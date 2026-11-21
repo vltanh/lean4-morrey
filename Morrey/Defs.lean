@@ -7,6 +7,7 @@ public import Mathlib.Logic.Equiv.Fin.Basic
 public import Mathlib.Analysis.Calculus.ContDiff.Defs
 public import Mathlib.Analysis.Convex.Function
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Integral.IntegrableOn
 public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 public import Mathlib.Topology.EMetricSpace.Lipschitz
 public import Mathlib.RingTheory.MvPolynomial.Homogeneous
@@ -41,6 +42,11 @@ of a pair `(u, v)` has rows `∇u` and `∇v`.
 * `Parallel`, `T`: the set-valued map `𝐓` (Definition 6.1).
 * `gradMat`, `gradMeasure`: the matrix `(∇u, ∇v)` on a triangle and the measure `ν` (6.1).
 * `IsLaminate`: laminates of finite order.
+
+Morrey's problem in general dimensions (Šverák 1992, Cassese 2026): `jac`, `RankOneConvex`,
+`unitCube`, `QuasiconvexOn` (Šverák's definition), `QuasiconvexAt` (Cassese's),
+`NowhereQuasiconvex`, `IsPHomogeneous`, `IsHomogeneousPolynomial`, `frobSq`, and Šverák's
+`sverakP`, `sverakf`, `sverakF`.
 
 Indices are from `0`: the leaves `2i − 1, 2i` of the paper's interface `i` are the leaves
 `2i, 2i + 1` here, and the leaf `(j − 1)·2^{2l+2} + k` of the paper is `(j, k)` with `j : Fin 3`.
@@ -265,20 +271,25 @@ def RankOneConvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
 def unitCube (m : ℕ) : Set (Fin m → ℝ) :=
   Set.pi Set.univ fun _ => Set.Ioo 0 1
 
-/-- Quasiconvexity on a domain `Ω` (Šverák 1992, (ii), after Morrey): for every matrix `A` and
-every smooth `φ` with compact support in `Ω`, `∫_Ω f (A) ≤ ∫_Ω f (A + ∇φ)`. -/
+/-- Quasiconvexity on a bounded open domain `Ω` (Šverák 1992, (ii), after Morrey): for every
+matrix `A` and every smooth `φ` with compact support in `Ω`, `∫_Ω f (A) ≤ ∫_Ω f (A + ∇φ)`. The
+integral is required to exist: test maps for which `f (A + ∇φ)` is not integrable do not count,
+so that a failure of quasiconvexity is witnessed by a genuine integral. -/
 def QuasiconvexOn {d m : ℕ} (Ω : Set (Fin m → ℝ)) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
   ∀ (A : Matrix (Fin d) (Fin m) ℝ) (φ : (Fin m → ℝ) → Fin d → ℝ),
     ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ → tsupport φ ⊆ Ω →
-      ∫ _x in Ω, f A ≤ ∫ x in Ω, f (A + jac φ x)
+      MeasureTheory.IntegrableOn (fun x => f (A + jac φ x)) Ω →
+        ∫ _x in Ω, f A ≤ ∫ x in Ω, f (A + jac φ x)
 
 /-- Quasiconvexity at a matrix `A` (Cassese 2026, Definition 2.1): for every Lipschitz
 `φ : [0, 1]^m → ℝ^d` vanishing on the boundary (extended by `0` outside the cube),
-`f (A) ≤ ∫_{[0,1]^m} f (A + ∇φ)`. -/
+`f (A) ≤ ∫_{[0,1]^m} f (A + ∇φ)`. As in `QuasiconvexOn`, the integral is required to exist. -/
 def QuasiconvexAt {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
     Prop :=
   ∀ (φ : (Fin m → ℝ) → Fin d → ℝ) (K : NNReal), LipschitzWith K φ →
-    (∀ x ∉ unitCube m, φ x = 0) → f A ≤ ∫ x in unitCube m, f (A + jac φ x)
+    (∀ x ∉ unitCube m, φ x = 0) →
+      MeasureTheory.IntegrableOn (fun x => f (A + jac φ x)) (unitCube m) →
+        f A ≤ ∫ x in unitCube m, f (A + jac φ x)
 
 /-- `f` is quasiconvex at no matrix. -/
 def NowhereQuasiconvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=

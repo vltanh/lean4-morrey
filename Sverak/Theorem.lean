@@ -25,6 +25,12 @@ theorem theorem_main :
     ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧ ¬ QuasiconvexOn (unitCube 2) (sverakF ε k) := by
   sorry
 
+/-- **Theorem** (`sv-theorem`), in the form of Cassese's Definition 2.1: by (11) the same `F` fails
+to be quasiconvex at `A = 0`. -/
+theorem theorem_main_at_zero :
+    ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧ ¬ QuasiconvexAt (sverakF ε k) 0 := by
+  sorry
+
 /-- The map `T : M^{m×n} → M^{3×2}` of the Corollary: the upper left `3 × 2` block. -/
 def topLeft {m n : ℕ} (hm : 3 ≤ m) (hn : 2 ≤ n) (X : Matrix (Fin m) (Fin n) ℝ) :
     Matrix (Fin 3) (Fin 2) ℝ :=

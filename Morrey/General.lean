@@ -37,9 +37,9 @@ theorem volume_unitCube : volume (unitCube m) = 1 := by
   sorry
 
 /-- A smooth map with compact support in the open unit cube is a test map of
-`QuasiconvexAt`: it is Lipschitz and vanishes outside the cube. So a smooth witness refutes
-quasiconvexity at `A` in Cassese's sense. -/
-theorem not_quasiconvexAt_of_smooth {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+`QuasiconvexAt`: it is Lipschitz and vanishes outside the cube, and for continuous `f` the integral
+exists. So a smooth witness refutes quasiconvexity at `A` in Cassese's sense. -/
+theorem not_quasiconvexAt_of_smooth {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     {A : Matrix (Fin d) (Fin m) ℝ} {φ : (Fin m → ℝ) → Fin d → ℝ}
     (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) (hc : HasCompactSupport φ)
     (hs : tsupport φ ⊆ unitCube m) (hlt : ∫ x in unitCube m, f (A + jac φ x) < f A) :
