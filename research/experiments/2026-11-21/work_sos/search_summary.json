@@ -1,0 +1,47 @@
+{
+  "features4": {
+    "alternating_steps": 24,
+    "restarts": 6,
+    "minimum_attained_gap": 0.00010790702740463587,
+    "optimal_status": 2,
+    "optimal_inaccurate_status": 22,
+    "max_coefficient_residual": 3.82343365856741e-08,
+    "min_gram_eigenvalue": 8.263598915313462e-08
+  },
+  "features6": {
+    "alternating_steps": 24,
+    "restarts": 6,
+    "minimum_attained_gap": 7.47633557349025e-05,
+    "optimal_status": 0,
+    "optimal_inaccurate_status": 24,
+    "max_coefficient_residual": 4.4696171416780395e-10,
+    "min_gram_eigenvalue": 9.79184081174238e-08
+  },
+  "search4": {
+    "alternating_steps": 72,
+    "restarts": 12,
+    "minimum_attained_gap": 5.8367035598242096e-08,
+    "optimal_status": 29,
+    "optimal_inaccurate_status": 43,
+    "max_coefficient_residual": 5.798815316815364e-10,
+    "min_gram_eigenvalue": 9.754051602827095e-08
+  },
+  "search6": {
+    "alternating_steps": 30,
+    "restarts": 6,
+    "minimum_attained_gap": 1.86010346323761e-05,
+    "optimal_status": 2,
+    "optimal_inaccurate_status": 28,
+    "max_coefficient_residual": 3.050809466165205e-10,
+    "min_gram_eigenvalue": 9.422736038507127e-08
+  },
+  "search8_diverse": {
+    "alternating_steps": 72,
+    "restarts": 12,
+    "minimum_attained_gap": 4.584998251587335e-05,
+    "optimal_status": 2,
+    "optimal_inaccurate_status": 70,
+    "max_coefficient_residual": 9.511364473802075e-10,
+    "min_gram_eigenvalue": 9.597492945196276e-08
+  }
+}

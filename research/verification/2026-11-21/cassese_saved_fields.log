@@ -1,0 +1,38 @@
+[
+  {
+    "file": "results_delta_0.1.json",
+    "runs": 6,
+    "min_gap_scaled": 1.003780723972193,
+    "min_direct_original_gap": 0.10037807239719695,
+    "max_abs_error": 2.1944945860497e-13,
+    "max_mean_gradient": 2.3345055535069114e-17,
+    "converged": 0
+  },
+  {
+    "file": "results_delta_0.01.json",
+    "runs": 6,
+    "min_gap_scaled": 1.0001728487859844,
+    "min_direct_original_gap": 0.010001728487654281,
+    "max_abs_error": 1.2542796662406985e-12,
+    "max_mean_gradient": 3.463558451343083e-17,
+    "converged": 5
+  },
+  {
+    "file": "fixed_planes_results.json",
+    "runs": 36,
+    "min_gap_scaled": 1.0000000000001872,
+    "min_direct_original_gap": 0.0010000000275968905,
+    "max_abs_error": 1.2215716936256338e-11,
+    "max_mean_gradient": 6.892038229048241e-17,
+    "converged": 35
+  },
+  {
+    "file": "tangent_planes_results.json",
+    "runs": 36,
+    "min_gap_scaled": 0.999999996020088,
+    "min_direct_original_gap": 0.000999999998391251,
+    "max_abs_error": 9.582918876829827e-12,
+    "max_mean_gradient": 5.5149883469398684e-17,
+    "converged": 35
+  }
+]

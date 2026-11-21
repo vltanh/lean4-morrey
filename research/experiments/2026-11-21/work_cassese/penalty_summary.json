@@ -1,0 +1,20 @@
+{
+  "penalty_sos_results.json": {
+    "total_rounds": 80,
+    "nondegenerate_family_rounds": 80,
+    "screened_rounds": 60,
+    "minimum_recorded_gap": 4.7452100969181866e-07,
+    "minimum_screened_gap": 1.0475752072303879e-05,
+    "maximum_coefficient_residual": 1.8016260794340155e-07,
+    "minimum_gram_eigenvalue": -8.342480230268234e-05
+  },
+  "penalty_barrier_results.json": {
+    "total_rounds": 96,
+    "nondegenerate_family_rounds": 72,
+    "screened_rounds": 55,
+    "minimum_recorded_gap": 0.002893133190387503,
+    "minimum_screened_gap": 0.002893133190387503,
+    "maximum_coefficient_residual": 6.963084402400455e-07,
+    "minimum_gram_eigenvalue": -6.545931941111538e-06
+  }
+}

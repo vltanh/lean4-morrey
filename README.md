@@ -13,6 +13,15 @@ settles it for three or more components, a claimed proof for `2 × 2` matrices, 
 preprint on the two-component case in higher dimension. Each paper is audited on its own, with its
 own Challenge, report and Palomar submission; the papers share general mathematics and the checks.
 
+## Research ledger and roadmap
+
+The [research ledger](docs/research/LEDGER.md) consolidates the follow-up work through
+21 November 2026: formal results, exact certificates, hand arguments, numerical searches and
+refuted approaches. The [roadmap](docs/research/ROADMAP.md) states what would complete either a
+positive proof or a certified planar counterexample. The [research index](docs/research/README.md)
+links the preserved source artifacts, reproduction commands and literature qualifications.
+**No solution of the unrestricted `2 × 2` problem is claimed.**
+
 ## The state of the problem
 
 **Morrey's problem**: does rank-one convexity imply quasiconvexity for `f : ℝ^{d×m} → ℝ`? A

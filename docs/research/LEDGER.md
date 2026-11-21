@@ -1,0 +1,191 @@
+# Research ledger
+
+**Snapshot: 21 November 2026. No proof or counterexample to the unrestricted planar Morrey problem has been obtained.**
+
+This is the current interpretation of all recovered research, including failed routes and later
+corrections. Entries F01–F12 describe the existing formal source, H01–H29 the earlier investigations,
+E01–E08 the latest search, and R01 a calculation reconstructed from the prior discussion. See the
+[roadmap](ROADMAP.md) for completion gates and [evidence definitions](README.md#reading-the-evidence).
+A hand proof plus a symbolic checker is not a Lean theorem. Prior-art status is recorded in
+[SOURCES.md](SOURCES.md); no new-priority claim is made by this consolidation.
+
+The sign convention is `J_f(F,u) = average f(F + Du) − f(F)`. A valid counterexample must have
+`J < 0` for an actual admissible **two-component, two-variable** gradient and the same globally
+rank-one-convex integrand. The original notes are retained byte-for-byte and may use other
+signs, old paths, tentative claims or stronger headings.
+
+## Formal baseline
+
+The full twelve-entry table, precise current paths and symbols are in
+[FORMAL_STATUS.md](FORMAL_STATUS.md). The inspected upstream commit is
+`d0471a6f174c8d5851398ec8069cd5bb2defbb54`. Source inspection is distinct from a fresh build;
+this PR does not claim to have recompiled Lean or rerun the axiom audit/Comparator.
+
+| IDs | What is available | Current verdict and scope |
+| --- | --- | --- |
+| F01–F03 | Pedregal Proposition 7.1, Corollary 7.2 and both Step 2 summaries are refuted. | Lean proof bodies in [Counterexample.lean](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean). E13 uses directions `(2,0)` and `(*,4)`, whose determinant is 8. |
+| F04, F06–F08 | Fixed point implies laminate; Kakutani conditional reduction; compactness, convexity, closed graph and upper semicontinuity; splitting-tree library. | Valid infrastructure. The nonemptiness premise needed by [Reduction.lean](../../Morrey/Pedregal/Reduction.lean) is false in general. |
+| F05 | Every level-one gradient law is a finite-order laminate by the eight-vertex construction. | [LevelOne.lean](../../Morrey/Pedregal/LevelOne.lean); this does not establish higher levels. |
+| F09 | All-level finite-order lamination and the two main planar RC/QC statements. | **Open:** [Introduction.lean](../../Morrey/Pedregal/Introduction.lean) defines propositions; it does not prove them. |
+| F10–F11 | Šverák's `3 × 2` theorem and a general smooth periodic-to-compact-support witness lemma. | Already in Lean source; the boundary lemma is reusable for a future planar witness. |
+| F12 | Cassese definitions, bridges and Šverák's example in Cassese's terminology. | Main does **not** contain Cassese's new `2 × 3` proof; that paper is a separate ongoing formalization. |
+
+The detailed paper audit, including E1–E18, proof-route differences and prior literature, remains
+in [docs/Pedregal/REPORT.md](../Pedregal/REPORT.md). Its fixed-`u,v` closed-graph theorem is not
+already a formal proof of joint closedness in `(u,v,t,r)` or an algebraic genericity theorem.
+
+## Fixed-point and lamination investigations
+
+| ID | Exact statement / finding | Evidence and scope | Current disposition |
+| --- | --- | --- | --- |
+| H01 | A level-one tri-dyadic mold `S*` admits the uniform weights as a fixed point for **every** pair in `P₁²`. | Hand construction and exact rational/combinatorial checker; not connected to the repository's Lean mold definitions. [Note](../../research/archive/files/morrey_l1_mold_counterexample.md), [checker](../../research/archive/files/morrey_l1_mold_certificate.py). | **Refutes research conjectures B and B₁ as originally quantified over every mold.** Does not repair Pedregal's universal nonemptiness claim. |
+| H02 | At level two the displayed integer nodal pair has nonzero determinant between the midpoint matrices of every two distinct physical interfaces. | Exact integer check of all `1128` pairs; minimum absolute scaled determinant `7`. [Note](../../research/archive/files/morrey_level2_repair_status.md), [checker](../../research/archive/files/morrey_level2_uniform_fixedpoint_obstruction.py). | Rules out the **uniform candidate fixed point**, for every mold, for this pair. Does not rule out nonuniform fixed points. |
+| H03 | For the same pair, no mold has a fixed point whose first-level relative weights all satisfy `\|α−1/2\| ≤ 1/8192`. | Exact `4512` corner-sign checks plus separate affinity of each two-interface determinant. Same note/checker as H02. | A concrete forbidden neighborhood of weights. It is not a global no-fixed-point result. |
+| H04 | For every dyadic `l ≥ 2`, a nonempty Zariski-open set of nodal pairs defeats the uniform fixed-point candidate for every mold. | Finite-stencil reduction: `84` overlapping local cases, `1128` exceptional `n=4` pairs; symmetry reduces these to `42+75=117` checks. All-level argument is in the hand proof. [Checker](../../research/archive/files/morrey_all_levels_uniform_obstruction.py). | A global-in-level obstruction to **uniform weights**, not to adaptive weights. |
+| H05 | For generic pairs at every `l ≥ 2`, no equal-mass binary lamination tree can use each distinct triangle-gradient atom exactly once. | Hand lowest-subtree argument and exact stencil checks. For the explicit level-two pair, `448` non-interface singleton pairs, `1440` pair-plus-singleton cases, and `1032` disjoint pair-pair cases fail compatibility. Same sources as H02/H04. | Rules out **single-use** trees. Repeated atoms with split masses remain permitted; finite-order lamination and weak-* laminate approximation are unresolved. |
+| H06 | Original conjecture A: the `(u,v,t)` with nonempty `T(t)` lie in a proper algebraic subset, for each mold. | Only the user's historical numerical investigations and proposed maximal-minor strategy; no recovered proof. Dimension counts alone do not establish independent equations or the projection claim. | **Open in this work.** H01 does not refute A because its uniform `t` can belong to an exceptional algebraic slice. |
+
+H01 is an important reversal of the initial roadmap. On the cube of level-one gradients `±C₁±C₂±C₃`, each sub-mold first averages interfaces in two coordinate directions, then equal means, then opposite means. Every merge direction is zero or a multiple of one `Cᵢ`. Each physical interface occurs twice and each triangle six times, so uniform leaf weight `1/48` obeys the required constraints. Taking `a₁=(1,0), a₂=(0,1), a₃=(1,1)` gives `q=(1,1,1)`, disproving B₁'s proposed necessary condition. The exact checker tests the abstract coefficient construction for arbitrary `Cᵢ`; a Lean bridge to `TriMold 1` is still needed. The archived note's suggested type name `TriDyadicMold 1` is historical, not the current repository identifier.
+
+The genericity in H04/H05 is **for each level separately**. It does not assert a uniform quantitative neighborhood across all levels or a single fixed pair simultaneously satisfying every level's nodal conditions.
+
+## Global reductions
+
+| ID | Statement / finding | Evidence | Remaining gate |
+| --- | --- | --- | --- |
+| H07 | Failure of Morrey can be witnessed by a globally rank-one-convex rational polynomial, rational base, and rational nodal data on some dyadic periodic mesh. | Hand density/reduction proof: mollify, add a strict quadratic margin, approximate in `C²` on a ball, stabilize outside using a high-degree positive radial polynomial, and approximate the test map by dyadic interpolation. [Note](../../research/archive/files/morrey_polynomial_reduction.md). | Audit/formalize the analytic lemmas and periodic/zero-boundary passage. **No uniform degree or mesh bound**; not a finite positive decision procedure. |
+| H08 | A globally rank-one-convex polynomial of degree at most three has zero cubic part; the remaining quadratic is quasiconvex. | Elementary hand proof plus exact rank calculation for all cubic coefficients. [Checker](../../research/archive/files/morrey_cubic_rigidity.py). Quadratic quasiconvexity uses Fourier/Plancherel. | Known/folklore, not a new solution or a novelty claim. |
+| H09 | Rational SOS identities for the Legendre–Hadamard polynomial supply sound sufficient global rank-one-convexity certificates; rational PL Jensen gaps can be evaluated exactly. | [Checker](../../research/archive/files/morrey_polynomial_certificate.py). Checks zero mean gradient and determinant. | SOS is **not asserted complete**. A search must still produce a globally certified integrand and strict negative actual-gradient gap. |
+| H10 | Jensen positivity on continuous rank-one-convex functions on a compact ball is equivalent to membership in the weak-* closed cone generated by rank-one splitting defects. | Hahn–Banach/bipolar hand argument; local-to-global extension uses H07's stabilization. [Note](../../research/archive/files/morrey_global_reorientation.md). | The universal inclusion for all gradient laws is exactly the missing problem. Cone reformulation is not a construction or a proof of feasibility. |
+| H11 | At degree `d≥2` and a closed ball `K` with nonempty interior, Jensen positivity for **all polynomials with LH ≥ 0 on K** is equivalent to a positive rank-one Hessian quadrature with at most `binomial(d+4,4)−6` atoms. | Finite-dimensional conic separation and Carathéodory. Kernel is affine functions plus determinant, dimension six. [Note](../../research/archive/files/morrey_global_certificate_research.md), [kernel checker](../../research/archive/files/morrey_rankone_kernel_exact_check.py). | **Not** the same fixed-degree cone as globally rank-one-convex polynomials. Extending a local polynomial can increase its degree. All-degree feasibility for every gradient law remains missing. |
+| H12 | A consistent all-degree family of positive Hessian measures with controlled support/mass would represent the full smooth Jensen functional. | Conditional compactness argument in H10/H11 notes. `P=\|A\|²/2` fixes mass; compact support gives tightness directly. The sketch also proposes radial moments for unbounded-support variants. | Do not state that arbitrary unrelated finite-degree solutions automatically give an all-test-function identity. Support control, extraction and `C²` approximation must be checked; universal feasibility is unproved. |
+
+H07 is a completeness statement **for negative witnesses in principle**. Real quantifier elimination can decide the polynomial's global LH formula, while finite rational gradient sums give the sign exactly. Neither the analytic reduction nor decidability supplies an efficient enumeration, a degree bound, or a terminating proof of a positive answer. The notation `P_l(Q)` in the historical note means rational vertex data, not a continuous nonconstant map with values in the disconnected space `Q²`.
+
+H09's old quadratic sanity test prints `−405772` for `|A|²+5 det A` because it computes `f(F)−average f(F+Dw)`. Under the ledger convention this is **`J=+405772`**, correctly satisfying quasiconvexity. Its deliberately non-rank-one-convex negative quadratic is a rejected control, not a candidate.
+
+## Positive certificates and their limitations
+
+| ID | Statement / finding | Evidence | Scope |
+| --- | --- | --- | --- |
+| H13 | One explicit level-two, 32-atom gradient law satisfies Jensen for **every globally rank-one-convex homogeneous quartic**, at base zero. | Exact 35-term positive rational Hessian identity, checked coefficient-by-coefficient. [Data](../../research/archive/files/morrey_quartic_l2_dual_certificate.json), [independent verifier](../../research/archive/files/morrey_verify_quartic_l2_certificate.py), [short note](../../research/archive/files/morrey_quartic_l2_readme.md). | One law/full 35-coefficient homogeneous quartic class. Does not cover all laws, nonhomogeneous quartics, or higher degrees. Gradients in the certificate are physical gradients divided by four. |
+| H14 | H13 persists for a specified joint neighborhood of nodal data and base matrix, radius `2⁻²¹` in the stated scaled convention. | Exact inverse matrix and conservative quartic moment bounds. [Script](../../research/archive/files/morrey_quartic_open_neighborhood.py), [bounds](../../research/archive/files/morrey_quartic_open_neighborhood.json). | Open family around the one certificate, not every level-two datum. Physical base entries `<2⁻²¹` give a conservative sufficient condition. |
+| H15 | Sixteen sampled gradient laws on grids `4,8,16` admitted numerical positive Hessian representations for all degree-≤4 coefficient coordinates. | LPs sampling `9000` Hessian evaluations; `64` active atoms; reported residuals `<7e−14`. [Script](../../research/archive/files/morrey_quartic_global_probe.py), historical log in archive. | Floating-point evidence only; no universal theorem or exact certificates for these 16 laws. |
+| H16 | `W_t=s²+4t s q+(6t²−2)q²`, `\|t\|≤1`, and its invertible left/right transforms generate a quasiconvex subcone; 35 explicit unimodular transforms at `t=1/2` are a linear basis of all homogeneous quartics. | External Bruno–Pasqualotto theorem plus exact basis certificate (`det C ≡41797 mod104729`). [Note](../../research/archive/files/morrey_global_quartic_orbit_note.md), [basis data](../../research/archive/files/morrey_quartic_gl_basis_unimodular.json), [verifier](../../research/archive/files/morrey_verify_quartic_orbit_basis.py). | **Linear span is not a positive cone.** The later hand argument H23 rules out the proposed cone equality; its analytic steps still require independent review. |
+| H17 | Split-Laplacian decomposition of homogeneous quartics into dimensions `25+9+1`; full orbit span has dimension `26` at `t=0`, `34` at `t=±1/3`, and `35` otherwise. | Hand equivariant decomposition plus exact polynomial identities and H16's basis certificate. [Verifier](../../research/archive/files/morrey_quartic_harmonic_verifier.py). | Linear representation theory, not Jensen positivity for arbitrary coefficients. |
+| H18 | An explicit degree-≤4 coefficient neighborhood around `Q=\|A\|⁴−(9/4)\|A\|²det A+\|A\|²/256` is globally quasiconvex and nonpolyconvex. | Hand quantitative stability proof using the **external** Bruno–Pasqualotto endpoint theorem. Perturbation coefficient ℓ¹ norm ≤`1/4096`, coercive gap coefficient `1/512`; four-atom nonpolyconvexity witness. [Note](../../research/archive/files/morrey_global_quartic_open_ball.md), [rational check](../../research/archive/files/morrey_global_quartic_open_ball_verify.py). | A neighborhood of a known energy, not the whole quartic cone. The displayed bounded coefficient set is not itself a cone despite the archived title. |
+
+The initial differentiation bug noted in the H13 discovery workflow was corrected before the archived exact certificate. The certificate's independent rational checker, not the discovery LP, carries its finite algebraic evidence.
+
+## Structural subclasses and obstructions
+
+| ID | Statement / finding | Evidence and analytic dependencies | Limitation / next use |
+| --- | --- | --- | --- |
+| H19 | If a global `C²` rank-one-convex function is affine on an **entire** rank-one line through `F`, it has a global determinant-affine support at `F`: `f(F+X)≥f(F)+Df(F):X+c det X`. | Hand separate-convexity/Hessian-normality proof. [Note](../../research/archive/files/morrey_flat_rankone_support.md), [algebra checker](../../research/archive/files/morrey_rankone_zero_global_check.py). | Quasiconvexity at points on that flat line only; no conclusion for functions with no such line. Not Lean-certified or novelty-cleared. |
+| H20 | A homogeneous globally RC polynomial vanishing on the whole determinant-zero cone is zero, `c det` with real `c`, or `c det^(2k)` with `c>0` and integer `k≥1`. The ray `(det A)²` is exposed in the full homogeneous RC quartic cone. | Hand divisibility/convex-line limiting proof valid in all degrees, plus finite algebra checks. [Note](../../research/archive/files/morrey_rankone_null_rigidity.md), [checker](../../research/archive/files/morrey_rankone_null_rigidity.py). | Classifies a restrictive boundary class. Inhomogeneous extension in the note constrains only the **top homogeneous term**, not the entire polynomial. |
+| H21 | A global `C²` RC function zero on every singular matrix has a single global support `f(A)≥c det A` and is quasiconvex at every singular base. | Hand normal-derivative argument using connectedness of the nonzero rank-one locus. [Note](../../research/archive/files/morrey_singular_base_support.md), [check](../../research/archive/files/morrey_singular_base_support_check.py). | Does not prove quasiconvexity at full-rank bases. |
+| H22 | A globally RC homogeneous quartic with one nonzero rank-one zero is nonnegative and a sum of at most four squares of homogeneous quadratics. | Hand normal form `α(ad)²+(ad)T₂+S₄`, square completion, **Hilbert's ternary-quartic theorem**. [Note](../../research/archive/files/morrey_rankone_zero_sos.md), [algebra](../../research/archive/files/morrey_rankone_zero_sos.py). | Jensen at zero follows; nonnegativity/SOS does not establish quasiconvexity at every base or polyconvexity. |
+| H23 | For `β≥5/2`, `P_β=(ad−2bc)²+β(b²+c²+d²)²` is nonpolyconvex and lies outside the coefficientwise closed cone generated by polyconvex quartics and all `W_t(LAR)`, `\|t\|≤1`. | Historical hand proof for `β≥5/2` using exact LH identity, explicit nonpolyconvexity support/three-atom witness, compact normalized RC cone and exposed rank-one-zero face. [Note](../../research/archive/files/morrey_quartic_cone_no_go.md), [exact identities](../../research/archive/files/morrey_rankone_zero_nonpolyconvex_verify.py). | **Closes the proposed generator-cone proof route.** Newer β=2 threshold certificate strengthens the RC parameter range; it does not prove non-quasiconvexity. The archived cone proof is not Lean-certified. |
+| H24 | Universal componentwise heat-flow energy monotonicity fails even for strongly RC polyconvex `f_η=(det A)²+η\|A\|²`. | Explicit periodic map gives energy derivative `20s⁴−336ηs²>0` when `s²>84η/5`; hand calculation and symbolic verification. [Note](../../research/archive/files/morrey_global_reorientation.md), [checker](../../research/archive/files/morrey_heatflow_no_go.py). | Rules out that **specific universal monotonicity claim**, not all evolution/correction arguments, and not quasiconvexity. |
+| H25 | Every affine planar pullback of a quadratic-bivector norm `G(X)=sqrt(Q(row₁X∧row₂X))`, with `Q≥0` on decomposable bivectors, is polyconvex. | Hand proof: row span ≤4; Finsler–Thorpe / equality S-lemma supplies PSD extension modulo the Plücker form; wedge depends affinely on `(A,det A)`. [Note](../../research/archive/files/morrey_counterexample_reorientation.md). | Blocks all embeddings/bases of this Grabovsky-type pullback family. Does **not** apply to Cassese's quartic or arbitrary higher-dimensional integrands. Symbolic identities for subfamilies support the proof; 15 numerical Gram tests alone do not prove it. |
+| H26 | Mean and determinant moments do not characterize gradient Young measures or guarantee Jensen for RC functions. | Exact four-atom measure with mean zero and mean determinant zero gives `J=−2/325` for `\|A\|⁴−(9/4)\|A\|²det A`; H18's known quasiconvexity rules out gradient realizability. H23 has a different three-atom witness with `J=−156317/59319`. | These are **nonpolyconvexity / nongradient-law witnesses**, not Morrey counterexamples. Actual gradient compatibility is indispensable. |
+
+### Failed numerical candidates and superseded workflows
+
+| ID | Attempt | Correct verdict |
+| --- | --- | --- |
+| H27 | Negative quartic Jensen values after imposing RC only at sampled points/directions. | Historically rejected using the reported rational LH value `−1205820883/1250000000` at `A=(3/5,0;0,4/5)`, `H=(-1,-2;3,6)`. The [checker](../../research/archive/files/morrey_false_quartic_exact_witness.py) requires `morrey_four_wave_exchange_last.npz`, which was not recovered; this value was not replayed here. Four-wave exchange/curvature searches are exploratory, not global certificates. |
+| H28 | Earlier direct Cassese planar-pullback and Grabovsky-family searches. | No valid negative witness. Latest search bundle supersedes numerical coverage and validation; H25 excludes the specified Grabovsky route analytically. Older logs are historical evidence, not current acceptance tests. |
+| H29 | Original numerical survey suggested no nondegenerate level-one fixed points for all molds. | Superseded by H01's explicit universal mold. Local minima, random molds and equation counts cannot establish universal absence. Preserve the initial conjecture as **refuted**, not as an open roadmap item. |
+
+## Latest exact results and counterexample searches
+
+The complete methods, normalizations, attained values and exclusions are in
+[EXPERIMENTS.md](EXPERIMENTS.md). Counts of alternating steps must not be read as independent
+restarts. Different families use different normalizations, so their gap magnitudes are not
+directly comparable. All four search families produced **no validated planar counterexample**.
+
+| ID | Result / campaign | Evidence and current verdict |
+| --- | --- | --- |
+| E01 | Sharp boundary for `Pβ=(ad−2bc)²+β(b²+c²+d²)²`: global RC exactly for `β≥2`. | Exact algebra plus a square-completion/Sylvester/continuity hand argument; [checker](../../research/experiments/2026-11-21/work_pb/beta2_certificate.py). Strengthens H23's earlier sufficient bound `5/2`. Novelty is unestablished; quasiconvexity is unresolved here. |
+| E02 | `P₂`: 190 Fourier/finite-element/targeted starts, with every base entry minimized analytically. | Lowest recorded values near `J=2` under the transverse normalization. Ten difficult cases checked at 60 digits. No negative gap; the apparent floor is **not** a theorem. [Report](../../research/experiments/2026-11-21/work_pb/README.md). |
+| E03 | Dacorogna–Haeberly anisotropic degree-one energies: 472 FE runs, including 424 avoiding rank-one-base degeneracy. | All attained admissible gaps nonnegative; some iteration limits. Published RC criteria and parameter checks, not a claim of global numerical minimization. [Report](../../research/experiments/2026-11-21/work_lit/README.md). |
+| E04 | Cassese inherited planar pullbacks: 84 runs; altered planar penalties: 80+96 alternating steps. | No valid negative gap. Inherited family independently reevaluated; altered penalties require their own RC certificates. Some Grams fail PSD screening; zero-integrand cases excluded. [Report](../../research/experiments/2026-11-21/work_cassese/README.md). |
+| E05 | Exact degeneracies in a planar Cassese penalty family: `q+L²/4−LP+3P²/4=0` and `−q−LP/2+3P²/2=4(det A)²`. | [Symbolic checker](../../research/experiments/2026-11-21/work_cassese/exact_degeneracy.py). Fixing the `q` coefficient can leave the zero integrand; entry covariance does not exclude determinant-square wells. |
+| E06 | General nonhomogeneous polynomial SOS search, degree 4/6: 42 restarts and 222 alternating steps. | Global coefficient-identity ansatz, but only floating Grams. All recorded gaps positive; feature barriers reduce degeneracy. No exact planar RC certificate or certified lower bound promoted from the runs. [Report](../../research/experiments/2026-11-21/work_sos/README.md). |
+| E07 | Exact rational polynomial/Gram control in `3 × 2`, with periodic map `(sin x,sin y,sin(x+y))`. | Full coefficient identity, exact positive-definite LDL and exact integral `J=−103817049981/8000000000000`. [Certificate](../../research/experiments/2026-11-21/work_sos/control_run/exact_control_certificate.json), [checker](../../research/experiments/2026-11-21/work_sos/certify_control.py). Validates the known higher-dimensional mechanism; **not planar**. |
+| E08 | Independent pipeline audits and SOS scope check. | The `Pβ` LH form has an exact SOS for `β≥5/2` although the integrand is nonpolyconvex. Derivatives, saved basis orderings, actual gradients and the `3 × 2` control were cross-checked. [Audit](../../research/experiments/2026-11-21/work_lit/SOS_AUDIT.md); [eight-check record](../../research/verification/2026-11-21/results.json). |
+
+No amount of precision in E02–E06 turns an attained positive value into a lower bound. E07
+shows the pipeline can certify a known negative mechanism in its correct dimension; it does
+not guarantee that the chosen planar ansatz contains a negative example.
+
+## Corrections and interpretation rules
+
+1. **B and B₁ are refuted, not pending targets.** H01 gives a fixed point at uniform weights
+   for every level-one pair in a particular mold. A can still concern an exceptional slice in
+   `(u,v,t)`; it does not imply B by projecting away `t` without additional arguments.
+2. **Uniform-weight obstructions are weaker than absence of fixed points.** H02–H05 leave
+   nonuniform weights, repeated atoms and limiting laminates available. Likewise, an empty
+   value `T(t)` does not exclude a fixed point elsewhere. The original E13 pair even has an
+   exact boundary fixed point in the [existing numerical record](../Pedregal/numerics/fixedpoint_exact.py).
+3. **The old quadratic gap has the opposite sign.** The historical polynomial checker prints
+   `f(F)−average f(F+Du)=−405772`; the current convention gives `J=+405772`. This is a successful
+   sanity check, not a quadratic counterexample or an arithmetic error.
+4. **The ambient cones differ.** A polynomial LH inequality only on a compact ball is not the
+   same fixed-degree condition as global RC. Stabilization can raise degree. SOS is a sufficient
+   certificate class, not a complete description of RC polynomials.
+5. **Archive headings are not current verdicts.** H16's proposed cone inclusion is superseded
+   by H23's hand obstruction. H18's bounded coefficient neighborhood is not itself a cone.
+   H19–H25 still need independent review of the analytic arguments beyond checked identities.
+6. **Quarantined files remain quarantined.** Cassese `penalty_sos_best.npz` has an unacceptable
+   Gram matrix; `penalty_barrier_best.npz` is a zero-integrand degeneration. Names containing
+   “best” do not confer candidate status. The early general quartic run has a different Gram
+   monomial ordering, recorded in its saved data and honored by the current validator.
+7. **Historical paths have moved.** Curated links use `Morrey/Pedregal`, `Morrey/Common` and
+   `palomar/<Paper>`. Original notes retain their old paths. Python and prose are not imported
+   into the Lean axiom audit merely by appearing in this repository.
+
+The original Pedregal survey reported 40 random empty fibers at each of levels one and two,
+one floating exhaustive `315³` level-one shape enumeration for a generic input, and unsuccessful
+local fixed-point searches. These are preserved in the [paper report](../Pedregal/REPORT.md)
+and its scripts. They motivated A/B/B₁; H01 demonstrates why the numerical absence could not
+justify B/B₁. Neither equation counts nor local residual minima certify global infeasibility.
+
+## R01: spatial averaging does not automatically produce rank-one splits
+
+This short calculation reconstructs a point from the prior discussion; no original certificate
+file for it was recovered. On the `2π`-periodic torus let
+`w(x,y)=(cos(x) sin(y), sin(x) cos(y))`. Then
+
+\[
+Dw=\begin{pmatrix}-\sin x\sin y&\cos x\cos y\\
+\cos x\cos y&-\sin x\sin y\end{pmatrix}.
+\]
+
+Partition the torus into the union of the two diagonal `π × π` squares and the union of the
+two off-diagonal squares. Each set has half the area. Using `∫₀^π sin x dx=2` and
+`∫₀^π cos x dx=0`, their conditional mean gradients are respectively
+`−4I/π²` and `+4I/π²`. Their difference has rank two. Thus this conditional-expectation split
+cannot be used as a rank-one laminate split. This rules out the automatic inference from an
+arbitrary spatial averaging tree to a laminate; it does **not** rule out every adaptive tree.
+
+## Coverage, provenance and remaining uncertainty
+
+All 36 recovered source artifacts are inventoried in
+[source_manifest.json](../../research/source_manifest.json), including ZIP members and duplicate
+aliases. Their 139 distinct payloads are preserved: 53 historical files and 86 in the latest
+package. The earlier paper audit is already in the repository. ZIP container hashes are
+recorded, while their extracted member bytes are retained instead of redundant ZIP copies.
+
+The recovery did not supply every transient optimizer candidate or every earlier chat message.
+In particular, discussion-only references to an earlier rejected degree-six candidate and a
+buggy early `Pβ` Fourier experiment are not treated here as independently reproduced results.
+The saved current searches and checks are the reproducible evidence; missing artifacts confer
+no additional support. No literature search can establish from absence alone that these
+observations are new; see [SOURCES.md](SOURCES.md).
+
+The unfinished central tasks remain explicit in [ROADMAP.md](ROADMAP.md): construct a valid
+global planar counterexample, or prove the all-scale Jensen statement. The finite certificates,
+subclasses and method obstructions above are evidence and reusable tools, not a substitute for
+either task.

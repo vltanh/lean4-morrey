@@ -1,0 +1,1078 @@
+{
+  "method": "periodic affine triangles; unit gradient L2; L-BFGS-B",
+  "checks": {
+    "gradient_max_error": 6.953229875553135e-12,
+    "gradient_mean": [
+      [
+        -2.7755575615628914e-17,
+        -1.3877787807814457e-17
+      ],
+      [
+        -5.551115123125783e-17,
+        1.249000902703301e-16
+      ]
+    ],
+    "determinant_mean": 2.6645352591003757e-15,
+    "rank_one_wave_control_good": 0.0015503894861064182,
+    "rank_one_wave_control_bad": -0.0041074843863517785
+  },
+  "runs": [
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 0,
+      "gap": 0.0006695690679316968,
+      "iters": 133,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.03622126579284668,
+      "F": [
+        [
+          4.0,
+          1.721485646332117e-07
+        ],
+        [
+          3.4218504478225117e-07,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.744557930526086,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 1,
+      "gap": 0.0005779852043836797,
+      "iters": 132,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.03306722640991211,
+      "F": [
+        [
+          4.0,
+          0.0007784205901343358
+        ],
+        [
+          0.0007790832141574099,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.626333566070848,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 2,
+      "gap": 0.0005804020816109201,
+      "iters": 141,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.03344607353210449,
+      "F": [
+        [
+          4.0,
+          -0.016127847145015677
+        ],
+        [
+          0.014092576012844887,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.660015692365047,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 3,
+      "gap": 7.105427357601002e-15,
+      "iters": 44,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.010266304016113281,
+      "F": [
+        [
+          3.993849455625878,
+          -7.803627820406022e-07
+        ],
+        [
+          1.371266258441086,
+          -2.3963232494115223e-09
+        ]
+      ],
+      "min_matrix_norm": 3.3526547259158024,
+      "gradient_variance": 1.0000000000000002
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 4,
+      "gap": 0.000580402081615361,
+      "iters": 112,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.02507185935974121,
+      "F": [
+        [
+          4.0,
+          -0.01612777887025695
+        ],
+        [
+          0.014091526853892653,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.660015296941469,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 5,
+      "gap": 0.0005804020815967093,
+      "iters": 87,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.01851820945739746,
+      "F": [
+        [
+          4.0,
+          0.014092539919014274
+        ],
+        [
+          -0.01612714337576185,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.660015719764607,
+      "gradient_variance": 1.0000000000000002
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 6,
+      "gap": 1.1102230246251565e-14,
+      "iters": 43,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.009926557540893555,
+      "F": [
+        [
+          3.999999334611734,
+          -6.969814350212759e-07
+        ],
+        [
+          0.49552114505947265,
+          -4.5475857534756557e-08
+        ]
+      ],
+      "min_matrix_norm": 3.138302484757029,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "strong",
+      "n": 4,
+      "start": 7,
+      "gap": 5.861977570020827e-14,
+      "iters": 60,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.01316213607788086,
+      "F": [
+        [
+          -3.9967875820112257,
+          -3.9967937974307817
+        ],
+        [
+          -3.507132759719103,
+          -3.5071393264390482
+        ]
+      ],
+      "min_matrix_norm": 6.107043758593213,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 0,
+      "gap": 0.0005641638764855017,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.13237905502319336,
+      "F": [
+        [
+          4.0,
+          -0.030086185589243232
+        ],
+        [
+          -0.07760917529937326,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.628266232619838,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 1,
+      "gap": 0.0005542600414916166,
+      "iters": 329,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.08636116981506348,
+      "F": [
+        [
+          -4.0,
+          0.009790380908154067
+        ],
+        [
+          -0.0051263051462017446,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 5.617676726226307,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 2,
+      "gap": 0.00181338470656911,
+      "iters": 111,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.027302026748657227,
+      "F": [
+        [
+          4.0,
+          -3.812130162589778
+        ],
+        [
+          -3.812132952741472,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 6.557920218306239,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 3,
+      "gap": 0.0005710417067676943,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.1331017017364502,
+      "F": [
+        [
+          4.0,
+          0.08123851420619467
+        ],
+        [
+          0.01851408117406958,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.608533408808714,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 4,
+      "gap": 0.0005715993343802239,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.13113665580749512,
+      "F": [
+        [
+          4.0,
+          0.012058293475631076
+        ],
+        [
+          0.07872291602558504,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.606671412909644,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 5,
+      "gap": 5.444533712761768e-12,
+      "iters": 271,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.06973481178283691,
+      "F": [
+        [
+          3.946807157411283,
+          3.9253668671681172
+        ],
+        [
+          3.916749344502003,
+          3.895355149526322
+        ]
+      ],
+      "min_matrix_norm": 5.974950541301058,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 6,
+      "gap": 0.0005535295151810615,
+      "iters": 427,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.11107492446899414,
+      "F": [
+        [
+          4.0,
+          0.005222459380221442
+        ],
+        [
+          -0.006639174920850971,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.622213890742036,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 8,
+      "start": 7,
+      "gap": 2.6645352591003757e-13,
+      "iters": 207,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.05613851547241211,
+      "F": [
+        [
+          3.9920276103529537,
+          3.9920454763955653
+        ],
+        [
+          3.79497017605544,
+          3.7949876162168033
+        ]
+      ],
+      "min_matrix_norm": 6.627262307878736,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 0,
+      "gap": 0.0005310446860260498,
+      "iters": 319,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.1256115436553955,
+      "F": [
+        [
+          4.0,
+          -0.0009920561746415268
+        ],
+        [
+          0.0029074563317524303,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.518926183895458,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 1,
+      "gap": 0.0006069564678448103,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.20216584205627441,
+      "F": [
+        [
+          -4.0,
+          -0.020135331636979174
+        ],
+        [
+          0.008828058260649868,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 5.51483206604694,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 2,
+      "gap": 0.000535251847574969,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.20096826553344727,
+      "F": [
+        [
+          -4.0,
+          0.02727476933384925
+        ],
+        [
+          -0.02287762158009948,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 5.51119307432558,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 3,
+      "gap": 0.0005861890516936086,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.2005767822265625,
+      "F": [
+        [
+          4.0,
+          -0.004064886792413458
+        ],
+        [
+          -0.005878116716547849,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.53102864389038,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 4,
+      "gap": 0.0005322956272868495,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.20261764526367188,
+      "F": [
+        [
+          4.0,
+          -0.0006074986588886818
+        ],
+        [
+          0.0013560761775374588,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 5.573904627962338,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 5,
+      "gap": 0.0005374723732565201,
+      "iters": 411,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.16301512718200684,
+      "F": [
+        [
+          -4.0,
+          -0.005460542520976349
+        ],
+        [
+          -0.007165115593690673,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 5.600365234691198,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 6,
+      "gap": 0.0005020851537631543,
+      "iters": 302,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.11820220947265625,
+      "F": [
+        [
+          -4.0,
+          -2.0194776629999596
+        ],
+        [
+          4.0,
+          2.0082985165308473
+        ]
+      ],
+      "min_matrix_norm": 4.9991798152553795,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "strong",
+      "n": 16,
+      "start": 7,
+      "gap": 0.000625030744243027,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.19544768333435059,
+      "F": [
+        [
+          -4.0,
+          -0.004179573368395823
+        ],
+        [
+          -0.027978321431657103,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 5.517949288957933,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 0,
+      "gap": 3.375077994860476e-14,
+      "iters": 83,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.01742267608642578,
+      "F": [
+        [
+          3.5717368686879647,
+          3.571664883764351
+        ],
+        [
+          3.4521286177630377,
+          3.452056691515045
+        ]
+      ],
+      "min_matrix_norm": 5.970292419754575,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 1,
+      "gap": 4.796163466380676e-14,
+      "iters": 140,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.030483722686767578,
+      "F": [
+        [
+          9.812060039202272e-08,
+          -0.009176104887650574
+        ],
+        [
+          8.213744436452803e-05,
+          3.9997737440819123
+        ]
+      ],
+      "min_matrix_norm": 3.250125877938189,
+      "gradient_variance": 1.0000000000000002
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 2,
+      "gap": 1.6431300764452317e-14,
+      "iters": 120,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.026355743408203125,
+      "F": [
+        [
+          3.9987629141110594,
+          0.0002254147911574115
+        ],
+        [
+          -0.008283167634793599,
+          4.908401488088416e-07
+        ]
+      ],
+      "min_matrix_norm": 3.000015808973978,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 3,
+      "gap": 1.4210854715202004e-14,
+      "iters": 46,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.01032710075378418,
+      "F": [
+        [
+          -3.9999985555114272,
+          5.997870417662604e-06
+        ],
+        [
+          -0.09657407171381746,
+          1.5580621723192152e-07
+        ]
+      ],
+      "min_matrix_norm": 2.8800592815201163,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 4,
+      "gap": 2.5757174171303632e-14,
+      "iters": 148,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.033028364181518555,
+      "F": [
+        [
+          3.905289967754045,
+          3.905413009571845
+        ],
+        [
+          3.834308456249679,
+          3.8344306619043946
+        ]
+      ],
+      "min_matrix_norm": 6.6705653874826325,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 5,
+      "gap": 1.3391066033818788e-11,
+      "iters": 86,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.02010178565979004,
+      "F": [
+        [
+          -3.961134847928405,
+          -3.9267252620498256
+        ],
+        [
+          -3.919027932406723,
+          -3.8846711399019984
+        ]
+      ],
+      "min_matrix_norm": 6.469815393851315,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 6,
+      "gap": 2.353672812205332e-14,
+      "iters": 67,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.015290498733520508,
+      "F": [
+        [
+          3.9997431657704228,
+          0.002252079569295034
+        ],
+        [
+          0.0006386882187401985,
+          7.548389660906538e-07
+        ]
+      ],
+      "min_matrix_norm": 2.9218070402608705,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "original",
+      "n": 4,
+      "start": 7,
+      "gap": 1.2434497875801753e-14,
+      "iters": 43,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.009396076202392578,
+      "F": [
+        [
+          -0.01039417168688124,
+          -0.010394282435756299
+        ],
+        [
+          -3.9898967405994794,
+          -3.9898971531882905
+        ]
+      ],
+      "min_matrix_norm": 4.941309168520663,
+      "gradient_variance": 0.9999999999999998
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 0,
+      "gap": 3.019806626980426e-14,
+      "iters": 101,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.02749919891357422,
+      "F": [
+        [
+          3.9995766777560675,
+          7.04890580556331e-06
+        ],
+        [
+          0.1965112890382721,
+          3.920868665285733e-08
+        ]
+      ],
+      "min_matrix_norm": 2.753156434647699,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 1,
+      "gap": 0.00501459837094842,
+      "iters": 88,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.025610685348510742,
+      "F": [
+        [
+          -4.0,
+          2.698622879467047
+        ],
+        [
+          4.0,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 6.447747689314798,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 2,
+      "gap": 5.924150059399835e-13,
+      "iters": 301,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.0892634391784668,
+      "F": [
+        [
+          -8.702165776959395e-07,
+          -0.9261116298282334
+        ],
+        [
+          2.9383418084386584e-06,
+          3.9973454713478427
+        ]
+      ],
+      "min_matrix_norm": 2.624304181919596,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 3,
+      "gap": 4.973799150320701e-14,
+      "iters": 134,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.03611040115356445,
+      "F": [
+        [
+          -2.5298742824794934e-07,
+          -0.03186488910548382
+        ],
+        [
+          -0.00019755834717665892,
+          3.9996300193440124
+        ]
+      ],
+      "min_matrix_norm": 2.8805449932003566,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 4,
+      "gap": 0.0001476093367074327,
+      "iters": 339,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.09385514259338379,
+      "F": [
+        [
+          4.0,
+          3.145897845915036
+        ],
+        [
+          2.9273474080481425,
+          2.0976208130899145
+        ]
+      ],
+      "min_matrix_norm": 4.762894971542158,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 5,
+      "gap": 0.0036654332919248134,
+      "iters": 86,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.024481534957885742,
+      "F": [
+        [
+          -4.0,
+          4.0
+        ],
+        [
+          4.0,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 6.824212950371736,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 6,
+      "gap": 9.681144774731365e-14,
+      "iters": 132,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.03688311576843262,
+      "F": [
+        [
+          3.6765415106818877,
+          3.6765835190691964
+        ],
+        [
+          3.974322231938172,
+          3.974363508769147
+        ]
+      ],
+      "min_matrix_norm": 6.082481933197755,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 8,
+      "start": 7,
+      "gap": 5.115907697472721e-13,
+      "iters": 256,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.06861090660095215,
+      "F": [
+        [
+          3.559374657706733,
+          3.559343069065952
+        ],
+        [
+          3.662105365206792,
+          3.6620719889068862
+        ]
+      ],
+      "min_matrix_norm": 5.620133168964868,
+      "gradient_variance": 1.0000000000000002
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 0,
+      "gap": 7.880280076300039e-05,
+      "iters": 112,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.04687333106994629,
+      "F": [
+        [
+          3.2355293163414456,
+          3.593214740409458
+        ],
+        [
+          3.6434697342907683,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 4.450003945641892,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 1,
+      "gap": 4.1744385725905886e-14,
+      "iters": 160,
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "seconds": 0.0633857250213623,
+      "F": [
+        [
+          -3.9986299956110174,
+          -1.0440072323589438e-06
+        ],
+        [
+          0.29498606945081024,
+          -2.0917378860761248e-07
+        ]
+      ],
+      "min_matrix_norm": 2.652006531627802,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 2,
+      "gap": 0.000953187627231955,
+      "iters": 198,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.07903099060058594,
+      "F": [
+        [
+          4.0,
+          -4.0
+        ],
+        [
+          -4.0,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 6.672156361823858,
+      "gradient_variance": 0.9999999999999999
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 3,
+      "gap": 1.9138535201079776e-08,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.19988441467285156,
+      "F": [
+        [
+          -3.5820037151810156,
+          -3.765511168123102
+        ],
+        [
+          -3.8102110729094427,
+          -3.9955187277136854
+        ]
+      ],
+      "min_matrix_norm": 5.699996218049446,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 4,
+      "gap": 1.1106013886319488e-09,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.19743824005126953,
+      "F": [
+        [
+          3.9860089134229,
+          3.884333973087813
+        ],
+        [
+          3.8635788236848745,
+          3.7623526892647403
+        ]
+      ],
+      "min_matrix_norm": 6.059110583841898,
+      "gradient_variance": 1.0000000000000004
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 5,
+      "gap": 0.0009531876314561316,
+      "iters": 254,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.09278392791748047,
+      "F": [
+        [
+          -4.0,
+          4.0
+        ],
+        [
+          4.0,
+          -4.0
+        ]
+      ],
+      "min_matrix_norm": 6.680142211785018,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 6,
+      "gap": 7.780213865249408e-05,
+      "iters": 161,
+      "success": true,
+      "message": "CONVERGENCE: NORM OF PROJECTED GRADIENT <= PGTOL",
+      "seconds": 0.06784224510192871,
+      "F": [
+        [
+          3.3167477024216505,
+          3.5833178847352536
+        ],
+        [
+          3.753181153452997,
+          4.0
+        ]
+      ],
+      "min_matrix_norm": 4.795422645140083,
+      "gradient_variance": 1.0
+    },
+    {
+      "family": "original",
+      "n": 16,
+      "start": 7,
+      "gap": 5.8960767459481644e-06,
+      "iters": 500,
+      "success": false,
+      "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+      "seconds": 0.18548846244812012,
+      "F": [
+        [
+          -3.8664857150886327,
+          -3.8303760274431995
+        ],
+        [
+          -3.969426837058782,
+          -3.9336876083324763
+        ]
+      ],
+      "min_matrix_norm": 6.080102405378529,
+      "gradient_variance": 1.0
+    }
+  ],
+  "seed": 75391
+}

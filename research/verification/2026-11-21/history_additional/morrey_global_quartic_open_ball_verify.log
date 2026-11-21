@@ -1,0 +1,10 @@
+independent symbolic check of exact quartic Taylor remainder: PASS
+gamma = 9/8 epsilon = 1/256 coefficient l1 radius = 1/4096
+Reference endpoint: gamma* = 2/sqrt(3); gamma/gamma* < 63/64
+Q_gamma strong quasiconvexity coefficient > 1/256
+degree<=4 perturbation loss <= 8*delta = 1/512
+GLOBAL STRONG QUASICONVEXITY MODULUS >= 1/512
+four-atom witness (P0) = -231/41600
+worst coefficient perturbation <= 1/4096
+witness upper bound = -7067/1331200 < 0
+all exact checks passed

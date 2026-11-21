@@ -1,0 +1,1217 @@
+{
+  "schema_version": 1,
+  "cutoff": "2026-11-21",
+  "upstream_commit": "d0471a6f174c8d5851398ec8069cd5bb2defbb54",
+  "policy": "All recovered source payloads retained byte-for-byte; identical content deduplicated. ZIP container bytes are identified by hashes; extracted members are retained, not duplicate ZIP containers. Historical prose is not authoritative; see docs/research/LEDGER.md. The latest ZIP top-level directory is stripped in the repository mapping.",
+  "source_artifact_count": 36,
+  "unique_payload_count": 139,
+  "historical_payload_count": 53,
+  "artifacts": [
+    {
+      "source_name": "morrey_all_levels_uniform_obstruction(1).py",
+      "source_sha256": "71ff3ec232245bb14eaab52a7d1b6ddc50ee6cef424ab50e179f1cae7a480521",
+      "source_bytes": 10152,
+      "members": [
+        {
+          "member_name": "morrey_all_levels_uniform_obstruction(1).py",
+          "sha256": "71ff3ec232245bb14eaab52a7d1b6ddc50ee6cef424ab50e179f1cae7a480521",
+          "bytes": 10152,
+          "repository_path": "research/archive/files/morrey_all_levels_uniform_obstruction.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_all_levels_uniform_obstruction.py",
+      "source_sha256": "71ff3ec232245bb14eaab52a7d1b6ddc50ee6cef424ab50e179f1cae7a480521",
+      "source_bytes": 10152,
+      "members": [
+        {
+          "member_name": "morrey_all_levels_uniform_obstruction.py",
+          "sha256": "71ff3ec232245bb14eaab52a7d1b6ddc50ee6cef424ab50e179f1cae7a480521",
+          "bytes": 10152,
+          "repository_path": "research/archive/files/morrey_all_levels_uniform_obstruction.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_counterexample_reorientation.md",
+      "source_sha256": "a87498c176d1fa4cac6f728c0bed9abd6ccad84f754e350696a109c77a2f59f0",
+      "source_bytes": 5735,
+      "members": [
+        {
+          "member_name": "morrey_counterexample_reorientation.md",
+          "sha256": "a87498c176d1fa4cac6f728c0bed9abd6ccad84f754e350696a109c77a2f59f0",
+          "bytes": 5735,
+          "repository_path": "research/archive/files/morrey_counterexample_reorientation.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_counterexample_search_2026_11_21.zip",
+      "source_sha256": "ba1f63d54f65e1dd297e03ed3a9b4f6b18228802d693f6a781ecce09c4b99397",
+      "source_bytes": 608960,
+      "members": [
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/README.md",
+          "sha256": "b177694576bcd6630639039bb08d955c6587e004f2c947bccda02ca65ad6a2a7",
+          "bytes": 9179,
+          "repository_path": "research/experiments/2026-11-21/README.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/manifest.json",
+          "sha256": "cc848f703f28aaa6847792987f7f4a6c5fc971adb6e97187e198f9dad3096c25",
+          "bytes": 14005,
+          "repository_path": "research/experiments/2026-11-21/manifest.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/requirements.txt",
+          "sha256": "ad05ca961e78823c027fa8438c6a33c1df46c1c563659f5763b5693c0bf3320d",
+          "bytes": 85,
+          "repository_path": "research/experiments/2026-11-21/requirements.txt"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/README.md",
+          "sha256": "0f8f75c3fb866c770e9240c7a8f73bcfdb812962c3c5474792044dbeb58d6f4b",
+          "bytes": 6305,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/README.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/exact_degeneracy.py",
+          "sha256": "4b605298c8986a0f835b0376209e20c393564568065ed56a978694fb0a858da3",
+          "bytes": 1117,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/exact_degeneracy.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/fixed_planes.py",
+          "sha256": "e93a4638dead469ca046d7cda2eb049e86342782ecd1bb2a3e46df52370d9184",
+          "bytes": 1303,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/fixed_planes.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/fixed_planes_results.json",
+          "sha256": "06070d7752cbc96c5fcc064f71e41246dfd8aa51fd22f908bf3a45ff0cddcc91",
+          "bytes": 145349,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/fixed_planes_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/lh_sos_core.py",
+          "sha256": "22f22320cfc83864aa5dcab846b1647a38a79d3528c76758eae07d0d555e44ba",
+          "bytes": 6603,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/lh_sos_core.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_barrier.log",
+          "sha256": "440fdf7d0df4100d3270d88339d352e446953c069ccc430016354d8323ddfd2d",
+          "bytes": 54655,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_barrier.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_barrier.py",
+          "sha256": "f4d06813eec41feabb6d61dc68be387368fbde54fa2dc85c6830a1da1137f8fa",
+          "bytes": 1935,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_barrier.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_barrier_best.npz",
+          "sha256": "baf55313c8a5dff0bafe6bf7dfd589b0f0c5f543c26c94a208a4a2e1e89bcfc9",
+          "bytes": 11308,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_barrier_best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_barrier_results.json",
+          "sha256": "4d2469bd452e3692459444cddc31f8bee800a66ba6519c3450b69431adb910cc",
+          "bytes": 67862,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_barrier_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_sos.log",
+          "sha256": "bd8a85b1608c566329ad3a6cdfae1c9956f787422226491bafb2b21d3c7d59c5",
+          "bytes": 36883,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_sos.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_sos.py",
+          "sha256": "2c6cd133b22516ccbef2f994683b9bcc0ca75749967af61299ee5d8886058a2e",
+          "bytes": 4960,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_sos.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_sos_best.npz",
+          "sha256": "2a31ec63b178dfce769e96198bcfef2e62e8d210c814e52116ab2dcb7337b19c",
+          "bytes": 11308,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_sos_best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_sos_results.json",
+          "sha256": "4620ec872f1b57b63cd6da81c0d358da671b718df4099373e8a88f0f050d578e",
+          "bytes": 43631,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_sos_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/penalty_summary.json",
+          "sha256": "795fe5a22f81f8b6cf18ee81722de7895b64eeb259dbc687d69e8cee323f0017",
+          "bytes": 691,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/penalty_summary.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/results_delta_0.01.json",
+          "sha256": "383965c1bfbcc2af30094b8b70d7128d8f42b3382673bc61226f0be5cd1e9360",
+          "bytes": 26393,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/results_delta_0.01.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/results_delta_0.1.json",
+          "sha256": "e8e71635fee1738f586418d0e0da52c11fc0b2f2e901b135477d2e82e6f331ed",
+          "bytes": 26332,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/results_delta_0.1.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/search.py",
+          "sha256": "521095b8479b4ec4d634a346ef92c965fdb6f19f311f750062e4e82b2bec921c",
+          "bytes": 5239,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/tangent_planes.py",
+          "sha256": "a70bbe8cc3dfd07cae76b5ecb57f1bb93c1195328b3350b2b8d7667ae5616006",
+          "bytes": 1473,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/tangent_planes.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/tangent_planes_results.json",
+          "sha256": "70388bd3eed269da4dbde3c954773f350aa525d4ab9d8508c37b596ee2d26d0f",
+          "bytes": 145335,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/tangent_planes_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/validate_results.py",
+          "sha256": "5aab83bfc9b1d03d127c681e6a4c1119b5dc8effe797f5b703caba9af01cdf83",
+          "bytes": 2233,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/validate_results.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_cassese/validation_summary.json",
+          "sha256": "3ee8c0a19ab308d11296a851a9141fe6cc8e8764911e53ff540d887fa568a725",
+          "bytes": 1087,
+          "repository_path": "research/experiments/2026-11-21/work_cassese/validation_summary.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/README.md",
+          "sha256": "b455041076c30476c6981dcd12f0bba0a0e0156c143fbd4da80dffec0a83a6fe",
+          "bytes": 4806,
+          "repository_path": "research/experiments/2026-11-21/work_lit/README.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/SOS_AUDIT.md",
+          "sha256": "d3b885bef8b9562343dbe9e9d6d3a5ee7b0c7f5c5c0f11761113eb66d625fe9e",
+          "bytes": 3298,
+          "repository_path": "research/experiments/2026-11-21/work_lit/SOS_AUDIT.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/audit_sos.py",
+          "sha256": "25b85f7ac1dad74dd104279a06f756640edf3760aec2c7a9fcc1b74a98d5770a",
+          "bytes": 2107,
+          "repository_path": "research/experiments/2026-11-21/work_lit/audit_sos.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_conditioned_results/best.npz",
+          "sha256": "a7d7bfd9bea400906be78b2105f63e9bbcf6607581523258c7de1294bd2eb377",
+          "bytes": 5226,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_conditioned_results/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_conditioned_results/results.json",
+          "sha256": "d8ed40dbd7aec90a41d3106ab28ecd7fbe4540ce78cc05a032202210acbeacef",
+          "bytes": 33466,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_conditioned_results/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_conditioned_search.log",
+          "sha256": "5c33218a2e1b0f92c1e5b60f87bd132a6ca9213c28f3b19ce2a51e2c7cd8ead6",
+          "bytes": 24104,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_conditioned_search.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_conditioned_search.py",
+          "sha256": "21e994843862b487e31c00efceb3357cf0890cda36143993e3d27161f1fbeac5",
+          "bytes": 2680,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_conditioned_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fem_search.log",
+          "sha256": "40339e7b738184674b80a5bb2f660218faaf4134b905e6d2b40351606aa706ca",
+          "bytes": 16943,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fem_search.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fem_search.py",
+          "sha256": "6082ca030807b41e1b40660bde926cc124ac5b7943a46a157680c10ac64f224a",
+          "bytes": 5476,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fem_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fixed_results/best.npz",
+          "sha256": "f8abf672e11ac5593f516fac09c069fa768b4dcfb92967a29414ad5ddba5c7be",
+          "bytes": 5226,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fixed_results/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fixed_results/results.json",
+          "sha256": "15605d12a4bd552fb673c5c970456c18dff28157dde651ca2cb85c112e9ff7c5",
+          "bytes": 101072,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fixed_results/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fixedbase_search.log",
+          "sha256": "0b37838671501e2b29e5e3e20cf52cb396c702222b6f4379b41bbf453a431d9f",
+          "bytes": 84150,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fixedbase_search.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_fixedbase_search.py",
+          "sha256": "d6ab58697c3fe7190ed42ceea55702ce40eb9e6c480efe386c6b5cd7d72416d5",
+          "bytes": 1923,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_fixedbase_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_results/best.npz",
+          "sha256": "9e5b193883b52b79a81dd59a40fe9f1e740bffcd00ad74c903bad289ae91b6e3",
+          "bytes": 1386,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_results/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/dh_results/results.json",
+          "sha256": "7c47f3c62b6c5bde92fbc562b8fe37360ec78c23379c8fff00272d4927a7b72d",
+          "bytes": 24878,
+          "repository_path": "research/experiments/2026-11-21/work_lit/dh_results/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/search_summary.json",
+          "sha256": "8f9414abf78245ab98bd924e50a7ab9a2b4d3996d157b417ca145588d99ec52b",
+          "bytes": 1183,
+          "repository_path": "research/experiments/2026-11-21/work_lit/search_summary.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/sos_audit_results.json",
+          "sha256": "84561f8e778906af76c89ee5e74135ce05ff9624dd059448c3f70966e883169a",
+          "bytes": 262,
+          "repository_path": "research/experiments/2026-11-21/work_lit/sos_audit_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_lit/verify_sos_and_dh_parameters.py",
+          "sha256": "3929230c5dddc7a71f1ba22e5227e7d666cc0044644f8467fd1c8887c34f4dc0",
+          "bytes": 1095,
+          "repository_path": "research/experiments/2026-11-21/work_lit/verify_sos_and_dh_parameters.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/README.md",
+          "sha256": "97f1d652d2d7422ac74cf2f38ace86e3fc623f294897a65958f0d00bc10ea404",
+          "bytes": 6051,
+          "repository_path": "research/experiments/2026-11-21/work_pb/README.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/beta2_certificate.py",
+          "sha256": "84da24b22fde58241376b96c7e20851b41d36a76bbf6c593c80110336b8a405e",
+          "bytes": 2253,
+          "repository_path": "research/experiments/2026-11-21/work_pb/beta2_certificate.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/fem8.log",
+          "sha256": "081df9d7c204350edb1caf35ff6b5c191f19b0e16ab8c4241709c7d1a3840cdf",
+          "bytes": 4035,
+          "repository_path": "research/experiments/2026-11-21/work_pb/fem8.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/fem8_results.json",
+          "sha256": "f0e3a0eda8cb33b6c8e7fc1a831106a180d7bbfbdf7427ef92f49d3c4ad461c1",
+          "bytes": 277494,
+          "repository_path": "research/experiments/2026-11-21/work_pb/fem8_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/high_precision.log",
+          "sha256": "9d5502d9c8a20ddd7d46d7495600b192ad846e8a72072d9e3fa6c4854c8aa7ad",
+          "bytes": 1121,
+          "repository_path": "research/experiments/2026-11-21/work_pb/high_precision.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/high_precision_audit.json",
+          "sha256": "144ace0851b7a012b540df193fb75c5ffee40231d10bb5c88138fb525f622fe7",
+          "bytes": 6366,
+          "repository_path": "research/experiments/2026-11-21/work_pb/high_precision_audit.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/k3_transverse.log",
+          "sha256": "61d2cdb82cf8ad0c6ea899d6cd2f3102ceec76dcdbf67c1230009b0ebb33a754",
+          "bytes": 5959,
+          "repository_path": "research/experiments/2026-11-21/work_pb/k3_transverse.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/k3_transverse_results.json",
+          "sha256": "ac63f6dc902d8403215c2d41ab93e5438326809c518da75720d9947a97e5a2c4",
+          "bytes": 301104,
+          "repository_path": "research/experiments/2026-11-21/work_pb/k3_transverse_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/pbeta_fem_search.py",
+          "sha256": "6b7657818eea9446e1c00bde4653088dcdd4d3e77acc1ae4e92712b1911b7de6",
+          "bytes": 3354,
+          "repository_path": "research/experiments/2026-11-21/work_pb/pbeta_fem_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/pbeta_fourier_search.py",
+          "sha256": "833b11c906882ba3bebce1c72e6b4e3da6e1c382276f89c514ed09f64af93a11",
+          "bytes": 5243,
+          "repository_path": "research/experiments/2026-11-21/work_pb/pbeta_fourier_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/pbeta_targeted_search.py",
+          "sha256": "9a8527a9ff57bfab31b875c233272fdf4b234f50c43a4dba57ae846b85cd9eb6",
+          "bytes": 1142,
+          "repository_path": "research/experiments/2026-11-21/work_pb/pbeta_targeted_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/six_transverse.log",
+          "sha256": "e0ab855e56117aecbf92843b3db47921a533dac3fde6c3a47a5a70db5e6d76fa",
+          "bytes": 3033,
+          "repository_path": "research/experiments/2026-11-21/work_pb/six_transverse.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/six_transverse_results.json",
+          "sha256": "ed8d8c87f9094d11096d74cbe4b24ac300b6a14647fb4dc2b81b47b0b26e8d72",
+          "bytes": 58592,
+          "repository_path": "research/experiments/2026-11-21/work_pb/six_transverse_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/targeted.log",
+          "sha256": "c0d85934fb4eb909edb1972cfd70035c2aa69cd26c3fbfcdb2131b04ac5d0bf2",
+          "bytes": 7755,
+          "repository_path": "research/experiments/2026-11-21/work_pb/targeted.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/targeted_results.json",
+          "sha256": "02e1173ea561a5f9af52f4e373e7f1b4a2d7c09c28012e22a727a32f7f7e57b2",
+          "bytes": 297357,
+          "repository_path": "research/experiments/2026-11-21/work_pb/targeted_results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_pb/validate_results.py",
+          "sha256": "5da356bb108678b35b5dcdfd42a5ff2a2e69ce7e152c29d07c31544bdf37e7e0",
+          "bytes": 3146,
+          "repository_path": "research/experiments/2026-11-21/work_pb/validate_results.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/README.md",
+          "sha256": "ffd0c49a2534b0bc8e3f9f01ea0ec4efecf99d2c660c7b36f5db5893005f182f",
+          "bytes": 5281,
+          "repository_path": "research/experiments/2026-11-21/work_sos/README.md"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/certify_control.py",
+          "sha256": "8e22c74f410ee5787485fa0e953bbb5f17b13719e49725e7100ab5dd2b961dd3",
+          "bytes": 4483,
+          "repository_path": "research/experiments/2026-11-21/work_sos/certify_control.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/control.log",
+          "sha256": "0858a2a8e23b3e025848d8f1f0f95b94be089694714a545ffea122c343550d23",
+          "bytes": 248,
+          "repository_path": "research/experiments/2026-11-21/work_sos/control.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/control_run/control.npz",
+          "sha256": "4ad07997de8eb519c80e52a4ca226b3fde90b4243e4564c4fb2a6a3aff3433f0",
+          "bytes": 37314,
+          "repository_path": "research/experiments/2026-11-21/work_sos/control_run/control.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/control_run/exact_control_certificate.json",
+          "sha256": "5942351f6371c136e2e8aa453b7e2cc025f64a39dc9507127c8fc237e9f92973",
+          "bytes": 11997,
+          "repository_path": "research/experiments/2026-11-21/work_sos/control_run/exact_control_certificate.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/control_run/exact_verification.json",
+          "sha256": "d6c23f8e7658810666984355cf18c358bbc4cd4f9c74dfeebf14cb84c8ae0b53",
+          "bytes": 315,
+          "repository_path": "research/experiments/2026-11-21/work_sos/control_run/exact_verification.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/control_run/results.json",
+          "sha256": "1f3053a35666cd4f7f872cca499db23b7cd611ca7d2d007314e5987afd712ee7",
+          "bytes": 148,
+          "repository_path": "research/experiments/2026-11-21/work_sos/control_run/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/feature_search.py",
+          "sha256": "e49b6441f260c237f90a46f0fd776ffb3f4a5f05fb90355bd7b020a26d6617b4",
+          "bytes": 3747,
+          "repository_path": "research/experiments/2026-11-21/work_sos/feature_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features4/best.npz",
+          "sha256": "8eaf7a601b3661f16de0041aede3ba4fd22668203d235cfe569c6b74f53b5415",
+          "bytes": 13902,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features4/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features4/results.json",
+          "sha256": "7e6dda420e0a861da2afd87c087b5509c11a887fed5cfeba380d34c37c3f468b",
+          "bytes": 9744,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features4/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features4.log",
+          "sha256": "d2bb9e98807a6f0f6dd925d7d00a5a04a4e45ce9a9e6ddd07b999177b475aaaa",
+          "bytes": 8915,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features4.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features6/best.npz",
+          "sha256": "f1e960094b521364e127a2cf71f08d23e7af0a5a93aa646985d71e6741223abd",
+          "bytes": 47662,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features6/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features6/results.json",
+          "sha256": "b9e0cf56b288c54785b23110486c5598494701e02a6bde18b8d52823a9a3d7a7",
+          "bytes": 9723,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features6/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/features6.log",
+          "sha256": "de817d87a8a38ebaeb249bf10c90c2a7a41c8efa45345be1d5ef5f8e034386f4",
+          "bytes": 8892,
+          "repository_path": "research/experiments/2026-11-21/work_sos/features6.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/floating_output_audit.json",
+          "sha256": "4d9e505f318d01193fb1a05b3df1d367f2389375c54d16aaade8c6a93a3b0bd3",
+          "bytes": 1665,
+          "repository_path": "research/experiments/2026-11-21/work_sos/floating_output_audit.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/floating_output_audit.log",
+          "sha256": "ecf085683f94183b9c5dbcfa90e4a1668fb227cd9a655c9c4ab3b60f96765370",
+          "bytes": 1666,
+          "repository_path": "research/experiments/2026-11-21/work_sos/floating_output_audit.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search4/best.npz",
+          "sha256": "deaa65654e53d4651947aa531134530354dcee931bd3ea059ce1a7d6341d3d03",
+          "bytes": 10062,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search4/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search4/results.json",
+          "sha256": "0e793d483493e957b383d2b46f119edeb731c7ec8c9774cec98e79942a577305",
+          "bytes": 19511,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search4/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search4.log",
+          "sha256": "012cf648260cf732e521e019710747a2c29f090796cbc767ae880e559ae7b9ce",
+          "bytes": 17186,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search4.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search6/best.npz",
+          "sha256": "08d257397798fa7b41df0a93f91d2137174c098b8e140c534aa259330126350f",
+          "bytes": 43822,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search6/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search6/results.json",
+          "sha256": "44cc7d5fac6a3f03d371f0d8c833cb1c4444a3347739d5744d1e9fa86e4bea3d",
+          "bytes": 9695,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search6/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search6.log",
+          "sha256": "19431fd6cc0c48a740bd68ba050636e0eddf21b6b6d7c25729cd259c9db16c1e",
+          "bytes": 8887,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search6.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search8_diverse/best.npz",
+          "sha256": "90a850edbf9e32782e4458caa2d20fa397c9edc8edeb02b6a45720fb360be501",
+          "bytes": 13902,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search8_diverse/best.npz"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search8_diverse/results.json",
+          "sha256": "a028ddfa389feede430277b8747e2980692244f174dd9cdea0957117007d3e71",
+          "bytes": 23344,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search8_diverse/results.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search8_diverse.log",
+          "sha256": "25ffa0804f138ce8e9faf81dfa444e954844e4648dc5dc39611a5cc990e9b3a8",
+          "bytes": 20731,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search8_diverse.log"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/search_summary.json",
+          "sha256": "e799f39ec0e9bdd5379c1d60511b22552dae66aa3b09b58226473efc3a8688ae",
+          "bytes": 1441,
+          "repository_path": "research/experiments/2026-11-21/work_sos/search_summary.json"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/sos_search.py",
+          "sha256": "d15dfdfb649249e1277fa4c8c6d251bacd3ca52d65535797c6dcd91222d34334",
+          "bytes": 9133,
+          "repository_path": "research/experiments/2026-11-21/work_sos/sos_search.py"
+        },
+        {
+          "member_name": "morrey_counterexample_search_2026_11_21/work_sos/validate_outputs.py",
+          "sha256": "469a4aca99e649ab3efb3ffd19367a6d21d655a7c8fe65dd371e32092b2126c5",
+          "bytes": 1765,
+          "repository_path": "research/experiments/2026-11-21/work_sos/validate_outputs.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_counterexample_search_global_results.zip",
+      "source_sha256": "557681fb445c15db2b6dd02398ee4083f891ed0deeb027f4d9bda7f732ed1a4e",
+      "source_bytes": 20196,
+      "members": [
+        {
+          "member_name": "morrey_counterexample_reorientation.md",
+          "sha256": "a87498c176d1fa4cac6f728c0bed9abd6ccad84f754e350696a109c77a2f59f0",
+          "bytes": 5735,
+          "repository_path": "research/archive/files/morrey_counterexample_reorientation.md"
+        },
+        {
+          "member_name": "morrey_grabovsky_pencil_identity.py",
+          "sha256": "e14b77cc4f0fc1916766bd95b40e3390863e6c9385606b1b317fe015a2d35a8c",
+          "bytes": 883,
+          "repository_path": "research/archive/files/morrey_grabovsky_pencil_identity.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_common_kernel_identity.py",
+          "sha256": "16306ca69c8434b87b3aba619a784e00d718e81936f8f9d29bb200d0094242f6",
+          "bytes": 965,
+          "repository_path": "research/archive/files/morrey_grabovsky_common_kernel_identity.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_general_identity.py",
+          "sha256": "2b9a378a511e87b75dae00629ebdbd6dfa407805a3b57dc712a29f627767ae28",
+          "bytes": 768,
+          "repository_path": "research/archive/files/morrey_grabovsky_general_identity.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_quartic_identity.py",
+          "sha256": "dc958ae3eeddffe67d9d45c63dc6028d3b6c1ad01506bd054383b849f84af823",
+          "bytes": 1042,
+          "repository_path": "research/archive/files/morrey_grabovsky_quartic_identity.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_rankone_tangent.py",
+          "sha256": "afaa454fe842f6eb551c82b4096696a904c93eab68a38070ff94a0c884b6a709",
+          "bytes": 817,
+          "repository_path": "research/archive/files/morrey_grabovsky_rankone_tangent.py"
+        },
+        {
+          "member_name": "morrey_all_pullback_polyconvex_test.py",
+          "sha256": "0dc2ec3d295c4ee603c1ea2cec0d51617a07da33e11f90889d538cf653e2ed4b",
+          "bytes": 1337,
+          "repository_path": "research/archive/files/morrey_all_pullback_polyconvex_test.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_pullback_search.py",
+          "sha256": "6e45f8efde40beda3796c543eed4f52ceae99eb9df4a94c7b1cde2ecbe872333",
+          "bytes": 3854,
+          "repository_path": "research/archive/files/morrey_grabovsky_pullback_search.py"
+        },
+        {
+          "member_name": "morrey_grabovsky_pullback.log",
+          "sha256": "f2c4ebe19eb05d921078bd936121a1eff50fafb1ace85549c58be854bce9547c",
+          "bytes": 1611,
+          "repository_path": "research/archive/files/morrey_grabovsky_pullback.log"
+        },
+        {
+          "member_name": "morrey_cassese_pullback_probe.py",
+          "sha256": "ffc1a3f057982f5a97cc144ab79c8dc18f55bc8ffb85bd361383fe1981009a7e",
+          "bytes": 3571,
+          "repository_path": "research/archive/files/morrey_cassese_pullback_probe.py"
+        },
+        {
+          "member_name": "morrey_cassese_pullback.log",
+          "sha256": "fc45370b4d6bfee884abb04cf5fdea8a4f55bd6f85694395ef1f68012af33f87",
+          "bytes": 601,
+          "repository_path": "research/archive/files/morrey_cassese_pullback.log"
+        },
+        {
+          "member_name": "morrey_cassese_nonzero_base_probe.py",
+          "sha256": "6d2c562369bfd25ddbf290371d78b2d3b76d09d7d9bf30d122c910c09a9b4570",
+          "bytes": 3637,
+          "repository_path": "research/archive/files/morrey_cassese_nonzero_base_probe.py"
+        },
+        {
+          "member_name": "morrey_cassese_nonzero_base.log",
+          "sha256": "df5f786f7747ee2554432c8164e60da2b51af7be7d4a6a9d510c55a8001c3c55",
+          "bytes": 603,
+          "repository_path": "research/archive/files/morrey_cassese_nonzero_base.log"
+        },
+        {
+          "member_name": "morrey_four_wave_exchange.py",
+          "sha256": "2289d84897308eee248efaec2d6deff4a782ceb643037355952a8e46288d9208",
+          "bytes": 3587,
+          "repository_path": "research/archive/files/morrey_four_wave_exchange.py"
+        },
+        {
+          "member_name": "morrey_four_wave_certify.py",
+          "sha256": "730f3c298e3faa58ac5e811fea59a4cc0ef16a1ec10579a3cba023e6b04e31d2",
+          "bytes": 1912,
+          "repository_path": "research/archive/files/morrey_four_wave_certify.py"
+        },
+        {
+          "member_name": "morrey_quartic_exact_roconvex.py",
+          "sha256": "9e8d90df79b92848cf72b13be0c8dc899203a69ed124be9221dffd36be1b4810",
+          "bytes": 3644,
+          "repository_path": "research/archive/files/morrey_quartic_exact_roconvex.py"
+        },
+        {
+          "member_name": "morrey_false_quartic_exact_witness.py",
+          "sha256": "9db3dddbe2b11e2cef7ab04e593d60177a05ce4cc4a1fb20403376b81bda864e",
+          "bytes": 851,
+          "repository_path": "research/archive/files/morrey_false_quartic_exact_witness.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_flat_rankone_support_bundle.zip",
+      "source_sha256": "0c3cd0720e67607664283535bb2d9ccfd90680085c95fa0054d6b716652e9c61",
+      "source_bytes": 3646,
+      "members": [
+        {
+          "member_name": "morrey_flat_rankone_support.md",
+          "sha256": "83687060a7ca9fa51086ede87c0ed73ea5f32a0ac0717be864047718f761dd9d",
+          "bytes": 5049,
+          "repository_path": "research/archive/files/morrey_flat_rankone_support.md"
+        },
+        {
+          "member_name": "morrey_rankone_zero_global_check.py",
+          "sha256": "153912d6efb61380fc6b0dc778cce7c6206f9e8b3e73f9b45f7f6d1d86ecf1f0",
+          "bytes": 1418,
+          "repository_path": "research/archive/files/morrey_rankone_zero_global_check.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_certificate_bundle.zip",
+      "source_sha256": "e0a14dd5d6dd22723fe56f1fd15c530e1492d646fa642571d23acef39cc6d5ff",
+      "source_bytes": 8297,
+      "members": [
+        {
+          "member_name": "morrey_global_certificate_research.md",
+          "sha256": "c4074be8beebd85694101c2651b9dafb2f50d844c14714188dce8030addb72eb",
+          "bytes": 9350,
+          "repository_path": "research/archive/files/morrey_global_certificate_research.md"
+        },
+        {
+          "member_name": "morrey_rankone_kernel_exact_check.py",
+          "sha256": "f0be61e1cdb9b37f11adbd580efb4ce64e842eae185e05ad73f6ec906cbde918",
+          "bytes": 2290,
+          "repository_path": "research/archive/files/morrey_rankone_kernel_exact_check.py"
+        },
+        {
+          "member_name": "morrey_quartic_global_probe.py",
+          "sha256": "16fe62d1dee69ee29f0910dfd78f9d52ded20395fca88e0a3333a4911d7546de",
+          "bytes": 3130,
+          "repository_path": "research/archive/files/morrey_quartic_global_probe.py"
+        },
+        {
+          "member_name": "morrey_quartic_all_16_log.txt",
+          "sha256": "6aed64dd52bed4fcd23c5f38d607d7101065966865c424c4c746eab3d653e6d8",
+          "bytes": 1849,
+          "repository_path": "research/archive/files/morrey_quartic_all_16_log.txt"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_certificate_research.md",
+      "source_sha256": "c4074be8beebd85694101c2651b9dafb2f50d844c14714188dce8030addb72eb",
+      "source_bytes": 9350,
+      "members": [
+        {
+          "member_name": "morrey_global_certificate_research.md",
+          "sha256": "c4074be8beebd85694101c2651b9dafb2f50d844c14714188dce8030addb72eb",
+          "bytes": 9350,
+          "repository_path": "research/archive/files/morrey_global_certificate_research.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_open_ball.md",
+      "source_sha256": "30ef98b5ae41685ff82358b8741f4a7e43e3164251b28bb011deaa89abceb857",
+      "source_bytes": 5494,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_open_ball.md",
+          "sha256": "30ef98b5ae41685ff82358b8741f4a7e43e3164251b28bb011deaa89abceb857",
+          "bytes": 5494,
+          "repository_path": "research/archive/files/morrey_global_quartic_open_ball.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_open_ball_bundle.zip",
+      "source_sha256": "72b9e750884d155f7e858aa36fa005b6eb111b9087a7446d629b53acf0a91b7d",
+      "source_bytes": 4684,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_open_ball.md",
+          "sha256": "30ef98b5ae41685ff82358b8741f4a7e43e3164251b28bb011deaa89abceb857",
+          "bytes": 5494,
+          "repository_path": "research/archive/files/morrey_global_quartic_open_ball.md"
+        },
+        {
+          "member_name": "morrey_global_quartic_open_ball_verify.py",
+          "sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+          "bytes": 2990,
+          "repository_path": "research/archive/files/morrey_global_quartic_open_ball_verify.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_open_ball_verify(1).py",
+      "source_sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+      "source_bytes": 2990,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_open_ball_verify(1).py",
+          "sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+          "bytes": 2990,
+          "repository_path": "research/archive/files/morrey_global_quartic_open_ball_verify.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_open_ball_verify.py",
+      "source_sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+      "source_bytes": 2990,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_open_ball_verify.py",
+          "sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+          "bytes": 2990,
+          "repository_path": "research/archive/files/morrey_global_quartic_open_ball_verify.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_orbit_bundle.zip",
+      "source_sha256": "347b600f281cbbed952f324e6b4eeabf7175185a05859eedce1d42866a2cd340",
+      "source_bytes": 8861,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_orbit_note.md",
+          "sha256": "e801f976ebb97a4db6cd4bc9a00ec62c7734187bd2ce6feb2a453708dbbd2f33",
+          "bytes": 7270,
+          "repository_path": "research/archive/files/morrey_global_quartic_orbit_note.md"
+        },
+        {
+          "member_name": "morrey_quartic_gl_basis_unimodular.json",
+          "sha256": "40ec252771a1eaa5bd44a719d089b6a2971cc755dd7c3d5491f23f5dd6c9fdb2",
+          "bytes": 15404,
+          "repository_path": "research/archive/files/morrey_quartic_gl_basis_unimodular.json"
+        },
+        {
+          "member_name": "morrey_verify_quartic_orbit_basis.py",
+          "sha256": "e712419c31f6bb522ebf28c60b2ad9974ffa70982da2c5cd2f191615184d2905",
+          "bytes": 2598,
+          "repository_path": "research/archive/files/morrey_verify_quartic_orbit_basis.py"
+        },
+        {
+          "member_name": "morrey_quartic_harmonic_verifier.py",
+          "sha256": "1c8811910b839d2bb2e21c9ab7ac695a4aef1271ca32083b788932470ef11fb2",
+          "bytes": 2055,
+          "repository_path": "research/archive/files/morrey_quartic_harmonic_verifier.py"
+        },
+        {
+          "member_name": "morrey_heatflow_no_go.py",
+          "sha256": "dfb190c7395ca29cd21fc99d0059a4935ac42740e9154d2e32e7ece7aeb994ca",
+          "bytes": 1775,
+          "repository_path": "research/archive/files/morrey_heatflow_no_go.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_quartic_orbit_note.md",
+      "source_sha256": "e801f976ebb97a4db6cd4bc9a00ec62c7734187bd2ce6feb2a453708dbbd2f33",
+      "source_bytes": 7270,
+      "members": [
+        {
+          "member_name": "morrey_global_quartic_orbit_note.md",
+          "sha256": "e801f976ebb97a4db6cd4bc9a00ec62c7734187bd2ce6feb2a453708dbbd2f33",
+          "bytes": 7270,
+          "repository_path": "research/archive/files/morrey_global_quartic_orbit_note.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_reorientation.md",
+      "source_sha256": "d0ad8e8751bc5dcc830f456a6e7cca192ad7389e27d4b0d85a01afcb41cef9a1",
+      "source_bytes": 7588,
+      "members": [
+        {
+          "member_name": "morrey_global_reorientation.md",
+          "sha256": "d0ad8e8751bc5dcc830f456a6e7cca192ad7389e27d4b0d85a01afcb41cef9a1",
+          "bytes": 7588,
+          "repository_path": "research/archive/files/morrey_global_reorientation.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_global_reorientation_bundle.zip",
+      "source_sha256": "1923214a7f728bec6b2bf2e1b28967c57ded6ac5c57332ee5567dcb3cea76ba9",
+      "source_bytes": 4700,
+      "members": [
+        {
+          "member_name": "morrey_global_reorientation.md",
+          "sha256": "d0ad8e8751bc5dcc830f456a6e7cca192ad7389e27d4b0d85a01afcb41cef9a1",
+          "bytes": 7588,
+          "repository_path": "research/archive/files/morrey_global_reorientation.md"
+        },
+        {
+          "member_name": "morrey_heatflow_no_go.py",
+          "sha256": "dfb190c7395ca29cd21fc99d0059a4935ac42740e9154d2e32e7ece7aeb994ca",
+          "bytes": 1775,
+          "repository_path": "research/archive/files/morrey_heatflow_no_go.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_heatflow_no_go.py",
+      "source_sha256": "dfb190c7395ca29cd21fc99d0059a4935ac42740e9154d2e32e7ece7aeb994ca",
+      "source_bytes": 1775,
+      "members": [
+        {
+          "member_name": "morrey_heatflow_no_go.py",
+          "sha256": "dfb190c7395ca29cd21fc99d0059a4935ac42740e9154d2e32e7ece7aeb994ca",
+          "bytes": 1775,
+          "repository_path": "research/archive/files/morrey_heatflow_no_go.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_l1_mold_certificate.py",
+      "source_sha256": "41dc2be7ba61c191fccf9b035ec933640f3851bc08d9142c8424a9f53089b52f",
+      "source_bytes": 6434,
+      "members": [
+        {
+          "member_name": "morrey_l1_mold_certificate.py",
+          "sha256": "41dc2be7ba61c191fccf9b035ec933640f3851bc08d9142c8424a9f53089b52f",
+          "bytes": 6434,
+          "repository_path": "research/archive/files/morrey_l1_mold_certificate.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_l1_mold_counterexample.md",
+      "source_sha256": "72fcdc82d26fbfcd1ab7bc3c75af609926eab83e92d6a5ffd8b7ed7537d657da",
+      "source_bytes": 4454,
+      "members": [
+        {
+          "member_name": "morrey_l1_mold_counterexample.md",
+          "sha256": "72fcdc82d26fbfcd1ab7bc3c75af609926eab83e92d6a5ffd8b7ed7537d657da",
+          "bytes": 4454,
+          "repository_path": "research/archive/files/morrey_l1_mold_counterexample.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_level2_repair_status.md",
+      "source_sha256": "1519a8a50afbcb3d9e494ef2b2d61d3d1eab965502c82307603f00cadd0b3759",
+      "source_bytes": 12290,
+      "members": [
+        {
+          "member_name": "morrey_level2_repair_status.md",
+          "sha256": "1519a8a50afbcb3d9e494ef2b2d61d3d1eab965502c82307603f00cadd0b3759",
+          "bytes": 12290,
+          "repository_path": "research/archive/files/morrey_level2_repair_status.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_level2_uniform_fixedpoint_obstruction.py",
+      "source_sha256": "20872067b6d7c6b38e82b2878cdbcf4c3053e44bae24c526643f959ed652f980",
+      "source_bytes": 7899,
+      "members": [
+        {
+          "member_name": "morrey_level2_uniform_fixedpoint_obstruction.py",
+          "sha256": "20872067b6d7c6b38e82b2878cdbcf4c3053e44bae24c526643f959ed652f980",
+          "bytes": 7899,
+          "repository_path": "research/archive/files/morrey_level2_uniform_fixedpoint_obstruction.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_polynomial_reduction.md",
+      "source_sha256": "c96d5165e94baee4d4217a3f2c003fb1aa5c3adc5bd50892132ad277c271c144",
+      "source_bytes": 15651,
+      "members": [
+        {
+          "member_name": "morrey_polynomial_reduction.md",
+          "sha256": "c96d5165e94baee4d4217a3f2c003fb1aa5c3adc5bd50892132ad277c271c144",
+          "bytes": 15651,
+          "repository_path": "research/archive/files/morrey_polynomial_reduction.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_cone_no_go.md",
+      "source_sha256": "26ed783270788608da0bc43429531df4f144ded7ab6d65588e74a475880d1ee6",
+      "source_bytes": 8372,
+      "members": [
+        {
+          "member_name": "morrey_quartic_cone_no_go.md",
+          "sha256": "26ed783270788608da0bc43429531df4f144ded7ab6d65588e74a475880d1ee6",
+          "bytes": 8372,
+          "repository_path": "research/archive/files/morrey_quartic_cone_no_go.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_gl_basis_unimodular(1).json",
+      "source_sha256": "40ec252771a1eaa5bd44a719d089b6a2971cc755dd7c3d5491f23f5dd6c9fdb2",
+      "source_bytes": 15404,
+      "members": [
+        {
+          "member_name": "morrey_quartic_gl_basis_unimodular(1).json",
+          "sha256": "40ec252771a1eaa5bd44a719d089b6a2971cc755dd7c3d5491f23f5dd6c9fdb2",
+          "bytes": 15404,
+          "repository_path": "research/archive/files/morrey_quartic_gl_basis_unimodular.json"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_gl_basis_unimodular.json",
+      "source_sha256": "40ec252771a1eaa5bd44a719d089b6a2971cc755dd7c3d5491f23f5dd6c9fdb2",
+      "source_bytes": 15404,
+      "members": [
+        {
+          "member_name": "morrey_quartic_gl_basis_unimodular.json",
+          "sha256": "40ec252771a1eaa5bd44a719d089b6a2971cc755dd7c3d5491f23f5dd6c9fdb2",
+          "bytes": 15404,
+          "repository_path": "research/archive/files/morrey_quartic_gl_basis_unimodular.json"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_global_cone_no_go_bundle.zip",
+      "source_sha256": "e16f78ec0a6de029ea014046e0ef6c72f8eb407fdba7aae791eee27e48cd0af6",
+      "source_bytes": 5252,
+      "members": [
+        {
+          "member_name": "morrey_quartic_cone_no_go.md",
+          "sha256": "26ed783270788608da0bc43429531df4f144ded7ab6d65588e74a475880d1ee6",
+          "bytes": 8372,
+          "repository_path": "research/archive/files/morrey_quartic_cone_no_go.md"
+        },
+        {
+          "member_name": "morrey_rankone_zero_nonpolyconvex_verify.py",
+          "sha256": "51e663c9932f5fe8a13a874cf026a4a57f6e66dbaed0c98f166733d6e7eb7854",
+          "bytes": 2694,
+          "repository_path": "research/archive/files/morrey_rankone_zero_nonpolyconvex_verify.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_global_probe.py",
+      "source_sha256": "16fe62d1dee69ee29f0910dfd78f9d52ded20395fca88e0a3333a4911d7546de",
+      "source_bytes": 3130,
+      "members": [
+        {
+          "member_name": "morrey_quartic_global_probe.py",
+          "sha256": "16fe62d1dee69ee29f0910dfd78f9d52ded20395fca88e0a3333a4911d7546de",
+          "bytes": 3130,
+          "repository_path": "research/archive/files/morrey_quartic_global_probe.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_quartic_l2_dual_certificate.json",
+      "source_sha256": "60d3b5a893879f30a350eb019bdf90760a2e9bb5c0c14ceea68122f194bf58eb",
+      "source_bytes": 26884,
+      "members": [
+        {
+          "member_name": "morrey_quartic_l2_dual_certificate.json",
+          "sha256": "60d3b5a893879f30a350eb019bdf90760a2e9bb5c0c14ceea68122f194bf58eb",
+          "bytes": 26884,
+          "repository_path": "research/archive/files/morrey_quartic_l2_dual_certificate.json"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_rankone_global_results_bundle.zip",
+      "source_sha256": "a1aae4e6ee813167d0298c03340e54ee3152b8278dd4a9c68e9418f69791dbab",
+      "source_bytes": 7779,
+      "members": [
+        {
+          "member_name": "morrey_rankone_null_rigidity.md",
+          "sha256": "d21949602dc3bb469cc37a6fce236731713a889c72692eb4a69606f3001f3c99",
+          "bytes": 6556,
+          "repository_path": "research/archive/files/morrey_rankone_null_rigidity.md"
+        },
+        {
+          "member_name": "morrey_rankone_null_rigidity.py",
+          "sha256": "49d17e33a49cd97f669dc33b4308fa32007d3a61fa3468daf2aa676980ec08de",
+          "bytes": 3288,
+          "repository_path": "research/archive/files/morrey_rankone_null_rigidity.py"
+        },
+        {
+          "member_name": "morrey_singular_base_support.md",
+          "sha256": "11ad6d0fcdc2d957c2297daaf601fdd77896fb4f69dda341e2ad971813dca917",
+          "bytes": 4335,
+          "repository_path": "research/archive/files/morrey_singular_base_support.md"
+        },
+        {
+          "member_name": "morrey_singular_base_support_check.py",
+          "sha256": "17eb57c9f97fad67e87a491188e1ee75b1c397cefd1c7828130e9dadcd9ac56f",
+          "bytes": 981,
+          "repository_path": "research/archive/files/morrey_singular_base_support_check.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_rankone_kernel_exact_check.py",
+      "source_sha256": "f0be61e1cdb9b37f11adbd580efb4ce64e842eae185e05ad73f6ec906cbde918",
+      "source_bytes": 2290,
+      "members": [
+        {
+          "member_name": "morrey_rankone_kernel_exact_check.py",
+          "sha256": "f0be61e1cdb9b37f11adbd580efb4ce64e842eae185e05ad73f6ec906cbde918",
+          "bytes": 2290,
+          "repository_path": "research/archive/files/morrey_rankone_kernel_exact_check.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_rankone_zero_nonpolyconvex_verify.py",
+      "source_sha256": "51e663c9932f5fe8a13a874cf026a4a57f6e66dbaed0c98f166733d6e7eb7854",
+      "source_bytes": 2694,
+      "members": [
+        {
+          "member_name": "morrey_rankone_zero_nonpolyconvex_verify.py",
+          "sha256": "51e663c9932f5fe8a13a874cf026a4a57f6e66dbaed0c98f166733d6e7eb7854",
+          "bytes": 2694,
+          "repository_path": "research/archive/files/morrey_rankone_zero_nonpolyconvex_verify.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_rankone_zero_sos.md",
+      "source_sha256": "0aaf3ebb98507e134992068f36e32121e553652926226396a06dd341b811d10c",
+      "source_bytes": 5329,
+      "members": [
+        {
+          "member_name": "morrey_rankone_zero_sos.md",
+          "sha256": "0aaf3ebb98507e134992068f36e32121e553652926226396a06dd341b811d10c",
+          "bytes": 5329,
+          "repository_path": "research/archive/files/morrey_rankone_zero_sos.md"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_rankone_zero_sos.py",
+      "source_sha256": "0c268f47691efa0a950b91f8cadad406d1ee7ed13b1c00a921759f669fd17df4",
+      "source_bytes": 1824,
+      "members": [
+        {
+          "member_name": "morrey_rankone_zero_sos.py",
+          "sha256": "0c268f47691efa0a950b91f8cadad406d1ee7ed13b1c00a921759f669fd17df4",
+          "bytes": 1824,
+          "repository_path": "research/archive/files/morrey_rankone_zero_sos.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_research_progress_bundle.zip",
+      "source_sha256": "11b5fa7b6e9e0bbaea7ad98d758a2b5e5d70c1e66cc42e82a86c2f95def32e5c",
+      "source_bytes": 22815,
+      "members": [
+        {
+          "member_name": "README_morrey_bundle.md",
+          "sha256": "7192ca440cab8eea3b79b0d8188bc4b9041deb7227242814766c22ae666d2311",
+          "bytes": 2071,
+          "repository_path": "research/archive/files/README_morrey_bundle.md"
+        },
+        {
+          "member_name": "morrey_polynomial_reduction.md",
+          "sha256": "c96d5165e94baee4d4217a3f2c003fb1aa5c3adc5bd50892132ad277c271c144",
+          "bytes": 15651,
+          "repository_path": "research/archive/files/morrey_polynomial_reduction.md"
+        },
+        {
+          "member_name": "morrey_quartic_l2_readme.md",
+          "sha256": "e42a30d3cc96720616175340bc201a62aab6fb7840bc9ab78a18babc0f281931",
+          "bytes": 2245,
+          "repository_path": "research/archive/files/morrey_quartic_l2_readme.md"
+        },
+        {
+          "member_name": "morrey_quartic_l2_dual_certificate.json",
+          "sha256": "60d3b5a893879f30a350eb019bdf90760a2e9bb5c0c14ceea68122f194bf58eb",
+          "bytes": 26884,
+          "repository_path": "research/archive/files/morrey_quartic_l2_dual_certificate.json"
+        },
+        {
+          "member_name": "morrey_verify_quartic_l2_certificate.py",
+          "sha256": "74180cbcf639c0664469bc0a8c83db26e3a1ae97d9aa791a0eefa7c7620bb2c8",
+          "bytes": 2578,
+          "repository_path": "research/archive/files/morrey_verify_quartic_l2_certificate.py"
+        },
+        {
+          "member_name": "morrey_quartic_open_neighborhood.py",
+          "sha256": "86f5f7502301d141f05a37282cfcaab4a8fbb4e62f965ee02ac5bde235a878fe",
+          "bytes": 3059,
+          "repository_path": "research/archive/files/morrey_quartic_open_neighborhood.py"
+        },
+        {
+          "member_name": "morrey_quartic_open_neighborhood.json",
+          "sha256": "62d839e648f2fa415d3f524f39f04519d24d8d80478772b9678175b1ae8c9f82",
+          "bytes": 905,
+          "repository_path": "research/archive/files/morrey_quartic_open_neighborhood.json"
+        },
+        {
+          "member_name": "morrey_cubic_rigidity.py",
+          "sha256": "872515bd07bff585588745af95ea531c2763f8d86718c5ef137978d921a2f72f",
+          "bytes": 2151,
+          "repository_path": "research/archive/files/morrey_cubic_rigidity.py"
+        },
+        {
+          "member_name": "morrey_polynomial_certificate.py",
+          "sha256": "69c3168283c828e8528410ca264ae4656c4b39b3c0cc574e3113fd289b454d2d",
+          "bytes": 5545,
+          "repository_path": "research/archive/files/morrey_polynomial_certificate.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_verify_quartic_l2_certificate.py",
+      "source_sha256": "74180cbcf639c0664469bc0a8c83db26e3a1ae97d9aa791a0eefa7c7620bb2c8",
+      "source_bytes": 2578,
+      "members": [
+        {
+          "member_name": "morrey_verify_quartic_l2_certificate.py",
+          "sha256": "74180cbcf639c0664469bc0a8c83db26e3a1ae97d9aa791a0eefa7c7620bb2c8",
+          "bytes": 2578,
+          "repository_path": "research/archive/files/morrey_verify_quartic_l2_certificate.py"
+        }
+      ]
+    },
+    {
+      "source_name": "morrey_verify_quartic_orbit_basis.py",
+      "source_sha256": "e712419c31f6bb522ebf28c60b2ad9974ffa70982da2c5cd2f191615184d2905",
+      "source_bytes": 2598,
+      "members": [
+        {
+          "member_name": "morrey_verify_quartic_orbit_basis.py",
+          "sha256": "e712419c31f6bb522ebf28c60b2ad9974ffa70982da2c5cd2f191615184d2905",
+          "bytes": 2598,
+          "repository_path": "research/archive/files/morrey_verify_quartic_orbit_basis.py"
+        }
+      ]
+    }
+  ]
+}
