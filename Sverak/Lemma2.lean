@@ -11,21 +11,27 @@ For each `ε > 0` there is `k = k(ε) > 0` such that
 `F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²` (`sverakF ε k`) is rank-one convex on
 `M^{3×2}`. The paper's proof:
 
-1. eq. (6): `(d²/dt²) F (A + t Y)|₀ = (d²/dt²) f (P A + t P Y)|₀ + 2ε |Y|² + 4ε |A|² |Y|²
-   + 8ε ⟨A, Y⟩² + 2k |Y − P Y|²`;
+1. eq. (6) (`equation6`): `(d²/dt²) F (A + t Y)|₀ = (d²/dt²) f (P A + t P Y)|₀ + 2ε |Y|²
+   + 4ε |A|² |Y|² + 8ε ⟨A, Y⟩² + 2k |Y − P Y|²`;
 2. since `X ↦ f (P X)` is a homogeneous cubic polynomial, `(d²/dt²) f (P A + t P Y)|₀ ≥ −c |A| |Y|²`
-   for some `c > 0`, so (7) and `(*)`: the second derivative is `≥ 0` when `|A| ≥ c / (4ε)`;
-3. eq. (8) and a compactness argument on `𝒦 = {(A, Y) : |A| ≤ c/(4ε), rank Y = 1, |Y| = 1}`:
-   there is `k₀` with `g (A, Y, k₀) > ε` on `𝒦`, otherwise a limit `(Ā, Ȳ)` would have
-   `Ȳ = P Ȳ` (a rank-one direction of `L`) and `(d²/dt²) f (P Ā + t P Ȳ)|₀ ≤ −ε`, against the
-   convexity of `f` on rank-one lines of `L` (`sverakf_affine_of_rankOne`);
+   for some `c > 0` (`l2_d2f_ge`), so (7) (`equation7`) and `(*)` (`equation_star`): the second
+   derivative is `≥ 0` when `|A| ≥ c / (4ε)`;
+3. eq. (8) (`equation8`) and a compactness argument on
+   `𝒦 = {(A, Y) : |A| ≤ c/(4ε), rank Y = 1, |Y| = 1}`: there is `k₀` with `g (A, Y, k₀) > ε` on
+   `𝒦`, otherwise a limit `(Ā, Ȳ)` would have `Ȳ = P Ȳ` (a rank-one direction of `L`) and
+   `(d²/dt²) f (P Ā + t P Ȳ)|₀ ≤ −ε`, against the convexity of `f` on rank-one lines of `L`
+   (`sverakf_affine_of_rankOne`);
 4. together, `F` is rank-one convex for `k = k₀`.
 
 In the formalization, `|X| = √(frobSq X)`, `c = 6` (`l2_d2f_ge`), and `k₀ = n + 1` for some
-`n ∈ ℕ` (`l2_claim`). Eq. (6) is `l2_eq6`: `t ↦ F (A + t Y)` is a quartic in `t`, and its second
-derivative at `t` is the right-hand side of (6) at `A + t Y` (`l2_D2`); convexity on `ℝ` then
-follows from `convexOn_univ_of_deriv2_nonneg`. `𝒦` is closed because `rank Y = 1` is equivalent
-to the vanishing of the `2 × 2` minors of `Y` together with `Y ≠ 0` (`l2_rank_eq_one_iff`).
+`n ∈ ℕ` (`l2_claim`). `equation6` says more than the paper's (6): `t ↦ F (A + t Y)` is a quartic
+in `t`, and its second derivative at every `t` is the right-hand side of (6) at `A + t Y`
+(`l2_D2`); at `t = 0` this is the paper's (6) (`l2_deriv2_zero`). (7), `(*)` and (8) are stated
+for the second derivative `deriv^[2] (fun t => F (A + t Y)) 0` and proved from (6), as in the
+paper. Convexity on each line then follows from `convexOn_univ_of_deriv2_nonneg`: by (6), the
+second derivative of `t ↦ F (A + t Y)` at `t` is that of `s ↦ F ((A + t Y) + s Y)` at `0`
+(`l2_convexOn_line`). `𝒦` is closed because `rank Y = 1` is equivalent to the vanishing of the
+`2 × 2` minors of `Y` together with `Y ≠ 0` (`l2_rank_eq_one_iff`).
 -/
 
 @[expose] public section
@@ -42,18 +48,22 @@ local notation "M32" => Matrix (Fin 3) (Fin 2) ℝ
 def l2_inner (X Y : M32) : ℝ :=
   ∑ i, ∑ j, X i j * Y i j
 
-/-- The second derivative `(d²/dt²) f (P X + t P Y)|_{t=0}`, written out: with
-`f (P X) = −X₀₀ X₁₁ (X₂₀ + X₂₁) / 2`. -/
+/-- The second derivative `(d²/dt²) f (P X + t P Y)|_{t=0}`, written out from
+`f (P X) = −X₀₀ X₁₁ (X₂₀ + X₂₁) / 2`; `l2_d2f_eq_deriv2` proves that it is this second
+derivative. -/
 def l2_d2f (X Y : M32) : ℝ :=
   -(Y 0 0 * Y 1 1 * (X 2 0 + X 2 1) + Y 0 0 * X 1 1 * (Y 2 0 + Y 2 1) +
     X 0 0 * Y 1 1 * (Y 2 0 + Y 2 1))
 
-/-- The right-hand side of eq. (6): the second derivative of `t ↦ F (X + t Y)` at `0`. -/
+/-- The right-hand side of eq. (6),
+`(d²/dt²) f (P X + t P Y)|₀ + 2ε |Y|² + 4ε |X|² |Y|² + 8ε ⟨X, Y⟩² + 2k |Y − P Y|²`; by (6)
+(`equation6`, `l2_deriv2_zero`) it is the second derivative of `t ↦ F (X + t Y)` at `0`. -/
 noncomputable def l2_D2 (ε k : ℝ) (X Y : M32) : ℝ :=
   l2_d2f X Y + 2 * ε * frobSq Y + 4 * ε * frobSq X * frobSq Y + 8 * ε * l2_inner X Y ^ 2 +
     2 * k * frobSq (Y - sverakP Y)
 
-/-- The function `g (A, Y, k)` of eq. (8). -/
+/-- The function `g (A, Y, k)` of eq. (8), its right-hand side:
+`(d²/dt²) f (P A + t P Y)|₀ + 2ε |Y|² + 2k |Y − P Y|²`. -/
 noncomputable def l2_g (ε k : ℝ) (X Y : M32) : ℝ :=
   l2_d2f X Y + 2 * ε * frobSq Y + 2 * k * frobSq (Y - sverakP Y)
 
@@ -145,10 +155,11 @@ theorem l2_d2f_eq_deriv2 (A Y : M32) :
     ring
   · ring
 
-/-- **Eq. (6)** (`sv-eq6`). `t ↦ F (A + t Y)` is twice differentiable, and its second derivative
-at `t` is `(d²/dt²) f (P X + s P Y)|₀ + 2ε |Y|² + 4ε |X|² |Y|² + 8ε ⟨X, Y⟩² + 2k |Y − P Y|²`
-(`l2_D2 ε k X Y`) at `X = A + t Y`. -/
-theorem l2_eq6 (ε k : ℝ) (A Y : M32) :
+/-- **Eq. (6)** (`sv-eq6`). For all `A, Y`, `t ↦ F (A + t Y)` is twice differentiable, and its
+second derivative at `t` is
+`(d²/ds²) f (P X + s P Y)|₀ + 2ε |Y|² + 4ε |X|² |Y|² + 8ε ⟨X, Y⟩² + 2k |Y − P Y|²`
+(`l2_D2 ε k X Y`) at `X = A + t Y`. At `t = 0` this is the paper's (6) (`l2_deriv2_zero`). -/
+theorem equation6 (ε k : ℝ) (A Y : M32) :
     Differentiable ℝ (fun t : ℝ => sverakF ε k (A + t • Y)) ∧
       Differentiable ℝ (deriv fun t : ℝ => sverakF ε k (A + t • Y)) ∧
       ∀ t, deriv^[2] (fun t : ℝ => sverakF ε k (A + t • Y)) t = l2_D2 ε k (A + t • Y) Y := by
@@ -169,12 +180,20 @@ theorem l2_eq6 (ε k : ℝ) (A Y : M32) :
   simp only [l2_frobSq_eq, l2_inner_eq, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul]
   ring
 
-/-- `t ↦ F (A + t Y)` is convex as soon as the right-hand side of (6) is nonnegative along the
-line. -/
-theorem l2_convexOn_line (ε k : ℝ) (A Y : M32) (h : ∀ t : ℝ, 0 ≤ l2_D2 ε k (A + t • Y) Y) :
+/-- (6) at `t = 0`, as the paper states it: `(d²/dt²) F (A + t Y)|₀ = l2_D2 ε k A Y`. -/
+theorem l2_deriv2_zero (ε k : ℝ) (A Y : M32) :
+    deriv^[2] (fun t : ℝ => sverakF ε k (A + t • Y)) 0 = l2_D2 ε k A Y := by
+  rw [(equation6 ε k A Y).2.2 0, zero_smul, add_zero]
+
+/-- `t ↦ F (A + t Y)` is convex as soon as `(d²/ds²) F (X + s Y)|₀ ≥ 0` for every `X`: by (6), the
+second derivative of `t ↦ F (A + t Y)` at `t` is that of `s ↦ F ((A + t Y) + s Y)` at `0`. -/
+theorem l2_convexOn_line (ε k : ℝ) (A Y : M32)
+    (h : ∀ X : M32, 0 ≤ deriv^[2] (fun s : ℝ => sverakF ε k (X + s • Y)) 0) :
     ConvexOn ℝ Set.univ fun t : ℝ => sverakF ε k (A + t • Y) := by
-  obtain ⟨h1, h2, h3⟩ := l2_eq6 ε k A Y
-  exact convexOn_univ_of_deriv2_nonneg h1 h2 fun t => (h3 t).symm ▸ h t
+  obtain ⟨h1, h2, h3⟩ := equation6 ε k A Y
+  refine convexOn_univ_of_deriv2_nonneg h1 h2 fun t => ?_
+  rw [h3 t, ← l2_deriv2_zero]
+  exact h _
 
 /-! ### Eq. (7) and `(*)` -/
 
@@ -208,30 +227,36 @@ theorem l2_d2f_ge (X Y : M32) : -(6 * Real.sqrt (frobSq X) * frobSq Y) ≤ l2_d2
       _ = 6 * a * b ^ 2 := by ring
   linarith [neg_abs_le (l2_d2f X Y)]
 
-/-- **Eq. (7)** (`sv-eq7`). `(d²/dt²) F (A + t Y)|₀ ≥ (−c |A| + 4ε |A|²) |Y|²`, `c = 6`. -/
-theorem l2_eq7 {ε k : ℝ} (hε : 0 ≤ ε) (hk : 0 ≤ k) (X Y : M32) :
-    (-(6 * Real.sqrt (frobSq X)) + 4 * ε * frobSq X) * frobSq Y ≤ l2_D2 ε k X Y := by
-  have h0 := l2_d2f_ge X Y
+/-- **Eq. (7)** (`sv-eq7`). `(d²/dt²) F (A + t Y)|₀ ≥ (−c |A| + 4ε |A|²) |Y|²` for every `A, Y`,
+with `c = 6` (and `ε, k ≥ 0`). "From (6)": by (6) the second derivative is `l2_D2 ε k A Y`, whose
+first term is `≥ −c |A| |Y|²` (`l2_d2f_ge`) and whose other terms are `≥ 4ε |A|² |Y|²`. -/
+theorem equation7 {ε k : ℝ} (hε : 0 ≤ ε) (hk : 0 ≤ k) (A Y : M32) :
+    (-(6 * Real.sqrt (frobSq A)) + 4 * ε * frobSq A) * frobSq Y ≤
+      deriv^[2] (fun t : ℝ => sverakF ε k (A + t • Y)) 0 := by
+  rw [l2_deriv2_zero]
+  have h0 := l2_d2f_ge A Y
   have hY := l2_frobSq_nonneg Y
   have h1 : 0 ≤ 2 * ε * frobSq Y := by positivity
-  have h2 : 0 ≤ 8 * ε * l2_inner X Y ^ 2 := by positivity
+  have h2 : 0 ≤ 8 * ε * l2_inner A Y ^ 2 := by positivity
   have h3 : 0 ≤ 2 * k * frobSq (Y - sverakP Y) := by
     have := l2_frobSq_nonneg (Y - sverakP Y)
     positivity
   unfold l2_D2
   nlinarith
 
-/-- **`(*)`**: `(d²/dt²) F (A + t Y)|₀ ≥ 0` when `|A| ≥ c / (4ε)`. -/
-theorem l2_star {ε k : ℝ} (hε : 0 < ε) (hk : 0 ≤ k) (X Y : M32)
-    (hX : 6 / (4 * ε) ≤ Real.sqrt (frobSq X)) : 0 ≤ l2_D2 ε k X Y := by
-  refine le_trans ?_ (l2_eq7 hε.le hk X Y)
-  have ha : 6 ≤ 4 * ε * Real.sqrt (frobSq X) := by
-    rwa [div_le_iff₀ (by positivity), mul_comm] at hX
-  have hsq := Real.sq_sqrt (l2_frobSq_nonneg X)
-  have : 0 ≤ -(6 * Real.sqrt (frobSq X)) + 4 * ε * frobSq X := by
-    set a := Real.sqrt (frobSq X)
+/-- **(*)** (`sv-star`). `(d²/dt²) F (A + t Y)|₀ ≥ 0` for each `A` with `|A| ≥ c / (4ε)` and each
+`Y`, with `c = 6`: by (7), since then `−c |A| + 4ε |A|² ≥ 0`. -/
+theorem equation_star {ε k : ℝ} (hε : 0 < ε) (hk : 0 ≤ k) (A Y : M32)
+    (hA : 6 / (4 * ε) ≤ Real.sqrt (frobSq A)) :
+    0 ≤ deriv^[2] (fun t : ℝ => sverakF ε k (A + t • Y)) 0 := by
+  refine le_trans ?_ (equation7 hε.le hk A Y)
+  have ha : 6 ≤ 4 * ε * Real.sqrt (frobSq A) := by
+    rwa [div_le_iff₀ (by positivity), mul_comm] at hA
+  have hsq := Real.sq_sqrt (l2_frobSq_nonneg A)
+  have : 0 ≤ -(6 * Real.sqrt (frobSq A)) + 4 * ε * frobSq A := by
+    set a := Real.sqrt (frobSq A)
     rw [← hsq]
-    nlinarith [Real.sqrt_nonneg (frobSq X)]
+    nlinarith [Real.sqrt_nonneg (frobSq A)]
   exact mul_nonneg this (l2_frobSq_nonneg Y)
 
 /-! ### Rank one -/
@@ -281,13 +306,17 @@ theorem l2_rank_eq_one_iff (Y : M32) :
 
 /-! ### Eq. (8) and the compactness argument -/
 
-/-- **Eq. (8)** (`sv-eq8`). `(d²/dt²) F (A + t Y)|₀ ≥ g (A, Y, k)`. -/
-theorem l2_eq8 {ε k : ℝ} (hε : 0 ≤ ε) (X Y : M32) : l2_g ε k X Y ≤ l2_D2 ε k X Y := by
-  have h1 : 0 ≤ 4 * ε * frobSq X * frobSq Y := by
-    have := l2_frobSq_nonneg X
+/-- **Eq. (8)** (`sv-eq8`). `(d²/dt²) F (A + t Y)|₀ ≥ g (A, Y, k)` for every `A, Y` (and `ε ≥ 0`),
+where `g (A, Y, k) = (d²/dt²) f (P A + t P Y)|₀ + 2ε |Y|² + 2k |Y − P Y|²` (`l2_g`). "From (6)": the
+terms `4ε |A|² |Y|² + 8ε ⟨A, Y⟩²` of (6) are `≥ 0`. -/
+theorem equation8 {ε k : ℝ} (hε : 0 ≤ ε) (A Y : M32) :
+    l2_g ε k A Y ≤ deriv^[2] (fun t : ℝ => sverakF ε k (A + t • Y)) 0 := by
+  rw [l2_deriv2_zero]
+  have h1 : 0 ≤ 4 * ε * frobSq A * frobSq Y := by
+    have := l2_frobSq_nonneg A
     have := l2_frobSq_nonneg Y
     positivity
-  have h2 : 0 ≤ 8 * ε * l2_inner X Y ^ 2 := by positivity
+  have h2 : 0 ≤ 8 * ε * l2_inner A Y ^ 2 := by positivity
   unfold l2_g l2_D2
   linarith
 
@@ -343,19 +372,20 @@ theorem l2_K_isCompact (ε : ℝ) : IsCompact (l2_K ε) := by
       rw [hY, Real.sqrt_one] at this
       exact abs_le.1 this
 
-/-- The second derivative of `τ ↦ f (P X + τ Y)` at `0`, as a second difference (the function is
-a cubic in `τ`). -/
-theorem l2_d2f_eq_second_difference (X Y : M32) :
-    l2_d2f X Y = sverakf (sverakP X + (1 : ℝ) • Y) + sverakf (sverakP X + (-1 : ℝ) • Y) -
-      2 * sverakf (sverakP X + (0 : ℝ) • Y) := by
-  simp only [l2_d2f, l2_sverakf_eq, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul]
-  simp [sverakP]
-  ring
+/-- `f (P (P X + Y)) = f (P (X + Y))`: `sverakf` depends on its argument only through `P`, and
+`P` is a linear projection. -/
+theorem l2_sverakf_sverakP_add (X Y : M32) : sverakf (sverakP X + Y) = sverakf (X + Y) := by
+  have h : sverakP (sverakP X + Y) = sverakP (X + Y) := by
+    ext i j
+    fin_cases i <;> fin_cases j <;> simp [sverakP] <;> ring
+  unfold sverakf
+  rw [h]
 
 /-- The claim of the proof: there is `k₀` (here `n + 1`, `n ∈ ℕ`) with `g (A, Y, k₀) > ε` on `𝒦`.
 Otherwise there are `(A⁽ᵏ⁾, Y⁽ᵏ⁾) ∈ 𝒦` with `g (A⁽ᵏ⁾, Y⁽ᵏ⁾, k) ≤ ε`; a subsequence converges to
 `(Ā, Ȳ) ∈ 𝒦` with `Ȳ = P Ȳ` and `(d²/dt²) f (P Ā + t P Ȳ)|₀ ≤ −ε`, while `f` is affine on the
-rank-one line `P Ā + t Ȳ` of `L`. -/
+rank-one line `P Ā + t Ȳ` of `L`, so that this second derivative vanishes
+(`l2_d2f_eq_deriv2`). -/
 theorem l2_claim {ε : ℝ} (hε : 0 < ε) : ∃ n : ℕ, ∀ p ∈ l2_K ε, ε < l2_g ε (n + 1) p.1 p.2 := by
   have : FirstCountableTopology M32 :=
     inferInstanceAs (FirstCountableTopology (Fin 3 → Fin 2 → ℝ))
@@ -418,19 +448,25 @@ theorem l2_claim {ε : ℝ} (hε : 0 < ε) : ∃ n : ℕ, ∀ p ∈ l2_K ε, ε 
     have h2 : Tendsto (fun n => l2_d2f (p (φ n)).1 (p (φ n)).2) atTop (𝓝 (l2_d2f Ab Yb)) :=
       (hcontd.tendsto (Ab, Yb)).comp hlim
     exact le_of_tendsto' h2 fun n => hd (φ n)
-  -- but `f` is affine on the rank-one line `P Ā + τ Ȳ` of `L`
+  -- but `f` is affine on the rank-one line `P Ā + τ Ȳ` of `L`, so the second derivative vanishes
   obtain ⟨-, hrank, -⟩ := hqK
   obtain ⟨a, b, hab⟩ := sverakf_affine_of_rankOne (sverakP_mem Ab) hYbL hrank
-  rw [l2_d2f_eq_second_difference, hab, hab, hab] at hdq
+  have h00 : l2_d2f Ab Yb = 0 := by
+    rw [← l2_d2f_eq_deriv2]
+    have := (l2_quartic_deriv2 (φ := fun τ : ℝ => sverakf (Ab + τ • Yb)) a b 0 0 0 fun τ => by
+      rw [← l2_sverakf_sverakP_add, hab]; ring).2.2 0
+    rw [this]
+    ring
   linarith
 
 /-- For `k = k₀`, `(d²/dt²) F (A + t Y)|₀ ≥ 0` for every `A` and every rank-one `Y`: by `(*)`
-when `|A| ≥ c/(4ε)`, and otherwise by the claim and homogeneity in `Y`. -/
-theorem l2_D2_nonneg {ε k : ℝ} (hε : 0 < ε) (hk : 0 ≤ k)
+when `|A| ≥ c/(4ε)`; otherwise `(A, Y / |Y|) ∈ 𝒦`, so the claim and the homogeneity of `g` in `Y`
+give `g (A, Y, k₀) > 0`, and (8) concludes. -/
+theorem l2_deriv2_nonneg {ε k : ℝ} (hε : 0 < ε) (hk : 0 ≤ k)
     (hK : ∀ p ∈ l2_K ε, ε < l2_g ε k p.1 p.2) {Y : M32} (hY : Y.rank = 1) (X : M32) :
-    0 ≤ l2_D2 ε k X Y := by
+    0 ≤ deriv^[2] (fun t : ℝ => sverakF ε k (X + t • Y)) 0 := by
   by_cases hX : 6 / (4 * ε) ≤ Real.sqrt (frobSq X)
-  · exact l2_star hε hk X Y hX
+  · exact equation_star hε hk X Y hX
   push Not at hX
   have hY0 : 0 < frobSq Y := by
     rcases (l2_frobSq_nonneg Y).lt_or_eq with h | h
@@ -455,14 +491,19 @@ theorem l2_D2_nonneg {ε k : ℝ} (hε : 0 < ε) (hk : 0 ≤ k)
     push Not at h
     have : c ^ 2 * l2_g ε k X Y ≤ 0 := mul_nonpos_of_nonneg_of_nonpos (sq_nonneg _) h
     linarith
-  exact hgpos.le.trans (l2_eq8 hε.le X Y)
+  exact hgpos.le.trans (equation8 hε.le X Y)
 
 /-- **Lemma 2** (`sv-lemma2`). Let `P` be the orthogonal projection onto `L` and `f` the function
 `−r s t` on `L`. For each `ε > 0` there exists `k = k(ε) > 0` such that
-`F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²` is rank-one convex on `M^{3×2}`. -/
+`F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²` is rank-one convex on `M^{3×2}`.
+
+Proof (the paper's): `k = k₀` from the claim `g (A, Y, k₀) > ε` on `𝒦` (`l2_claim`: compactness
+and the affinity of `f` on rank-one lines of `L`); then `(d²/dt²) F (A + t Y)|₀ ≥ 0` for every `A`
+and every rank-one `Y`, by `(*)` and by (8) with the claim (`l2_deriv2_nonneg`), and so every line
+`t ↦ F (A + t Y)` with `rank Y = 1` is convex (`l2_convexOn_line`, by (6)). -/
 theorem lemma2 {ε : ℝ} (hε : 0 < ε) : ∃ k > 0, RankOneConvex (sverakF ε k) := by
   obtain ⟨n, hn⟩ := l2_claim hε
-  refine ⟨n + 1, by positivity, fun A B hB => l2_convexOn_line _ _ A B fun t => ?_⟩
-  exact l2_D2_nonneg hε (by positivity) hn hB (A + t • B)
+  exact ⟨n + 1, by positivity, fun A B hB =>
+    l2_convexOn_line _ _ A B (l2_deriv2_nonneg hε (by positivity) hn hB)⟩
 
 end Sverak

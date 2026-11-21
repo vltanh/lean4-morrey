@@ -32,7 +32,8 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process.
-DOCS = ['README.md', 'Pedregal/README.md', 'Pedregal/REPORT.md', 'Pedregal/CREDITS.md']
+DOCS = ['README.md', 'Pedregal/README.md', 'Pedregal/REPORT.md', 'Pedregal/CREDITS.md',
+        'Sverak/README.md', 'Sverak/REPORT.md', 'Sverak/CREDITS.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['External.Kakutani', 'Matrix']
 # With several papers in one repository (references/multi-paper.md): the namespaces of the documents

@@ -44,3 +44,4 @@ jobs:
         run: >-
           python3 scripts/check_md_tables.py README.md
           Pedregal/README.md Pedregal/REPORT.md Pedregal/CREDITS.md
+          Sverak/README.md Sverak/REPORT.md Sverak/CREDITS.md

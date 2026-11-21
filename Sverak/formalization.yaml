@@ -1,0 +1,141 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Šverák 1992: rank-one convexity does not imply quasiconvexity, in Lean"
+  description: >-
+    A Lean 4 formalization of V. Šverák, "Rank-one convexity does not imply quasiconvexity",
+    Proc. Roy. Soc. Edinburgh Sect. A 120 (1992), 185-189: a quartic polynomial F on 3x2
+    matrices that is rank-one convex but not quasiconvex, and its lift to m x n matrices for
+    m >= 3 and n >= 2, which answers Morrey's problem negatively for maps with at least three
+    components.
+
+
+    Every result of the paper is proved by the paper's argument: Lemma 1 (quasiconvexity of a
+    continuous function is tested by periodic maps), the structure of the subspace L and the
+    computation (4), Lemma 2 (the extension of f from L to a rank-one convex F), the Theorem, the
+    Remark (F is a polynomial of degree four) and the Corollary. Nothing is assumed. The paper is
+    one of three on Morrey's problem formalized in this repository, each its own submission.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.AP", "math.OC"]
+  msc2020: ["49J45", "26B25", "68V15"]
+
+sources:
+  - title: "Rank-one convexity does not imply quasiconvexity"
+    authors:
+      - "Vladimír Šverák"
+    id: "Proc. Roy. Soc. Edinburgh Sect. A 120 (1992), 185-189"
+    type: "article"
+    location: "https://doi.org/10.1017/S0308210500015080"
+    relationship: "formalizes"
+    note: >-
+      Formalized from the published article (PDF). Every result is proved by the paper's
+      argument; the formalization supplies the limit in Lemma 1, which the paper leaves to the
+      reader.
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
+    relationship: "independent"
+    note: >-
+      Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
+      non-quasiconvex function on 3x3 matrices, with its own definitions. It includes parts of
+      Šverák's argument (the test map w, its gradients in L, the integral (4), the "only if" half
+      of Lemma 1), not Lemma 2, the Theorem or the Corollary. Not consulted.
+  - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
+    relationship: "independent"
+    note: >-
+      Cassese's Lean formalization of results of arXiv:2608.03488 (2x m and 2x3 examples). Not
+      consulted; not a formalization of this paper.
+  - id: "Pedregal/ in this repository"
+    relationship: "other"
+    note: >-
+      The audit of Pedregal, arXiv:1905.06571v5 (a claimed proof for 2x2), in the same
+      repository, with its own Challenge and metadata.
+  - id: "Cassese/ in this repository"
+    relationship: "other"
+    note: >-
+      The formalization of Cassese, arXiv:2608.03488 (in progress), in the same repository. It
+      imports this library: it restates Šverák's example in Cassese's definitions.
+
+status:
+  scope: >-
+    The whole paper: Lemma 1, the rank-one directions of L and the affinity of f on rank-one lines
+    in L, Dw and (4), Lemma 2 with (6)-(8) and the compactness argument, (10)-(11), the Theorem,
+    the Remark and the Corollary. Not formalized: the introduction's survey of known results.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
+      tool_setup: >-
+        The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
+        020f253); FIGURES-TBD; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+      cost:
+        wall_time: "FIGURES-TBD"
+        spend_usd: "not tracked"
+        hardware: "local machine (20 cores, 62 GB RAM) and API"
+      prompting_notes: >-
+        The user supplied the paper's PDF and asked for it to be formalized in the repository
+        that already held the audit of Pedregal's paper, independently of other formalizations.
+  spend_usd: "not tracked"
+  notes: >-
+    The AI system wrote the code and the documents at the request of the author. No person has
+    reviewed the proofs. Independent AI agents checked the statements against the paper and the
+    formal proofs against the paper's. See Sverak/CREDITS.md.
+
+fidelity:
+  divergences: >-
+    Statements: no statement of the paper was changed. Readings: matrices are Matrix (Fin m) (Fin n)
+    R and gradients have the components as rows; quasiconvexity (ii) is stated on a given domain,
+    with smooth compactly supported test maps and the requirement that the integral exist
+    (automatic for continuous f on a bounded domain), and the Theorem and the Corollary are proved
+    on the open unit cube, the domain of the paper's proofs (the paper cites that the class does
+    not depend on the domain; that is not formalized); Lemma 1 is proved for every matrix A (the
+    paper writes A = 0); P is given by its formula and proved orthogonal; the constants that the
+    paper leaves open are c = 6 in Lemma 2 and k = n + 1 for some natural n, and the cutoff of
+    Lemma 1 satisfies |D eta| <= C/eps with a C larger than the paper's 2, which its argument does
+    not use; "polynomial of degree four" is total degree 4, for eps /= 0. Proofs: every proof
+    follows the paper's argument; the steps it leaves to the reader (the limit in Lemma 1, the
+    compactness of K and the other implicit steps of Lemma 2, the rank-zero case in the Corollary)
+    are supplied along its lines. See Sverak/REPORT.md, Sections 3, 6 and 7.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "none"
+  notes: >-
+    No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
+    paper and compared the formal proofs with the paper's.
+
+alignment:
+  namespace: "SverakChallenge"
+  statements:
+    - source: "Theorem"
+      lean: "SverakChallenge.theorem_main"
+      module: "Sverak.Challenge"
+      status: "proved"
+      note: "There are eps > 0 and k > 0 such that F = sverakF eps k is rank-one convex and not quasiconvex (on the unit cube)."
+    - source: "Corollary"
+      lean: "SverakChallenge.corollary"
+      module: "Sverak.Challenge"
+      status: "proved"
+      note: "With the same eps and k, F(TX) is rank-one convex and not quasiconvex on m x n matrices, for every m >= 3 and n >= 2."
+    - source: "Remark"
+      lean: "SverakChallenge.remark_polynomial"
+      module: "Sverak.Challenge"
+      status: "proved"
+      note: "For eps /= 0, F is a polynomial of total degree four in the entries."
+
+acknowledgements: >-
+  Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts.

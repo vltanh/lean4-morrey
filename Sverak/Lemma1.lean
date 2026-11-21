@@ -12,21 +12,26 @@ public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
 
 V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A
 (1992), 185–189, Section 2, Lemma 1. Quasiconvexity is taken on the unit cube `Ω = (0, 1)^n`, the
-domain of the paper's proof ("Since `u_ε` is smooth and compactly supported in `(0, 1)^n`").
+domain of the paper's proof ("Since `u_ε` is smooth and compactly supported in `(0, 1)^n`"). The
+paper's class does not depend on `Ω`, by [3] and [10] of the paper, which is not formalized here.
 
-* `lemma1_witness`: the "only if" part, as the paper proves it: from a smooth periodic `u`, the
-  maps `u_ε (x) = ε² η_ε (x) u (x / ε²)`, smooth with compact support in `(0, 1)^n`, have
-  `∫ f (A + ∇u_ε) → ∫_{[0,1]^n} f (A + ∇u)` as `ε → 0`. So a periodic map with
-  `∫ f (A + ∇u) < f (A)` gives a compactly supported one.
-* `lemma1`: the equivalence.
+* `lemma1_limit`: the limit in the proof: for a continuous `f`, a smooth periodic `u` and every
+  `A`, the maps `u_ε (x) = ε² η_ε (x) u (x / ε²)`, smooth with compact support in `(0, 1)^n`,
+  have `∫_{(0,1)^n} f (A + ∇u_ε) → ∫_{(0,1)^n} f (A + ∇u)` as `ε → 0⁺`.
+* `lemma1`: the equivalence. The "only if" part is the paper's: quasiconvexity gives (2),
+  `f (A) ≤ ∫ f (A + ∇u_ε)` for `0 < ε < 1/2`, and the limit gives `f (A) ≤ ∫ f (A + ∇u)`.
+* `lemma1_witness`: the "only if" part in contrapositive form, from the same limit: a periodic
+  map with `∫ f (A + ∇u) < f (A)` gives a compactly supported one, one of the `u_ε`.
 
 Helpers (prefix `l1_`):
 
 * the cutoff `η_ε` (`l1_eta`, for `ε = 1/K`): a product of one-dimensional profiles built from
   `Real.smoothTransition`, equal to `1` on `[ε, 1 - ε]^n`, vanishing off `(ε/2, 1 - ε/2)^n`, with
-  `|D η_ε| ≤ 4 n B / ε` (`l1_eta_fderiv_bound`);
+  `|D η_ε| ≤ 4 n B / ε` (`l1_eta_fderiv_bound`), where the paper asks `|D η_ε| ≤ 2 / ε`; the
+  paper's constant 2 is not used, any bound `C / ε` serves;
 * the periodic average identity `∫_{(0,1)^n} G (N x) dx = ∫_{(0,1)^n} G` for an integer `N ≥ 1`
-  (`l1_setIntegral_comp_nsmul`);
+  (`l1_setIntegral_comp_nsmul`), and the averaging limit `∫_{(0,1)^n} G (N x) dx → ∫_{(0,1)^n} G`
+  as `N → ∞` through the reals (`l1_tendsto_setIntegral_comp_smul`);
 * the test maps `u_ε` (`l1_testMap`) and their gradients;
 * the periodic extension `x ↦ φ (fract x)` (`l1_perExt`) for the "if" part.
 -/
@@ -151,7 +156,11 @@ theorem l1_chi_deriv_bound {K B : ℝ} (hK : 0 < K)
   rw [abs_mul (2 * K) (p * b), abs_mul (2 * K) (c * q), abs_of_pos (by positivity : (0:ℝ) < 2 * K)]
   nlinarith
 
-/-- The cutoff `η_ε` for `ε = 1/K`. -/
+/-- The cutoff `η_ε` for `ε = 1/K`: `η_ε (x) = ∏ᵢ χ (xᵢ)`. It is smooth, takes values in `[0, 1]`,
+equals `1` on `[ε, 1 - ε]^n` and vanishes off `(ε/2, 1 - ε/2)^n`, as the paper asks. A note on the
+construction: its gradient satisfies `|D η_ε| ≤ 4 n B / ε` (`l1_eta_fderiv_bound`), with
+`B = sup |smoothTransition'|`, where the paper asks `|D η_ε| ≤ 2 / ε`. The paper's constant 2 is
+not used; any bound `C / ε` serves, since the proof only needs `ε² |D η_ε|` to be bounded. -/
 noncomputable def l1_eta (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : ℝ := ∏ i, l1_chi K (x i)
 
 theorem l1_eta_contDiff (n : ℕ) (K : ℝ) : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (l1_eta n K) := by
@@ -179,7 +188,10 @@ theorem l1_eta_eq_zero {n : ℕ} {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
   · exact Or.inr (hi h)
   · exact Or.inl (not_lt.1 h)
 
-/-- The gradient bound `|D η_ε| ≤ 4 n B / ε` (the paper has `2 / ε`; any `C / ε` works). -/
+/-- The gradient bound `|D η_ε| ≤ 4 n B / ε` for `ε = 1/K`, with `B` a bound for the derivative of
+`Real.smoothTransition`. The paper asks `|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any
+bound `C / ε` serves (only the boundedness of `ε² |D η_ε|` enters, in
+`l1_fderiv_testMap_bound`). -/
 theorem l1_eta_fderiv_bound {n : ℕ} {K B : ℝ} (hK : 0 < K)
     (hB : ∀ s, |deriv Real.smoothTransition s| ≤ B) (x : Fin n → ℝ) :
     ‖fderiv ℝ (l1_eta n K) x‖ ≤ n * (4 * K * B) := by
@@ -322,6 +334,88 @@ theorem l1_setIntegral_comp_nsmul {n : ℕ} {G : (Fin n → ℝ) → ℝ} (hG : 
   push_cast
   rw [inv_mul_cancel₀ (by positivity), one_mul]
 
+/-- The averaging limit, for the limit in the proof of Lemma 1: for a continuous `ℤ^n`-periodic `G`,
+`∫_{(0,1)^n} G (N x) dx → ∫_{(0,1)^n} G` as `N → ∞` through the reals. Rescaled,
+`∫_{(0,1)^n} G (N x) dx = N^{-n} ∫_{(0,N)^n} G`. With `M = ⌊N⌋`, the cube `(0, N)^n` holds the
+`M^n` whole cells of `(0, M)^n`, which contribute `M^n ∫_{(0,1)^n} G` (`l1_setIntegral_comp_nsmul`),
+and a boundary layer of measure `N^n - M^n`. So the difference between `∫_{(0,1)^n} G (N x) dx`
+and `(M/N)^n ∫_{(0,1)^n} G` is at most `sup |G| (1 - (M/N)^n)`, and `M / N → 1`. -/
+theorem l1_tendsto_setIntegral_comp_smul {n : ℕ} {G : (Fin n → ℝ) → ℝ} (hG : Continuous G)
+    (hper : ∀ x (z : Fin n → ℤ), G (x + fun i => (z i : ℝ)) = G x) :
+    Tendsto (fun N : ℝ => ∫ x in unitCube n, G (N • x)) atTop (𝓝 (∫ x in unitCube n, G x)) := by
+  obtain ⟨C, -, hC⟩ := l1_periodic_bounded hG hper
+  set I := ∫ x in unitCube n, G x
+  -- the cubes `(0, r)^n`
+  let Q : ℝ → Set (Fin n → ℝ) := fun r => Set.pi Set.univ fun _ => Set.Ioo 0 r
+  have hQmeas : ∀ r, MeasurableSet (Q r) := fun r =>
+    MeasurableSet.univ_pi fun _ => measurableSet_Ioo
+  have hQvol : ∀ r : ℝ, 0 ≤ r → volume.real (Q r) = r ^ n := fun r hr => by
+    simp only [Measure.real, Q]
+    rw [Real.volume_pi_Ioo_toReal fun _ => hr]
+    simp
+  have hQfin : ∀ r, volume (Q r) ≠ ⊤ := fun r => by
+    simp [Q, Real.volume_pi_Ioo]
+  have hQint : ∀ r, IntegrableOn G (Q r) := fun r =>
+    (hG.continuousOn.integrableOn_compact
+      (isCompact_univ_pi fun _ => isCompact_Icc (a := (0:ℝ)) (b := r))).mono_set
+        (Set.pi_mono fun _ _ => Set.Ioo_subset_Icc_self)
+  -- rescaling: `∫_{(0,1)^n} G (r x) dx = r^{-n} ∫_{(0,r)^n} G`
+  have hscale : ∀ r : ℝ, 0 < r →
+      ∫ x in unitCube n, G (r • x) = (r ^ n)⁻¹ * ∫ y in Q r, G y := by
+    intro r hr
+    rw [Measure.setIntegral_comp_smul_of_pos volume G _ hr, Module.finrank_fintype_fun_eq_card,
+      Fintype.card_fin, smul_eq_mul]
+    congr 3
+    ext y
+    rw [Set.mem_smul_set_iff_inv_smul_mem₀ hr.ne']
+    simp only [unitCube, Q, Set.mem_pi, Set.mem_univ, true_implies, Set.mem_Ioo, Pi.smul_apply,
+      smul_eq_mul]
+    refine forall_congr' fun i => ?_
+    rw [mul_pos_iff_of_pos_left (inv_pos.2 hr), inv_mul_lt_iff₀ hr, mul_one]
+  -- the whole cells: `∫_{(0,M)^n} G = M^n ∫_{(0,1)^n} G`
+  have hcells : ∀ M : ℕ, 0 < M → ∫ y in Q M, G y = (M : ℝ) ^ n * I := by
+    intro M hM
+    have hM' : (0:ℝ) < M := by exact_mod_cast hM
+    have h := (hscale M hM').symm.trans (l1_setIntegral_comp_nsmul hG hper hM)
+    exact (mul_inv_cancel_left₀ (by positivity) _).symm.trans (congrArg _ h)
+  -- the estimate, for `N ≥ 1`
+  have hest : ∀ N : ℝ, 1 ≤ N →
+      ‖(∫ x in unitCube n, G (N • x)) - ((⌊N⌋₊ : ℝ) / N) ^ n * I‖ ≤
+        C * (1 - ((⌊N⌋₊ : ℝ) / N) ^ n) := by
+    intro N hN
+    set M := ⌊N⌋₊
+    have hN0 : 0 < N := by linarith
+    have hM1 : 0 < M := Nat.floor_pos.2 hN
+    have hM0 : (0:ℝ) < M := by exact_mod_cast hM1
+    have hMN : (M : ℝ) ≤ N := Nat.floor_le hN0.le
+    have hsub : Q M ⊆ Q N := Set.pi_mono fun _ _ => Set.Ioo_subset_Ioo_right hMN
+    have hsplit : ∫ y in Q N, G y = (M : ℝ) ^ n * I + ∫ y in Q N \ Q M, G y := by
+      conv_lhs => rw [← Set.union_sdiff_cancel hsub]
+      rw [setIntegral_union Set.disjoint_sdiff_right ((hQmeas N).diff (hQmeas M)) (hQint M)
+        ((hQint N).mono_set Set.sdiff_subset), hcells M hM1]
+    have hE : ‖∫ y in Q N \ Q M, G y‖ ≤ C * (N ^ n - (M : ℝ) ^ n) := by
+      have h := norm_setIntegral_le_of_norm_le_const (μ := volume) (s := Q N \ Q M) (f := G)
+        ((measure_mono Set.sdiff_subset).trans_lt (hQfin N).lt_top) fun x _ => hC x
+      rwa [measureReal_sdiff hsub (hQmeas M) (hQfin N), hQvol N hN0.le, hQvol M hM0.le] at h
+    have hNn : (0:ℝ) < N ^ n := by positivity
+    rw [hscale N hN0, hsplit, div_pow]
+    calc ‖(N ^ n)⁻¹ * ((M : ℝ) ^ n * I + ∫ y in Q N \ Q M, G y) - (M : ℝ) ^ n / N ^ n * I‖
+        = (N ^ n)⁻¹ * ‖∫ y in Q N \ Q M, G y‖ := by
+          rw [show (N ^ n)⁻¹ * ((M : ℝ) ^ n * I + ∫ y in Q N \ Q M, G y) -
+              (M : ℝ) ^ n / N ^ n * I = (N ^ n)⁻¹ * ∫ y in Q N \ Q M, G y by
+            field_simp; ring, norm_mul, Real.norm_of_nonneg (inv_nonneg.2 hNn.le)]
+      _ ≤ (N ^ n)⁻¹ * (C * (N ^ n - (M : ℝ) ^ n)) := by gcongr
+      _ = C * (1 - (M : ℝ) ^ n / N ^ n) := by field_simp
+  -- `M / N → 1`
+  have hr : Tendsto (fun N : ℝ => ((⌊N⌋₊ : ℝ) / N) ^ n) atTop (𝓝 1) := by
+    simpa using (tendsto_nat_floor_div_atTop (R := ℝ)).pow n
+  have he : Tendsto (fun N : ℝ => (∫ x in unitCube n, G (N • x)) - ((⌊N⌋₊ : ℝ) / N) ^ n * I)
+      atTop (𝓝 0) := by
+    refine squeeze_zero_norm' (a := fun N : ℝ => C * (1 - ((⌊N⌋₊ : ℝ) / N) ^ n)) ?_ ?_
+    · filter_upwards [eventually_ge_atTop 1] with N hN using hest N hN
+    · simpa using ((tendsto_const_nhds (x := (1:ℝ))).sub hr).const_mul C
+  simpa using he.add (hr.mul_const I)
+
 /-! ### Jacobians and periodicity -/
 
 /-- `jac` only depends on the germ of the map. -/
@@ -344,21 +438,6 @@ theorem l1_abs_jac_le {m n : ℕ} (φ : (Fin n → ℝ) → Fin m → ℝ) (x : 
     · simp [h]
   calc _ ≤ ‖fderiv ℝ (fun y => φ y i) x‖ * 1 := by gcongr
     _ = _ := mul_one _
-
-/-- For smooth `φ` and continuous `f`, `x ↦ f (A + ∇φ (x))` is continuous. -/
-theorem l1_continuous_comp_jac {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
-    (A : Matrix (Fin m) (Fin n) ℝ) {φ : (Fin n → ℝ) → Fin m → ℝ}
-    (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) : Continuous fun x => f (A + jac φ x) := by
-  refine hf.comp (continuous_const.add ?_)
-  refine continuous_pi fun i => continuous_pi fun k => ?_
-  have hi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) fun y => φ y i := (contDiff_pi.1 hφ) i
-  exact (hi.continuous_fderiv (by simp)).clm_apply continuous_const
-
-/-- A continuous function is integrable on the unit cube. -/
-theorem l1_integrableOn_unitCube {n : ℕ} {g : (Fin n → ℝ) → ℝ} (hg : Continuous g) :
-    IntegrableOn g (unitCube n) :=
-  (hg.continuousOn.integrableOn_compact (isCompact_univ_pi fun _ => isCompact_Icc)).mono_set
-    (Set.pi_mono fun _ _ => Set.Ioo_subset_Icc_self)
 
 /-- The derivative of a periodic map is periodic. -/
 theorem l1_fderiv_periodic {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ} (hper : IsPeriodic u)
@@ -429,8 +508,9 @@ theorem l1_jac_testMap_inner {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
   have hK2 : K ^ 2 ≠ 0 := by positivity
   simp [hK2]
 
-/-- `D u_ε = ε² u (x/ε²) ⊗ D η_ε + η_ε D u (x/ε²)` is bounded uniformly in `ε ≤ 1`:
-`|D u_ε| ≤ |D u|_∞ + 4 n B |u|_∞ ε`. -/
+/-- `D u_ε = ε² u (x/ε²) ⊗ D η_ε + η_ε D u (x/ε²)` is bounded uniformly in `ε = 1/K ≤ 1`: each row
+satisfies `|D (u_ε)ᵢ| ≤ D + 4 n B U ε ≤ D + 4 n B U`, where `U` bounds `|u|`, `D` bounds the rows of
+`D u`, and `B` bounds the derivative of `Real.smoothTransition` (so `|D η_ε| ≤ 4 n B / ε`). -/
 theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
     (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) {K : ℝ} (hK : 1 ≤ K) {B U D : ℝ}
     (hB : ∀ s, |deriv Real.smoothTransition s| ≤ B) (hU : ∀ y, ‖u y‖ ≤ U)
@@ -476,22 +556,25 @@ theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → �
     _ = D + n * (4 * B) * U / K := by field_simp
     _ ≤ D + n * (4 * B) * U := by gcongr; exact div_le_self (by positivity) hK
 
-/-- The core of the proof of **Lemma 1** (`sv-lemma1`), "only if" part: for a continuous `f`, a
-smooth `ℤ^n`-periodic `u` with `∫_{[0,1]^n} f (A + ∇u) < f (A)` yields a smooth map `φ` with
-compact support in `(0, 1)^n` and `∫ f (A + ∇φ) < f (A)` (one of the paper's `u_ε`).
+/-- The limit in the proof of **Lemma 1** (`sv-lemma1`): for a continuous `f`, a smooth
+`ℤ^n`-periodic `u` and every matrix `A`, the paper's maps `u_ε = ε² η_ε u (· / ε²)`
+(`l1_testMap u ε⁻¹`: the formalization's parameter is `K = 1/ε`) satisfy
+`∫_{(0,1)^n} f (A + D u_ε) → ∫_{(0,1)^n} f (A + D u)` as `ε → 0⁺`. The paper states this limit
+("it is easily seen") without proof.
 
-Proof (the paper's): `φ = u_ε = ε² η_ε u (· / ε²)` (`l1_testMap`) along `ε = 1 / (j + 1)`, so that
-`1 / ε²` is an integer. The cutoff `η_ε` (`l1_eta`) has `|D η_ε| ≤ 4 n B / ε` instead of the paper's
-`2 / ε`, with `B = sup |smoothTransition'|`; only the boundedness of `ε² |D η_ε|` is used. The
-integrands are uniformly bounded, and `f (A + D u_ε (x)) = f (A + D u (x / ε²))` for `x` in
-`(ε, 1 - ε)^n`, so by dominated convergence `∫ f (A + D u_ε) - ∫ f (A + D u (x / ε²)) → 0`; and
-`∫ f (A + D u (x / ε²)) = ∫ f (A + D u)` exactly by periodicity (`l1_setIntegral_comp_nsmul`). -/
-theorem lemma1_witness {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
-    {A : Matrix (Fin m) (Fin n) ℝ} {u : (Fin n → ℝ) → Fin m → ℝ}
-    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) (hper : IsPeriodic u)
-    (hlt : ∫ x in unitCube n, f (A + jac u x) < f A) :
-    ∃ φ : (Fin n → ℝ) → Fin m → ℝ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ ∧ HasCompactSupport φ ∧
-      tsupport φ ⊆ unitCube n ∧ ∫ x in unitCube n, f (A + jac φ x) < f A := by
+Proof: the integrands are bounded uniformly in `ε ≤ 1` (`l1_fderiv_testMap_bound`), and
+`D u_ε (x) = D u (x / ε²)` on `(ε, 1 - ε)^n` (`l1_jac_testMap_inner`), so by dominated convergence
+`∫ f (A + D u_ε) - ∫ f (A + D u (x / ε²)) → 0`; and `∫ f (A + D u (x / ε²)) → ∫ f (A + D u)` by
+periodicity (`l1_tendsto_setIntegral_comp_smul`, with `N = 1/ε²`, not an integer in general). A
+note on the construction: the cutoff `η_ε` (`l1_eta`) has `|D η_ε| ≤ 4 n B / ε`
+(`l1_eta_fderiv_bound`), with `B = sup |smoothTransition'|`, where the paper asks
+`|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any bound `C / ε` serves, since only the
+boundedness of `ε² |D η_ε|` enters. -/
+theorem lemma1_limit {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
+    (A : Matrix (Fin m) (Fin n) ℝ) {u : (Fin n → ℝ) → Fin m → ℝ}
+    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) (hper : IsPeriodic u) :
+    Tendsto (fun ε : ℝ => ∫ x in unitCube n, f (A + jac (l1_testMap u ε⁻¹) x)) (𝓝[>] 0)
+      (𝓝 (∫ x in unitCube n, f (A + jac u x))) := by
   -- uniform bounds: `|Dη_ε| ≤ 4 n B / ε`, `|u| ≤ U`, `|Du| ≤ D'`
   obtain ⟨B, hB0, hB⟩ := l1_deriv_smoothTransition_bound
   obtain ⟨U, hU0, hU⟩ := l1_periodic_bounded hu.continuous hper
@@ -514,69 +597,84 @@ theorem lemma1_witness {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf 
       (∀ i, ‖fderiv ℝ (fun y => ψ y i) x‖ ≤ R) → jac ψ x ∈ S := by
     intro ψ x h i _ k _
     exact abs_le.1 ((l1_abs_jac_le ψ x i k).trans (h i))
-  -- the sequence `ε_j = 1 / (j + 1)`, with `1 / ε_j² = (j + 1)²` an integer
-  let K : ℕ → ℝ := fun j => (j : ℝ) + 1
-  have hK : ∀ j, 1 ≤ K j := fun j => by simp [K]
-  have hN : ∀ j : ℕ, (((j + 1) ^ 2 : ℕ) : ℝ) = K j ^ 2 := fun j => by simp [K]
+  -- in terms of `K = 1/ε → ∞`
   let G : (Fin n → ℝ) → ℝ := fun y => f (A + jac u y)
-  have hGc : Continuous G := l1_continuous_comp_jac hf A hu
+  have hGc : Continuous G := gen_continuous_comp_jac hf A hu
   have hGper : ∀ x (z : Fin n → ℤ), G (x + fun i => (z i : ℝ)) = G x := fun x z => by
     simp only [G, l1_jac_periodic hper]
-  let H : ℕ → (Fin n → ℝ) → ℝ := fun j x =>
-    f (A + jac (l1_testMap u (K j)) x) - G ((K j ^ 2) • x)
-  have hHc : ∀ j, Continuous (H j) := fun j =>
-    (l1_continuous_comp_jac hf A (l1_testMap_contDiff hu (K j))).sub
+  let H : ℝ → (Fin n → ℝ) → ℝ := fun K x =>
+    f (A + jac (l1_testMap u K) x) - G ((K ^ 2) • x)
+  have hHc : ∀ K, Continuous (H K) := fun K =>
+    (gen_continuous_comp_jac hf A (l1_testMap_contDiff hu K)).sub
       (hGc.comp (continuous_const_smul _))
   have : IsFiniteMeasure (volume.restrict (unitCube n)) :=
     isFiniteMeasure_restrict.2 (by rw [volume_unitCube]; simp)
   have hcube : MeasurableSet (unitCube n) := MeasurableSet.univ_pi fun _ => measurableSet_Ioo
-  -- dominated convergence: the difference tends to `0`
-  have hlim : Tendsto (fun j => ∫ x in unitCube n, H j x) atTop
+  -- dominated convergence: `∫ f (A + D u_ε) - ∫ f (A + D u (x / ε²)) → 0`
+  have hlim : Tendsto (fun K => ∫ x in unitCube n, H K x) atTop
       (𝓝 (∫ x in unitCube n, (0:ℝ))) := by
-    refine tendsto_integral_of_dominated_convergence (fun _ => 2 * M)
-      (fun j => (hHc j).aestronglyMeasurable) (integrable_const _)
-      (fun j => Eventually.of_forall fun x => ?_) ?_
-    · have h1 : ‖f (A + jac (l1_testMap u (K j)) x)‖ ≤ M :=
-        hM _ (hmemS _ x fun i => l1_fderiv_testMap_bound hu (hK j) hB hU hD' x i)
-      have h2 : ‖G ((K j ^ 2) • x)‖ ≤ M := hM _ (hmemS u _ fun i => (hD' i _).trans hD'R)
-      calc ‖H j x‖ ≤ ‖f (A + jac (l1_testMap u (K j)) x)‖ + ‖G ((K j ^ 2) • x)‖ :=
-            norm_sub_le _ _
+    refine tendsto_integral_filter_of_dominated_convergence (fun _ => 2 * M)
+      (Eventually.of_forall fun K => (hHc K).aestronglyMeasurable) ?_ (integrable_const _) ?_
+    · filter_upwards [eventually_ge_atTop 1] with K hK
+      refine Eventually.of_forall fun x => ?_
+      have h1 : ‖f (A + jac (l1_testMap u K) x)‖ ≤ M :=
+        hM _ (hmemS _ x fun i => l1_fderiv_testMap_bound hu hK hB hU hD' x i)
+      have h2 : ‖G ((K ^ 2) • x)‖ ≤ M := hM _ (hmemS u _ fun i => (hD' i _).trans hD'R)
+      calc ‖H K x‖ ≤ ‖f (A + jac (l1_testMap u K) x)‖ + ‖G ((K ^ 2) • x)‖ := norm_sub_le _ _
         _ ≤ 2 * M := by linarith
     · rw [ae_restrict_iff' hcube]
       refine Eventually.of_forall fun x hx => ?_
       refine tendsto_const_nhds.congr' ?_
-      have hev : ∀ᶠ j in atTop, ∀ i, 1 / K j < x i ∧ x i < 1 - 1 / K j := by
+      have ht : Tendsto (fun K : ℝ => 1 / K) atTop (𝓝 0) :=
+        tendsto_const_nhds.div_atTop tendsto_id
+      have hev : ∀ᶠ K in atTop, ∀ i, 1 / K < x i ∧ x i < 1 - 1 / K := by
         rw [eventually_all]
         intro i
         have hxi := hx i (Set.mem_univ _)
-        have ht := tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)
         filter_upwards [ht.eventually (Iio_mem_nhds hxi.1),
-          ht.eventually (Iio_mem_nhds (sub_pos.2 hxi.2))] with j h1 h2
+          ht.eventually (Iio_mem_nhds (sub_pos.2 hxi.2))] with K h1 h2
         exact ⟨h1, by linarith⟩
-      filter_upwards [hev] with j hj
-      show (0:ℝ) = f (A + jac (l1_testMap u (K j)) x) - f (A + jac u ((K j ^ 2) • x))
-      rw [l1_jac_testMap_inner hu (by linarith [hK j]) hj, sub_self]
+      filter_upwards [hev, eventually_gt_atTop 0] with K hK hK0
+      show (0:ℝ) = f (A + jac (l1_testMap u K) x) - f (A + jac u ((K ^ 2) • x))
+      rw [l1_jac_testMap_inner hu hK0 hK, sub_self]
   rw [integral_zero] at hlim
-  -- by periodicity, `∫ f (A + D u (x / ε²)) = ∫ f (A + D u)` exactly
-  have hint1 : ∀ j, ∫ x in unitCube n, f (A + jac (l1_testMap u (K j)) x) =
-      (∫ x in unitCube n, H j x) + ∫ x in unitCube n, G x := by
-    intro j
-    have e : ∫ x in unitCube n, G ((K j ^ 2) • x) = ∫ x in unitCube n, G x := by
-      rw [← hN j]; exact l1_setIntegral_comp_nsmul hGc hGper (by positivity)
-    calc ∫ x in unitCube n, f (A + jac (l1_testMap u (K j)) x)
-        = ∫ x in unitCube n, (H j x + G ((K j ^ 2) • x)) := by
-          congr 1; funext x; simp only [H]; ring
-      _ = (∫ x in unitCube n, H j x) + ∫ x in unitCube n, G ((K j ^ 2) • x) :=
-          integral_add (l1_integrableOn_unitCube (hHc j))
-            (l1_integrableOn_unitCube (g := fun x => G ((K j ^ 2) • x))
-              (hGc.comp (continuous_const_smul _)))
-      _ = (∫ x in unitCube n, H j x) + ∫ x in unitCube n, G x := by rw [e]
-  have hGI : ∫ x in unitCube n, G x = ∫ x in unitCube n, f (A + jac u x) := rfl
-  obtain ⟨j, hj⟩ := (hlim.eventually_lt_const (sub_pos.2 hlt)).exists
-  obtain ⟨hcs, hts⟩ := l1_testMap_support u (hK j)
-  refine ⟨l1_testMap u (K j), l1_testMap_contDiff hu (K j), hcs, hts, ?_⟩
-  rw [hint1 j, hGI]
-  linarith
+  -- by periodicity, `∫ f (A + D u (x / ε²)) → ∫ f (A + D u)`
+  have havg : Tendsto (fun K : ℝ => ∫ x in unitCube n, G ((K ^ 2) • x)) atTop
+      (𝓝 (∫ x in unitCube n, G x)) :=
+    (l1_tendsto_setIntegral_comp_smul hGc hGper).comp (tendsto_pow_atTop two_ne_zero)
+  have hK : Tendsto (fun K => ∫ x in unitCube n, f (A + jac (l1_testMap u K) x)) atTop
+      (𝓝 (∫ x in unitCube n, G x)) := by
+    have h := hlim.add havg
+    rw [zero_add] at h
+    refine h.congr fun K => ?_
+    rw [← integral_add (gen_integrableOn_unitCube (hHc K))
+      (gen_integrableOn_unitCube (g := fun x => G ((K ^ 2) • x))
+        (hGc.comp (continuous_const_smul _)))]
+    congr 1
+    funext x
+    simp only [H]
+    ring
+  exact hK.comp tendsto_inv_nhdsGT_zero
+
+/-- **Lemma 1** (`sv-lemma1`), "only if" part, in contrapositive form: for a continuous `f`, a
+smooth `ℤ^n`-periodic `u` with `∫_{[0,1]^n} f (A + ∇u) < f (A)` yields a smooth map `φ` with
+compact support in `(0, 1)^n` and `∫ f (A + ∇φ) < f (A)`, one of the paper's `u_ε` with
+`0 < ε < 1/2`.
+
+Proof (the paper's): by the limit in the proof of Lemma 1 (`lemma1_limit`), the integrals
+`∫ f (A + D u_ε)` tend to `∫ f (A + D u) < f (A)` as `ε → 0⁺`, so one of them is `< f (A)`. A
+note on the construction: the cutoff `η_ε` (`l1_eta`) has `|D η_ε| ≤ 4 n B / ε` where the paper
+asks `|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any bound `C / ε` serves. -/
+theorem lemma1_witness {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
+    {A : Matrix (Fin m) (Fin n) ℝ} {u : (Fin n → ℝ) → Fin m → ℝ}
+    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) (hper : IsPeriodic u)
+    (hlt : ∫ x in unitCube n, f (A + jac u x) < f A) :
+    ∃ φ : (Fin n → ℝ) → Fin m → ℝ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ ∧ HasCompactSupport φ ∧
+      tsupport φ ⊆ unitCube n ∧ ∫ x in unitCube n, f (A + jac φ x) < f A := by
+  obtain ⟨ε, hlt', hε⟩ := (((lemma1_limit hf A hu hper).eventually_lt_const hlt).and
+    (Ioo_mem_nhdsGT (show (0:ℝ) < 1 / 2 by norm_num))).exists
+  obtain ⟨hcs, hts⟩ := l1_testMap_support u ((one_le_inv₀ hε.1).2 (by linarith [hε.2]))
+  exact ⟨l1_testMap u ε⁻¹, l1_testMap_contDiff hu _, hcs, hts, hlt'⟩
 
 /-! ### The "if" part: periodic extension -/
 
@@ -639,10 +737,15 @@ theorem l1_jac_perExt {m n : ℕ} (φ : (Fin n → ℝ) → Fin m → ℝ) {x : 
 
 /-- **Lemma 1** (`sv-lemma1`). A continuous function `f : M^{m×n} → ℝ` is quasiconvex if and only
 if `∫_{[0,1]^n} f (A + D u (x)) dx ≥ f (A)` for each `A ∈ M^{m×n}` and each smooth `u : ℝ^n → ℝ^m`
-which is periodic with respect to `ℤ^n`.
+which is periodic with respect to `ℤ^n`. Quasiconvex is meant on the unit cube
+(`QuasiconvexOn (unitCube n)`); the paper's class does not depend on `Ω`, by [3] and [10] of the
+paper, which is not formalized here.
 
-The "if" part tests with the periodic extension `x ↦ φ (fract x)` of `φ` (`l1_perExt`), smooth
-because near each point it is a finite sum of integer translates of `φ`. -/
+Proof (the paper's). "Only if": for `0 < ε < 1/2` the map `u_ε = ε² η_ε u (· / ε²)` is smooth and
+compactly supported in `(0, 1)^n`, so quasiconvexity gives (2), `f (A) ≤ ∫ f (A + D u_ε)`; as
+`ε → 0⁺` the right side tends to `∫ f (A + D u)` (`lemma1_limit`). "If" (the paper: "trivial"):
+test with the periodic extension `x ↦ φ (fract x)` of `φ` (`l1_perExt`), smooth because near each
+point it is a finite sum of integer translates of `φ`. -/
 theorem lemma1 {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f) :
     QuasiconvexOn (unitCube n) f ↔
       ∀ (A : Matrix (Fin m) (Fin n) ℝ) (u : (Fin n → ℝ) → Fin m → ℝ),
@@ -653,12 +756,16 @@ theorem lemma1 {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Contin
   have hcube : MeasurableSet (unitCube n) := MeasurableSet.univ_pi fun _ => measurableSet_Ioo
   constructor
   · intro hq A u hu hper
-    by_contra hlt
-    push Not at hlt
-    obtain ⟨φ, hφ, hc, hs, hφlt⟩ := lemma1_witness hf hu hper hlt
-    have := hq A φ hφ hc hs (l1_integrableOn_unitCube (l1_continuous_comp_jac hf A hφ))
-    rw [hconst] at this
-    linarith
+    -- (2): `f (A) ≤ ∫ f (A + D u_ε)` for each `0 < ε < 1/2`
+    have h2 : ∀ᶠ ε in 𝓝[>] (0:ℝ),
+        f A ≤ ∫ x in unitCube n, f (A + jac (l1_testMap u ε⁻¹) x) := by
+      filter_upwards [Ioo_mem_nhdsGT (show (0:ℝ) < 1 / 2 by norm_num)] with ε hε
+      obtain ⟨hcs, hts⟩ := l1_testMap_support u ((one_le_inv₀ hε.1).2 (by linarith [hε.2]))
+      have := hq A _ (l1_testMap_contDiff hu _) hcs hts
+        (gen_integrableOn_unitCube (gen_continuous_comp_jac hf A (l1_testMap_contDiff hu _)))
+      rwa [hconst] at this
+    -- and the right-hand sides tend to `∫ f (A + D u)`
+    exact ge_of_tendsto (lemma1_limit hf A hu hper) h2
   · intro h A φ hφ _ hs _
     rw [hconst]
     calc f A ≤ ∫ x in unitCube n, f (A + jac (l1_perExt φ) x) :=

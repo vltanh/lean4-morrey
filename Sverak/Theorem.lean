@@ -11,11 +11,17 @@ public import Mathlib.MeasureTheory.Function.LocallyIntegrable
 # Šverák 1992: the Theorem, the Corollary and the Remark
 
 * `theorem_main` (`sv-theorem`): there exist `ε > 0` and `k > 0` such that `F = sverakF ε k`
-  is rank-one convex but not quasiconvex.
+  is rank-one convex but not quasiconvex (on the unit cube).
 * `corollary` (`sv-corollary`): for `n ≥ 2` and `m ≥ 3`, `F̃ (X) = F (T X)`, with `T X` the upper
-  left `3 × 2` block of `X ∈ M^{m×n}`, is rank-one convex but not quasiconvex.
+  left `3 × 2` block of `X ∈ M^{m×n}`, is rank-one convex but not quasiconvex (on the unit cube).
 * `remark_polynomial` (`sv-remark`): `F` is a polynomial of degree four.
-* `equation11` (`sv-eq11`): the choice of `ε` by (10), of `k` by Lemma 2, and (11).
+* `equation10` (`sv-eq10`): the choice of `ε` in (10),
+  `∫_{[0,1]²} (f (D w) + ε |D w|² + ε |D w|⁴) < 0`, which holds for every `ε ∈ (0, ε₀]`.
+* `equation11` (`sv-eq11`): with `ε` from (10) and `k` from Lemma 2, `F` is rank-one convex and
+  (11) holds, `∫_{[0,1]²} F (D w) < 0 = F (0)`.
+
+Quasiconvexity is taken on the unit cube (`QuasiconvexOn (unitCube n)`); the paper's class does
+not depend on `Ω`, by [3] and [10] of the paper, which is not formalized here.
 -/
 
 @[expose] public section
@@ -85,14 +91,6 @@ private theorem thm_sverakF_ofRST (ε k r s t : ℝ) :
   simp [sverakF, sverakf, sverakP, ofRST, frobSq, Fin.sum_univ_succ, Matrix.sub_apply]
   ring
 
-/-- A continuous function is integrable on the unit cube. -/
-private theorem thm_integrableOn_unitCube {n : ℕ} {g : (Fin n → ℝ) → ℝ} (hg : Continuous g) :
-    IntegrableOn g (unitCube n) := by
-  refine (hg.continuousOn.integrableOn_compact
-    (isCompact_univ_pi fun _ => isCompact_Icc (a := (0 : ℝ)) (b := 1))).mono_set ?_
-  intro x hx i _
-  exact ⟨(hx i (Set.mem_univ i)).1.le, (hx i (Set.mem_univ i)).2.le⟩
-
 /-- `F (D w (x))`, explicitly. -/
 private theorem thm_sverakF_jac_w (ε k : ℝ) :
     (fun x : Fin 2 → ℝ => sverakF ε k (jac w x)) = fun x =>
@@ -106,57 +104,86 @@ private theorem thm_continuous_sverakF_jac_w (ε k : ℝ) :
     Continuous fun x : Fin 2 → ℝ => sverakF ε k (jac w x) := by
   rw [thm_sverakF_jac_w]; fun_prop
 
-/-- **(10) and (11)** (`sv-eq11`), the heart of the proof of the Theorem: `ε` with (10), `k` from
-Lemma 2, and `∫_{[0,1]²} F (Dw) < 0 = F (0)`. -/
-theorem equation11 : ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧
-    ∫ x in unitCube 2, sverakF ε k (jac w x) < sverakF ε k 0 := by
+/-- **(10)** (`sv-eq10`). "Since `D w` is bounded, we see from (4) that we can choose `ε > 0` such
+that `∫_{[0,1]²} (f (D w (x)) + ε |D w (x)|² + ε |D w (x)|⁴) dx < 0`." Every `ε ∈ (0, ε₀]` works,
+with `ε₀ = −I / 40` and `I = ∫_{[0,1]²} f (D w) < 0` by (4): `|D w|² ≤ 4`, so the `ε`-terms add at
+most `20 ε ≤ −I / 2`. -/
+theorem equation10 : ∃ ε₀ > 0, ∀ ε, 0 < ε → ε ≤ ε₀ →
+    ∫ x in unitCube 2,
+      (sverakf (jac w x) + ε * frobSq (jac w x) + ε * frobSq (jac w x) ^ 2) < 0 := by
   set I := ∫ x in unitCube 2, sverakf (jac w x) with hI
   have hI0 : I < 0 := by
     have h := equation4.2
     have hf0 : sverakf 0 = 0 := by simp [sverakf, sverakP]
     rwa [hf0] at h
-  set ε := -I / 40 with hε
-  have hεpos : 0 < ε := by rw [hε]; linarith
-  obtain ⟨k, hk, hR⟩ := lemma2 hεpos
-  refine ⟨ε, hεpos, k, hk, hR, ?_⟩
-  have hF0 : sverakF ε k 0 = 0 := by
-    simp [sverakF, sverakf, sverakP, frobSq, Fin.sum_univ_succ, Matrix.sub_apply]
-  rw [hF0]
+  refine ⟨-I / 40, by linarith, fun ε hε hεle => ?_⟩
   have hf : (fun x : Fin 2 → ℝ => sverakf (jac w x)) = fun x =>
       -(cos (2 * π * x 0) * cos (2 * π * x 1) * cos (2 * π * (x 0 + x 1))) := by
     funext x; rw [jac_w, sverakf_ofRST]
-  have hF := thm_sverakF_jac_w ε k
   have hcf : Continuous fun x : Fin 2 → ℝ => sverakf (jac w x) := by rw [hf]; fun_prop
-  have hcF := thm_continuous_sverakF_jac_w ε k
-  -- `|D w|² ≤ 4`, so the `ε`-terms are at most `20 ε`
-  have hpt : ∀ x : Fin 2 → ℝ, sverakF ε k (jac w x) ≤ sverakf (jac w x) + 20 * ε := by
+  -- `|D w|² = (cos 2πx₁)² + (cos 2πx₂)² + 2 (cos 2π(x₁ + x₂))² ≤ 4`
+  have hS : (fun x : Fin 2 → ℝ => frobSq (jac w x)) = fun x =>
+      cos (2 * π * x 0) ^ 2 + cos (2 * π * x 1) ^ 2 + 2 * cos (2 * π * (x 0 + x 1)) ^ 2 := by
+    funext x
+    rw [jac_w]
+    simp [frobSq, ofRST, Fin.sum_univ_succ]
+    ring
+  have hcS : Continuous fun x : Fin 2 → ℝ => frobSq (jac w x) := by rw [hS]; fun_prop
+  -- so the `ε`-terms are at most `20 ε`
+  have hpt : ∀ x : Fin 2 → ℝ,
+      sverakf (jac w x) + ε * frobSq (jac w x) + ε * frobSq (jac w x) ^ 2 ≤
+        sverakf (jac w x) + 20 * ε := by
     intro x
-    have h1 := congrFun hF x
-    have h2 := congrFun hf x
-    rw [h1, h2]
-    have ha := cos_sq_le_one (2 * π * x 0)
-    have hb := cos_sq_le_one (2 * π * x 1)
-    have hc := cos_sq_le_one (2 * π * (x 0 + x 1))
-    set S := cos (2 * π * x 0) ^ 2 + cos (2 * π * x 1) ^ 2 + 2 * cos (2 * π * (x 0 + x 1)) ^ 2
-      with hS
-    have hS0 : 0 ≤ S := by positivity
-    have hS4 : S ≤ 4 := by rw [hS]; linarith
-    have hS16 : S ^ 2 ≤ 16 := by nlinarith
-    nlinarith [mul_le_mul_of_nonneg_left hS4 hεpos.le, mul_le_mul_of_nonneg_left hS16 hεpos.le]
-  calc ∫ x in unitCube 2, sverakF ε k (jac w x)
+    have hS0 : 0 ≤ frobSq (jac w x) := l2_frobSq_nonneg _
+    have hS4 : frobSq (jac w x) ≤ 4 := by
+      rw [congrFun hS x]
+      linarith [cos_sq_le_one (2 * π * x 0), cos_sq_le_one (2 * π * x 1),
+        cos_sq_le_one (2 * π * (x 0 + x 1))]
+    have hS16 : frobSq (jac w x) ^ 2 ≤ 16 := by nlinarith
+    nlinarith [mul_le_mul_of_nonneg_left hS4 hε.le, mul_le_mul_of_nonneg_left hS16 hε.le]
+  calc ∫ x in unitCube 2,
+        (sverakf (jac w x) + ε * frobSq (jac w x) + ε * frobSq (jac w x) ^ 2)
       ≤ ∫ x in unitCube 2, (sverakf (jac w x) + 20 * ε) :=
-        setIntegral_mono (thm_integrableOn_unitCube hcF)
-          (thm_integrableOn_unitCube (hcf.add continuous_const)) hpt
+        setIntegral_mono (gen_integrableOn_unitCube
+            ((hcf.add (continuous_const.mul hcS)).add (continuous_const.mul (hcS.pow 2))))
+          (gen_integrableOn_unitCube (hcf.add continuous_const)) hpt
     _ = I + 20 * ε := by
-        rw [integral_add (thm_integrableOn_unitCube hcf)
-          (thm_integrableOn_unitCube continuous_const), setIntegral_const]
+        rw [integral_add (gen_integrableOn_unitCube hcf)
+          (gen_integrableOn_unitCube continuous_const), setIntegral_const]
         simp [Measure.real, volume_unitCube, hI]
-    _ < 0 := by rw [hε]; linarith
+    _ < 0 := by linarith
+
+/-- **(11)** (`sv-eq11`), with the choices of `ε` and `k` in the proof of the Theorem: `ε` by (10)
+(`equation10`), and `k = k (ε)` by Lemma 2, so that `F` is rank-one convex; then
+`∫_{[0,1]²} F (D w) < 0 = F (0)`, since `|D w (x) − P D w (x)| = 0` (`D w (x) ∈ L`), so that the
+integrand `F (D w)` is the one of (10). -/
+theorem equation11 : ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧
+    ∫ x in unitCube 2, sverakF ε k (jac w x) < sverakF ε k 0 := by
+  obtain ⟨ε, hε, h10⟩ := equation10
+  obtain ⟨k, hk, hR⟩ := lemma2 hε
+  refine ⟨ε, hε, k, hk, hR, ?_⟩
+  have hF0 : sverakF ε k 0 = 0 := by
+    simp [sverakF, sverakf, sverakP, frobSq, Fin.sum_univ_succ, Matrix.sub_apply]
+  -- `|D w − P D w| = 0`, since `D w (x) ∈ L`
+  have h0 : frobSq (0 : Matrix (Fin 3) (Fin 2) ℝ) = 0 := by simp [frobSq]
+  have hFw : ∀ x : Fin 2 → ℝ, sverakF ε k (jac w x) =
+      sverakf (jac w x) + ε * frobSq (jac w x) + ε * frobSq (jac w x) ^ 2 := by
+    intro x
+    have hP : sverakP (jac w x) = jac w x := sverakP_of_mem (by rw [jac_w]; exact ⟨(_, _, _), rfl⟩)
+    simp only [sverakF, hP, sub_self, h0, mul_zero, add_zero]
+  rw [hF0]
+  simp_rw [hFw]
+  exact h10 ε hε le_rfl
 
 end Key
 
 /-- **Theorem** (`sv-theorem`). There exist `ε > 0` and `k > 0` such that the function `F` given
-by (5) is rank-one convex but is not quasiconvex. -/
+by (5) is rank-one convex but is not quasiconvex: quasiconvex on the unit cube
+(`QuasiconvexOn (unitCube 2)`); the paper's class does not depend on `Ω`, by [3] and [10] of the
+paper, which is not formalized here.
+
+Proof (the paper's): `ε`, `k` and (11) from `equation11`; by Lemma 1, tested with the periodic map
+`w`, `F` is not quasiconvex. -/
 theorem theorem_main :
     ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧ ¬ QuasiconvexOn (unitCube 2) (sverakF ε k) := by
   obtain ⟨ε, hε, k, hk, hR, hlt⟩ := equation11
@@ -305,7 +332,12 @@ end Cor
 
 /-- **Corollary** (`sv-corollary`). Let `n ≥ 2` and `m ≥ 3`, and `F̃ (X) = F (T X)` with `F` the
 function of the Theorem and `T X` the upper left `3 × 2` block of `X`. Then `F̃` is rank-one convex
-but is not quasiconvex. -/
+but is not quasiconvex: quasiconvex on the unit cube (`QuasiconvexOn (unitCube n)`); the paper's
+class does not depend on `Ω`, by [3] and [10] of the paper, which is not formalized here.
+
+Proof (the paper's): `T` maps rank-one lines to rank-one lines (or to points), so `F̃` is rank-one
+convex; with `ε` and `k` of (11) (`equation11`), Lemma 1 tested with the periodic map
+`w̃ (x) = (w (x₁, x₂), 0, …, 0)` shows that `F̃` is not quasiconvex. -/
 theorem corollary :
     ∃ ε > 0, ∃ k > 0, ∀ {m n : ℕ} (hm : 3 ≤ m) (hn : 2 ≤ n),
       RankOneConvex (fun X : Matrix (Fin m) (Fin n) ℝ => sverakF ε k (topLeft hm hn X)) ∧

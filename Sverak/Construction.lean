@@ -11,7 +11,8 @@ public import Mathlib.MeasureTheory.Integral.Pi
 * `ofRST r s t = (r 0; 0 s; t t)`, `L` the subspace of these matrices, `sverakP` (in
   `Sverak.Defs`) the orthogonal projection onto `L` (`sverakP_mem`, `sverakP_of_mem`,
   `sverakP_orth`).
-* `sverakf (P X) = −r s t` (`sverakf_ofRST`).
+* (3): `sverakf (ofRST r s t) = −(r s t)` (`sverakf_ofRST`); `sverakf X` (in `Sverak.Defs`) is
+  `f (P X)`, so `sverakf` is the paper's `f` on `L`, where `P` is the identity.
 * `rank_ofRST_eq_one`, `sverakf_affine_of_rankOne` (`sv-L`): "the only rank-one directions in `L`
   are" the three coordinate directions, "therefore the function `f` is convex (in fact linear) on
   each rank-one line contained in `L`".

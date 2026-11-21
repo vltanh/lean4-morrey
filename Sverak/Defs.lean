@@ -49,10 +49,12 @@ def RankOneConvex {m n : ℕ} (f : Matrix (Fin m) (Fin n) ℝ → ℝ) : Prop :=
 def unitCube (n : ℕ) : Set (Fin n → ℝ) :=
   Set.pi Set.univ fun _ => Set.Ioo 0 1
 
-/-- Quasiconvexity on a bounded open domain `Ω` (the paper's (ii), after Morrey): for every
-matrix `A` and every smooth `φ` with compact support in `Ω`, `∫_Ω f (A) ≤ ∫_Ω f (A + ∇φ)`. The
-integral is required to exist: test maps for which `f (A + ∇φ)` is not integrable do not count,
-so that a failure of quasiconvexity is witnessed by a genuine integral. -/
+/-- Quasiconvexity on `Ω` (the paper's (ii), after Morrey, for a bounded open domain `Ω`; the
+definition accepts any set): for every matrix `A` and every smooth `φ` with compact support in
+`Ω`, `∫_Ω f (A) ≤ ∫_Ω f (A + ∇φ)`. The integral is required to exist: test maps for which
+`f (A + ∇φ)` is not integrable do not count, so that a failure of quasiconvexity is witnessed by a
+genuine integral. For a continuous `f` and a bounded measurable `Ω` the integral always exists, so
+the premise changes nothing there. -/
 def QuasiconvexOn {m n : ℕ} (Ω : Set (Fin n → ℝ)) (f : Matrix (Fin m) (Fin n) ℝ → ℝ) : Prop :=
   ∀ (A : Matrix (Fin m) (Fin n) ℝ) (φ : (Fin n → ℝ) → Fin m → ℝ),
     ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ → tsupport φ ⊆ Ω →
