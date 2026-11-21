@@ -37,9 +37,9 @@ How it was made:
   literature in the repository's README, whose corrections also apply to the report.
 
 Figures, from 2026-11-21 11:56:52 (UTC−6), the start of the second round, to the commit that
-completes [`REPORT.md`](REPORT.md) (13:45):
+completes [`REPORT.md`](REPORT.md) (13:41):
 
-- elapsed time: 1.8 h, for the whole round. The work on Šverák ran in parallel with the work on
+- elapsed time: 1.7 h, for the whole round. The work on Šverák ran in parallel with the work on
   Cassese's paper and with an update of the procedure, so it has no elapsed time of its own;
 - sub-agents on this paper: 7 (1 statement checker, 4 provers, 1 proof checker, 1 cleanup agent),
   1.4 h of working time in all; and 1 web-reading checker of the repository's README (0.25 h),
