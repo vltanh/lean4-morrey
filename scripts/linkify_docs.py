@@ -32,22 +32,32 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The Markdown documents to process.
-DOCS = ['README.md', 'Pedregal/README.md', 'Pedregal/REPORT.md', 'Pedregal/CREDITS.md',
-        'Sverak/README.md', 'Sverak/REPORT.md', 'Sverak/CREDITS.md']
+DOCS = ['README.md',
+        'docs/Pedregal/README.md',
+        'docs/Pedregal/REPORT.md',
+        'docs/Pedregal/CREDITS.md',
+        'docs/Sverak/README.md',
+        'docs/Sverak/REPORT.md',
+        'docs/Sverak/CREDITS.md',
+        'docs/Cassese/README.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['External.Kakutani', 'Matrix']
 # With several papers in one repository (references/multi-paper.md): the namespaces of the documents
-# in each top-level directory, tried before `NAMESPACES`, so that a short name in a paper's documents
-# names that paper's declaration. Example: {'PaperA': ['PaperA'], 'PaperB': ['PaperB']}.
-NAMESPACES_BY_DIR = {'Pedregal': ['Pedregal', 'PedregalChallenge'],
-                     'Sverak': ['Sverak', 'SverakChallenge'],
-                     'Cassese': ['Cassese', 'CasseseChallenge']}
+# in each directory, tried before `NAMESPACES`, so that a short name in a paper's documents names
+# that paper's declaration; the first namespace that declares a name wins, and the longest
+# directory that contains the document is used.
+NAMESPACES_BY_DIR = {'docs/Pedregal': ['Pedregal', 'PedregalChallenge'],
+                     'docs/Sverak': ['Sverak', 'SverakChallenge'],
+                     'docs/Cassese': ['Cassese', 'CasseseChallenge']}
 # Top-level module names of the project: a code span naming such a module links to its file.
-MODULE_ROOTS = ('Pedregal', 'Sverak', 'Cassese', 'External', 'Basic')
+MODULE_ROOTS = ('Morrey', 'Pedregal', 'Sverak', 'Cassese')
 # The module whose declarations win when a name is declared in several modules. With several
 # papers, a tuple of modules, one per paper (each Challenge repeats its own paper's definitions):
 # ('PaperA.Challenge', 'PaperB.Challenge').
-PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge')
+PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge', 'Cassese.Challenge')
+# The source directory of each module root whose `lean_lib` has a `srcDir` other than the
+# repository root.
+SOURCE_DIRS = {'Pedregal': 'palomar', 'Sverak': 'palomar', 'Cassese': 'palomar'}
 # Directories, besides the repository root, against which the paths in the documents of a
 # given directory are resolved.
 PATH_BASES = {'': ['.github/workflows']}
@@ -95,7 +105,19 @@ def warn(message):
 
 
 def module_file(module):
-    return '/'.join(module.split('.')) + '.lean'
+    path = '/'.join(module.split('.')) + '.lean'
+    base = SOURCE_DIRS.get(module.split('.')[0])
+    return base + '/' + path if base else path
+
+
+def dir_namespaces(doc_dir):
+    """The namespaces of `NAMESPACES_BY_DIR` for a document in `doc_dir`: those of the longest
+    configured directory that contains it."""
+    best = None
+    for d in NAMESPACES_BY_DIR:
+        if (doc_dir == d or doc_dir.startswith(d + '/')) and (best is None or len(d) > len(best)):
+            best = d
+    return NAMESPACES_BY_DIR[best] if best is not None else []
 
 
 def mathlib_page(module):
@@ -132,8 +154,7 @@ class Linker:
         candidates = [name]
         # Short names such as `U` or `h` are variables, not declarations.
         if len(name) >= 4:
-            top = Path(doc_dir).parts[0] if doc_dir else ''
-            own = [ns + '.' + name for ns in NAMESPACES_BY_DIR.get(top, [])]
+            own = [ns + '.' + name for ns in dir_namespaces(doc_dir)]
             # The directory's namespaces in order: the first that declares the name wins (the
             # library's before the Challenge's, whose Solution restates its theorems).
             own_hits = [c for c in own if c in self.locations]

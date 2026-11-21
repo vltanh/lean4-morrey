@@ -22,9 +22,9 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 | Size | Answer | Settled by | Here |
 | --- | --- | --- | --- |
 | `d = 1` or `m = 1` | yes: both notions are convexity | classical | stated (Cassese, in progress) |
-| `d ≥ 3`, `m ≥ 2` | no | Šverák (1992), on `ℝ^{3×2}` | **proved** ([`Sverak/`](Sverak)) |
-| `d = 2`, `m ≥ 3` | no, claimed in two 2026 preprints | Cassese, on `ℝ^{2×3}`; Agazzi, Bruno, Guerra and Pasqualotto, on `ℝ^{2×4}` | in progress ([`Cassese/`](Cassese)) |
-| `2 × 2` | **open** | Pedregal (2019–2026, preprint) claims yes | the proof fails: its Corollary 7.2 is **refuted** ([`Pedregal/`](Pedregal)) |
+| `d ≥ 3`, `m ≥ 2` | no | Šverák (1992), on `ℝ^{3×2}` | **proved** ([Šverák](docs/Sverak/README.md)) |
+| `d = 2`, `m ≥ 3` | no, claimed in two 2026 preprints | Cassese, on `ℝ^{2×3}`; Agazzi, Bruno, Guerra and Pasqualotto, on `ℝ^{2×4}` | in progress ([`Morrey/Cassese/`](Morrey/Cassese)) |
+| `2 × 2` | **open** | Pedregal (2019–2026, preprint) claims yes | the proof fails: its Corollary 7.2 is **refuted** ([Pedregal](docs/Pedregal/README.md)) |
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
 convex, `p`-homogeneous `f` (`f(tA) = |t|^p f(A)`) quasiconvex at `0`? For a continuous
@@ -49,12 +49,12 @@ claims of Cassese's preprint.
 | --- | --- | --- | --- |
 | V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A (1992) | a quartic polynomial on `ℝ^{3×2}`, rank-one convex and not quasiconvex; hence no for `d ≥ 3`, `m ≥ 2` | **proved**, every step by the paper's argument | no false statement; the steps left to the reader are supplied, chief among them the limit in Lemma 1, "easily seen" |
 | P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**; the rest of Sections 3–7, except Claim 7.3, is proved; Theorems 1.1 (2) and 1.2 are stated, not proved | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open |
-| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | in progress: definitions, the bridges to Šverák's definitions, Šverák's example in Cassese's terms | — |
+| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | in progress: the definitions, the bridges to Šverák's definitions and Šverák's example in Cassese's terms are on `main`; all statements, checked against the TeX, are on the branch `cassese` until they are proved | — |
 
-Each paper's directory has, or will have, a README, a report (`REPORT.md`: its findings, how the
-formalization reads it, what each result depends on, its place in the literature, what comes next)
-and credits: [Pedregal](Pedregal/README.md), [Šverák](Sverak/README.md), [Cassese](Cassese) (in
-progress).
+Each paper has, or will have, a README, a report (`REPORT.md`: its findings, how the formalization
+reads it, what each result depends on, its place in the literature, what comes next) and credits
+in `docs/<paper>/`: [Pedregal](docs/Pedregal/README.md), [Šverák](docs/Sverak/README.md), Cassese
+(in progress).
 
 ## How the papers connect
 
@@ -132,7 +132,7 @@ of finite order, obtained as a fixed point, by Kakutani's theorem, of a set-valu
 weights of the two components' `(H_n)`-conditions. Versions 1–2 claimed this for two-component maps
 in every dimension; version 3 was withdrawn; versions 4–5 restrict the claim to `2 × 2`.
 
-The audit ([`Pedregal/REPORT.md`](Pedregal/REPORT.md)) proves the paper's reduction (a fixed point
+The audit ([`docs/Pedregal/REPORT.md`](docs/Pedregal/REPORT.md)) proves the paper's reduction (a fixed point
 gives a laminate), the properties of the map and Kakutani's theorem, but finds that Corollary 7.2,
 which says that the map has nonempty values, is false: an explicit counterexample at the coarsest
 level, checked in Lean, and empty values in every random instance tested numerically. The claim is
@@ -176,7 +176,7 @@ How Cassese relates to the other two papers:
   in Cassese's definitions (Lipschitz test maps on the unit cube, rank-one convexity on segments);
   Šverák uses smooth test maps on a domain and convexity along lines. The repository proves the two
   forms of rank-one convexity equivalent, Cassese's quasiconvexity stronger than Šverák's on the
-  cube, and Šverák's example in Cassese's form ([`Cassese/Sverak.lean`](Cassese/Sverak.lean)).
+  cube, and Šverák's example in Cassese's form ([`Morrey/Cassese/Sverak.lean`](Morrey/Cassese/Sverak.lean)).
 - **Pedregal.** Cassese does not cite Pedregal. If Cassese's `2 × 3` example, or Agazzi, Bruno,
   Guerra and Pasqualotto's `2 × 4` one, is correct, it contradicts the claim of Pedregal's versions
   1–2 for two-component maps in dimension `3` and more (an inference of this repository: Pedregal
@@ -222,10 +222,10 @@ How Cassese relates to the other two papers:
 ## What the repository adds to the papers
 
 - The refutation of Pedregal's Corollary 7.2, Proposition 7.1 and the summary of Step 2 of its
-  proof, with an exact counterexample ([`Pedregal/REPORT.md`](Pedregal/REPORT.md), E13–E14).
+  proof, with an exact counterexample ([`docs/Pedregal/REPORT.md`](docs/Pedregal/REPORT.md), E13–E14).
 - Bridges between Šverák's and Cassese's definitions, which differ in their test maps and in how
-  they test convexity along rank-one directions ([`Cassese/Bridges.lean`](Cassese/Bridges.lean)).
-- Šverák's example in Cassese's terms: not quasiconvex at `0` ([`Cassese.sverak_example`](Cassese/Sverak.lean#L25)).
+  they test convexity along rank-one directions ([`Morrey/Cassese/Bridges.lean`](Morrey/Cassese/Bridges.lean)).
+- Šverák's example in Cassese's terms: not quasiconvex at `0` ([`Cassese.sverak_example`](Morrey/Cassese/Sverak.lean#L32)).
 
 ## Trust
 
@@ -242,31 +242,41 @@ How Cassese relates to the other two papers:
 
 ## Layout and building
 
-| Directory | Content |
-| --- | --- |
-| [`Pedregal/`](Pedregal) | Pedregal's paper: library, Challenge, Solution, Palomar files, routes, README, REPORT, CREDITS |
-| [`Sverak/`](Sverak) | Šverák's paper, the same |
-| [`Cassese/`](Cassese) | Cassese's paper, the same (in progress), and the bridges to Šverák's definitions |
-| [`Basic/`](Basic) | general mathematics, shared: the rank of `2 × 2` matrices |
-| [`External/`](External) | cited results, shared: Kakutani's theorem, from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) |
-| [`scripts/`](scripts) | the audit, the route check, the documentation checks |
+```text
+Morrey/                 the Lean code
+  Common/Basic/         general mathematics, shared (the rank of 2 × 2 matrices)
+  Common/External/      cited results, shared (Kakutani's theorem, from lean4-fixed-point)
+  Pedregal/             Pedregal's paper: its library, by section
+  Sverak/               Šverák's paper
+  Cassese/              Cassese's paper (in progress), with the bridges to Šverák's definitions
+palomar/                one Palomar submission per paper
+  Pedregal/             Challenge.lean, Solution.lean, comparator.json, formalization.yaml
+  Sverak/, Cassese/     the same
+docs/                   the documents of each paper
+  Pedregal/             README.md, REPORT.md, CREDITS.md, the routes of the paper's proofs, numerics/
+  Sverak/, Cassese/     the same
+scripts/                the audit, the route check, the documentation checks
+.github/workflows/      CI for all papers; one Palomar preflight workflow per paper
+```
 
-Each paper is its own Palomar submission: its directory holds `comparator.json` and
-`formalization.yaml`, and its preflight workflow names both. Lean and Mathlib `v4.36.0-rc2`.
+The papers' documents: [Pedregal](docs/Pedregal/README.md), [Šverák](docs/Sverak/README.md),
+Cassese (in progress). Their Palomar files: [`palomar/`](palomar). Each preflight workflow names its
+paper's `comparator.json` and `formalization.yaml`. Lean and Mathlib `v4.36.0-rc2`.
 
 ```sh
 lake exe cache get && lake build
 lake env lean scripts/Audit.lean
-python3 scripts/route_check.py check Pedregal/docs/paper_routes.tsv --accept Pedregal/docs/route_differences.tsv
-python3 scripts/route_check.py check Sverak/docs/paper_routes.tsv --accept Sverak/docs/route_differences.tsv
-lake env lake comparator --config=Pedregal/comparator.json
-lake env lake comparator --config=Sverak/comparator.json
+python3 scripts/route_check.py check docs/Pedregal/paper_routes.tsv --accept docs/Pedregal/route_differences.tsv
+python3 scripts/route_check.py check docs/Sverak/paper_routes.tsv --accept docs/Sverak/route_differences.tsv
+lake env lake comparator --config=palomar/Pedregal/comparator.json
+lake env lake comparator --config=palomar/Sverak/comparator.json
 ```
 
 ## Credits
 
-- Pedregal, first round (21 November 2026): [`Pedregal/CREDITS.md`](Pedregal/CREDITS.md).
-- Šverák and Cassese, second round (21 November 2026): in each paper's `CREDITS.md`.
+- Pedregal, first round (21 November 2026): [`docs/Pedregal/CREDITS.md`](docs/Pedregal/CREDITS.md).
+- Šverák, second round (21 November 2026): [`docs/Sverak/CREDITS.md`](docs/Sverak/CREDITS.md); Cassese, in
+  progress.
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person has
   reviewed the proofs.

@@ -22,14 +22,14 @@ from pathlib import Path
 
 # ---- configuration -------------------------------------------------------------------------
 # The library module that holds the shared definitions, and the Challenge file.
-DEFS = 'Pedregal/Defs.lean'
-CHALLENGE = 'Pedregal/Challenge.lean'
+DEFS = 'Morrey/Pedregal/Defs.lean'
+CHALLENGE = 'palomar/Pedregal/Challenge.lean'
 # With several papers, one (definitions module, Challenge) pair per paper, e.g.
 #   PAIRS = [('PaperA/Defs.lean', 'PaperA/Challenge.lean'), ('PaperB/Defs.lean', 'PaperB/Challenge.lean')]
 # When PAIRS is empty, the single pair (DEFS, CHALLENGE) is used.
-PAIRS = [('Pedregal/Defs.lean', 'Pedregal/Challenge.lean'),
-         ('Sverak/Defs.lean', 'Sverak/Challenge.lean'),
-         ('Cassese/Defs.lean', 'Cassese/Challenge.lean')]
+PAIRS = [('Morrey/Pedregal/Defs.lean', 'palomar/Pedregal/Challenge.lean'),
+         ('Morrey/Sverak/Defs.lean', 'palomar/Sverak/Challenge.lean'),
+         ('Morrey/Cassese/Defs.lean', 'palomar/Cassese/Challenge.lean')]
 # The marker lines around the shared block, in both files.
 BEGIN = '-- BEGIN SHARED DEFINITIONS\n'
 END = '-- END SHARED DEFINITIONS\n'

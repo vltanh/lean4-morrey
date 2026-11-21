@@ -15,27 +15,27 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: leanprover/lean-action@v1
-      # The audit sees a module's proofs only through its own `import all` line. Basic, External
-      # and the papers' directories are the libraries' roots; every paper's Solution is imported,
-      # and no Challenge (each holds a copy of its paper's definitions).
+      # The audit sees a module's proofs only through its own `import all` line: every module of
+      # Morrey/ (the shared Common/ and the papers' libraries), and every paper's Solution in
+      # palomar/, but no Challenge (each holds a copy of its paper's definitions).
       - name: Check that the audit imports every module of the libraries
         run: >-
-          diff <(find Basic External Pedregal Sverak Cassese -name '*.lean' ! -name Challenge.lean
-          | sed 's/\.lean$//; s#/#.#g' | sort)
-          <(grep -E '^import all (Basic|External|Pedregal|Sverak|Cassese)\.' scripts/Audit.lean
+          diff <({ find Morrey -name '*.lean'; cd palomar && find . -name Solution.lean; }
+          | sed 's#^\./##; s/\.lean$//; s#/#.#g' | sort)
+          <(grep -E '^import all (Morrey|Pedregal|Sverak|Cassese)\.' scripts/Audit.lean
           | sed 's/^import all //' | sort)
       - name: Audit axioms and dependencies
         run: lake env lean scripts/Audit.lean
-      # The routes of each paper's proofs (<Paper>/docs/paper_routes.tsv) and the reviewed
-      # differences (<Paper>/docs/route_differences.tsv), against the audit's route_deps.tsv.
+      # The routes of each paper's proofs (docs/<Paper>/paper_routes.tsv) and the reviewed
+      # differences (docs/<Paper>/route_differences.tsv), against the audit's route_deps.tsv.
       - name: Check that Pedregal's proofs follow the routes of the paper's proofs
         run: >-
-          python3 scripts/route_check.py check Pedregal/docs/paper_routes.tsv
-          --accept Pedregal/docs/route_differences.tsv
+          python3 scripts/route_check.py check docs/Pedregal/paper_routes.tsv
+          --accept docs/Pedregal/route_differences.tsv
       - name: Check that Šverák's proofs follow the routes of the paper's proofs
         run: >-
-          python3 scripts/route_check.py check Sverak/docs/paper_routes.tsv
-          --accept Sverak/docs/route_differences.tsv
+          python3 scripts/route_check.py check docs/Sverak/paper_routes.tsv
+          --accept docs/Sverak/route_differences.tsv
       - name: Check that each Challenge's copy of its paper's definitions is current
         run: python3 scripts/sync_challenge_defs.py --check
       - name: Check that the documentation's links to the code are current
@@ -43,5 +43,6 @@ jobs:
       - name: Check the Markdown tables
         run: >-
           python3 scripts/check_md_tables.py README.md
-          Pedregal/README.md Pedregal/REPORT.md Pedregal/CREDITS.md
-          Sverak/README.md Sverak/REPORT.md Sverak/CREDITS.md
+          docs/Pedregal/README.md docs/Pedregal/REPORT.md docs/Pedregal/CREDITS.md
+          docs/Sverak/README.md docs/Sverak/REPORT.md docs/Sverak/CREDITS.md
+          docs/Cassese/README.md

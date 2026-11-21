@@ -4,52 +4,52 @@ public meta import Lean.Elab.Command
 public meta import Lean.DocString
 -- One `import all` line per module of the libraries, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
---   find Basic External Pedregal Sverak Cassese -name '*.lean' ! -name Challenge.lean | sort |
---     sed 's/\.lean$//; s#/#.#g; s/^/import all /'
+--   { find Morrey -name '*.lean'; cd palomar && find . -name Solution.lean; } |
+--     sed 's#^\./##; s/\.lean$//; s#/#.#g; s/^/import all /' | sort
 -- Every paper's Solution is imported, and no Challenge: a Challenge holds a copy of its paper's
 -- definitions under the library's names.
-import all Basic.CalculusOfVariations.Basic
-import all Basic.LinearAlgebra.Matrix.RankTwo
-import all Cassese.Bridges
-import all Cassese.Conclusion
-import all Cassese.Defs
-import all Cassese.FourByTwo
-import all Cassese.Introduction
-import all Cassese.NonLocality
-import all Cassese.Square
-import all Cassese.Sverak
-import all Cassese.Toolkit
-import all Cassese.TwoByM
-import all Cassese.TwoByThree
-import all External.Burkholder.ScalarFunction
-import all External.Dacorogna.Minors
-import all External.Kakutani.Theorem
-import all External.KinderlehrerPedregal.Formula
-import all External.KirchheimKristensen.Theorem
-import all External.Kristensen.Smoothing
-import all External.Osekowski.HilbertCharacterization
-import all External.Rindler.Lemmas
-import all Pedregal.Checks
-import all Pedregal.Defs
-import all Pedregal.Hn.Laminate
-import all Pedregal.Hn.Mold
-import all Pedregal.Introduction
-import all Pedregal.LevelOne
-import all Pedregal.Map
-import all Pedregal.MoldTau
-import all Pedregal.NonEmptiness.Counterexample
-import all Pedregal.NonEmptiness.Statements
-import all Pedregal.Reduction
+import all Morrey.Cassese.Bridges
+import all Morrey.Cassese.Conclusion
+import all Morrey.Cassese.Defs
+import all Morrey.Cassese.FourByTwo
+import all Morrey.Cassese.Introduction
+import all Morrey.Cassese.NonLocality
+import all Morrey.Cassese.Square
+import all Morrey.Cassese.Sverak
+import all Morrey.Cassese.Toolkit
+import all Morrey.Cassese.TwoByM
+import all Morrey.Cassese.TwoByThree
+import all Morrey.Common.Basic.CalculusOfVariations.Basic
+import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
+import all Morrey.Common.External.Burkholder.ScalarFunction
+import all Morrey.Common.External.Dacorogna.Minors
+import all Morrey.Common.External.Kakutani.Theorem
+import all Morrey.Common.External.KinderlehrerPedregal.Formula
+import all Morrey.Common.External.KirchheimKristensen.Theorem
+import all Morrey.Common.External.Kristensen.Smoothing
+import all Morrey.Common.External.Osekowski.HilbertCharacterization
+import all Morrey.Common.External.Rindler.Lemmas
+import all Morrey.Pedregal.Checks
+import all Morrey.Pedregal.Defs
+import all Morrey.Pedregal.Hn.Laminate
+import all Morrey.Pedregal.Hn.Mold
+import all Morrey.Pedregal.Introduction
+import all Morrey.Pedregal.LevelOne
+import all Morrey.Pedregal.Map
+import all Morrey.Pedregal.MoldTau
+import all Morrey.Pedregal.NonEmptiness.Counterexample
+import all Morrey.Pedregal.NonEmptiness.Statements
+import all Morrey.Pedregal.Reduction
+import all Morrey.Pedregal.Triangulation
+import all Morrey.Pedregal.Weights
+import all Morrey.Sverak.Construction
+import all Morrey.Sverak.Cube
+import all Morrey.Sverak.Defs
+import all Morrey.Sverak.Lemma1
+import all Morrey.Sverak.Lemma2
+import all Morrey.Sverak.Theorem
 import all Pedregal.Solution
-import all Pedregal.Triangulation
-import all Pedregal.Weights
-import all Sverak.Construction
-import all Sverak.Cube
-import all Sverak.Defs
-import all Sverak.Lemma1
-import all Sverak.Lemma2
 import all Sverak.Solution
-import all Sverak.Theorem
 
 /-!
 # Axiom and dependency audit
@@ -150,8 +150,8 @@ meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.so
 
 /-- Whether `m` is a module of the libraries: the papers', `External` or `Basic`. -/
 meta def isLibraryModule (m : Name) : Bool :=
-  (`Pedregal).isPrefixOf m || (`Sverak).isPrefixOf m || (`Cassese).isPrefixOf m ||
-    (`External).isPrefixOf m || (`Basic).isPrefixOf m
+  (`Morrey).isPrefixOf m || (`Pedregal).isPrefixOf m || (`Sverak).isPrefixOf m ||
+    (`Cassese).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do
