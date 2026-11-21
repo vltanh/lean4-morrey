@@ -148,11 +148,11 @@ private lemma linOn_subMold {V : Type} [AddCommGroup V] [Module ℝ V] (S : TriM
 /-- On `Θ_l`, the mass point of a dyadic block of first-level mixtures is linear in the weights
 (eqs. (5.10), (5.11)). -/
 private lemma linOn_block {V : Type} [AddCommGroup V] [Module ℝ V] (S : TriMold l)
-    (w : Leaf l → V) (j : Fin 3) (q n : ℕ) (hn : n + 2 ^ q ≤ 2 ^ (2 * l + 1)) :
+    (w : Leaf l → V) (j : Fin 3) (q n : ℕ) :
     LinOn S (fun t => (dyadic q fun k => Mold.node (Mold.leaf (j, ifaceLeaf (l := l) (n + k) 0))
       (Mold.leaf (j, ifaceLeaf (l := l) (n + k) 1))).point t w) :=
   ((LinOn.sum fun _ _ => ((linOn_coord _ _).add (linOn_coord _ _)).smul _).smul _).congr
-    fun _ ht => point_dyadic_theta ht w j q n hn
+    fun _ ht => point_dyadic_theta ht w j q n
 
 /-- On `Θ_l`, each sub-mold has weight `1/3`. -/
 private lemma weight_subMold {S : TriMold l} {t : Leaf l → ℝ} (ht : t ∈ Theta S) (j : Fin 3) :
@@ -185,7 +185,7 @@ private lemma map_nodes_cases {V : Type} [AddCommGroup V] [Module ℝ V] (S : Tr
       have hq : 0 < 2 ^ q := by positivity
       exact Or.inr ⟨not_isLeaf_dyadic _ _ (by simp [Mold.IsLeaf]),
         not_isLeaf_dyadic _ _ (by simp [Mold.IsLeaf]),
-        linOn_block S w j q n (by omega), linOn_block S w j q (n + 2 ^ q) (by omega)⟩
+        linOn_block S w j q n, linOn_block S w j q (n + 2 ^ q)⟩
     · exact Or.inl ⟨j, n, hn, rfl⟩
   simp only [TriMold.tree, Mold.nodes, List.mem_cons, List.mem_append] at hp
   rcases hp with rfl | (rfl | hp | hp) | hp

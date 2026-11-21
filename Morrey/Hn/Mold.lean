@@ -102,10 +102,10 @@ private theorem weight_smul_point_aux {t : ι → ℝ} (ht : ∀ i, 0 ≤ t i) (
       have h2 : weight t R = 0 := by linarith
       simp [h1, h2]
 
-/-- For a mold of positive weight with nonnegative leaf weights, the mass point is the
-barycenter of the leaves: `weight · point = ∑ t_i w_i`. -/
-theorem weight_smul_point {t : ι → ℝ} (ht : ∀ i, 0 ≤ t i) (w : ι → V) (M : Mold ι)
-    (hM : 0 < M.weight t) : M.weight t • M.point t w = (M.leaves.map fun i => t i • w i).sum :=
+/-- With nonnegative leaf weights, the mass point of a mold is the barycenter of its leaves:
+`weight · point = ∑ t_i w_i` (both sides vanish when the weight is `0`). -/
+theorem weight_smul_point {t : ι → ℝ} (ht : ∀ i, 0 ≤ t i) (w : ι → V) (M : Mold ι) :
+    M.weight t • M.point t w = (M.leaves.map fun i => t i • w i).sum :=
   weight_smul_point_aux ht w M
 
 /-- The mass point is linear in the vectors: the point for `a • w + b • w'` is

@@ -144,16 +144,13 @@ private lemma wt_point_pair {V : Type} [AddCommGroup V] [Module ℝ V] (t : Leaf
 
 /-- **Equations (5.10), (5.11)** (`pesofijo`, `constante`). On `Θ_l`, the mass point of a block
 of `2^q` consecutive first-level mixtures of the sub-mold `j`, mixed dyadically, is the average
-of their mass points: every relative weight above the first level is `1/2`. -/
+of their mass points: every relative weight above the first level is `1/2`. (No bound on `n` is
+needed: the indices of interfaces are taken modulo `2^{2l+1}`.) -/
 theorem point_dyadic_theta {V : Type} [AddCommGroup V] [Module ℝ V] {S : TriMold l}
-    {t : Leaf l → ℝ} (ht : t ∈ Theta S) (w : Leaf l → V) (j : Fin 3) (q n : ℕ)
-    (hn : n + 2 ^ q ≤ 2 ^ (2 * l + 1)) :
+    {t : Leaf l → ℝ} (ht : t ∈ Theta S) (w : Leaf l → V) (j : Fin 3) (q n : ℕ) :
     (dyadic q fun k => Mold.node (Mold.leaf (j, ifaceLeaf (l := l) (n + k) 0))
         (Mold.leaf (j, ifaceLeaf (l := l) (n + k) 1))).point t w =
       (1 / 2 ^ q : ℝ) • ∑ k ∈ Finset.range (2 ^ q), ifacePoint t w j (n + k) := by
-  -- The bound `hn` is not needed: the indices of interfaces are taken modulo `2^{2l+1}`.
-  have _hn := hn
-  clear _hn hn
   induction q generalizing n with
   | zero =>
     simp only [dyadic, pow_zero, div_one, one_smul, Finset.range_one, Finset.sum_singleton,
@@ -207,7 +204,7 @@ theorem wt_sum_pairs {V : Type} [AddCommGroup V] (g : Fin (2 ^ (2 * l + 2)) → 
 theorem point_subMold_theta {V : Type} [AddCommGroup V] [Module ℝ V] {S : TriMold l}
     {t : Leaf l → ℝ} (ht : t ∈ Theta S) (w : Leaf l → V) (j : Fin 3) :
     (subMold l j).point t w = (3 : ℝ) • ∑ k : Fin (2 ^ (2 * l + 2)), t (j, k) • w (j, k) := by
-  have h := point_dyadic_theta ht w j (2 * l + 1) 0 (by simp)
+  have h := point_dyadic_theta ht w j (2 * l + 1) 0
   simp only [zero_add] at h
   rw [subMold, h]
   simp only [ifacePoint, ← Finset.smul_sum, smul_smul]
