@@ -165,8 +165,8 @@ def dyadicStd (m : ℕ) : Mold (Fin (2 ^ m)) :=
   dyadic m fun k => Mold.leaf ⟨k % 2 ^ m, Nat.mod_lt _ (by positivity)⟩
 
 /-- **Proposition 3.3** (`permutacion`). For a dyadic mold in `m` levels there is a unique
-permutation `σ` of `{1, …, 2^m}` such that, after relabelling the leaves by `σ`, the mixtures are
-`[2i − 1, 2i]` at all levels: the mold is the standard dyadic mold with its leaf `k` labelled
+permutation `σ` of `{1, …, 2^m}` such that, after relabelling the leaves by `σ⁻¹`, the mixtures
+are `[2i − 1, 2i]` at all levels: the mold is the standard dyadic mold with its leaf `k` labelled
 `σ k`. -/
 theorem proposition3_3 (m : ℕ) (M : Mold (Fin (2 ^ m))) (hM : M.IsDyadic m) :
     ∃! σ : Equiv.Perm (Fin (2 ^ m)), M = (dyadicStd m).map σ := by

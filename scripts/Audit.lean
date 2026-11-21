@@ -73,6 +73,7 @@ meta def paperResults : List (String × Name) :=
    ("Def 5.1 (assertions)", ``Morrey.isCompact_theta),
    ("Def 5.1 (assertions)", ``Morrey.theta_subset_simplex),
    ("Eq. (5.13)", ``Morrey.equation5_13),
+   ("Eq. (5.15)", ``Morrey.equation5_15),
    ("Prop 6.1", ``Morrey.proposition6_1),
    ("Thm 6.2 (Kakutani, cited)", ``External.Kakutani.exists_fixedPoint),
    ("Subsection 6.1", ``Morrey.section6_1_isClosed_graph),

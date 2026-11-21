@@ -6,8 +6,9 @@ public import Basic.LinearAlgebra.Matrix.RankTwo
 /-!
 # Theorem 1.1 (1) at the level `l = 1`
 
-At `l = 1` the conclusion of Theorem 1.1 (1) holds, although the paper's argument does not apply
-there: Corollary 7.2 already fails at `l = 1` (`Morrey.T_cex_eq_empty`).
+At `l = 1` the conclusion of Theorem 1.1 (1) holds, although the paper's argument does not prove
+it there: Corollary 7.2 already fails at `l = 1`, for the mold `TriMold.canonical 1`
+(`Morrey.T_cex_eq_empty`), so Kakutani's theorem cannot be applied.
 
 For `w ∈ ℙ_1` with nodal values `W_{ab}` (`a, b ∈ {0, 1}`), put
 `α = (W₁₀ − W₀₀) + (W₁₁ − W₀₁)`, `β = (W₀₁ − W₀₀) + (W₁₁ − W₁₀)`,

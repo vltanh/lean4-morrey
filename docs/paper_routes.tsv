@@ -28,3 +28,5 @@ corte	claim	0
 positivo	claim	0	
 # baricentro: equation (5.13), asserted "due to periodicity".
 baricentro	equation	0	
+# firstcero: equation (5.15), derived in running text from (5.13) and (5.14).
+firstcero	equation	0	

@@ -18,6 +18,7 @@ Definition 6.1 (`Morrey.T`), Proposition 6.1, Subsection 6.1 and Proposition 6.3
 * `section6_1_isClosed_graph`, `section6_1_isCompact`, `section6_1_usc`: the graph of `𝐓` is
   closed, its values are compact, and it is upper semicontinuous on `Θ_l` (Subsection 6.1).
 * `T_subset_theta`: `𝐓` maps `Θ_l` into itself.
+* `equation5_15`: the three barycenters `𝕎_j` average to `0` (eq. (5.15)).
 -/
 
 @[expose] public section
@@ -232,6 +233,25 @@ private lemma map_jump_normal {w : (Fin 2 → ℝ) → ℝ} (hw : w ∈ PL l) (f
   · exact ⟨-κ, by rw [neg_smul, ← hκ, neg_sub]⟩
   · exact ⟨0, by simp⟩
 
+/-- **Equation (5.15)** (`firstcero`). For `w ∈ ℙ_l` and `t ∈ Θ_l`, the barycenters `𝕎_j` of the
+three sub-molds average to `0`: `0 = (𝕎_1 + 𝕎_2 + 𝕎_3)/3`. -/
+theorem equation5_15 (S : TriMold l) {w : (Fin 2 → ℝ) → ℝ} (hw : w ∈ PL l) {t : Leaf l → ℝ}
+    (ht : t ∈ Theta S) :
+    (1 / 3 : ℝ) • ∑ j : Fin 3, (subMold l j).point t (leafGrad S w) = 0 := by
+  simp only [point_subMold_theta ht, ← Finset.smul_sum, smul_smul]
+  have h1 : ∑ j : Fin 3, ∑ k : Fin (2 ^ (2 * l + 2)), t (j, k) • leafGrad S w (j, k) =
+      ∑ p : Leaf l, t p • grad l w (S.leafTri p) := by
+    rw [← Finset.univ_product_univ, Finset.sum_product]
+    rfl
+  rw [h1, ← Finset.sum_fiberwise Finset.univ S.leafTri]
+  have h2 : ∀ s : Tri l, ∑ p ∈ Finset.univ.filter (fun p => S.leafTri p = s),
+      t p • grad l w (S.leafTri p) = (1 / 2 ^ (2 * l + 1) : ℝ) • grad l w s := by
+    intro s
+    rw [Finset.sum_congr rfl fun p hp => by rw [(Finset.mem_filter.mp hp).2], ← Finset.sum_smul]
+    congr 1
+    exact ht.2.2 s
+  simp only [h2, equation5_13 hw, smul_zero]
+
 /-- `𝐓(t) ⊆ Θ_l`. -/
 theorem T_subset_theta (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ) (t : Leaf l → ℝ) :
     T S u v t ⊆ Theta S :=
@@ -278,7 +298,8 @@ theorem proposition6_3 (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ) (t : Leaf
   linear_combination a * h₀ + b * h₁
 
 /-- **Subsection 6.1** (`cuatro`), closed graph: if `r_n ∈ 𝐓(t_n)`, `t_n ∈ Θ_l`, `r_n → r` and
-`t_n → t`, then `r ∈ 𝐓(t)`. -/
+`t_n → t`, then `r ∈ 𝐓(t)`, "because the dependence of elements in (3.7) on `t` is continuous".
+On `Θ_l` that continuity is the linearity of Proposition 6.3 (1), which the proof uses. -/
 theorem section6_1_isClosed_graph (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ) :
     IsClosed {p : (Leaf l → ℝ) × (Leaf l → ℝ) | p.1 ∈ Theta S ∧ p.2 ∈ T S u v p.1} := by
   -- On `Θ_l × Θ_l` the conditions of `𝐓` are `det (L_U t, L_V r) = 0` for the linear maps

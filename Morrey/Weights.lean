@@ -8,7 +8,7 @@ public import Mathlib.Topology.Algebra.Module.FiniteDimension
 # Section 5: the set of weights `Θ_l`
 
 Definition 5.1 asserts that `Θ_l` is "a non-empty, convex, compact subset of the standard
-simplex". This file proves it, and the facts (5.10), (5.11), (5.14), (5.15) about the
+simplex". This file proves it, and the facts (5.10), (5.11), (5.14) about the
 `(H_n)`-conditions of a function fed with weights of `Θ_l`.
 
 * `uniform_mem_theta`, `theta_nonempty`, `convex_theta`, `isCompact_theta`,
@@ -19,6 +19,8 @@ simplex". This file proves it, and the facts (5.10), (5.11), (5.14), (5.15) abou
   average of the first-level mass points it contains, because the relative weights above the
   first level are all `1/2` (eqs. (5.10), (5.11)).
 * `point_subMold_theta`: the barycenter `𝕎_j` of the sub-mold `j` (eq. (5.14)).
+
+Eq. (5.15) is `Morrey.equation5_15` (in `Morrey.Map`), from (5.13) and (5.14).
 -/
 
 @[expose] public section
@@ -55,7 +57,7 @@ theorem convex_theta (S : TriMold l) : Convex ℝ (Theta S) := by
     rw [ht.2.2 s, hr.2.2 s]
     linear_combination (1 / 2 ^ (2 * l + 1)) * hab
 
-/-- **Definition 5.1** (`pesos-claim`), third assertion: `Θ_l` is closed. -/
+/-- `Θ_l` is closed, a step towards its compactness (Definition 5.1). -/
 theorem isClosed_theta (S : TriMold l) : IsClosed (Theta S) := by
   have h1 : IsClosed {t : Leaf l → ℝ | ∀ p, 0 ≤ t p} := by
     simp only [Set.ofPred_forall]
