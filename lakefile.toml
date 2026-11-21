@@ -1,0 +1,37 @@
+name = "Morrey"
+version = "0.1.0"
+keywords = ["math"]
+defaultTargets = ["Basic", "External", "Morrey", "Challenge", "Solution"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+maxSynthPendingDepth = 3
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.36.0-rc2"
+
+[[require]]
+name = "FixedPoint"
+git = "https://github.com/vltanh/lean4-fixed-point.git"
+rev = "5f650f00b1db63837a452696331a98ca886b94a8"
+
+[[lean_lib]]
+name = "Basic"
+globs = ["Basic.+"]
+
+[[lean_lib]]
+name = "External"
+globs = ["External.+"]
+
+[[lean_lib]]
+name = "Morrey"
+globs = ["Morrey.+"]
+
+[[lean_lib]]
+name = "Challenge"
+
+[[lean_lib]]
+name = "Solution"
