@@ -1,0 +1,11 @@
+# Recorded differences between the routes of the formal proofs and the paper's (route_check.py).
+# LABEL<TAB>±OTHER<TAB>reason
+objetivo	-cor7_2	Corollary 7.2 is false (REPORT.md, E13): theorem1_1_of_nonempty takes its conclusion (every T(t) nonempty) as a hypothesis, and theorem1_1_part1_levelOne proves the case l = 1 by an explicit lamination; neither is the paper's Theorem 1.1
+cuatro	+convexidad	Subsection 6.1 invokes "the dependence of elements in (3.7) on t is continuous"; on Theta_l this continuity is the linearity of Proposition 6.3 (1), which the closed-graph proof uses. The paper leaves the use implicit
+esta	-cuatro	Proposition 7.1 is false (E13): proposition7_1_false refutes it with an explicit counterexample, so the steps of the paper's proof are not used
+esta	-rango	Proposition 7.1 is false (E13): its refutation does not use Claim 7.3
+esta	-corte	Proposition 7.1 is false (E13): its refutation does not use Claim 7.4
+esta	-positivo	Proposition 7.1 is false (E13): its refutation does not use Claim 7.5
+esta	-convexidad	Proposition 7.1 is false (E13): its refutation does not use Proposition 6.3
+cor7_2	-esta	Proposition 7.1 is false: the paper's derivation is corollary7_2_of_proposition7_1, which takes the statement Proposition7_1 as a hypothesis; corollary7_2_false refutes Corollary 7.2 directly
+*	+pesos-claim	Definition 5.1 asserts that Theta_l is nonempty, convex and compact; the paper uses this without citing it: for Kakutani's theorem (Section 8), for the compact values (Subsection 6.1) and for the convex values (Proposition 6.3)

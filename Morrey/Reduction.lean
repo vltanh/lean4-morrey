@@ -24,6 +24,10 @@ laminate (Proposition 6.1). The hypothesis does not hold in general (`Morrey.cor
 theorem theorem1_1_of_nonempty {l : ℕ} (S : TriMold l) {u v : (Fin 2 → ℝ) → ℝ} (hu : u ∈ PL l)
     (hv : v ∈ PL l) (hne : ∀ t ∈ Theta S, (T S u v t).Nonempty) :
     IsLaminate (gradMeasure l u v) := by
-  sorry
+  obtain ⟨t, ht, hfix⟩ := External.Kakutani.exists_fixedPoint (theta_nonempty S)
+    (isCompact_theta S) (convex_theta S) (fun t _ => T_subset_theta S u v t)
+    (section6_1_usc S u v) hne (fun t _ => proposition6_3 S u v t)
+    (fun _ ht => section6_1_isCompact S u v ht)
+  exact proposition6_1 S hu hv ht hfix
 
 end Morrey

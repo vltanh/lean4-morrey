@@ -245,8 +245,12 @@ false**, already for the sub-mold
 `uCex` along it. -/
 theorem step2Claim_false : ¬ Step2Claim := by
   intro h
-  obtain ⟨r, -, -, hr, -⟩ :=
+  obtain ⟨r, -, -, hr⟩ :=
     h 1 le_rfl (TriMold.canonical 1) uCex uCex_mem tCex tCex_mem 0 vCex vCex_mem
   exact not_parallel r (hr mixP mixP_mem_subMold mixP_not_leaf)
+
+/-- The summary of Step 2 as the paper states it (with the start from `𝕌_j`) is false too. -/
+theorem step2ClaimPaper_false : ¬ Step2ClaimPaper :=
+  fun h => step2Claim_false (step2Claim_of_paper h)
 
 end Morrey

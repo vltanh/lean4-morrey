@@ -1,0 +1,30 @@
+# label	environment	proved	cited statements (from route_check.py extract, completed by hand)
+# objetivo: proved in running text, Section 8 (Conclusion), lines 1047-1050: Kakutani applied to T
+#   (hypotheses checked in Subsection 6.1, Proposition 6.3 and Corollary 7.2), then Proposition 6.1.
+#   cor7_2 is our label for the unlabelled Corollary 7.2 (line 874).
+objetivo	theorem	1	facil,kakutani,convexidad,cuatro,cor7_2
+# thm:intro: our label for the unlabelled Theorem 1.2 (line 198), a restatement of Theorem 1.1 (2);
+#   no proof is given.
+thm:intro	theorem	0	
+permutacion	proposition	0	
+facil	proposition	1	
+kakutani	theorem	0	
+# cuatro: Subsection 6.1 (line 781) proves in running text that the graph of T is closed and its
+#   values compact (no result cited).
+cuatro	subsection	1	
+convexidad	proposition	1	
+# pesos-claim: our label for the assertion inside Definition 5.1 (line 623) that Theta_l is
+#   nonempty, convex and compact (stated without proof). The TeX label `pesos` is used twice.
+pesos-claim	definition	0	
+# esta: the proof (line 884, "(of Proposition \ref{esta})") is not attributed by the extractor.
+#   It cites Subsection 6.1 (density/upper semicontinuity), Claims 7.3-7.5 and the convexity of
+#   Proposition 6.3 (Step 3).
+esta	proposition	1	cuatro,rango,corte,positivo,convexidad
+# cor7_2: our label for the unlabelled Corollary 7.2 (line 874); its proof (line 878) uses
+#   Proposition 7.1.
+cor7_2	corollary	1	esta
+rango	claim	0	
+corte	claim	0	
+positivo	claim	0	
+# baricentro: equation (5.13), asserted "due to periodicity".
+baricentro	equation	0	
