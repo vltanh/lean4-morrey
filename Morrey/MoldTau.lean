@@ -30,10 +30,35 @@ namespace Morrey
 theorem card_ifaceSet (l : ℕ) (j : Fin 3) : Nat.card (ifaceSet l j) = 2 ^ (2 * l + 1) := by
   sorry
 
-/-- An explicit tri-dyadic mold for `τ_l`: in the sub-mold `j`, the interfaces of its first kind
-come first, then those of its second kind, each kind cell by cell (`(a, b)` in the order of
-`a · 2^l + b`); no side is flipped, and the barycenters are mixed as `[[0, 1], 2]`. -/
-def TriMold.canonical (l : ℕ) : TriMold l := sorry
+/-- The first kind of interfaces of the sub-mold `j`: vertical, vertical, horizontal. -/
+def kind1 : Fin 3 → Fin 3 := ![0, 0, 1]
+
+/-- The second kind of interfaces of the sub-mold `j`: horizontal, diagonal, diagonal. -/
+def kind2 : Fin 3 → Fin 3 := ![1, 2, 2]
+
+/-- The numbering of the interfaces of the sub-mold `j` used by `TriMold.canonical`: the
+interfaces of its first kind come first, then those of its second kind, each kind cell by cell,
+`(a, b)` in the order of `a · 2^l + b`. -/
+def canonicalLabel (l : ℕ) (j : Fin 3) : Fin (2 ^ (2 * l + 1)) ≃ ifaceSet l j where
+  toFun i := ⟨(if i.1 < 2 ^ (2 * l) then kind1 j else kind2 j,
+      ⟨i.1 % 2 ^ (2 * l) / 2 ^ l, Nat.div_lt_of_lt_mul (lt_of_lt_of_eq (Nat.mod_lt _ (by positivity))
+        (by rw [← pow_add]; ring_nf))⟩,
+      ⟨i.1 % 2 ^ l, Nat.mod_lt _ (by positivity)⟩), by
+    simp only [ifaceSet, Set.mem_ofPred_eq]
+    fin_cases j <;> split_ifs <;> decide⟩
+  invFun f := ⟨(if f.1.1 = kind1 j then 0 else 2 ^ (2 * l)) + f.1.2.1.1 * 2 ^ l + f.1.2.2.1, by
+    sorry⟩
+  left_inv := by
+    sorry
+  right_inv := by
+    sorry
+
+/-- An explicit tri-dyadic mold for `τ_l`, numbering the interfaces of each sub-mold with
+`canonicalLabel`; no side is flipped, and the barycenters are mixed as `[[0, 1], 2]`. -/
+def TriMold.canonical (l : ℕ) : TriMold l where
+  label := canonicalLabel l
+  flip := fun _ _ => false
+  order := Equiv.refl _
 
 /-- The mold of a `TriMold` is tri-dyadic (Definition 3.4), with the dyadic sub-molds in
 `2l + 2` levels on the leaves of each block. -/
