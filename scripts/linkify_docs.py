@@ -34,7 +34,7 @@ from pathlib import Path
 # The Markdown documents to process.
 DOCS = ['README.md', 'REPORT.md', 'CREDITS.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
-NAMESPACES = ['Morrey', 'MorreyChallenge', 'External.Kakutani', 'Matrix']
+NAMESPACES = ['Morrey', 'External.Kakutani', 'Matrix']
 # Top-level module names of the project: a code span naming such a module links to its file.
 MODULE_ROOTS = ('Morrey', 'External', 'Basic', 'Challenge', 'Solution')
 # The module whose declarations win when a name is declared in several modules.

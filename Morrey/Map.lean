@@ -298,7 +298,7 @@ theorem proposition6_3 (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ) (t : Leaf
   linear_combination a * h₀ + b * h₁
 
 /-- **Subsection 6.1** (`cuatro`), closed graph: if `r_n ∈ 𝐓(t_n)`, `t_n ∈ Θ_l`, `r_n → r` and
-`t_n → t`, then `r ∈ 𝐓(t)`, "because the dependence of elements in (3.7) on `t` is continuous".
+`t_n → t`, then `r ∈ 𝐓(t)`, "because the dependence of elements in (5.12) on `t` is continuous" (the notation of (3.7)).
 On `Θ_l` that continuity is the linearity of Proposition 6.3 (1), which the proof uses. -/
 theorem section6_1_isClosed_graph (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ) :
     IsClosed {p : (Leaf l → ℝ) × (Leaf l → ℝ) | p.1 ∈ Theta S ∧ p.2 ∈ T S u v p.1} := by
