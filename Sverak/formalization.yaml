@@ -80,9 +80,11 @@ automation:
       framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
       tool_setup: >-
         The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
-        020f253); FIGURES-TBD; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        020f253); the main session and 7 sub-agents on this paper (1 statement checker, 4 provers,
+        1 proof checker, 1 cleanup agent), plus 1 checker of the repository's README shared with
+        the other papers; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
-        wall_time: "FIGURES-TBD"
+        wall_time: "1.8 h elapsed for the whole second round (this paper, Cassese's and the reorganization, in parallel); 1.4 h of sub-agent working time on this paper"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
