@@ -225,7 +225,7 @@ How Cassese relates to the other two papers:
   proof, with an exact counterexample ([`Pedregal/REPORT.md`](Pedregal/REPORT.md), E13–E14).
 - Bridges between Šverák's and Cassese's definitions, which differ in their test maps and in how
   they test convexity along rank-one directions ([`Cassese/Bridges.lean`](Cassese/Bridges.lean)).
-- Šverák's example in Cassese's terms: not quasiconvex at `0` ([`Cassese.sverak_example`](Cassese/Sverak.lean#L25)).
+- Šverák's example in Cassese's terms: not quasiconvex at `0` ([`Cassese.sverak_example`](Cassese/Sverak.lean#L24)).
 
 ## Trust
 
