@@ -1,7 +1,7 @@
 name = "Morrey"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Basic", "External", "Morrey", "Challenge", "Solution"]
+defaultTargets = ["Basic", "External", "Morrey", "Sverak", "Cassese", "Challenge", "Solution"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -29,6 +29,14 @@ globs = ["External.+"]
 [[lean_lib]]
 name = "Morrey"
 globs = ["Morrey.+"]
+
+[[lean_lib]]
+name = "Sverak"
+globs = ["Sverak.+"]
+
+[[lean_lib]]
+name = "Cassese"
+globs = ["Cassese.+"]
 
 [[lean_lib]]
 name = "Challenge"
