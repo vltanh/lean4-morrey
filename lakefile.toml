@@ -1,7 +1,7 @@
 name = "Morrey"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Basic", "External", "Pedregal", "Sverak", "Cassese"]
+defaultTargets = ["Common", "Pedregal", "Sverak", "Cassese", "Palomar"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -19,21 +19,24 @@ git = "https://github.com/vltanh/lean4-fixed-point.git"
 rev = "5f650f00b1db63837a452696331a98ca886b94a8"
 
 [[lean_lib]]
-name = "Basic"
-globs = ["Basic.+"]
-
-[[lean_lib]]
-name = "External"
-globs = ["External.+"]
+name = "Common"
+globs = ["Morrey.Common.+"]
 
 [[lean_lib]]
 name = "Pedregal"
-globs = ["Pedregal.+"]
+globs = ["Morrey.Pedregal.+"]
 
 [[lean_lib]]
 name = "Sverak"
-globs = ["Sverak.+"]
+globs = ["Morrey.Sverak.+"]
 
 [[lean_lib]]
 name = "Cassese"
-globs = ["Cassese.+"]
+globs = ["Morrey.Cassese.+"]
+
+# Each paper's Challenge and Solution (the files of its Palomar submission), as the modules
+# `Pedregal.Challenge`, `Pedregal.Solution`, ... of the source directory `palomar/`.
+[[lean_lib]]
+name = "Palomar"
+srcDir = "palomar"
+globs = ["Pedregal.+", "Sverak.+"]
