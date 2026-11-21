@@ -1,0 +1,171 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Pedregal's proof of Morrey's conjecture in 2x2: an audit in Lean"
+  description: >-
+    A Lean 4 formalization and audit of P. Pedregal, "Morrey's conjecture: rank-one convexity
+    implies quasi-convexity for two-dimensional, two-component maps" (arXiv:1905.06571v5, 2026),
+    which claims the 2x2 case of Morrey's problem: every rank-one convex function on 2x2 matrices
+    is quasiconvex.
+
+
+    The paper's proof applies Kakutani's fixed-point theorem to a set-valued map T between the
+    weights of (H_n)-conditions of the two components of a periodic piecewise affine map, and
+    needs every value T(t) to be nonempty (Corollary 7.2). The formalization proves that
+    Corollary 7.2 is false, with an explicit counterexample on the triangulation with 2x2 cells,
+    and so are Proposition 7.1 and the summary of Step 2 of its proof. It proves the rest of the
+    argument: Proposition 3.3, the assertions of Definition 5.1, Proposition 6.1, Subsection 6.1,
+    Proposition 6.3, Claim 7.4, Kakutani's theorem (from lean4-fixed-point), and the reduction "if
+    every T(t) is nonempty, then the gradient measure is a laminate"; and it proves Theorem 1.1 (1)
+    at the coarsest level by an explicit lamination.
+
+
+    The paper's main results, Theorems 1.1 and 1.2 (the open 2x2 case of Morrey's problem), are
+    neither proved nor refuted. Nothing is assumed.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.AP", "math.OC"]
+  msc2020: ["49J45", "26B25", "47H10", "68V15"]
+
+sources:
+  - title: "Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps"
+    authors:
+      - "Pablo Pedregal"
+    id: "arXiv:1905.06571v5"
+    type: "preprint"
+    location: "https://arxiv.org/abs/1905.06571v5"
+    relationship: "formalizes"
+    note: >-
+      Formalized against the LaTeX source of v5 (18 June 2026). Corollary 7.2, Proposition 7.1
+      and the summary of Step 2 are formalized as stated and refuted; Theorems 1.1 and 1.2 are
+      stated as propositions and not proved; every other numbered result is proved by the paper's
+      argument.
+    author_endorsement: "not-contacted"
+  - title: "A generalization of Brouwer's fixed point theorem"
+    authors:
+      - "Shizuo Kakutani"
+    id: "Duke Math. J. 8 (1941), 457-459"
+    type: "article"
+    relationship: "background"
+    note: "Theorem 6.2 of the paper (cited from Smirnov's book); proved in External/Kakutani from lean4-fixed-point."
+  - title: "Laminates supported on cubes"
+    authors:
+      - "Gabriella Sebestyén"
+      - "László Székelyhidi Jr."
+    id: "arXiv:1504.06516"
+    type: "article"
+    location: "https://arxiv.org/abs/1504.06516"
+    relationship: "background"
+    note: "Related work on laminates in 2x2, cited by the paper; not formalized."
+
+related_formalizations:
+  - id: "https://github.com/vltanh/lean4-fixed-point"
+    relationship: "builds-on"
+    note: "Provides Kakutani's fixed-point theorem (commit 5f650f0), used by the proofs only."
+  - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
+    relationship: "independent"
+    note: >-
+      Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
+      non-quasiconvex function on 3x3 matrices, with its own definitions of rank-one convexity and
+      quasiconvexity. Not consulted for code; not a formalization of this paper.
+
+status:
+  scope: >-
+    Not a proof of the paper's main results: Theorems 1.1 and 1.2 are stated as propositions and
+    neither proved nor refuted (the open 2x2 case of Morrey's problem). Formalized and refuted:
+    Corollary 7.2, Proposition 7.1, and the summary of Step 2 of the proof of Proposition 7.1 with
+    Claim 7.5. Proved: Definitions 3.1-6.1 as definitions, Proposition 3.3, the assertions of
+    Definition 5.1 and eqs. (5.10)-(5.14), Proposition 6.1, Subsection 6.1, Proposition 6.3,
+    Kakutani's theorem (Theorem 6.2), Claim 7.4, Corollary 7.2 from Proposition 7.1, the paper's
+    reduction of Theorem 1.1 (1) to the non-emptiness of the values of T, and Theorem 1.1 (1) for
+    l = 1. Not formalized: Claim 7.3, the reduction of Theorem 1.1 (2) to (1), Section 2 and the
+    examples.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5", "claude-haiku-5-5"]
+      framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
+      tool_setup: >-
+        The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
+        020f253); one main session and its sub-agents (AGENTS-FIGURE), at most 7 at once; Lean
+        v4.36.0-rc2, Mathlib v4.36.0-rc2; Python (NumPy, SciPy, SymPy) for the numerical search
+        and exact checks of the counterexample.
+      cost:
+        wall_time: "WALL-TIME-FIGURE"
+        spend_usd: "not tracked"
+        hardware: "local machine (20 cores, 62 GB RAM) and API"
+      prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill."
+  spend_usd: "not tracked"
+  notes: >-
+    The AI system wrote the code and the documents at the request of the author, who chose the
+    paper. No person has reviewed the proofs. Independent AI agents checked the statements and
+    the counterexample against the TeX source, the formal proofs against the paper's, and the
+    report's findings and literature section. See CREDITS.md.
+
+fidelity:
+  divergences: >-
+    Statements: no statement of the paper was changed. Corollary 7.2, Proposition 7.1 and the
+    summary of Step 2 are stated as in the paper (the summary also without its start from the
+    barycenter U_j, a weaker claim, refuted together with the paper's form) and refuted. Theorem
+    1.2 reads the "arbitrary function" psi as continuous. Readings: points of R^2 are Fin 2 -> R;
+    molds are ordered binary trees (Proposition 3.3's permutation is unique only for this
+    reading); leaves are indexed from 0 as (j, k); "parallel" is linear dependence; the
+    parallelism of Definition 6.1 is imposed at every mixture above the first level; laminates are
+    laminates of finite order; Kakutani's theorem is stated with topological upper
+    semicontinuity, derived from the closed graph that Subsection 6.1 proves. Proofs: every proof
+    of a correct result follows the paper's argument. Departures: Theorem 1.1 (1) is proved only
+    with the conclusion of the false Corollary 7.2 as a hypothesis (theorem1_1_of_nonempty), and at
+    l = 1 by an explicit lamination instead of the paper's fixed point (theorem1_1_part1_levelOne),
+    because Corollary 7.2 is false. See REPORT.md, Sections 6 and 7.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "none"
+  notes: >-
+    No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
+    TeX source and recomputed the counterexample by hand, compared the formal proofs with the
+    paper's, and checked the report's findings and literature section against the sources.
+
+alignment:
+  namespace: "MorreyChallenge"
+  statements:
+    - source: "Corollary 7.2"
+      lean: "MorreyChallenge.corollary7_2_false"
+      module: "Challenge"
+      status: "proved (refutation)"
+      note: "The negation of Corollary 7.2 as the paper states it."
+    - source: "Corollary 7.2"
+      lean: "MorreyChallenge.exists_T_eq_empty"
+      module: "Challenge"
+      status: "proved (counterexample)"
+      note: "For l = 1: a tri-dyadic mold, u, v in P_1 and t in Theta_1 with T(t) empty."
+    - source: "Theorem 1.1 (1), Section 8"
+      lean: "MorreyChallenge.theorem1_1_of_nonempty"
+      module: "Challenge"
+      status: "proved (conditional on the conclusion of Corollary 7.2, which is false)"
+      note: "The paper's argument: if every T(t) is nonempty, the gradient measure is a laminate. Not Theorem 1.1."
+    - source: "Definition 6.1"
+      lean: "MorreyChallenge.mem_T_self"
+      module: "Challenge"
+      status: "proved (check of the definition)"
+      note: "When v = u, every t in Theta_l is a fixed point of T."
+    - source: "Definition 4.1, eq. (4.3)"
+      lean: "MorreyChallenge.card_C"
+      module: "Challenge"
+      status: "proved (check of the definition)"
+      note: "Each triangle of tau_l has six leaves in a tri-dyadic mold."
+
+acknowledgements: >-
+  Mathlib; lean4-fixed-point (Kakutani's theorem); Lean's Comparator, NanoDa and con-ron kernels;
+  Palomar's validation scripts.

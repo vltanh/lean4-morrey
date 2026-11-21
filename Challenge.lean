@@ -19,50 +19,35 @@ Theorem 1.1 (1). The paper's Theorems 1.1 and 1.2 are neither proved nor refuted
 
 ## Conventions
 
-* Points of `ℝ²` are `Fin 2 → ℝ`; `2 × 2` matrices are `Matrix (Fin 2) (Fin 2) ℝ`; the matrix of
-  a pair `(u, v)` of functions has rows `∇u`, `∇v`.
-* `τ_l` (`Tri l`, `triangle`): the unit square cut into `2^l × 2^l` equal squares, each cut along
-  its diagonal of normal `(1, 1)` into a lower-left (`k = 0`) and an upper-right (`k = 1`)
-  triangle; `2^{2l+1}` triangles.
-* `ℙ_l` (`PL l`): continuous functions on `ℝ²`, of period `1` in each variable, affine on every
-  triangle of `τ_l`. `grad l w s`, the gradient of `w` on the triangle `s`, is the derivative
-  of `w` at the centroid of `s`.
-* Interfaces (`Iface l`): the edges of `τ_l`, with periodicity: vertical (normal `(1, 0)`),
-  horizontal (normal `(0, 1)`) and diagonal (normal `(1, 1)`) edges of each cell, each with its two
-  adjacent triangles (`Iface.sides`). The sub-mold `j` uses the interfaces with two of the three
-  normals (`ifaceSet l j`).
-* Molds (`Mold`): ordered binary trees whose leaves label pairs (weight, vector). For leaf
-  weights `t` and vectors `w`, the pair of a mixture `[L, R]` has the sum of the weights, and the
-  mass point `(1 − λ) w_L + λ w_R`, with `λ` the relative weight of `R` (`1/2` when both weights
-  vanish). The decomposition direction of `[L, R]` is `w_L − w_R`.
-* A tri-dyadic mold for `τ_l` (`TriMold l`, the paper's `𝒮_l`, Definition 4.1): for each of the
-  three sub-molds, a numbering `i ↦ label j i` of its `2^{2l+1}` interfaces; the interface `i`
-  mixes the leaves `(j, 2i)` and `(j, 2i + 1)`, which stand for its two adjacent triangles
-  (`flip` says which is which); the upper levels mix consecutive pairs dyadically
-  (`dyadic`, `subMold`); finally the three barycenters are mixed as
-  `[[order 0, order 1], order 2]`. `S.C s` is the set of the six leaves of the triangle `s`.
-* `Θ_l` (`Theta S`, Definition 5.1): nonnegative weights on the `3 · 2^{2l+2}` leaves, with
-  `t_{2i} + t_{2i+1} = 3^{-1} 2^{-1-2l}` for each interface of each sub-mold and
-  `∑_{k ∈ 𝒞_s} t_k = 2^{-1-2l}` for each triangle `s`.
-* `𝐓(t)` (`T S u v t`, Definition 6.1): the weights `r ∈ Θ_l` such that, at every mixture of
-  the mold above the first level, the decomposition direction of the gradients of `v` with the
-  weights `r` is parallel (linearly dependent) to that of the gradients of `u` with the weights
-  `t`.
-* `ν` (`gradMeasure l u v`, eq. (6.1)): mass `2^{-1-2l}` at the matrix `(∇u, ∇v)` of each
-  triangle, as a finitely supported function on matrices.
-* Laminates of finite order (`IsLaminate`): every Dirac mass is one, and splitting an atom
-  `A = θ B + (1 − θ) C` with `rank (B − C) ≤ 1` into masses at `B` and `C` gives another.
+* `ℝ²` is `Fin 2 → ℝ`; the matrix of `(u, v)` has rows `∇u`, `∇v`.
+* `τ_l` (`Tri l`, `triangle`): `2^l × 2^l` squares of the unit square, each cut along its diagonal
+  of normal `(1, 1)` into a lower (`k = 0`) and an upper (`k = 1`) triangle. `ℙ_l` (`PL l`):
+  continuous `1`-periodic functions affine on each triangle; `grad l w s` is the derivative at the
+  centroid of `s`. `Iface l`: the vertical, horizontal and diagonal edge of each cell (normals
+  `(1,0)`, `(0,1)`, `(1,1)`), with its two triangles (`Iface.sides`), modulo the period.
+* `Mold`: ordered binary trees; a mixture `[L, R]` of pairs (weight, vector) has the sum of the
+  weights and the point `(1 − λ) w_L + λ w_R`, `λ` the relative weight of `R` (`1/2` if both
+  vanish); its decomposition direction is `w_L − w_R`.
+* `TriMold l` (the paper's `𝒮_l`, Definition 4.1): in each of three sub-molds, a numbering of the
+  `2^{2l+1}` interfaces with two of the three normals (`ifaceSet`); interface `i` mixes the leaves
+  `(j, 2i)`, `(j, 2i + 1)`, standing for its two triangles; upper levels mix consecutive pairs
+  (`dyadic`, `subMold`); the three barycenters are mixed as `[[order 0, order 1], order 2]`.
+  `S.C s`: the leaves of the triangle `s`.
+* `Theta S` (`Θ_l`, Definition 5.1): weights `t ≥ 0` with `t_{2i} + t_{2i+1} = 3^{-1} 2^{-1-2l}` on
+  each interface of each sub-mold and `∑_{k ∈ 𝒞_s} t_k = 2^{-1-2l}` on each triangle.
+* `T S u v t` (`𝐓(t)`, Definition 6.1): the `r ∈ Θ_l` such that at every mixture above the first
+  level the direction for `v` with `r` is parallel (linearly dependent) to that for `u` with `t`.
+* `gradMeasure l u v` (`ν`, eq. (6.1)): mass `2^{-1-2l}` at the matrix of each triangle.
+  `IsLaminate`: laminates of finite order (Dirac masses, closed under splitting an atom
+  `θ B + (1 − θ) C` with `rank (B − C) ≤ 1`).
 
 ## Statements
 
-* `corollary7_2_false`: Corollary 7.2 as the paper states it is false.
-* `exists_T_eq_empty`: explicitly, for `l = 1` there are a tri-dyadic mold, `u, v ∈ ℙ_1` and
-  `t ∈ Θ_1` with `𝐓(t) = ∅`.
-* `theorem1_1_of_nonempty`: the paper's argument (Kakutani's theorem, Proposition 6.3,
-  Subsection 6.1, Proposition 6.1) with the conclusion of Corollary 7.2 as a hypothesis: if
-  every `𝐓(t)` is nonempty, then `ν` is a laminate.
-* `mem_T_self`, `card_C`: checks of the definitions: for `v = u` every `t ∈ Θ_l` is a fixed
-  point of `𝐓`, and each triangle has six leaves in the mold.
+* `corollary7_2_false`, `exists_T_eq_empty`: Corollary 7.2 is false; a counterexample at `l = 1`.
+* `theorem1_1_of_nonempty`: the paper's argument (Kakutani's theorem, Propositions 6.1 and 6.3,
+  Subsection 6.1): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
+* `theorem1_1_part1_levelOne`: the conclusion of Theorem 1.1 (1) at `l = 1`.
+* `mem_T_self`, `card_C`: checks of the definitions.
 -/
 
 @[expose] public section
@@ -294,6 +279,12 @@ theorem exists_T_eq_empty :
 theorem theorem1_1_of_nonempty {l : ℕ} (S : TriMold l) {u v : (Fin 2 → ℝ) → ℝ}
     (hu : u ∈ PL l) (hv : v ∈ PL l) (hne : ∀ t ∈ Theta S, (T S u v t).Nonempty) :
     IsLaminate (gradMeasure l u v) := by
+  sorry
+
+/-- **Theorem 1.1 (1) at the level `l = 1`**: for `u, v ∈ ℙ_1`, the gradient measure of `(u, v)` is
+a laminate. -/
+theorem theorem1_1_part1_levelOne {u v : (Fin 2 → ℝ) → ℝ} (hu : u ∈ PL 1) (hv : v ∈ PL 1) :
+    IsLaminate (gradMeasure 1 u v) := by
   sorry
 
 /-- A check of Definition 6.1: when `v = u`, every `t ∈ Θ_l` is a fixed point of `𝐓`. -/

@@ -92,7 +92,8 @@ meta def paperResults : List (String × Name) :=
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
   [``MorreyChallenge.corollary7_2_false, ``MorreyChallenge.exists_T_eq_empty,
-   ``MorreyChallenge.theorem1_1_of_nonempty, ``MorreyChallenge.mem_T_self,
+   ``MorreyChallenge.theorem1_1_of_nonempty, ``MorreyChallenge.theorem1_1_part1_levelOne,
+   ``MorreyChallenge.mem_T_self,
    ``MorreyChallenge.card_C]
 
 /-- Lean's standard axioms. -/
