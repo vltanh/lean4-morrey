@@ -20,9 +20,11 @@ where their statements can live:
 * Lemma 2.1 (`cs-lem2.1`): `External.Rindler.lemma5_6` (proved);
 * Lemma 2.2 (`cs-lem2.2`): `External.Rindler.rankOneConvex_of_quasiconvex`,
   `External.Rindler.quasiconvexAtOn_iff`, `External.Rindler.quasiconvexAtOn_iff_periodic`;
-* Proposition 2.2 (`cs-prop2.2`): `External.KinderlehrerPedregal.DacorognaFormula` (hypothesis);
-* Theorem 2.3 (`cs-thm2.3`): `BurkholderInequality`, `BurkholderSquareFunction` (hypotheses, in
-  the shared block of `Morrey/Cassese/Defs.lean`, because the main theorems assume them);
+* Proposition 2.2 (`cs-prop2.2`): `External.KinderlehrerPedregal.DacorognaFormula` (proved,
+  `External.KinderlehrerPedregal.dacorognaFormula_holds`);
+* Theorem 2.3 (`cs-thm2.3`): `BurkholderInequality`, `BurkholderSquareFunction` (proved, in
+  `Morrey/Cassese/Hypotheses.lean`: `burkholderInequality_holds`,
+  `burkholderSquareFunction_holds`);
 * Proposition 2.6 (`cs-prop2.6`): `External.Osekowski.HilbertCharacterization` (context only);
 * Definition 2.5: `umdConst`, `umdConstWith`, `complexUMDConst` (shared block);
 * Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2),
@@ -1081,7 +1083,8 @@ private lemma tk_unitBall_nonempty : (CalculusOfVariations.unitBall m).Nonempty 
 
 /-- **Consequence of Proposition 2.2** (`cs-qc-minorant`, line 559): for a continuous integrand
 `f`, quasiconvexity at `A` is equivalent to the existence of a quasiconvex minorant `g ≤ f` with
-`g (A) = f (A)`. Conditional on Dacorogna's formula (Kinderlehrer–Pedregal). 
+`g (A) = f (A)`. By Dacorogna's formula (Kinderlehrer–Pedregal,
+`External.KinderlehrerPedregal.dacorognaFormula_holds`).
 
 Proof. If `g` is such a minorant, `f (A) = g (A) ≤ ∫ g (A + ∇φ) ≤ ∫ f (A + ∇φ)`. Conversely, if `f`
 is quasiconvex at `A`, then `f` is quasiconvex at `A` on the unit ball (Lemma 2.2, domain
@@ -1091,7 +1094,6 @@ average in Dacorogna's formula is at least `f (A)` and `f^{qc} (A) = f (A)`; and
 a quasiconvex integrand (the supremum of the quasiconvex integrands below the continuous `f`,
 `tk_qc_cases`), the required minorant.-/
 theorem quasiconvexAt_iff_exists_minorant
-    (hKP : External.KinderlehrerPedregal.DacorognaFormula)
     {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f) (A : Matrix (Fin d) (Fin m) ℝ) :
     QuasiconvexAt f A ↔
       ∃ g : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand g ∧ Quasiconvex g ∧ (∀ B, g B ≤ f B) ∧
@@ -1112,7 +1114,7 @@ theorem quasiconvexAt_iff_exists_minorant
       ENNReal.toReal_pos (tk_unitBall_isOpen.measure_pos volume tk_unitBall_nonempty).ne' hBfin.ne
     -- so every average in Dacorogna's formula is at least `f (A)`: `f^{qc} (A) ≥ f (A)`
     have hge : (f A : EReal) ≤ qcEnvelope f A := by
-      rw [← tk_cov_qcEnvelope_eq, hKP d m f hf A]
+      rw [← tk_cov_qcEnvelope_eq, External.KinderlehrerPedregal.dacorognaFormula_holds d m f hf A]
       refine le_iInf₂ fun φ hφ => ?_
       obtain ⟨⟨K, hK⟩, h0⟩ := hφ
       have := hball φ K hK h0 (tk_integrableOn_comp hfI A hK hBfin)
@@ -1430,16 +1432,17 @@ private lemma tk_c_left {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuou
 set_option linter.unusedVariables false in
 /-- **Proposition 2.3 (c)** (`prop:envelope`): for `p ∈ (1, ∞)` and a continuous `f` that is
 `p`-homogeneous or positively `p`-homogeneous and rank-one convex at `0`, `f^{rc}` is
-quasiconvex at `0` if and only if `f` is. Conditional on Dacorogna's formula, which the
-implication "`f` quasiconvex at `0` ⇒ `f^{rc}` quasiconvex at `0`" needs (line 559); the other
-implication is `proposition2_3_c_left`. (`f^{rc}` is finite when `f` is rank-one convex at `0`,
+quasiconvex at `0` if and only if `f` is. Dacorogna's formula
+(`External.KinderlehrerPedregal.dacorognaFormula_holds`) gives the implication "`f` quasiconvex
+at `0` ⇒ `f^{rc}` quasiconvex at `0`" (line 559); the other implication is
+`proposition2_3_c_left`. (`f^{rc}` is finite when `f` is rank-one convex at `0`,
 and is read through `EReal.toReal`.) 
 
 Proof. "`f^{rc}` quasiconvex at `0` ⇒ `f` quasiconvex at `0`" is `proposition2_3_c_left`. Conversely,
 line 559 gives a quasiconvex minorant `g ≤ f` with `g (0) = f (0)`; `g` is rank-one convex
 (Lemma 2.2, `External.Rindler.rankOneConvex_of_quasiconvex`), so `g ≤ f^{rc} ≤ f`, and
 `∫ f^{rc} (∇φ) ≥ ∫ g (∇φ) ≥ g (0) = f^{rc} (0)`. The hypotheses `hp`, `hhom` are not used.-/
-theorem proposition2_3_c (hKP : External.KinderlehrerPedregal.DacorognaFormula) {p : ℝ}
+theorem proposition2_3_c {p : ℝ}
     (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) (hrc : RankOneConvexAt f 0) :
     QuasiconvexAt (fun A => (rcEnvelope f A).toReal) 0 ↔ QuasiconvexAt f 0 := by
@@ -1447,7 +1450,7 @@ theorem proposition2_3_c (hKP : External.KinderlehrerPedregal.DacorognaFormula) 
   refine ⟨tk_c_left hf hrc, fun hqc => ?_⟩
   -- line 559: a quasiconvex minorant `g ≤ f` with `g (0) = f (0)`; it is rank-one convex
   -- (Lemma 2.2), so `g ≤ f^{rc} ≤ f`
-  obtain ⟨g, hgI, hgQ, hgf, hg0⟩ := (quasiconvexAt_iff_exists_minorant hKP hf 0).1 hqc
+  obtain ⟨g, hgI, hgQ, hgf, hg0⟩ := (quasiconvexAt_iff_exists_minorant hf 0).1 hqc
   have hgR : RankOneConvex g := tk_rankOneConvex_of_cov
     (External.Rindler.rankOneConvex_of_quasiconvex hgI.1 hgI.2
       fun A => (tk_cov_quasiconvexAtOn_unitCube_iff g A).2 (hgQ A))

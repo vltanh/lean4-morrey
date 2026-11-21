@@ -63,12 +63,10 @@ definitions of Section 5.2.
 ## Conditional statements
 
 The proofs use results of other works that this formalization does not prove (the theory of UMD
-spaces, Burkholder's inequalities, non-commutative Khintchine inequalities, transference and
-lower bounds for the powers of the Beurling–Ahlfors transform). Each is a proposition named after
-its source, and a hypothesis of every theorem whose proof uses it:
+spaces, non-commutative Khintchine inequalities, transference and lower bounds for the powers of
+the Beurling–Ahlfors transform). Each is a proposition named after its source, and a hypothesis
+of every theorem whose proof uses it:
 
-* `BurkholderInequality`, `BurkholderSquareFunction`: Burkholder's inequalities for
-  Hilbert-space-valued martingales (the paper's Theorem 2.3; Osękowski 2012, Theorems 3.5, 8.6);
 * `HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`, `PisierLpUMD`, `YaroslavtsevComplexUMD`:
   Proposition 2.7 (1), (2), (3), (5), on UMD constants (`umdConst`, `umdConstWith`,
   `complexUMDConst`, Definition 2.5);
@@ -340,37 +338,6 @@ noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
     MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
       MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
 
-/-- **Theorem 2.3** (`cs-thm2.3`), inequality (1), citing Osękowski, *Sharp martingale and
-semimartingale inequalities* (2012), Theorem 3.5 (Burkholder): if `X`, `Y` are martingales with
-values in a separable Hilbert space, started at `0`, with `‖dX_n‖ ≤ ‖dY_n‖` almost surely for
-`n > 0`, then `‖X_n‖_{L^p} ≤ (p* − 1) ‖Y_n‖_{L^p}` for `p ∈ (1, ∞)`. -/
-def BurkholderInequality : Prop :=
-  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
-    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (H : Type)
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    [TopologicalSpace.SeparableSpace H] (X Y : ℕ → Ω → H) (p : ℝ), 1 < p →
-    MeasureTheory.Martingale X ℱ μ → MeasureTheory.Martingale Y ℱ μ → (∀ ω, X 0 ω = 0) →
-    (∀ ω, Y 0 ω = 0) → (∀ n, ∀ᵐ ω ∂μ, ‖X (n + 1) ω - X n ω‖ ≤ ‖Y (n + 1) ω - Y n ω‖) →
-    ∀ n, MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ≤
-      ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm (Y n) (ENNReal.ofReal p) μ
-
-/-- **Theorem 2.3** (`cs-thm2.3`), inequality (2), citing Osękowski (2012), Theorem 8.6
-(Burkholder's square function inequality): for a martingale `X` with values in a separable Hilbert
-space, started at `0`, `p ∈ (1, ∞)` and `𝒮_n X = (Σ_{k ≤ n} ‖dX_k‖²)^{1/2}`,
-`(p* − 1)⁻¹ ‖𝒮_n X‖_{L^p} ≤ ‖X_n‖_{L^p} ≤ (p* − 1) ‖𝒮_n X‖_{L^p}`. -/
-def BurkholderSquareFunction : Prop :=
-  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
-    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (H : Type)
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    [TopologicalSpace.SeparableSpace H] (X : ℕ → Ω → H) (p : ℝ), 1 < p →
-    MeasureTheory.Martingale X ℱ μ → (∀ ω, X 0 ω = 0) →
-    ∀ n, MeasureTheory.eLpNorm
-          (fun ω => √(∑ k ∈ Finset.range n, ‖X (k + 1) ω - X k ω‖ ^ 2)) (ENNReal.ofReal p) μ ≤
-        ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ∧
-      MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ≤
-        ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm
-          (fun ω => √(∑ k ∈ Finset.range n, ‖X (k + 1) ω - X k ω‖ ^ 2)) (ENNReal.ofReal p) μ
-
 /-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
 Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some
 `p₀ ∈ (1, ∞)` is `UMD_p` for every `p ∈ (1, ∞)`; and
@@ -506,17 +473,15 @@ theorem theorem1_2 (hP : PisierLpUMD) (hH : HNVWExtrapolation)
   sorry
 
 /-- **Theorem 1.3**, first assertion. There is a homogeneous quartic polynomial
-`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on Burkholder's
-inequality. -/
-theorem theorem1_3_a (hB : BurkholderInequality) :
+`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. -/
+theorem theorem1_3_a :
     ∃ P : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       IsHomogeneousPolynomial 4 P ∧ RankOneConvex P ∧ NowhereQuasiconvex P := by
   sorry
 
 /-- **Theorem 1.3**, second assertion. For `p` sufficiently close to `4` there is a
-`p`-homogeneous integrand `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex.
-Conditional on Burkholder's inequality. -/
-theorem theorem1_3_b (hB : BurkholderInequality) :
+`p`-homogeneous integrand `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. -/
+theorem theorem1_3_b :
     ∃ ε > 0, ∀ p : ℝ, |p - 4| < ε → ∃ f : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   sorry
@@ -524,20 +489,20 @@ theorem theorem1_3_b (hB : BurkholderInequality) :
 /-- **Theorem 1.4.** For `p ∈ (1, ∞)` there is `d₀ (p)` such that for every `d ≥ d₀ (p)` there is
 a conjugation- and transposition-invariant `p`-homogeneous integrand `f : ℝ^{d×d} → ℝ` which is
 rank-one convex but nowhere quasiconvex. Conditional on Proposition 2.7 (1), (2), Proposition 2.8,
-Propositions 6.3, 6.4 and Burkholder's square function inequality. -/
+Propositions 6.3, 6.4. -/
 theorem theorem1_4 (hH : HNVWExtrapolation)
     (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
     (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (hS : BurkholderSquareFunction) {p : ℝ} (hp : 1 < p) :
+    {p : ℝ} (hp : 1 < p) :
     ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
       IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
         IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   sorry
 
 /-- **Theorem 1.5.** For every `p ∈ (1, ∞) ∖ {2}` there is a `p`-homogeneous integrand
-`f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on Burkholder's
-inequality, transference and Dragičević's lower bound. -/
-theorem theorem1_5 (hB : BurkholderInequality)
+`f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on transference
+and Dragičević's lower bound. -/
+theorem theorem1_5
     (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
@@ -547,7 +512,7 @@ theorem theorem1_5 (hB : BurkholderInequality)
 /-- **Corollary 1.6.** There is a `1`-homogeneous rank-one convex integrand
 `f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Conditional as
 Theorem 1.5. -/
-theorem corollary1_6 (hB : BurkholderInequality)
+theorem corollary1_6
     (hT : HNVWTransference) (hD : DragicevicLowerBound) :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
@@ -555,17 +520,16 @@ theorem corollary1_6 (hB : BurkholderInequality)
 
 /-- **Corollary 5.3.** For `K` sufficiently large and `δ > 0` sufficiently small, with
 `Λ = K/δ`, `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` on `ℝ^{3×2}` is a homogeneous quartic polynomial which is
-globally rank-one convex and nowhere quasiconvex. Conditional on Burkholder's inequality. -/
-theorem corollary5_3 (hB : BurkholderInequality) :
+globally rank-one convex and nowhere quasiconvex. -/
+theorem corollary5_3 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       IsHomogeneousPolynomial 4 (qHat δ (K / δ)) ∧ RankOneConvex (qHat δ (K / δ)) ∧
         NowhereQuasiconvex (qHat δ (K / δ)) := by
   sorry
 
 /-- **The 2 × 2 landscape** (the remark after Theorem 1.3). For `d, m ≥ 2` with
-`(d, m) ≠ (2, 2)` there is a rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex.
-Conditional on Burkholder's inequality (through Theorem 1.3). -/
-theorem morrey_landscape (hB : BurkholderInequality) {d m : ℕ} (hd : 2 ≤ d)
+`(d, m) ≠ (2, 2)` there is a rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex. -/
+theorem morrey_landscape {d m : ℕ} (hd : 2 ≤ d)
     (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
     ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand f ∧ RankOneConvex f ∧ ¬ Quasiconvex f := by
   sorry
@@ -573,9 +537,8 @@ theorem morrey_landscape (hB : BurkholderInequality) {d m : ℕ} (hd : 2 ≤ d)
 /-- **The homogeneous landscape** (after Theorem 1.3, and after Corollary 5.3). For `d, m ≥ 2`
 with `(d, m) ≠ (2, 2)` there is a `4`-homogeneous rank-one convex integrand on `ℝ^{d×m}` that is
 not quasiconvex at `0`: the homogeneous Morrey problem has a negative answer in every nontrivial
-dimension except possibly `2 × 2`. Conditional on Burkholder's inequality (through Theorem 1.3
-and Corollary 5.3). -/
-theorem homMorrey_landscape (hB : BurkholderInequality) {d m : ℕ}
+dimension except possibly `2 × 2`. -/
+theorem homMorrey_landscape {d m : ℕ}
     (hd : 2 ≤ d) (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
     ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous 4 f ∧ RankOneConvex f ∧ ¬ QuasiconvexAt f 0 := by

@@ -146,8 +146,8 @@ theorem tbt3_rankOneConvex_qHat {δ Λ : ℝ} (h : RankOneConvex (qDeltaLambda �
 
 /-- **Corollary 5.3** (`cor:transp`): for `K` sufficiently large and `δ > 0` sufficiently small,
 with `Λ = K/δ`, `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` on `ℝ^{3×2}` is a homogeneous quartic polynomial
-which is globally rank-one convex and nowhere quasiconvex. Conditional on Burkholder's inequality
-(through the rank-one convexity of `q_{δ,Λ}`, Lemma 5.1 (2)).
+which is globally rank-one convex and nowhere quasiconvex. Burkholder's inequality (Theorem 2.3)
+enters through the rank-one convexity of `q_{δ,Λ}` (Lemma 5.1 (2)).
 
 Proof, after the paper's sketch (TeX 2102–2136). The rank-one convexity of `q_{δ,K/δ}` for `K ≥ K₀`,
 `0 < δ ≤ 1` (`qDeltaLambda_rankOneConvex`, from Lemma 5.1 (2)) passes to the transposes
@@ -174,11 +174,11 @@ carries an extra inner cut-off so that it is smooth (it is used only on `|y|² �
 logarithmic divergence `∫_{2 < |x|² < R²} |x|⁻² dx` is bounded below by `½ log (R/4)`, its integral
 over the triangle `2 < x₀ < R/2`, `0 < x₁ < x₀` (Tonelli, `tbt3_J_lower`), instead of being
 computed as `2π log (R/√2)` in polar coordinates; only its divergence is used. -/
-theorem corollary5_3 (hB : BurkholderInequality) :
+theorem corollary5_3 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       IsHomogeneousPolynomial 4 (qHat δ (K / δ)) ∧ RankOneConvex (qHat δ (K / δ)) ∧
         NowhereQuasiconvex (qHat δ (K / δ)) := by
-  obtain ⟨K₀, -, hK₀⟩ := qDeltaLambda_rankOneConvex hB
+  obtain ⟨K₀, -, hK₀⟩ := qDeltaLambda_rankOneConvex
   refine ⟨K₀, fun K hK => ⟨75 / 64000000, by norm_num, fun δ hδ hδ₀ => ?_⟩⟩
   refine ⟨tbt_ihp_qHat δ (K / δ),
     tbt3_rankOneConvex_qHat (hK₀ K hK δ hδ (by linarith)).2, ?_⟩

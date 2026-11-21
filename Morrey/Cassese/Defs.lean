@@ -46,10 +46,10 @@ matrices are `Matrix (Fin d) (Fin m) ℝ`, `ℝ^m` is `Fin m → ℝ`, and the g
   orthogonal projection `projL3` onto `L3`, and the quartics `qDeltaLambda` (proof of Theorem 1.3)
   and `qHat` (Corollary 5.3).
 * The results of other works on which the main theorems are conditional, as propositions named
-  after their sources (`BurkholderInequality`, `BurkholderSquareFunction`, `HNVWExtrapolation`,
-  `RandrianantoaninaSchattenUMD`, `PisierLpUMD`, `YaroslavtsevComplexUMD`, `CoxVeraarDecoupling`,
-  `PisierXuKhintchine`, `KahaneKhintchine`, `HNVWTransference`, `DragicevicLowerBound`), and what
-  they need: Burkholder's `pStar`; Rademacher signs on the canonical space `Fin N → Bool`
+  after their sources (`HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`, `PisierLpUMD`,
+  `YaroslavtsevComplexUMD`, `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`,
+  `HNVWTransference`, `DragicevicLowerBound`), and what they need: `pStar`, `p* = max (p, p')`;
+  Rademacher signs on the canonical space `Fin N → Bool`
   (`coin`, `avg`, `IsPredictable`, `mart`, `lpNormWith`); the UMD constants of Definition 2.5
   and Proposition 2.7 (5) (`umdConstWith`, `umdConst`, `complexUMDConst`); the Schatten norms
   (`sval`, `schattenNorm`); the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²`
@@ -320,37 +320,6 @@ noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
   ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
     MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
       MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
-
-/-- **Theorem 2.3** (`cs-thm2.3`), inequality (1), citing Osękowski, *Sharp martingale and
-semimartingale inequalities* (2012), Theorem 3.5 (Burkholder): if `X`, `Y` are martingales with
-values in a separable Hilbert space, started at `0`, with `‖dX_n‖ ≤ ‖dY_n‖` almost surely for
-`n > 0`, then `‖X_n‖_{L^p} ≤ (p* − 1) ‖Y_n‖_{L^p}` for `p ∈ (1, ∞)`. -/
-def BurkholderInequality : Prop :=
-  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
-    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (H : Type)
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    [TopologicalSpace.SeparableSpace H] (X Y : ℕ → Ω → H) (p : ℝ), 1 < p →
-    MeasureTheory.Martingale X ℱ μ → MeasureTheory.Martingale Y ℱ μ → (∀ ω, X 0 ω = 0) →
-    (∀ ω, Y 0 ω = 0) → (∀ n, ∀ᵐ ω ∂μ, ‖X (n + 1) ω - X n ω‖ ≤ ‖Y (n + 1) ω - Y n ω‖) →
-    ∀ n, MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ≤
-      ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm (Y n) (ENNReal.ofReal p) μ
-
-/-- **Theorem 2.3** (`cs-thm2.3`), inequality (2), citing Osękowski (2012), Theorem 8.6
-(Burkholder's square function inequality): for a martingale `X` with values in a separable Hilbert
-space, started at `0`, `p ∈ (1, ∞)` and `𝒮_n X = (Σ_{k ≤ n} ‖dX_k‖²)^{1/2}`,
-`(p* − 1)⁻¹ ‖𝒮_n X‖_{L^p} ≤ ‖X_n‖_{L^p} ≤ (p* − 1) ‖𝒮_n X‖_{L^p}`. -/
-def BurkholderSquareFunction : Prop :=
-  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
-    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (H : Type)
-    [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-    [TopologicalSpace.SeparableSpace H] (X : ℕ → Ω → H) (p : ℝ), 1 < p →
-    MeasureTheory.Martingale X ℱ μ → (∀ ω, X 0 ω = 0) →
-    ∀ n, MeasureTheory.eLpNorm
-          (fun ω => √(∑ k ∈ Finset.range n, ‖X (k + 1) ω - X k ω‖ ^ 2)) (ENNReal.ofReal p) μ ≤
-        ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ∧
-      MeasureTheory.eLpNorm (X n) (ENNReal.ofReal p) μ ≤
-        ENNReal.ofReal (pStar p - 1) * MeasureTheory.eLpNorm
-          (fun ω => √(∑ k ∈ Finset.range n, ‖X (k + 1) ω - X k ω‖ ^ 2)) (ENNReal.ofReal p) μ
 
 /-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
 Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some

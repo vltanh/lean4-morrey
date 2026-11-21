@@ -1963,7 +1963,7 @@ theorem twoByM_normSq_line (c w : ℂ) (t : ℝ) :
   rw [Complex.sq_norm, Complex.normSq_apply]; simp; ring
 
 /-- Zig-zag concavity of `U` where some coordinate line `x_{j₀} + t h_{j₀}` avoids `0`. -/
-theorem twoByM_zigzag_generic (hB : External.Burkholder.ScalarFunction) {n : ℕ}
+theorem twoByM_zigzag_generic {n : ℕ}
     (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) (j₀ : Fin n)
     (hj₀ : ∀ t : ℝ, x j₀ + t * h j₀ ≠ 0) :
     ConcaveOn ℝ Set.univ fun t : ℝ =>
@@ -2016,13 +2016,14 @@ theorem twoByM_zigzag_generic (hB : External.Burkholder.ScalarFunction) {n : ℕ
   have h18 := twoByM_eq18 hb0 hb hb' hconv
   -- `κ` is concave by (14)
   have hκ : ConcaveOn ℝ Set.univ κ :=
-    twoByM_concaveOn_sum _ fun j _ => hB.2 (x j) (y j) (h j) ε hε
+    twoByM_concaveOn_sum _ fun j _ =>
+      External.Burkholder.scalarFunction_holds.2 (x j) (y j) (h j) ε hε
   -- `r ≥ 5⁶ b` by (13)
   have hr : ∀ t, 5 ^ 6 * b t ≤ κ t + 2 * 5 ^ 6 * b t := fun t => by
     have : -(5 ^ 6 * b t) ≤ κ t := by
       rw [hbn, Finset.mul_sum, ← Finset.sum_neg_distrib]
       refine Finset.sum_le_sum fun j _ => ?_
-      have := hB.1 (x j + t * h j) (y j + t * ε * h j)
+      have := External.Burkholder.scalarFunction_holds.1 (x j + t * h j) (y j + t * ε * h j)
       have : 0 ≤ ‖y j + t * ε * h j‖ ^ 6 := by positivity
       simp only [burkholderU_eq]
       linarith
@@ -2041,7 +2042,7 @@ theorem twoByM_continuous_zigzagU (n : ℕ) :
 `t ↦ U (x + t h, y + t ε h)` is concave. If `h = 0` it is constant; otherwise, with
 `h_{j₀} ≠ 0`, `x_{j₀}` is a limit of points for which `x_{j₀} + t h_{j₀}` never vanishes (so that
 `B (x + t h) > 0`, as the paper's `b_η > 0`), and concavity passes to the limit. -/
-theorem twoByM_zigzag (hB : External.Burkholder.ScalarFunction) {n : ℕ}
+theorem twoByM_zigzag {n : ℕ}
     (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) :
     ConcaveOn ℝ Set.univ fun t : ℝ =>
       zigzagU (fun j => x j + t * h j) (fun j => y j + t * ε * h j) := by
@@ -2055,7 +2056,7 @@ theorem twoByM_zigzag (hB : External.Burkholder.ScalarFunction) {n : ℕ}
   refine External.Burkholder.concaveOn_univ_of_tendsto
     (F := fun m t => zigzagU (fun j => Function.update x j₀ (a' m) j + t * h j)
       (fun j => y j + t * ε * h j))
-    (fun m => twoByM_zigzag_generic hB _ y h hε j₀ fun t => by
+    (fun m => twoByM_zigzag_generic _ y h hε j₀ fun t => by
       rw [Function.update_self]; exact ha'0 m t)
     fun t => ?_
   have hx : Tendsto (fun m => Function.update x j₀ (a' m)) atTop (𝓝 x) := by
@@ -2081,14 +2082,14 @@ theorem twoByM_lq6_cube {n : ℕ} (z : Fin n → ℂ) : lqNorm 6 z ^ 3 = √(bur
   norm_num
 
 /-- (16) (`eq:U-majorization`): `U (x, y) ≥ ‖y‖_6³ − 5⁴ ‖x‖_6³`, from (13). -/
-theorem twoByM_U_majorization (hB : External.Burkholder.ScalarFunction) {n : ℕ}
+theorem twoByM_U_majorization {n : ℕ}
     (x y : Fin n → ℂ) : lqNorm 6 y ^ 3 - 5 ^ 4 * lqNorm 6 x ^ 3 ≤ zigzagU x y := by
   rw [twoByM_lq6_cube, twoByM_lq6_cube, zigzagU]
   -- `R (x, y) ≥ ‖y‖_6⁶ + 5⁶ ‖x‖_6⁶ ≥ ‖y‖_6⁶`
   have hR : burkholderB y ≤ burkholderR x y := by
     rw [burkholderB, burkholderR]
     refine Finset.sum_le_sum fun j _ => ?_
-    have := hB.1 (x j) (y j)
+    have := External.Burkholder.scalarFunction_holds.1 (x j) (y j)
     have : 0 ≤ ‖x j‖ ^ 6 := by positivity
     simp only [burkholderU_eq]
     linarith
@@ -2113,7 +2114,7 @@ theorem twoByM_isIntegrand_of_continuous {d m : ℕ} {f : Matrix (Fin d) (Fin m)
 `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)` (stated as `proposition4_2_minorant`). Rank-one
 convexity: along `B + t R`, `rank R = 1`, Lemma 4.1 gives `Q_n R = λ conj (P_n R)` with `|λ| = 1`,
 so `g_n = −U (x + t h, y + t λ h)`, which is convex by the zig-zag concavity of `U`. -/
-theorem twoByM_explicit_minorant (hB : External.Burkholder.ScalarFunction) (n : ℕ) :
+theorem twoByM_explicit_minorant (n : ℕ) :
     IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
       (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 := by
   refine ⟨twoByM_isIntegrand_of_continuous (twoByM_continuous_explicitG n), fun A B hAB => ?_,
@@ -2137,10 +2138,10 @@ theorem twoByM_explicit_minorant (hB : External.Burkholder.ScalarFunction) (n : 
         rw [twoByM_wirtQ_add, twoByM_wirtQ_smul, Pi.add_apply, twoByM_rank_one_identity hR j,
           mul_assoc]
     rw [key]
-    exact (twoByM_zigzag hB _ _ _ (twoByM_norm_lam R).le).neg.subset (Set.subset_univ _)
+    exact (twoByM_zigzag _ _ _ (twoByM_norm_lam R).le).neg.subset (Set.subset_univ _)
       (convex_Icc 0 1)
   · -- (16)
-    have := twoByM_U_majorization hB (fun j => conj (wirtP A j)) (wirtQ A)
+    have := twoByM_U_majorization (fun j => conj (wirtP A j)) (wirtQ A)
     rw [twoByM_lqNorm_conj] at this
     rw [explicitG, explicitF]
     linarith
@@ -2150,18 +2151,19 @@ theorem twoByM_explicit_minorant (hB : External.Burkholder.ScalarFunction) (n : 
       twoByM_lqNorm_zero (by norm_num : (0:ℝ) < 6)]
 
 /-- **Proposition 4.2** (`prop:explicit`): `f_n` is rank-one convex at `0` (for every `n`; the
-section fixes `n ∈ ℕ`). Conditional on Burkholder's properties (13), (14) of `u`.
+section fixes `n ∈ ℕ`). By Burkholder's properties (13), (14) of `u`
+(`External.Burkholder.scalarFunction_holds`).
 
 Proof: the paper's: `g_n` is a rank-one convex minorant of `f_n` with `g_n (0) = 0 = f_n (0)`
-(`proposition4_2_minorant`). The hypothesis is proved:
-`External.Burkholder.scalarFunction_holds`. -/
-theorem proposition4_2 (hB : External.Burkholder.ScalarFunction) (n : ℕ) :
+(`proposition4_2_minorant`). -/
+theorem proposition4_2 (n : ℕ) :
     RankOneConvexAt (explicitF n) 0 := by
-  obtain ⟨h1, h2, h3, h4, h5⟩ := twoByM_explicit_minorant hB n
+  obtain ⟨h1, h2, h3, h4, h5⟩ := twoByM_explicit_minorant n
   exact ⟨explicitG n, h1, h2, h3, by rw [h4, h5]⟩
 
 /-- **Proposition 4.2** (`prop:explicit`), the claim of its proof: `g_n` is a globally rank-one
-convex integrand with `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)`. Conditional on (13), (14).
+convex integrand with `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)`. By (13), (14)
+(`External.Burkholder.scalarFunction_holds`).
 
 Proof: the paper's (`twoByM_explicit_minorant`): (16) from (13) (`twoByM_U_majorization`); rank-one
 convexity from Lemma 4.1 and the zig-zag concavity of `U` (`twoByM_zigzag`), which follows from
@@ -2180,10 +2182,10 @@ at
 calculus of convolutions (derivatives of `r_η`, Minkowski's integral inequality for `b_η^{1/6}`),
 which the supporting-majorant device avoids while keeping (17), (18) and the computation; reported
 for review, since this is a choice of regularization rather than a gap in the paper. -/
-theorem proposition4_2_minorant (hB : External.Burkholder.ScalarFunction) (n : ℕ) :
+theorem proposition4_2_minorant (n : ℕ) :
     IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
       (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 :=
-  twoByM_explicit_minorant hB n
+  twoByM_explicit_minorant n
 
 /-! ### Proposition 4.3: the limiting argument and the failure of quasiconvexity -/
 
@@ -2757,7 +2759,8 @@ theorem twoByM_isPHomogeneous_explicitG (n : ℕ) : IsPHomogeneous 3 (explicitG 
   ring
 
 /-- **Proposition 4.3** (`prop:elem`): for `n` large enough, `g_n` is not quasiconvex at `0`, and
-hence it is not quasiconvex anywhere. Conditional on (13), (14) and on Dacorogna's formula.
+hence it is not quasiconvex anywhere. By (13), (14) (`External.Burkholder.scalarFunction_holds`)
+and Dacorogna's formula (`External.KinderlehrerPedregal.dacorognaFormula_holds`).
 
 Why Dacorogna's formula (TeX lines 1359–1366). The proof reads: if `g_n` were quasiconvex at `0`,
 then `0 = g_n (0) = g_n^{qc} (0) ≤ f_n^{qc} (0) ≤ f_n (0) = 0`, contradicting that `f_n` is not
@@ -2766,7 +2769,7 @@ quasiconvex at `0`" need no formula. The step `g_n (0) = g_n^{qc} (0)` does: `g_
 quasiconvex at `0` only, and `g_n^{qc} (0) = g_n (0)` asks for a quasiconvex (at every matrix)
 minorant of `g_n` touching it at `0`. That is the "only if" direction of line 559, which the paper
 derives from Proposition 2.2 (Kinderlehrer–Pedregal); without the formula no such minorant is
-available. So the hypothesis stays, on the paper's route (`cs-qc-minorant`). A shorter argument
+available. So the proof uses the formula, on the paper's route (`cs-qc-minorant`). A shorter argument
 would avoid it, by never forming the envelope: for each test map `φ`,
 `∫ f_n (∇φ) ≥ ∫ g_n (∇φ) ≥ g_n (0) = 0 = f_n (0)` (`g_n` is continuous and `∇φ` bounded, so the
 second integral exists), so `f_n` would be quasiconvex at `0`; it is recorded as a simplification,
@@ -2781,20 +2784,19 @@ Lemma 4.2 (at `p = 3`, `q = 6 ≥ p + 2`) and the limiting argument of Section 4
 it is proved in `twoByM_not_qc_explicitF` (cutoff of `u_n`, Fatou's lemma, rescaling into the unit
 cube). Nowhere quasiconvexity: `g_n` is `3`-homogeneous (`twoByM_isPHomogeneous_explicitG`) and
 continuous, and `nowhereQuasiconvex_of_not_quasiconvexAt_zero` applies. -/
-theorem proposition4_3 (hB : External.Burkholder.ScalarFunction)
-    (hKP : External.KinderlehrerPedregal.DacorognaFormula) :
+theorem proposition4_3 :
     ∃ n₀ : ℕ, ∀ n ≥ n₀, ¬ QuasiconvexAt (explicitG n) 0 ∧ NowhereQuasiconvex (explicitG n) := by
   obtain ⟨n₀, hn₀⟩ := twoByM_not_qc_explicitF
   refine ⟨n₀, fun n hn => ?_⟩
-  obtain ⟨-, -, hle, hg0, hf0⟩ := twoByM_explicit_minorant hB n
+  obtain ⟨-, -, hle, hg0, hf0⟩ := twoByM_explicit_minorant n
   have hnot : ¬ QuasiconvexAt (explicitG n) 0 := by
     intro hqc
     -- `g_n (0) = g_n^{qc} (0)`: a quasiconvex minorant `g'` of `g_n` touching it at `0`
     obtain ⟨g', hg'i, hg'q, hg'le, hg'0⟩ :=
-      (quasiconvexAt_iff_exists_minorant hKP (twoByM_continuous_explicitG n) 0).1 hqc
+      (quasiconvexAt_iff_exists_minorant (twoByM_continuous_explicitG n) 0).1 hqc
     -- `g' ≤ g_n ≤ f_n` and `g' (0) = 0 = f_n (0)`, so `f_n^{qc} (0) = f_n (0)`: `f_n` would be
     -- quasiconvex at `0`
-    exact hn₀ n hn ((quasiconvexAt_iff_exists_minorant hKP (twoByM_continuous_explicitF n) 0).2
+    exact hn₀ n hn ((quasiconvexAt_iff_exists_minorant (twoByM_continuous_explicitF n) 0).2
       ⟨g', hg'i, hg'q, fun B => (hg'le B).trans (hle B), by rw [hg'0, hg0, hf0]⟩)
   exact ⟨hnot, nowhereQuasiconvex_of_not_quasiconvexAt_zero (p := 3) (by norm_num)
     (twoByM_continuous_explicitG n) (Or.inl (twoByM_isPHomogeneous_explicitG n)) hnot⟩
@@ -3809,8 +3811,9 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   supporting-majorant device of `twoByM_sqrt_concave` instead of mollification).
 * As in Proposition 4.3, `g` is not quasiconvex at `0`: otherwise `F_{n₀,p,q,C}` would be. Here
   directly (`twoByM_quasiconvexAt_of_minorant`: `∫ F (∇φ) ≥ ∫ g (∇φ) ≥ g (0) = F (0)`) instead of
-  through `g^{qc}` and Dacorogna's formula, which `proposition4_3` needs as a hypothesis
-  (reason 2). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex
+  through `g^{qc}` and Dacorogna's formula, which `proposition4_3` uses
+  (reason 2: when this route was written, Dacorogna's formula was a hypothesis out of reach; it is
+  now proved, `External.KinderlehrerPedregal.dacorognaFormula_holds`). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex
   (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). No envelope is needed: `g` is already
   globally rank-one convex, so `f = g` for `m₀ = 2 n₀` (the paper takes `f = F^{rc}`).
 * For `m ≥ m₀`, `f ∘ π` with the projection `π` onto the first `m₀` columns, as in the paper; a

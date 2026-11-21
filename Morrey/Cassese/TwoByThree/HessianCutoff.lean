@@ -442,7 +442,7 @@ theorem tbt6_not_hessianQuasiconvexAt (K : ℝ) :
 
 /-- **Corollary 5.4** (`cor:hessian-quartic`): for `K` sufficiently large and `δ > 0` sufficiently
 small, with `Λ = K/δ`, `h (A) = q_{δ,Λ} (B A)` on `ℝ^{3×3}` is rank-one convex but not Hessian
-quasiconvex at `0`. Conditional on Burkholder's inequality (through Lemma 5.1 (2)).
+quasiconvex at `0`. Burkholder's inequality (Theorem 2.3) enters through Lemma 5.1 (2).
 
 Proof, as in the paper (TeX 2159–2191: "the proof of Theorem 1.3 now applies unchanged, with
 `Λ = K/δ` and `R = δ⁻⁴`"). Rank-one convexity: `q_{δ,K/δ}` is rank-one convex for `K ≥ K₀`,
@@ -464,12 +464,12 @@ replaces Hölder's inequality, `I₁ = ∫_{B₁} q₃ (V)` replaces `∫_{ℝ³
 and the cut-off is `χ (y) = σ (2 − |y|²)`. The potential is the explicit
 `φ = Re (x Ψ₁ (ζ) + y Ψ₂ (ζ) + t Ψ₃ (ζ) + i ζ²)` (`tbt5Pot`), where the paper only describes `∇φ`
 and says "the integration constants can be chosen so that `B ∇φ = u`". -/
-theorem corollary5_4 (hB : BurkholderInequality) :
+theorem corollary5_4 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       RankOneConvex (fun A : Matrix (Fin 3) (Fin 3) ℝ => qDeltaLambda δ (K / δ) (hessB * A)) ∧
         ¬ HessianQuasiconvexAt
           (fun A : Matrix (Fin 3) (Fin 3) ℝ => qDeltaLambda δ (K / δ) (hessB * A)) 0 := by
-  obtain ⟨K₀, -, hK₀⟩ := qDeltaLambda_rankOneConvex hB
+  obtain ⟨K₀, -, hK₀⟩ := qDeltaLambda_rankOneConvex
   refine ⟨K₀, fun K hK => ?_⟩
   obtain ⟨δ₀, hδ₀, hδ₀1, hnq⟩ := tbt6_not_hessianQuasiconvexAt K
   exact ⟨δ₀, hδ₀, fun δ hδ hδ' =>

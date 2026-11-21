@@ -1,6 +1,7 @@
 module
 
 public import Morrey.Cassese.Defs
+public import Morrey.Cassese.Hypotheses
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.MeasureTheory.Integral.Bochner.SumMeasure
 public import Mathlib.MeasureTheory.Measure.Count
@@ -13,7 +14,7 @@ The Rademacher martingales `n ↦ Σ_{k<n} ε_k ξ_k` of `Defs` (`mart`, predict
 canonical space `{±1}^N = Fin N → Bool` with the uniform probability `tbt1Mu N`
 (`(2^N)⁻¹ • count`). With the filtration `tbt1Filt N` of the sets determined by the first `k`
 signs, they are martingales in Mathlib's sense (`tbt1_martingale_mart`), so Burkholder's
-inequality (Theorem 2.3, the hypothesis `BurkholderInequality`) applies to them; on this finite
+inequality (Theorem 2.3, `burkholderInequality_holds`) applies to them; on this finite
 space `L^p` norms are averages (`tbt1_eLpNorm_eq`). The consequence used in Lemma 5.1 (1),
 inequality (27), is `tbt1_burkholder_avg`: if `‖ξ_k‖ ≤ ‖ζ_k‖` pointwise then
 `E ‖Σ ε_k ξ_k‖^p ≤ (p* − 1)^p E ‖Σ ε_k ζ_k‖^p`.
@@ -213,16 +214,16 @@ theorem tbt1_martingale_mart {ξ : Fin N → (Fin N → Bool) → H} (hξ : IsPr
 
 /-- **Burkholder's inequality (27) on `{±1}^N`**: if `‖ξ_k‖ ≤ ‖ζ_k‖` pointwise, for predictable
 `ξ`, `ζ` with values in a separable Hilbert space, then
-`E ‖Σ_{k<N} ε_k ξ_k‖^p ≤ (p* − 1)^p E ‖Σ_{k<N} ε_k ζ_k‖^p`. From `BurkholderInequality`
-(differential subordination `‖dX_n‖ ≤ ‖dY_n‖`) on the canonical space. -/
-theorem tbt1_burkholder_avg (hB : BurkholderInequality) {N : ℕ} {E : Type}
+`E ‖Σ_{k<N} ε_k ξ_k‖^p ≤ (p* − 1)^p E ‖Σ_{k<N} ε_k ζ_k‖^p`. From Burkholder's inequality,
+`burkholderInequality_holds` (differential subordination `‖dX_n‖ ≤ ‖dY_n‖`) on the canonical space. -/
+theorem tbt1_burkholder_avg {N : ℕ} {E : Type}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [TopologicalSpace.SeparableSpace E] [MeasurableSpace E] [BorelSpace E]
     [SecondCountableTopology E]
     {ξ ζ : Fin N → (Fin N → Bool) → E} (hξ : IsPredictable ξ)
     (hζ : IsPredictable ζ) (hle : ∀ k ε, ‖ξ k ε‖ ≤ ‖ζ k ε‖) {p : ℝ} (hp : 1 < p) :
     avg (fun ε => ‖mart ξ N ε‖ ^ p) ≤ (pStar p - 1) ^ p * avg (fun ε => ‖mart ζ N ε‖ ^ p) := by
-  have key := hB (Fin N → Bool) MeasurableSpace.pi (tbt1Mu N) (tbt1Filt N)
+  have key := burkholderInequality_holds (Fin N → Bool) MeasurableSpace.pi (tbt1Mu N) (tbt1Filt N)
     E (fun n => mart ξ n) (fun n => mart ζ n) p hp
     (tbt1_martingale_mart hξ) (tbt1_martingale_mart hζ) (fun ε => by simp [mart])
     (fun ε => by simp [mart])

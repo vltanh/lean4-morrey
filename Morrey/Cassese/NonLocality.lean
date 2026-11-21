@@ -19,18 +19,16 @@ namespace Cassese
 `c, C > 0` with `D²h (A) [H, H] ≥ c ‖H‖²` for every `A` and every rank-one `H`,
 `c ‖A‖² ≤ h (A) ≤ C (1 + ‖A‖²)` for every `A`, and `h` not quasiconvex at `0` (`‖·‖` the
 Frobenius norm; `D²h (A) [H, H]` is the second derivative of `t ↦ h (A + t H)` at `0`).
-Conditional on Burkholder's inequality (through Theorem 1.3) and on Kristensen's smoothing
-argument (`External.Kristensen.Smoothing`, stated for rank-one convex homogeneous quartics on
-`ℝ^{2×m}`, `m ≥ 3`, that are not quasiconvex at `0`). The proof applies it to the quartic of
-Theorem 1.3 lifted to `ℝ^{2×m}` through the first three columns, read through the bridges
+The proof uses Kristensen's smoothing argument (`External.Kristensen.Smoothing`, stated for
+rank-one convex homogeneous quartics on `ℝ^{2×m}`, `m ≥ 3`, that are not quasiconvex at `0`, and
+proved in `External.Kristensen.smoothing_holds`). It applies it to the quartic of Theorem 1.3 lifted to `ℝ^{2×m}` through the first three columns, read through the bridges
 `cov_rankOneConvex_iff` and `cov_quasiconvexAtOn_unitCube_iff` of `Cassese.Bridges`.
 
 Proof: the quartic `P` of Theorem 1.3 lifted to `P ∘ T`, `T A` the first three columns of `A`
 (the polynomial `MvPolynomial.rename` of `P`'s), is a rank-one convex homogeneous quartic
 (`intro_rankOneConvex_comp`) which is not quasiconvex at `0` (a witness for `P ∘ T` would give one
 for `P`, `intro_quasiconvexAt_of_comp_trunc`); Kristensen's smoothing gives `h`. -/
-theorem corollary5_2 (hB : BurkholderInequality)
-    (hK : External.Kristensen.Smoothing) {m : ℕ} (hm : 3 ≤ m) :
+theorem corollary5_2 {m : ℕ} (hm : 3 ≤ m) :
     ∃ (h : Matrix (Fin 2) (Fin m) ℝ → ℝ) (c C : ℝ), 0 < c ∧ 0 < C ∧
       ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (fun X : Fin 2 → Fin m → ℝ => h (Matrix.of X)) ∧
       (∀ A H : Matrix (Fin 2) (Fin m) ℝ, H.rank = 1 →
@@ -38,7 +36,7 @@ theorem corollary5_2 (hB : BurkholderInequality)
       (∀ A : Matrix (Fin 2) (Fin m) ℝ, c * frobSq A ≤ h A ∧ h A ≤ C * (1 + frobSq A)) ∧
       ¬ QuasiconvexAt h 0 := by
   -- the quartic `P` of Theorem 1.3, lifted to `P ∘ T` with `T A` the first three columns of `A`
-  obtain ⟨P, ⟨Q, hQh, hQ⟩, hR, hnq⟩ := theorem1_3_a hB
+  obtain ⟨P, ⟨Q, hQh, hQ⟩, hR, hnq⟩ := theorem1_3_a
   set Q' := MvPolynomial.rename
     (fun ij : Fin 2 × Fin 3 => (Fin.castLE le_rfl ij.1, Fin.castLE hm ij.2)) Q with hQ'def
   have hfun : (fun A : Matrix (Fin 2) (Fin m) ℝ => MvPolynomial.eval (fun ij => A ij.1 ij.2) Q') =
@@ -60,7 +58,8 @@ theorem corollary5_2 (hB : BurkholderInequality)
     rw [intro_trunc_zero] at this
     exact hnq 0 this
   -- Kristensen's smoothing
-  obtain ⟨h, c, C, hc, hC, hsm, hLH, hgr, hnq'⟩ := hK m hm Q' hQh.rename_isHomogeneous hRl hnql
+  obtain ⟨h, c, C, hc, hC, hsm, hLH, hgr, hnq'⟩ :=
+    External.Kristensen.smoothing_holds m hm Q' hQh.rename_isHomogeneous hRl hnql
   exact ⟨h, c, C, hc, hC, hsm, hLH, hgr,
     fun hq => hnq' ((cov_quasiconvexAtOn_unitCube_iff h 0).2 hq)⟩
 

@@ -2,6 +2,7 @@ module
 
 public import Morrey.Cassese.Square.Hermite
 public import Morrey.Cassese.FourByTwo
+public import Morrey.Cassese.Hypotheses
 public import Mathlib.LinearAlgebra.Matrix.PosDef
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 
@@ -20,7 +21,7 @@ rests on the shape of the symmetric and skew parts of a rank-one matrix. After r
 
 Also: orthogonality of the increments of a Rademacher martingale of matrices in the Frobenius
 norm (`square_korn_avg_frob_mart`), and Burkholder's square function inequality
-(`BurkholderSquareFunction`, Theorem 2.3 (2)) for such martingales in the Hilbert space
+(Theorem 2.3 (2), `burkholderSquareFunction_holds`) for such martingales in the Hilbert space
 `S_2^{d×d}` (`square_korn_burkholder`), through the model `EuclideanSpace ℝ (Fin d × Fin d)` of
 `S_2^{d×d}` (`square_korn_toE`, an isometry for the Frobenius norm) and the bridge of
 `Morrey/Cassese/FourByTwo.lean` from Rademacher martingales on the signs to
@@ -226,11 +227,11 @@ theorem square_korn_norm_toE (M : Matrix (Fin n) (Fin n) ℝ) :
   simp only [square_korn_toE, LinearMap.coe_mk, AddHom.coe_mk, PiLp.toLp_apply, Real.norm_eq_abs,
     sq, abs_mul_abs_self]
 
-/-- **Burkholder's square function inequality in `S_2^{d×d}`** (`BurkholderSquareFunction`,
-Theorem 2.3 (2), in the Hilbert space `S_2^{d×d}`), for a Rademacher martingale of matrices
+/-- **Burkholder's square function inequality in `S_2^{d×d}`** (Theorem 2.3 (2),
+`burkholderSquareFunction_holds`, in the Hilbert space `S_2^{d×d}`), for a Rademacher martingale of matrices
 `f_N = Σ_{k<N} ε_k ξ_k` with predictable `ξ`:
 `‖(Σ_k ‖ξ_k‖_F²)^{1/2}‖_{L^p} ≤ (p* − 1) ‖f_N‖_{L^p (S_2)}`. -/
-theorem square_korn_burkholder (hS : BurkholderSquareFunction) {p : ℝ} (hp : 1 < p) {N : ℕ}
+theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
     (ξ : Fin N → (Fin N → Bool) → Matrix (Fin n) (Fin n) ℝ) (hξ : IsPredictable ξ) :
     (avg fun ε => (∑ k, squareFrob (ξ k ε) (ξ k ε)) ^ (p / 2)) ^ (1 / p) ≤
       (pStar p - 1) * (avg fun ε => squareFrob (mart ξ N ε) (mart ξ N ε) ^ (p / 2)) ^ (1 / p) := by
@@ -244,7 +245,7 @@ theorem square_korn_burkholder (hS : BurkholderSquareFunction) {p : ℝ} (hp : 1
   have hζ : IsPredictable ζ := fun k ε ε' h => by simp only [hζdef, hξ k ε ε' h]
   have hm : ∀ k ε, mart ζ k ε = L (mart ξ k ε) := by
     intro k ε; simp [hζdef, mart, map_sum, map_smul]
-  obtain ⟨h1, -⟩ := hS (Fin N → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
+  obtain ⟨h1, -⟩ := burkholderSquareFunction_holds (Fin N → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
     (fourByTwo_filtration N) (EuclideanSpace ℝ (Fin n × Fin n)) (fun k => mart ζ k) p hp
     (fourByTwo_martingale ζ hζ) (fourByTwo_mart_zero ζ) N
   rw [fourByTwo_eLpNorm_uniform _ hp0, fourByTwo_eLpNorm_uniform _ hp0,

@@ -1343,7 +1343,7 @@ comparison `square_rankOne_comparison` and Cauchy–Schwarz); decoupling and (31
 Hilbert-valued square function inequality in `S_2` (Burkholder, Theorem 2.3 (2),
 `square_korn_burkholder`) with fact (2):
 `‖𝔖_N f‖_{L^p (S_2)} = ‖𝒮_N f‖_{L^p} ≤ (p* − 1) ‖f_N‖_{L^p (S_2)} ≤ (p* − 1) d^{1/2 − 1/q} ‖f_N‖_{L^p (S_q)}`. -/
-theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling) (hS : BurkholderSquareFunction)
+theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
     {q : ℝ} (hq : 2 < q) {p : ℝ} (hp : 1 < p) {u c : ℝ} (hu : 0 ≤ u) (hc : 0 < c)
     (hU : umdConstWith (Fin d → Fin d → ℝ)
       (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) p ≤ ENNReal.ofReal u)
@@ -1453,7 +1453,7 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling) (hS : BurkholderSquareF
     have hWs : ∀ ε, W ε = ∑ k, squareFrob (S k ε) (S k ε) := fun ε => by
       simp only [hW, Matrix.trace_sum, squareFrob]
       exact Finset.sum_congr rfl fun k _ => Matrix.trace_mul_comm _ _
-    have hB := square_korn_burkholder hS hp S hSp
+    have hB := square_korn_burkholder hp S hSp
     simp only [← hWs] at hB
     refine hB.trans (mul_le_mul_of_nonneg_left ?_ hβ)
     have h2q : ∀ M : Matrix (Fin d) (Fin d) ℝ,
@@ -1675,8 +1675,8 @@ theorem square_log_choice {d : ℕ} (hd : 2 ≤ d) :
 /-- **Proposition 6.5** (`cs-prop6.5`): for `q ∈ (2, ∞)` and `p ∈ (1, ∞)` there is `C_{q,p}` with
 `C^{rc} (S_q^{d×d}, p) ≤ C_{q,p} d^{1/4 − 1/(2q)}` for every `d ≥ 2`; and for every `p ∈ (1, ∞)`
 there are `α > 0` and `C_p` with `C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for every `d ≥ 2`.
-Conditional on Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 and Burkholder's square function
-inequality (Theorem 2.3 (2)). Reading: `α` may depend on `p`.
+Conditional on Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 (Burkholder's square function
+inequality, Theorem 2.3 (2), is proved). Reading: `α` may depend on `p`.
 
 Proof (the paper's, TeX lines 2448–2480): for `q ∈ (2, ∞)`, the bound
 `‖Skew M_N‖_{L^p (S_q)} ≤ (u c)^{3/2} (p* − 1)^{1/2} d^{1/4 − 1/(2q)} ‖Sym M_N‖_{L^p (S_q)}`
@@ -1690,8 +1690,7 @@ with a constant `c₀ (p) √q`, `square_eq31_q`, from the quantitative clause o
 `K_p q³ d^{1/4} d^{1/(2q)}` times that of `Sym M_N`; with `q = log d + 2`, `α = 3`. -/
 theorem proposition6_5 (hH : HNVWExtrapolation)
     (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (hS : BurkholderSquareFunction) :
+    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine) :
     (∀ q : ℝ, 2 < q → ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p (ENNReal.ofReal q)) ≤
         ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 - 1 / (2 * q)))) ∧
@@ -1721,7 +1720,7 @@ theorem proposition6_5 (hH : HNVWExtrapolation)
     refine (iInf₂_le C ⟨hC0, (proposition2_5 (square_continuous_kornF hp0.le hQ1 C)).2
       fun N A hA => ?_⟩).trans (le_of_eq (by rw [hCdef]))
     rw [square_kornF_zero hp0 hQ1]
-    exact square_avg_kornF_nonneg hp0 hC0 _ (square_skew_le_sym_p hCV hS hq hp hu.le hc
+    exact square_avg_kornF_nonneg hp0 hC0 _ (square_skew_le_sym_p hCV hq hp hu.le hc
       (square_umd_p hH hCRq hq1 hp d) (h31 d) A hA)
   · -- `q = ∞`, through `q = log d + 2`, with constants polynomial in `q`
     have hp0 : 0 < p := by linarith
@@ -1748,7 +1747,7 @@ theorem proposition6_5 (hH : HNVWExtrapolation)
     have hsq : 0 < √q := Real.sqrt_pos.2 (by linarith)
     have hc : 0 < c := mul_pos hc₀ hsq
     have hb := fun N (A : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin d) ℝ)
-      (hA : IsRankOneIncrements A) => square_skew_le_sym_p hCV hS hq hp hu hc
+      (hA : IsRankOneIncrements A) => square_skew_le_sym_p hCV hq hp hu hc
         (square_umd_p hH hCRq hq1 hp d) (fun n x hx => h31 q hq.le d n x hx) A hA
     -- `u c √(u c) ≤ G √G q³`
     have huc : u * c ≤ G * q ^ 2 := by
@@ -1911,7 +1910,7 @@ the Hessian analogue of the consequence of Proposition 2.3 that is
 theorem corollary6_1 (hH : HNVWExtrapolation)
     (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
     (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (hS : BurkholderSquareFunction) (p : ℝ) (hp : 1 < p) :
+    (p : ℝ) (hp : 1 < p) :
     ∃ (d : ℕ) (F : Matrix (Fin d) (Fin d) ℝ → ℝ), IsIntegrand F ∧
       (∀ H : Matrix (Fin d) (Fin d) ℝ, H.IsSymm → ∀ a : Fin d → ℝ,
         ConvexOn ℝ Set.univ fun t : ℝ => F (H + t • Matrix.vecMulVec a a)) ∧
@@ -1921,7 +1920,7 @@ theorem corollary6_1 (hH : HNVWExtrapolation)
   have hp0 : 0 < p := by linarith
   have h4 : ENNReal.ofReal 4 = (4 : ℝ≥0∞) := by norm_num
   have hq4 : (1 : ℝ≥0∞) ≤ ENNReal.ofReal 4 := by rw [h4]; norm_num
-  obtain ⟨Cp, hCp, hrc⟩ := (proposition6_5 hH hR hCV hPX hKK hS).1 4 (by norm_num) p hp
+  obtain ⟨Cp, hCp, hrc⟩ := (proposition6_5 hH hR hCV hPX hKK).1 4 (by norm_num) p hp
   -- the size `n = m⁸`, with `m > a (b + 1)`
   set a : ℝ := 4 * (2 : ℝ) ^ (1 / 4 : ℝ) * √p with ha
   set b : ℝ := Cp * (2 : ℝ) ^ (1 / 8 : ℝ) with hb

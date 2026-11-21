@@ -9,6 +9,7 @@ public import Mathlib.Analysis.Calculus.Deriv.Polynomial
 public import Mathlib.Analysis.Convex.Deriv
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 public import Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
+public import Morrey.Cassese.Hypotheses
 
 /-!
 # Section 7: another example, `ℝ^{4×2}`
@@ -264,7 +265,7 @@ theorem fourByTwo_rankOne_bound {N : ℕ} {ρ : ℝ} (hρ : 0 ≤ ρ)
 
 /-! ### Rademacher martingales on the canonical space are martingales
 
-The setting in which Burkholder's inequality (`BurkholderInequality`) is applied to rank-one
+The setting in which Burkholder's inequality (`burkholderInequality_holds`) is applied to rank-one
 Rademacher martingales: the space `Fin n → Bool` of `n` signs with the uniform probability
 (`ProbabilityTheory.uniformOn Set.univ`), and the natural filtration
 `ℱ_k = σ (ε₀, …, ε_{k−1})` (`fourByTwo_filtration`). -/
@@ -425,7 +426,7 @@ inequality (Theorem 2.3): if two linear maps `L_X`, `L_Y` into a separable Hilbe
 `‖L_X (R)‖ ≤ ‖L_Y (R)‖` on the matrices of rank at most one, then for every rank-one Rademacher
 martingale `M` started at `0`, the martingale `L_X (M)` is differentially subordinate to
 `L_Y (M)`, so `E ‖L_X (M_n)‖^p ≤ (p* − 1)^p E ‖L_Y (M_n)‖^p`. -/
-theorem fourByTwo_burkholder (hB : BurkholderInequality) {d m : ℕ} {H : Type}
+theorem fourByTwo_burkholder {d m : ℕ} {H : Type}
     [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
     [TopologicalSpace.SeparableSpace H] (LX LY : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] H)
     (hXY : ∀ R : Matrix (Fin d) (Fin m) ℝ, R.rank ≤ 1 → ‖LX R‖ ≤ ‖LY R‖) {p : ℝ} (hp : 1 < p)
@@ -452,7 +453,7 @@ theorem fourByTwo_burkholder (hB : BurkholderInequality) {d m : ℕ} {H : Type}
     · rw [norm_smul, norm_smul]
       exact mul_le_mul_of_nonneg_left (hXY _ (hA.2 _ _)) (norm_nonneg _)
     · simp
-  have key := hB (Fin n → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
+  have key := burkholderInequality_holds (Fin n → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
     (fourByTwo_filtration n) H (fun k => mart ξX k) (fun k => mart ξY k) p hp
     (fourByTwo_martingale ξX hpX) (fourByTwo_martingale ξY hpY) (fourByTwo_mart_zero ξX)
     (fourByTwo_mart_zero ξY) (fun k => ae_of_all _ (hsub k)) n
@@ -472,7 +473,7 @@ theorem fourByTwo_burkholder (hB : BurkholderInequality) {d m : ℕ} {H : Type}
   exact key2
 
 /-- **Proposition 7.1** (`prop:rcbound`): for every `p ∈ (1, ∞)`,
-`C^{rc} (p, N, ρ) ≤ (p* − 1) (Σ_{k=0}^N ρ^{2k})^{1/2}`. Conditional on Burkholder's inequality
+`C^{rc} (p, N, ρ) ≤ (p* − 1) (Σ_{k=0}^N ρ^{2k})^{1/2}`. By Burkholder's inequality
 (Theorem 2.3), through "the results of [Cassese 2025]".
 
 Proof (the paper's). By Proposition 2.5 (`proposition2_5`), `f_{p,ρ,K}` with
@@ -484,7 +485,7 @@ in `ℂ^{N+1}` (`fourByTwo_martingale`) and the first is differentially subordin
 when `|Q| ≤ √S ‖P_ρ‖` on rank-one matrices, so Burkholder's inequality applies. That bound, with
 `√S = (Σ_{k=0}^N ρ^{2k})^{1/2}`, is the paper's computation (`fourByTwo_rankOne_bound`:
 `β_j = ω α_j`, `γ_j = α_j − ρ ω̄ α_{j−1}`, Cauchy–Schwarz). -/
-theorem proposition7_1 (hB : BurkholderInequality) (N : ℕ) {ρ : ℝ}
+theorem proposition7_1 (N : ℕ) {ρ : ℝ}
     (hρ : 0 < ρ) {p : ℝ} (hp : 1 < p) :
     rcThreshold (chainF N p ρ) ≤
       ENNReal.ofReal ((pStar p - 1) * √(∑ k ∈ Finset.range (N + 1), ρ ^ (2 * k))) := by
@@ -520,7 +521,7 @@ theorem proposition7_1 (hB : BurkholderInequality) (N : ℕ) {ρ : ℝ}
     intro R hR
     rw [hnX, hnY, ← Real.sqrt_mul hS]
     exact Real.le_sqrt_of_sq_le (fourByTwo_rankOne_bound hρ.le R hR)
-  have key := fourByTwo_burkholder hB LX LY hXY hp n A hA
+  have key := fourByTwo_burkholder LX LY hXY hp n A hA
   simp_rw [hnX, hnY] at key
   -- conclude: `0 = f (0) ≤ E f (M_n)`
   have h0 : chainF N p ρ K 0 = 0 := by
@@ -1716,8 +1717,8 @@ theorem fourByTwo_not_quasiconvexAt_of_lt {d m : ℕ} (F : ℝ → Matrix (Fin d
 /-- **Theorem 7.1** (`cs-thm7.1`): for `p ∈ (1, 2) ∪ (2, ∞)` there are linear maps
 `P_p : ℝ^{4×2} → ℝ^{2×2}`, `Q_p : ℝ^{4×2} → ℝ²` and `C (p) > 0` such that
 `A ↦ C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖_{ℓ₂}^p` is rank-one convex at `0` but not quasiconvex
-at `0`. Conditional on Burkholder's inequality (Proposition 7.1), transference (Proposition 7.2)
-and Dragičević's lower bound `‖𝓑²‖_p > p* − 1`.
+at `0`. Conditional on transference (Proposition 7.2) and Dragičević's lower bound
+`‖𝓑²‖_p > p* − 1`; Burkholder's inequality (Theorem 2.3) enters through Proposition 7.1.
 
 Proof (the paper's): `N = 1`, with `ℝ^{4×2} ≅ Lin (ℂ, ℂ²)` and `ℝ^{2×2} ≅ ℂ²` (row `j` of `P_p (A)`
 is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the integrand is
@@ -1726,7 +1727,7 @@ is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the inte
 `ρ ‖𝓑²‖_p > (p* − 1) √(1 + ρ²)` for large `ρ` (explicitly `ρ = (p* − 1) / (‖𝓑²‖_p − p* + 1) + 1`,
 or `ρ = 1` if `‖𝓑²‖_p = ∞`), and `C` is chosen strictly between. Since `f_{p,ρ,C}` increases with
 `C`, `C > C^{rc}` gives rank-one convexity at `0` and `C < C^{qc}` its failure of quasiconvexity. -/
-theorem theorem7_1 (hB : BurkholderInequality)
+theorem theorem7_1
     (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ (P : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] Matrix (Fin 2) (Fin 2) ℝ)
@@ -1773,7 +1774,7 @@ theorem theorem7_1 (hB : BurkholderInequality)
   · -- Proposition 7.1: `C^{rc} (p, 1, ρ) ≤ (p* − 1) √(1 + ρ²) < C`
     rw [fourByTwo_integrand_eq]
     apply fourByTwo_rankOneConvexAt_of_lt 1 hp0 ρ
-    refine lt_of_le_of_lt (proposition7_1 hB 1 hρ hp) ?_
+    refine lt_of_le_of_lt (proposition7_1 1 hρ hp) ?_
     rw [show ∑ k ∈ Finset.range (1 + 1), ρ ^ (2 * k) = 1 + ρ ^ 2 by
       simp [Finset.sum_range_succ]]
     exact (ENNReal.ofReal_lt_ofReal_iff hC0).mpr hC1

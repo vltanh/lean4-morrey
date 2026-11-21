@@ -45,7 +45,7 @@ on `L`, `tbt2_lipschitz`, which follows from the `C²` regularity and the homoge
 step (`tbt2_gain`); and the absorption with `ε ≍ δ`, `Λ ≥ c₀ / δ` (`tbt2_absorb`).
 
 Departures from the paper. (i) Only one-step martingales are used, so (27) is the pointwise
-subordination `|𝓔₁| ≤ κ |N₁|` of (25) and Burkholder's inequality (`hB`, Theorem 2.3) is not
+subordination `|𝓔₁| ≤ κ |N₁|` of (25) and Burkholder's inequality (Theorem 2.3) is not
 invoked; the paper runs the same estimates for `n`-step martingales, which global rank-one
 convexity does not need (the conclusion is the same and the intermediate claims (28), (29) are
 the paper's at `n = 1`; reason 1 in the form of a repair: the general-`n` version of (28) has the
@@ -55,7 +55,7 @@ controlled by the Lipschitz-type bound on `Df` (reason 1: the paper's (28) omits
 (iii) (29), "uniform convexity of `|·|^p`", which the paper does not prove or cite, is proved by
 the elementary inequality `(u^q + v^q)/2 ≥ ((u + v)/2)^q` (convexity of `t^q`, `q = p/2`)
 followed by `(x + y)^q − x^q ≥ (q x^{q−1} y + y^q)/2` (Bernoulli and superadditivity). -/
-theorem lemma5_1_part2 (hB : BurkholderInequality)
+theorem lemma5_1_part2
     (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
     (π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ) (hπ : IsFrobProj L π) (κ : ℝ)
     (hκ : HasRankOneCorrection L π κ) {p : ℝ} (hp : 2 ≤ p) (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
@@ -160,14 +160,13 @@ theorem tbt_rankOneConvex_penalty (c Λ : ℝ) (hc : 0 ≤ c) :
 
 /-- **Proof of Theorem 1.3** (`cs-qdl-rc`, lines 1980–1991): for a sufficiently large fixed `K`
 and every `0 < δ ≤ 1`, `q_{δ, K/δ}` is a globally rank-one convex homogeneous quartic polynomial
-(from Lemma 5.1 (2) applied to `q₃` on `𝓛₃`). Conditional on Burkholder's inequality, through
-Lemma 5.1. (The text has `0 < δ ≤ 1`; Lemma 5.1 (2) is stated for `δ ∈ (0, 1)`.) -/
-theorem qDeltaLambda_rankOneConvex (hB : BurkholderInequality) :
+(from Lemma 5.1 (2) applied to `q₃` on `𝓛₃`). (The text has `0 < δ ≤ 1`; Lemma 5.1 (2) is stated for `δ ∈ (0, 1)`.) -/
+theorem qDeltaLambda_rankOneConvex :
     ∃ K₀ : ℝ, 0 < K₀ ∧ ∀ K ≥ K₀, ∀ δ : ℝ, 0 < δ → δ ≤ 1 →
       IsHomogeneousPolynomial 4 (qDeltaLambda δ (K / δ)) ∧
         RankOneConvex (qDeltaLambda δ (K / δ)) := by
   -- Lemma 5.1 (2) for `f = q₃` on `𝓛₃` (`p = 4`, `κ = 2`)
-  obtain ⟨c₀, hc₀⟩ := lemma5_1_part2 hB L3Submodule projL3 isFrobProj_projL3 2
+  obtain ⟨c₀, hc₀⟩ := lemma5_1_part2 L3Submodule projL3 isFrobProj_projL3 2
     hasRankOneCorrection_L3 (p := 4) (by norm_num) q3
     (fun X hX R hR hR1 => q3_rankOneConvexOn_L3 X R hX hR hR1)
     (fun t X _ => by

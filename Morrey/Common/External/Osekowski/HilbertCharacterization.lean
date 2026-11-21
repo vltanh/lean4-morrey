@@ -10,9 +10,10 @@ A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2
 Cassese quotes it as Proposition 2.6, for context only: no proof of the paper uses it. It is a
 proposition with no proof, and a hypothesis of no statement.
 
-(Cassese's Theorem 2.3, from Osękowski's Theorems 3.5 and 8.6, is used by the main theorems, so
-its two parts are stated in the shared block of `Morrey/Cassese/Defs.lean`:
-`Cassese.BurkholderInequality` and `Cassese.BurkholderSquareFunction`.)
+(Cassese's Theorem 2.3, from Osękowski's Theorems 3.5 and 8.6, is used by the main theorems: its
+two parts are proved in `Morrey/Common/External/Burkholder/Inequality.lean` and stated in
+Cassese's terms in `Morrey/Cassese/Hypotheses.lean`, `Cassese.BurkholderInequality` and
+`Cassese.BurkholderSquareFunction`.)
 -/
 
 @[expose] public section

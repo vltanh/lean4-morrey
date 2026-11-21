@@ -185,7 +185,7 @@ theorem tbt1_DH_mart {N : ℕ} {A : Fin N → (Fin N → Bool) → Matrix (Fin 2
 `𝓛₃`-valued rank-one Rademacher martingale started at `0`, `E f (M_N) ≥ δ E |M_N|^p`. Burkholder's
 inequality in `L^r` (`r = p/2 > 1`) for the martingales `H (Z (J M))` and `2 D (Z (J M))` in
 `ℂ ≅ ℝ²`, with `|dH| ≤ |d (2D)|` by (22), gives `E |H_N|^r ≤ (r* − 1)^r E |2 D_N|^r`. -/
-theorem tbt1_coercive (hB : BurkholderInequality) {p : ℝ} (hp : 2 < p) (δ : ℝ) (N : ℕ)
+theorem tbt1_coercive {p : ℝ} (hp : 2 < p) (δ : ℝ) (N : ℕ)
     (A : Fin N → (Fin N → Bool) → Matrix (Fin 2) (Fin 3) ℝ) (hA : IsRankOneIncrements A)
     (hL : ∀ k ε, A k ε ∈ L3Submodule) :
     δ * avg (fun ε => frobNorm (radMart 0 A N ε) ^ p) ≤
@@ -211,7 +211,7 @@ theorem tbt1_coercive (hB : BurkholderInequality) {p : ℝ} (hp : 2 < p) (δ : �
     have : |tbt1C (zCoord (embedJ (mart A (↑k) ε))) (zCoord (embedJ (A k ε)))| ≤
         ‖tbt1B (zCoord (embedJ (mart A (↑k) ε))) (zCoord (embedJ (A k ε)))‖ := abs_le.mpr h
     linarith
-  have hbk := tbt1_burkholder_avg hB hξH hξD hle hr
+  have hbk := tbt1_burkholder_avg hξH hξD hle hr
   have e1 : ∀ ε, ‖mart ξH N ε‖ = |tbt1Hz (radMart 0 A N ε)| := fun ε => by
     rw [← (tbt1_DH_mart hA hL N ε).2, radMart, zero_add, Complex.norm_real, Real.norm_eq_abs]
   have e2 : ∀ ε, ‖mart ξD N ε‖ = ‖2 * tbt1Dz (radMart 0 A N ε)‖ := fun ε => by
@@ -849,8 +849,8 @@ theorem tbt1_qDeltaLambda_zero (δ Λ : ℝ) : qDeltaLambda δ Λ 0 = 0 := by
 
 /-- **Proof of Theorem 1.3 (b)** (`cs-thm1.3b-witness`, TeX lines 2031–2044): for `p`
 sufficiently close to `4` there is a continuous `p`-homogeneous integrand on `ℝ^{2×3}` that is
-rank-one convex at `0` but not quasiconvex at `0`. Conditional on Burkholder's inequality
-(Theorem 2.3), through Lemma 5.1 (1) and the coercivity of `f_{r,δ,C}`.
+rank-one convex at `0` but not quasiconvex at `0`. Burkholder's inequality (Theorem 2.3) enters
+through Lemma 5.1 (1) and the coercivity of `f_{r,δ,C}`.
 
 Proof, as in the paper: the integrand is `g = f_{r,δ,C} ∘ π + Λ^p |π^⊥ ·|^p` (`tbt1G`) with
 `f_{r,δ,C} (A) = C^r |2D (JA)|^r − |H (JA)|^r + δ |A|^{2r}`, `r = p/2`, `C = r* − 1`. It is
@@ -870,7 +870,7 @@ its quantitative form (`lemma5_1_part1_quant`), so `Λ₀ (p, δ)` is continuous
 `Λ = (K⁴/δ³)^{1/4} > Λ₀ (4, δ)`; and `p ↦ ∫ g_{p,δ,Λ} (∇φ)` is continuous at `4` by dominated
 convergence (`tbt1_witness_integral`). The envelope step of the paper ("finally taking the rank-one
 convex envelope") belongs to Theorem 1.3 (b) itself, not to this witness. -/
-theorem twoByThree_theorem1_3_b_witness (hB : BurkholderInequality) :
+theorem twoByThree_theorem1_3_b_witness :
     ∃ ε > 0, ∀ p : ℝ, |p - 4| < ε → ∃ g : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       Continuous g ∧ IsPHomogeneous p g ∧ RankOneConvexAt g 0 ∧ ¬ QuasiconvexAt g 0 := by
   have hK : 0 < tbt1K := by unfold tbt1K; norm_num
@@ -903,9 +903,9 @@ theorem twoByThree_theorem1_3_b_witness (hB : BurkholderInequality) :
   have hp2 : 2 < p := by linarith [hrange.1]
   refine ⟨tbt1G p δ Λ, tbt1_continuous_G hΛ hp2, tbt1_G_isPHomogeneous p δ Λ, ?_, ?_⟩
   · -- rank-one convex at `0`, by Lemma 5.1 (1) with explicit constants
-    exact lemma5_1_part1_quant hB L3Submodule projL3 isFrobProj_projL3 2 hasRankOneCorrection_L3
+    exact lemma5_1_part1_quant L3Submodule projL3 isFrobProj_projL3 2 hasRankOneCorrection_L3
       (p := p) (by linarith) (tbt1Fp p δ) (tbt1_continuous_Fp δ (by linarith)).continuousOn
-      (fun t ht X _ => by rw [tbt1_Fp_smul, abs_of_pos ht]) hδ (tbt1_coercive hB hp2 δ)
+      (fun t ht X _ => by rw [tbt1_Fp_smul, abs_of_pos ht]) hδ (tbt1_coercive hp2 δ)
       (tbt1Cp p δ) (tbt1_Cp_pos hp2.le hδ).le (fun X _ Y _ => tbt1_fp_young hp2.le hδ hδ1 X Y)
       Λ hΛ0.le
   · -- not quasiconvex at `0`: the same witness `φ`

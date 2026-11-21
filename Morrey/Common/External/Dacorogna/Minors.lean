@@ -12,8 +12,8 @@ B. Dacorogna, *Direct methods in the calculus of variations*, 2nd ed., Springer 
 Theorems 5.20 and 5.25 (i). Cassese uses both in the proof of Proposition 5.1 only. Both are
 proved here:
 
-* Theorem 5.20 is the proposition `RankOneAffineMinors`, which Cassese's Proposition 5.1 takes as
-  a hypothesis; `rankOneAffineMinors_holds` proves it (rank-one affine ⇒ affine combination of
+* Theorem 5.20 is the proposition `RankOneAffineMinors`, which Cassese's Proposition 5.1 uses;
+  `rankOneAffineMinors_holds` proves it (rank-one affine ⇒ affine combination of
   minors, by induction on the number of rows; the minors are rank-one affine by the matrix
   determinant lemma);
 * Theorem 5.25 (i) is `quadraticForm_quasiconvex`, by Dacorogna's Fourier–Plancherel argument

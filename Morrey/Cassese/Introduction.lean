@@ -2318,8 +2318,8 @@ theorem theorem1_2 (hP : PisierLpUMD) (hH : HNVWExtrapolation)
     fun A hA => hN _ (intro_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
 
 /-- **Theorem 1.3**, first assertion (`thm:2x4`): there is a homogeneous quartic polynomial
-`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on Burkholder's
-inequality (Theorem 2.3), which the proof uses through Lemma 5.1 (2).
+`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. The proof uses Burkholder's
+inequality (Theorem 2.3, `burkholderInequality_holds`) through Lemma 5.1 (2).
 
 Proof (the paper's, after Remark 5.2): `q_{δ, K/δ}` is a rank-one convex homogeneous quartic
 (`qDeltaLambda_rankOneConvex`, Lemma 5.1 (2) for `q₃` on `𝓛₃`); the cutoff `u_R` of the witness
@@ -2327,11 +2327,11 @@ of Proposition 5.2 with `R = δ^{−4}` shows that it is not quasiconvex at `0` 
 (`twoByThree_not_quasiconvexAt_qDeltaLambda`, the cutoff estimates of the proof, which
 `TwoByThree.lean` does not state: here without proof); homogeneity makes it nowhere quasiconvex
 (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). -/
-theorem theorem1_3_a (hB : BurkholderInequality) :
+theorem theorem1_3_a :
     ∃ P : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       IsHomogeneousPolynomial 4 P ∧ RankOneConvex P ∧ NowhereQuasiconvex P := by
   -- `q_{δ, K/δ}` is a rank-one convex homogeneous quartic (Lemma 5.1 (2) for `q₃` on `𝓛₃`)
-  obtain ⟨K₀, -, hrc⟩ := qDeltaLambda_rankOneConvex hB
+  obtain ⟨K₀, -, hrc⟩ := qDeltaLambda_rankOneConvex
   -- the cutoff of the witness of Proposition 5.2 shows that it is not quasiconvex at `0`
   obtain ⟨δ₀, hδ₀, hnq⟩ := twoByThree_not_quasiconvexAt_qDeltaLambda K₀
   set δ := min (δ₀ / 2) 1 with hδdef
@@ -2345,17 +2345,17 @@ theorem theorem1_3_a (hB : BurkholderInequality) :
 
 /-- **Theorem 1.3**, second assertion (`thm:2x4`): for `p` sufficiently close to `4` there is a
 `p`-homogeneous integrand `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex.
-Conditional on Burkholder's inequality (Theorem 2.3).
+The proof uses Burkholder's inequality (Theorem 2.3, `burkholderInequality_holds`).
 
 Proof: the paper's last step, the rank-one convex envelope (Proposition 2.3, `intro_envelope`),
 applied to the integrand `g = f_{r,δ,C} ∘ π + Λ^p |π^⊥ ·|^p` of the proof, rank-one convex but not
 quasiconvex at `0` for `p` near `4` (`twoByThree_theorem1_3_b_witness`, here without proof: the
 paper's argument for it has the gap E4 of the inventory, the uniformity in `p` of the constant `Λ`
 of Lemma 5.1 (1)). -/
-theorem theorem1_3_b (hB : BurkholderInequality) :
+theorem theorem1_3_b :
     ∃ ε > 0, ∀ p : ℝ, |p - 4| < ε → ∃ f : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
-  obtain ⟨ε, hε, h⟩ := twoByThree_theorem1_3_b_witness hB
+  obtain ⟨ε, hε, h⟩ := twoByThree_theorem1_3_b_witness
   refine ⟨min ε 1, by positivity, fun p hp => ?_⟩
   have hp1 : 1 < p := by
     have := abs_lt.1 (hp.trans_le (min_le_right _ _))
@@ -2370,8 +2370,9 @@ theorem theorem1_3_b (hB : BurkholderInequality) :
 `f : ℝ^{d×d} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on
 Proposition 2.7 (1), (2) (UMD extrapolation, HNVW; the UMD constant of `S_q`, Randrianantoanina),
 Proposition 2.8 (decoupling, Cox–Veraar), Proposition 6.3 (non-commutative Khintchine, Pisier–Xu),
-Proposition 6.4 (Kahane–Khintchine, HNVW) and Burkholder's square function inequality
-(Theorem 2.3 (2)), which the proofs of Propositions 6.2 and 6.5 use.
+Proposition 6.4 (Kahane–Khintchine, HNVW), which the proofs of Propositions 6.2 and 6.5 use
+(they also use Burkholder's square function inequality, Theorem 2.3 (2), which is proved,
+`burkholderSquareFunction_holds`).
 
 Proof (the paper's, running text after Propositions 6.2 and 6.5, "the same proof as
 Theorem 1.2"): with the Schatten exponent `q = 4`, `C^{qc} (S_4^{d×d}, p) ≳ d^{3/4} / min (√(d p), d)
@@ -2383,7 +2384,7 @@ envelope (Proposition 2.3 (a)–(c), `intro_envelope`) keeps the invariances (Pr
 theorem theorem1_4 (hH : HNVWExtrapolation)
     (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
     (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (hS : BurkholderSquareFunction) {p : ℝ} (hp : 1 < p) :
+    {p : ℝ} (hp : 1 < p) :
     ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
       IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
         IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -2402,7 +2403,7 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
       rcThreshold (kornF d p q) ≤ ENNReal.ofReal (Cr * (d : ℝ) ^ (1 / 4 - 1 / (2 * 4) : ℝ)) := by
     rcases eq_or_ne p 2 with rfl | -
     · exact proposition6_2 hR hCV hPX hKK 4 (by norm_num)
-    · exact (proposition6_5 hH hR hCV hPX hKK hS).1 4 (by norm_num) p hp
+    · exact (proposition6_5 hH hR hCV hPX hKK).1 4 (by norm_num) p hp
   set M : ℝ := Cr * √p / c with hMdef
   have hM : 0 ≤ M := by positivity
   refine ⟨⌈M ^ 8⌉₊ + 2, fun d hd => ?_⟩
@@ -2459,20 +2460,20 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
 
 /-- **Theorem 1.5** (`thm:lowdim`): for every `p ∈ (1, ∞) ∖ {2}` there is a `p`-homogeneous
 integrand `f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on
-Burkholder's inequality (Theorem 2.3, through Proposition 7.1), transference for homogeneous
-multipliers (HNVW I, Corollary 5.7.6, through Proposition 7.2) and Dragičević's lower bound
-`‖𝓑²‖_{L^p} > p* − 1` (Theorem 7.1).
+transference for homogeneous multipliers (HNVW I, Corollary 5.7.6, through Proposition 7.2) and
+Dragičević's lower bound `‖𝓑²‖_{L^p} > p* − 1` (Theorem 7.1); Burkholder's inequality (Theorem 2.3,
+through Proposition 7.1) is proved.
 
 Proof (the paper's, running text after Theorem 7.1): the integrand of Theorem 7.1 is continuous
 and `p`-homogeneous, rank-one convex but not quasiconvex at `0`; its rank-one convex envelope
 (Proposition 2.3, `intro_envelope`) is the integrand. -/
-theorem theorem1_5 (hB : BurkholderInequality)
+theorem theorem1_5
     (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   -- Theorem 7.1: `C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖^p` is rank-one convex, not quasiconvex, at `0`
-  obtain ⟨P, Q, C, -, hrc, hnq⟩ := theorem7_1 hB hT hD hp hp2
+  obtain ⟨P, Q, C, -, hrc, hnq⟩ := theorem7_1 hT hD hp hp2
   have hp0 : (0 : ℝ) < p := by linarith
   have h2 : (1 : ENNReal) ≤ 2 := one_le_two
   obtain ⟨hh, -, -⟩ := intro_family (N₁ := fun A => schattenNorm 2 (P A))
@@ -2515,14 +2516,14 @@ locally midpoint convex continuous functions (`intro_convexOn_of_local_midpoint`
 witness: the paper takes a smooth periodic `φ` with `∫ F (∇φ) < 0`; the formalization takes the
 Lipschitz periodic witness that the periodic form of quasiconvexity (Lemma 2.2) provides, for
 which the same expansion works (`∇φ` is bounded); and `|B|² = 2` instead of `|B| = 1`. -/
-theorem corollary1_6 (hB : BurkholderInequality)
+theorem corollary1_6
     (hT : HNVWTransference) (hD : DragicevicLowerBound) :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
   -- `p = 3/2 ∈ (1, 2)` and `F` from Theorem 1.5; `F` is continuous by Lemma 2.1
   have hp : (1 : ℝ) < 3 / 2 := by norm_num
   have hp2 : (3 / 2 : ℝ) < 2 := by norm_num
-  obtain ⟨F, -, hFh, hFR, hFN⟩ := theorem1_5 hB hT hD hp (by norm_num)
+  obtain ⟨F, -, hFh, hFR, hFN⟩ := theorem1_5 hT hD hp (by norm_num)
   have hFc : Continuous F :=
     (External.Rindler.lemma5_6 ((cov_rankOneConvex_iff F).2 hFR)).continuous
   -- `G` for `Λ` large
@@ -2536,13 +2537,14 @@ theorem corollary1_6 (hB : BurkholderInequality)
 /-- **The 2 × 2 landscape** (`cs-landscape`, lines 251–254): "this result [Theorem 1.3] complements
 Šverák's to prove that the only nontrivial instance in which Morrey's problem may have a positive
 answer is `2 × 2`": for `d, m ≥ 2` with `(d, m) ≠ (2, 2)` there is a rank-one convex integrand on
-`ℝ^{d×m}` that is not quasiconvex. Conditional on Burkholder's inequality, through Theorem 1.3.
+`ℝ^{d×m}` that is not quasiconvex. Unconditional (Theorem 1.3 uses Burkholder's inequality, which
+is proved).
 
 Proof: otherwise Morrey's problem has a positive answer in `d × m`, hence in `3 × 2` if `d ≥ 3`
 (`morreyPositive_mono`), contradicting Šverák's example (`sverak_example`), and in `2 × 3` if
 `d = 2`, `m ≥ 3`, contradicting the quartic of Theorem 1.3 (a polynomial is an integrand, and
 nowhere quasiconvex implies not quasiconvex). -/
-theorem morrey_landscape (hB : BurkholderInequality) {d m : ℕ} (hd : 2 ≤ d)
+theorem morrey_landscape {d m : ℕ} (hd : 2 ≤ d)
     (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
     ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand f ∧ RankOneConvex f ∧ ¬ Quasiconvex f := by
   by_contra hne
@@ -2557,7 +2559,7 @@ theorem morrey_landscape (hB : BurkholderInequality) {d m : ℕ} (hd : 2 ≤ d)
       (intro_isIntegrand_of_continuous (Sverak.thm_sverakF_continuous ε₀ k)) hR 0)
   · -- `d = 2`, `m ≥ 3`: the quartic of Theorem 1.3 in `2 × 3`
     have hm3 : 3 ≤ m := by omega
-    obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a hB
+    obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a
     exact hnq 0 (morreyPositive_mono hd hm3 hpos P
       (intro_isIntegrand_of_continuous (intro_continuous_of_isHomogeneousPolynomial hP)) hR 0)
 
@@ -2565,12 +2567,12 @@ theorem morrey_landscape (hB : BurkholderInequality) {d m : ℕ} (hd : 2 ≤ d)
 Corollary 5.3, the homogeneous Morrey problem (at `p = 4`) has a negative answer in every
 nontrivial dimension except possibly `2 × 2`: for `d, m ≥ 2` with `(d, m) ≠ (2, 2)` there is a
 `4`-homogeneous rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex at `0`.
-Conditional on Burkholder's inequality, through Theorem 1.3 and Corollary 5.3.
+Unconditional (Theorem 1.3 and Corollary 5.3 use Burkholder's inequality, which is proved).
 
 Proof: as for `morrey_landscape`, with `homMorreyPositive_mono`, the quartic of Corollary 5.3 in
 `3 × 2` (for `d ≥ 3`) and that of Theorem 1.3 in `2 × 3` (for `d = 2`, `m ≥ 3`); a homogeneous
 quartic is `4`-homogeneous. -/
-theorem homMorrey_landscape (hB : BurkholderInequality) {d m : ℕ}
+theorem homMorrey_landscape {d m : ℕ}
     (hd : 2 ≤ d) (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
     ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous 4 f ∧ RankOneConvex f ∧ ¬ QuasiconvexAt f 0 := by
@@ -2581,7 +2583,7 @@ theorem homMorrey_landscape (hB : BurkholderInequality) {d m : ℕ}
   have h14 : (1 : ℝ) < 4 := by norm_num
   rcases Nat.lt_or_ge 2 d with h3 | h2
   · -- `d ≥ 3`: the transposed quartic of Corollary 5.3 in `3 × 2`
-    obtain ⟨K₀, hK₀⟩ := corollary5_3 hB
+    obtain ⟨K₀, hK₀⟩ := corollary5_3
     obtain ⟨δ₀, hδ₀, hδ⟩ := hK₀ K₀ le_rfl
     obtain ⟨hP, hR, hnq⟩ := hδ (δ₀ / 2) (by positivity) (by linarith)
     exact hnq 0 (homMorreyPositive_mono h14 h3 hm hpos _
@@ -2589,7 +2591,7 @@ theorem homMorrey_landscape (hB : BurkholderInequality) {d m : ℕ}
       (intro_isPHomogeneous_of_isHomogeneousPolynomial hP) hR)
   · -- `d = 2`, `m ≥ 3`: the quartic of Theorem 1.3 in `2 × 3`
     have hm3 : 3 ≤ m := by omega
-    obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a hB
+    obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a
     exact hnq 0 (homMorreyPositive_mono h14 hd hm3 hpos P
       (intro_isIntegrand_of_continuous (intro_continuous_of_isHomogeneousPolynomial hP))
       (intro_isPHomogeneous_of_isHomogeneousPolynomial hP) hR)

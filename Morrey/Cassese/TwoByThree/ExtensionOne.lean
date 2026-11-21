@@ -298,8 +298,8 @@ theorem tbt1_mart_mem {N : ℕ} (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
 `Λ₀ = (C (p* − 1)^p (max κ 0)^p)^{1/p}` suffices: for every `Λ ≥ Λ₀`,
 `A ↦ g (π A) + Λ^p |π^⊥ A|^p` is rank-one convex at `0`. This is the proof of Lemma 5.1 (1) with
 its constants kept explicit; the proof of Theorem 1.3 (b) needs them to choose `Λ` uniformly in `p`
-(inventory E4). Conditional on Burkholder's inequality (Theorem 2.3), which gives (27). -/
-theorem lemma5_1_part1_quant (hB : BurkholderInequality)
+(inventory E4). Burkholder's inequality (Theorem 2.3) gives (27). -/
+theorem lemma5_1_part1_quant
     (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
     (π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ) (hπ : IsFrobProj L π) (κ : ℝ)
     (hκ : HasRankOneCorrection L π κ) {p : ℝ} (hp : 1 < p) (g : Matrix (Fin d) (Fin m) ℝ → ℝ)
@@ -387,7 +387,7 @@ theorem lemma5_1_part1_quant (hB : BurkholderInequality)
       simp only [B, hA.1 k ε ε' h]
     have hζ : IsPredictable fun k ε => tbt1Iota (κ' • (A k ε - π (A k ε))) := fun k ε ε' h => by
       simp only [hA.1 k ε ε' h]
-    have := tbt1_burkholder_avg hB hξ hζ (fun k ε => by
+    have := tbt1_burkholder_avg hξ hζ (fun k ε => by
       rw [tbt1_norm_iota, tbt1_norm_iota, tbt1_frobNorm_smul, abs_of_nonneg hκ']
       exact hcorrle _ (hA.2 k ε)) hp
     have e1 : ∀ ε, ‖mart (fun k ε => tbt1Iota (π (A k ε) - B k ε)) N ε‖ = frobNorm (E ε) :=
@@ -423,8 +423,8 @@ theorem lemma5_1_part1_quant (hB : BurkholderInequality)
 orthogonal projection onto a subspace `L ⊆ ℝ^{d×m}` satisfying (25) for some `κ`. Let `p > 1` and
 let `g` be continuous and positively `p`-homogeneous on `L`, with `E g (M_n) ≥ η E |M_n|^p` for
 some `η > 0` and every `L`-valued rank-one Rademacher martingale started at `0`. Then for `Λ`
-large enough, `A ↦ g (π A) + Λ^p |π^⊥ A|^p` is rank-one convex at `0`. Conditional on Burkholder's
-inequality (Theorem 2.3), which gives (27).
+large enough, `A ↦ g (π A) + Λ^p |π^⊥ A|^p` is rank-one convex at `0`. Burkholder's inequality
+(Theorem 2.3) gives (27).
 
 Proof, as in the paper (TeX lines 1870–1903). By Proposition 2.5 it suffices that
 `E F (M_N) ≥ 0 = F (0)` for every rank-one Rademacher martingale `M` started at `0`. Applying (25)
@@ -437,7 +437,7 @@ one; `0` for a zero increment, inventory E16), an `L`-valued rank-one martingale
 `|g (X + Y) − g (X)| ≤ (η/2) |X|^p + C |Y|^p` on `L` (`tbt1_young`, from the uniform continuity of
 `g` on a compact ball of `L`), so `E g (π M_N) ≥ (η/2) E |M̃_N|^p − C E |𝓔_N|^p`, and
 `Λ^p ≥ C (κ (p* − 1))^p` makes `E F (M_N) ≥ 0`. -/
-theorem lemma5_1_part1 (hB : BurkholderInequality)
+theorem lemma5_1_part1
     (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
     (π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ) (hπ : IsFrobProj L π) (κ : ℝ)
     (hκ : HasRankOneCorrection L π κ) {p : ℝ} (hp : 1 < p) (g : Matrix (Fin d) (Fin m) ℝ → ℝ)
@@ -450,6 +450,6 @@ theorem lemma5_1_part1 (hB : BurkholderInequality)
     ∃ Λ₀ : ℝ, ∀ Λ ≥ Λ₀, RankOneConvexAt (fun A => g (π A) + Λ ^ p * frobNorm (A - π A) ^ p) 0 := by
   -- "by homogeneity and Young's inequality"
   obtain ⟨C, hC0, hC⟩ := tbt1_young hgc (by linarith) hgh (η' := η / 2) (by linarith)
-  exact ⟨_, lemma5_1_part1_quant hB L π hπ κ hκ hp g hgc hgh hη hcoer C hC0 hC⟩
+  exact ⟨_, lemma5_1_part1_quant L π hπ κ hκ hp g hgc hgh hη hcoer C hC0 hC⟩
 
 end Cassese

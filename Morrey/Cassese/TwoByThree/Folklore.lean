@@ -188,7 +188,7 @@ centred at `0` (`tbt6_jensen`); applied to the dilations of a fixed laminate thi
 `0 ≤ s ∫ P₁ + s² ∫ P₂ + s³ ∫ P₃` for all `s ≠ 0`, hence `∫ Q dμ = 0` and `∫ P₂ dμ ≥ 0` (the
 "limiting argument", `tbt6_list_cubic`): `P₂` satisfies the Legendre–Hadamard condition
 (`tbt6_LH`), and `Q` is rank-one affine (`tbt6_sym`, `tbt6_rankOneAffine`). By Dacorogna's
-Theorem 5.20 (`hD`), `Q` is an affine combination of minors, and homogeneity leaves only the
+Theorem 5.20 (`External.Dacorogna.rankOneAffineMinors_holds`), `Q` is an affine combination of minors, and homogeneity leaves only the
 `3 × 3` minors (`tbt6_minors_extract`). The quadratic form `P₂` is rank-one convex, hence
 quasiconvex (Dacorogna, Theorem 5.25 (i), `External.Dacorogna.quadraticForm_quasiconvex`);
 `P₁` is linear (`∫ ∇φ = 0`); and the `3 × 3` minors are quasiaffine (`tbt6_minor3_quasiaffine`).
@@ -201,11 +201,12 @@ at an arbitrary `A` (symmetric splittings along the rank-one pieces of `A`), spl
 is rank-one convex, since `P'' (0) = (P − Q)'' (0)`" is obtained in the same way, as the
 Legendre–Hadamard condition for `P₂`. (ii) The paper concludes from "`Q` is a linear combination
 of minors" without saying that minors are quasiaffine (null Lagrangians); that is the other
-direction of the cited Dacorogna Theorem 5.20, which the hypothesis `hD` does not contain, and it
+direction of the cited Dacorogna Theorem 5.20, which `External.Dacorogna.RankOneAffineMinors`
+does not contain, and it
 is proved here by the standard divergence identities and mollification
 (`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`) (reason 1: a step the paper leaves
 implicit). -/
-theorem proposition5_1 (hD : External.Dacorogna.RankOneAffineMinors)
+theorem proposition5_1
     (P : MvPolynomial (Fin d × Fin m) ℝ) (hP : P.totalDegree ≤ 3)
     (hrc : RankOneConvexAt (fun A => MvPolynomial.eval (fun ij => A ij.1 ij.2) P) 0) :
     Quasiconvex fun A : Matrix (Fin d) (Fin m) ℝ =>
@@ -235,7 +236,7 @@ theorem proposition5_1 (hD : External.Dacorogna.RankOneAffineMinors)
   have hRA : CalculusOfVariations.RankOneAffine (fk 3) :=
     tbt6_rankOneAffine (hcont 3) fun A R hR h =>
       tbt6_sym hf hrc hsum h0 h1 (hhom 2) (hhom 3) A hR h
-  obtain ⟨a, ha⟩ := hD d m (fk 3) (hcont 3) hRA
+  obtain ⟨a, ha⟩ := External.Dacorogna.rankOneAffineMinors_holds d m (fk 3) (hcont 3) hRA
   -- the quadratic part is a quasiconvex quadratic form
   set c : Fin d × Fin m → Fin d × Fin m → ℝ := fun ij kl =>
     (MvPolynomial.pderiv kl (MvPolynomial.pderiv ij
