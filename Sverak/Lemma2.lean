@@ -8,7 +8,7 @@ public import Mathlib.Analysis.Calculus.Deriv.Pow
 # Šverák 1992, Lemma 2: the extension is rank-one convex
 
 For each `ε > 0` there is `k = k(ε) > 0` such that
-`F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²` (`Morrey.sverakF ε k`) is rank-one convex on
+`F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²` (`sverakF ε k`) is rank-one convex on
 `M^{3×2}`. The paper's proof:
 
 1. eq. (6): `(d²/dt²) F (A + t Y)|₀ = (d²/dt²) f (P A + t P Y)|₀ + 2ε |Y|² + 4ε |A|² |Y|²
@@ -30,7 +30,7 @@ to the vanishing of the `2 × 2` minors of `Y` together with `Y ≠ 0` (`l2_rank
 
 @[expose] public section
 
-open Morrey Filter Topology
+open Filter Topology
 
 namespace Sverak
 

@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Triangulation
+public import Pedregal.Triangulation
 public import Basic.LinearAlgebra.Matrix.RankTwo
 
 /-!
@@ -8,7 +8,7 @@ public import Basic.LinearAlgebra.Matrix.RankTwo
 
 At `l = 1` the conclusion of Theorem 1.1 (1) holds, although the paper's argument does not prove
 it there: Corollary 7.2 already fails at `l = 1`, for the mold `TriMold.canonical 1`
-(`Morrey.T_cex_eq_empty`), so Kakutani's theorem cannot be applied.
+(`Pedregal.T_cex_eq_empty`), so Kakutani's theorem cannot be applied.
 
 For `w ∈ ℙ_1` with nodal values `W_{ab}` (`a, b ∈ {0, 1}`), put
 `α = (W₁₀ − W₀₀) + (W₁₁ − W₀₁)`, `β = (W₀₁ − W₀₀) + (W₁₁ − W₁₀)`,
@@ -23,7 +23,7 @@ then `C₃`.
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-- `α = (W₁₀ − W₀₀) + (W₁₁ − W₀₁)` for the nodal values `W` of `w` at the level `1`. -/
 private noncomputable def lvl1_alpha (w : (Fin 2 → ℝ) → ℝ) : ℝ :=
@@ -151,7 +151,7 @@ private theorem lvl1_sum_tri {M : Type*} [AddCommMonoid M] (f : Tri 1 → M) :
 measure `ν` of `(u, v)` is a laminate.
 
 Departure from the paper: the paper proves Theorem 1.1 (1) with a fixed point of `𝐓`, which needs
-Corollary 7.2, false already at `l = 1` (`Morrey.T_cex_eq_empty`). At `l = 1` the formalization
+Corollary 7.2, false already at `l = 1` (`Pedregal.T_cex_eq_empty`). At `l = 1` the formalization
 proves it instead by an explicit lamination of three rank-one splittings. -/
 theorem theorem1_1_part1_levelOne {u v : (Fin 2 → ℝ) → ℝ} (hu : u ∈ PL 1) (hv : v ∈ PL 1) :
     IsLaminate (gradMeasure 1 u v) := by
@@ -190,4 +190,4 @@ theorem theorem1_1_part1_levelOne {u v : (Fin 2 → ℝ) → ℝ} (hu : u ∈ PL
   rw [key]
   exact h7.1
 
-end Morrey
+end Pedregal

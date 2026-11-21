@@ -1,15 +1,15 @@
 module
 
-public import Morrey.Weights
-public import Morrey.Triangulation
-public import Morrey.Hn.Laminate
+public import Pedregal.Weights
+public import Pedregal.Triangulation
+public import Pedregal.Hn.Laminate
 public import External.Kakutani.Theorem
 public import Basic.LinearAlgebra.Matrix.RankTwo
 
 /-!
 # Section 6: the map `𝐓`
 
-Definition 6.1 (`Morrey.T`), Proposition 6.1, Subsection 6.1 and Proposition 6.3.
+Definition 6.1 (`Pedregal.T`), Proposition 6.1, Subsection 6.1 and Proposition 6.3.
 
 * `proposition6_1`: a fixed point of `𝐓` makes `ν` a laminate.
 * `proposition6_3_point`, `proposition6_3_dir`: on `Θ_l`, the mass points of the intermediate
@@ -23,7 +23,7 @@ Definition 6.1 (`Morrey.T`), Proposition 6.1, Subsection 6.1 and Proposition 6.3
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 variable {l : ℕ}
 
@@ -413,4 +413,4 @@ theorem proposition6_1 (S : TriMold l) {u v : (Fin 2 → ℝ) → ℝ} (hu : u �
   rw [← hmeas]
   exact Mold.isLaminate_leafMeasure ht.1 A S.tree hw hrank
 
-end Morrey
+end Pedregal

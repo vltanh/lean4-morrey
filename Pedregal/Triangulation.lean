@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Defs
+public import Pedregal.Defs
 public import Mathlib.Analysis.Calculus.FDeriv.Add
 public import Mathlib.Analysis.Calculus.FDeriv.Pi
 
@@ -24,7 +24,7 @@ Facts about `τ_l` and `ℙ_l` that the paper uses without proof (Sections 4 and
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-- The node `(a/2^l, b/2^l)` of the grid of `τ_l`. -/
 noncomputable def vertex (l : ℕ) (a b : ℕ) : Fin 2 → ℝ :=
@@ -361,4 +361,4 @@ theorem equation5_13 {l : ℕ} {w : (Fin 2 → ℝ) → ℝ} (hw : w ∈ PL l) :
         Finset.sum_const_zero]
   rw [hsum, smul_zero]
 
-end Morrey
+end Pedregal

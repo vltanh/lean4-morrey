@@ -4,23 +4,36 @@ public meta import Lean.Elab.Command
 public meta import Lean.DocString
 -- One `import all` line per module of the libraries, so that proofs are visible to the dependency
 -- traversal (the module system hides them from a plain `import`). Generate the lines with
---   find PaperName External Basic -name '*.lean' | sort | sed 's/\.lean$//; s#/#.#g; s/^/import all /'
+--   find Basic External Pedregal Sverak Cassese -name '*.lean' ! -name Challenge.lean | sort |
+--     sed 's/\.lean$//; s#/#.#g; s/^/import all /'
+-- Every paper's Solution is imported, and no Challenge: a Challenge holds a copy of its paper's
+-- definitions under the library's names.
 import all Basic.LinearAlgebra.Matrix.RankTwo
+import all Cassese.Bridges
+import all Cassese.Defs
+import all Cassese.Sverak
 import all External.Kakutani.Theorem
-import all Morrey.Checks
-import all Morrey.Defs
-import all Morrey.Hn.Laminate
-import all Morrey.Hn.Mold
-import all Morrey.Introduction
-import all Morrey.LevelOne
-import all Morrey.Map
-import all Morrey.MoldTau
-import all Morrey.NonEmptiness.Counterexample
-import all Morrey.NonEmptiness.Statements
-import all Morrey.Reduction
-import all Morrey.Triangulation
-import all Morrey.Weights
-import all Solution
+import all Pedregal.Checks
+import all Pedregal.Defs
+import all Pedregal.Hn.Laminate
+import all Pedregal.Hn.Mold
+import all Pedregal.Introduction
+import all Pedregal.LevelOne
+import all Pedregal.Map
+import all Pedregal.MoldTau
+import all Pedregal.NonEmptiness.Counterexample
+import all Pedregal.NonEmptiness.Statements
+import all Pedregal.Reduction
+import all Pedregal.Solution
+import all Pedregal.Triangulation
+import all Pedregal.Weights
+import all Sverak.Construction
+import all Sverak.Cube
+import all Sverak.Defs
+import all Sverak.Lemma1
+import all Sverak.Lemma2
+import all Sverak.Solution
+import all Sverak.Theorem
 
 /-!
 # Axiom and dependency audit
@@ -67,42 +80,59 @@ meta def externalResults : List (String × Name) :=
 
 /-- The numbered results of the paper, in the order of the paper. -/
 meta def paperResults : List (String × Name) :=
-  [("Prop 3.3", ``Morrey.proposition3_3),
-   ("Def 5.1 (assertions)", ``Morrey.theta_nonempty),
-   ("Def 5.1 (assertions)", ``Morrey.convex_theta),
-   ("Def 5.1 (assertions)", ``Morrey.isCompact_theta),
-   ("Def 5.1 (assertions)", ``Morrey.theta_subset_simplex),
-   ("Eq. (5.13)", ``Morrey.equation5_13),
-   ("Eq. (5.15)", ``Morrey.equation5_15),
-   ("Prop 6.1", ``Morrey.proposition6_1),
+  [("Prop 3.3", ``Pedregal.proposition3_3),
+   ("Def 5.1 (assertions)", ``Pedregal.theta_nonempty),
+   ("Def 5.1 (assertions)", ``Pedregal.convex_theta),
+   ("Def 5.1 (assertions)", ``Pedregal.isCompact_theta),
+   ("Def 5.1 (assertions)", ``Pedregal.theta_subset_simplex),
+   ("Eq. (5.13)", ``Pedregal.equation5_13),
+   ("Eq. (5.15)", ``Pedregal.equation5_15),
+   ("Prop 6.1", ``Pedregal.proposition6_1),
    ("Thm 6.2 (Kakutani, cited)", ``External.Kakutani.exists_fixedPoint),
-   ("Subsection 6.1", ``Morrey.section6_1_isClosed_graph),
-   ("Subsection 6.1", ``Morrey.section6_1_isCompact),
-   ("Subsection 6.1", ``Morrey.section6_1_usc),
-   ("Prop 6.3 (1)", ``Morrey.proposition6_3_point),
-   ("Prop 6.3 (1)", ``Morrey.proposition6_3_dir),
-   ("Prop 6.3 (2)", ``Morrey.proposition6_3),
-   ("Prop 7.1 (false)", ``Morrey.proposition7_1_false),
-   ("Cor 7.2 (false)", ``Morrey.corollary7_2_false),
-   ("Cor 7.2 from Prop 7.1", ``Morrey.corollary7_2_of_proposition7_1),
-   ("Step 2 summary (false)", ``Morrey.step2Claim_false),
-   ("Claim 7.4", ``Morrey.claim7_4),
-   ("Thm 1.1 (1), up to Cor 7.2", ``Morrey.theorem1_1_of_nonempty),
-   ("Thm 1.1 (1), l = 1", ``Morrey.theorem1_1_part1_levelOne)]
+   ("Subsection 6.1", ``Pedregal.section6_1_isClosed_graph),
+   ("Subsection 6.1", ``Pedregal.section6_1_isCompact),
+   ("Subsection 6.1", ``Pedregal.section6_1_usc),
+   ("Prop 6.3 (1)", ``Pedregal.proposition6_3_point),
+   ("Prop 6.3 (1)", ``Pedregal.proposition6_3_dir),
+   ("Prop 6.3 (2)", ``Pedregal.proposition6_3),
+   ("Prop 7.1 (false)", ``Pedregal.proposition7_1_false),
+   ("Cor 7.2 (false)", ``Pedregal.corollary7_2_false),
+   ("Cor 7.2 from Prop 7.1", ``Pedregal.corollary7_2_of_proposition7_1),
+   ("Step 2 summary (false)", ``Pedregal.step2Claim_false),
+   ("Claim 7.4", ``Pedregal.claim7_4),
+   ("Thm 1.1 (1), up to Cor 7.2", ``Pedregal.theorem1_1_of_nonempty),
+   ("Thm 1.1 (1), l = 1", ``Pedregal.theorem1_1_part1_levelOne),
+   ("Šverák Lemma 1", ``Sverak.lemma1),
+   ("Šverák Lemma 1 (witness)", ``Sverak.lemma1_witness),
+   ("Šverák rank-one directions of L", ``Sverak.rank_ofRST_eq_one),
+   ("Šverák f affine on rank-one lines of L", ``Sverak.sverakf_affine_of_rankOne),
+   ("Šverák (4)", ``Sverak.equation4),
+   ("Šverák (6)", ``Sverak.l2_eq6),
+   ("Šverák (7)", ``Sverak.l2_eq7),
+   ("Šverák (8)", ``Sverak.l2_eq8),
+   ("Šverák Lemma 2", ``Sverak.lemma2),
+   ("Šverák (10), (11)", ``Sverak.equation11),
+   ("Šverák Theorem", ``Sverak.theorem_main),
+   ("Šverák Remark", ``Sverak.remark_polynomial),
+   ("Šverák Corollary", ``Sverak.corollary),
+   ("Cassese Section 1.1 (Šverák's example)", ``Cassese.sverak_example)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
-  [``MorreyChallenge.corollary7_2_false, ``MorreyChallenge.exists_T_eq_empty,
-   ``MorreyChallenge.theorem1_1_of_nonempty, ``MorreyChallenge.theorem1_1_part1_levelOne,
-   ``MorreyChallenge.mem_T_self,
-   ``MorreyChallenge.card_C]
+  [``PedregalChallenge.corollary7_2_false, ``PedregalChallenge.exists_T_eq_empty,
+   ``PedregalChallenge.theorem1_1_of_nonempty, ``PedregalChallenge.theorem1_1_part1_levelOne,
+   ``PedregalChallenge.mem_T_self,
+   ``PedregalChallenge.card_C,
+   ``SverakChallenge.theorem_main, ``SverakChallenge.corollary,
+   ``SverakChallenge.remark_polynomial]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
 
-/-- Whether `m` is a module of the libraries: the paper's, `External` or `Basic`. -/
+/-- Whether `m` is a module of the libraries: the papers', `External` or `Basic`. -/
 meta def isLibraryModule (m : Name) : Bool :=
-  (`Morrey).isPrefixOf m || (`External).isPrefixOf m || (`Basic).isPrefixOf m
+  (`Pedregal).isPrefixOf m || (`Sverak).isPrefixOf m || (`Cassese).isPrefixOf m ||
+    (`External).isPrefixOf m || (`Basic).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

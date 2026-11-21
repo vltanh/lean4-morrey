@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Defs
+public import Pedregal.Defs
 
 /-!
 # Section 3: `(H_n)`-conditions and their molds
@@ -30,7 +30,7 @@ reading.
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 namespace Mold
 
@@ -197,4 +197,4 @@ theorem proposition3_3 (m : ℕ) (M : Mold (Fin (2 ^ m))) (hM : M.IsDyadic m) :
   ext x
   simpa [Nat.mod_eq_of_lt x.2] using congrArg Fin.val (h x (List.mem_range.2 x.2))
 
-end Morrey
+end Pedregal

@@ -1,6 +1,6 @@
 module
 
-public import Morrey.NonEmptiness.Statements
+public import Pedregal.NonEmptiness.Statements
 public import Mathlib.Analysis.Normed.Group.AddCircle
 
 /-!
@@ -29,7 +29,7 @@ the summary of Step 2 (with `j = 0`).
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-- The distance from `x` to the nearest integer. -/
 noncomputable def tri (x : ℝ) : ℝ :=
@@ -253,4 +253,4 @@ theorem step2Claim_false : ¬ Step2Claim := by
 theorem step2ClaimPaper_false : ¬ Step2ClaimPaper :=
   fun h => step2Claim_false (step2Claim_of_paper h)
 
-end Morrey
+end Pedregal

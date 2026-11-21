@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Hn.Mold
+public import Pedregal.Hn.Mold
 
 /-!
 # Section 4: tri-dyadic molds for `τ_l`
@@ -24,7 +24,7 @@ properties, and that such molds exist for every `l`.
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-! ### Arithmetic of the numbering of the interfaces -/
 
@@ -362,4 +362,4 @@ theorem TriMold.card_C_filter {l : ℕ} (S : TriMold l) (s : Tri l) (j : Fin 3) 
     ((S.C s).filter fun p => p.1 = j).card = 2 :=
   mt_card_C_filter S s j
 
-end Morrey
+end Pedregal

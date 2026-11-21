@@ -1,0 +1,15 @@
+{
+  "challenge_module": "Pedregal.Challenge",
+  "solution_module": "Pedregal.Solution",
+  "theorem_names": [
+    "PedregalChallenge.corollary7_2_false",
+    "PedregalChallenge.exists_T_eq_empty",
+    "PedregalChallenge.theorem1_1_of_nonempty",
+    "PedregalChallenge.theorem1_1_part1_levelOne",
+    "PedregalChallenge.mem_T_self",
+    "PedregalChallenge.card_C"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}

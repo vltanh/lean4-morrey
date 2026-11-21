@@ -12,23 +12,23 @@ Status of the formalization:
   (2) and Theorem 1.2 are the `2 × 2` case of Morrey's problem, which is open; Theorem 1.1 (1)
   (every gradient measure of a pair of `ℙ_l` maps is a laminate of finite order) implies it (E16)
   and is open too. They are stated as propositions
-  ([`Theorem1_1_part1`](Morrey/Introduction.lean#L54), [`Theorem1_1_part2`](Morrey/Introduction.lean#L60), [`Theorem1_2`](Morrey/Introduction.lean#L65)), not as theorems.
-- **Corollary 7.2 and Proposition 7.1 are false** ([`corollary7_2_false`](Morrey/NonEmptiness/Counterexample.lean#L230),
-  [`proposition7_1_false`](Morrey/NonEmptiness/Counterexample.lean#L237)), and so is the summary of Step 2 of the proof of Proposition 7.1, with
-  Claim 7.5 ([`step2Claim_false`](Morrey/NonEmptiness/Counterexample.lean#L246)). The proof of Theorem 1.1 applies Kakutani's theorem to the map
+  ([`Theorem1_1_part1`](Introduction.lean#L54), [`Theorem1_1_part2`](Introduction.lean#L60), [`Theorem1_2`](Introduction.lean#L65)), not as theorems.
+- **Corollary 7.2 and Proposition 7.1 are false** ([`corollary7_2_false`](NonEmptiness/Counterexample.lean#L230),
+  [`proposition7_1_false`](NonEmptiness/Counterexample.lean#L237)), and so is the summary of Step 2 of the proof of Proposition 7.1, with
+  Claim 7.5 ([`step2Claim_false`](NonEmptiness/Counterexample.lean#L246)). The proof of Theorem 1.1 applies Kakutani's theorem to the map
   `𝐓` of Definition 6.1, and needs every value `𝐓(t)` to be nonempty, which is Corollary 7.2. So
   the paper does not prove Theorem 1.1 (E13).
 - Every other numbered result of Sections 3–7 except Claim 7.3 is correct and proved:
   Proposition 3.3, the assertions of Definition 5.1 and eqs. (5.10)–(5.15), Proposition 6.1,
   Subsection 6.1, Proposition 6.3, Claim 7.4, and the reduction
-  [`theorem1_1_of_nonempty`](Morrey/Reduction.lean#L24): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
-- Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](Morrey/LevelOne.lean#L156)), by an explicit
+  [`theorem1_1_of_nonempty`](Reduction.lean#L24): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
+- Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](LevelOne.lean#L156)), by an explicit
   lamination: the paper's argument fails there too.
-- The cited result, Kakutani's fixed-point theorem (Theorem 6.2), is proved in [`External/`](External) from
+- The cited result, Kakutani's fixed-point theorem (Theorem 6.2), is proved in [`External/`](../External) from
   [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point). Nothing is assumed.
 - `lake build` passes with no `sorry` outside [`Challenge.lean`](Challenge.lean), no `axiom`, and every
   declaration depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
-  ([`scripts/Audit.lean`](scripts/Audit.lean)). Comparator accepts [`Solution.lean`](Solution.lean) against [`Challenge.lean`](Challenge.lean).
+  ([`scripts/Audit.lean`](../scripts/Audit.lean)). Comparator accepts [`Solution.lean`](Solution.lean) against [`Challenge.lean`](Challenge.lean).
 - No statement of the paper was changed: the false ones are stated as the paper states them and
   refuted.
 
@@ -51,19 +51,19 @@ Status of the formalization:
 
 | Result | Where the paper uses it | Source | Theorem in `External/` |
 | --- | --- | --- | --- |
-| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](External/Kakutani/Theorem.lean#L38), from `Kakutani.exists_fixedPoint` of [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) |
+| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](../External/Kakutani/Theorem.lean#L38), from `Kakutani.exists_fixedPoint` of [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) |
 
 ### Standard facts used without citation
 
 | Fact | Where | In the formalization |
 | --- | --- | --- |
-| The gradient of a function of `ℙ_l` on a triangle, from its values at the vertices | Sections 4, 5, 7 | [`grad_eq_of_affine`](Morrey/Triangulation.lean#L71), [`grad_lower`](Morrey/Triangulation.lean#L168), [`grad_upper`](Morrey/Triangulation.lean#L192) |
-| Across an interface, the jump of the gradient of `w ∈ ℙ_l` is a multiple of the normal | Section 2, Definition 6.1, Proposition 6.1 | [`grad_sides_sub`](Morrey/Triangulation.lean#L307) |
-| The barycenter of `ν_w` vanishes, by periodicity (5.13), and so the barycenters `𝕎_j` average to `0` (5.15) | Section 5 | [`equation5_13`](Morrey/Triangulation.lean#L337), [`equation5_15`](Morrey/Map.lean#L238) |
-| `Θ_l` is nonempty, convex and compact (Definition 5.1) | Section 6 | [`theta_nonempty`](Morrey/Weights.lean#L45), [`convex_theta`](Morrey/Weights.lean#L49), [`isCompact_theta`](Morrey/Weights.lean#L90), [`theta_subset_simplex`](Morrey/Weights.lean#L77) |
-| A closed graph into a compact set gives upper semicontinuity | Subsection 6.1 | [`section6_1_usc`](Morrey/Map.lean#L346) |
-| A rank-one splitting tree gives a laminate | Proposition 6.1 | [`Mold.isLaminate_leafMeasure`](Morrey/Hn/Laminate.lean#L139) |
-| A `2 × 2` matrix has rank at most one exactly when its determinant vanishes | Definition 6.1, Proposition 6.1 | [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) |
+| The gradient of a function of `ℙ_l` on a triangle, from its values at the vertices | Sections 4, 5, 7 | [`grad_eq_of_affine`](Triangulation.lean#L71), [`grad_lower`](Triangulation.lean#L168), [`grad_upper`](Triangulation.lean#L192) |
+| Across an interface, the jump of the gradient of `w ∈ ℙ_l` is a multiple of the normal | Section 2, Definition 6.1, Proposition 6.1 | [`grad_sides_sub`](Triangulation.lean#L307) |
+| The barycenter of `ν_w` vanishes, by periodicity (5.13), and so the barycenters `𝕎_j` average to `0` (5.15) | Section 5 | [`equation5_13`](Triangulation.lean#L337), [`equation5_15`](Map.lean#L238) |
+| `Θ_l` is nonempty, convex and compact (Definition 5.1) | Section 6 | [`theta_nonempty`](Weights.lean#L45), [`convex_theta`](Weights.lean#L49), [`isCompact_theta`](Weights.lean#L90), [`theta_subset_simplex`](Weights.lean#L77) |
+| A closed graph into a compact set gives upper semicontinuity | Subsection 6.1 | [`section6_1_usc`](Map.lean#L346) |
+| A rank-one splitting tree gives a laminate | Proposition 6.1 | [`Mold.isLaminate_leafMeasure`](Hn/Laminate.lean#L139) |
+| A `2 × 2` matrix has rank at most one exactly when its determinant vanishes | Definition 6.1, Proposition 6.1 | [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](../Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) |
 
 ### Does the paper use each cited result correctly?
 
@@ -99,8 +99,8 @@ The theorem takes "an arbitrary function" `ψ : 𝕄^{2×2} → ℝ`, but statem
 `ψ(F + ∇u)`, which needs `ψ` measurable; the Introduction works with continuous integrands
 (lines 124, 136). Statement (1) also writes `Ψ` for `ψ` and does not say `t ∈ [0, 1]`. A
 real-valued rank-one convex function is separately convex, hence locally Lipschitz, so the
-hypothesis matters only for (2) ⇒ (1). The formalization reads `ψ` continuous ([`Theorem1_2`](Morrey/Introduction.lean#L65);
-in [`Theorem1_1_part2`](Morrey/Introduction.lean#L60) the hypothesis is redundant and harmless). Not proved either way (E13).
+hypothesis matters only for (2) ⇒ (1). The formalization reads `ψ` continuous ([`Theorem1_2`](Introduction.lean#L65);
+in [`Theorem1_1_part2`](Introduction.lean#L60) the hypothesis is redundant and harmless). Not proved either way (E13).
 
 ### E5. Example 3.2 (line 407)
 
@@ -113,7 +113,7 @@ sub-molds, `2^{−1−2l}`), but (5.5) makes them `3^{−1} 2^{−1−2l}`: a fa
 gives `λ_k^{(p)} = 1/2` for `1 ≤ p ≤ m − 2`, and line 679 for "all `0 ≤ p ≤ m − 1`"; the
 relative weights are `1/2` for `0 ≤ p ≤ m − 2`, and at `p = m − 1` (the first level) they are
 `t_{2k}/t_k^{(m−1)}`, not `1/2`. Slips: the argument only uses that the relative weights above the
-first level are `1/2` ([`point_dyadic_theta`](Morrey/Weights.lean#L151)).
+first level are `1/2` ([`point_dyadic_theta`](Weights.lean#L151)).
 
 ### E7. Proposition 3.3 (line 411): uniqueness of the permutation (a reading)
 
@@ -122,12 +122,12 @@ first level are `1/2` ([`point_dyadic_theta`](Morrey/Weights.lean#L151)).
 notation and for the sign of the direction (3.5); for unordered mixtures there would be
 `2^{2^m − 1}` such permutations (`[1, 2]` comes from the identity and from `(1 2)`). The
 paper's proof is "elementary". The formalization reads molds as ordered trees and proves the
-statement ([`proposition3_3`](Morrey/Hn/Mold.lean#L171)).
+statement ([`proposition3_3`](Hn/Mold.lean#L171)).
 
 ### E8. Definition 4.1 (line 592): "a suitable partition `{𝒞_s}` of the triangles of `τ_l` in which each element occurs six times"
 
 It is a partition of the index set into classes `𝒞_s` of six indices, one class per triangle
-(as eq. (4.3) says). A slip of wording. [`TriMold.card_C`](Morrey/MoldTau.lean#L355), [`TriMold.card_C_filter`](Morrey/MoldTau.lean#L361).
+(as eq. (4.3) says). A slip of wording. [`TriMold.card_C`](MoldTau.lean#L355), [`TriMold.card_C_filter`](MoldTau.lean#L361).
 
 ### E9. Duplicate TeX labels
 
@@ -140,7 +140,7 @@ which is the intended one there (it repeats the notation of (3.7)). Harmless.
 The tri-dyadic mold is not dyadic: level `0` has one mixture, level `1` one mixture and a pair
 that passes through, and level `p ≥ 2` has `3 · 2^{p−2}` mixtures (`2^{p−2}` per sub-mold). So
 `1 ≤ k ≤ 2^p` is wrong at every level `p ≥ 1` (line 723 has the same slip). The intended condition
-is "at every mixture above the first level", which the formalization states ([`Morrey.T`](Challenge.lean#L224)).
+is "at every mixture above the first level", which the formalization states ([`Pedregal.T`](Challenge.lean#L224)).
 
 ### E11. Eq. (7.12) and line 998
 
@@ -180,11 +180,11 @@ With the weights `t` the mass points of `u` are `(1, 0)` and `(−1, 0)`, so the
 is `(2, 0)`. For every weights `r`, the mass points of `v` have second coordinates `2` and `−2`,
 so the direction of `v` is `(∗, 4)`, and `det((2, 0), (∗, 4)) = 8 ≠ 0`. No `r` satisfies the
 condition of Definition 6.1 at this mixture: `𝐓(t) = ∅`. The same mixture refutes Proposition 7.1
-(with `w = v`). Lean: [`T_cex_eq_empty`](Morrey/NonEmptiness/Counterexample.lean#L224), [`corollary7_2_false`](Morrey/NonEmptiness/Counterexample.lean#L230), [`proposition7_1_false`](Morrey/NonEmptiness/Counterexample.lean#L237). The
+(with `w = v`). Lean: [`T_cex_eq_empty`](NonEmptiness/Counterexample.lean#L224), [`corollary7_2_false`](NonEmptiness/Counterexample.lean#L230), [`proposition7_1_false`](NonEmptiness/Counterexample.lean#L237). The
 argument does not use the constraints of `Θ_1`. It works for every `t ∈ Θ_1` except those that put
 all the weight of the two interfaces on the two triangles where `∇u = 0`, and it survives small
 perturbations of `(u, v, t)`: non-emptiness is a closed condition (the conditions are polynomial
-in `(u, v, t, r)` and `Θ_l` is compact; [`section6_1_isClosed_graph`](Morrey/Map.lean#L303) proves the closedness for fixed
+in `(u, v, t, r)` and `Θ_l` is compact; [`section6_1_isClosed_graph`](Map.lean#L303) proves the closedness for fixed
 `u, v` only). So the counterexamples meet the dense class `𝒞` to which the proof of
 Proposition 7.1 reduces (line 885), and the reduction cannot rescue the claim.
 
@@ -195,7 +195,7 @@ line 560). That it fails for every mold is checked only numerically, below.
 **The failure is generic, and does not depend on the mold.** `𝐓(t)` is cut out of `Θ_l` by linear
 equations in `r`: `Θ_l` has dimension `2^{2l+2} + 1` (`17` for `l = 1`), while Definition 6.1
 imposes `3(2^{2l+1} − 1) + 2` conditions (`23`). Checked numerically (floating point, not in
-Lean; the scripts are in [`scripts/numerics/`](scripts/numerics)):
+Lean; the scripts are in [`numerics/`](numerics)):
 
 - for 40 random `(u, v, t)` with random molds at each of `l = 1` and `l = 2`, the linear system
   defining `𝐓(t)` was inconsistent every time;
@@ -205,7 +205,7 @@ Lean; the scripts are in [`scripts/numerics/`](scripts/numerics)):
 
 **Does Theorem 1.1 still hold?** Unknown: Theorem 1.1 (2) is the `2 × 2` case of Morrey's
 problem, and (1) implies it. At `l = 1`
-the conclusion of Theorem 1.1 (1) holds ([`theorem1_1_part1_levelOne`](Morrey/LevelOne.lean#L156)): `ν` is uniform on the
+the conclusion of Theorem 1.1 (1) holds ([`theorem1_1_part1_levelOne`](LevelOne.lean#L156)): `ν` is uniform on the
 eight matrices `±C₁ ± C₂ ± C₃` with rank-one `C_i`, which three rank-one splittings reach. So the
 failure of Corollary 7.2 is a failure of the method, not evidence against the theorem. For the
 counterexample pair itself, `𝐓` even has a fixed point, which Kakutani's theorem cannot provide
@@ -213,17 +213,17 @@ here: the weights whose relative weights `λ` (the share of the second leaf, `2i
 the paper's `2i`) on the first-level mixtures, in the order of `TriMold.canonical 1`, are
 `1, 0, 0, 1, 0, 1, 1, 0` in the sub-mold `j = 1`, `1, 0, 0, 1, ½, ½, ½, ½` in `j = 2` and
 `0, 1, 1, 0, ½, ½, ½, ½` in `j = 3` lie in `Θ_1` and in their own image (found numerically,
-checked in exact rational arithmetic, [`scripts/numerics/fixedpoint_exact.py`](scripts/numerics/fixedpoint_exact.py); not in Lean).
+checked in exact rational arithmetic, [`numerics/fixedpoint_exact.py`](numerics/fixedpoint_exact.py); not in Lean).
 
 ### E14. The summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5, is false
 
 The displayed summary after Step 2 (lines 1002–1004) asserts, for each sub-mold `j` separately,
 weights `r_j ≥ 0` for which the decomposition directions of `w` are those of `u`, with the
 top-to-bottom procedure started from the barycenter `𝕌_j` of `u` (7.6); Claim 7.5 (line 966) is
-the positivity part. As the paper states it ([`Step2ClaimPaper`](Morrey/NonEmptiness/Statements.lean#L75)), it fails for a trivial reason:
+the positivity part. As the paper states it ([`Step2ClaimPaper`](NonEmptiness/Statements.lean#L75)), it fails for a trivial reason:
 for `w = 0` the barycenter of `w` is `0`, not `𝕌_j ≠ 0`. Without the start from `𝕌_j`
-([`Step2Claim`](Morrey/NonEmptiness/Statements.lean#L65), weaker), it is still false: the mixture of E13 lies in one sub-mold
-([`step2Claim_false`](Morrey/NonEmptiness/Counterexample.lean#L246), [`step2ClaimPaper_false`](Morrey/NonEmptiness/Counterexample.lean#L253)). (For uniform `t` the barycenters `𝕌_j`
+([`Step2Claim`](NonEmptiness/Statements.lean#L65), weaker), it is still false: the mixture of E13 lies in one sub-mold
+([`step2Claim_false`](NonEmptiness/Counterexample.lean#L246), [`step2ClaimPaper_false`](NonEmptiness/Counterexample.lean#L253)). (For uniform `t` the barycenters `𝕌_j`
 vanish, so this trivial failure needs a non-uniform `t`.) Numerically the failure is typical but
 not generic: one sub-mold has `2^{2l+1}` relative weights and `2^{2l+1} − 1` parallelism
 conditions, so the solutions form a line, which for most random instances misses
@@ -288,7 +288,7 @@ concern" (line 762), "alway" (line 990), and "(in press)" for a 2011 paper (line
 
 | Where | Missing hypothesis | Counterexample without it | In the formalization |
 | --- | --- | --- | --- |
-| Theorem 1.2 | `ψ` measurable (continuous, as in Section 1), needed only for (2) ⇒ (1) | for a non-measurable `ψ` the integral in (2) is undefined | [`Theorem1_2`](Morrey/Introduction.lean#L65) takes `Continuous ψ` |
+| Theorem 1.2 | `ψ` measurable (continuous, as in Section 1), needed only for (2) ⇒ (1) | for a non-measurable `ψ` the integral in (2) is undefined | [`Theorem1_2`](Introduction.lean#L65) takes `Continuous ψ` |
 
 ## 5. Redundant hypotheses
 
@@ -302,19 +302,19 @@ formalization states them for arbitrary functions `u, v`.
   `k = 0` (lower-left) or `1` (upper-right), cut along the diagonal of normal `(1, 1)`
   (`Tri`, [`triangle`](Challenge.lean#L67)). `ℙ_l` (`PL`) is the set of continuous `1`-periodic functions affine on
   every triangle; the gradient on a triangle is the derivative at its centroid ([`grad`](Challenge.lean#L88)), which is
-  the slope of the affine function ([`grad_eq_of_affine`](Morrey/Triangulation.lean#L71)).
+  the slope of the affine function ([`grad_eq_of_affine`](Triangulation.lean#L71)).
 - **Interfaces.** `Iface l`: the vertical, horizontal and diagonal edge of each cell, with its two
-  triangles ([`Iface.sides`](Challenge.lean#L101)), modulo the period; [`sides_adjacent`](Morrey/Triangulation.lean#L232) checks that they share an edge
+  triangles ([`Iface.sides`](Challenge.lean#L101)), modulo the period; [`sides_adjacent`](Triangulation.lean#L232) checks that they share an edge
   orthogonal to the normal.
 - **Molds** (Definitions 3.1, 3.2) are ordered binary trees, as the paper's bracket notation is
   (E7) ([`Mold`](Challenge.lean#L116)); the bottom-to-top recursion
   (3.3)–(3.6) is [`Mold.weight`](Challenge.lean#L125), [`Mold.point`](Challenge.lean#L135) (with the convention `λ = 1/2` for weight `0`), and the
   direction of `[L, R]` is `L.point − R.point`. The top-to-bottom description is the same object
-  read from the root ([`Mold.isLaminate_add_leafMeasure`](Morrey/Hn/Laminate.lean#L70)).
+  read from the root ([`Mold.isLaminate_add_leafMeasure`](Hn/Laminate.lean#L70)).
 - **Tri-dyadic molds for `τ_l`** (Definition 4.1) are `TriMold l`: a numbering of the interfaces
   of each sub-mold, which side gets the first leaf, and the order of the last two mixtures. The
-  conditions of Section 4 are proved ([`TriMold.card_C`](Morrey/MoldTau.lean#L355), [`TriMold.card_C_filter`](Morrey/MoldTau.lean#L361),
-  [`TriMold.leafTri_pair`](Morrey/MoldTau.lean#L274), [`TriMold.tree_isTriDyadic`](Morrey/MoldTau.lean#L243)).
+  conditions of Section 4 are proved ([`TriMold.card_C`](MoldTau.lean#L355), [`TriMold.card_C_filter`](MoldTau.lean#L361),
+  [`TriMold.leafTri_pair`](MoldTau.lean#L274), [`TriMold.tree_isTriDyadic`](MoldTau.lean#L243)).
 - **Indices.** Leaves are `(j, k)`, both from `0`: the paper's leaf `j · 2^{2l+2} + k + 1`; the
   first-level mixture `i` (from `0`) joins the leaves `2i, 2i + 1`, the paper's `2i + 1, 2i + 2` of
   its interface `i + 1`.
@@ -326,18 +326,18 @@ formalization states them for arbitrary functions `u, v`.
   "joint `(H_n)`-conditions whose decomposition directions are parallel" (Section 1).
 - **Proposition 7.1** ("with the given system of decomposition directions") means directions
   parallel to the given ones: the top-to-bottom step (7.7) splits along `S · 𝐔_k^{(p)}`.
-- **Step 2's summary** is stated as [`Step2ClaimPaper`](Morrey/NonEmptiness/Statements.lean#L75), for one sub-mold, with nonnegative weights
+- **Step 2's summary** is stated as [`Step2ClaimPaper`](NonEmptiness/Statements.lean#L75), for one sub-mold, with nonnegative weights
   adding up to `3^{−1} 2^{−1−2l}` on each first-level mixture and the start from `𝕌_j`, and as
-  the weaker [`Step2Claim`](Morrey/NonEmptiness/Statements.lean#L65), without the start from `𝕌_j`; both are refuted (E14).
+  the weaker [`Step2Claim`](NonEmptiness/Statements.lean#L65), without the start from `𝕌_j`; both are refuted (E14).
 - **Kakutani's theorem** is stated with upper semicontinuity in the topological sense; the paper's
-  Subsection 6.1 proves the closed graph property, and [`section6_1_usc`](Morrey/Map.lean#L346) derives upper
+  Subsection 6.1 proves the closed graph property, and [`section6_1_usc`](Map.lean#L346) derives upper
   semicontinuity from it and the compactness of `Θ_l`, a step the paper leaves implicit.
 
 ## 7. Departures from the paper's proofs
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 | [`theorem1_1_of_nonempty`](Morrey/Reduction.lean#L24): the same argument, with the non-emptiness of the values as a hypothesis; [`theorem1_1_part1_levelOne`](Morrey/LevelOne.lean#L156): at `l = 1`, an explicit lamination | Corollary 7.2 is false (reason 1: the paper's step is wrong) | E13 |
+| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 | [`theorem1_1_of_nonempty`](Reduction.lean#L24): the same argument, with the non-emptiness of the values as a hypothesis; [`theorem1_1_part1_levelOne`](LevelOne.lean#L156): at `l = 1`, an explicit lamination | Corollary 7.2 is false (reason 1: the paper's step is wrong) | E13 |
 | Proposition 7.1, Corollary 7.2, Step 2 | proofs of false statements | refutations | the statements are false | E13, E14 |
 
 Every other proof follows the paper's argument. Two steps that the paper leaves implicit are
@@ -345,42 +345,42 @@ spelled out, not changed: the closed graph of Subsection 6.1 rests on "the depen
 in (5.12) on `t` is continuous" (the notation of (3.7), E9), which on `Θ_l` is the linearity of
 Proposition 6.3 (1); and the
 upper semicontinuity that Kakutani's theorem asks for is derived from the closed graph and the
-compactness of `Θ_l` ([`section6_1_usc`](Morrey/Map.lean#L346)).
+compactness of `Θ_l` ([`section6_1_usc`](Map.lean#L346)).
 
 ## 8. What each result depends on
 
-Generated by [`scripts/Audit.lean`](scripts/Audit.lean), which also checks that every declaration of the library uses
+Generated by [`scripts/Audit.lean`](../scripts/Audit.lean), which also checks that every declaration of the library uses
 only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
 
 | Result | Lean | Results from prior work used |
 | --- | --- | --- |
-| Prop 3.3 | [`Morrey.proposition3_3`](Morrey/Hn/Mold.lean#L171) | – |
-| Def 5.1 (assertions) | [`Morrey.theta_nonempty`](Morrey/Weights.lean#L45) | – |
-| Def 5.1 (assertions) | [`Morrey.convex_theta`](Morrey/Weights.lean#L49) | – |
-| Def 5.1 (assertions) | [`Morrey.isCompact_theta`](Morrey/Weights.lean#L90) | – |
-| Def 5.1 (assertions) | [`Morrey.theta_subset_simplex`](Morrey/Weights.lean#L77) | – |
-| Eq. (5.13) | [`Morrey.equation5_13`](Morrey/Triangulation.lean#L337) | – |
-| Eq. (5.15) | [`Morrey.equation5_15`](Morrey/Map.lean#L238) | – |
-| Prop 6.1 | [`Morrey.proposition6_1`](Morrey/Map.lean#L365) | – |
-| Thm 6.2 (Kakutani, cited) | [`External.Kakutani.exists_fixedPoint`](External/Kakutani/Theorem.lean#L38) | – |
-| Subsection 6.1 | [`Morrey.section6_1_isClosed_graph`](Morrey/Map.lean#L303) | – |
-| Subsection 6.1 | [`Morrey.section6_1_isCompact`](Morrey/Map.lean#L333) | – |
-| Subsection 6.1 | [`Morrey.section6_1_usc`](Morrey/Map.lean#L346) | – |
-| Prop 6.3 (1) | [`Morrey.proposition6_3_point`](Morrey/Map.lean#L263) | – |
-| Prop 6.3 (1) | [`Morrey.proposition6_3_dir`](Morrey/Map.lean#L276) | – |
-| Prop 6.3 (2) | [`Morrey.proposition6_3`](Morrey/Map.lean#L285) | – |
-| Prop 7.1 (false) | [`Morrey.proposition7_1_false`](Morrey/NonEmptiness/Counterexample.lean#L237) | – |
-| Cor 7.2 (false) | [`Morrey.corollary7_2_false`](Morrey/NonEmptiness/Counterexample.lean#L230) | – |
-| Cor 7.2 from Prop 7.1 | [`Morrey.corollary7_2_of_proposition7_1`](Morrey/NonEmptiness/Statements.lean#L49) | – |
-| Step 2 summary (false) | [`Morrey.step2Claim_false`](Morrey/NonEmptiness/Counterexample.lean#L246) | – |
-| Claim 7.4 | [`Morrey.claim7_4`](Morrey/NonEmptiness/Statements.lean#L107) | – |
-| Thm 1.1 (1), up to Cor 7.2 | [`Morrey.theorem1_1_of_nonempty`](Morrey/Reduction.lean#L24) | [`External.Kakutani.exists_fixedPoint`](External/Kakutani/Theorem.lean#L38) |
-| Thm 1.1 (1), l = 1 | [`Morrey.theorem1_1_part1_levelOne`](Morrey/LevelOne.lean#L156) | – |
+| Prop 3.3 | [`Pedregal.proposition3_3`](Hn/Mold.lean#L171) | – |
+| Def 5.1 (assertions) | [`Pedregal.theta_nonempty`](Weights.lean#L45) | – |
+| Def 5.1 (assertions) | [`Pedregal.convex_theta`](Weights.lean#L49) | – |
+| Def 5.1 (assertions) | [`Pedregal.isCompact_theta`](Weights.lean#L90) | – |
+| Def 5.1 (assertions) | [`Pedregal.theta_subset_simplex`](Weights.lean#L77) | – |
+| Eq. (5.13) | [`Pedregal.equation5_13`](Triangulation.lean#L337) | – |
+| Eq. (5.15) | [`Pedregal.equation5_15`](Map.lean#L238) | – |
+| Prop 6.1 | [`Pedregal.proposition6_1`](Map.lean#L365) | – |
+| Thm 6.2 (Kakutani, cited) | [`External.Kakutani.exists_fixedPoint`](../External/Kakutani/Theorem.lean#L38) | – |
+| Subsection 6.1 | [`Pedregal.section6_1_isClosed_graph`](Map.lean#L303) | – |
+| Subsection 6.1 | [`Pedregal.section6_1_isCompact`](Map.lean#L333) | – |
+| Subsection 6.1 | [`Pedregal.section6_1_usc`](Map.lean#L346) | – |
+| Prop 6.3 (1) | [`Pedregal.proposition6_3_point`](Map.lean#L263) | – |
+| Prop 6.3 (1) | [`Pedregal.proposition6_3_dir`](Map.lean#L276) | – |
+| Prop 6.3 (2) | [`Pedregal.proposition6_3`](Map.lean#L285) | – |
+| Prop 7.1 (false) | [`Pedregal.proposition7_1_false`](NonEmptiness/Counterexample.lean#L237) | – |
+| Cor 7.2 (false) | [`Pedregal.corollary7_2_false`](NonEmptiness/Counterexample.lean#L230) | – |
+| Cor 7.2 from Prop 7.1 | [`Pedregal.corollary7_2_of_proposition7_1`](NonEmptiness/Statements.lean#L49) | – |
+| Step 2 summary (false) | [`Pedregal.step2Claim_false`](NonEmptiness/Counterexample.lean#L246) | – |
+| Claim 7.4 | [`Pedregal.claim7_4`](NonEmptiness/Statements.lean#L107) | – |
+| Thm 1.1 (1), up to Cor 7.2 | [`Pedregal.theorem1_1_of_nonempty`](Reduction.lean#L24) | [`External.Kakutani.exists_fixedPoint`](../External/Kakutani/Theorem.lean#L38) |
+| Thm 1.1 (1), l = 1 | [`Pedregal.theorem1_1_part1_levelOne`](LevelOne.lean#L156) | – |
 
-The route check ([`scripts/route_check.py`](scripts/route_check.py)) compares the results that each formal proof uses with
+The route check ([`scripts/route_check.py`](../scripts/route_check.py)) compares the results that each formal proof uses with
 those that the paper's proof cites ([`docs/paper_routes.tsv`](docs/paper_routes.tsv)). Every difference is recorded with its
 reason in [`docs/route_differences.tsv`](docs/route_differences.tsv): the refutations do not use the steps of the refuted proofs,
-[`theorem1_1_of_nonempty`](Morrey/Reduction.lean#L24) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
+[`theorem1_1_of_nonempty`](Reduction.lean#L24) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
 Subsection 6.1 uses the linearity of Proposition 6.3 (the continuity that the paper invokes), and
 the assertions of Definition 5.1 are used without citation throughout.
 
@@ -481,7 +481,7 @@ claims a solution of the `2 × 2` case.
 - Conti, Dolzmann and Dondl formalized their `3 × 3` example in Lean 4 with Mathlib
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)),
   with definitions of rank-one convexity and quasiconvexity (on the unit cube, with smooth test
-  maps and an integrability condition). This work did not use their code; its [`Quasiconvex`](Morrey/Introduction.lean#L46)
+  maps and an integrability condition). This work did not use their code; its [`Quasiconvex`](Introduction.lean#L46)
   follows Theorem 1.2 instead (bounded open domains, Lipschitz test maps).
 - Kakutani's theorem comes from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point)
   (Brouwer's, Kakutani's and Schauder's theorems), a dependency of this project.
@@ -493,7 +493,7 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 ### Open directions
 
 - **Theorem 1.1 (1) for `l ≥ 2`.** Is the gradient measure of every pair of `ℙ_l` maps a laminate
-  of finite order? At `l = 1` it is ([`theorem1_1_part1_levelOne`](Morrey/LevelOne.lean#L156)). For all `l`, a positive answer
+  of finite order? At `l = 1` it is ([`theorem1_1_part1_levelOne`](LevelOne.lean#L156)). For all `l`, a positive answer
   gives the `2 × 2` case of Morrey's problem, by the density argument of E16. The maps of `ℙ_l`
   that are sums of three dyadic profiles along `(1, 0)`, `(0, 1)`, `(1, 1)` are `N`-wave maps with
   `N = 3(2^l − 1)`, inside the case `N ≥ 4` that Guerra and Teixeira da Costa leave open.
@@ -507,18 +507,18 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 ### Simpler proofs
 
 None of the paper's correct proofs could be made simpler for a reader: they are short. One
-observation from the formalization: in [`Mold.weight_smul_point`](Morrey/Hn/Mold.lean#L107) the identity
+observation from the formalization: in [`Mold.weight_smul_point`](Hn/Mold.lean#L107) the identity
 `weight · point = ∑ t_i w_i` needs no positivity of the weight, since both sides vanish when it is
 zero.
 
 ### The formalization
 
-- [`Basic`](Basic) holds [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) (for
+- [`Basic`](../Basic) holds [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](../Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) (for
   `Mathlib/LinearAlgebra/Matrix/Rank.lean`).
-- The `(H_n)`-conditions of [`Morrey/Hn/`](Morrey/Hn) (molds, their weights and mass points, and the laminate
+- The `(H_n)`-conditions of [`Pedregal/Hn/`](Hn) (molds, their weights and mass points, and the laminate
   of a rank-one mold) are general and could become a small library on laminates, with Jensen's
   inequality for rank-one convex functions, which the reduction of Theorem 1.1 (2) to (1) needs.
-- [`External/Kakutani`](External/Kakutani) derives the upper semicontinuous form of Kakutani's theorem from the
+- [`External/Kakutani`](../External/Kakutani) derives the upper semicontinuous form of Kakutani's theorem from the
   closed-graph form of lean4-fixed-point; other formalizations that cite Kakutani in that form can
   reuse it.
 - The density argument of E16 (Jensen's inequality for laminates, the continuity of rank-one

@@ -9,7 +9,7 @@ public import Mathlib.MeasureTheory.Integral.Pi
 # Šverák 1992, Section 2: the subspace `L`, the function `f` and the map `w`
 
 * `ofRST r s t = (r 0; 0 s; t t)`, `L` the subspace of these matrices, `sverakP` (in
-  `Morrey.Defs`) the orthogonal projection onto `L` (`sverakP_mem`, `sverakP_of_mem`,
+  `Sverak.Defs`) the orthogonal projection onto `L` (`sverakP_mem`, `sverakP_of_mem`,
   `sverakP_orth`).
 * `sverakf (P X) = −r s t` (`sverakf_ofRST`).
 * `rank_ofRST_eq_one`, `sverakf_affine_of_rankOne` (`sv-L`): "the only rank-one directions in `L`
@@ -22,7 +22,7 @@ public import Mathlib.MeasureTheory.Integral.Pi
 
 @[expose] public section
 
-open MeasureTheory Morrey Real
+open MeasureTheory Real
 
 namespace Sverak
 

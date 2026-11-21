@@ -49,3 +49,11 @@ Figures, from 2026-11-21 09:52 (UTC−6) to the commit that completes [`REPORT.m
 From `scripts/session_stats.py` on the session transcript. The figures leave out the numerical
 experiments' running time outside the agents' tool calls, and the work after that commit
 ([`CREDITS.md`](CREDITS.md), packaging).
+
+## Reorganization (21 November 2026)
+
+When Šverák (1992) and Cassese (2026) joined the repository, the paper's files moved into
+`Pedregal/` and its namespaces were renamed (`Morrey` to `Pedregal`, `MorreyChallenge` to
+`PedregalChallenge`). No statement or proof changed: the statement diff against the commit before
+the move shows only the renames, and the build, the audit, the route check and Comparator pass as
+before. The work is counted in the second round's figures ([`../README.md`](../README.md)).

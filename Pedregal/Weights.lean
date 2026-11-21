@@ -1,6 +1,6 @@
 module
 
-public import Morrey.MoldTau
+public import Pedregal.MoldTau
 public import Mathlib.Analysis.Convex.Basic
 public import Mathlib.Topology.Algebra.Module.FiniteDimension
 
@@ -20,12 +20,12 @@ simplex". This file proves it, and the facts (5.10), (5.11), (5.14) about the
   first level are all `1/2` (eqs. (5.10), (5.11)).
 * `point_subMold_theta`: the barycenter `𝕎_j` of the sub-mold `j` (eq. (5.14)).
 
-Eq. (5.15) is `Morrey.equation5_15` (in `Morrey.Map`), from (5.13) and (5.14).
+Eq. (5.15) is `Pedregal.equation5_15` (in `Pedregal.Map`), from (5.13) and (5.14).
 -/
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 variable {l : ℕ}
 
@@ -214,4 +214,4 @@ theorem point_subMold_theta {V : Type} [AddCommGroup V] [Module ℝ V] {S : TriM
   congr 1
   exact (wt_sum_pairs fun k => t (j, k) • w (j, k)).symm
 
-end Morrey
+end Pedregal

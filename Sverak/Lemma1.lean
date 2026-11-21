@@ -1,6 +1,6 @@
 module
 
-public import Morrey.General
+public import Sverak.Cube
 public import Mathlib.Analysis.SpecialFunctions.SmoothTransition
 public import Mathlib.Analysis.Calculus.FDeriv.Mul
 public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
@@ -33,7 +33,7 @@ Helpers (prefix `l1_`):
 
 @[expose] public section
 
-open MeasureTheory Morrey Filter Topology
+open MeasureTheory Filter Topology
 open scoped Pointwise
 
 namespace Sverak

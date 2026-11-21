@@ -1,12 +1,12 @@
 module
 
-public import Morrey.Map
+public import Pedregal.Map
 
 /-!
 # Section 7: the non-emptiness of the images, as the paper states it
 
 * `Proposition7_1`, `Corollary7_2`: the statements of Proposition 7.1 and Corollary 7.2, as
-  propositions. Both are false (`Morrey.proposition7_1_false`, `Morrey.corollary7_2_false`).
+  propositions. Both are false (`Pedregal.proposition7_1_false`, `Pedregal.corollary7_2_false`).
 * `corollary7_2_of_proposition7_1`: the paper's proof of Corollary 7.2 from Proposition 7.1,
   which is correct.
 * `Step2Claim`: the summary of Step 2 of the proof of Proposition 7.1 (the displayed quotation
@@ -22,7 +22,7 @@ its mass point along `S · 𝐔_k^{(p)}`): this is `r ∈ 𝐓(t)` with `v := w`
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-- The decomposition direction of the mixture `p` of a mold, for weights `t` and the gradients of
 `w` on the triangles of the leaves. -/
@@ -33,14 +33,14 @@ noncomputable def dir {l : ℕ} (S : TriMold l) (w : (Fin 2 → ℝ) → ℝ) (t
 /-- **Proposition 7.1** (`esta`), as stated in the paper: for `u ∈ ℙ_l` and `t ∈ Θ_l`, the
 measure `ν_w` of every `w ∈ ℙ_l` admits an `(H_n)`-condition along `𝒮_l` whose decomposition
 directions are those of `u` for `t`, for some weights `r ∈ Θ_l`. It is false
-(`Morrey.proposition7_1_false`). -/
+(`Pedregal.proposition7_1_false`). -/
 def Proposition7_1 : Prop :=
   ∀ l : ℕ, 1 ≤ l → ∀ (S : TriMold l) (u : (Fin 2 → ℝ) → ℝ), u ∈ PL l → ∀ t ∈ Theta S,
     ∀ w ∈ PL l, ∃ r ∈ Theta S, ∀ p ∈ S.tree.nodes, ¬ (p.1.IsLeaf ∧ p.2.IsLeaf) →
       Parallel (dir S u t p) (dir S w r p)
 
 /-- **Corollary 7.2**, as stated in the paper: for all `u, v ∈ ℙ_l` and `t ∈ Θ_l`, the image
-`𝐓(t)` is nonempty. It is false (`Morrey.corollary7_2_false`). -/
+`𝐓(t)` is nonempty. It is false (`Pedregal.corollary7_2_false`). -/
 def Corollary7_2 : Prop :=
   ∀ l : ℕ, 1 ≤ l → ∀ (S : TriMold l) (u v : (Fin 2 → ℝ) → ℝ), u ∈ PL l → v ∈ PL l →
     ∀ t ∈ Theta S, (T S u v t).Nonempty
@@ -137,4 +137,4 @@ theorem claim7_4 {l : ℕ} {w : (Fin 2 → ℝ) → ℝ} (hw : w ∈ PL l) {s : 
   · rintro rfl
     exact ⟨⟨-α, by rw [hα]; module⟩, ⟨-β, by rw [hβ]; module⟩⟩
 
-end Morrey
+end Pedregal

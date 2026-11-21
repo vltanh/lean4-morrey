@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Map
+public import Pedregal.Map
 
 /-!
 # Checks of the definitions
@@ -14,11 +14,11 @@ reader can see that the definitions mean what they should.
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 /-- When `v = u`, every `t ∈ Θ_l` lies in `𝐓(t)`. -/
 theorem mem_T_self {l : ℕ} (S : TriMold l) (u : (Fin 2 → ℝ) → ℝ) {t : Leaf l → ℝ}
     (ht : t ∈ Theta S) : t ∈ T S u u t :=
   ⟨ht, fun _ _ _ => by unfold Parallel; ring⟩
 
-end Morrey
+end Pedregal

@@ -2,6 +2,7 @@ module
 
 public import Sverak.Lemma2
 public import Mathlib.RingTheory.MvPolynomial.Basic
+public import Mathlib.RingTheory.MvPolynomial.Homogeneous
 public import Mathlib.Topology.Algebra.MvPolynomial
 public import Mathlib.MeasureTheory.Integral.Bochner.Set
 public import Mathlib.MeasureTheory.Function.LocallyIntegrable
@@ -14,11 +15,10 @@ public import Mathlib.MeasureTheory.Function.LocallyIntegrable
 * `corollary` (`sv-corollary`): for `n ≥ 2` and `m ≥ 3`, `F̃ (X) = F (T X)`, with `T X` the upper
   left `3 × 2` block of `X ∈ M^{m×n}`, is rank-one convex but not quasiconvex.
 * `remark_polynomial` (`sv-remark`): `F` is a polynomial of degree four.
+* `equation11` (`sv-eq11`): the choice of `ε` by (10), of `k` by Lemma 2, and (11).
 -/
 
 @[expose] public section
-
-open Morrey
 
 namespace Sverak
 
@@ -106,8 +106,9 @@ private theorem thm_continuous_sverakF_jac_w (ε k : ℝ) :
     Continuous fun x : Fin 2 → ℝ => sverakF ε k (jac w x) := by
   rw [thm_sverakF_jac_w]; fun_prop
 
-/-- The heart of the proof of the Theorem: `ε` with (10), `k` from Lemma 2, and (11). -/
-private theorem thm_key : ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧
+/-- **(10) and (11)** (`sv-eq11`), the heart of the proof of the Theorem: `ε` with (10), `k` from
+Lemma 2, and `∫_{[0,1]²} F (Dw) < 0 = F (0)`. -/
+theorem equation11 : ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧
     ∫ x in unitCube 2, sverakF ε k (jac w x) < sverakF ε k 0 := by
   set I := ∫ x in unitCube 2, sverakf (jac w x) with hI
   have hI0 : I < 0 := by
@@ -158,29 +159,11 @@ end Key
 by (5) is rank-one convex but is not quasiconvex. -/
 theorem theorem_main :
     ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧ ¬ QuasiconvexOn (unitCube 2) (sverakF ε k) := by
-  obtain ⟨ε, hε, k, hk, hR, hlt⟩ := thm_key
+  obtain ⟨ε, hε, k, hk, hR, hlt⟩ := equation11
   refine ⟨ε, hε, k, hk, hR, fun hQ => ?_⟩
   have h := (lemma1 (thm_sverakF_continuous ε k)).1 hQ 0 w w_contDiff w_periodic
   simp only [zero_add] at h
   linarith
-
-/-- **Theorem** (`sv-theorem`), in the form of Cassese's Definition 2.1: by (11) the same `F` fails
-to be quasiconvex at `A = 0`. -/
-theorem theorem_main_at_zero :
-    ∃ ε > 0, ∃ k > 0, RankOneConvex (sverakF ε k) ∧ ¬ QuasiconvexAt (sverakF ε k) 0 := by
-  obtain ⟨ε, hε, k, hk, hR, hlt⟩ := thm_key
-  refine ⟨ε, hε, k, hk, hR, ?_⟩
-  have hlt' : ∫ x in unitCube 2, sverakF ε k (0 + jac w x) < sverakF ε k 0 := by
-    simp only [zero_add]; exact hlt
-  obtain ⟨φ, hφ, hc, hs, hφlt⟩ :=
-    lemma1_witness (thm_sverakF_continuous ε k) w_contDiff w_periodic hlt'
-  exact not_quasiconvexAt_of_smooth (thm_sverakF_continuous ε k) hφ hc hs hφlt
-
-/-- The map `T : M^{m×n} → M^{3×2}` of the Corollary: the upper left `3 × 2` block. -/
-def topLeft {m n : ℕ} (hm : 3 ≤ m) (hn : 2 ≤ n) (X : Matrix (Fin m) (Fin n) ℝ) :
-    Matrix (Fin 3) (Fin 2) ℝ :=
-  Matrix.of fun i j => X (Fin.castLE hm i) (Fin.castLE hn j)
-
 
 /-! ### The Corollary -/
 
@@ -328,7 +311,7 @@ theorem corollary :
       RankOneConvex (fun X : Matrix (Fin m) (Fin n) ℝ => sverakF ε k (topLeft hm hn X)) ∧
         ¬ QuasiconvexOn (unitCube n)
           (fun X : Matrix (Fin m) (Fin n) ℝ => sverakF ε k (topLeft hm hn X)) := by
-  obtain ⟨ε, hε, k, hk, hR, hlt⟩ := thm_key
+  obtain ⟨ε, hε, k, hk, hR, hlt⟩ := equation11
   refine ⟨ε, hε, k, hk, fun {m n} hm hn => ⟨thm_rankOneConvex_topLeft hm hn hR, fun hQ => ?_⟩⟩
   have hcont : Continuous fun X : Matrix (Fin m) (Fin n) ℝ => sverakF ε k (topLeft hm hn X) :=
     (thm_sverakF_continuous ε k).comp (thm_topLeft_continuous hm hn)

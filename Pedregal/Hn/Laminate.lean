@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Hn.Mold
+public import Pedregal.Hn.Mold
 
 /-!
 # `(H_n)`-conditions with rank-one directions are laminates
@@ -15,7 +15,7 @@ directions are parallel, i.e. with laminates", Section 1).
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 namespace Mold
 
@@ -146,4 +146,4 @@ theorem isLaminate_leafMeasure {t : ι → ℝ} (ht : ∀ i, 0 ≤ t i)
 
 end Mold
 
-end Morrey
+end Pedregal

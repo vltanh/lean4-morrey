@@ -1,0 +1,19 @@
+# label	environment	proved	cited statements (written by hand: no TeX source)
+# Šverák (1992) is formalized from the published PDF, so the labels are ours, prefixed sv-; each is
+# named in the docstring of its Lean result.
+# sv-L: the claims of page 187, in running text: the only rank-one directions in L are the three
+#   given, so f is convex (in fact linear) on each rank-one line contained in L.
+# sv-eq11: the displays (10) and (11) in the proof of the Theorem, with the choice of ε and of k.
+# sv-corollary: "F is the function from the theorem above" and the proof concludes "from (11)", so
+#   its route is (10)-(11), where ε and k are fixed; Lemma 1 is used without being named.
+sv-lemma1	lemma	1	
+sv-L	text	1	
+sv-eq4	equation	1	
+sv-eq6	equation	1	
+sv-eq7	equation	1	sv-eq6
+sv-eq8	equation	1	sv-eq6
+sv-lemma2	lemma	1	sv-eq7,sv-eq8,sv-L
+sv-eq11	equation	1	sv-eq4,sv-lemma2
+sv-theorem	theorem	1	sv-eq11,sv-lemma1
+sv-remark	remark	1	
+sv-corollary	corollary	1	sv-eq11,sv-lemma1

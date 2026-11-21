@@ -1,11 +1,13 @@
-name: Palomar preflight
+name: Palomar preflight (Šverák)
 
 # Runs Palomar's complete mechanical verification on this commit, as the registry does after a
 # submission, and publishes its report as an artifact. The verifier fetches the repository
 # anonymously, so the repository must be public. A run can take hours, so it only runs on demand.
 # Pin `uses` and `pipeline_commit` to the same full PalomarSubmission commit:
 #   git ls-remote https://github.com/PalomarRegistry/PalomarSubmission.git HEAD
-# `request_id` must be exactly 12 lowercase letters or digits.
+# `request_id` must be exactly 12 lowercase letters or digits. This repository holds several
+# papers, each its own submission: this workflow is Šverák's, and its options name the paper's
+# Comparator configuration and metadata.
 on:
   workflow_dispatch:
 
@@ -19,7 +21,7 @@ jobs:
       repository: ${{ github.repository }}
       commit: ${{ github.sha }}
       pipeline_commit: 14aa8d6b3c2f14a8540605e37144560b9a00e7e7
-      request_id: preflight001
+      request_id: sverakpf0001
       mode: full
       execution_profile: palomar-standard-v1
-      options: '{"comparator_config_path":"comparator.json","authorization_relationship":"I am a responsible author or maintainer"}'
+      options: '{"comparator_config_path":"Sverak/comparator.json","formalization_metadata_path":"Sverak/formalization.yaml","authorization_relationship":"I am a responsible author or maintainer"}'

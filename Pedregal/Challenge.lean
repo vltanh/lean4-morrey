@@ -4,13 +4,6 @@ public import Mathlib.Analysis.Calculus.FDeriv.Basic
 public import Mathlib.LinearAlgebra.Matrix.Rank
 public import Mathlib.Data.Finsupp.Basic
 public import Mathlib.Logic.Equiv.Fin.Basic
-public import Mathlib.Analysis.Calculus.ContDiff.Defs
-public import Mathlib.Analysis.Convex.Function
-public import Mathlib.MeasureTheory.Integral.Bochner.Basic
-public import Mathlib.MeasureTheory.Integral.IntegrableOn
-public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-public import Mathlib.Topology.EMetricSpace.Lipschitz
-public import Mathlib.RingTheory.MvPolynomial.Homogeneous
 
 /-!
 # Challenge: Pedregal, arXiv:1905.06571v5, Corollary 7.2 is false
@@ -59,7 +52,7 @@ Theorem 1.1 (1). The paper's Theorems 1.1 and 1.2 are neither proved nor refuted
 
 @[expose] public section
 
-namespace Morrey
+namespace Pedregal
 
 -- BEGIN SHARED DEFINITIONS
 
@@ -259,80 +252,13 @@ inductive IsLaminate : (Matrix (Fin 2) (Fin 2) ℝ →₀ ℝ) → Prop
       (B - C).rank ≤ 1 →
       IsLaminate (μ - Finsupp.single A c + Finsupp.single B (θ * c) + Finsupp.single C ((1 - θ) * c))
 
-/-! ### Morrey's problem in general dimensions (Šverák 1992, Cassese 2026) -/
-
-/-- The derivative matrix of `φ : ℝ^m → ℝ^d` at `x`: the `d × m` matrix with entries
-`∂_k φ_i (x)` (rows are the components). -/
-noncomputable def jac {d m : ℕ} (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) :
-    Matrix (Fin d) (Fin m) ℝ :=
-  Matrix.of fun i k => fderiv ℝ (fun y => φ y i) x (Pi.single k 1)
-
-/-- Rank-one convexity (Šverák 1992, (i)): `t ↦ f (A + t B)` is convex for every matrix `A` and
-every matrix `B` of rank one. -/
-def RankOneConvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
-  ∀ A B : Matrix (Fin d) (Fin m) ℝ, B.rank = 1 → ConvexOn ℝ Set.univ fun t : ℝ => f (A + t • B)
-
-/-- The open unit cube `(0, 1)^m`. -/
-def unitCube (m : ℕ) : Set (Fin m → ℝ) :=
-  Set.pi Set.univ fun _ => Set.Ioo 0 1
-
-/-- Quasiconvexity on a bounded open domain `Ω` (Šverák 1992, (ii), after Morrey): for every
-matrix `A` and every smooth `φ` with compact support in `Ω`, `∫_Ω f (A) ≤ ∫_Ω f (A + ∇φ)`. The
-integral is required to exist: test maps for which `f (A + ∇φ)` is not integrable do not count,
-so that a failure of quasiconvexity is witnessed by a genuine integral. -/
-def QuasiconvexOn {d m : ℕ} (Ω : Set (Fin m → ℝ)) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
-  ∀ (A : Matrix (Fin d) (Fin m) ℝ) (φ : (Fin m → ℝ) → Fin d → ℝ),
-    ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ → HasCompactSupport φ → tsupport φ ⊆ Ω →
-      MeasureTheory.IntegrableOn (fun x => f (A + jac φ x)) Ω →
-        ∫ _x in Ω, f A ≤ ∫ x in Ω, f (A + jac φ x)
-
-/-- Quasiconvexity at a matrix `A` (Cassese 2026, Definition 2.1): for every Lipschitz
-`φ : [0, 1]^m → ℝ^d` vanishing on the boundary (extended by `0` outside the cube),
-`f (A) ≤ ∫_{[0,1]^m} f (A + ∇φ)`. As in `QuasiconvexOn`, the integral is required to exist. -/
-def QuasiconvexAt {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
-    Prop :=
-  ∀ (φ : (Fin m → ℝ) → Fin d → ℝ) (K : NNReal), LipschitzWith K φ →
-    (∀ x ∉ unitCube m, φ x = 0) →
-      MeasureTheory.IntegrableOn (fun x => f (A + jac φ x)) (unitCube m) →
-        f A ≤ ∫ x in unitCube m, f (A + jac φ x)
-
-/-- `f` is quasiconvex at no matrix. -/
-def NowhereQuasiconvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
-  ∀ A, ¬ QuasiconvexAt f A
-
-/-- `p`-homogeneity: `f (t A) = |t|^p f (A)` for every real `t`. -/
-def IsPHomogeneous {d m : ℕ} (p : ℝ) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
-  ∀ (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ), f (t • A) = |t| ^ p * f A
-
-/-- `f` is a homogeneous polynomial of degree `n` in the entries of the matrix. -/
-def IsHomogeneousPolynomial {d m : ℕ} (n : ℕ) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
-  ∃ P : MvPolynomial (Fin d × Fin m) ℝ, P.IsHomogeneous n ∧
-    ∀ A, f A = MvPolynomial.eval (fun ij => A ij.1 ij.2) P
-
-/-- The squared Frobenius norm `|X|² = ∑ X_{ij}²`. -/
-def frobSq {d m : ℕ} (X : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
-  ∑ i, ∑ j, X i j ^ 2
-
-/-- The orthogonal projection (Frobenius inner product) of `3 × 2` matrices onto Šverák's
-subspace `L = {(r 0; 0 s; t t)}`. -/
-noncomputable def sverakP (X : Matrix (Fin 3) (Fin 2) ℝ) : Matrix (Fin 3) (Fin 2) ℝ :=
-  !![X 0 0, 0; 0, X 1 1; (X 2 0 + X 2 1) / 2, (X 2 0 + X 2 1) / 2]
-
-/-- Šverák's function on `L`: `f (r 0; 0 s; t t) = −r s t`, evaluated at `P X`. -/
-noncomputable def sverakf (X : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
-  -(sverakP X 0 0 * sverakP X 1 1 * sverakP X 2 0)
-
-/-- Šverák's integrand (5): `F (X) = f (P X) + ε |X|² + ε |X|⁴ + k |X − P X|²`. -/
-noncomputable def sverakF (ε k : ℝ) (X : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
-  sverakf X + ε * frobSq X + ε * frobSq X ^ 2 + k * frobSq (X - sverakP X)
-
 -- END SHARED DEFINITIONS
 
-end Morrey
+end Pedregal
 
-namespace MorreyChallenge
+namespace PedregalChallenge
 
-open Morrey
+open Pedregal
 
 /-- **Corollary 7.2 is false.** The paper's Corollary 7.2 asserts that for every `l ≥ 1`, every
 tri-dyadic mold for `τ_l`, all `u, v ∈ ℙ_l` and every `t ∈ Θ_l`, the image `𝐓(t)` is
@@ -370,4 +296,4 @@ theorem mem_T_self {l : ℕ} (S : TriMold l) (u : (Fin 2 → ℝ) → ℝ) {t : 
 theorem card_C {l : ℕ} (S : TriMold l) (s : Tri l) : (S.C s).card = 6 := by
   sorry
 
-end MorreyChallenge
+end PedregalChallenge

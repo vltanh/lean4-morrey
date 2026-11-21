@@ -1,0 +1,3 @@
+# label	±other	reason
+sv-eq7	-sv-eq6	(7) is stated for l2_D2, the right side of (6) as a definition; (6), that l2_D2 is the second derivative, enters where Lemma 2 turns the bounds into convexity (l2_convexOn_line)
+sv-eq8	-sv-eq6	as for (7): (8) bounds l2_D2, the right side of (6) as a definition, and (6) itself is used in Lemma 2

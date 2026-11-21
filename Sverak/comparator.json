@@ -1,0 +1,12 @@
+{
+  "challenge_module": "Sverak.Challenge",
+  "solution_module": "Sverak.Solution",
+  "theorem_names": [
+    "SverakChallenge.theorem_main",
+    "SverakChallenge.corollary",
+    "SverakChallenge.remark_polynomial"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}

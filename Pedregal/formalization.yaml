@@ -74,6 +74,16 @@ related_formalizations:
       Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
       non-quasiconvex function on 3x3 matrices, with its own definitions of rank-one convexity and
       quasiconvexity. Not consulted for code; not a formalization of this paper.
+  - id: "Sverak/ in this repository"
+    relationship: "other"
+    note: >-
+      The formalization of Šverák (1992), rank-one convexity does not imply quasiconvexity for
+      maps with at least three components, in the same repository (its own Challenge and
+      metadata). It shares no definition with this one; see the root README.
+  - id: "Cassese/ in this repository"
+    relationship: "other"
+    note: >-
+      The formalization of Cassese, arXiv:2608.03488 (in progress), in the same repository.
 
 status:
   scope: >-
@@ -138,31 +148,36 @@ review:
     paper's, and checked the report's findings and literature section against the sources.
 
 alignment:
-  namespace: "MorreyChallenge"
+  namespace: "PedregalChallenge"
   statements:
     - source: "Corollary 7.2"
-      lean: "MorreyChallenge.corollary7_2_false"
-      module: "Challenge"
+      lean: "PedregalChallenge.corollary7_2_false"
+      module: "Pedregal.Challenge"
       status: "proved (refutation)"
       note: "The negation of Corollary 7.2 as the paper states it."
     - source: "Corollary 7.2"
-      lean: "MorreyChallenge.exists_T_eq_empty"
-      module: "Challenge"
+      lean: "PedregalChallenge.exists_T_eq_empty"
+      module: "Pedregal.Challenge"
       status: "proved (counterexample)"
       note: "For l = 1: a tri-dyadic mold, u, v in P_1 and t in Theta_1 with T(t) empty."
     - source: "Theorem 1.1 (1), Section 8"
-      lean: "MorreyChallenge.theorem1_1_of_nonempty"
-      module: "Challenge"
+      lean: "PedregalChallenge.theorem1_1_of_nonempty"
+      module: "Pedregal.Challenge"
       status: "proved (conditional on the conclusion of Corollary 7.2, which is false)"
       note: "The paper's argument: if every T(t) is nonempty, the gradient measure is a laminate. Not Theorem 1.1."
+    - source: "Theorem 1.1 (1), l = 1"
+      lean: "PedregalChallenge.theorem1_1_part1_levelOne"
+      module: "Pedregal.Challenge"
+      status: "proved (special case, by another argument)"
+      note: "At the coarsest level l = 1 the gradient measure is a laminate, by an explicit lamination instead of the paper's fixed point."
     - source: "Definition 6.1"
-      lean: "MorreyChallenge.mem_T_self"
-      module: "Challenge"
+      lean: "PedregalChallenge.mem_T_self"
+      module: "Pedregal.Challenge"
       status: "proved (check of the definition)"
       note: "When v = u, every t in Theta_l is a fixed point of T."
     - source: "Definition 4.1, eq. (4.3)"
-      lean: "MorreyChallenge.card_C"
-      module: "Challenge"
+      lean: "PedregalChallenge.card_C"
+      module: "Pedregal.Challenge"
       status: "proved (check of the definition)"
       note: "Each triangle of tau_l has six leaves in a tri-dyadic mold."
 
