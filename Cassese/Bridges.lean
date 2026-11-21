@@ -1,26 +1,34 @@
 module
 
-public import Cassese.Defs
+public import Cassese.Toolkit
 public import Sverak.Cube
 public import Mathlib.Analysis.Calculus.ContDiff.RCLike
 
 /-!
-# Cassese's definitions and Šverák's
+# Cassese's definitions, Šverák's, and the textbook ones
 
-The two papers state the notions in slightly different forms (each paper's statements are in its
-own terms: `Sverak.Defs`, `Cassese.Defs`).
+Three formalizations state the same notions in slightly different forms: each paper's statements
+are in its own terms (`Sverak.Defs`, `Cassese.Defs`, `Cassese.Toolkit`), and the results cited
+from the literature (`External/`) are in the textbook terms of `Basic.CalculusOfVariations`. The
+lemmas here connect them, so that a cited result can be applied to a statement of Cassese.
 
-* Rank-one convexity. Šverák (i): `t ↦ f (A + t B)` is convex for rank-one `B`. Cassese,
-  Definition 2.2: `t ↦ f (t A + (1 − t) B)` is convex on `[0, 1]` whenever `rank (A − B) = 1`.
-  `rankOneConvex_iff` proves them equivalent.
+* Derivative matrices and cubes. `Sverak.jac`, `CalculusOfVariations.grad` and `Cassese.jac` are
+  the same definition, and so are the three open unit cubes (`jac_eq`, `grad_eq`,
+  `unitCube_eq`, `unitCube_eq_cov`).
+* Rank-one convexity. Šverák (i) and `CalculusOfVariations.RankOneConvex`: `t ↦ f (A + t B)` is
+  convex for rank-one `B`. Cassese, Definition 2.2: `t ↦ f (t A + (1 − t) B)` is convex on
+  `[0, 1]` whenever `rank (A − B) = 1`. `rankOneConvex_iff` and `cov_rankOneConvex_iff` prove them
+  equivalent; `cov_rankOneAffine_iff` follows.
 * Quasiconvexity. Šverák (ii): `Sverak.QuasiconvexOn Ω f`, smooth test maps with compact support
   in `Ω`. Cassese, Definition 2.1: `QuasiconvexAt f A`, Lipschitz test maps on `[0, 1]^m`
-  vanishing on the boundary. `not_quasiconvexAt_of_smooth` turns a smooth compactly supported
-  witness in the unit cube into a failure of `QuasiconvexAt`, and
-  `quasiconvexOn_of_quasiconvexAt` shows that Cassese's notion implies Šverák's on the unit cube.
-
-The derivative matrices `Sverak.jac` and `Cassese.jac`, and the two unit cubes, are the same
-definitions (`jac_eq`, `unitCube_eq`).
+  vanishing on the boundary. `CalculusOfVariations.QuasiconvexAtOn Ω f A`: Lipschitz test maps
+  vanishing outside `Ω`, with the factor `|Ω|`. `not_quasiconvexAt_of_smooth` turns a smooth
+  compactly supported witness in the unit cube into a failure of `QuasiconvexAt`,
+  `quasiconvexOn_of_quasiconvex` shows that Cassese's notion implies Šverák's on the unit cube,
+  and `cov_quasiconvexAtOn_unitCube_iff` and `cov_quasiconvex_iff` identify Cassese's notion with
+  the textbook one on the unit cube (which has volume `1`).
+* Integrands and envelopes. `IsIntegrand f` is `LowerSemicontinuous f ∧ IsLocallyBounded f`
+  (`isIntegrand_iff`), and the two quasiconvex envelopes are equal (`cov_qcEnvelope_eq`).
 -/
 
 @[expose] public section
@@ -34,6 +42,16 @@ variable {d m : ℕ}
 theorem jac_eq (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) : jac φ x = Sverak.jac φ x := rfl
 
 theorem unitCube_eq (m : ℕ) : unitCube m = Sverak.unitCube m := rfl
+
+/-- The textbook derivative matrix is Cassese's. -/
+theorem grad_eq (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) :
+    CalculusOfVariations.grad φ x = jac φ x := rfl
+
+/-- The textbook unit cube is Cassese's. -/
+theorem unitCube_eq_cov (m : ℕ) : CalculusOfVariations.unitCube m = unitCube m := rfl
+
+/-- The unit cube has volume `1`. -/
+theorem volume_unitCube (m : ℕ) : volume (unitCube m) = 1 := Sverak.volume_unitCube
 
 /-- Šverák's rank-one convexity (convexity along rank-one lines) is Cassese's (convexity on every
 segment whose endpoints differ by a rank-one matrix). -/
@@ -94,5 +112,47 @@ theorem quasiconvexOn_of_quasiconvex {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
   obtain ⟨⟨K, hK⟩, h0⟩ := testMap_of_smooth hφ hc hs
   have key : f A ≤ ∫ x in Sverak.unitCube m, f (A + Sverak.jac φ x) := h A φ K hK h0 hint
   simpa [Measure.real, Sverak.volume_unitCube] using key
+
+/-- The textbook rank-one convexity (`t ↦ f (A + t B)` convex for rank-one `B`, the form of the
+results cited in `External/`) is Cassese's Definition 2.2. -/
+theorem cov_rankOneConvex_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    CalculusOfVariations.RankOneConvex f ↔ RankOneConvex f :=
+  rankOneConvex_iff f
+
+/-- Rank-one affinity in the textbook sense: `f` and `−f` are rank-one convex in Cassese's
+sense. -/
+theorem cov_rankOneAffine_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    CalculusOfVariations.RankOneAffine f ↔ RankOneConvex f ∧ RankOneConvex (-f) :=
+  and_congr (cov_rankOneConvex_iff f) (cov_rankOneConvex_iff (-f))
+
+/-- An integrand in Cassese's sense (Section 1.5) is a lower semicontinuous, locally bounded
+function. -/
+theorem isIntegrand_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    IsIntegrand f ↔ LowerSemicontinuous f ∧ CalculusOfVariations.IsLocallyBounded f :=
+  Iff.rfl
+
+/-- The textbook quasiconvexity at `A` on the unit cube (`|Ω| f (A) ≤ ∫_Ω f (A + ∇φ)` with
+`Ω = (0, 1)^m`, `|Ω| = 1`) is Cassese's Definition 2.1. -/
+theorem cov_quasiconvexAtOn_unitCube_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
+    (A : Matrix (Fin d) (Fin m) ℝ) :
+    CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitCube m) f A ↔
+      QuasiconvexAt f A := by
+  have hv : (volume (CalculusOfVariations.unitCube m)).toReal = 1 := by
+    rw [unitCube_eq_cov, volume_unitCube, ENNReal.toReal_one]
+  simp only [CalculusOfVariations.QuasiconvexAtOn, hv, one_mul]
+  rfl
+
+/-- The textbook quasiconvexity (on the unit cube, at every matrix) is Cassese's. -/
+theorem cov_quasiconvex_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    CalculusOfVariations.Quasiconvex f ↔ Quasiconvex f :=
+  forall_congr' fun A => cov_quasiconvexAtOn_unitCube_iff f A
+
+/-- The textbook quasiconvex envelope (over lower semicontinuous, locally bounded, quasiconvex
+minorants, the form of Dacorogna's formula in `External.KinderlehrerPedregal`) is Cassese's
+(Definition 2.3, over quasiconvex integrands). -/
+theorem cov_qcEnvelope_eq (f : Matrix (Fin d) (Fin m) ℝ → ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
+    CalculusOfVariations.qcEnvelope f A = qcEnvelope f A := by
+  refine iSup_congr fun g => iSup_congr_Prop ?_ fun _ => rfl
+  rw [cov_quasiconvex_iff, isIntegrand_iff, and_assoc]
 
 end Cassese

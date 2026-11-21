@@ -8,11 +8,27 @@ public meta import Lean.DocString
 --     sed 's/\.lean$//; s#/#.#g; s/^/import all /'
 -- Every paper's Solution is imported, and no Challenge: a Challenge holds a copy of its paper's
 -- definitions under the library's names.
+import all Basic.CalculusOfVariations.Basic
 import all Basic.LinearAlgebra.Matrix.RankTwo
 import all Cassese.Bridges
+import all Cassese.Conclusion
 import all Cassese.Defs
+import all Cassese.FourByTwo
+import all Cassese.Introduction
+import all Cassese.NonLocality
+import all Cassese.Square
 import all Cassese.Sverak
+import all Cassese.Toolkit
+import all Cassese.TwoByM
+import all Cassese.TwoByThree
+import all External.Burkholder.ScalarFunction
+import all External.Dacorogna.Minors
 import all External.Kakutani.Theorem
+import all External.KinderlehrerPedregal.Formula
+import all External.KirchheimKristensen.Theorem
+import all External.Kristensen.Smoothing
+import all External.Osekowski.HilbertCharacterization
+import all External.Rindler.Lemmas
 import all Pedregal.Checks
 import all Pedregal.Defs
 import all Pedregal.Hn.Laminate

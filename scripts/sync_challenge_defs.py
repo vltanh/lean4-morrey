@@ -28,7 +28,8 @@ CHALLENGE = 'Pedregal/Challenge.lean'
 #   PAIRS = [('PaperA/Defs.lean', 'PaperA/Challenge.lean'), ('PaperB/Defs.lean', 'PaperB/Challenge.lean')]
 # When PAIRS is empty, the single pair (DEFS, CHALLENGE) is used.
 PAIRS = [('Pedregal/Defs.lean', 'Pedregal/Challenge.lean'),
-         ('Sverak/Defs.lean', 'Sverak/Challenge.lean')]
+         ('Sverak/Defs.lean', 'Sverak/Challenge.lean'),
+         ('Cassese/Defs.lean', 'Cassese/Challenge.lean')]
 # The marker lines around the shared block, in both files.
 BEGIN = '-- BEGIN SHARED DEFINITIONS\n'
 END = '-- END SHARED DEFINITIONS\n'
