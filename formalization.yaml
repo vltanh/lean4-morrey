@@ -97,11 +97,11 @@ automation:
       framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
       tool_setup: >-
         The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
-        020f253); one main session and its sub-agents (AGENTS-FIGURE), at most 7 at once; Lean
+        020f253); one main session and 13 sub-agents (6 provers, 4 independent checkers, 3 web readers), at most 7 at once; Lean
         v4.36.0-rc2, Mathlib v4.36.0-rc2; Python (NumPy, SciPy, SymPy) for the numerical search
         and exact checks of the counterexample.
       cost:
-        wall_time: "WALL-TIME-FIGURE"
+        wall_time: "1.86 h elapsed to the completed audit report; 2.4 h of sub-agent working time"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill."
