@@ -32,7 +32,7 @@ variable {V : Type*} [NormedAddCommGroup V] [NormedSpace ℝ V]
 def UpperSemicontinuousOn (F : V → Set V) (A : Set V) : Prop :=
   ∀ x ∈ A, ∀ W : Set V, IsOpen W → F x ⊆ W → ∀ᶠ y in 𝓝[A] x, F y ⊆ W
 
-/-- **Kakutani's fixed-point theorem** (the paper's Theorem 6.2; Smirnov 2002): an upper
+/-- **Kakutani's fixed-point theorem** (the paper's Theorem 6.2, `kakutani`; Smirnov 2002): an upper
 semicontinuous set-valued map of a nonempty compact convex subset of a finite-dimensional real
 normed space into itself, with nonempty convex compact values, has a fixed point. -/
 theorem exists_fixedPoint [FiniteDimensional ℝ V] {A : Set V} (hne : A.Nonempty)
@@ -40,6 +40,25 @@ theorem exists_fixedPoint [FiniteDimensional ℝ V] {A : Set V} (hne : A.Nonempt
     (husc : UpperSemicontinuousOn F A) (hFne : ∀ x ∈ A, (F x).Nonempty)
     (hFconv : ∀ x ∈ A, Convex ℝ (F x)) (hFcomp : ∀ x ∈ A, IsCompact (F x)) :
     ∃ x ∈ A, x ∈ F x := by
-  sorry
+  -- The graph of `F` over `A` is closed: take `(x, y)` in its closure; then `x ∈ A`, and if
+  -- `y ∉ F x`, disjoint open sets `W ⊇ F x` and `U ∋ y` and upper semicontinuity at `x` give a
+  -- neighbourhood of `(x, y)` that misses the graph.
+  have hgraph : IsClosed {p : V × V | p.1 ∈ A ∧ p.2 ∈ F p.1} := by
+    refine isClosed_of_closure_subset fun p hp => ?_
+    have hA : p.1 ∈ A :=
+      closure_minimal (s := {p : V × V | p.1 ∈ A ∧ p.2 ∈ F p.1}) (t := Prod.fst ⁻¹' A)
+        (fun q hq => hq.1) (hcomp.isClosed.preimage continuous_fst) hp
+    refine ⟨hA, ?_⟩
+    by_contra hy
+    obtain ⟨W, U, hW, hU, hFW, hyU, hWU⟩ :=
+      SeparatedNhds.of_isCompact_isCompact (hFcomp _ hA) isCompact_singleton
+        (Set.disjoint_singleton_right.mpr hy)
+    have hN := husc _ hA W hW hFW
+    rw [eventually_nhdsWithin_iff] at hN
+    have hmem : {z | z ∈ A → F z ⊆ W} ×ˢ U ∈ 𝓝 p :=
+      prod_mem_nhds hN (hU.mem_nhds (hyU rfl))
+    obtain ⟨q, hqNU, hqG⟩ := mem_closure_iff_nhds.mp hp _ hmem
+    exact hWU.ne_of_mem (hqNU.1 hqG.1 hqG.2) hqNU.2 rfl
+  exact _root_.Kakutani.exists_fixedPoint hconv hcomp hne hmaps hFne hFconv hgraph
 
 end External.Kakutani
