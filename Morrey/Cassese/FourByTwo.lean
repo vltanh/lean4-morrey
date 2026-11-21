@@ -453,7 +453,8 @@ theorem fourByTwo_burkholder {d m : ℕ} {H : Type}
     · rw [norm_smul, norm_smul]
       exact mul_le_mul_of_nonneg_left (hXY _ (hA.2 _ _)) (norm_nonneg _)
     · simp
-  have key := burkholderInequality_holds (Fin n → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
+  have key := burkholderInequality_holds (Fin n → Bool) inferInstance
+    (ProbabilityTheory.uniformOn Set.univ)
     (fourByTwo_filtration n) H (fun k => mart ξX k) (fun k => mart ξY k) p hp
     (fourByTwo_martingale ξX hpX) (fourByTwo_martingale ξY hpY) (fourByTwo_mart_zero ξX)
     (fourByTwo_mart_zero ξY) (fun k => ae_of_all _ (hsub k)) n
@@ -1727,8 +1728,7 @@ is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the inte
 `ρ ‖𝓑²‖_p > (p* − 1) √(1 + ρ²)` for large `ρ` (explicitly `ρ = (p* − 1) / (‖𝓑²‖_p − p* + 1) + 1`,
 or `ρ = 1` if `‖𝓑²‖_p = ∞`), and `C` is chosen strictly between. Since `f_{p,ρ,C}` increases with
 `C`, `C > C^{rc}` gives rank-one convexity at `0` and `C < C^{qc}` its failure of quasiconvexity. -/
-theorem theorem7_1
-    (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
+theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ (P : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] Matrix (Fin 2) (Fin 2) ℝ)
       (Q : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] (Fin 2 → ℝ)) (C : ℝ), 0 < C ∧

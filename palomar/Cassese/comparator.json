@@ -1,0 +1,20 @@
+{
+  "challenge_module": "Cassese.Challenge",
+  "solution_module": "Cassese.Solution",
+  "theorem_names": [
+    "CasseseChallenge.theorem1_2",
+    "CasseseChallenge.theorem1_3_a",
+    "CasseseChallenge.theorem1_3_b",
+    "CasseseChallenge.theorem1_4",
+    "CasseseChallenge.theorem1_4_four",
+    "CasseseChallenge.theorem1_5",
+    "CasseseChallenge.corollary1_6",
+    "CasseseChallenge.corollary5_3",
+    "CasseseChallenge.morrey_landscape",
+    "CasseseChallenge.homMorrey_landscape",
+    "CasseseChallenge.projL3_mem"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}

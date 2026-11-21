@@ -160,7 +160,8 @@ theorem tbt_rankOneConvex_penalty (c Λ : ℝ) (hc : 0 ≤ c) :
 
 /-- **Proof of Theorem 1.3** (`cs-qdl-rc`, lines 1980–1991): for a sufficiently large fixed `K`
 and every `0 < δ ≤ 1`, `q_{δ, K/δ}` is a globally rank-one convex homogeneous quartic polynomial
-(from Lemma 5.1 (2) applied to `q₃` on `𝓛₃`). (The text has `0 < δ ≤ 1`; Lemma 5.1 (2) is stated for `δ ∈ (0, 1)`.) -/
+(from Lemma 5.1 (2) applied to `q₃` on `𝓛₃`). (The text has `0 < δ ≤ 1`; Lemma 5.1 (2) is stated
+for `δ ∈ (0, 1)`.) -/
 theorem qDeltaLambda_rankOneConvex :
     ∃ K₀ : ℝ, 0 < K₀ ∧ ∀ K ≥ K₀, ∀ δ : ℝ, 0 < δ → δ ≤ 1 →
       IsHomogeneousPolynomial 4 (qDeltaLambda δ (K / δ)) ∧

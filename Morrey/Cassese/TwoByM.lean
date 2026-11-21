@@ -2769,8 +2769,8 @@ quasiconvex at `0`" need no formula. The step `g_n (0) = g_n^{qc} (0)` does: `g_
 quasiconvex at `0` only, and `g_n^{qc} (0) = g_n (0)` asks for a quasiconvex (at every matrix)
 minorant of `g_n` touching it at `0`. That is the "only if" direction of line 559, which the paper
 derives from Proposition 2.2 (Kinderlehrer–Pedregal); without the formula no such minorant is
-available. So the proof uses the formula, on the paper's route (`cs-qc-minorant`). A shorter argument
-would avoid it, by never forming the envelope: for each test map `φ`,
+available. So the proof uses the formula, on the paper's route (`cs-qc-minorant`). A shorter
+argument would avoid it, by never forming the envelope: for each test map `φ`,
 `∫ f_n (∇φ) ≥ ∫ g_n (∇φ) ≥ g_n (0) = 0 = f_n (0)` (`g_n` is continuous and `∇φ` bounded, so the
 second integral exists), so `f_n` would be quasiconvex at `0`; it is recorded as a simplification,
 not used here, because it departs from the paper's proof. (It is used, as
@@ -3789,8 +3789,8 @@ end Lifting
 
 /-- **Theorem 1.2, elementary route** (`cs-thm1.2-elementary`): for `p ∈ (1, ∞)` there is `m₀ (p)`
 such that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere
-quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2` without its three UMD
-hypotheses.
+quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2_umd` (the paper's proof)
+without its three UMD hypotheses; it proves `theorem1_2`.
 
 Departure from the paper (approved by the user): Theorem 1.2 by the route of Remark 4.5
 (Burkholder's scalar function instead of UMD constants), because the UMD estimates the paper's
@@ -3813,7 +3813,8 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   directly (`twoByM_quasiconvexAt_of_minorant`: `∫ F (∇φ) ≥ ∫ g (∇φ) ≥ g (0) = F (0)`) instead of
   through `g^{qc}` and Dacorogna's formula, which `proposition4_3` uses
   (reason 2: when this route was written, Dacorogna's formula was a hypothesis out of reach; it is
-  now proved, `External.KinderlehrerPedregal.dacorognaFormula_holds`). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex
+  now proved, `External.KinderlehrerPedregal.dacorognaFormula_holds`). Being `p`-homogeneous and
+  continuous, `g` is nowhere quasiconvex
   (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). No envelope is needed: `g` is already
   globally rank-one convex, so `f = g` for `m₀ = 2 n₀` (the paper takes `f = F^{rc}`).
 * For `m ≥ m₀`, `f ∘ π` with the projection `π` onto the first `m₀` columns, as in the paper; a

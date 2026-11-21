@@ -21,7 +21,8 @@ namespace Cassese
 Frobenius norm; `D²h (A) [H, H]` is the second derivative of `t ↦ h (A + t H)` at `0`).
 The proof uses Kristensen's smoothing argument (`External.Kristensen.Smoothing`, stated for
 rank-one convex homogeneous quartics on `ℝ^{2×m}`, `m ≥ 3`, that are not quasiconvex at `0`, and
-proved in `External.Kristensen.smoothing_holds`). It applies it to the quartic of Theorem 1.3 lifted to `ℝ^{2×m}` through the first three columns, read through the bridges
+proved in `External.Kristensen.smoothing_holds`). It applies it to the quartic of Theorem 1.3
+lifted to `ℝ^{2×m}` through the first three columns, read through the bridges
 `cov_rankOneConvex_iff` and `cov_quasiconvexAtOn_unitCube_iff` of `Cassese.Bridges`.
 
 Proof: the quartic `P` of Theorem 1.3 lifted to `P ∘ T`, `T A` the first three columns of `A`

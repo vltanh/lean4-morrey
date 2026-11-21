@@ -45,17 +45,19 @@ matrices are `Matrix (Fin d) (Fin m) ℝ`, `ℝ^m` is `Fin m → ℝ`, and the g
   `L3 = J⁻¹ calL ⊆ ℝ^{2×3}`, the embedding `embedJ` (`J A = (A | 0)`), `q3 = q ∘ J`, the
   orthogonal projection `projL3` onto `L3`, and the quartics `qDeltaLambda` (proof of Theorem 1.3)
   and `qHat` (Corollary 5.3).
-* The results of other works on which the main theorems are conditional, as propositions named
-  after their sources (`HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`, `PisierLpUMD`,
-  `YaroslavtsevComplexUMD`, `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`,
-  `HNVWTransference`, `DragicevicLowerBound`), and what they need: `pStar`, `p* = max (p, p')`;
-  Rademacher signs on the canonical space `Fin N → Bool`
-  (`coin`, `avg`, `IsPredictable`, `mart`, `lpNormWith`); the UMD constants of Definition 2.5
-  and Proposition 2.7 (5) (`umdConstWith`, `umdConst`, `complexUMDConst`); the Schatten norms
-  (`sval`, `schattenNorm`); the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²`
-  (`beurlingSymbol`, `beurlingPow`, `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`,
-  `torusBeurlingPowNorm`). They live here, and not in `External/`, because the Challenge states
-  the main theorems with these hypotheses and may import only Mathlib.
+* The results of other works on which the main theorems of the Challenge are conditional, as
+  propositions named after their sources (`HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`,
+  `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`, `HNVWTransference`,
+  `DragicevicLowerBound`), and what they need: `pStar`, `p* = max (p, p')`; Rademacher signs on
+  the canonical space `Fin N → Bool` (`coin`, `avg`, `IsPredictable`, `mart`, `lpNormWith`); the
+  UMD constants of Definition 2.5 (`umdConstWith`); the Schatten norms (`sval`, `schattenNorm`);
+  the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²` (`beurlingSymbol`,
+  `beurlingPow`, `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`, `torusBeurlingPowNorm`). They
+  live here, and not in `External/`, because the Challenge states the main theorems with these
+  hypotheses and may import only Mathlib.
+* After the shared block: Proposition 2.7 (3), (5) (`PisierLpUMD`, `YaroslavtsevComplexUMD`) and
+  the constants they need (`umdConst`, `complexUMDConst`), hypotheses of the paper's proof of
+  Theorem 1.2 (`theorem1_2_umd`) only.
 
 Representation choices. A Banach space in the hypotheses on UMD spaces is a complete normed space
 `E` renormed by an equivalent norm `nrm` (every Banach space is one, with `nrm = ‖·‖`; `S_q^{d×d}`
@@ -253,30 +255,6 @@ noncomputable def umdConstWith (E : Type*) [NormedAddCommGroup E] [NormedSpace �
     [CompleteSpace E] (nrm : E → ℝ) (p : ℝ) : ℝ≥0∞ :=
   sInf {β | IsUMDBoundWith E nrm p β}
 
-/-- `UMD_p (X)` of a real Banach space `X` (Definition 2.5). -/
-noncomputable def umdConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X]
-    (p : ℝ) : ℝ≥0∞ :=
-  umdConstWith X (fun x => ‖x‖) p
-
-/-- `β` is a complex `UMD_p` constant of the complex Banach space `X` ((5)): for every
-`X`-valued martingale `Y` with `Y₀ = 0` and every predictable sequence of unimodular `λ_k ∈ ℂ`,
-`‖Σ_{k<n} λ_{k+1} (Y_{k+1} − Y_k)‖_{L^p} ≤ β ‖Y_n‖_{L^p}`. -/
-def IsComplexUMDBound (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X]
-    (p : ℝ) (β : ℝ≥0∞) : Prop :=
-  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
-    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (Y : ℕ → Ω → X)
-    (c : ℕ → Ω → ℂ),
-    MeasureTheory.Martingale Y ℱ μ → (∀ ω, Y 0 ω = 0) → (∀ n ω, ‖c n ω‖ = 1) →
-      (∀ k, @MeasureTheory.StronglyMeasurable _ _ _ (ℱ k) (c (k + 1))) →
-      ∀ n, MeasureTheory.eLpNorm
-          (fun ω => ∑ k ∈ Finset.range n, c (k + 1) ω • (Y (k + 1) ω - Y k ω))
-          (ENNReal.ofReal p) μ ≤ β * MeasureTheory.eLpNorm (Y n) (ENNReal.ofReal p) μ
-
-/-- `UMD_{ℂ,p} (X)` (Proposition 2.7 (5)): the best complex `UMD_p` constant (`∞` if none). -/
-noncomputable def complexUMDConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X]
-    [CompleteSpace X] (p : ℝ) : ℝ≥0∞ :=
-  sInf {β | IsComplexUMDBound X p β}
-
 /-- The singular values of `A ∈ ℝ^{d×m}`, indexed by the columns: `s_i = √λ_i (Aᵀ A)` (when
 `m > d` the extra ones are `0`, which changes no Schatten norm). -/
 noncomputable def sval {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin m) : ℝ :=
@@ -344,22 +322,6 @@ def RandrianantoaninaSchattenUMD : Prop :=
   ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 1 < q → ∀ d : ℕ,
     umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
       ENNReal.ofReal (C * (pStar q - 1))
-
-/-- **Proposition 2.7 (3)** (`prop:umd`), citing Pisier, *Martingales in Banach spaces* (2016),
-Corollary 5.22: for every measure space and `p ∈ (1, ∞)`, the complex `L^p` is a UMD space,
-`UMD_p (L^p (μ)) < ∞`. -/
-def PisierLpUMD : Prop :=
-  ∀ (p : ℝ≥0∞) [Fact (1 ≤ p)], 1 < p → p ≠ ⊤ →
-    ∀ (Ω : Type) [MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω),
-      umdConst (MeasureTheory.Lp ℂ p μ) p.toReal < ⊤
-
-/-- **Proposition 2.7 (5)** (`prop:umd`), citing Yaroslavtsev, *Even Fourier multipliers and
-martingale transforms in infinite dimensions*, Indag. Math. 29 (2018), Lemma 3.2: for a complex
-Banach space `X` and `p ∈ (1, ∞)`, `UMD_p (X) ≤ UMD_{ℂ,p} (X) ≤ (π / 2) UMD_p (X)`. -/
-def YaroslavtsevComplexUMD : Prop :=
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    umdConst X p ≤ complexUMDConst X p ∧
-      complexUMDConst X p ≤ ENNReal.ofReal (Real.pi / 2) * umdConst X p
 
 /-- **Proposition 2.8** (`cs-prop2.8`), decoupling, citing Cox–Veraar, Electron. Commun. Probab.
 12 (2007), and HNVW I, Proposition 4.2.3: for a Banach space `(E, nrm)`, `p ∈ (1, ∞)` and a
@@ -439,5 +401,51 @@ def DragicevicLowerBound : Prop :=
   ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
 
 -- END SHARED DEFINITIONS
+
+/-! ### Hypotheses of the paper's proof of Theorem 1.2
+
+Proposition 2.7 (3), (5) and the constants they need. No statement of the Challenge uses them
+(its Theorem 1.2 is the unconditional `theorem1_2`), so they stand after the shared block; the
+paper's proof of Theorem 1.2, `theorem1_2_umd`, takes them as hypotheses. -/
+
+/-- `UMD_p (X)` of a real Banach space `X` (Definition 2.5). -/
+noncomputable def umdConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X]
+    (p : ℝ) : ℝ≥0∞ :=
+  umdConstWith X (fun x => ‖x‖) p
+
+/-- `β` is a complex `UMD_p` constant of the complex Banach space `X` ((5)): for every
+`X`-valued martingale `Y` with `Y₀ = 0` and every predictable sequence of unimodular `λ_k ∈ ℂ`,
+`‖Σ_{k<n} λ_{k+1} (Y_{k+1} − Y_k)‖_{L^p} ≤ β ‖Y_n‖_{L^p}`. -/
+def IsComplexUMDBound (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X]
+    (p : ℝ) (β : ℝ≥0∞) : Prop :=
+  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
+    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (Y : ℕ → Ω → X)
+    (c : ℕ → Ω → ℂ),
+    MeasureTheory.Martingale Y ℱ μ → (∀ ω, Y 0 ω = 0) → (∀ n ω, ‖c n ω‖ = 1) →
+      (∀ k, @MeasureTheory.StronglyMeasurable _ _ _ (ℱ k) (c (k + 1))) →
+      ∀ n, MeasureTheory.eLpNorm
+          (fun ω => ∑ k ∈ Finset.range n, c (k + 1) ω • (Y (k + 1) ω - Y k ω))
+          (ENNReal.ofReal p) μ ≤ β * MeasureTheory.eLpNorm (Y n) (ENNReal.ofReal p) μ
+
+/-- `UMD_{ℂ,p} (X)` (Proposition 2.7 (5)): the best complex `UMD_p` constant (`∞` if none). -/
+noncomputable def complexUMDConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X]
+    [CompleteSpace X] (p : ℝ) : ℝ≥0∞ :=
+  sInf {β | IsComplexUMDBound X p β}
+
+/-- **Proposition 2.7 (3)** (`prop:umd`), citing Pisier, *Martingales in Banach spaces* (2016),
+Corollary 5.22: for every measure space and `p ∈ (1, ∞)`, the complex `L^p` is a UMD space,
+`UMD_p (L^p (μ)) < ∞`. -/
+def PisierLpUMD : Prop :=
+  ∀ (p : ℝ≥0∞) [Fact (1 ≤ p)], 1 < p → p ≠ ⊤ →
+    ∀ (Ω : Type) [MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω),
+      umdConst (MeasureTheory.Lp ℂ p μ) p.toReal < ⊤
+
+/-- **Proposition 2.7 (5)** (`prop:umd`), citing Yaroslavtsev, *Even Fourier multipliers and
+martingale transforms in infinite dimensions*, Indag. Math. 29 (2018), Lemma 3.2: for a complex
+Banach space `X` and `p ∈ (1, ∞)`, `UMD_p (X) ≤ UMD_{ℂ,p} (X) ≤ (π / 2) UMD_p (X)`. -/
+def YaroslavtsevComplexUMD : Prop :=
+  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
+    umdConst X p ≤ complexUMDConst X p ∧
+      complexUMDConst X p ≤ ENNReal.ofReal (Real.pi / 2) * umdConst X p
 
 end Cassese

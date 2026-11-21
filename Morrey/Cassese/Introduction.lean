@@ -27,7 +27,9 @@ the introduction about the landscape of Morrey's problem:
   rank-one convex integrand is quasiconvex at `0`);
 * the monotonicity of both problems in the dimensions (lines 105–107 and 209–210), and the
   triviality of the case `min (d, m) ≤ 1` (lines 108–109);
-* Theorems 1.2–1.5 and Corollary 1.6;
+* Theorems 1.2–1.5 and Corollary 1.6; Theorem 1.2 twice: by the paper's proof, conditional on
+  Proposition 2.7 (1), (3), (5) (`theorem1_2_umd`), and unconditionally, by the route of
+  Remark 4.5 (`theorem1_2`, from `theorem1_2_elementary`);
 * the combined statement of lines 251–254: with Šverák's example (`Cassese.sverak_example`),
   Theorem 1.3 leaves `2 × 2` as the only nontrivial dimension in which Morrey's problem may have a
   positive answer (`morrey_landscape`); and, with Corollary 5.3, the same for the homogeneous
@@ -2274,10 +2276,12 @@ theorem intro_corG_rankOneConvex {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin
 
 end Corollary16RankOne
 
-/-- **Theorem 1.2** (`thm:morrey`): for `p ∈ (1, ∞)` there is `m₀ (p)` such that for every
-`m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex integrand
-`f : ℝ^{2×m} → ℝ`. Conditional on Proposition 2.7 (1) (UMD extrapolation, HNVW), (3) (`L^p` is UMD,
-Pisier) and (5) (complex UMD, Yaroslavtsev), through the finiteness of `UMD_{ℂ,p} (ℓ_q)`.
+/-- **Theorem 1.2** (`thm:morrey`), by the paper's proof: for `p ∈ (1, ∞)` there is `m₀ (p)` such
+that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex
+integrand `f : ℝ^{2×m} → ℝ`. Conditional on Proposition 2.7 (1) (UMD extrapolation, HNVW), (3)
+(`L^p` is UMD, Pisier) and (5) (complex UMD, Yaroslavtsev), through the finiteness of
+`UMD_{ℂ,p} (ℓ_q)`. The unconditional statement, `theorem1_2`, is proved by the route of
+Remark 4.5 (`theorem1_2_elementary`).
 
 Proof (the paper's, Section 4.4): `q = p + 3 > p + 2`; `C` above `UMD_{ℂ,p} (ℓ_q)`
 (`umdEllq_lt_top`), which bounds `C^{rc} (p, q, n)` for every `n` (10) (`equation10`); by (12)
@@ -2287,7 +2291,7 @@ without proof), `C < C^{qc} (p, q, n₀)` for some `n₀`; so `F_{n₀,p,q,C}` i
 quasiconvex at `0`, and its rank-one convex envelope (Proposition 2.3, `intro_envelope`) is the
 integrand for `m₀ = 2 n₀`; for `m ≥ m₀` it is lifted by the projection onto the first `m₀`
 columns, witnesses lifting by Lemma 2.2 (`intro_quasiconvexAt_of_comp_trunc`). -/
-theorem theorem1_2 (hP : PisierLpUMD) (hH : HNVWExtrapolation)
+theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
     (hY : YaroslavtsevComplexUMD) {p : ℝ} (hp : 1 < p) :
     ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -2316,6 +2320,20 @@ theorem theorem1_2 (hP : PisierLpUMD) (hH : HNVWExtrapolation)
     (intro_trunc le_rfl hm A)).toReal, intro_isIntegrand_comp le_rfl hm hI,
     intro_isPHomogeneous_comp le_rfl hm hH', intro_rankOneConvex_comp le_rfl hm hR,
     fun A hA => hN _ (intro_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
+
+/-- **Theorem 1.2** (`thm:morrey`): for `p ∈ (1, ∞)` there is `m₀ (p)` such that for every
+`m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex integrand
+`f : ℝ^{2×m} → ℝ`. Unconditional.
+
+Departure from the paper (approved by the user; reason 2): proved by the route of the paper's
+Remark 4.5, `theorem1_2_elementary` (Burkholder's scalar function `u_q` in place of the UMD
+constants), because the UMD estimates of the paper's proof (Proposition 2.7 (1), (3), (5)) are out
+of reach. The paper's proof is formalized too, as `theorem1_2_umd`, conditional on those three
+results. -/
+theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
+    ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
+      IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
+  theorem1_2_elementary hp
 
 /-- **Theorem 1.3**, first assertion (`thm:2x4`): there is a homogeneous quartic polynomial
 `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. The proof uses Burkholder's
@@ -2467,8 +2485,7 @@ through Proposition 7.1) is proved.
 Proof (the paper's, running text after Theorem 7.1): the integrand of Theorem 7.1 is continuous
 and `p`-homogeneous, rank-one convex but not quasiconvex at `0`; its rank-one convex envelope
 (Proposition 2.3, `intro_envelope`) is the integrand. -/
-theorem theorem1_5
-    (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
+theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -2516,8 +2533,7 @@ locally midpoint convex continuous functions (`intro_convexOn_of_local_midpoint`
 witness: the paper takes a smooth periodic `φ` with `∫ F (∇φ) < 0`; the formalization takes the
 Lipschitz periodic witness that the periodic form of quasiconvexity (Lemma 2.2) provides, for
 which the same expansion works (`∇φ` is bounded); and `|B|² = 2` instead of `|B| = 1`. -/
-theorem corollary1_6
-    (hT : HNVWTransference) (hD : DragicevicLowerBound) :
+theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
   -- `p = 3/2 ∈ (1, 2)` and `F` from Theorem 1.5; `F` is continuous by Lemma 2.1

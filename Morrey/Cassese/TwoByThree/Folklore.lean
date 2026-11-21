@@ -188,7 +188,8 @@ centred at `0` (`tbt6_jensen`); applied to the dilations of a fixed laminate thi
 `0 ≤ s ∫ P₁ + s² ∫ P₂ + s³ ∫ P₃` for all `s ≠ 0`, hence `∫ Q dμ = 0` and `∫ P₂ dμ ≥ 0` (the
 "limiting argument", `tbt6_list_cubic`): `P₂` satisfies the Legendre–Hadamard condition
 (`tbt6_LH`), and `Q` is rank-one affine (`tbt6_sym`, `tbt6_rankOneAffine`). By Dacorogna's
-Theorem 5.20 (`External.Dacorogna.rankOneAffineMinors_holds`), `Q` is an affine combination of minors, and homogeneity leaves only the
+Theorem 5.20 (`External.Dacorogna.rankOneAffineMinors_holds`), `Q` is an affine combination of
+minors, and homogeneity leaves only the
 `3 × 3` minors (`tbt6_minors_extract`). The quadratic form `P₂` is rank-one convex, hence
 quasiconvex (Dacorogna, Theorem 5.25 (i), `External.Dacorogna.quadraticForm_quasiconvex`);
 `P₁` is linear (`∫ ∇φ = 0`); and the `3 × 3` minors are quasiaffine (`tbt6_minor3_quasiaffine`).

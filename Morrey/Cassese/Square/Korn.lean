@@ -228,8 +228,8 @@ theorem square_korn_norm_toE (M : Matrix (Fin n) (Fin n) ℝ) :
     sq, abs_mul_abs_self]
 
 /-- **Burkholder's square function inequality in `S_2^{d×d}`** (Theorem 2.3 (2),
-`burkholderSquareFunction_holds`, in the Hilbert space `S_2^{d×d}`), for a Rademacher martingale of matrices
-`f_N = Σ_{k<N} ε_k ξ_k` with predictable `ξ`:
+`burkholderSquareFunction_holds`, in the Hilbert space `S_2^{d×d}`), for a Rademacher martingale
+of matrices `f_N = Σ_{k<N} ε_k ξ_k` with predictable `ξ`:
 `‖(Σ_k ‖ξ_k‖_F²)^{1/2}‖_{L^p} ≤ (p* − 1) ‖f_N‖_{L^p (S_2)}`. -/
 theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
     (ξ : Fin N → (Fin N → Bool) → Matrix (Fin n) (Fin n) ℝ) (hξ : IsPredictable ξ) :
@@ -245,7 +245,8 @@ theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
   have hζ : IsPredictable ζ := fun k ε ε' h => by simp only [hζdef, hξ k ε ε' h]
   have hm : ∀ k ε, mart ζ k ε = L (mart ξ k ε) := by
     intro k ε; simp [hζdef, mart, map_sum, map_smul]
-  obtain ⟨h1, -⟩ := burkholderSquareFunction_holds (Fin N → Bool) inferInstance (ProbabilityTheory.uniformOn Set.univ)
+  obtain ⟨h1, -⟩ := burkholderSquareFunction_holds (Fin N → Bool) inferInstance
+    (ProbabilityTheory.uniformOn Set.univ)
     (fourByTwo_filtration N) (EuclideanSpace ℝ (Fin n × Fin n)) (fun k => mart ζ k) p hp
     (fourByTwo_martingale ζ hζ) (fourByTwo_mart_zero ζ) N
   rw [fourByTwo_eLpNorm_uniform _ hp0, fourByTwo_eLpNorm_uniform _ hp0,
