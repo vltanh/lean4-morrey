@@ -24,7 +24,7 @@ at `x` is `jac φ x`, whose rows are the derivatives of the components.
   (3) evaluated at `P X`, and the integrand `F` of (5).
 * `topLeft`: the map `T : M^{m×n} → M^{3×2}` of the Corollary.
 
-Everything between the markers below is copied word for word into `Sverak/Challenge.lean` by
+Everything between the markers below is copied word for word into `palomar/Sverak/Challenge.lean` by
 `scripts/sync_challenge_defs.py`.
 -/
 

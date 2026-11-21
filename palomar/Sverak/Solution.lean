@@ -5,7 +5,7 @@ public import Morrey.Sverak.Theorem
 /-!
 # Solution
 
-The statements of `Sverak/Challenge.lean`, word for word, proved from the library.
+The statements of `palomar/Sverak/Challenge.lean`, word for word, proved from the library.
 -/
 
 @[expose] public section

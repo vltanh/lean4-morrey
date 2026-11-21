@@ -31,8 +31,8 @@ components. This file states the paper's Theorem, Corollary and Remark.
   orthogonal projection onto `L = {(r 0; 0 s; t t)}` and `f (r 0; 0 s; t t) = −r s t`.
 * `topLeft hm hn X`: the upper left `3 × 2` block of `X` (the Corollary's `T X`).
 
-The definitions are copied word for word from `Sverak/Defs.lean` (kept in sync by
-`scripts/sync_challenge_defs.py`); the theorems are proved in `Sverak/Solution.lean`.
+The definitions are copied word for word from `Morrey/Sverak/Defs.lean` (kept in sync by
+`scripts/sync_challenge_defs.py`); the theorems are proved in `palomar/Sverak/Solution.lean`.
 -/
 
 @[expose] public section
