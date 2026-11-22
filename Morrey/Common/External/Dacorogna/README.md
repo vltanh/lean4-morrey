@@ -16,10 +16,12 @@ Theorems 5.20 and 5.25 (i) (paywalled, not consulted).
 package `CalculusOfVariations` (`Minors/RankOneAffine.lean`, `Minors/Quasiaffine.lean`,
 `QuadraticForm/Quasiconvex.lean`).
 
-**Proofs** (the book was not accessible; named arguments). Theorem 5.20, (iii) ⇒ (iv): by
-induction on the number of rows, an argument of our own in the spirit of Ball–Currie–Olver; a
-rank-one affine function is affine in each row, and the minors are rank-one affine by the matrix
-determinant lemma; continuity is not needed. Minors are quasiaffine: C. B. Morrey, Pacific J.
+**Proofs** (the book was not accessible; named arguments). Theorem 5.20, (iii) ⇒ (iv): the proof
+of S. Conti, G. Dolzmann, B. Kirchheim and S. Müller, J. Eur. Math. Soc. 8 (2006), Appendix,
+Theorem 6.1 (open): vanishing of the derivatives along rank-one directions, (6.1)–(6.2), their
+Proposition 6.2, Taylor's formula, and the uniqueness of alternating forms; their distributional
+derivatives are taken as classical derivatives of mollifications. The package also proves the
+statement without continuity, by an elementary argument of its own (not used here). Minors are quasiaffine: C. B. Morrey, Pacific J.
 Math. 2 (1952), Lemma 5.1 (divergence identities for smooth maps, then mollification). Theorem
 5.25 (i): Morrey 1952, Theorem 5.2: the linear term integrates to zero, and the quadratic term is
 nonnegative under the Legendre–Hadamard condition, for smooth maps (here by Plancherel's formula

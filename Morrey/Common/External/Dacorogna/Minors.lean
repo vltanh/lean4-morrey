@@ -1,6 +1,7 @@
 module
 
 public import CalculusOfVariations.Minors.RankOneAffine
+public import CalculusOfVariations.Minors.RankOneAffineContinuous
 public import CalculusOfVariations.Minors.Quasiaffine
 public import CalculusOfVariations.QuadraticForm.Quasiconvex
 
@@ -54,18 +55,21 @@ def RankOneAffineMinors : Prop :=
     ∃ a : (k : ℕ) → (Fin k ↪o Fin d) → (Fin k ↪o Fin m) → ℝ,
       ∀ A, f A = ∑ k ∈ Finset.range (min d m + 1), ∑ r, ∑ c, a k r c * minor A r c
 
-/-- **Dacorogna, Theorem 5.20** ((iii) ⇒ (iv)): a rank-one affine `f : ℝ^{d×m} → ℝ` is an affine
-combination of the minors of its argument.
+/-- **Dacorogna, Theorem 5.20** ((iii) ⇒ (iv)): a continuous rank-one affine `f : ℝ^{d×m} → ℝ` is
+an affine combination of the minors of its argument.
 
-Proof: Dacorogna's book was not accessible; the argument is the package's
-(`CalculusOfVariations.RankOneAffine.exists_eq_sum_minor`), an induction on the rows (our own,
-in the spirit of Ball–Currie–Olver 1981, whose proof was not checked against it): `f` is affine
-along each rank-one line `A + t (u ⊗ v)`, hence affine in each row, and an induction on the number of rows writes it as a
-combination of minors, the coefficients of the first row being identified through the rank-one
-lines `(1; u') ⊗ v` and the Laplace expansion of the determinant along its first row; the minors
-are rank-one affine by the matrix determinant lemma. Continuity is not needed. -/
+Proof: Dacorogna's book was not accessible; the argument is the proof of Conti, Dolzmann,
+Kirchheim and Müller, J. Eur. Math. Soc. 8 (2006), Appendix, Theorem 6.1 (open), in the package
+(`CalculusOfVariations.RankOneAffine.exists_eq_sum_minor_of_continuous`): `f` is affine along the
+rank-one lines; its second derivatives vanish along rank-one directions, hence (6.1) and, by
+symmetry and pigeonhole, (6.2): the derivative of order `k` vanishes on matrices of rank `< k`;
+with Proposition 6.2 at `k = min d m + 1` and Taylor's formula (6.3) `f` is a polynomial whose
+homogeneous parts vanish below their rank; grouping by rows and columns and the uniqueness of
+alternating forms make each part a combination of minors. Their distributional derivatives are
+realized as classical derivatives of mollifications of `f`, whose limit stays in the closed
+finite-dimensional space of polynomials of degree at most `min d m`. -/
 theorem rankOneAffineMinors_holds : RankOneAffineMinors :=
-  fun _ _ _ _ hf => RankOneAffine.exists_eq_sum_minor hf
+  fun _ _ _ hc hf => RankOneAffine.exists_eq_sum_minor_of_continuous hc hf
 
 /-- **Dacorogna, Theorem 5.20**, the direction "minors are quasiaffine", for `3 × 3` minors (used
 in the proof of Cassese's Proposition 5.1): for a Lipschitz `φ` vanishing outside the unit cube,
