@@ -28,6 +28,11 @@ path = "../lean4-harmonic-analysis"
 name = "CalculusOfVariations"
 path = "../lean4-calculus-of-variations"
 
+# Developed alongside the project; to be pinned by `git` and `rev` once it is published.
+[[require]]
+name = "BanachProbability"
+path = "../lean4-banach-probability-int"
+
 [[lean_lib]]
 name = "Common"
 globs = ["Morrey.Common.+"]
