@@ -26,7 +26,7 @@ Proof: `BanachProbability.decoupling` in the package `BanachProbability`
 that Cox–Veraar attribute to Montgomery-Smith: with `η_k = ε_k ε̃_k`, `Σ ε̃_k ξ_k` is the transform
 of `Σ ε_k ξ_k` by the predictable signs `η_k` in the interleaved order `η_0, ε_0, η_1, ε_1, …` of
 the doubled cube, and conversely; then Maurey's theorem (`UMD^Δ_p = UMD_p`). The same statement is
-HNVW I, Proposition 4.2.3 (`External.HNVW.proposition4_2_3`).
+HNVW I, Proposition 4.2.3, which Cassese cites with it; it is not stated separately.
 -/
 
 @[expose] public section

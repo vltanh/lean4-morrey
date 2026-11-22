@@ -63,7 +63,6 @@ import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.CoxVeraar.Decoupling
 import all Morrey.Common.External.Dacorogna.Minors
 import all Morrey.Common.External.Dragicevic.LowerBound
-import all Morrey.Common.External.HNVW.Decoupling
 import all Morrey.Common.External.HNVW.DyadicUMD
 import all Morrey.Common.External.HNVW.Extrapolation
 import all Morrey.Common.External.HNVW.KahaneKhintchine
@@ -178,7 +177,6 @@ meta def externalResults : List (String × Name) :=
    ("Yaroslavtsev Prop 3.7, complex zig-zag (Cassese Prop 2.7 (6))",
     ``External.Yaroslavtsev.proposition3_7),
    ("Cox–Veraar decoupling (Cassese Prop 2.8)", ``External.CoxVeraar.decoupling),
-   ("HNVW I Prop 4.2.3, decoupling (Cassese Prop 2.8)", ``External.HNVW.proposition4_2_3),
    ("Pisier–Xu Thm 6.1 (Cassese Prop 6.3)", ``External.PisierXu.theorem6_1),
    ("Pisier–Xu Thm 6.1, lower bounds", ``External.PisierXu.theorem6_1_lower),
    ("Pisier–Xu Thm 6.1, upper bound", ``External.PisierXu.theorem6_1_upper),

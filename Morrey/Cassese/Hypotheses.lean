@@ -5,7 +5,6 @@ public import Morrey.Common.External.Burkholder.Inequality
 public import Morrey.Common.External.Dragicevic.LowerBound
 public import Morrey.Common.External.HNVW.Transference
 public import Morrey.Common.External.HNVW.Extrapolation
-public import Morrey.Common.External.HNVW.Decoupling
 public import Morrey.Common.External.HNVW.DyadicUMD
 public import Morrey.Common.External.HNVW.ZigZag
 public import Morrey.Common.External.HNVW.KahaneKhintchine
