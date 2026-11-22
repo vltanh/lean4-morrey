@@ -27,7 +27,7 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 | `2 × 2` | **open** | Pedregal (2019–2026, preprint) claims yes | the proof fails: its Corollary 7.2 is **refuted** ([Pedregal](docs/Pedregal/README.md)) |
 
 That every size but `2 × 2` fails is proved here as one theorem, from Šverák's example and Cassese's
-([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L542)).
+([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L484)).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
 convex, `p`-homogeneous `f` (`f(tA) = |t|^p f(A)`) quasiconvex at `0`? For a continuous
@@ -233,7 +233,7 @@ How Cassese relates to the other two papers:
 - Šverák's example in Cassese's terms: not quasiconvex at `0` ([`Cassese.sverak_example`](Morrey/Cassese/Sverak.lean#L32)).
 - The landscape as theorems: with Šverák's example and Cassese's, rank-one convexity does not imply
   quasiconvexity in any size `d × m` with `d, m ≥ 2` except `2 × 2`, and at `p = 4` the homogeneous
-  problem fails in all those sizes ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L542), `homMorrey_landscape`).
+  problem fails in all those sizes ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L484), `homMorrey_landscape`).
 - The cited results that the papers' proofs use, proved in [`Morrey/Common/`](Morrey/Common):
   Burkholder's inequality and square function inequality for Hilbert-space-valued martingales, the
   sharpness of Burkholder's constant, Burkholder's functions `u_q`, Dacorogna's formula for the

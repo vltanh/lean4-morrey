@@ -46,7 +46,7 @@ largest is the limit in the proof of Lemma 1, which the paper calls "easily seen
 | Theorem | [`theorem_main`](../../Morrey/Sverak/Theorem.lean#L187) ⭐ | there are `ε > 0` and `k > 0` such that `F` is rank-one convex and not quasiconvex |
 | Corollary | [`corollary`](../../Morrey/Sverak/Theorem.lean#L341) ⭐ | for `m ≥ 3` and `n ≥ 2`, `X ↦ F(TX)` on `M^{m×n}` is rank-one convex and not quasiconvex |
 | Remark | [`remark_polynomial`](../../Morrey/Sverak/Theorem.lean#L360) ⭐ | `F` is a polynomial of degree four (for `ε ≠ 0`) |
-| Lemma 1 | [`lemma1`](../../Morrey/Sverak/Lemma1.lean#L749) | a continuous `f` is quasiconvex if and only if `∫_{[0,1]^n} f(A + Du) ≥ f(A)` for every smooth `ℤ^n`-periodic `u` |
+| Lemma 1 | [`lemma1`](../../Morrey/Sverak/Lemma1.lean#L717) | a continuous `f` is quasiconvex if and only if `∫_{[0,1]^n} f(A + Du) ≥ f(A)` for every smooth `ℤ^n`-periodic `u` |
 | Lemma 2 | [`lemma2`](../../Morrey/Sverak/Lemma2.lean#L504) | for each `ε > 0` there is `k > 0` such that `F` is rank-one convex |
 | (4) | [`equation4`](../../Morrey/Sverak/Construction.lean#L177) | `∫_{[0,1]²} f(Dw) = −∫ (cos 2πx₁)² (cos 2πx₂)² < 0 = f(0)` |
 
@@ -103,7 +103,7 @@ needs three things:
 - the convergence of `f(Du_ε(x))` to `f(Du(x/ε²))` off a boundary layer of measure `O(ε)`;
 - the averaging `∫_{[0,1]^n} G(x/ε²) dx → ∫_{[0,1]^n} G` for continuous periodic `G`.
 
-The formalization proves the limit as `ε → 0⁺`, as the paper states it ([`lemma1_limit`](../../Morrey/Sverak/Lemma1.lean#L573)): by
+The formalization proves the limit as `ε → 0⁺`, as the paper states it ([`lemma1_limit`](../../Morrey/Sverak/Lemma1.lean#L541)): by
 dominated convergence, with the averaging lemma for every real scale `N = 1/ε² → ∞` (the
 `⌊N⌋^n` whole cells, and a boundary layer of relative measure `1 − (⌊N⌋/N)^n`). The "only if"
 part of Lemma 1 then follows from (2) by passing to the limit, as in the paper.
@@ -195,9 +195,9 @@ proofs cite none.
 
 | Result | Lean | Results from prior work used | Axioms |
 | --- | --- | --- | --- |
-| Lemma 1 | [`Sverak.lemma1`](../../Morrey/Sverak/Lemma1.lean#L749) | – | propext, Classical.choice, Quot.sound |
-| Lemma 1 (limit) | [`Sverak.lemma1_limit`](../../Morrey/Sverak/Lemma1.lean#L573) | – | propext, Classical.choice, Quot.sound |
-| Lemma 1 (witness) | [`Sverak.lemma1_witness`](../../Morrey/Sverak/Lemma1.lean#L668) | – | propext, Classical.choice, Quot.sound |
+| Lemma 1 | [`Sverak.lemma1`](../../Morrey/Sverak/Lemma1.lean#L717) | – | propext, Classical.choice, Quot.sound |
+| Lemma 1 (limit) | [`Sverak.lemma1_limit`](../../Morrey/Sverak/Lemma1.lean#L541) | – | propext, Classical.choice, Quot.sound |
+| Lemma 1 (witness) | [`Sverak.lemma1_witness`](../../Morrey/Sverak/Lemma1.lean#L636) | – | propext, Classical.choice, Quot.sound |
 | rank-one directions of L | [`Sverak.rank_ofRST_eq_one`](../../Morrey/Sverak/Construction.lean#L75) | – | propext, Classical.choice, Quot.sound |
 | f affine on rank-one lines of L | [`Sverak.sverakf_affine_of_rankOne`](../../Morrey/Sverak/Construction.lean#L112) | – | propext, Classical.choice, Quot.sound |
 | (4) | [`Sverak.equation4`](../../Morrey/Sverak/Construction.lean#L177) | – | propext, Classical.choice, Quot.sound |
@@ -258,7 +258,7 @@ proofs cite none.
   - G. Cassese ([arXiv:2608.03488](https://arxiv.org/abs/2608.03488)) claims the two-component case
     outside `2 × 2`, so that, with Šverák's theorem, only `2 × 2` would remain open. The paper is
     formalized in this repository ([`docs/Cassese/`](../Cassese/README.md)), and the combined
-    statement is proved there from this paper's theorem ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L542)). Its `2 × 3`
+    statement is proved there from this paper's theorem ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L484)). Its `2 × 3`
     quartic (Theorem 1.3) follows Šverák's architecture: a polynomial rank-one convex on a subspace
     with few rank-one directions, extended by a projection and a penalty (a homogeneous analogue of
     `k|X − PX|²`), and a witness with gradients in the subspace. Its transpose on `ℝ^{3×2}`

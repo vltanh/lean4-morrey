@@ -36,7 +36,7 @@ supplies the steps it leaves to the reader, chief among them the limit in the pr
 | Theorem | [`theorem_main`](../../Morrey/Sverak/Theorem.lean#L187) ⭐ | there are `ε > 0` and `k > 0` such that `F` is rank-one convex and not quasiconvex |
 | Corollary | [`corollary`](../../Morrey/Sverak/Theorem.lean#L341) ⭐ | for `m ≥ 3`, `n ≥ 2`, `X ↦ F(TX)` (`TX` the upper left `3 × 2` block) is rank-one convex and not quasiconvex |
 | Remark | [`remark_polynomial`](../../Morrey/Sverak/Theorem.lean#L360) ⭐ | `F` is a polynomial of degree four (`ε ≠ 0`) |
-| Lemma 1 | [`lemma1`](../../Morrey/Sverak/Lemma1.lean#L749) | a continuous `f` is quasiconvex if and only if `∫_{[0,1]^n} f(A + Du) ≥ f(A)` for all smooth periodic `u` |
+| Lemma 1 | [`lemma1`](../../Morrey/Sverak/Lemma1.lean#L717) | a continuous `f` is quasiconvex if and only if `∫_{[0,1]^n} f(A + Du) ≥ f(A)` for all smooth periodic `u` |
 | Lemma 2 | [`lemma2`](../../Morrey/Sverak/Lemma2.lean#L504) | for each `ε > 0` there is `k > 0` such that `F` is rank-one convex |
 | (4) | [`equation4`](../../Morrey/Sverak/Construction.lean#L177) | `∫_{[0,1]²} f(Dw) < 0 = f(0)` |
 
