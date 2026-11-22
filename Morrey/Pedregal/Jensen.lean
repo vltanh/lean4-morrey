@@ -57,7 +57,8 @@ theorem RankOneConvex.segment_le {f : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
     (hBC : (B - C).rank ≤ 1) {θ : ℝ} (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) :
     f (θ • B + (1 - θ) • C) ≤ θ * f B + (1 - θ) * f C := by
   rcases Nat.le_one_iff_eq_zero_or_eq_one.1 hBC with h0 | h1
-  · obtain rfl : B = C := sub_eq_zero.1 (jensen_eq_zero_of_rank_eq_zero h0)
+  · have h : B = C := sub_eq_zero.1 (jensen_eq_zero_of_rank_eq_zero h0)
+    subst B
     rw [show θ • C + (1 - θ) • C = C by module]
     nlinarith
   · exact hf C B θ h1 hθ0 hθ1
@@ -161,8 +162,8 @@ theorem discreteBarycenter_gradMeasure {l : ℕ} {u v : (Fin 2 → ℝ) → ℝ}
   simp only [gradMeasure, map_sum, discreteBarycenter_single]
   ext i j
   fin_cases i
-  · simpa [gradMat] using congrFun (equation5_13 hu) j
-  · simpa [gradMat] using congrFun (equation5_13 hv) j
+  · simpa [gradMat, Matrix.sum_apply, Finset.sum_apply] using congrFun (equation5_13 hu) j
+  · simpa [gradMat, Matrix.sum_apply, Finset.sum_apply] using congrFun (equation5_13 hv) j
 
 @[simp] theorem weightedEval_gradMeasure (l : ℕ) (u v : (Fin 2 → ℝ) → ℝ)
     (f : Matrix (Fin 2) (Fin 2) ℝ → ℝ) :

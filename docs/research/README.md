@@ -8,6 +8,7 @@ Start with these documents:
 
 | Document | Purpose |
 | --- | --- |
+| [Main formalization audit](MAIN_FORMALIZATION_AUDIT.md) | 22 November review of theorem scope and trust, plus global Lean interfaces added in this PR. |
 | [Completion audit](COMPLETION_AUDIT.md) | New findings, numerical blind spots and the strongest remaining global routes. |
 | [Global certificates](GLOBAL_CERTIFICATES.md) | Complete negative-witness hierarchy, local-to-global stabilization and positive-certificate compactness. |
 | [Structural audit](STRUCTURAL_AUDIT.md) | Rechecked exclusions and the explicit all-field P₂ benchmark. |
@@ -29,8 +30,9 @@ preserved separately under [research/experiments/2026-11-21](../../research/expe
 
 ## Reading the evidence
 
-- **Lean source:** a proof body is present in the existing formalization. This PR inspects that
-  source; it does not claim a fresh Lean build or extend kernel checking to Python or prose.
+- **Lean source:** a proof body is present; distinguish the audited main baseline from additions
+  in this PR. The [formalization audit](MAIN_FORMALIZATION_AUDIT.md) records the exact CI evidence.
+  Kernel checking of Lean modules does not certify the adjacent Python or prose.
 - **Exact check:** a rational, integer or symbolic identity has a replayable checker. Its scope
   is the statement checked; an analytic theorem used around it still needs its own proof.
 - **Hand proof / external input:** a written mathematical argument, with dependencies stated,
@@ -53,9 +55,10 @@ gradient laws must remain distinct. A rank-one-convex function that is not polyc
 automatically a counterexample to quasiconvexity. Neither a higher-dimensional counterexample
 nor the failure of a particular mold settles the planar question.
 
-This consolidation uses the repository at commit
-`cde348ba320b65d902c9f0f782f392e932ba507c` after the Cassese merge and the recovered research artifacts. It adds documentation,
-research code, data and checkers; it makes no changes to Lean theorem statements or proof bodies.
+This consolidation originally used `cde348ba320b65d902c9f0f782f392e932ba507c` after the Cassese
+merge and the recovered research artifacts. The 22 November formalization audit updates the
+baseline to `764256f7910b00551419fe71c35809e6b52d7ddd` and adds four global Lean interface modules.
+Existing paper theorem statements and proof bodies are preserved.
 The earlier [Pedregal report](../Pedregal/REPORT.md) remains the detailed audit of that paper.
 
 The follow-up notes, searches and this consolidation were produced in an AI-assisted research

@@ -15,6 +15,7 @@ candidate satisfying its hypotheses.
 @[expose] public section
 
 open MeasureTheory
+open scoped Matrix.Norms.Elementwise
 
 namespace Pedregal
 

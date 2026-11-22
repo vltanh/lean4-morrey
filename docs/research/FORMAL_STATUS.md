@@ -1,10 +1,12 @@
-# Formalization baseline
+# Formalization baseline and audited additions
 
-Inspected upstream source at `cde348ba320b65d902c9f0f782f392e932ba507c` (21 November
-2026), after the Cassese merge. The upstream [Lean CI run](https://github.com/vltanh/lean4-morrey/actions/runs/44981210586/job/137081885372)
-was successful. This audit inspected the relevant declarations and hypotheses; it did **not**
-run a new local Lean build, axiom audit or Comparator. Source/CI status is distinct from
-independent mathematical review. The new Python and prose results are not Lean proofs.
+Reaudited upstream source at `764256f7910b00551419fe71c35809e6b52d7ddd` on 22 November
+2026. Its Lean source is unchanged from the previous baseline
+`cde348ba320b65d902c9f0f782f392e932ba507c`. The [main CI job](https://github.com/vltanh/lean4-morrey/actions/runs/44989900031/job/137108445876)
+passed, including the standard-axiom audit of all 4,166 library declarations. No local Lean
+runtime or new Comparator run was available. The [formalization audit](MAIN_FORMALIZATION_AUDIT.md)
+records the semantic review and the new global bridge modules in this PR, whose branch-CI
+validation is recorded there. Python checks and prose arguments are not Lean proofs.
 
 ## 1. Source-backed ledger entries
 
@@ -26,7 +28,7 @@ All paths below are relative to the repository root. `SOURCE-FORMAL` means a pro
 | F12 | Cassese's homogeneous quartic counterexample on `ℝ²ˣ³`, the nearby-exponent result, the elementary all-`p>1` higher-dimensional result, and the nonplanar dimensional landscape. | SOURCE-FORMAL; unconditional declarations for these results. Does not resolve `2 × 2`. | [Introduction.lean](../../Morrey/Cassese/Introduction.lean): `Cassese.theorem1_2`, `theorem1_3_a`, `theorem1_3_b`, `morrey_landscape`; construction in [TwoByThree.lean](../../Morrey/Cassese/TwoByThree.lean). |
 | F13 | Every real-valued rank-one-convex function is locally Lipschitz. | SOURCE-FORMAL, dimension-general | [Rindler/Lemmas.lean](../../Morrey/Common/External/Rindler/Lemmas.lean): `External.Rindler.lemma5_6`; underlying separate-convexity result in [SeparatelyConvex.lean](../../Morrey/Common/Basic/Analysis/Convex/SeparatelyConvex.lean). |
 | F14 | Quasiconvexity on the unit cube is equivalent to the periodic Lipschitz formulation, and to tests on any nonempty bounded open domain, for lower-semicontinuous locally bounded integrands. | SOURCE-FORMAL infrastructure; includes periodic FE maps once their admissibility and integral are instantiated | [Rindler/Lemmas.lean](../../Morrey/Common/External/Rindler/Lemmas.lean): `External.Rindler.quasiconvexAtOn_iff_periodic`, `quasiconvexAtOn_iff`; standard definitions in [CalculusOfVariations/Basic.lean](../../Morrey/Common/Basic/CalculusOfVariations/Basic.lean). |
-| F15 | A polynomial of total degree at most three satisfying Cassese's `RankOneConvexAt ... 0` is quasiconvex. In `2 × 2`, global RC polynomials of degree at most three cannot furnish counterexamples. | SOURCE-FORMAL; `RankOneConvexAt` here means laminate Jensen at the base, not merely a pointwise LH condition | [Folklore.lean](../../Morrey/Cassese/TwoByThree/Folklore.lean): `Cassese.proposition5_1`; quadratic bridge in [Dacorogna/Minors.lean](../../Morrey/Common/External/Dacorogna/Minors.lean). |
+| F15 | A polynomial of total degree at most three satisfying Cassese's `RankOneConvexAt ... 0` is quasiconvex. In `2 × 2`, global RC polynomials of degree at most three cannot furnish counterexamples. | SOURCE-FORMAL; `RankOneConvexAt` is defined by a touching globally RC integrand minorant, not a pointwise LH condition. Its Jensen characterization is a separate theorem. | [Folklore.lean](../../Morrey/Cassese/TwoByThree/Folklore.lean): `Cassese.proposition5_1`; definition in [Toolkit.lean](../../Morrey/Cassese/Toolkit.lean); quadratic bridge in [Dacorogna/Minors.lean](../../Morrey/Common/External/Dacorogna/Minors.lean). |
 
 ### Cassese results with named external hypotheses
 
@@ -45,22 +47,35 @@ this baseline. The broader source can be reused without rebuilding its general a
 
 `Pedregal.IsLaminate` is an inductive predicate for **finite-order** laminates on finitely supported measures ([Morrey/Pedregal/Defs.lean](../../Morrey/Pedregal/Defs.lean)). It is not a definition of every measure satisfying rank-one-convex Jensen inequalities, nor every weak limit of finite laminates. Pedregal's all-level finite-order target is a sufficient route to the planar problem; a positive proof of Morrey's statement need not establish this stronger target. Conversely, failure to find a finite tree is not a counterexample to Jensen's inequality.
 
-`Pedregal.Quasiconvex` tests bounded open planar domains with null boundary and globally Lipschitz maps vanishing outside the domain. `Cassese.QuasiconvexAt` tests Lipschitz maps on the unit cube, explicitly requiring integrability; `Sverak.QuasiconvexOn` uses smooth compactly supported tests. The existing bridges now cover Cassese, Šverák and the shared calculus-of-variations definitions. A full Pedregal–Cassese interface still needs explicit statement matching. For a continuous polynomial composed with the essentially bounded gradient of a Lipschitz test map, use the available integrability tools and instantiate their hypotheses for the concrete witness.
+`Pedregal.Quasiconvex` tests bounded open planar domains with null boundary and globally Lipschitz maps vanishing outside the domain. `Cassese.QuasiconvexAt` tests Lipschitz maps on the unit cube, explicitly requiring integrability; `Sverak.QuasiconvexOn` uses smooth compactly supported tests. Main has the Cassese–Šverák–shared bridges; this PR adds the Pedregal–shared equivalence for continuous integrands in [Bridges.lean](../../Morrey/Pedregal/Bridges.lean). The shared integrability theorem already handles every continuous integrand and Lipschitz map on a finite-volume set.
 
 The determinant moment identity and the correct mean are necessary conditions on a gradient law. They are not a realization theorem. A finite measure violating polyconvex Jensen, or a finite measure with compatible minors, is not automatically an admissible gradient witness.
 
 `section6_1_isClosed_graph` keeps the pair of functions fixed. A claim about joint closedness in `(u,v,t,r)`, robust empty fibers under perturbation, or proper algebraic exceptional sets needs additional proof. Source-FORMAL F06 must not silently be used as if it included those results.
 
 
-## 3. What remains to assemble
+## 3. Global additions in this PR
 
-The Pedregal-specific positive route still needs Jensen for its finite-laminate predicate,
-translation by a base matrix, controlled dyadic interpolation and energy convergence, with
-bridges between its test-function definitions and the shared ones. Finite-valued RC regularity
-and the general periodic Lipschitz/domain equivalences are already available (F13–F14).
-A polynomial counterexample instead needs its exact global certificate, the actual FE witness
-and its integral, then these existing equivalences. Neither route needs a new proof of the
-general periodic cutoff theorem.
+These entries describe the new source, with validation tracked in
+[MAIN_FORMALIZATION_AUDIT.md](MAIN_FORMALIZATION_AUDIT.md); they were not present in the pinned
+main snapshot.
+
+| ID | Result and exact scope | Source / symbol |
+| --- | --- | --- |
+| F16 | Jensen for every Pedregal finite-order laminate, translation by every base matrix, and the all-level discrete consequence under the laminate-existence hypothesis. | [Jensen.lean](../../Morrey/Pedregal/Jensen.lean): `IsLaminate.jensen`, `discrete_jensen_of_theorem1_1_part1` |
+| F17 | Exact planar RC-definition matching and QC-definition matching for continuous integrands; the two open Pedregal endpoints are equivalent to the shared universal implication. | [Jensen.lean](../../Morrey/Pedregal/Jensen.lean): `cov_rankOneConvex_iff`; [Bridges.lean](../../Morrey/Pedregal/Bridges.lean): `cov_quasiconvex_iff`, `theorem1_1_part2_iff_cov_morrey`, `theorem1_2_iff_theorem1_1_part2` |
+| F18 | For every C² integrand in every matrix dimension, global LH nonnegativity is equivalent to global RC. | [LegendreHadamard.lean](../../Morrey/Common/Basic/CalculusOfVariations/LegendreHadamard.lean): `rankOneConvex_iff_iteratedFDeriv_nonneg` |
+| F19 | Global LH plus a genuine periodic Lipschitz strict energy gap refutes the universal planar implication. This is a conditional acceptance theorem, not a supplied counterexample. | [CounterexampleCertificate.lean](../../Morrey/Pedregal/CounterexampleCertificate.lean): `not_cov_morrey_of_lh_periodic_gap` |
+
+## 4. What remains to assemble
+
+The new F16–F19 modules supply universal algebraic and analytic interfaces. The positive route
+still needs the PL gradient-sum-to-integral identity, controlled dyadic interpolation and energy
+convergence, as well as the central all-level Jensen or laminate-existence theorem. The negative
+route needs an actual globally certified planar candidate; its polynomial certificate and
+finite-element witness/integral must be instantiated in Lean before F19 applies. Neither route
+needs a new proof of the general periodic cutoff theorem. No Python checker has become a Lean
+checker merely by the addition of F19.
 
 The main planar assertions remain propositions rather than proved theorems (F09). Their
 central mathematical content is still missing; the Cassese merge settles different dimensions.

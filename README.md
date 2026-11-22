@@ -17,7 +17,8 @@ own Challenge, report and Palomar submission; the papers share general mathemati
 
 The [research ledger](docs/research/README.md) consolidates the subsequent proof attempts,
 exact certificates, failed routes and counterexample searches. Start with the
-[completion audit](docs/research/COMPLETION_AUDIT.md) and [roadmap](docs/research/ROADMAP.md).
+[completion audit](docs/research/COMPLETION_AUDIT.md), [main formalization audit](docs/research/MAIN_FORMALIZATION_AUDIT.md),
+and [roadmap](docs/research/ROADMAP.md).
 The planar problem remains open in this work. Research scripts and hand proofs are distinguished
 from Lean theorems, and the historical payloads are preserved with checksums.
 

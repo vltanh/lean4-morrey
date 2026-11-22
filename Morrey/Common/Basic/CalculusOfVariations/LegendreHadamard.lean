@@ -2,9 +2,11 @@ module
 
 public import Morrey.Common.Basic.CalculusOfVariations.Basic
 public import Mathlib.Analysis.Calculus.ContDiff.Bounds
+public import Mathlib.Analysis.Calculus.ContDiff.Deriv
 public import Mathlib.Analysis.Calculus.IteratedDeriv.Defs
 public import Mathlib.Analysis.Calculus.IteratedDeriv.Lemmas
 public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Matrix.Normed
 public import Mathlib.Tactic
 
 /-!
@@ -19,6 +21,7 @@ here so that this Basic module does not import an External theorem module.
 @[expose] public section
 
 open Set
+open scoped Matrix.Norms.Elementwise
 
 namespace CalculusOfVariations
 
@@ -60,12 +63,8 @@ theorem rankOneConvex_iff_iteratedFDeriv_nonneg {d m : ℕ}
   · intro h A H hH
     have hg : ContDiff ℝ 2 (fun t : ℝ => f (A + t • H)) :=
       hf.comp (contDiff_const.add (contDiff_id.smul contDiff_const))
-    have hg' : ContDiff ℝ 1 (deriv fun t : ℝ => f (A + t • H)) := by
-      simpa only [deriv] using
-        (hg.fderiv_right (m := 1) (by norm_num)).clm_apply
-          (contDiff_const : ContDiff ℝ 1 (fun _ : ℝ => (1 : ℝ)))
     refine convexOn_univ_of_deriv2_nonneg (hg.differentiable (by simp))
-      (hg'.differentiable (by simp)) ?_
+      hg.differentiable_deriv_two ?_
     intro t
     rw [← iteratedDeriv_eq_iterate, iteratedDeriv_two_line_at hf A H t]
     exact h (A + t • H) H hH

@@ -17,6 +17,15 @@ Showing that a prescribed finite tree fails is not evidence that its gradient la
 
 ## 2. Immediate priorities after the audit
 
+The [22 November formalization audit](MAIN_FORMALIZATION_AUDIT.md) adds universal finite-laminate
+Jensen, exact planar definition bridges, the dimension-general C² LH equivalence and an actual
+periodic-gap acceptance theorem. Their Lean validation is recorded in that audit. These close
+interfaces; they do not supply the open universal Jensen theorem or a negative candidate.
+The remaining formal tasks are the exact polynomial-certificate evaluator and the periodic PL
+gradient-sum-to-integral identity; the positive route additionally needs controlled dyadic
+approximation. Do not treat numerical certificate checking as if it already instantiated the
+Lean acceptance theorem.
+
 Start with [COMPLETION_AUDIT.md](COMPLETION_AUDIT.md), the new exact interfaces in
 [research/audit](../../research/audit/README.md), and the current [formal baseline](FORMAL_STATUS.md).
 The source inventory and exact controls have been checked; repeat them after relevant changes,
