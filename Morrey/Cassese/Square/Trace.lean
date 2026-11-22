@@ -9,7 +9,7 @@ public import Mathlib.Algebra.Order.Star.Real
 
 For a real matrix `A`, the squared singular values `s_i (A)²` are the eigenvalues of the positive
 semidefinite `AᵀA`. Hence `‖A‖_{S_2}² = tr (AᵀA)` and `‖A‖_{S_4}⁴ = tr ((AᵀA)²)`: the norms of even
-order are polynomials in the entries. These are the forms in which Section 6.4 (`p = q = 4`)
+order are polynomials in the entries. These are the forms in which Section 6.3 (`p = q = 4`)
 computes: Proposition 6.6 integrates `‖·‖_{S_4}⁴` of a trigonometric field, and Corollary 6.4 is a
 quartic polynomial written with `‖·‖_{S_4}⁴` and `‖·‖_{S_2}²`.
 -/

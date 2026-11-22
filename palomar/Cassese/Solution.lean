@@ -6,9 +6,9 @@ public import Morrey.Cassese.Introduction
 # Solution
 
 The statements of `palomar/Cassese/Challenge.lean`, word for word, proved from the library.
-`theorem1_2` is proved by `Cassese.theorem1_2`, which is `Cassese.theorem1_2_elementary` (the
-route of the paper's Remark 4.5); `theorem1_4_four` by the paper's proof for `p = 4` in
-Section 6.4 (`Cassese.theorem1_4_four`).
+`theorem1_2` is proved by `Cassese.theorem1_2`, the paper's proof (Section 4.4); `theorem1_4` by
+`Cassese.theorem1_4`, the paper's proof (Section 6); `theorem1_4_four` by the paper's proof for
+`p = 4` in Section 6.3 (`Cassese.theorem1_4_four`).
 -/
 
 @[expose] public section
@@ -32,14 +32,11 @@ theorem theorem1_3_b :
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
   Cassese.theorem1_3_b
 
-theorem theorem1_4 (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    {p : ℝ} (hp : 1 < p) :
+theorem theorem1_4 {p : ℝ} (hp : 1 < p) :
     ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
       IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
         IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
-  Cassese.theorem1_4 hH hR hCV hPX hKK hp
+  Cassese.theorem1_4 hp
 
 theorem theorem1_4_four : ∀ d ≥ 588, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
     IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧

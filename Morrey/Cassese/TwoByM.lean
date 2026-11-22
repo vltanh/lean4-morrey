@@ -3,6 +3,7 @@ module
 public import Morrey.Cassese.Toolkit
 public import Morrey.Cassese.Bridges
 public import Morrey.Common.External.Burkholder.ScalarFunction
+public import Morrey.Cassese.Hypotheses
 public import Morrey.Cassese.Lifting
 public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 public import Mathlib.MeasureTheory.Measure.Count
@@ -681,24 +682,26 @@ theorem equation10 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) (n : ℕ) :
     _ = c := ENNReal.ofReal_toReal hctop
 
 /-- **Finiteness of UMD_{ℂ,p} (ℓ_q)** (`cs-ellq-umd`, lines 991–992, "by Proposition 2.7"):
-for `p, q ∈ (1, ∞)`, `UMD_{ℂ,p} (ℓ_q) < ∞`. Conditional on Proposition 2.7 (1), (3), (5):
-`ℓ_q` is UMD (Pisier), hence `UMD_p` (extrapolation, HNVW), hence complex `UMD_p`
-(Yaroslavtsev). -/
-theorem umdEllq_lt_top (hP : PisierLpUMD) (hH : HNVWExtrapolation)
-    (hY : YaroslavtsevComplexUMD) {p q : ℝ} (hp : 1 < p) (hq : 1 < q) :
+for `p, q ∈ (1, ∞)`, `UMD_{ℂ,p} (ℓ_q) < ∞`. From Proposition 2.7 (1), (3), (5), which are proved
+(`Morrey/Cassese/Hypotheses.lean`): `ℓ_q` is UMD (Pisier, `pisierLpUMD_holds`), hence `UMD_p`
+(extrapolation, HNVW, `hnvwExtrapolation_holds`), hence complex `UMD_p` (Yaroslavtsev,
+`yaroslavtsevComplexUMD_holds`). -/
+theorem umdEllq_lt_top {p q : ℝ} (hp : 1 < p) (hq : 1 < q) :
     umdEllq p q < ⊤ := by
   rw [umdEllq, dite_eq_left hq.le]
   have : Fact (1 ≤ ENNReal.ofReal q) := ⟨one_le_ofReal_of_one_le hq.le⟩
   have hq' : (1 : ℝ≥0∞) < ENNReal.ofReal q := by simpa using hq
   -- Pisier: `ℓ_q` is `UMD_q`
-  have h1 := hP (ENNReal.ofReal q) hq' ENNReal.ofReal_ne_top ℕ (Measure.count : Measure ℕ)
+  have h1 := pisierLpUMD_holds (ENNReal.ofReal q) hq' ENNReal.ofReal_ne_top ℕ
+    (Measure.count : Measure ℕ)
   rw [ENNReal.toReal_ofReal (by linarith)] at h1
   -- HNVW: hence `UMD_p`
-  have h2 := (hH (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ)) (fun x => ‖x‖)
-    (fun x y => norm_add_le x y) (fun c x => by rw [norm_smul, Real.norm_eq_abs])
+  have h2 := (hnvwExtrapolation_holds (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ))
+    (fun x => ‖x‖) (fun x y => norm_add_le x y) (fun c x => by rw [norm_smul, Real.norm_eq_abs])
     ⟨1, 1, one_pos, one_pos, fun x => by simp⟩).1 ⟨q, hq, h1⟩ p hp
   -- Yaroslavtsev: hence complex `UMD_p`
-  have h3 := (hY (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ)) p hp).2
+  have h3 := (yaroslavtsevComplexUMD_holds (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ))
+    p hp).2
   calc _ ≤ _ := h3
     _ < ⊤ := ENNReal.mul_lt_top ENNReal.ofReal_lt_top h2
 
@@ -3443,15 +3446,12 @@ theorem twoByM_quasiconvexAt_of_minorant {d m : ℕ} {f g : Matrix (Fin d) (Fin 
 
 /-- **Theorem 1.2, elementary route** (`cs-thm1.2-elementary`): for `p ∈ (1, ∞)` there is `m₀ (p)`
 such that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere
-quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2_umd` (the paper's proof)
-without its three UMD hypotheses; it proves `theorem1_2`.
-
-Departure from the paper (approved by the user): Theorem 1.2 by the route of Remark 4.5
-(Burkholder's scalar function instead of UMD constants), because the UMD estimates the paper's
-proof uses (Proposition 2.7 (1), (3), (5) through Proposition 4.1 and (10)) are out of reach
-(reason 2). Remark 4.5 only sketches this route ("the argument can be extended to general
-`1 < p < ∞`, `p + 2 < q < ∞`, where such a `U` can also be constructed"); the formal proof makes it
-explicit as follows.
+quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2`, proved a second time, by
+the route of the paper's Remark 4.5 ("an entirely elementary (if more inscrutable) proof of
+Theorem 1.2"): Burkholder's scalar function `u_q` in place of the UMD constants that the paper's
+own proof (Section 4.4, `theorem1_2`) uses through Proposition 4.1 and (10). Remark 4.5 only
+sketches this route ("the argument can be extended to general `1 < p < ∞`, `p + 2 < q < ∞`, where
+such a `U` can also be constructed"); the formal proof makes it explicit as follows.
 
 Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
 * By Lemma 4.2 (`lemma4_2`, `q ≥ p + 2`) and the limiting argument of Section 4.3

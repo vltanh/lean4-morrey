@@ -30,19 +30,18 @@ the introduction about the landscape of Morrey's problem:
   rank-one convex integrand is quasiconvex at `0`);
 * the monotonicity of both problems in the dimensions (lines 105–107 and 209–210), and the
   triviality of the case `min (d, m) ≤ 1` (lines 108–109);
-* Theorems 1.2–1.5 and Corollary 1.6; Theorem 1.2 twice: by the paper's proof, conditional on
-  Proposition 2.7 (1), (3), (5) (`theorem1_2_umd`), and unconditionally, by the route of
-  Remark 4.5 (`theorem1_2`, from `theorem1_2_elementary`);
+* Theorems 1.2–1.5 and Corollary 1.6; Theorem 1.2 by the paper's proof (Section 4.4,
+  `theorem1_2`), and again by the route of Remark 4.5 (`theorem1_2_elementary`, in
+  `Morrey/Cassese/TwoByM.lean`);
 * the combined statement of lines 251–254: with Šverák's example (`Cassese.sverak_example`),
   Theorem 1.3 leaves `2 × 2` as the only nontrivial dimension in which Morrey's problem may have a
   positive answer (`morrey_landscape`); and, with Corollary 5.3, the same for the homogeneous
   problem at `p = 4` (lines 254–256 and 2137–2142, `homMorrey_landscape`).
 
-Conditional statements. The results of other works that are out of reach of this project are
-hypotheses, named after their sources, of every statement whose proof uses them: Theorem 1.4 for
-general `p` and the paper's proof of Theorem 1.2 (see each docstring). The others, Theorem 1.5 and
-Corollary 1.6 included, are unconditional: the cited results that their proofs use are proved
-(`Morrey/Cassese/Hypotheses.lean`, `Morrey/Common/External`).
+Every statement is unconditional: the results of other works that the proofs cite are proved
+(`Morrey/Cassese/Hypotheses.lean`, in the paper's terms; `Morrey/Common/External`, in their
+sources' terms, from the packages `BanachProbability`, `HarmonicAnalysis` and
+`CalculusOfVariations`).
 
 Tools (helpers, prefixed `intro_`): Jensen's inequality along test maps
 (`intro_quasiconvexAt_of_convexOn`); the rank-one convex envelope step
@@ -1972,29 +1971,27 @@ theorem intro_corG_rankOneConvex {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin
 
 end Corollary16RankOne
 
-/-- **Theorem 1.2** (`thm:morrey`), by the paper's proof: for `p ∈ (1, ∞)` there is `m₀ (p)` such
-that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex
-integrand `f : ℝ^{2×m} → ℝ`. Conditional on Proposition 2.7 (1) (UMD extrapolation, HNVW), (3)
-(`L^p` is UMD, Pisier) and (5) (complex UMD, Yaroslavtsev), through the finiteness of
-`UMD_{ℂ,p} (ℓ_q)`. The unconditional statement, `theorem1_2`, is proved by the route of
-Remark 4.5 (`theorem1_2_elementary`).
+/-- **Theorem 1.2** (`thm:morrey`): for `p ∈ (1, ∞)` there is `m₀ (p)` such that for every
+`m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex integrand
+`f : ℝ^{2×m} → ℝ`.
 
-Proof (the paper's, Section 4.4): `q = p + 3 > p + 2`; `C` above `UMD_{ℂ,p} (ℓ_q)`
-(`umdEllq_lt_top`), which bounds `C^{rc} (p, q, n)` for every `n` (10) (`equation10`); by (12)
-(`lemma4_2`) and the lower bound of `C^{qc}` by the ratio of the test map `u_n`
-(`twoByM_ratio_le_qcThreshold`, the limiting argument of Section 4.3), `C < C^{qc} (p, q, n₀)` for
-some `n₀`; so `F_{n₀,p,q,C}` is rank-one convex but not
+Proof (the paper's, Section 4.4): `q = p + 3 > p + 2`; `C` above `UMD_{ℂ,p} (ℓ_q)`, finite by
+Proposition 2.7 (1), (3), (5) (`umdEllq_lt_top`), which bounds `C^{rc} (p, q, n)` for every `n`
+(10) (`equation10`); by (12) (`lemma4_2`) and the lower bound of `C^{qc}` by the ratio of the test
+map `u_n` (`twoByM_ratio_le_qcThreshold`, the limiting argument of Section 4.3),
+`C < C^{qc} (p, q, n₀)` for some `n₀`; so `F_{n₀,p,q,C}` is rank-one convex but not
 quasiconvex at `0`, and its rank-one convex envelope (Proposition 2.3, `intro_envelope`) is the
 integrand for `m₀ = 2 n₀`; for `m ≥ m₀` it is lifted by the projection onto the first `m₀`
-columns, witnesses lifting by Lemma 2.2 (`lift_quasiconvexAt_of_comp_trunc`). -/
-theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
-    (hY : YaroslavtsevComplexUMD) {p : ℝ} (hp : 1 < p) :
+columns, witnesses lifting by Lemma 2.2 (`lift_quasiconvexAt_of_comp_trunc`). The route of the
+paper's Remark 4.5 (Burkholder's scalar function `u_q` in place of the UMD constants) is
+formalized too, as `theorem1_2_elementary`. -/
+theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
     ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   -- `q > p + 2`, and `C` above `UMD_{ℂ,p} (ℓ_q) ≥ C^{rc} (p, q, n)` (10)
   set q := p + 3 with hqdef
   have hq : 1 < q := by linarith
-  have hU := umdEllq_lt_top hP hH hY hp hq
+  have hU := umdEllq_lt_top hp hq
   set C := (umdEllq p q).toReal + 1 with hCdef
   have hC0 : 0 ≤ C := by positivity
   have hUC : umdEllq p q < ENNReal.ofReal C := by
@@ -2016,20 +2013,6 @@ theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
     (lift_trunc le_rfl hm A)).toReal, lift_isIntegrand_comp le_rfl hm hI,
     lift_isPHomogeneous_comp le_rfl hm hH', lift_rankOneConvex_comp le_rfl hm hR,
     fun A hA => hN _ (lift_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
-
-/-- **Theorem 1.2** (`thm:morrey`): for `p ∈ (1, ∞)` there is `m₀ (p)` such that for every
-`m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex integrand
-`f : ℝ^{2×m} → ℝ`. Unconditional.
-
-Departure from the paper (approved by the user; reason 2): proved by the route of the paper's
-Remark 4.5, `theorem1_2_elementary` (Burkholder's scalar function `u_q` in place of the UMD
-constants), because the UMD estimates of the paper's proof (Proposition 2.7 (1), (3), (5)) are out
-of reach. The paper's proof is formalized too, as `theorem1_2_umd`, conditional on those three
-results. -/
-theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
-    ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
-      IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
-  theorem1_2_elementary hp
 
 /-- **Theorem 1.3**, first assertion (`thm:2x4`): there is a homogeneous quartic polynomial
 `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex.
@@ -2080,15 +2063,15 @@ theorem theorem1_3_b :
 
 /-- **Theorem 1.4** (`thm:main`): for `p ∈ (1, ∞)` there is `d₀ (p)` such that for every
 `d ≥ d₀ (p)` there is a conjugation- and transposition-invariant, `p`-homogeneous integrand
-`f : ℝ^{d×d} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on
-Proposition 2.7 (1), (2) (UMD extrapolation, HNVW; the UMD constant of `S_q`, Randrianantoanina),
-Proposition 2.8 (decoupling, Cox–Veraar), Proposition 6.3 (non-commutative Khintchine, Pisier–Xu),
-Proposition 6.4 (Kahane–Khintchine, HNVW), which the proofs of Propositions 6.2 and 6.5 use
-(Proposition 6.5 also uses Burkholder's square function inequality, Theorem 2.3 (2), which is
-proved, `burkholderSquareFunction_holds`). For `p = 4` the unconditional `theorem1_4_four`.
-The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants:
-the proof uses Proposition 6.5 only for `q = 4 < ∞` (`proposition6_5_finite`), which does not
-need the hypercontractive bound (`KahaneKhintchineHypercontractive`).
+`f : ℝ^{d×d} → ℝ` which is rank-one convex but nowhere quasiconvex. The proofs of
+Propositions 6.2 and 6.5 use Proposition 2.7 (1), (2) (UMD extrapolation, HNVW; the UMD constant
+of `S_q`, Randrianantoanina), Proposition 2.8 (decoupling, Cox–Veraar), Proposition 6.3
+(non-commutative Khintchine, Pisier–Xu), Proposition 6.4 (Kahane–Khintchine, HNVW) and, for
+Proposition 6.5, Burkholder's square function inequality (Theorem 2.3 (2)), all proved
+(`Morrey/Cassese/Hypotheses.lean`). The proof uses Proposition 6.5 only for `q = 4 < ∞`
+(`proposition6_5_finite`), which does not need the hypercontractive bound of the constants of
+Proposition 6.4. For `p = 4` also `theorem1_4_four`, by the paper's "simple, somewhat quantitative
+proof" (Section 6.3).
 
 Proof (the paper's, running text after Propositions 6.2 and 6.5, "the same proof as
 Theorem 1.2"): with the Schatten exponent `q = 4`, `C^{qc} (S_4^{d×d}, p) ≳ d^{3/4} / min (√(d p), d)
@@ -2097,10 +2080,7 @@ Proposition 6.5 for general `p`), so for `d ≥ d₀` some `C` lies strictly bet
 is rank-one convex but not quasiconvex at `0`, and conjugation and transposition invariant
 (`intro_kornF`; `‖U A Uᵀ‖_{S_q} = ‖A‖_{S_q}`, `intro_schattenNorm_conj`); its rank-one convex
 envelope (Proposition 2.3 (a)–(c), `intro_envelope`) keeps the invariances (Proposition 2.3 (b)). -/
-theorem theorem1_4 (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    {p : ℝ} (hp : 1 < p) :
+theorem theorem1_4 {p : ℝ} (hp : 1 < p) :
     ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
       IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
         IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -2118,8 +2098,8 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
   obtain ⟨Cr, hCr, hrc⟩ : ∃ Cr : ℝ, 0 < Cr ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p q) ≤ ENNReal.ofReal (Cr * (d : ℝ) ^ (1 / 4 - 1 / (2 * 4) : ℝ)) := by
     rcases eq_or_ne p 2 with rfl | -
-    · exact proposition6_2 hR hCV hPX hKK 4 (by norm_num)
-    · exact proposition6_5_finite hH hR hCV hPX hKK 4 (by norm_num) p hp
+    · exact proposition6_2 4 (by norm_num)
+    · exact proposition6_5_finite 4 (by norm_num) p hp
   set M : ℝ := Cr * √p / c with hMdef
   have hM : 0 ≤ M := by positivity
   refine ⟨⌈M ^ 8⌉₊ + 2, fun d hd => ?_⟩

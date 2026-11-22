@@ -28,13 +28,14 @@ where their statements can live:
   `Morrey/Cassese/Hypotheses.lean`: `burkholderInequality_holds`,
   `burkholderSquareFunction_holds`);
 * Proposition 2.6 (`cs-prop2.6`): `External.Osekowski.HilbertCharacterization` (context only);
-* Definition 2.5: `umdConstWith` (`Defs`, shared block), `umdConst`, `complexUMDConst` (`Defs`,
-  after the shared block);
-* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2)
-  (hypotheses, `Defs`, shared block), `PisierLpUMD` (3), `YaroslavtsevComplexUMD` (5)
-  (hypotheses, `Defs`, after the shared block), and `HNVWDyadicUMD` (4), `HNVWZigZag` (6) (here;
-  used only in Remark 4.1);
-* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (hypothesis, `Defs`, shared block).
+* Definition 2.5: `umdConstWith`, `umdConst`, `complexUMDConst` (`Defs`, after the shared
+  block); the dyadic constant `dyadicUMDConst` and zig-zag concavity (`IsZigZagConcave`,
+  `IsComplexZigZagConcave`), which Proposition 2.7 (4), (6) use (here);
+* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2),
+  `PisierLpUMD` (3), `HNVWDyadicUMD` (4), `YaroslavtsevComplexUMD` (5), `HNVWZigZag` (6) (proved,
+  in `Morrey/Cassese/Hypotheses.lean`: `hnvwExtrapolation_holds`, …, `hnvwZigZag_holds`);
+* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (proved, in
+  `Morrey/Cassese/Hypotheses.lean`: `coxVeraarDecoupling_holds`).
 
 Definitions here:
 
@@ -1974,13 +1975,6 @@ noncomputable def dyadicUMDConst (X : Type*) [NormedAddCommGroup X] [NormedSpace
     ℝ≥0∞ :=
   sInf {β | IsDyadicUMDBound X p β}
 
-/-- **Proposition 2.7 (4)** (`prop:umd`), citing HNVW I, Theorem 4.2.5: restricting (4) to dyadic
-martingales gives the same optimal constant, `UMD_p^{dyad} (X) = UMD_p (X)`. Used only in
-Remark 4.1; a proposition with no proof (class X), a hypothesis of no statement. -/
-def HNVWDyadicUMD : Prop :=
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    dyadicUMDConst X p = umdConst X p
-
 /-- `U : X × X → ℝ` is zig-zag concave for the obstacle `‖y‖^p − β^p ‖x‖^p` (real scalars):
 `z ↦ U (x + z, y + ε z)` is concave for every `ε ∈ [−1, 1]`, `U (0, 0) = 0`, and
 `U (x, y) ≥ ‖y‖^p − β^p ‖x‖^p`. -/
@@ -1994,19 +1988,5 @@ def IsComplexZigZagConcave {X : Type*} [NormedAddCommGroup X] [NormedSpace ℂ X
     (U : X → X → ℝ) : Prop :=
   (∀ (x y : X) (ε : ℂ), ‖ε‖ ≤ 1 → ConcaveOn ℝ Set.univ fun z : X => U (x + z) (y + ε • z)) ∧
     U 0 0 = 0 ∧ ∀ x y : X, ‖y‖ ^ p - β ^ p * ‖x‖ ^ p ≤ U x y
-
-/-- **Proposition 2.7 (6)** (`prop:umd`), citing HNVW I, Theorem 4.5.6, and Yaroslavtsev,
-Proposition 3.7: a Banach space `X` is `UMD_p` if and only if there is a zig-zag concave `U` for
-some `β > 0`; then `β ≥ UMD_p (X)`, and `β ≥ UMD_{ℂ,p} (X)` when `X` is complex and `U` is
-zig-zag concave in the complex sense. Not used in any proof; a proposition with no proof
-(class X), a hypothesis of no statement. -/
-def HNVWZigZag : Prop :=
-  (∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    (umdConst X p < ⊤ ↔ ∃ β : ℝ, 0 < β ∧ ∃ U : X → X → ℝ, IsZigZagConcave p β U) ∧
-    ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsZigZagConcave p β U →
-      umdConst X p ≤ ENNReal.ofReal β) ∧
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsComplexZigZagConcave p β U →
-      complexUMDConst X p ≤ ENNReal.ofReal β
 
 end Cassese

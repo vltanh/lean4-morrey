@@ -45,23 +45,18 @@ matrices are `Matrix (Fin d) (Fin m) ℝ`, `ℝ^m` is `Fin m → ℝ`, and the g
   `L3 = J⁻¹ calL ⊆ ℝ^{2×3}`, the embedding `embedJ` (`J A = (A | 0)`), `q3 = q ∘ J`, the
   orthogonal projection `projL3` onto `L3`, and the quartics `qDeltaLambda` (proof of Theorem 1.3)
   and `qHat` (Corollary 5.3).
-* The results of other works on which the main theorems of the Challenge are conditional, as
-  propositions named after their sources (`HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`,
-  `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`), and what they need: `pStar`,
-  `p* = max (p, p')`; Rademacher signs on the canonical space `Fin N → Bool` (`coin`, `avg`,
-  `IsPredictable`, `mart`, `lpNormWith`); the UMD constants of Definition 2.5 (`umdConstWith`);
-  the Schatten norms (`sval`, `schattenNorm`). They live here, and not in `External/`, because the
-  Challenge states the main theorems with these hypotheses and may import only Mathlib.
-* After the shared block: the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²`
-  (`beurlingSymbol`, `beurlingPow`, `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`,
-  `torusBeurlingPowNorm`), the objects of Section 7; no statement of the Challenge uses them, since
-  Theorem 1.5 and Corollary 1.6 no longer take the cited results of Section 7 (transference,
-  Dragičević's bound) as hypotheses: `Morrey/Cassese/Hypotheses.lean` states and proves them.
-  Then Proposition 2.7 (3), (5) (`PisierLpUMD`, `YaroslavtsevComplexUMD`) and the constants they
-  need (`umdConst`, `complexUMDConst`), hypotheses of the paper's proof of Theorem 1.2
-  (`theorem1_2_umd`) only.
+* After the shared block, the definitions that no statement of the Challenge uses: the
+  Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²` (`beurlingSymbol`, `beurlingPow`,
+  `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`, `torusBeurlingPowNorm`), the objects of
+  Section 7; and the tools of Sections 2, 4 and 6: `pStar`, `p* = max (p, p')`; Rademacher signs on
+  the canonical space `Fin N → Bool` (`coin`, `avg`, `IsPredictable`, `mart`, `lpNormWith`); the
+  UMD constants of Definition 2.5 (`IsUMDBoundWith`, `umdConstWith`, `umdConst`) and of
+  Proposition 2.7 (5) (`IsComplexUMDBound`, `complexUMDConst`); the Schatten norms (`sval`,
+  `schattenNorm`). The results of other works that the paper cites in Sections 2, 6 and 7 are
+  stated with them, in the paper's terms, and proved in `Morrey/Cassese/Hypotheses.lean`; no
+  statement takes them as hypotheses.
 
-Representation choices. A Banach space in the hypotheses on UMD spaces is a complete normed space
+Representation choices. A Banach space in the UMD constants is a complete normed space
 `E` renormed by an equivalent norm `nrm` (every Banach space is one, with `nrm = ‖·‖`; `S_q^{d×d}`
 is `Fin d → Fin d → ℝ` with `nrm = ‖·‖_{S_q}`); the norms of `𝓑^k` are suprema over dense
 subspaces (Schwartz functions on `ℝ²`, mean-zero trigonometric polynomials on `𝕋²`).
@@ -201,11 +196,57 @@ noncomputable def qDeltaLambda (δ Λ : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) : 
 noncomputable def qHat (δ Λ : ℝ) (A : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
   qDeltaLambda δ Λ Aᵀ
 
-/-! ### Tools for the conditional statements
+-- END SHARED DEFINITIONS
 
-Theorem 1.4, for general `p`, is conditional on results of other works that are out of reach of
-this formalization. Each such result is a proposition below, named after its source; the
-definitions it needs come first. -/
+/-! ### Section 7: the Beurling–Ahlfors transform on `ℝ²` and on `𝕋²`
+
+The objects of Proposition 7.2, Theorem 7.1 and Corollary 7.2. No statement of the Challenge
+uses them (Theorem 1.5 and Corollary 1.6 are stated without them), so they stand after the shared
+block. -/
+
+/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
+by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
+noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
+
+/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
+noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
+  FourierTransformInv.fourierInv
+    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
+
+/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
+functions `f`. -/
+noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
+      MeasureTheory.volume /
+    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
+
+/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
+noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
+  c.sum fun n a => a * UnitAddTorus.mFourier n x
+
+/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
+polynomial with coefficients `c`. -/
+noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
+    ℂ :=
+  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
+    UnitAddTorus.mFourier n x
+
+/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
+polynomials (`c₀ = 0`). -/
+noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
+    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
+      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
+
+/-! ### Tools of Sections 2, 4 and 6: signs, martingales, UMD constants, Schatten norms
+
+The definitions that the library's Sections 2, 4 and 6 use and that no statement of the Challenge
+uses, so they stand after the shared block: Burkholder's exponent `pStar`; Rademacher signs on the
+canonical space `Fin N → Bool` (`coin`, `avg`, `IsPredictable`, `lpNormWith`, `mart`); the UMD
+constants of Definition 2.5 (`IsUMDBoundWith`, `umdConstWith`, `umdConst`) and of
+Proposition 2.7 (5) (`IsComplexUMDBound`, `complexUMDConst`); the singular values `sval` and the
+Schatten norms `schattenNorm`. The results of other works stated with them (Propositions 2.7, 2.8,
+6.3, 6.4) are in `Morrey/Cassese/Hypotheses.lean`, with their proofs. -/
 
 /-- Burkholder's exponent `p* = max (p, p / (p − 1))`. -/
 noncomputable def pStar (p : ℝ) : ℝ := max p (p / (p - 1))
@@ -267,167 +308,6 @@ noncomputable def sval {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin m) 
 noncomputable def schattenNorm {d m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
   if q = ⊤ then ⨆ i, sval A i else (∑ i, sval A i ^ q.toReal) ^ (1 / q.toReal)
 
-/-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
-Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some
-`p₀ ∈ (1, ∞)` is `UMD_p` for every `p ∈ (1, ∞)`; and
-`UMD₂ (X) / 200 ≤ UMD_p (X) ≤ 100 p* UMD₂ (X)` for every `p ∈ (1, ∞)`. The Banach spaces are
-the complete normed spaces `E` renormed by an equivalent norm `nrm` (every Banach space is one,
-with `nrm = ‖·‖`). -/
-def HNVWExtrapolation : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E] (nrm : E → ℝ),
-    (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
-    (∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ x, a * ‖x‖ ≤ nrm x ∧ nrm x ≤ b * ‖x‖) →
-    ((∃ p₀ : ℝ, 1 < p₀ ∧ umdConstWith E nrm p₀ < ⊤) →
-        ∀ p : ℝ, 1 < p → umdConstWith E nrm p < ⊤) ∧
-      ∀ p : ℝ, 1 < p → umdConstWith E nrm 2 ≤ 200 * umdConstWith E nrm p ∧
-        umdConstWith E nrm p ≤ ENNReal.ofReal (100 * pStar p) * umdConstWith E nrm 2
-
-/-- **Proposition 2.7 (2)** (`prop:umd`), citing Randrianantoanina, *Non-commutative martingale
-transforms*, J. Funct. Anal. 194 (2002), Corollary 4.5, for the subspaces `S_q^{d×d}` of
-`S_q (ℓ₂ (ℕ))`: there is an absolute `C` with `UMD₂ (S_q^{d×d}) ≤ C (q* − 1)` for every
-`q ∈ (1, ∞)` and every `d`. (`S_q^{d×d}` is `Fin d → Fin d → ℝ` renormed by `‖·‖_{S_q}`.) -/
-def RandrianantoaninaSchattenUMD : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 1 < q → ∀ d : ℕ,
-    umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
-      ENNReal.ofReal (C * (pStar q - 1))
-
-/-- **Proposition 2.8** (`cs-prop2.8`), decoupling, citing Cox–Veraar, Electron. Commun. Probab.
-12 (2007), and HNVW I, Proposition 4.2.3: for a Banach space `(E, nrm)`, `p ∈ (1, ∞)` and a
-Rademacher martingale `dY_n = ε_n ξ_n` with predictable `ξ_n`, and `Ỹ_n = Σ_{k<n} ε̃_k ξ_k` with an
-independent copy `ε̃` of the signs,
-`UMD_p⁻¹ ‖Ỹ_n‖_{L^p} ≤ ‖Y_n‖_{L^p} ≤ UMD_p ‖Ỹ_n‖_{L^p}`. On the canonical space
-`{±1}^N × {±1}^N`. -/
-def CoxVeraarDecoupling : Prop :=
-  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E] (nrm : E → ℝ),
-    (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
-    (∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ x, a * ‖x‖ ≤ nrm x ∧ nrm x ≤ b * ‖x‖) →
-    ∀ p : ℝ, 1 < p → ∀ (N : ℕ) (ξ : Fin N → (Fin N → Bool) → E), IsPredictable ξ → ∀ n : ℕ,
-      ENNReal.ofReal (avg (fun ε => avg fun ε' => nrm (mart (fun k _ => ξ k ε) n ε') ^ p) ^ (1 / p))
-          ≤ umdConstWith E nrm p * ENNReal.ofReal (lpNormWith nrm p (mart ξ n)) ∧
-        ENNReal.ofReal (lpNormWith nrm p (mart ξ n)) ≤ umdConstWith E nrm p *
-          ENNReal.ofReal
-            (avg (fun ε => avg fun ε' => nrm (mart (fun k _ => ξ k ε) n ε') ^ p) ^ (1 / p))
-
-/-- **Proposition 6.3** (`cs-prop6.3`), non-commutative Khintchine, citing Pisier–Xu,
-*Non-commutative `L^p`-spaces* (2003), Theorem 6.1: for `q ∈ [2, ∞)`, normal `d × d` matrices
-`x_i` and independent Rademacher `ε_i`,
-`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≲ √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`,
-with an absolute constant. Stated with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of the paper's
-`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`: the two are equal, since `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for
-`B = Σ x_i x_iᵀ ⪰ 0` and `q ≥ 2` (`schattenNorm_sqrt_sq` in `Morrey/Cassese/Square.lean`: fact (1),
-`‖A²‖_{S_{q/2}} = ‖A‖_{S_q}²`, applied to the positive semidefinite square root `A = B^{1/2}`). -/
-def PisierXuKhintchine : Prop :=
-  ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
-    (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
-      √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) ≤
-          lpNormWith (schattenNorm (ENNReal.ofReal q)) q
-            (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ∧
-        lpNormWith (schattenNorm (ENNReal.ofReal q)) q
-            (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
-          C * √q * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
-
-/-- **Proposition 6.4** (`cs-prop6.4`), Kahane–Khintchine, citing HNVW, *Analysis in Banach
-spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)` there are constants
-`k_{p,q}` such that for every Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher
-`ε_i`, `k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
-statement, with no bound on the constants: the hypercontractive bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
-that Remark 6.3 and the case `q = ∞` of Proposition 6.5 need is the separate hypothesis
-`KahaneKhintchineHypercontractive`, taken only by the statements whose proofs use it.
-
-Generality. It is stated for any seminorm `nrm` on a real vector space `E` (the hypotheses on
-`nrm` are the triangle inequality and absolute homogeneity, which give `nrm ≥ 0`), not only for
-Banach spaces. This follows from the Banach case: the `x_i` span a finite-dimensional subspace,
-whose quotient by the kernel of `nrm` is a finite-dimensional, hence complete, normed space in
-which the finite sums `Σ ε_i x_i` have the same norms. -/
-def KahaneKhintchine : Prop :=
-  ∃ κ : ℝ → ℝ → ℝ, (∀ p q, 0 < κ p q) ∧
-    ∀ p q : ℝ, 1 < p → 1 < q →
-    ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
-      (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
-      ∀ (n : ℕ) (x : Fin n → E),
-        (κ q p)⁻¹ * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
-            lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ∧
-          lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
-            κ p q * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
-
--- END SHARED DEFINITIONS
-
-/-! ### Section 7: the Beurling–Ahlfors transform on `ℝ²` and on `𝕋²`
-
-The objects of Proposition 7.2, Theorem 7.1 and Corollary 7.2. No statement of the Challenge
-uses them (Theorem 1.5 and Corollary 1.6 are stated without them), so they stand after the shared
-block. -/
-
-/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
-by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
-noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
-
-/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
-noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
-  FourierTransformInv.fourierInv
-    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
-
-/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
-functions `f`. -/
-noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
-      MeasureTheory.volume /
-    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
-
-/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
-noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
-  c.sum fun n a => a * UnitAddTorus.mFourier n x
-
-/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
-polynomial with coefficients `c`. -/
-noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
-    ℂ :=
-  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
-    UnitAddTorus.mFourier n x
-
-/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
-polynomials (`c₀ = 0`). -/
-noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
-    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
-      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
-
-/-! ### The hypercontractive Kahane–Khintchine inequality
-
-Used by Remark 6.3 and by the case `q = ∞` of Proposition 6.5 only. No statement of the Challenge
-uses it, so it stands after the shared block. -/
-
-/-- The hypercontractive Kahane–Khintchine inequality: for `1 < p ≤ q < ∞`, every seminorm `nrm`
-on a real vector space `E` and `x₁, …, x_n ∈ E`,
-`‖Σ ε_i x_i‖_{L^q} ≤ √((q − 1) / (p − 1)) ‖Σ ε_i x_i‖_{L^p}`, that is,
-`k_{q,p} ≤ √((q − 1) / (p − 1))` in Proposition 6.4 (`KahaneKhintchine`).
-
-How the paper uses it. The paper's Proposition 6.4 names only constants `k_{p,q}`, but its route
-to Remark 6.3 (TeX lines 2425–2437) and to the case `q = ∞` of Proposition 6.5 (TeX lines
-2477–2479: "all the implied multiplicative constants in the above inequalities are at most
-polynomial in `q`") uses (31) (TeX lines 2322–2328) with constants that grow at most polynomially
-in `q`, which needs `k_{q,p}` to. The paper names no source for this growth. The form assumed is
-the standard hypercontractive bound for Banach-valued Rademacher sums (from the hypercontractivity
-of the Rademacher semigroup; Hytönen–van Neerven–Veraar–Weis, *Analysis in Banach spaces II*,
-2017, Chapter 6); neither that book nor any other source for it was consulted for this
-formalization. A hypothesis (assumed, not proved) of `remark6_3`, `proposition6_5_infty` and
-`proposition6_5` only (and of their helpers `square_eq31_two`, `square_eq31_q`). As for
-`KahaneKhintchine`, it is stated for seminorms; the Banach case gives it through the quotient by the
-kernel of `nrm` of the span of the `x_i`. -/
-def KahaneKhintchineHypercontractive : Prop :=
-  ∀ p q : ℝ, 1 < p → p ≤ q →
-    ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
-      (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
-      ∀ (n : ℕ) (x : Fin n → E),
-        lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
-          √((q - 1) / (p - 1)) * lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
-
-/-! ### Hypotheses of the paper's proof of Theorem 1.2
-
-Proposition 2.7 (3), (5) and the constants they need. No statement of the Challenge uses them
-(its Theorem 1.2 is the unconditional `theorem1_2`), so they stand after the shared block; the
-paper's proof of Theorem 1.2, `theorem1_2_umd`, takes them as hypotheses. -/
-
 /-- `UMD_p (X)` of a real Banach space `X` (Definition 2.5). -/
 noncomputable def umdConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X]
     (p : ℝ) : ℝ≥0∞ :=
@@ -451,21 +331,5 @@ def IsComplexUMDBound (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X] [Co
 noncomputable def complexUMDConst (X : Type*) [NormedAddCommGroup X] [NormedSpace ℂ X]
     [CompleteSpace X] (p : ℝ) : ℝ≥0∞ :=
   sInf {β | IsComplexUMDBound X p β}
-
-/-- **Proposition 2.7 (3)** (`prop:umd`), citing Pisier, *Martingales in Banach spaces* (2016),
-Corollary 5.22: for every measure space and `p ∈ (1, ∞)`, the complex `L^p` is a UMD space,
-`UMD_p (L^p (μ)) < ∞`. -/
-def PisierLpUMD : Prop :=
-  ∀ (p : ℝ≥0∞) [Fact (1 ≤ p)], 1 < p → p ≠ ⊤ →
-    ∀ (Ω : Type) [MeasurableSpace Ω] (μ : MeasureTheory.Measure Ω),
-      umdConst (MeasureTheory.Lp ℂ p μ) p.toReal < ⊤
-
-/-- **Proposition 2.7 (5)** (`prop:umd`), citing Yaroslavtsev, *Even Fourier multipliers and
-martingale transforms in infinite dimensions*, Indag. Math. 29 (2018), Lemma 3.2: for a complex
-Banach space `X` and `p ∈ (1, ∞)`, `UMD_p (X) ≤ UMD_{ℂ,p} (X) ≤ (π / 2) UMD_p (X)`. -/
-def YaroslavtsevComplexUMD : Prop :=
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    umdConst X p ≤ complexUMDConst X p ∧
-      complexUMDConst X p ≤ ENNReal.ofReal (Real.pi / 2) * umdConst X p
 
 end Cassese
