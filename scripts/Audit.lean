@@ -60,6 +60,7 @@ import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex
 import all Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
 import all Morrey.Common.Basic.CalculusOfVariations.Basic
+import all Morrey.Common.Basic.CalculusOfVariations.LegendreHadamard
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
 import all Morrey.Common.External.Burkholder.Inequality
 import all Morrey.Common.External.Burkholder.ScalarFunction
@@ -75,6 +76,7 @@ import all Morrey.Common.External.Osekowski.HilbertCharacterization
 import all Morrey.Common.External.Rindler.Lemmas
 import all Morrey.Pedregal.Bridges
 import all Morrey.Pedregal.Checks
+import all Morrey.Pedregal.CounterexampleCertificate
 import all Morrey.Pedregal.Defs
 import all Morrey.Pedregal.Hn.Laminate
 import all Morrey.Pedregal.Hn.Mold
