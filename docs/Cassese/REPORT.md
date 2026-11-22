@@ -8,7 +8,8 @@ labels; labels `cs-…` are ours, for results the paper does not label
 ([`paper_routes.tsv`](paper_routes.tsv)). The main theorems are numbered 1.2–1.5 because
 Theorem 1.1 is Kirchheim and Kristensen's cited theorem. The repository also formalizes Šverák
 (1992) and audits Pedregal's claimed `2 × 2` proof ([overview](../../README.md)). This
-formalization was written independently of the author's own Lean code, which was not consulted.
+formalization was written independently of the author's own Lean code, which its proofs did not
+consult (Section 10, "Formalizations").
 
 Status of the formalization:
 
@@ -24,14 +25,14 @@ Status of the formalization:
   formalization: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
   [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
   [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), which
-  the lakefile pins by commit (`bf215c5`, `250cd49` and `fc86bbb`).
+  [`lakefile.toml`](../../lakefile.toml) pins by commit.
 - **Nothing is assumed.** No statement takes a result of another work as a hypothesis. Two cited
   theorems that the paper quotes only as context, Kirchheim–Kristensen's Theorem 1.1 and
   Osękowski's characterization of Hilbert spaces (Proposition 2.6), are stated and not proved; no
   proof uses them. Conjecture 1 is stated.
 - `lake build` passes, with no `sorry` outside the Challenges and no `axiom`.
   [`scripts/Audit.lean`](../../scripts/Audit.lean) checks that every declaration of the
-  repository's library (3,521 at commit `452cccc`, for the three papers and the shared code) uses
+  repository's library (3,382 at commit `7b2462d`, for the three papers and the shared code) uses
   only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and lists the results of other works that
   each result of the paper uses (Section 8). Each package has an audit of the same kind.
 - [`palomar/Cassese/Challenge.lean`](../../palomar/Cassese/Challenge.lean) states the main results
@@ -40,8 +41,10 @@ Status of the formalization:
   Comparator compares the two ([`comparator.json`](../../palomar/Cassese/comparator.json)).
 - No statement of the paper had to change (Section 4).
 - Every proof follows the paper's argument, except three that repair a gap or a false step
-  (Section 7). The cited results follow their sources' proofs, or, where a source was not
-  obtained, a named argument from an open source (Section 7).
+  (Section 7). The cited results follow their sources' proofs, whose gaps and slips are repaired
+  along the sources' lines (Section 7). One proof departs from its source: the upper bound of the
+  non-commutative Khintchine inequality (Proposition 6.3), at present by the method of exchangeable
+  pairs.
 
 ## Contents
 
@@ -75,16 +78,16 @@ needs, and misprints:
 | Kind | Findings |
 | --- | --- |
 | Errors | none: no statement is false. One intermediate claim, at lines 661–663, is false under the reading of prelaminates that Proposition 2.4 needs (E10) |
-| Gaps that change what must be proved | E4: Theorem 1.3 (b) needs the constants of Lemma 5.1 (1) uniform in `p`; E10: Proposition 2.5 "⇐" rests on the claim of lines 661–663; E27: Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants polynomial in `q` |
+| Gaps that change what must be proved | E4: Theorem 1.3 (b) needs the constants of Lemma 5.1 (1) uniform in `p`; E10: Proposition 2.5 "⇐" rests on the claim of lines 661–663; E27: Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants polynomial in `q`, which Proposition 6.4 leaves out of the theorem it cites |
 | Results stated without proof | E5: `κ = 2` for `𝓛₃`; E6: Proposition 6.6; E8: Proposition 2.3; E19: Corollary 5.2 |
 | Proofs only sketched | E17: Corollary 5.3; E26: Remark 4.5; E31: Corollary 6.4 |
 | Steps left to the reader | E2, E3, E7, E9, E16, E21–E25, E28, E29, E32 (Corollary 7.2's "standard calculations"), E33–E35 (Section 3) |
 | Claims without proof, not formalized | E18: Corollary 1.6 for `p > 2` |
 | Not errors | E14: no value of `n₀` in Proposition 4.3; E20: `q₃(∇u) ∈ L¹` |
-| Misprints and wording | E11, E12, E13, E15 |
+| Misprints and wording | E11, E12, E13, E15, E40, E41 |
 | Missing hypotheses | none (Section 4) |
 | Redundant hypotheses | eight, among them the evenness in Lemma 5.1 (2), which Remark 5.2 needs to drop, and `ρ > 0` in Proposition 7.2 (Section 5) |
-| Use of cited results | correct, with reservations (Section 2): applied loosely but correctly, Randrianantoanina's Corollary 4.5, Kristensen's growth bound and Dragičević's theorem for `p < 2`; no source named for the step, E27 and E30; silent steps, Lemma 2.1 for the minorant `G` (E21), the nonempty domain of Lemma 2.2, Proposition 2.2 from the ball to the cube (E22), `UMD_p` for `UMD_{ℂ,p}` in Remark 4.2 (E11); transference, whose exact form in the source could not be checked |
+| Use of cited results | correct, with reservations (Section 2). Applied loosely but correctly: Randrianantoanina's Corollary 4.5, Kristensen's growth bound, Dragičević's theorem for `p < 2` (E39), the theorems on UMD constants, which are for deterministic signs (E38). Quoted inexactly: Dacorogna's Theorem 6.10 (E36), Osękowski's Theorem 3.24 (E37), and the theorem behind Proposition 6.4, whose bound on the constants the paper leaves out and uses (E27). Source only hinted at: the sharpness of `p* − 1` (E30). Silent steps: Lemma 2.1 for the minorant `G` (E21), the nonempty domain of Lemma 2.2, Proposition 2.2 from the ball to the cube (E22), `UMD_p` for `UMD_{ℂ,p}` in Remark 4.2 (E11) |
 
 ## 2. Results from prior work and how the paper uses them
 
@@ -93,39 +96,39 @@ needs, and misprints:
 Each result is stated in its source's terms in `Morrey/Common/External/<Source>/`, whose README
 gives the source, the statement, the argument and the users, and is proved there from the package
 named in the last column: HA = `lean4-harmonic-analysis`, BP = `lean4-banach-probability`,
-CV = `lean4-calculus-of-variations`. Section 7 says which argument replaces a source that was not
-obtained.
+CV = `lean4-calculus-of-variations`. Section 7 says how each source was read, which module follows
+it and where the proof differs.
 
 | Result | Where the paper uses it | Source cited by the paper | Lean |
 | --- | --- | --- | --- |
-| Lemma 2.1: a rank-one convex function is locally Lipschitz | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | Rindler 2018, Lemma 5.6 | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) (CV) |
-| Lemma 2.2: quasiconvexity implies rank-one convexity, does not depend on the domain, and may be tested with periodic maps | Proposition 2.3, the thresholds, the lifting, Propositions 6.1, 7.2 | Rindler, Propositions 5.1, 5.3; Dacorogna 2008, Propositions 5.11, 5.13 | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L78), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) (CV) |
+| Lemma 2.1: a rank-one convex function is locally Lipschitz | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | Rindler 2018, Lemma 5.6 | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) (CV) |
+| Lemma 2.2: quasiconvexity implies rank-one convexity, does not depend on the domain, and may be tested with periodic maps | Proposition 2.3, the thresholds, the lifting, Propositions 6.1, 7.2 | Rindler 2018, Propositions 5.1, 5.3 (numbers not checked: the first edition was not obtained, and the second one's Proposition 5.1 is another result); Dacorogna 2008, Propositions 5.11, 5.13 | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L88), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) (CV) |
 | Proposition 2.1: the rank-one convex envelope by prelaminates | Propositions 2.3, 5.1 | Pedregal 1993, §4; Dacorogna 2008, Theorem 6.10 | [`proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780), in the library, by the paper's own route of Remark 2.1 (through Proposition 2.4) |
 | Proposition 2.2: Dacorogna's formula for the quasiconvex envelope | line 559, Propositions 2.3, 4.3 | Kinderlehrer–Pedregal 1991, Proposition 8.1 | [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) (CV) |
-| Theorem 2.3 (1): Burkholder's inequality, Hilbert-valued | Lemma 5.1, Theorem 1.3 (b), Proposition 7.1 | Osękowski 2012, Theorem 3.5 (Burkholder 1984) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70) (BP) |
-| Theorem 2.3 (2): Burkholder's square function inequality | Proposition 6.5 | Osękowski 2012, Theorem 8.6 | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109) (BP) |
-| Proposition 2.7 (1): extrapolation of the UMD property, with constants | Section 4.2 (for Theorem 1.2), Proposition 6.5, Corollary 6.1 | HNVW I, Theorem 4.2.7 | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42) (BP) |
-| Proposition 2.7 (2): `UMD₂(S_q) ≤ C (q* − 1)` | Propositions 6.2, 6.5, Remark 6.3 | Randrianantoanina 2002, Corollary 4.5 | [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), with [`External.Randrianantoanina.corollary4_5`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L47) (BP) |
+| Theorem 2.3 (1): Burkholder's inequality, Hilbert-valued | Lemma 5.1 (1) and (2), Theorem 1.3 (a) and (b), Proposition 7.1 | Osękowski 2012, Theorem 3.5 | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), from [`External.Osekowski.theorem3_5`](../../Morrey/Common/External/Osekowski/Inequality.lean#L68) (the book's form) (BP) |
+| Theorem 2.3 (2): Burkholder's square function inequality | Proposition 6.5 | Osękowski 2012, Theorem 8.6 | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), from [`External.Osekowski.theorem8_6`](../../Morrey/Common/External/Osekowski/Inequality.lean#L106) (BP) |
+| Proposition 2.7 (1): extrapolation of the UMD property, with constants | Section 4.2 (for Theorem 1.2), Proposition 6.5, Corollary 6.1 | HNVW I, Theorem 4.2.7 | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55); the book's form, [`External.HNVW.theorem4_2_7_general`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L46) (BP) |
+| Proposition 2.7 (2): `UMD₂(S_q) ≤ C (q* − 1)` | Propositions 6.2, 6.5, Remark 6.3 | Randrianantoanina 2002, Corollary 4.5 | [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), with [`External.Randrianantoanina.corollary4_5`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L49) (BP) |
 | Proposition 2.7 (3): `L^p` is UMD | Section 4.2 (Theorem 1.2) | Pisier 2016, Corollary 5.22 | [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40) (BP) |
-| Proposition 2.7 (4): the dyadic and the general UMD constants agree | no proof | HNVW I, Theorem 4.2.5 | [`External.HNVW.theorem4_2_5`](../../Morrey/Common/External/HNVW/DyadicUMD.lean#L35) (BP) |
-| Proposition 2.7 (5): `UMD_p ≤ UMD_{ℂ,p} ≤ (π/2) UMD_p` | Section 4.2 (Theorem 1.2) | Yaroslavtsev 2018, Lemma 3.2 | [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L44) (BP) |
-| Proposition 2.7 (6): zig-zag concave functions bound the UMD constants | no proof | HNVW I, Theorem 4.5.6; Yaroslavtsev 2018, Proposition 3.7 | [`External.HNVW.theorem4_5_6`](../../Morrey/Common/External/HNVW/ZigZag.lean#L45), [`External.Yaroslavtsev.proposition3_7`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L53) (BP) |
-| Proposition 2.8: decoupling with the UMD constant | Propositions 6.2, 6.5, Remark 6.3 | Cox–Veraar 2007; HNVW I, Proposition 4.2.3 | [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44) (BP) |
+| Proposition 2.7 (4): the dyadic and the general UMD constants agree | no proof | HNVW I, Theorem 4.2.5 | [`External.HNVW.theorem4_2_5`](../../Morrey/Common/External/HNVW/DyadicUMD.lean#L39) (BP) |
+| Proposition 2.7 (5): `UMD_p ≤ UMD_{ℂ,p} ≤ (π/2) UMD_p` | Section 4.2 (Theorem 1.2) | Yaroslavtsev 2018, Lemma 3.2 | [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54) (BP) |
+| Proposition 2.7 (6): `X` is `UMD_p` if and only if there is a zig-zag concave function, whose `β` then bounds `UMD_p` and, for complex `X`, `UMD_{ℂ,p}` | no proof | HNVW I, Theorem 4.5.6; Yaroslavtsev 2018, Proposition 3.7 | [`External.HNVW.theorem4_5_6`](../../Morrey/Common/External/HNVW/ZigZag.lean#L52), with the book's final clause [`External.HNVW.theorem4_5_6_isLeast`](../../Morrey/Common/External/HNVW/ZigZag.lean#L63); for complex `X`, [`External.Yaroslavtsev.proposition3_7_iff`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L71), [`External.Yaroslavtsev.proposition3_7`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L63) and [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54) (BP) |
+| Proposition 2.8: decoupling with the UMD constant | Propositions 6.2, 6.5, Remark 6.3 | Cox–Veraar 2007; HNVW I, Proposition 4.2.3 | [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51) (BP) |
 | (13), (14): Burkholder's function `u`; the function `u_q` behind Remark 4.5's "such a `U` can also be constructed" | Propositions 4.2, 4.3; Remark 4.5 | Burkholder 1988 (for `u`) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142), [`External.Burkholder.scalarFunctionQ_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L123) (BP) |
-| rank-one affine functions are affine combinations of minors, and minors are quasiaffine | Proposition 5.1 | Dacorogna 2008, Theorem 5.20 | [`External.Dacorogna.rankOneAffineMinors_holds`](../../Morrey/Common/External/Dacorogna/Minors.lean#L71), [`External.Dacorogna.minor3_quasiaffine`](../../Morrey/Common/External/Dacorogna/Minors.lean#L83) (CV) |
-| rank-one convex quadratic forms are quasiconvex | Proposition 5.1 | Dacorogna 2008, Theorem 5.25 (i) | [`External.Dacorogna.quadraticForm_quasiconvex`](../../Morrey/Common/External/Dacorogna/Minors.lean#L99) (CV) |
+| rank-one affine functions are affine combinations of minors (no continuity assumed), and minors are quasiaffine | Proposition 5.1 | Dacorogna 2008, Theorem 5.20 | [`External.Dacorogna.rankOneAffineMinors_holds`](../../Morrey/Common/External/Dacorogna/Minors.lean#L75), [`External.Dacorogna.minor3_quasiaffine`](../../Morrey/Common/External/Dacorogna/Minors.lean#L87) (CV) |
+| rank-one convex quadratic forms are quasiconvex | Proposition 5.1 | Dacorogna 2008, Theorem 5.25 (i) | [`External.Dacorogna.quadraticForm_quasiconvex`](../../Morrey/Common/External/Dacorogna/Minors.lean#L104) (CV) |
 | a smoothing that keeps the failure of quasiconvexity | Corollary 5.2 | Kristensen 1999, Proposition 2; Heinz 2008 | [`External.Kristensen.smoothing_holds`](../../Morrey/Common/External/Kristensen/Smoothing.lean#L106) (CV) |
-| Proposition 6.3: the non-commutative Khintchine inequality | (31) | Pisier–Xu 2003, Theorem 6.1; Lust-Piquard 1986; Lust-Piquard–Pisier 1991 | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77) (BP) |
-| Proposition 6.4: the Kahane–Khintchine inequality | (31) | HNVW II, Theorem 6.2.4 | [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) (BP) |
-| the hypercontractive constants `κ_{q,p} ≤ √((q − 1)/(p − 1))` | Remark 6.3, Proposition 6.5 at `q = ∞` | none (E27); Borell 1979 | [`External.Borell.kahaneKhintchine_hypercontractive`](../../Morrey/Common/External/Borell/Hypercontractivity.lean#L58) (BP) |
-| the sharpness of `p* − 1` for dyadic `±1`-transforms | Corollary 6.3, lower bound | "see also [Cassese 2025]" (E30) | [`burkholderSharpness_holds`](../../Morrey/Cassese/Square/Sharpness.lean#L878), in the library ([`Morrey/Cassese/Square/Sharpness.lean`](../../Morrey/Cassese/Square/Sharpness.lean)) |
+| Proposition 6.3: the non-commutative Khintchine inequality | (31) | Pisier–Xu 2003, Theorem 6.1; Lust-Piquard 1986; Lust-Piquard–Pisier 1991 | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80) (BP) |
+| Proposition 6.4: the Kahane–Khintchine inequality | (31) | HNVW II, Theorem 6.2.4 | [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) (BP) |
+| the constants `κ_{q,p} ≤ √((q − 1)/(p − 1))` | Remark 6.3, Proposition 6.5 at `q = ∞` | HNVW II, Theorem 6.2.4, through Proposition 6.4, which leaves them out (E27) | [`External.HNVW.theorem6_2_4_hypercontractive`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L48) (BP) |
+| the sharpness of `p* − 1` for dyadic `±1`-transforms | Corollary 6.3, lower bound | "see also [Cassese 2025]" (E30), that is Osękowski 2012, Theorem 3.5 with Remark 3.8 and p. 138 | [`External.Osekowski.exists_lt_lpNorm_transform`](../../Morrey/Common/External/Osekowski/Sharpness.lean#L81) (BP) |
 | the bound `C^{rc} ≤ (p* − 1) sup ‖Q‖/‖P_ρ‖` | Proposition 7.1 | "the results of [Cassese 2025]" | from Burkholder's inequality, in [`proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L343) |
-| transference: `‖𝓑^k‖_{L^p(ℝ²)} ≤ ‖𝓑^k‖_{L^p_0(𝕋²)}` | Proposition 7.2, lower bound | HNVW I, Corollary 5.7.6 | [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46) (HA) |
-| Dragičević's lower bound `‖𝓑²‖_p ≥ κ₂(p*) > p* − 1`, with `κ₂(p) = (p − 1)(2p − 1)/(p + 1)`, and `‖𝓑²‖₄ ≥ 21/5` | Theorem 7.1, Corollary 7.2 | Dragičević 2011, Theorem 1.1 | [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L58), [`External.Dragicevic.theorem1_1_two`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L46) (HA) |
+| transference: `‖𝓑^k‖_{L^p(ℝ²)} ≤ ‖𝓑^k‖_{L^p_0(𝕋²)}` | Proposition 7.2, lower bound | HNVW I, Corollary 5.7.6 | [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56) (HA) |
+| Dragičević's lower bound `‖𝓑²‖_p ≥ κ₂(p*) > p* − 1`, with `κ₂(p) = (p − 1)(2p − 1)/(p + 1)`, and `‖𝓑²‖₄ ≥ 21/5` | Theorem 7.1, Corollary 7.2 | Dragičević 2011, Theorem 1.1 (for `p > 2`); "see also" Carbonaro–Dragičević–Kovač 2023 | [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L64), [`External.Dragicevic.theorem1_1_two`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L52) (HA) |
 
 Quoted for context, stated and not proved, used by no proof: Kirchheim–Kristensen 2016 (the
 paper's Theorem 1.1, [`External.KirchheimKristensen.Theorem1_1`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean#L25)) and Osękowski 2012, Theorem 3.24
-(Proposition 2.6, [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L42)).
+(Proposition 2.6, [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L48); E37).
 
 ### Assumed
 
@@ -135,7 +138,7 @@ Nothing.
 
 | Fact | Where | In the formalization |
 | --- | --- | --- |
-| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and the triangle inequality | Section 6 | proved: [`schattenNorm_mul_self`](../../Morrey/Cassese/Square.lean#L196) (fact (1), for every `q ≥ 1`: E2), [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L439) (BP's, after Bourin–Zhang, arXiv:2610.30538, Proposition 3.13; Section 7), Weyl's monotonicity by Courant–Fischer ([`Morrey/Cassese/Square/Weyl.lean`](../../Morrey/Cassese/Square/Weyl.lean)) |
+| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and, with no source, the triangle inequality | Section 6 | proved: [`schattenNorm_mul_self`](../../Morrey/Cassese/Square.lean#L196) (fact (1), for every `q ≥ 1`: E2; Bhatia's (IV.49)), fact (2) from the definition, Weyl's monotonicity for fact (3) as in Bhatia's second proof of his Corollary III.2.3 ([`Morrey/Cassese/Square/Weyl.lean`](../../Morrey/Cassese/Square/Weyl.lean)), [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L441) (BP's, after Bourin–Zhang, arXiv:2610.30538, Proposition 3.13; Section 7) |
 | the Bernstein–Doetsch theorem: a midpoint convex function, locally bounded above, is convex | lines 643–646 (Proposition 2.4) | proved, in `tk_midpoint_principle` |
 | the uniform convexity of `\|·\|^p` | (29) | proved, [`tbt2_gain`](../../Morrey/Cassese/TwoByThree/ExtensionAux.lean#L526) (E3) |
 | the strong law of large numbers with infinite mean, Fatou's lemma, Jensen's inequality | Lemma 4.2 | Mathlib, in [`lemma4_2`](../../Morrey/Cassese/TwoByM.lean#L1585) |
@@ -152,19 +155,20 @@ Nothing.
 | --- | --- | --- |
 | Theorem 2.3 (Burkholder) | Sections 5–7 | correct. The paper asks for a separable Hilbert space; the proofs do not use separability (Section 5) |
 | (13), (14) (Burkholder's `u`) | Proposition 4.2 | correct |
-| Lemma 2.1 (Rindler) | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | correct. The paper uses the minorant `G` of Propositions 2.4 and 2.5 as a competitor without showing that it is an integrand; Lemma 2.1 in Rindler's form, for every real-valued rank-one convex function, supplies this (E21) |
+| Lemma 2.1 (Rindler) | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | correct. The paper uses the minorant `G` of Propositions 2.4 and 2.5 as a competitor without showing that it is an integrand; Lemma 2.1 for every real-valued rank-one convex function, proved here, supplies this (E21); Rindler's definition of rank-one convexity includes local boundedness and Borel measurability |
 | Lemma 2.2 (Rindler, Dacorogna) | Sections 2, 4, 6, 7 | correct; the domain must be nonempty, which the paper does not say |
-| Proposition 2.1 (Pedregal, Dacorogna) | Propositions 2.3, 5.1 | correct; the paper's Remark 2.1 removes the sources' assumption that `f` is bounded below |
+| Proposition 2.1 (Pedregal, Dacorogna) | Propositions 2.3, 5.1 | correct; Remark 2.1 says that the sources assume `f` bounded below, where Dacorogna's Theorem 6.10 asks only for a rank-one convex minorant (E36) |
+| Proposition 2.6 (Osękowski, Theorem 3.24) | no proof | quoted with more than the source proves: the bound on the Banach–Mazur distance is not in it (E37) |
 | Proposition 2.2 (Kinderlehrer–Pedregal) | line 559 | correct; the passage from the ball of the formula to the cube of Definition 2.1 is silent (E22) |
 | Dacorogna, Theorems 5.20 and 5.25 (i) | Proposition 5.1 | correct |
 | Kristensen, Proposition 2 | Corollary 5.2 | applied loosely but correctly: the paper's form asks `c ‖A‖² ≤ h(A)` for every `A`, which Kristensen's function need not satisfy, since the cut-off polynomial can be negative; adding a constant repairs it and changes neither the second derivatives nor quasiconvexity at `0` |
-| Proposition 2.7 (1), (3), (5) | Section 4.2 (for Theorem 1.2) | correct. Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11) |
+| Proposition 2.7 (1), (3)–(6) | Section 4.2 (for Theorem 1.2); (4), (6) in no proof | correct for (3); applied loosely but correctly for (1), (4)–(6): HNVW's and Yaroslavtsev's constants are for deterministic signs or multipliers, the paper's for predictable ones, and HNVW I, Theorem 4.2.25, which shows that they agree, is not cited (E38). Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11) |
 | Proposition 2.7 (2) (Randrianantoanina) | Propositions 6.2, 6.5 | applied loosely but correctly: Corollary 4.5 bounds `UMD_q(S_q)` by `C q²/(q − 1)`; the bound at the exponent `2`, linear in `q*`, is the source's Remark 4.6 (1), through extrapolation |
 | Proposition 2.8 (Cox–Veraar, HNVW) | Propositions 6.2, 6.5 | correct; the case used is the Paley–Walsh case of Cox–Veraar's statement |
-| Propositions 6.3, 6.4 | (31) | correct; but Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants that grow polynomially in `q`, which Proposition 6.4 as stated does not give and for which no source is named (E27) |
+| Propositions 6.3, 6.4 | (31) | correct; the order `√q` in Proposition 6.3 is not in Pisier–Xu's Theorem 6.1 but in the remark after it (E40); Proposition 6.4 leaves out the constants of the theorem it cites, which Remark 6.3 and Proposition 6.5 at `q = ∞` use (E27) |
 | the sharpness of `p* − 1` | Corollary 6.3 | correct, with only "see also [Cassese 2025]" as a source (E30) |
-| transference (HNVW I, Corollary 5.7.6) | Proposition 7.2 | correct for the direction used (from `𝕋²` to `ℝ²`); the exact form of the corollary could not be checked, since the book was not accessible |
-| Dragičević, Theorem 1.1 | Theorem 7.1, Corollary 7.2 | applied loosely but correctly: the theorem is stated for `p > 2` (as read in Dragičević's lecture notes); for `p < 2` it follows from the duality `‖𝓑^n‖_p = ‖𝓑^n‖_{p'}` of Carbonaro–Dragičević–Kovač, §1.3.1, the paper's "see also [Dragicevic1]"; and `κ₂(p*) − (p* − 1) = (p* − 1)(p* − 2)/(p* + 1) > 0` for `p* > 2` |
+| transference (HNVW I, Corollary 5.7.6) | Proposition 7.2 | correct: the corollary states that the three norms are equal, and the proof uses one inequality, from `L^p_0(𝕋²)` to `L^p(ℝ²)` (E41) |
+| Dragičević, Theorem 1.1 | Theorem 7.1, Corollary 7.2 | applied loosely but correctly: the theorem is stated for `p > 2` (the article's standing assumption, p. 464); for `p < 2` it follows from the duality `‖𝓑^n‖_p = ‖𝓑^n‖_{p'}` of Carbonaro–Dragičević–Kovač, §1.3.1, the paper's "see also [Dragicevic1]"; and `κ₂(p*) − (p* − 1) = (p* − 1)(p* − 2)/(p* + 1) > 0` for `p* > 2` (E39) |
 
 The other citations give context and are used in no proof: the history of Morrey's problem and of
 Burkholder's method in the calculus of variations (Sections 1, 2 and 8, Remarks 2.3 and 3.1),
@@ -174,10 +178,11 @@ conjecture.
 ## 3. Errors and gaps in the paper
 
 No statement is false. The items below are gaps (steps that need an argument the paper does not
-give, or only sketches), one intermediate claim that is false under a natural reading (E10), and
-misprints, collected at the end. The numbers are those of the inventory of the paper, which the
-docstrings of the code cite; E1 of the inventory is the remark on numbering in the preamble, not a
-finding. In every case the result holds, and the formalization supplies the missing argument.
+give, or only sketches), one intermediate claim that is false under a natural reading (E10),
+citations that say more or less than their sources, and misprints, collected at the end. The numbers
+are those of the inventory of the paper, which the docstrings of the code cite; E1 of the inventory is
+the remark on numbering in the preamble, not a finding, and E35–E41 are not in the inventory. In every
+case the result holds, and the formalization supplies the missing argument.
 
 ### E2. Lines 375–377, 2350–2378: Schatten fact (1)
 
@@ -219,14 +224,14 @@ small `x ≠ 0` keeps `R_L` of rank one, and `κ = 2` covers it ([`L3_rankOneCor
 
 Proposition 6.6 has no proof. It is correct: for `u_i = Σ_{j≠i} cos(x_i − x_j)`, exact
 trigonometric moments give `E ‖Skew ∇u‖⁴_{S_4} = d(d − 1)(d² − d + 1)/8` and
-`E ‖Sym ∇u‖⁴_{S_4} = d(d − 1)(6d − 9)/8`. Proved in [`proposition6_6`](../../Morrey/Cassese/Square.lean#L2752).
+`E ‖Sym ∇u‖⁴_{S_4} = d(d − 1)(6d − 9)/8`. Proved in [`proposition6_6`](../../Morrey/Cassese/Square.lean#L2754).
 
 ### E7. Lines 2683–2684: Corollary 6.4
 
 The bound `⟨W, Z⟩ ≤ (1/3)(2ae + 2bc) + (2/3)(2aρ)` does not follow "by the assumption on
 `(E, D)`", which gives only `a ≤ b`, `c ≤ e`. It holds by a trace argument,
 `tr(YEXD) = −⟨YD, EX⟩ ≤ bc` and `tr(YEDX) = ⟨XD, YE⟩ ≤ ae`, together with
-`⟨W, Z⟩ ≤ ‖W‖ ρ ≤ 2aρ`. Supplied in [`corollary6_4`](../../Morrey/Cassese/Square.lean#L3477).
+`⟨W, Z⟩ ≤ ‖W‖ ρ ≤ 2aρ`. Supplied in [`corollary6_4`](../../Morrey/Cassese/Square.lean#L3479).
 
 ### E8. Lines 562–578: Proposition 2.3
 
@@ -305,15 +310,17 @@ integrability (Section 11).
 
 The minorant `G` is used as a competitor in `f^{rc}` (lines 643–658), so it must be an integrand,
 and the paper does not say why it is one; Lemma 2.1, as the paper states it (for integrands), does
-not apply before that is known. `G` is real-valued and rank-one convex, and Lemma 2.1 in Rindler's
-form, for every real-valued rank-one convex function, makes it continuous. The formalization
-proves Lemma 2.1 in that form ([`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61)).
+not apply before that is known. `G` is real-valued and rank-one convex, and a real-valued rank-one
+convex function is locally Lipschitz without further assumptions: convexity in each entry gives the
+local boundedness, which Rindler's definition of rank-one convexity asks for (with Borel
+measurability), and then his proof applies. The formalization proves Lemma 2.1 in this generality
+([`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72)).
 
 ### E22. Line 559: from the ball to the cube
 
 Dacorogna's formula (Proposition 2.2) averages over the unit ball, and Definition 2.1 tests on the
 unit cube; the passage, silent in the paper, needs the domain-independence clause of Lemma 2.2.
-Supplied ([`quasiconvexAt_iff_exists_minorant`](../../Morrey/Cassese/Toolkit.lean#L1177), with [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98)).
+Supplied ([`quasiconvexAt_iff_exists_minorant`](../../Morrey/Cassese/Toolkit.lean#L1177), with [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109)).
 
 ### E23. Lines 1047–1053: the limiting argument of Section 4.3
 
@@ -338,16 +345,16 @@ The elementary route to Theorem 1.2 is sketched without the function `U` or the 
 ("such a `U` can also be constructed"). Supplied: `q = p + 3`, `U = R^{p/q} − K B^{p/q}` with
 Burkholder's `u_q`, `K = 2 (q − 1)^{p+1}/(p − 1)` ([`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480)).
 
-### E27. Lines 2425–2437, 2477–2479: Kahane–Khintchine constants
+### E27. Lines 2312–2321, 2425–2437, 2477–2479: Kahane–Khintchine constants
 
 Remark 6.3, and Proposition 6.5 at `q = ∞` ("all the implied multiplicative constants in the above
 inequalities are at most polynomial in `q`"), use (31) with constants that grow at most
-polynomially in `q`. This needs the Kahane–Khintchine constants `κ_{q,p}` to grow so, which
-Proposition 6.4 as stated (constants `k_{p,q}`, HNVW II, Theorem 6.2.4) does not give, and the paper
-names no source. It holds by Borell's hypercontractive bound
-`κ_{q,p} ≤ √((q − 1)/(p − 1))`, proved here by Borell's proof
-([`External.Borell.kahaneKhintchine_hypercontractive`](../../Morrey/Common/External/Borell/Hypercontractivity.lean#L58); Section 7). Theorem 1.4 uses
-Proposition 6.5 only at `q = 4` and does not need it.
+polynomially in `q`. This needs the Kahane–Khintchine constants to grow so, and Proposition 6.4
+gives only some constants `k_{p,q}`. The theorem that Proposition 6.4 cites, HNVW II, Theorem 6.2.4
+(pp. 21–22), states the bound that is needed: `κ_{q,p} ≤ √((q − 1)/(p − 1))` for `1 < p < q < ∞` and
+real signs. It is proved here by the book's proof
+([`External.HNVW.theorem6_2_4_hypercontractive`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L48)). Theorem 1.4 uses Proposition 6.5 only at `q = 4`
+and does not need it.
 
 ### E28. Lines 2807–2821, 915–919, 480–486: Proposition 7.2
 
@@ -362,22 +369,27 @@ bounded, and dominated convergence carries the inequality over
 The reduction from periodic to compactly supported Hessian test maps is not stated, and "the
 calculation of Proposition 6.1" does not carry over: the skew part of `J D²φ` has two distinct
 doubled singular values. Supplied, with matrices of rank at most `4` and `S₂` compared with `S₄`
-([`not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square.lean#L1925), [`square_not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square/Hessian.lean#L204)).
+([`not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square.lean#L1927), [`square_not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square/Hessian.lean#L204)).
 
 ### E30. Lines 2624–2633: Corollary 6.3, lower bound
 
 The lower bound uses the sharpness of `p* − 1` for dyadic `±1`-transforms, with only "by choosing
-the martingale-transform pair suitably (see also [Cassese 2025])" as a source. The sharpness goes
-back to Burkholder (Bull. London Math. Soc. 17 (1985); it also follows from Ann. Probab. 12 (1984)
-and Maurey's theorem); the Bulletin paper is not open access, and the Annals paper, open access on
-Project Euclid, could not be obtained (the site refused automated download). Proved here by an
-explicit dyadic construction, the standard extremal examples with a potential function
-([`burkholderSharpness_holds`](../../Morrey/Cassese/Square/Sharpness.lean#L878)).
+the martingale-transform pair suitably (see also [Cassese 2025])" as a source. The reference is to
+Theorem 2.3 of *Martingales, laminates and minimal Korn inequalities*
+([arXiv:2512.02784](https://arxiv.org/abs/2512.02784), p. 9), Burkholder's inequality, quoted from
+Burkholder (Ann. Probab. 12 (1984)), "see [Osękowski 2012] for an exposition": the inequality "is
+sharp among martingales defined on dyadic trees such that `‖dX_i‖ = ‖dY_i‖`". Those trees may split
+with any weights; Corollary 6.3 needs the weights `1/2` of a Rademacher martingale. In that form the
+sharpness is Osękowski 2012, Theorem 3.5 with Remark 3.8 and p. 138: the best constants of
+`±1`-transforms are already the best possible for dyadic martingales. It is proved here by the book's
+proof: the second approach of pp. 56–57 for `1 < p ≤ 2`, run on the dyadic function `W⁰` of the
+proof of Theorem 3.34, and the duality of p. 59 for `p > 2` ([`External.Osekowski.exists_lt_lpNorm_transform`](../../Morrey/Common/External/Osekowski/Sharpness.lean#L81);
+[`burkholderSharpness_holds`](../../Morrey/Cassese/Square/Sharpness.lean#L49) in the paper's notation).
 
 ### E31. Lines 2658–2659, 2670: Corollary 6.4
 
 The paper only sketches the proof ("so we only sketch it"), and leaves `8/5 U ≥ ‖Y‖⁴ − 98 ‖X‖⁴` to
-"standard calculations". Completed ([`corollary6_4`](../../Morrey/Cassese/Square.lean#L3477), [`corollary6_4_not_quasiconvexAt`](../../Morrey/Cassese/Square.lean#L3526)).
+"standard calculations". Completed ([`corollary6_4`](../../Morrey/Cassese/Square.lean#L3479), [`corollary6_4_not_quasiconvexAt`](../../Morrey/Cassese/Square.lean#L3528)).
 
 ### E32. Lines 2891–2892: Corollary 7.2
 
@@ -398,7 +410,7 @@ recorded in [`route_differences.tsv`](route_differences.tsv)).
 ### E34. Lines 2552–2554, 2660–2668: the invariances in Theorem 1.4 at `p = 4`
 
 Theorem 1.4 at `p = 4` needs Corollary 6.4's quartic to be invariant under conjugation and
-transposition, which the paper does not state. Proved ([`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3588)).
+transposition, which the paper does not state. Proved ([`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3590)).
 
 ### E35. Lines 2945–2947: the witness of Corollary 1.6
 
@@ -406,9 +418,42 @@ The proof takes "a smooth periodic `φ : 𝕋² → ℝ⁴` satisfying `∫_{�
 where it comes from. Since `F` is not quasiconvex at `0`, Lemma 2.2 gives a Lipschitz periodic
 `φ`; a smooth one needs a density step. It holds: the mollifications of the Lipschitz witness are
 smooth, Lipschitz and periodic, and by dominated convergence one of them still has
-`∫ F(∇φ) < 0` ([`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214)). This item is not in the inventory, hence its number.
+`∫ F(∇φ) < 0` ([`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214)).
 
-### Misprints and wording: E11, E12, E13, E15
+### E36. Lines 541–549: Remark 2.1
+
+"The proofs in [Pedregal 1993, Section 4] and [Dacorogna 2008, Theorem 6.10] assume that `f` is
+bounded below." Dacorogna's Theorem 6.10 (p. 277) assumes less: a rank-one convex `g ≤ f`, with `f`
+and `g` valued in `ℝ ∪ {+∞}`. The remark's device, `max {f, −n}`, applies either way, and
+Proposition 2.1 is not affected; it is proved here by the remark's second route, from
+Proposition 2.4. (Pedregal 1993 was not obtained.)
+
+### E37. Lines 768–787: Proposition 2.6
+
+Proposition 2.6 cites Osękowski's Theorem 3.24 (pp. 120–121), which concludes only that the space is
+isomorphic to a Hilbert space. Its proof, by the Khintchine–Kahane inequality and a theorem of
+Kwapień, estimates no distance: the bound `d_BM(X, H) ≲_p β_p` and its optimality are not in it. The
+proposition is context and no proof uses it; it is stated with the bound
+([`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L48)) and not proved.
+
+### E38. Lines 807–868: which signs, in Proposition 2.7
+
+Definition 2.5 asks for the inequality for all *predictable* signs. The constants of the cited
+theorems are for *deterministic* signs or multipliers (HNVW I, Definition 4.2.1, for Theorems 4.2.5,
+4.2.7 and 4.5.6; Yaroslavtsev 2018, (3.1), for Lemma 3.2 and Proposition 3.7). That the two
+definitions give the same constants is HNVW I, Theorem 4.2.25 (Burkholder), which the paper does not
+cite. Proposition 2.7 (1), (4)–(6) hold as stated: the formalization proves them for predictable
+signs, the arguments of HNVW applying to them directly, with Theorem 4.2.25 for (5).
+
+### E39. Lines 2865–2870: Theorem 7.1
+
+"By [Dragičević 2011, Theorem 1.1] (see also [Dragicevic1]), we have `‖𝓑²‖_{L^p} > p* − 1` for
+`p ≠ 2`." The theorem is stated for `p > 2` (p. 464: "Until the end of the paper we will assume that
+`p > 2`, unless stated otherwise"). For `p < 2` one needs `‖𝓑²‖_p = ‖𝓑²‖_{p'}`, which is §1.3.1 of the
+second reference (Carbonaro, Dragičević and Kovač), and for both cases `κ₂(p*) > p* − 1`, left to the
+reader. Supplied ([`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L64), [`dragicevicLowerBound_holds`](../../Morrey/Cassese/Hypotheses.lean#L178)).
+
+### Misprints and wording: E11, E12, E13, E15, E40, E41
 
 - E11 (line 1130): Remark 4.2 bounds `C^{rc}` by `UMD_p` where the argument gives `UMD_{ℂ,p}`;
   equivalent up to `π/2` (Proposition 2.7 (5)), so harmless under `≲`.
@@ -418,6 +463,12 @@ smooth, Lipschitz and periodic, and by dominated convergence one of them still h
   depends on unspecified `K` and `δ`.
 - E15 (lines 1595–1596, 1722–1723): the wave equation that the proof mentions, `u_tt = Δu`
   (implied by `u_t = 2 conj(∂u)`), is never stated.
+- E40 (lines 2300–2311): Proposition 6.3 cites Pisier–Xu's Theorem 6.1 for the upper constant `≲ √q`.
+  The theorem says only that the constant depends on `q`; the order `√q` is in Remark (i) after it
+  (p. 1486), with a reference to Pisier, Astérisque 247 (1998), p. 106.
+- E41 (lines 2832–2835): "the standard transference identity for homogeneous multipliers". HNVW I,
+  Corollary 5.7.6, states the identity (of three norms); the proof of Proposition 7.2 uses one
+  inequality, `‖𝓑^{N+1}‖_{L^p(ℝ²)} ≤ ‖𝓑^{N+1}‖_{L^p_0(𝕋²)}`. Not an error.
 
 The constants of Corollary 6.3 (`d₀ = 588`, the least that works) check out.
 
@@ -434,10 +485,10 @@ statements, as the paper states them.
 | --- | --- | --- |
 | Section 5.1: `q` is rank-one convex on `𝓛` (`cs-q-rc`) | `A ∈ 𝓛`: only the direction `R` must lie in `𝓛` | kept ([`quarticQ_rankOneConvexOn_calL`](../../Morrey/Cassese/TwoByThree/Basic.lean#L359)) |
 | Lemma 5.1 (2) | the evenness of `f`: "`p`-homogeneous" means `f(tX) = \|t\|^p f(X)` for every real `t` (lines 158–163), and the proof uses it only for `t > 0`. Remark 5.2 applies the lemma to Šverák's `−rst`, which is only positively homogeneous, so it needs this | kept ([`lemma5_1_part2`](../../Morrey/Cassese/TwoByThree/Extension.lean#L276)), as the paper states it |
-| Corollary 6.3, upper bound | `d ≥ 2` | kept ([`corollary6_3_upper`](../../Morrey/Cassese/Square.lean#L3078)) |
+| Corollary 6.3, upper bound | `d ≥ 2` | kept ([`corollary6_3_upper`](../../Morrey/Cassese/Square.lean#L3080)) |
 | Proposition 2.3 | the homogeneity, for the dichotomy `≡ −∞` or finite in (a) (the homogeneity of the envelopes uses it); the homogeneity and `p > 1` in (b), (c) (the formalization's split, E8) | kept |
 | Section 1.3: monotonicity of the homogeneous problem | `1 < p` | kept ([`homMorreyPositive_mono`](../../Morrey/Cassese/Introduction.lean#L419)) |
-| Theorem 2.3 | the separability of the Hilbert space | kept in [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70) and [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109); [`External.Burkholder.inequality_of_subordinate`](../../Morrey/Common/External/Burkholder/Inequality.lean#L53) and [`External.Burkholder.squareFunction_of_martingale`](../../Morrey/Common/External/Burkholder/Inequality.lean#L87) do without it |
+| Theorem 2.3 | the separability of the Hilbert space | kept in [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82) and [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119); [`External.Osekowski.theorem3_5`](../../Morrey/Common/External/Osekowski/Inequality.lean#L68) and [`External.Osekowski.theorem8_6`](../../Morrey/Common/External/Osekowski/Inequality.lean#L106) do without it |
 | Proposition 4.1 | the standing assumption `q > p + 2` of Section 4 | not assumed: [`proposition4_1`](../../Morrey/Cassese/TwoByM.lean#L431) asks only `1 < q` (Lemma 4.1 has no `q`) |
 | Proposition 7.2 | `ρ > 0`, the setting of Section 7 | dropped: [`proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1075) holds for every real `ρ`, a generalization of the paper's statement. Its lower bound, [`proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1091), keeps `ρ > 0`, which its proof uses (`‖ρ^N h‖ = ρ^N ‖h‖`) |
 
@@ -477,19 +528,28 @@ statements, as the paper states them.
   `∃ K₀ ∀ K ≥ K₀ ∃ δ₀ > 0 ∀ δ ∈ (0, δ₀)`, with `Λ = K/δ`. Proposition 6.5 at `q = ∞`: one exponent
   `α` for every `p` (the proof gives `α = 3`), which covers both readings of the paper.
   Corollary 6.1: the paper's `d(p)`, with `d = 2n`; the formalization takes `n = m⁸` and proves
-  every larger `d` as an extra lemma ([`corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2274)).
+  every larger `d` as an extra lemma ([`corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2276)).
 - **Theorem 1.4** for general `p` fixes the Schatten exponent `q = 4` among the paper's
   `q ∈ (2, ∞)`.
 - **The cited results** are stated in their sources' terms in [`Morrey/Common/External/`](../../Morrey/Common/External), and in the
-  paper's terms in [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) ([`burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L112),
-  [`hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L496), …, [`dragicevicLowerBound_holds`](../../Morrey/Cassese/Hypotheses.lean#L173)). Some are stated more generally than
+  paper's terms in [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) ([`burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L115),
+  [`hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L509), …, [`dragicevicLowerBound_holds`](../../Morrey/Cassese/Hypotheses.lean#L178)). Some are stated more generally than
   the paper quotes them: Lemma 2.1 for every real-valued rank-one convex function (E21);
-  Burkholder's inequalities without separability (Section 5); Kahane–Khintchine for any seminorm
-  on a real vector space; Kristensen's smoothing for every smooth rank-one convex integrand on
-  `ℝ^{d×m}` that is not quasiconvex at `0`. Others are stated in the case the paper uses:
-  Randrianantoanina's bounds for real square matrices, uniformly in the size; Pisier's for the
-  complex `L^p(μ)` as a real Banach space; transference in the direction from `𝕋²` to `ℝ²`, for
-  symbols homogeneous of degree `0`; Dragičević's theorem for `𝓑²`.
+  Burkholder's inequalities without separability (Section 5), and Theorem 3.5 in the book's form, with
+  `‖g_0‖ ≤ ‖f_0‖`; the extrapolation of UMD constants for all exponents, as in HNVW; Kahane–Khintchine
+  for any seminorm on a real vector space; Dacorogna's Theorem 5.20 without continuity, as in the book
+  ([`External.Dacorogna.RankOneAffineMinors`](../../Morrey/Common/External/Dacorogna/Minors.lean#L61)); Kristensen's smoothing, in the package,
+  for every smooth rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex at `0`. Others are stated in the case the paper uses:
+  Lemma 2.2 for lower semicontinuous, locally bounded integrands (the sources: Borel and locally
+  bounded); Randrianantoanina's bounds for real square matrices, uniformly in the size; Pisier's for
+  the complex `L^p(μ)` as a real Banach space; HNVW's UMD theorems for real spaces, probability spaces
+  and martingales started at `0`; decoupling for Paley–Walsh martingales; transference in the direction
+  from `𝕋²` to `ℝ²`, for symbols homogeneous of degree `0`; Dragičević's theorem for `𝓑²`.
+- **Proposition 2.7 (6)** ([`HNVWZigZag`](../../Morrey/Cassese/Hypotheses.lean#L478)). For a real `X`, the equivalence and the bound `β ≥ UMD_p(X)`,
+  with functions concave along `z ↦ (x + z, y + εz)` for `ε ∈ [−1, 1]`; for a complex `X`, with `ε` in the
+  closed unit disc (the paper's footnote), the equivalence with the finiteness of `UMD_p(X)`, the
+  constant of `X` as a real space, and the bounds `β ≥ UMD_p(X)` and `β ≥ UMD_{ℂ,p}(X)`. The spaces are
+  in `Type`, as in the other statements on UMD constants.
 
 No statement of the paper had to be corrected.
 
@@ -519,47 +579,97 @@ in [`route_differences.tsv`](route_differences.tsv).
 
 ### The cited results
 
-Each cited result is proved by its source's argument, with the differences below, or, where the
-source was not obtained, by a named argument from an open source. The READMEs of
-[`Morrey/Common/External/`](../../Morrey/Common/External) and the packages' module docstrings give the details.
+Each cited result is proved by its source's argument, with one exception (the upper bound of
+Proposition 6.3, below). The table says how each source was read, which module states the result and
+where in the packages the proof is (HA, BP, CV as in Section 2), and what is different, and why. Where the last column says "gap" or "slip", it is the source's, and
+it is repaired along the source's lines (the list "Errors and gaps found in the sources", below, has
+the references). The READMEs of [`Morrey/Common/External/`](../../Morrey/Common/External) and the packages' module docstrings give
+the details.
 
-Sources read and followed, with their differences:
+| Cited result | Source, and how it was read | Stated and proved in | What is different, and why |
+| --- | --- | --- | --- |
+| Lemma 2.1 | Rindler 2018, Lemma 5.6: the first edition was not obtained; the second one (2026) was read, where the result is Lemma 5.9 (pp. 114–115), matched by content | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `RankOneConvex/` | the local boundedness of a rank-one convex function, part of Rindler's definition, is proved, by convexity in each entry (a gap fill: the paper applies the lemma to functions not known to be integrands, E21); (5.10) is used where it holds (slip); the part on functions of `p`-growth is not formalized |
+| Lemma 2.2, quasiconvex ⇒ rank-one convex | Rindler 2026, Proposition 5.6 (pp. 111–113): read; the first edition's Propositions 5.1 and 5.3 not checked | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `Quasiconvex/{Cutoff, Laminate, RankOneConvex}` | on the unit cube, with an orthogonal change of variables for the cubes of other directions (mechanics); lower semicontinuous instead of Borel integrands |
+| Lemma 2.2, the domain and the periodic test maps | Dacorogna 2008, Propositions 5.11 and 5.13 (pp. 172–174): read; also Rindler 2026, Lemma 5.2 (i) (p. 106) | the same; CV `Quasiconvex/{Domain, Periodic}` | the test maps are Lipschitz maps that vanish outside the domain, and their gradients vanish almost everywhere on the zero set, which is proved (for Dacorogna's `W^{1,∞}_0` it is immediate); the domain is nonempty (slip); the statements are at one matrix, as the paper's |
+| Proposition 2.1 | Dacorogna 2008, Theorem 6.10 (pp. 277–279): read; Pedregal 1993: not obtained | [`proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780) | the paper's own second route (Remark 2.1), so neither source's argument is used |
+| Proposition 2.2 | Kinderlehrer–Pedregal 1991, Proposition 8.1 (pp. 360–362) with Step 6 of Proposition 7.2: read; Dacorogna 1982, Theorem 5: read (a hypercube, and a growth condition) | [`External/KinderlehrerPedregal/Formula.lean`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean); CV `Envelope/` | the formula itself, `f^{qc} = ψ^#`, which the source does not state, and the approximation in (iv) by piecewise affine maps are supplied; the copied domains have null boundaries, a hypothesis that Proposition 8.1 leaves out (gaps) |
+| Theorem 2.3 | Osękowski 2012, Theorems 3.5 (pp. 53–54, 58) and 8.6 (pp. 413–415): read | [`External/Osekowski/Inequality.lean`](../../Morrey/Common/External/Osekowski/Inequality.lean); BP `Martingale/Osekowski/{Method, SimpleFunctions, Integral, Moment}`, `Martingale/Burkholder/Inequality` | a fixed time instead of `sup_n`, equivalent; no separability; Theorem 8.6 for martingales started at `0`; the two integral formulas for Burkholder's function, stated there without proof, are proved; the majorization `U_p ≥ V_p` also uses Burkholder 1988, (1.11), where the book's argument has a gap; slips |
+| Proposition 2.6 | Osękowski 2012, Theorem 3.24 (pp. 120–121): read | [`External/Osekowski/HilbertCharacterization.lean`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean) | stated, not proved (context; E37) |
+| Proposition 2.7 (1) | HNVW I, Theorem 4.2.7 (pp. 283–285) with pp. 229–234: read | [`External/HNVW/Extrapolation.lean`](../../Morrey/Common/External/HNVW/Extrapolation.lean); BP `UMD/{CubeTransform, GoodLambda, Extrapolation}` | predictable signs, probability spaces, martingales started at `0`, real spaces (the paper's Definition 2.5 and the case used); Lemma 3.5.14 at the first index (gap); an elementary inequality left to the reader |
+| Proposition 2.7 (2) | Randrianantoanina 2002 (arXiv:math/0111264), §§2–4: read | [`External/Randrianantoanina/SchattenUMD.lean`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean); BP `Noncommutative/` | Cuculescu's projections `q_{k+1} = 1_{[0,λ]}(q_k x_k q_k)` are read in the reduced algebra `q_k N q_k`, as the proof requires (read literally, they would not decrease); "by interpolation" (Theorem 4.3) is carried out in three ranges of exponents, so that the constant stays uniform near `2`; Lemma 3.2 in a counting form for matrices (constant `26` in (3.2)); HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that the source quotes from Pisier |
+| Proposition 2.7 (3) | Pisier 2016, Corollary 5.22, read in the 2011 lecture notes (Corollary 8.19): the book was not obtained | [`External/Pisier/LpUMD.lean`](../../Morrey/Common/External/Pisier/LpUMD.lean); BP `UMD/Lp` | Fubini's theorem is applied to Paley–Walsh martingales, and HNVW I, Theorem 4.2.5, passes to general filtrations: no σ-finiteness and no joint measurability needed |
+| Proposition 2.7 (4) | HNVW I, Theorem 4.2.5 (p. 282): read | [`External/HNVW/DyadicUMD.lean`](../../Morrey/Common/External/HNVW/DyadicUMD.lean); BP `UMD/Maurey/` | by the alternative proof that the book points out on p. 334 (Burkholder 1986), Theorem 4.5.6, (2)⇒(3)⇒(1); the proof printed at Theorem 4.2.5 (pp. 284–285, after Maurey) is not the one followed |
+| Proposition 2.7 (5) | Yaroslavtsev 2018 (arXiv:1710.04958), Lemma 3.2: read, no proof there ("proven in" HNVW I, Proposition 4.2.10); HNVW I, p. 286, with Theorem 4.2.25 (pp. 300–301): read | [`External/Yaroslavtsev/ComplexUMD.lean`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean); BP `UMD/{ConvexHull, Incremental, Complex}` | none in the argument; Lemma 3.6.18 (iii) (slip) |
+| Proposition 2.7 (6) | HNVW I, Theorem 4.5.6 (pp. 330–337), and Yaroslavtsev 2018, Proposition 3.7: read | [`External/HNVW/ZigZag.lean`](../../Morrey/Common/External/HNVW/ZigZag.lean), [`External/Yaroslavtsev/ComplexUMD.lean`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean); BP `ZigZag/` | the paper's functions are concave for `\|ε\| ≤ 1` and vanish at the origin, so the multipliers are constants in `[−1, 1]`, or in the unit disc, as Yaroslavtsev's; two steps of HNVW's proof are exchanged (gap) |
+| Proposition 2.8 | Cox–Veraar 2007: introduction read, no proof there; HNVW I, Proposition 4.2.3 (p. 282, by Proposition 4.1.16, pp. 279–280): read | [`External/CoxVeraar/Decoupling.lean`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean); BP `UMD/Decoupling` | only the Paley–Walsh case, which the paper uses |
+| (13), (14) | Burkholder 1988 (Numdam), proof of Theorem 1.1 and Remark 1.2: read; Vasyunin–Volberg 2010, cited as an alternative: not obtained | [`External/Burkholder/ScalarFunction.lean`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean); BP `Martingale/Burkholder/Function` | Remark 1.2, concavity along every line, has no proof in the source: it is completed from (1.14) and the shift of the proof of (1.8) (gap) |
+| Dacorogna, Theorem 5.20 (Proposition 5.1) | Dacorogna 2008, pp. 179–191, with Theorem 8.35 (pp. 409–411): read | [`External/Dacorogna/Minors.lean`](../../Morrey/Common/External/Dacorogna/Minors.lean); CV `Minors/` | Lemma 5.24, Part 2, repaired, and (ii) ⇒ (ii′) avoided (gaps, slips); that the minors are quasiaffine by the proof of Theorem 8.35 (ii), for `3 × 3` minors on the cube, which the paper needs |
+| Dacorogna, Theorem 5.25 (i) (Proposition 5.1) | Dacorogna 2008, pp. 191–194: read | [`External/Dacorogna/Minors.lean`](../../Morrey/Common/External/Dacorogna/Minors.lean); CV `QuadraticForm/` | Plancherel's formula for smooth maps, then mollification, where the book applies it to the Lipschitz map (mechanics) |
+| Kristensen's smoothing (Corollary 5.2) | Kristensen 1999, proof of Proposition 2 (pp. 6–7): read (scan, Numdam); Heinz 2008: not obtained | [`External/Kristensen/Smoothing.lean`](../../Morrey/Common/External/Kristensen/Smoothing.lean); CV `Smoothing/` | the cut-offs are functions of `\|X\|²` instead of `\|X\|` (slip); a constant is added, since the paper's form asks `c ‖A‖² ≤ h(A)`; `ε` is chosen before the radius (the order of independent steps); his "it is not hard to see", the rank-one convexity of the cut-off function, is supplied along his lines |
+| Proposition 6.3 | Pisier–Xu 2003, Theorem 6.1 (p. 1486): read, no proof there; Lust-Piquard 1986: not obtained; Lust-Piquard–Pisier 1991, and Pisier, Astérisque 247 (1998), pp. 101–108: read | [`External/PisierXu/Khintchine.lean`](../../Morrey/Common/External/PisierXu/Khintchine.lean); BP `NoncommutativeKhintchine/` | lower bound: as Lust-Piquard–Pisier, (I.5)–(I.7) (pp. 246–247); upper bound: **a departure** (below) |
+| Proposition 6.4; the constants of E27 | HNVW II, Theorem 6.2.4 (pp. 21–22), with Theorem 6.2.2 and Lemma 6.2.3 (pp. 18–21): read | [`External/HNVW/KahaneKhintchine.lean`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean); BP `Hypercontractivity/HeatSemigroup`, `KahaneKhintchine/Basic` | values in any seminormed space; a constant in Lemma 6.2.3 and the case `q = 1` of Theorem 6.2.4 (slips) |
+| the sharpness of `p* − 1` (Corollary 6.3) | Cassese 2025 (arXiv:2512.02784), Theorem 2.3: read; Burkholder 1984, quoted there: read, not followed; Osękowski 2012, Theorem 3.5 (pp. 56–57, 59), with Theorem 3.34, Remark 3.8 and pp. 137–138: read | [`External/Osekowski/Sharpness.lean`](../../Morrey/Common/External/Osekowski/Sharpness.lean); BP `Martingale/Osekowski/Sharpness` | the second approach is run on the dyadic function `W⁰` of the proof of Theorem 3.34, instead of on `U⁰` and then that theorem (which is not formalized); a predictable sign on the sign cube is a sign for each Haar function, as in Remark 3.8; slips |
+| the bound of Proposition 7.1 | Cassese 2025, Theorem 2.1 (proof p. 9): read | [`proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L343) | on rank-one Rademacher martingales, as the paper's Propositions 2.4 and 2.5 allow |
+| transference (Proposition 7.2) | HNVW I, Corollary 5.7.6 (pp. 462–463), with Proposition 5.7.4, Lemma 5.7.5 and Proposition 2.4.23: read | [`External/HNVW/Transference.lean`](../../Morrey/Common/External/HNVW/Transference.lean); HA `Transference/`, `FourierMultiplier/Density`, `Torus/Poisson` | scalar symbols on `ℝ² ≅ ℂ`, and the inequality used, from `L^p_0(𝕋²)` to `L^p(ℝ²)`; the closing density and duality, left to the reader, are written out (gap); slips |
+| Dragičević's lower bound (Theorem 7.1, Corollary 7.2) | Dragičević 2011 (pp. 463–467): read; Carbonaro–Dragičević–Kovač 2023 (arXiv:2109.08369), §1.3.1: read | [`External/Dragicevic/LowerBound.lean`](../../Morrey/Common/External/Dragicevic/LowerBound.lean); HA `BeurlingAhlfors/` | `n = 2`; the sentence "`f` belongs to `W^{n,p}`, which ensures that `T^n(∂̄^n f) = ∂^n f`" (p. 465, no proof) is replaced by what is used of it, `‖∂²f‖_p ≤ ‖𝓑²‖_p ‖∂̄²f‖_p`, proved by approximating `f_{2,α}` by Schwartz functions; the duality on the Fourier side |
+| Theorem 1.1 (Kirchheim–Kristensen) | Kirchheim–Kristensen 2016 | [`External/KirchheimKristensen/Theorem.lean`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean) | stated, not proved (context) |
+| the Schatten facts (1)–(3) of Section 1.5 | Bhatia 1997, Chapters III and IV: read | [`Morrey/Cassese/Square.lean`](../../Morrey/Cassese/Square.lean), [`Morrey/Cassese/Square/`](../../Morrey/Cassese/Square) | none in the argument; Bhatia writes out no proof of (2) |
 
-| Cited result | Source read | Difference from the source, and why |
-| --- | --- | --- |
-| Kristensen's smoothing (Corollary 5.2) | Kristensen 1999, proof of Proposition 2 (pp. 6–7, from a scan) | the cut-offs are functions of `\|X\|²` instead of `\|X\|`: Kristensen's `ξ_s` (convex, `0` below `s − 1`, `t²` above `s + 1`) exists only for `s < 3`, since convexity at `s + 1` gives `0 = ξ_s(s − 1) ≥ (s + 1)² − 4(s + 1)`, and he does not say how `s` is chosen (a slip of the source); a constant is added, since the paper's form asks `c ‖A‖² ≤ h(A)`; `ε` is chosen before the radius (the order of independent steps); his "it is not hard to see", the rank-one convexity of the cut-off function, is supplied along his lines |
-| the non-commutative Khintchine inequality (Proposition 6.3) | Mackey–Jordan–Chen–Farrell–Tropp 2014 (arXiv:1201.6002), §§7–8 | their Remark 7.2 gives the constant `√(2(q − 1))` for `2 < q < 3` through a variant of the mean value trace inequality that the source does not prove; the package proves it (a gap fill) |
-| Proposition 2.7 (2) | Randrianantoanina 2002 (arXiv:math/0111264), §§2–4 | Cuculescu's projections `q_{k+1} = 1_{[0,λ]}(q_k x_k q_k)` are read in the reduced algebra `q_k N q_k`, as the proof requires (read literally, the projections would not decrease); Theorem 4.3's step "by interpolation" is carried out in three ranges of exponents, so that the constant stays uniform near `2`; Lemma 3.2, whose proof uses generalized singular values, is used in a counting form for matrices, which gives the constant `52` in place of `14√3/3 + 28` |
-| Dragičević's lower bound (Theorem 7.1, Corollary 7.2) | Dragičević's lecture notes, arXiv:2109.04555, Proposition 4.2; Carbonaro–Dragičević–Kovač, arXiv:2109.08369, §1.3.1 | his test functions `f_{2,α}` are not Schwartz functions, and the norm is a supremum over Schwartz functions: they are approximated by Schwartz functions, as the hint of his Exercise 2.19 does ("first consider smooth `h` and then approximate"); `p < 2` by the duality of §1.3.1 |
-| Dacorogna, Theorem 5.20 (Proposition 5.1) | Conti–Dolzmann–Kirchheim–Müller 2006, Appendix, Theorem 6.1 | their distributional derivatives are taken as classical derivatives of mollifications |
-| Dacorogna, Theorem 5.25 (i) (Proposition 5.1) | Morrey 1952, Theorem 5.2 | the smooth case by Plancherel's formula for Schwartz functions (Morrey cites Van Hove), then Lipschitz maps by mollification |
-| Lemma 2.2, independence of the domain | Müller 1998, Definition 4.2, Remark 2 | the gradient of a Lipschitz map vanishes almost everywhere on its zero set, in place of Müller's assumption `\|∂U\| = 0`, which the paper does not make (a gap fill) |
-| Proposition 2.7 (3) | Pisier's lecture notes (2011), Corollary 8.19 | the dyadic form of the source's Fubini argument, which needs neither σ-finiteness nor joint measurability |
-| Theorem 2.3 (1), (2); (13), (14) | Burkholder 1988 (Astérisque 157–158, 75–94, from Numdam), proofs of Theorems 1.1 and 3.1 | none in the argument: (1.11) by the convexity and concavity of `log φ`; (1.10) by homogeneity and the pieces of Burkholder's `F`; (1.12)–(1.14) on lines along which neither coordinate vanishes; (1.8) by enlarging `H` and shifting by a vector orthogonal to `H`, then dominated convergence; Theorem 3.1 through `ℓ²_H`, used through its subspace `H^{n+1}`, which holds the values up to time `n` (mechanics). The statements are Cassese's (martingales started at `0`, a fixed time `n`). Remark 1.2 (concavity on every line, Cassese's (14)) is stated without proof in the source (a gap of the source): it is completed from (1.12)–(1.14) and the shift of the proof of (1.8), as a pointwise limit of concave functions. The equality cases and the sharpness are not formalized |
-| Proposition 6.4; the constants of E27 | Borell 1979 (Sém. Probab. XIII, LNM 721, 1–3, from Numdam), proof of Theorem 1.1 (§2) | none in the argument: the scalar two-point inequality (which Borell cites from Gross and Beckner) and the Segal lemma (which he cites from Beckner) are proved by O'Donnell's arguments (*Analysis of Boolean Functions*, arXiv:2105.10386: §10.1, after Janson, with Exercise 9.7; Exercise 10.3 with Exercise 10.1); the positivity of `K̄` carries them to `E`-valued functions; `(⊗K̄) e_α = λ^{\|α\|} e_α`. Formalized for Walsh polynomials of degree `≤ 1` and the largest `λ = √((p − 1)/(q − 1))`, which is what Cassese uses |
+Departures from the sources' proofs:
 
-Sources not obtained, and the argument used in place of each:
+| Cited result | The source's argument | The formalization's | Why |
+| --- | --- | --- | --- |
+| Proposition 6.3, the upper bound | Lust-Piquard–Pisier 1991 (Theorem III.1, Corollary III.4, pp. 252–255): a lacunary sequence in place of the signs, the factorization of matrix-valued `H¹` functions, multipliers for UMD spaces, duality; the order `√q` by Pisier, Astérisque 247, p. 106. Pisier–Xu give no proof | Mackey–Jordan–Chen–Farrell–Tropp 2014 (arXiv:1201.6002), §7 (exchangeable pairs, Corollary 7.3) and §8 (Hermitian dilation), with the constant `√(2(q − 1))`; their Remark 7.2, for `2 < q < 3`, uses a variant of the mean value trace inequality that they do not prove and the package proves | not forced: the proof was made before Lust-Piquard–Pisier was obtained. A proof by the sources' argument is planned |
 
-| Source | Cited for | Argument used |
-| --- | --- | --- |
-| Rindler 2018; Dacorogna 2008, Propositions 5.11, 5.13 | Lemmas 2.1, 2.2 | Müller's 1998 lecture notes: Definition 4.2, Remark 3 (separately convex functions are locally Lipschitz); Lemma 4.3 (laminates on a cube with faces orthogonal to the rank-one direction); Definition 4.2, Remark 2 (the domain); Proposition 4.19 (periodic test maps) |
-| Kinderlehrer–Pedregal 1991; Dacorogna 1982 | Proposition 2.2 | the proof of Müller's Theorem 4.5 (iii), §4.8, with his (4.28), Lemma 4.3 and the density argument of his Theorem 4.4 (i) (mollification and Kuhn–Freudenthal interpolation) |
-| Dacorogna 2008, Theorems 5.20, 5.25 (i) | Proposition 5.1 | Conti–Dolzmann–Kirchheim–Müller 2006, Theorem 6.1; Morrey 1952, Lemma 5.1 (minors are quasiaffine) and Theorem 5.2 |
-| Burkholder 1984 (open access on Project Euclid, not obtained); Osękowski 2012, Theorems 3.5, 8.6 | Theorem 2.3 | Burkholder 1988, proofs of Theorems 1.1 and 3.1 (read; previous table) |
-| Burkholder 1984 (not obtained), 1985 (not open access) | the sharpness of `p* − 1` (Corollary 6.3) | the standard extremal examples, in a dyadic form with an explicit potential function ([`Morrey/Cassese/Square/Sharpness.lean`](../../Morrey/Cassese/Square/Sharpness.lean)) |
-| HNVW I, Theorem 4.2.5 | Proposition 2.7 (4) | Maurey's argument as in Pisier's lecture notes (2011), Lemmas 8.29–8.31, Theorem 8.32 |
-| HNVW I, Theorem 4.2.7; Burkholder 1973, 1981 (not obtained) | Proposition 2.7 (1) | Burkholder's good-λ inequality, as in Pisier's lecture notes (Lemma 8.20, second proof of Theorem 8.12), with Doob's inequality and Maurey's theorem |
-| HNVW I, Proposition 4.2.3 | Proposition 2.8 | the argument from the definition that Cox–Veraar (whose introduction was read) credit to Montgomery-Smith |
-| HNVW I, Proposition 4.2.10 (Yaroslavtsev's source for his Lemma 3.2) | Proposition 2.7 (5) | the averaging of `sgn cos(θ − φ)` over `φ`, with Riemann sums |
-| HNVW I, Theorem 4.5.6; Burkholder 1981, 1984 (not obtained) | Proposition 2.7 (6) | the Bellman-function argument; Yaroslavtsev's Proposition 3.7 by Burkholder's argument |
-| HNVW I, Corollary 5.7.6; de Leeuw 1965 | transference (Proposition 7.2) | the standard argument for this direction of de Leeuw's theorem: Poisson summation on `ℤ²`, lattice Riemann sums, Fatou's lemma |
-| Dragičević 2011 | Theorem 7.1, Corollary 7.2 | his lecture notes, arXiv:2109.04555, Proposition 4.2, which reproduces the 2011 theorem and its proof (previous table) |
-| HNVW II, Theorem 6.2.4 | Proposition 6.4 | hypercontractivity by Borell's proof (Borell 1979, read; previous table) |
-| Pisier–Xu 2003 (the Handbook chapter); Lust-Piquard 1986 | Proposition 6.3 | Mackey–Jordan–Chen–Farrell–Tropp 2014: exchangeable pairs (Corollary 7.3, Remark 7.2) and the Hermitian dilation (§8); the lower bound by convexity |
-| Bhatia 1997 | the Schatten facts of Section 1.5 | Courant–Fischer for Weyl's inequalities; the triangle inequality by Bourin and Zhang, *Matrix triangle inequalities: past, present, and future*, arXiv:2610.30538 (2026), Proposition 3.13, by the third proof of their Remark 3.14 (Hermitian dilations and the convexity inequality (1.1), proved by Peierls's standard argument; `q = ∞` by Weyl's inequality), proved in BP; the source treats complex square matrices, BP real `m × n` ones, by the same argument |
+Not a cited result, hence not in the table: the triangle inequality for Schatten norms, which the
+paper uses with no source (Bhatia, Theorem IV.2.1, proves it by majorization). It is proved after
+Bourin and Zhang, *Matrix triangle inequalities: past, present, and future*, arXiv:2610.30538 (2026),
+Proposition 3.13, by the third proof of their Remark 3.14 (Hermitian dilations and the convexity
+inequality (1.1), proved by Peierls's argument; `q = ∞` by Weyl's inequality), for real `m × n`
+matrices where they have complex square ones.
 
-Yaroslavtsev 2018 was read for its statements only; Heinz 2008, cited with Kristensen, was not
-consulted and is not needed.
+### Errors and gaps found in the sources
+
+None affects a statement used here. They are noted in the docstrings of the packages, with the
+repairs.
+
+- **Osękowski 2012.** P. 11, Theorem 2.2: the spliced pair need not have deterministic signs. P. 27,
+  (3.8) and the last display before "and (3.8) follows": signs (the inequality of (3.8) is reversed).
+  P. 29: `U_∞ ≥ (|y| − 1)² − |x|²` should be `≤`, and the two inner products in the bracket have the
+  wrong sign. P. 30: `= U₁(x, y)` should be `= |U₁(x, y)|`. P. 54: `F` is convex on `(0, s₀)` and
+  concave on `(s₀, 1]`, not the reverse, so `F ≥ 0` also needs `F(1) ≥ 0`, which is Burkholder's (1.11);
+  the factor `p − 1` in the constant of the integral formula should not be there. P. 56: `x/(2x + 1)`
+  should be `x/(2x − 1)`. P. 57: `w(1) < 0` follows from (3.65), not from (3.66). The integral
+  formulas (pp. 54, 58) have no proof.
+- **HNVW I (2016).** Proposition 2.4.23 (i) (p. 118): false for `C_c^∞(ℝ^d∖{0})`, since
+  `|f(0)| ≤ ‖f̂‖_1` (not used). Lemma 3.5.14 (p. 231): `g_{ρ−1}` has no meaning at the first index, and
+  the bound `3δλ`, stated for `ρ`, is needed for every `k`. Lemma 3.6.18 (iii) (p. 258): `k = 0, …, n`,
+  not `N`. Theorem 4.2.5 (p. 284): the printed proof applies Theorem 3.6.1, for divisible spaces, to any
+  space (not used). Theorem 4.5.6, Step 2 (p. 335): Lemma 4.5.2, for real-valued functions, is applied
+  before `U < ∞` is known. Proposition 5.7.4 (pp. 460–462): printed without its hypotheses;
+  `ε^{d/p}` and `ε^{d/p'}` interchanged; the density of the `g` in `L^{p'}` does not by itself norm
+  `T_m f`. Lemma 5.7.5 (p. 461): the bound on `f(u + k/ε)` needs a centred cell. Corollary 5.7.6,
+  III ≤ I (p. 463): Proposition 5.7.1 asks that `0` be a Lebesgue point of `m`, and it is not one for a
+  non-constant homogeneous `m` (not used).
+- **HNVW II (2017).** Lemma 6.2.3 (p. 21): `√(1/(q − 2))` should be `√(1/(q − 1))`. Theorem 6.2.4
+  (p. 22): the case `q = 1` is left out.
+- **Dacorogna 2008.** Lemma 5.24, Part 2 (pp. 188–190): for `n > s + 1`, `g ≠ Σ_β X_β` (each term is
+  counted `n − s` times) and `X_β` need not be rank-one affine (`N = 2`, `n = 3`,
+  `g = det(ξ₁, ξ₂) + det(ξ₁, ξ₃)`, `β = (1, 2)`: the `t²` coefficient along `(1, 1) ⊗ b` is `−b₁b₃`); the
+  displayed `t²` coefficients (p. 190) omit terms. Repaired by restricting the columns to `β` first.
+  Theorem 5.20, (ii) ⇒ (ii′) (p. 181): "`f ∈ C¹`" is not justified (not needed). Proposition 5.11: false
+  for `D = ∅`.
+- **Rindler 2026**, (5.10) (p. 114): printed with absolute values, it holds when `h(B) ≤ h(A)`;
+  otherwise `A` and `B` are to be exchanged.
+- **Randrianantoanina 2002** (p. 13 of arXiv:math/0111264): the constant
+  `inf {24 α⁻¹ β⁻² + 2(1 − α)⁻¹ : α, β ∈ (0, 1)}` is `26 + 8√3`, not `14√3/3 + 28`. Theorem 4.3,
+  "by interpolation": not detailed.
+- **Kristensen 1999**, p. 7: `ξ_s` (convex, `0` below `s − 1`, `t²` above `s + 1`) exists only for
+  `s < 3`, since convexity at `s + 1` gives `0 = ξ_s(s − 1) ≥ (s + 1)² − 4(s + 1)`; how `s` is chosen is
+  not said.
+- **Kinderlehrer–Pedregal 1991**, Proposition 8.1: (i) needs `|∂D| = 0`; `f^{qc} = ψ^#` is not stated.
+- **Burkholder 1988**, Remark 1.2, **Dragičević 2011**, p. 465 (`f ∈ W^{n,p}`), and **Mackey et al.
+  2014**, Remark 7.2: stated without proof.
 
 ## 8. What each result depends on
 
@@ -570,103 +680,103 @@ third column lists the results of other works that each one uses, all proved
 
 | Result | Lean | Results from prior work used |
 | --- | --- | --- |
-| Section 1.1 (monotonicity) | [`Cassese.morreyPositive_mono`](../../Morrey/Cassese/Introduction.lean#L405) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
+| Section 1.1 (monotonicity) | [`Cassese.morreyPositive_mono`](../../Morrey/Cassese/Introduction.lean#L405) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
 | Section 1.1 (min (d, m) = 1) | [`Cassese.rankOneConvex_iff_convexOn_of_min_eq_one`](../../Morrey/Cassese/Introduction.lean#L431) | – |
-| Section 1.1 (min (d, m) = 1) | [`Cassese.quasiconvex_iff_convexOn_of_min_eq_one`](../../Morrey/Cassese/Introduction.lean#L460) | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L78) |
+| Section 1.1 (min (d, m) = 1) | [`Cassese.quasiconvex_iff_convexOn_of_min_eq_one`](../../Morrey/Cassese/Introduction.lean#L460) | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L88) |
 | Section 1.1 (min (d, m) = 1) | [`Cassese.morreyPositive_of_min_le_one`](../../Morrey/Cassese/Introduction.lean#L475) | – |
 | Section 1.1 (Šverák's example) | [`Cassese.sverak_example`](../../Morrey/Cassese/Sverak.lean#L32) | – |
 | Thm 1.1 (Kirchheim–Kristensen, quoted) | [`External.KirchheimKristensen.Theorem1_1`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean#L25) | – |
-| Section 1.3 (homogeneous monotonicity) | [`Cassese.homMorreyPositive_mono`](../../Morrey/Cassese/Introduction.lean#L419) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Thm 1.2 | [`Cassese.theorem1_2`](../../Morrey/Cassese/Introduction.lean#L1988) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40), [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L44) |
-| Thm 1.3 (a) | [`Cassese.theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2026) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Thm 1.3 (b) | [`Cassese.theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2051) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Section 1.4 (2 × 2 landscape) | [`Cassese.morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2240) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Section 1.4 (homogeneous landscape) | [`Cassese.homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2268) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Thm 1.4 | [`Cassese.theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2083) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Thm 1.5 | [`Cassese.theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2166) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L58) |
-| Cor 1.6 | [`Cassese.corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L58) |
-| Lemma 2.1 (Rindler, cited) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) | – |
-| Lemma 2.2 (Rindler, cited) | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L78) | – |
-| Lemma 2.2 (Rindler, cited) | [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98) | – |
-| Lemma 2.2 (Rindler, cited) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) | – |
-| Prop 2.1 | [`Cassese.proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
+| Section 1.3 (homogeneous monotonicity) | [`Cassese.homMorreyPositive_mono`](../../Morrey/Cassese/Introduction.lean#L419) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Thm 1.2 | [`Cassese.theorem1_2`](../../Morrey/Cassese/Introduction.lean#L1988) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40), [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54) |
+| Thm 1.3 (a) | [`Cassese.theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2026) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Thm 1.3 (b) | [`Cassese.theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2051) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Section 1.4 (2 × 2 landscape) | [`Cassese.morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2240) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Section 1.4 (homogeneous landscape) | [`Cassese.homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2268) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Thm 1.4 | [`Cassese.theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2083) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Thm 1.5 | [`Cassese.theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2166) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L64) |
+| Cor 1.6 | [`Cassese.corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L64) |
+| Lemma 2.1 (Rindler, cited) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) | – |
+| Lemma 2.2 (Rindler, cited) | [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L88) | – |
+| Lemma 2.2 (Rindler, cited) | [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109) | – |
+| Lemma 2.2 (Rindler, cited) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) | – |
+| Prop 2.1 | [`Cassese.proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
 | Prop 2.2 (Kinderlehrer–Pedregal, cited) | [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) | – |
-| Section 2.1 (quasiconvex minorants) | [`Cassese.quasiconvexAt_iff_exists_minorant`](../../Morrey/Cassese/Toolkit.lean#L1177) | [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 2.3 (a) | [`Cassese.proposition2_3_a`](../../Morrey/Cassese/Toolkit.lean#L1286) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 2.3 (b) | [`Cassese.proposition2_3_b`](../../Morrey/Cassese/Toolkit.lean#L1458) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 2.3 (c) | [`Cassese.proposition2_3_c`](../../Morrey/Cassese/Toolkit.lean#L1565) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L78), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 2.3 (c), one direction | [`Cassese.proposition2_3_c_left`](../../Morrey/Cassese/Toolkit.lean#L1596) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Section 2.1 (consequences of Prop 2.3) | [`Cassese.envelope_zero`](../../Morrey/Cassese/Toolkit.lean#L1608) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Section 2.1 (consequences of Prop 2.3) | [`Cassese.rankOneConvexAt_zero_of_rankOneConvexAt`](../../Morrey/Cassese/Toolkit.lean#L1639) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Section 2.1 (consequences of Prop 2.3) | [`Cassese.quasiconvexAt_zero_of_quasiconvexAt`](../../Morrey/Cassese/Toolkit.lean#L1661) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Section 2.1 (consequences of Prop 2.3) | [`Cassese.nowhereQuasiconvex_of_not_quasiconvexAt_zero`](../../Morrey/Cassese/Toolkit.lean#L1683) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 2.4 | [`Cassese.proposition2_4`](../../Morrey/Cassese/Toolkit.lean#L762) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Prop 2.5 | [`Cassese.proposition2_5`](../../Morrey/Cassese/Toolkit.lean#L1935) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Thm 2.3 (1) (Burkholder, cited) | [`Cassese.burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L112) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70) |
-| Thm 2.3 (2) (Burkholder, cited) | [`Cassese.burkholderSquareFunction_holds`](../../Morrey/Cassese/Hypotheses.lean#L121) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109) |
-| Prop 2.6 (Osękowski, quoted) | [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L42) | – |
-| Prop 2.7 (1) (HNVW, cited) | [`Cassese.hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L496) | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42) |
-| Prop 2.7 (2) (Randrianantoanina, cited) | [`Cassese.randrianantoaninaSchattenUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L506) | [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65) |
-| Prop 2.7 (3) (Pisier, cited) | [`Cassese.pisierLpUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L520) | [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40) |
-| Prop 2.7 (4) (HNVW, cited) | [`Cassese.hnvwDyadicUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L526) | [`External.HNVW.theorem4_2_5`](../../Morrey/Common/External/HNVW/DyadicUMD.lean#L35) |
-| Prop 2.7 (5) (Yaroslavtsev, cited) | [`Cassese.yaroslavtsevComplexUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L532) | [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L44) |
-| Prop 2.7 (6) (HNVW, Yaroslavtsev, cited) | [`Cassese.hnvwZigZag_holds`](../../Morrey/Cassese/Hypotheses.lean#L539) | [`External.HNVW.theorem4_5_6`](../../Morrey/Common/External/HNVW/ZigZag.lean#L45), [`External.Yaroslavtsev.proposition3_7`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L53) |
-| Prop 2.8 (Cox–Veraar, cited) | [`Cassese.coxVeraarDecoupling_holds`](../../Morrey/Cassese/Hypotheses.lean#L547) | [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44) |
+| Section 2.1 (quasiconvex minorants) | [`Cassese.quasiconvexAt_iff_exists_minorant`](../../Morrey/Cassese/Toolkit.lean#L1177) | [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 2.3 (a) | [`Cassese.proposition2_3_a`](../../Morrey/Cassese/Toolkit.lean#L1286) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 2.3 (b) | [`Cassese.proposition2_3_b`](../../Morrey/Cassese/Toolkit.lean#L1458) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 2.3 (c) | [`Cassese.proposition2_3_c`](../../Morrey/Cassese/Toolkit.lean#L1565) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.rankOneConvex_of_quasiconvex`](../../Morrey/Common/External/Rindler/Lemmas.lean#L88), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 2.3 (c), one direction | [`Cassese.proposition2_3_c_left`](../../Morrey/Cassese/Toolkit.lean#L1596) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Section 2.1 (consequences of Prop 2.3) | [`Cassese.envelope_zero`](../../Morrey/Cassese/Toolkit.lean#L1608) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Section 2.1 (consequences of Prop 2.3) | [`Cassese.rankOneConvexAt_zero_of_rankOneConvexAt`](../../Morrey/Cassese/Toolkit.lean#L1639) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Section 2.1 (consequences of Prop 2.3) | [`Cassese.quasiconvexAt_zero_of_quasiconvexAt`](../../Morrey/Cassese/Toolkit.lean#L1661) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Section 2.1 (consequences of Prop 2.3) | [`Cassese.nowhereQuasiconvex_of_not_quasiconvexAt_zero`](../../Morrey/Cassese/Toolkit.lean#L1683) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 2.4 | [`Cassese.proposition2_4`](../../Morrey/Cassese/Toolkit.lean#L762) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Prop 2.5 | [`Cassese.proposition2_5`](../../Morrey/Cassese/Toolkit.lean#L1935) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Thm 2.3 (1) (Burkholder, cited) | [`Cassese.burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L115) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82) |
+| Thm 2.3 (2) (Burkholder, cited) | [`Cassese.burkholderSquareFunction_holds`](../../Morrey/Cassese/Hypotheses.lean#L124) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119) |
+| Prop 2.6 (Osękowski, quoted) | [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L48) | – |
+| Prop 2.7 (1) (HNVW, cited) | [`Cassese.hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L509) | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55) |
+| Prop 2.7 (2) (Randrianantoanina, cited) | [`Cassese.randrianantoaninaSchattenUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L519) | [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67) |
+| Prop 2.7 (3) (Pisier, cited) | [`Cassese.pisierLpUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L533) | [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40) |
+| Prop 2.7 (4) (HNVW, cited) | [`Cassese.hnvwDyadicUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L539) | [`External.HNVW.theorem4_2_5`](../../Morrey/Common/External/HNVW/DyadicUMD.lean#L39) |
+| Prop 2.7 (5) (Yaroslavtsev, cited) | [`Cassese.yaroslavtsevComplexUMD_holds`](../../Morrey/Cassese/Hypotheses.lean#L545) | [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54) |
+| Prop 2.7 (6) (HNVW, Yaroslavtsev, cited) | [`Cassese.hnvwZigZag_holds`](../../Morrey/Cassese/Hypotheses.lean#L555) | [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54), [`External.HNVW.theorem4_5_6`](../../Morrey/Common/External/HNVW/ZigZag.lean#L52), [`External.Yaroslavtsev.proposition3_7`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L63), [`External.Yaroslavtsev.proposition3_7_iff`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L71) |
+| Prop 2.8 (Cox–Veraar, cited) | [`Cassese.coxVeraarDecoupling_holds`](../../Morrey/Cassese/Hypotheses.lean#L568) | [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51) |
 | Lemma 4.1 | [`Cassese.lemma4_1`](../../Morrey/Cassese/TwoByM.lean#L229) | – |
 | Prop 4.1 | [`Cassese.proposition4_1`](../../Morrey/Cassese/TwoByM.lean#L431) | – |
 | Prop 4.1 (nonnegativity) | [`Cassese.proposition4_1_nonneg`](../../Morrey/Cassese/TwoByM.lean#L632) | – |
-| Eq. (10) | [`Cassese.equation10`](../../Morrey/Cassese/TwoByM.lean#L667) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Section 4.2 (UMD of ℓ_q) | [`Cassese.umdEllq_lt_top`](../../Morrey/Cassese/TwoByM.lean#L690) | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40), [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L44) |
+| Eq. (10) | [`Cassese.equation10`](../../Morrey/Cassese/TwoByM.lean#L667) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Section 4.2 (UMD of ℓ_q) | [`Cassese.umdEllq_lt_top`](../../Morrey/Cassese/TwoByM.lean#L690) | [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Pisier.corollary5_22`](../../Morrey/Common/External/Pisier/LpUMD.lean#L40), [`External.Yaroslavtsev.lemma3_2`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean#L54) |
 | Section 4.3 (limiting argument) | [`Cassese.twoByM_ratio_le_qcThreshold`](../../Morrey/Cassese/TwoByM.lean#L3011) | – |
 | Lemma 4.2 | [`Cassese.lemma4_2`](../../Morrey/Cassese/TwoByM.lean#L1585) | – |
 | Eqs. (13), (14) (Burkholder, cited) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142) | [`External.Burkholder.scalarFunctionQ_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L123) |
 | Prop 4.2 | [`Cassese.proposition4_2`](../../Morrey/Cassese/TwoByM.lean#L2197) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142) |
 | Prop 4.2 (the minorant) | [`Cassese.proposition4_2_minorant`](../../Morrey/Cassese/TwoByM.lean#L2155) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142) |
 | Section 4.3 (limiting argument, for f_n) | [`Cassese.twoByM_not_qc_explicitF`](../../Morrey/Cassese/TwoByM.lean#L2602) | – |
-| Prop 4.3 | [`Cassese.proposition4_3`](../../Morrey/Cassese/TwoByM.lean#L2799) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Remark 4.5 (Thm 1.2, elementary route) | [`Cassese.theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480) | [`External.Burkholder.scalarFunctionQ_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L123), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 5.1 | [`Cassese.proposition5_1`](../../Morrey/Cassese/TwoByThree/Folklore.lean#L260) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Dacorogna.rankOneAffineMinors_holds`](../../Morrey/Common/External/Dacorogna/Minors.lean#L71), [`External.Dacorogna.minor3_quasiaffine`](../../Morrey/Common/External/Dacorogna/Minors.lean#L83), [`External.Dacorogna.quadraticForm_quasiconvex`](../../Morrey/Common/External/Dacorogna/Minors.lean#L99) |
+| Prop 4.3 | [`Cassese.proposition4_3`](../../Morrey/Cassese/TwoByM.lean#L2799) | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L142), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Remark 4.5 (Thm 1.2, elementary route) | [`Cassese.theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480) | [`External.Burkholder.scalarFunctionQ_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L123), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 5.1 | [`Cassese.proposition5_1`](../../Morrey/Cassese/TwoByThree/Folklore.lean#L260) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Dacorogna.rankOneAffineMinors_holds`](../../Morrey/Common/External/Dacorogna/Minors.lean#L75), [`External.Dacorogna.minor3_quasiaffine`](../../Morrey/Common/External/Dacorogna/Minors.lean#L87), [`External.Dacorogna.quadraticForm_quasiconvex`](../../Morrey/Common/External/Dacorogna/Minors.lean#L104) |
 | Section 5.1 (q rank-one convex on 𝓛) | [`Cassese.quarticQ_rankOneConvexOn_calL`](../../Morrey/Cassese/TwoByThree/Basic.lean#L359) | – |
 | Section 5.2 (q₃ rank-one convex on 𝓛₃) | [`Cassese.q3_rankOneConvexOn_L3`](../../Morrey/Cassese/TwoByThree/Basic.lean#L367) | – |
 | Eq. (24) | [`Cassese.equation24`](../../Morrey/Cassese/TwoByThree/Basic.lean#L381) | – |
 | Prop 5.2 | [`Cassese.proposition5_2`](../../Morrey/Cassese/TwoByThree/Witness.lean#L1327) | – |
-| Lemma 5.1 (1) | [`Cassese.lemma5_1_part1`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L436) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Lemma 5.1 (1), with constants | [`Cassese.lemma5_1_part1_quant`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L324) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Lemma 5.1 (2) | [`Cassese.lemma5_1_part2`](../../Morrey/Cassese/TwoByThree/Extension.lean#L276) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
+| Lemma 5.1 (1) | [`Cassese.lemma5_1_part1`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L436) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Lemma 5.1 (1), with constants | [`Cassese.lemma5_1_part1_quant`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L324) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Lemma 5.1 (2) | [`Cassese.lemma5_1_part2`](../../Morrey/Cassese/TwoByThree/Extension.lean#L276) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
 | Proof of Thm 1.3 (κ = 2) | [`Cassese.tbt_correction_identity`](../../Morrey/Cassese/TwoByThree/Basic.lean#L459) | – |
 | Proof of Thm 1.3 (κ = 2) | [`Cassese.L3_rankOneCorrection`](../../Morrey/Cassese/TwoByThree/Basic.lean#L481) | – |
-| Proof of Thm 1.3 (q_{δ,K/δ} rank-one convex) | [`Cassese.qDeltaLambda_rankOneConvex`](../../Morrey/Cassese/TwoByThree/Extension.lean#L542) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
+| Proof of Thm 1.3 (q_{δ,K/δ} rank-one convex) | [`Cassese.qDeltaLambda_rankOneConvex`](../../Morrey/Cassese/TwoByThree/Extension.lean#L542) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
 | Proof of Thm 1.3 (a) (the witness) | [`Cassese.twoByThree_not_quasiconvexAt_qDeltaLambda`](../../Morrey/Cassese/TwoByThree/WitnessCutoff.lean#L1030) | – |
-| Proof of Thm 1.3 (b) (the witness) | [`Cassese.twoByThree_theorem1_3_b_witness`](../../Morrey/Cassese/TwoByThree/NearFour.lean#L860) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Cor 5.2 | [`Cassese.corollary5_2`](../../Morrey/Cassese/NonLocality.lean#L32) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.Kristensen.smoothing_holds`](../../Morrey/Common/External/Kristensen/Smoothing.lean#L106) |
-| Cor 5.3 | [`Cassese.corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L197) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Cor 5.4 | [`Cassese.corollary5_4`](../../Morrey/Cassese/TwoByThree/HessianCutoff.lean#L408) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Prop 6.1 | [`Cassese.proposition6_1`](../../Morrey/Cassese/Square.lean#L2602) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Prop 6.2 | [`Cassese.proposition6_2`](../../Morrey/Cassese/Square.lean#L1014) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Prop 6.3 (Pisier–Xu, cited) | [`Cassese.pisierXuKhintchine_holds`](../../Morrey/Cassese/Hypotheses.lean#L644) | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77) |
-| Prop 6.4 (Kahane–Khintchine, cited) | [`Cassese.kahaneKhintchine_holds`](../../Morrey/Cassese/Hypotheses.lean#L651) | [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Eq. (31) | [`Cassese.equation31`](../../Morrey/Cassese/Square.lean#L814) | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Remark 6.3 | [`Cassese.remark6_3`](../../Morrey/Cassese/Square.lean#L1217) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.Borell.kahaneKhintchine_hypercontractive`](../../Morrey/Common/External/Borell/Hypercontractivity.lean#L58) |
-| Prop 6.5 | [`Cassese.proposition6_5`](../../Morrey/Cassese/Square.lean#L1895) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41), [`External.Borell.kahaneKhintchine_hypercontractive`](../../Morrey/Common/External/Borell/Hypercontractivity.lean#L58) |
-| Prop 6.5 (q < ∞) | [`Cassese.proposition6_5_finite`](../../Morrey/Cassese/Square.lean#L1720) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Prop 6.5 (q = ∞) | [`Cassese.proposition6_5_infty`](../../Morrey/Cassese/Square.lean#L1768) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.Borell.kahaneKhintchine_hypercontractive`](../../Morrey/Common/External/Borell/Hypercontractivity.lean#L58) |
-| Cor 6.1 | [`Cassese.corollary6_1`](../../Morrey/Cassese/Square.lean#L2259) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Cor 6.1 (every large d) | [`Cassese.corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2274) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L109), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L42), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L65), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L44), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L77), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L41) |
-| Proof of Cor 6.1 (periodic Hessian test maps) | [`Cassese.not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square.lean#L1925) | – |
+| Proof of Thm 1.3 (b) (the witness) | [`Cassese.twoByThree_theorem1_3_b_witness`](../../Morrey/Cassese/TwoByThree/NearFour.lean#L860) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Cor 5.2 | [`Cassese.corollary5_2`](../../Morrey/Cassese/NonLocality.lean#L32) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.Kristensen.smoothing_holds`](../../Morrey/Common/External/Kristensen/Smoothing.lean#L106) |
+| Cor 5.3 | [`Cassese.corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L197) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Cor 5.4 | [`Cassese.corollary5_4`](../../Morrey/Cassese/TwoByThree/HessianCutoff.lean#L408) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Prop 6.1 | [`Cassese.proposition6_1`](../../Morrey/Cassese/Square.lean#L2604) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Prop 6.2 | [`Cassese.proposition6_2`](../../Morrey/Cassese/Square.lean#L1016) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Prop 6.3 (Pisier–Xu, cited) | [`Cassese.pisierXuKhintchine_holds`](../../Morrey/Cassese/Hypotheses.lean#L667) | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80) |
+| Prop 6.4 (Kahane–Khintchine, cited) | [`Cassese.kahaneKhintchine_holds`](../../Morrey/Cassese/Hypotheses.lean#L674) | [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Eq. (31) | [`Cassese.equation31`](../../Morrey/Cassese/Square.lean#L816) | [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Remark 6.3 | [`Cassese.remark6_3`](../../Morrey/Cassese/Square.lean#L1219) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_hypercontractive`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L48) |
+| Prop 6.5 | [`Cassese.proposition6_5`](../../Morrey/Cassese/Square.lean#L1897) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58), [`External.HNVW.theorem6_2_4_hypercontractive`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L48) |
+| Prop 6.5 (q < ∞) | [`Cassese.proposition6_5_finite`](../../Morrey/Cassese/Square.lean#L1722) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Prop 6.5 (q = ∞) | [`Cassese.proposition6_5_infty`](../../Morrey/Cassese/Square.lean#L1770) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_hypercontractive`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L48) |
+| Cor 6.1 | [`Cassese.corollary6_1`](../../Morrey/Cassese/Square.lean#L2261) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Cor 6.1 (every large d) | [`Cassese.corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2276) | [`External.Osekowski.squareFunction`](../../Morrey/Common/External/Osekowski/Inequality.lean#L119), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58), [`External.HNVW.theorem4_2_7`](../../Morrey/Common/External/HNVW/Extrapolation.lean#L55), [`External.Randrianantoanina.remark4_6`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean#L67), [`External.CoxVeraar.decoupling`](../../Morrey/Common/External/CoxVeraar/Decoupling.lean#L51), [`External.PisierXu.theorem6_1`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L80), [`External.HNVW.theorem6_2_4_seminorm`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean#L58) |
+| Proof of Cor 6.1 (periodic Hessian test maps) | [`Cassese.not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square.lean#L1927) | – |
 | Proof of Cor 6.1 (periodic Hessian test maps) | [`Cassese.square_not_hessianQuasiconvexAt_of_periodic`](../../Morrey/Cassese/Square/Hessian.lean#L204) | – |
-| Prop 6.6 | [`Cassese.proposition6_6`](../../Morrey/Cassese/Square.lean#L2752) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Thm 6.2 | [`Cassese.theorem6_2`](../../Morrey/Cassese/Square.lean#L2805) | – |
-| Cor 6.3 (lower bound) | [`Cassese.corollary6_3_lower`](../../Morrey/Cassese/Square.lean#L2942) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`Cassese.burkholderSharpness_holds`](../../Morrey/Cassese/Square/Sharpness.lean#L878) |
-| Cor 6.3 (upper bound) | [`Cassese.corollary6_3_upper`](../../Morrey/Cassese/Square.lean#L3078) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Cor 6.3 (separation) | [`Cassese.corollary6_3_separation`](../../Morrey/Cassese/Square.lean#L3176) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Cor 6.4 | [`Cassese.corollary6_4`](../../Morrey/Cassese/Square.lean#L3477) | – |
-| Cor 6.4 (not quasiconvex) | [`Cassese.corollary6_4_not_quasiconvexAt`](../../Morrey/Cassese/Square.lean#L3526) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Thm 1.4, p = 4 (Section 6.3) | [`Cassese.theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3588) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L98), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
-| Prop 7.1 | [`Cassese.proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L343) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61) |
-| Prop 7.2 | [`Cassese.proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1075) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117) |
-| Prop 7.2 (lower bound) | [`Cassese.proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1091) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46) |
-| Thm 7.1 | [`Cassese.theorem7_1`](../../Morrey/Cassese/FourByTwo.lean#L1261) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L70), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L61), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L58) |
-| Cor 7.2 | [`Cassese.corollary7_2`](../../Morrey/Cassese/FourByTwo.lean#L1602) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L117), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L46), [`External.Dragicevic.theorem1_1_two`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L46) |
+| Prop 6.6 | [`Cassese.proposition6_6`](../../Morrey/Cassese/Square.lean#L2754) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Thm 6.2 | [`Cassese.theorem6_2`](../../Morrey/Cassese/Square.lean#L2807) | – |
+| Cor 6.3 (lower bound) | [`Cassese.corollary6_3_lower`](../../Morrey/Cassese/Square.lean#L2944) | [`External.Osekowski.exists_lt_lpNorm_transform`](../../Morrey/Common/External/Osekowski/Sharpness.lean#L81), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Cor 6.3 (upper bound) | [`Cassese.corollary6_3_upper`](../../Morrey/Cassese/Square.lean#L3080) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Cor 6.3 (separation) | [`Cassese.corollary6_3_separation`](../../Morrey/Cassese/Square.lean#L3178) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Cor 6.4 | [`Cassese.corollary6_4`](../../Morrey/Cassese/Square.lean#L3479) | – |
+| Cor 6.4 (not quasiconvex) | [`Cassese.corollary6_4_not_quasiconvexAt`](../../Morrey/Cassese/Square.lean#L3528) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Thm 1.4, p = 4 (Section 6.3) | [`Cassese.theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3590) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L109), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L58) |
+| Prop 7.1 | [`Cassese.proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L343) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72) |
+| Prop 7.2 | [`Cassese.proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1075) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128) |
+| Prop 7.2 (lower bound) | [`Cassese.proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1091) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56) |
+| Thm 7.1 | [`Cassese.theorem7_1`](../../Morrey/Cassese/FourByTwo.lean#L1261) | [`External.Osekowski.inequality`](../../Morrey/Common/External/Osekowski/Inequality.lean#L82), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L72), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56), [`External.Dragicevic.theorem1_1_two_pStar`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L64) |
+| Cor 7.2 | [`Cassese.corollary7_2`](../../Morrey/Cassese/FourByTwo.lean#L1602) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L128), [`External.HNVW.transference_beurlingPow`](../../Morrey/Common/External/HNVW/Transference.lean#L56), [`External.Dragicevic.theorem1_1_two`](../../Morrey/Common/External/Dragicevic/LowerBound.lean#L52) |
 | Conjecture 1 (stated) | [`Cassese.Conjecture1`](../../Morrey/Cassese/Conclusion.lean#L18) | – |
 
 The route check ([`scripts/route_check.py`](../../scripts/route_check.py) with [`paper_routes.tsv`](paper_routes.tsv)) finds 67
@@ -695,7 +805,7 @@ definition rather than a statement.
   186–188, Osękowski's Proposition 2.6, Grabovsky's examples (lines 144–156, 201–204), Iwaniec's bound
   `C^{rc} ≤ p* − 1` (lines 763–765), and the history of Remarks 2.3 and 3.1. Theorem 1.1 and
   Proposition 2.6 are stated ([`External.KirchheimKristensen.Theorem1_1`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean#L25),
-  [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L42)) and not proved.
+  [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L48)) and not proved.
 - Conjecture 1 is stated as a definition ([`Conjecture1`](../../Morrey/Cassese/Conclusion.lean#L18)), not proved.
 
 ## 10. The paper in the literature
@@ -781,18 +891,30 @@ claimed, not as proved.
 - The author formalized Theorem 1.2 and Theorem 1.3 at `p = 4` in Lean (v4.32.2)
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)), with an
   AI system (the paper's declaration names ChatGPT 5.6 Sol), released without a license; the
-  `2 × 3` file was added after v3 and is not in its default build. It was not consulted. This
-  formalization covers the whole paper, including what the author's does not: Theorems 1.4 and
-  1.5, Corollaries 1.6 and 5.2–5.4, Sections 6 and 7, and the cited results that the proofs use.
-- The cited results are proved in three Lake packages written for this formalization, which
-  depend only on Mathlib and are published on GitHub, pinned by commit in the lakefile:
-  [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) (`bf215c5`),
-  [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) (`250cd49`) and
-  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) (`fc86bbb`).
+  `2 × 3` file was added after v3 and is not in its default build. This formalization covers the
+  whole paper, including what the author's does not: Theorems 1.4 and 1.5, Corollaries 1.6 and
+  5.2–5.4, Sections 6 and 7, and the cited results that the proofs use.
 - Conti, Dolzmann and Dondl's Lean code for their `3 × 3` example
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc),
   Apache-2.0, written with Claude Opus 5.5 under the authors' guidance) shares the subject, not the
-  results. It was not consulted.
+  results.
+- The proofs here were written without consulting either, and nothing from them was used. Parts of
+  both were displayed on 21 and 22 November 2026 by searches for earlier formalizations and for the
+  literature, and by checks of the documents: [`CREDITS.md`](CREDITS.md) says which.
+- The cited results are proved in three Lake packages written for this formalization, which
+  depend only on Mathlib and are published on GitHub, pinned by commit in [`lakefile.toml`](../../lakefile.toml):
+  [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
+  [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
+  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations).
+- Other formalizations of cited results, all in Lean, found on 22 November 2026 after the packages'
+  proofs (the packages' READMEs give the searches, the overlaps and the rest): Burkholder's inequality
+  for real martingales ([SmaniaD/Burkholder](https://github.com/SmaniaD/Burkholder)); a UMD constant
+  and cases of Burkholder's inequality
+  ([elorist/UMD_Hilberttransform](https://github.com/elorist/UMD_Hilberttransform)); the
+  Kahane–Khintchine inequality and the Schatten triangle inequality
+  ([Tau Ceti](https://github.com/TauCetiProject/TauCeti)); the Beurling–Ahlfors transform on `L^p`
+  (Tau Ceti; `will1491/no-wandering-domains`); null Lagrangians
+  ([PDEAtlas](https://github.com/Robertboy18/PDEAtlas)). None was used here.
 
 ## 11. What's next
 
@@ -819,8 +941,11 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 
 ### Simpler proofs
 
-Simpler arguments for steps of the paper or of the cited results, found while proving. The
-formal proofs follow the paper; the column "checked" says where each simpler argument was checked.
+Simpler arguments found while proving. The formal proofs follow the paper and the cited sources; the
+last column says where each simpler argument was checked: in Lean (in a library, in the history of a
+package, or in a file outside the libraries that compiles against the commit named), or on paper.
+
+Steps of the paper:
 
 | Step | The paper's argument | The simpler one, and what it saves | Checked |
 | --- | --- | --- | --- |
@@ -830,16 +955,48 @@ formal proofs follow the paper; the column "checked" says where each simpler arg
 | Proposition 5.2, smoothness of `ζ` | `ζ` is the unique root of `w̄ ζ² + 2(t + i)ζ + w = 0` in the disc, a simple one, hence smooth by the implicit function theorem | the closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of `(1 − i t)² + \|w\|²`, which lies off the negative axis, with `Re(1 − i t + s) > 0`; smoothness by composition | in Lean, outside the library |
 | Corollary 1.6, the witness | a smooth periodic `φ` with `∫ F(∇φ) < 0` (E35) | the Lipschitz periodic `φ` that Lemma 2.2 gives: the expansion in `ε` needs only bounded `∇φ`; saves the density step | in Lean, outside the library |
 | Lemma 5.1 (2) | `n`-step rank-one Rademacher martingales, Burkholder's inequality, Proposition 2.5, the estimates (27)–(29) | for `f` that is `C²` away from `0`, the second derivative along rank-one lines: with `D²f[R_L, R_L] ≥ 0` and `\|D²f(X)\| ≤ C\|X\|^{p−2}`, polarization gives `D²f(πA)[πR, πR] ≥ −C' \|πA\|^{p−2} \|π^⊥R\| (\|πR\| + \|π^⊥R\|)`, and the inequality of arithmetic and geometric means against `D²(‖·‖_Λ^p)(A)[R, R] ≥ p ‖A‖_Λ^{p−2} ‖R‖_Λ²`, `‖A‖_Λ² = \|πA\|² + Λ²\|π^⊥A\|²`, gives `Λ ≳ 1/δ`; saves the martingales and Burkholder's inequality | on paper only |
-| Dacorogna, Theorem 5.20 (Proposition 5.1) | the book was not accessible; formalized by Conti–Dolzmann–Kirchheim–Müller's proof, which takes the derivatives of a continuous rank-one affine function in the sense of distributions | without continuity: a rank-one affine function is affine in each entry, hence a sum of products of distinct entries, and `t ↦ f(tF)` has degree `< k` when `F` is a sum of fewer than `k` rank-one matrices; saves the first half of their proof (the derivatives and the polynomial structure) | in Lean: `CalculusOfVariations.RankOneAffine.exists_eq_sum_minor`, in the package, used by no proof here |
+
+Cited results. The packages hold more sketches and smaller items: `docs/SHORTER_PROOFS.md` of BP, and
+the sections "Shorter proofs" of the READMEs of HA and CV. Sizes are in lines of Lean, the simpler
+argument against the source's.
+
+| Cited result | The source's argument | The simpler one | Size | Checked |
+| --- | --- | --- | --- | --- |
+| Theorem 2.3 (1) (Osękowski, Theorem 3.5 (ii)) | `U_p` is an integral of simple functions; Fubini's theorem | Burkholder 1988, Theorem 1.1: (1.12) along lines on which neither coordinate vanishes, the shift of the martingales by a vector orthogonal to `H`, dominated convergence, `E U_p ≤ U_p(0, 0) = 0` | 527, beyond the lemmas kept for (13) and (14), against 1,120 | in Lean, in the history of BP (commit `250cd49`) |
+| Theorem 2.3 (1) | the same | (14) and the one-sided derivatives of `U_p` in the norms give a tangent majorant of `U_p` at every point, so that Burkholder's method (Osękowski, Theorem 2.7) applies to `U_p` itself: no shift, no integral formula | 60–100 (estimate) | on paper |
+| (14) (Burkholder 1988, Remark 1.2) | completed here from (1.14) and the shift of the proof of (1.8) | the two simple functions of Osękowski's integral formulas have affine majorants that touch them at every point of a line, hence are concave along it, and so is the integral; `p = 2` is an identity | 90 against 307 | in Lean, at BP `25b96a3` |
+| the sharpness of `p* − 1` for `p > 2` | duality (Osękowski, p. 59) | the second approach on `x ↦ U⁰(1 − x, x)`: the chord from `1 − 1/(β + 1)` to `1` gives `p w(1) ≤ (β + 1) w(1)`, and `w(1) ≥ 1`; the "reasoning similar to that in the case `1 < p < 2`" that the book mentions | 41 against 137 | in Lean, at BP `25b96a3` |
+| the sharpness for `1 < p ≤ 2`, the end | one-sided derivatives of `w` at `1` | both slopes at `1` are at most the slope of the chord from `1/(β + 1)` to `1`, and `x ↓ 1`; `w(1) < 0` from the initial condition 3° | about 85 against 96 | in Lean, at BP `25b96a3` |
+| the sharpness for dyadic martingales | on `U⁰`, then Theorem 3.34 | the second approach run on the dyadic `W⁰` | – | the proof used, in BP |
+| Proposition 2.7 (1) (HNVW I, Lemmas 3.5.13, 3.5.14) | the localized weak-type bound, summed over `{ρ = k}` | one application of the weak-type bound, to `h`, the martingale between the times `ρ` and `ν ∧ σ`: `h* ≤ 3δλ 1_{ρ<∞}` gives `η = (K/α)^q` at once | about 100 less | on paper; a variant in Lean, in the history of BP |
+| Proposition 2.7 (1) (HNVW I, Lemma 3.5.3, the adjoint) | cross terms | `T = E_0 + Σ_k M_{σ_k} D_k`, with `D_k` self-adjoint and commuting with `M_{σ_k}`: termwise | about 40 less | on paper |
+| Proposition 2.7 (4) (HNVW I, Theorem 4.2.5) | approximation by Paley–Walsh martingales, after Maurey (pp. 284–285) | the book's alternative proof (p. 334) | 2,345 against 3,222 (Maurey's route as in Pisier's lecture notes) | the proof used, in BP; Maurey's route in its history |
+| Proposition 2.7 (5) (HNVW I, Proposition 4.2.10 with Theorem 4.2.25) | convex hulls for deterministic multipliers, then incremental filtrations | Proposition 3.2.14 for the vector of the *values* `z_i` of the predictable multipliers: `φ • Y = Σ_ε c(ε) (σ^ε • Y)`, with `σ^ε_k = ε_{i(k, ·)}` predictable signs; no Lemma 3.6.18 and no Theorem 4.2.25 | 88 against 911 | in Lean, at BP `67f48bf` |
+| HNVW I, Theorem 4.2.25, for signs | Lemma 3.6.18 (incremental filtrations) | Theorem 4.5.6, (2)⇒(3)⇒(1), from the cube: it ends with predictable signs | 12 | in Lean, at BP `67f48bf` |
+| HNVW I, Theorem 4.2.25 | the same | for multipliers in the unit ball, from the same theorem (about 60 lines); or on any probability space, revealing `ℱ_{k+1}` on one level set `{φ_{k+1} = z_i}` at a time (150–200) | estimates, against about 500 | on paper |
+| Proposition 2.7 (6) (HNVW I, Theorem 4.5.6) | homogenization (4.31); padding and even/odd interleaving of two pairs (Step 2) | `E F(f_n, g_n) ≤ u(0, 0)` for `tf`, `tg` and `t → ∞`; the two pairs on consecutive blocks of signs | about 10 against 101; about 125 against 185 | on paper |
+| Proposition 6.4 (HNVW II, Lemma 6.2.3) | the two-point inequality for all real functions: the case `\|y\| > 1`, duality | after the reduction by positivity, only nonnegative functions are needed | 123 less | in Lean, in BP (kept for Borell's proof) |
+| Proposition 6.4 (HNVW II, Theorem 6.2.4) | tensorization in `L^q(D^{N−1}; X)` | Borell 1979, (2.1), at `c = 0` | about 10, given Borell's proof | in Lean, at BP `67f48bf` |
+| Proposition 6.3, the upper bound | Lust-Piquard–Pisier 1991 | exchangeable pairs (Mackey et al. 2014) | – | the proof used, in BP (Section 7) |
+| transference (HNVW I, Corollary 5.7.6, I ≤ II) | a pairing with a second function, Hölder's inequality, duality and density | Igari 1969 (Tôhoku Math. J. 21, Theorem 2): the series with coefficients `R⁻² m(n) f̂(n/R)`, `n ≠ 0`, at `x/R` are, up to the term `n = 0`, Riemann sums of `T_m f(x)`, and Fatou's lemma concludes | about 225 against 1,000 | in Lean, in the history of HA (commit `bf215c5`) |
+| HNVW I, Proposition 5.7.4 | `g` with `ĝ` supported off `0` | any Schwartz `g`: no density step for `g` | – | on paper |
+| HNVW I, Proposition 2.4.23 (ii) | `L^p` limits by translations and `‖φ_R‖_p` | `‖h‖_p ≤ ‖h‖_1^{1/p} ‖h‖_∞^{1−1/p}` | about 40 against 200 | on paper |
+| Lemma 2.1 (Rindler) | the singular value decomposition | a rank-one convex function is convex in each entry, and a separately convex function is locally Lipschitz; no explicit constant | one line, given the latter | in Lean, at CV `e474abf` |
+| Lemma 2.1, the bound (5.9) | the same | the rows (or the columns) of `B − A` are Frobenius-orthogonal of rank at most one | about 150 less | on paper (the orthogonality in Lean, at CV `e474abf`) |
+| Lemma 2.2, quasiconvex ⇒ rank-one convex, on the cube | laminates with cut-offs (Rindler) | the periodic sawtooth is a periodic test map | 4 | in Lean, at CV `e474abf` |
+| Proposition 2.2 (Kinderlehrer–Pedregal, Proposition 8.1) | (ii) in every rank-one direction, on rotated cubes | (ii) along the `e_i ⊗ e_j`, then the local Lipschitz bound for separately convex functions | about 100 less | in Lean, at CV `e474abf` |
+| Dacorogna, Theorem 5.20 (Proposition 5.1) | induction on the rows, with Lemma 5.24 | `f` is multi-affine in the rows; its part multilinear in the rows `I` vanishes when two of them are equal (the `t²` coefficient along `(e_i + e_j) ⊗ b`), so it is an alternating form, a combination of minors with the rows `I`. The same argument shortens Lemma 5.24 | – | on paper |
 
 ### The formalization
 
 - Nothing is assumed. What is not proved: the two theorems quoted only as context (Theorem 1.1,
   Proposition 2.6), Conjecture 1, and the claims of Section 9.
-- The packages state their planned extensions: Dragičević's bound for every power `𝓑^n`, the
+- Planned: a proof of Proposition 6.3's upper bound along Lust-Piquard and Pisier (Section 7), in a
+  package of its own.
+- The packages state their other planned extensions: Dragičević's bound for every power `𝓑^n`, the
   reverse direction of transference and general dimension (`lean4-harmonic-analysis`);
-  Randrianantoanina's Theorem 3.1 for general semifinite von Neumann algebras, and the
-  non-commutative Khintchine inequality for rectangular and complex matrices
+  Randrianantoanina's Theorem 3.1 for general semifinite von Neumann algebras and non-scalar
+  multipliers, and the non-commutative Khintchine inequality for rectangular and complex matrices
   (`lean4-banach-probability`); null Lagrangians of every order (`lean4-calculus-of-variations`).
 - [`Morrey/Common/Basic/`](../../Morrey/Common/Basic) holds two Mathlib candidates: `Basic.LinearAlgebra.Matrix.RankTwo` (for
   `Mathlib/LinearAlgebra/Matrix/Rank.lean`) and `Basic.Analysis.Calculus.BumpFunction.Mollify`
@@ -850,6 +1007,6 @@ formal proofs follow the paper; the column "checked" says where each simpler arg
   periodic functions, martingale inequalities in Banach spaces, UMD spaces, Schatten classes,
   quasiconvexity and distributions on `ℝ`.
 - [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms, under its source's
-  name (Burkholder, HNVW, Pisier, Randrianantoanina, Cox–Veraar, Yaroslavtsev, Pisier–Xu, Borell,
+  name (Osękowski, Burkholder, HNVW, Pisier, Randrianantoanina, Cox–Veraar, Yaroslavtsev, Pisier–Xu,
   Dragičević, Rindler, Dacorogna, Kinderlehrer–Pedregal, Kristensen), for reuse by other
   formalizations that cite the same sources.
