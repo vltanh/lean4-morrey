@@ -71,7 +71,7 @@ for random instances and, for a generic instance at `l = 1`, for every mold
 | E14 | the summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5, is false |
 | E15 | the gaps in the proof of Proposition 7.1: the dimension count, the positivity, the starting barycenter, the averaging over translates |
 | E16 | Theorem 1.1 (2) from (1), "a standard density argument", is not given |
-| E17 | later work: counterexamples claimed in 2026 preprints on `ℝ^{2×3}` and `ℝ^{2×4}` would, if correct, contradict the claim of v1–v2 for two-component maps in dimension `N ≥ 3` |
+| E17 | later work: the claim of v1–v2 for two-component maps in dimension `N ≥ 3` is false; Cassese's `2 × 3` counterexample (2026) is proved in this repository |
 | E4 | Theorem 1.2's "arbitrary function" needs to be measurable |
 
 18 findings in all, with the misprints: see [REPORT.md](REPORT.md). Every proof of a correct
