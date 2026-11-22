@@ -15,7 +15,8 @@ periodic map `w(x) = (1/2π)(sin 2πx₁, sin 2πx₂, sin 2π(x₁ + x₂))` ha
 
 This directory formalizes the whole paper in Lean 4 with Mathlib. **Every result is proved, by the
 paper's argument, and nothing is assumed.** The paper has no false statement; the formalization
-supplies the steps it leaves to the reader, chief among them the limit in the proof of Lemma 1.
+supplies the steps it leaves to the reader, chief among them the limit in the proof of Lemma 1, and
+builds the objects it takes for granted, such as Lemma 1's cut-off `η_ε` with `|Dη_ε| ≤ 2/ε`.
 
 ## Status
 
@@ -54,7 +55,9 @@ the class does not depend on the domain).
 | E4 | Lemma 2: three implicit steps (compactness of `𝒦`, `Ȳ = PȲ`, the passage to every rank-one `Y`) |
 | E5 | the Corollary: `T` can map a rank-one line to a point; Lemma 1 is used without being named |
 
-Details, how the formalization reads the paper, its place in the literature and what comes next:
+Every proof follows the paper's argument: there is no departure
+([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)). Details, how the
+formalization reads the paper, its place in the literature and what comes next:
 [REPORT.md](REPORT.md).
 
 ## Trust
@@ -62,21 +65,28 @@ Details, how the formalization reads the paper, its place in the literature and 
 - `lake build` passes; no `sorry` outside [`Challenge.lean`](../../palomar/Sverak/Challenge.lean), no `axiom`.
 - The repository's audit, [`scripts/Audit.lean`](../../scripts/Audit.lean), checks that every result
   uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound).
-- The route check, with [`docs/paper_routes.tsv`](paper_routes.tsv) and
-  [`docs/route_differences.tsv`](route_differences.tsv), checks that each proof uses the
+- The route check, with [`paper_routes.tsv`](paper_routes.tsv) and
+  [`route_differences.tsv`](route_differences.tsv) (empty), checks that each proof uses the
   results that the paper's proof cites.
 - Comparator accepts [`Solution.lean`](../../palomar/Sverak/Solution.lean) against [`Challenge.lean`](../../palomar/Sverak/Challenge.lean)
   ([`comparator.json`](../../palomar/Sverak/comparator.json)).
-- Independent AI agents checked the statements against the paper and the formal proofs against the
-  paper's. No person has reviewed the proofs.
+- Independent AI agents checked the statements against the paper, the formal proofs against the
+  paper's, and every recorded departure from the paper. No person has reviewed the proofs.
 
 ## Building and Palomar
+
+The library uses only Mathlib, and one module shared with the other papers,
+[`Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean)
+(mollification, for the cut-off of Lemma 1). It uses none of the packages that Cassese's
+formalization needs, but Lake loads them to build any part of the repository: see the
+[overview's building instructions](../../README.md#building). Lean and Mathlib `v4.36.0-rc2`.
 
 This paper is its own Palomar submission: [`Challenge.lean`](../../palomar/Sverak/Challenge.lean),
 [`Solution.lean`](../../palomar/Sverak/Solution.lean), [`comparator.json`](../../palomar/Sverak/comparator.json) and
 [`formalization.yaml`](../../palomar/Sverak/formalization.yaml), named by the workflow
 [`palomar_preflight_sverak.yml`](../../.github/workflows/palomar_preflight_sverak.yml). From the
-repository root:
+repository root, with the packages in place (and, for Comparator, the copies that the overview
+describes):
 
 ```sh
 lake exe cache get && lake build
@@ -92,18 +102,20 @@ The library is [`Morrey/Sverak/`](../../Morrey/Sverak), the Palomar submission
 | --- | --- |
 | [`Defs.lean`](../../Morrey/Sverak/Defs.lean) | the definitions that the Challenge copies: `jac`, [`RankOneConvex`](../../palomar/Sverak/Challenge.lean#L52), [`QuasiconvexOn`](../../palomar/Sverak/Challenge.lean#L65), [`unitCube`](../../palomar/Sverak/Challenge.lean#L56), [`frobSq`](../../palomar/Sverak/Challenge.lean#L73), `P`, `f`, `F`, `T` |
 | [`Cube.lean`](../../Morrey/Sverak/Cube.lean) | the unit cube and smooth test maps |
-| [`Lemma1.lean`](../../Morrey/Sverak/Lemma1.lean) | Lemma 1 |
+| [`Lemma1.lean`](../../Morrey/Sverak/Lemma1.lean) | Lemma 1: the cut-off `η_ε`, the test maps `u_ε`, the limit, the equivalence |
 | [`Construction.lean`](../../Morrey/Sverak/Construction.lean) | `L`, its rank-one directions, `w`, `Dw`, (4) |
 | [`Lemma2.lean`](../../Morrey/Sverak/Lemma2.lean) | Lemma 2 |
 | [`Theorem.lean`](../../Morrey/Sverak/Theorem.lean) | (10), (11), the Theorem, the Remark, the Corollary |
 | [`paper_routes.tsv`](paper_routes.tsv), [`route_differences.tsv`](route_differences.tsv) | the routes of the paper's proofs (labels `sv-…`, ours: the paper has no TeX source) |
 
-The library uses only Mathlib. Another paper's library builds on it:
-[`Morrey/Cassese/Sverak.lean`](../../Morrey/Cassese/Sverak.lean) restates the example in Cassese's definitions.
+Cassese's library builds on this one: [`Morrey/Cassese/Sverak.lean`](../../Morrey/Cassese/Sverak.lean) restates the
+example in Cassese's definitions, and Cassese's periodic test maps
+([`Morrey/Cassese/Square/Hessian.lean`](../../Morrey/Cassese/Square/Hessian.lean)) use the cut-off and the averaging lemma of Lemma 1.
 
 ## Credits
 
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following
-  the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person
-  has reviewed the proofs. See [CREDITS.md](CREDITS.md).
+  the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, on 21
+  November 2026; Lemma 1's cut-off was rebuilt as the paper's on 22 November 2026. No person has
+  reviewed the proofs. See [CREDITS.md](CREDITS.md).
 - License: Apache-2.0 ([`LICENSE`](../../LICENSE)).

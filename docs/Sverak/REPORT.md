@@ -2,7 +2,7 @@
 
 V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh Sect. A
 120 (1992), 185–189. Formalized in Lean 4 with Mathlib (`v4.36.0-rc2`) from the published article,
-on 21 November 2026, in a repository that also formalizes two later papers on Morrey's problem
+on 21–22 November 2026, in a repository that also formalizes two later papers on Morrey's problem
 ([overview](../../README.md)). The paper has no TeX source; the labels `sv-…` used in the code and in
 [`docs/paper_routes.tsv`](paper_routes.tsv) are ours.
 
@@ -37,9 +37,9 @@ Every result of the paper is formalized and proved, and nothing is assumed:
 - Lemma 2: the extension of `f` to a rank-one convex `F`;
 - the Theorem, the Remark and the Corollary.
 
-Every proof follows the paper's argument. No statement of the paper is false. Its gaps are steps it
-leaves to the reader (Section 3); the formalization supplies each along the paper's lines. The
-largest is the limit in the proof of Lemma 1, which the paper calls "easily seen".
+Every proof follows the paper's argument (Section 7). No statement of the paper is false. Its gaps
+are steps it leaves to the reader (Section 3); the formalization supplies each along the paper's
+lines. The largest is the limit in the proof of Lemma 1, which the paper calls "easily seen".
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
@@ -80,8 +80,15 @@ All are proved, from Mathlib or in the library:
 - a function whose second derivative is nonnegative is convex;
 - Bolzano–Weierstrass in `M^{3×2} × M^{3×2}`;
 - the rank of a matrix through its minors;
-- smooth cutoff functions, periodic averages, dominated convergence (in the limit of Lemma 1);
+- the existence of the cut-off `η_ε` of Lemma 1 (Section 6), by mollification: Mathlib's
+  convolution with a normed bump function, and the lemmas of the shared module
+  [`Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean) (smoothness, values in `[0, 1]`,
+  locality, and the derivative bound by the Lipschitz constant,
+  [`ContDiffBump.norm_fderiv_normed_convolution_le`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean#L334));
+- periodic averages and dominated convergence (in the limit of Lemma 1);
 - the chain rule for `T` in the Corollary.
+
+No package beyond Mathlib is used.
 
 ### Does the paper use each cited result correctly?
 
@@ -163,17 +170,25 @@ provides.
 - **The domain.** The paper says that the class of quasiconvex functions does not depend on `Ω`, and
   its proofs use the unit cube. The Theorem and the Corollary are stated and proved on the open unit
   cube `(0,1)^n`. Failure on the cube is failure of quasiconvexity in the paper's sense whatever the
-  domain, by the cited independence, which is not formalized.
+  domain, by the cited independence, which is not formalized for the paper's smooth test maps
+  (Section 11).
 - **Lemma 1** is stated for continuous `f`, as in the paper, and for every matrix `A` (E3).
   "Periodic" is periodic with respect to `ℤ^n`.
 - **`P` and `f`.** `P` is given by its formula, and [`sverakP_orth`](../../Morrey/Sverak/Construction.lean#L50) proves that it is the orthogonal
   projection onto `L`. The function `f` of (3), defined on `L`, is used through `X ↦ f(PX)`
   ([`sverakf`](../../palomar/Sverak/Challenge.lean#L81)).
+- **The cut-off of Lemma 1.** The paper takes a smooth `η_ε`, equal to `1` on `[ε, 1 − ε]^n`,
+  vanishing in a neighbourhood of the boundary of `[0, 1]^n`, with `|Dη_ε| ≤ 2/ε`, and does not
+  construct it. The formalization builds one with these properties ([`l1_eta`](../../Morrey/Sverak/Lemma1.lean#L137), for `ε = 1/K`):
+  the mollification, at radius `ε/16`, of the Lipschitz profile
+  `min(1, max(0, (d − ε/8)·8/(5ε)))`, with `d` the distance to the boundary of the cube for the
+  sup norm. It equals `1` on `[ε, 1 − ε]^n` ([`l1_eta_eq_one`](../../Morrey/Sverak/Lemma1.lean#L156)), vanishes off
+  `(ε/16, 1 − ε/16)^n` ([`l1_eta_eq_zero`](../../Morrey/Sverak/Lemma1.lean#L173)), and `‖Dη_ε‖ ≤ 8/(5ε) ≤ 2/ε`
+  ([`l1_eta_fderiv_bound`](../../Morrey/Sverak/Lemma1.lean#L191)). The norm there is the operator norm for the sup norm on `ℝ^n`,
+  the `ℓ¹` norm of the gradient, which dominates the Euclidean `|Dη_ε|`. The proof of the limit
+  uses this bound.
 - **Constants the paper leaves open.** The bound in Lemma 2 holds with `c = 6`, and the claim of its
-  proof holds with `k₀ = n + 1` for some `n ∈ ℕ`, the paper's "`k = 1, 2, …`". The paper's cutoff has
-  `|Dη_ε| ≤ 2/ε`. The formalization's cutoff, a product of one-dimensional profiles, has
-  `|Dη_ε| ≤ C/ε` with a larger `C`. The argument uses only that `ε²|Dη_ε|` stays bounded, so the
-  constant `2` plays no role.
+  proof holds with `k₀ = n + 1` for some `n ∈ ℕ`, the paper's "`k = 1, 2, …`".
 - **The Corollary.** `T` is the upper left `3 × 2` block
   ([`topLeft`](../../palomar/Sverak/Challenge.lean#L89)), and `ε`, `k` are chosen before `m` and `n`, as "the function
   from the theorem above" requires.
@@ -183,9 +198,10 @@ provides.
 
 None. Every proof follows the paper's argument: the same intermediate claims, constructions and
 cited steps, checked by the route check with no recorded difference
-([`docs/route_differences.tsv`](route_differences.tsv) is empty). Where the paper leaves a
-step to the reader, the formalization supplies it along the paper's lines (Section 3), and the
-constants it leaves open are fixed as in Section 6.
+([`route_differences.tsv`](route_differences.tsv) is empty). Where the paper leaves a
+step to the reader, the formalization supplies it along the paper's lines (Section 3); the objects
+it takes for granted, such as the cut-off of Lemma 1, are built with the properties it states; and
+the constants it leaves open are fixed as in Section 6.
 
 ## 8. What each result depends on
 
@@ -214,8 +230,8 @@ proofs cite none.
 
 ## 9. Not formalized
 
-- The independence of quasiconvexity from the domain (cited from [3] and [10]); the Theorem and the
-  Corollary are proved on the unit cube (Section 6).
+- The independence of quasiconvexity from the domain (cited from [3] and [10]), for the paper's
+  smooth test maps; the Theorem and the Corollary are proved on the unit cube (Sections 6 and 11).
 - The introduction's survey: polyconvexity implies quasiconvexity, the quadratic case, Morrey's
   semicontinuity theorem.
 
@@ -247,8 +263,8 @@ proofs cite none.
   Sebestyén and Székelyhidi (J. Convex Anal. 2017) proved it for the whole class: the gradient
   measure of a sum of three sawtooth waves along pairwise non-collinear directions in `2 × 2` is a
   laminate. Nor can the example be transposed: quasiconvexity is not invariant under transposition
-  (Kružík 1999), and Müller (2000) showed that Šverák's example itself becomes quasiconvex after
-  transposition.
+  (Kružík 1999), and Müller (2000; announced in his 1998 lecture notes, Section 4.7) showed that
+  Šverák's `F`, for `ε` small and `k ≥ k(ε)`, becomes quasiconvex after transposition.
 - Kristensen (1999) proved that quasiconvexity is equivalent to a local condition among smooth
   integrands only if it equals rank-one convexity; with Šverák's example, it is not local for three
   or more components.
@@ -305,15 +321,33 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 
 ### Simpler proofs
 
-- Lemma 2's compactness argument gives no value of `k`. An explicit `k(ε)` would follow from a
-  quantitative form of "`f` is linear on the rank-one lines of `L`": the second derivative of
-  `X ↦ f(PX)` along a rank-one `Y` is controlled by `|Y − PY|`. That would make the example fully
-  explicit.
+- **An explicit `k(ε)` in Lemma 2.** The compactness argument gives no value of `k`; a
+  quantitative form of "`f` is linear on the rank-one lines of `L`" gives one. For rank-one
+  `R = a ⊗ n`, write `|PR|² = ΣTᵢ` and `|R − PR|² = ΣSᵢ` with
+  `T = (a₁²n₁², a₂²n₂², a₃²(n₁ + n₂)²/2)` and `S = (a₁²n₂², a₂²n₁², a₃²(n₁ − n₂)²/2)`; comparing
+  them term by term (with `λ = n₂/n₁` and `h(λ) = λ² + ((1 − λ)/(1 + λ))² ≥ 6 − 4√2`) shows that
+  the orthogonal projection `R_L` of `PR` on one of the three rank-one lines of `L` satisfies
+  `|PR − R_L| ≤ κ|R − PR|`, `κ = 1 + 1/√2`. Since `D²f(PA)[R_L, R_L] = 0` and
+  `‖D²f(PA)‖ ≤ √(2/3)|PA|`, polarization gives `|D²f(PA)[PY, PY]| ≤ 2√(2/3)κ|A||Y||Y − PY|` for
+  rank-one `Y`, and the arithmetic–geometric mean inequality against
+  `4ε|A|²|Y|² + 2k|Y − PY|²` makes `F` rank-one convex for
+  `k ≥ κ²/(12ε) = (3 + 2√2)/(24ε) ≈ 0.25/ε`. With `∫ f(Dw) = −1/4`, `∫|Dw|² = 2` and
+  `∫|Dw|⁴ = 19/4`, every `ε < 1/27` keeps `∫ F(Dw) < 0`; so
+  `F(X) = −rst(PX) + (|X|² + |X|⁴)/30 + 13|X − PX|²` is an explicit example. Checked on paper and
+  numerically (random rank-one directions), not in Lean.
 
 ### The formalization
 
-- The independence of quasiconvexity from the domain, and its equivalence with Cassese's form
-  (Lipschitz test maps vanishing on the boundary), would let the Theorem be stated for every bounded
-  open `Ω`. One direction, from Cassese's form to Šverák's on the cube, is proved in
-  [`Morrey/Cassese/Bridges.lean`](../../Morrey/Cassese/Bridges.lean).
+- **The domain.** The independence of quasiconvexity from the domain is proved, for Lipschitz test
+  maps vanishing outside the domain, in the package
+  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations)
+  (`CalculusOfVariations.quasiconvexAtOn_iff`), which Cassese's formalization uses. With
+  [`Cassese.not_quasiconvexAt_of_smooth`](../../Morrey/Cassese/Bridges.lean#L97) (a smooth witness on the cube is a Lipschitz one), it would
+  give that Šverák's `F` fails quasiconvexity with Lipschitz test maps on every bounded open set;
+  that combination is not stated in Lean. Stating the Theorem on every bounded open `Ω` with the
+  paper's smooth test maps needs, in addition, the approximation of Lipschitz test maps by smooth
+  compactly supported ones.
+- **Mollification.** [`Morrey/Common/Basic`](../../Morrey/Common/Basic) holds the mollification lemmas that the cut-off of Lemma 1 uses
+  ([`Mollify.lean`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean), for `Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean`); they depend
+  only on Mathlib.
 - Morrey's semicontinuity theorem, which the paper's introduction recalls, is not in Mathlib.

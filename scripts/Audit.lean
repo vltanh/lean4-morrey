@@ -333,7 +333,7 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Cor 6.3 (separation)", ``Cassese.corollary6_3_separation),
    ("Cassese Cor 6.4", ``Cassese.corollary6_4),
    ("Cassese Cor 6.4 (not quasiconvex)", ``Cassese.corollary6_4_not_quasiconvexAt),
-   ("Cassese Thm 1.4, p = 4 (Section 6.4)", ``Cassese.theorem1_4_four),
+   ("Cassese Thm 1.4, p = 4 (Section 6.3)", ``Cassese.theorem1_4_four),
    ("Cassese Prop 7.1", ``Cassese.proposition7_1),
    ("Cassese Prop 7.2", ``Cassese.proposition7_2),
    ("Cassese Prop 7.2 (lower bound)", ``Cassese.proposition7_2_lower),

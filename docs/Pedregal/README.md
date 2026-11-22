@@ -75,8 +75,10 @@ for random instances and, for a generic instance at `l = 1`, for every mold
 | E4 | Theorem 1.2's "arbitrary function" needs to be measurable |
 
 18 findings in all, with the misprints: see [REPORT.md](REPORT.md). Every proof of a correct
-result follows the paper's argument; the departures, forced by the false corollary, are listed in
-[REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs).
+result follows the paper's argument. There are three departures, each forced by an error of the
+paper: the reduction takes the conclusion of the false Corollary 7.2 as a hypothesis, the case
+`l = 1` is proved by an explicit lamination, and the false statements are refuted instead of proved
+([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
 
@@ -85,24 +87,28 @@ result follows the paper's argument; the departures, forced by the false corolla
   [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and lists what each result depends on.
 - [`scripts/route_check.py`](../../scripts/route_check.py) checks that each proof uses the results the paper's proof cites,
   except the differences recorded with their reasons in
-  [`docs/route_differences.tsv`](route_differences.tsv).
+  [`route_differences.tsv`](route_differences.tsv).
 - Comparator accepts [`Solution.lean`](../../palomar/Pedregal/Solution.lean) against [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean)
   ([`comparator.json`](../../palomar/Pedregal/comparator.json)).
 - Independent AI agents checked the statements and the counterexample against the TeX source,
-  the formal proofs against the paper's, and the report. No person has reviewed the proofs.
+  the formal proofs against the paper's, the report, and every recorded departure. No person has
+  reviewed the proofs.
 
 ## Dependencies, Palomar, building
 
 - [Mathlib](https://github.com/leanprover-community/mathlib4) `v4.36.0-rc2`, Lean
   `v4.36.0-rc2`.
 - [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) (commit `5f650f0`):
-  Kakutani's theorem, used only by the proofs.
+  Kakutani's theorem, used only by the proofs. No other package: the three packages that Cassese's
+  formalization needs are not used here, but Lake loads them to build any part of the repository
+  (see the [overview's building instructions](../../README.md#building)).
 - Palomar: this paper is its own submission: [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean) (statements, in
   Mathlib's vocabulary), [`Solution.lean`](../../palomar/Pedregal/Solution.lean) (proofs), [`comparator.json`](../../palomar/Pedregal/comparator.json) and
   [`formalization.yaml`](../../palomar/Pedregal/formalization.yaml), named by the workflow
   [`palomar_preflight_pedregal.yml`](../../.github/workflows/palomar_preflight_pedregal.yml).
 
-From the repository root:
+From the repository root, with the packages in place (and, for Comparator, the copies that the
+overview describes):
 
 ```sh
 lake exe cache get && lake build
@@ -116,7 +122,7 @@ lake env lake comparator --config=palomar/Pedregal/comparator.json
 | [`Morrey/Pedregal/`](../../Morrey/Pedregal) | the library: `Defs` (the definitions that the Challenge copies), [`Hn/`](../../Morrey/Pedregal/Hn) (§3), `MoldTau` (§4), `Weights` (§5), `Triangulation`, `Map` (§6), `Reduction` (§8), [`NonEmptiness/`](../../Morrey/Pedregal/NonEmptiness) (§7), `LevelOne`, `Introduction` (§1) |
 | [`palomar/Pedregal/`](../../palomar/Pedregal) | the Palomar submission: Challenge, Solution, `comparator.json`, `formalization.yaml` |
 | [`docs/Pedregal/`](.) | this README, the report, the credits, the routes of the paper's proofs and the recorded differences, and [`numerics/`](numerics), the numerical checks behind the report |
-| [`Morrey/Common/`](../../Morrey/Common) | shared with the other papers: [`Basic/`](../../Morrey/Common/Basic) (the rank of `2 × 2` matrices) and [`External/`](../../Morrey/Common/External) (Kakutani's theorem, from lean4-fixed-point) |
+| [`Morrey/Common/`](../../Morrey/Common) | shared with the other papers; this paper uses [`Basic/LinearAlgebra/Matrix/RankTwo.lean`](../../Morrey/Common/Basic/LinearAlgebra/Matrix/RankTwo.lean) (the rank of `2 × 2` matrices) and [`External/Kakutani/`](../../Morrey/Common/External/Kakutani) (Kakutani's theorem, from lean4-fixed-point) |
 | [`scripts/`](../../scripts) | shared: the audit, the route check, the documentation checks |
 
 ## Related work and credits
@@ -124,6 +130,6 @@ lake env lake comparator --config=palomar/Pedregal/comparator.json
 - The literature, the versions of the paper and the 2026 counterexamples in higher dimension:
   [REPORT.md, Section 10](REPORT.md#10-the-paper-in-the-literature).
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following
-  the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person
-  has reviewed the proofs. See [CREDITS.md](CREDITS.md).
+  the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, on 21
+  November 2026. No person has reviewed the proofs. See [CREDITS.md](CREDITS.md).
 - License: Apache-2.0.

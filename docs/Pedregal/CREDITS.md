@@ -15,8 +15,8 @@ How this formalization was made, from the run log and the session transcripts.
 - Kakutani's theorem comes from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point)
   (commit `5f650f0`), an earlier project made with the same procedure.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements and the
-  counterexample against the TeX source, the formal proofs against the paper's, and the report's
-  findings and literature section.
+  counterexample against the TeX source, the formal proofs against the paper's, the report's
+  findings and literature section, and, in a later round, every recorded departure.
 
 ## First formalization (21 November 2026)
 
@@ -56,4 +56,18 @@ When Šverák (1992) and Cassese (2026) joined the repository, the paper's files
 `Pedregal/` and its namespaces were renamed ([`Morrey`](../../Morrey) to `Pedregal`, `MorreyChallenge` to
 `PedregalChallenge`). No statement or proof changed: the statement diff against the commit before
 the move shows only the renames, and the build, the audit, the route check and Comparator pass as
-before. The work is counted in the second round's figures ([`../README.md`](../../README.md)).
+before. The work is counted in the second round's figures
+([`../Sverak/CREDITS.md`](../Sverak/CREDITS.md)).
+
+## Departure audit (21–22 November 2026)
+
+In a later round, which made Cassese's formalization unconditional, the procedure moved to its
+version 4.2.0 (commit `f5e7420`), under which a proof may depart from the paper's only for an error
+or a gap of the paper, a representation the formalization must use, or the user's decision.
+
+- An independent agent (Claude Opus 5.5, `claude-opus-5-5`, in Claude Code 2.1.330) audited,
+  read-only, every recorded departure of the three papers against their sources (21 November,
+  23:08 to 23:27, UTC−6; 0.33 h for the three papers). For this paper it found the three departures
+  allowed, each forced by an error of the paper, and nothing to redo.
+- No proof or statement of this paper changed in that round. An agent updated this paper's
+  documents on 22 November to match: the table of departures and the dependencies.

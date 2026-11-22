@@ -67,7 +67,7 @@ sources:
 related_formalizations:
   - id: "https://github.com/vltanh/lean4-fixed-point"
     relationship: "builds-on"
-    note: "Provides Kakutani's fixed-point theorem (commit 5f650f0), used by the proofs only."
+    note: "Provides Kakutani's fixed-point theorem (commit 5f650f0), by Kakutani's own argument, used by the proofs only. No other package is used."
   - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
     relationship: "independent"
     note: >-
@@ -83,7 +83,11 @@ related_formalizations:
   - id: "palomar/Cassese in this repository"
     relationship: "other"
     note: >-
-      The formalization of Cassese, arXiv:2608.03488 (in progress), in the same repository.
+      The formalization of Cassese, arXiv:2608.03488v3, in the same repository, with its own
+      Challenge and metadata (every result proved, unconditionally). Its 2x3 example makes the
+      claim of v1-v2 of this paper for two-component maps in dimension N >= 3 false, an inference
+      recorded in docs/Pedregal/REPORT.md, E17 (that claim is not stated in Lean). It shares no
+      definition with this one.
 
 status:
   scope: >-
@@ -114,29 +118,32 @@ automation:
         wall_time: "1.86 h elapsed to the completed audit report; 2.4 h of sub-agent working time"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
-      prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill."
+      prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill. In a later round (21 November 2026, the skill's version 4.2.0), an independent agent audited every recorded departure; no proof changed."
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code and the documents at the request of the author, who chose the
     paper. No person has reviewed the proofs. Independent AI agents checked the statements and
-    the counterexample against the TeX source, the formal proofs against the paper's, and the
-    report's findings and literature section. See CREDITS.md.
+    the counterexample against the TeX source, the formal proofs against the paper's, the
+    report's findings and literature section, and every recorded departure. See
+    docs/Pedregal/CREDITS.md.
 
 fidelity:
   divergences: >-
     Statements: no statement of the paper was changed. Corollary 7.2, Proposition 7.1 and the
     summary of Step 2 are stated as in the paper (the summary also without its start from the
-    barycenter U_j, a weaker claim, refuted together with the paper's form) and refuted. Theorem
-    1.2 reads the "arbitrary function" psi as continuous. Readings: points of R^2 are Fin 2 -> R;
-    molds are ordered binary trees (Proposition 3.3's permutation is unique only for this
-    reading); leaves are indexed from 0 as (j, k); "parallel" is linear dependence; the
-    parallelism of Definition 6.1 is imposed at every mixture above the first level; laminates are
-    laminates of finite order; Kakutani's theorem is stated with topological upper
-    semicontinuity, derived from the closed graph that Subsection 6.1 proves. Proofs: every proof
-    of a correct result follows the paper's argument. Departures: Theorem 1.1 (1) is proved only
-    with the conclusion of the false Corollary 7.2 as a hypothesis (theorem1_1_of_nonempty), and at
-    l = 1 by an explicit lamination instead of the paper's fixed point (theorem1_1_part1_levelOne),
-    because Corollary 7.2 is false. See REPORT.md, Sections 6 and 7.
+    barycenter U_j, a weaker claim, refuted together with the paper's form) and refuted. Theorem 1.2
+    reads the "arbitrary function" psi as continuous. Readings: points of R^2 are Fin 2 -> R; molds
+    are ordered binary trees (Proposition 3.3's permutation is unique only for this reading); leaves
+    are indexed from 0 as (j, k); "parallel" is linear dependence; the parallelism of Definition 6.1
+    is imposed at every mixture above the first level; laminates are laminates of finite order;
+    Kakutani's theorem is stated with topological upper semicontinuity, derived from the closed
+    graph that Subsection 6.1 proves. Proofs: every proof of a correct result follows the paper's
+    argument. Three departures, each forced by an error of the paper (the paper's step is wrong):
+    Theorem 1.1 (1) is proved only with the conclusion of the false Corollary 7.2 as a hypothesis
+    (theorem1_1_of_nonempty); at l = 1 it is proved by an explicit lamination instead of the paper's
+    fixed point (theorem1_1_part1_levelOne), since the paper's step fails there too; and Proposition
+    7.1, Corollary 7.2 and the summary of Step 2 are refuted by a counterexample instead of proved.
+    See docs/Pedregal/REPORT.md, Sections 6 and 7.
 
 review:
   status: "agent-reviewed"

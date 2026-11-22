@@ -25,12 +25,15 @@ Status of the formalization:
 - Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156)), by an explicit
   lamination: the paper's argument fails there too.
 - The cited result, Kakutani's fixed-point theorem (Theorem 6.2), is proved in [`External/`](../../Morrey/Common/External) from
-  [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point). Nothing is assumed.
+  [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), by Kakutani's own argument.
+  Nothing is assumed, and no other package is used.
 - `lake build` passes with no `sorry` outside [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean), no `axiom`, and every
   declaration depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
   ([`scripts/Audit.lean`](../../scripts/Audit.lean)). Comparator accepts [`Solution.lean`](../../palomar/Pedregal/Solution.lean) against [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean).
 - No statement of the paper was changed: the false ones are stated as the paper states them and
   refuted.
+- Every proof of a correct result follows the paper's argument. Three departures, each forced by an
+  error of the paper, are listed in Section 7.
 
 ## 1. Summary
 
@@ -51,7 +54,7 @@ Status of the formalization:
 
 | Result | Where the paper uses it | Source | Theorem in `External/` |
 | --- | --- | --- | --- |
-| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38), from `Kakutani.exists_fixedPoint` of [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) |
+| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38), from `Kakutani.exists_fixedPoint` of [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), which follows Kakutani's proof (barycentric subdivisions, Brouwer's theorem, a limit); upper semicontinuity gives the closed graph that it assumes |
 
 ### Standard facts used without citation
 
@@ -345,8 +348,9 @@ formalization states them for arbitrary functions `u, v`.
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24): the same argument, with the non-emptiness of the values as a hypothesis; [`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156): at `l = 1`, an explicit lamination | Corollary 7.2 is false (reason 1: the paper's step is wrong) | E13 |
-| Proposition 7.1, Corollary 7.2, Step 2 | proofs of false statements | refutations | the statements are false | E13, E14 |
+| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 for the non-emptiness of the values | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24): the same argument, with "every `𝐓(t)` is nonempty" as a hypothesis | Corollary 7.2 is false, and nothing along the paper's lines supplies the non-emptiness (reason 1: the paper's step is wrong) | E13 |
+| Theorem 1.1 (1) at `l = 1` | the same fixed-point argument | [`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156): an explicit lamination by three rank-one splittings, a special case proved by another argument | the paper's step fails already at `l = 1` ([`T_cex_eq_empty`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L224); reason 1) | E13 |
+| Proposition 7.1, Corollary 7.2, the summary of Step 2 with Claim 7.5 | proofs | refutations by an explicit counterexample | the statements are false (reason 1) | E13, E14 |
 
 Every other proof follows the paper's argument. Two steps that the paper leaves implicit are
 spelled out, not changed: the closed graph of Subsection 6.1 rests on "the dependence of elements
@@ -524,14 +528,21 @@ zero.
 
 ### The formalization
 
-- [`Basic`](../../Morrey/Common/Basic) holds [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](../../Morrey/Common/Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) (for
-  `Mathlib/LinearAlgebra/Matrix/Rank.lean`).
+- Of [`Morrey/Common/Basic`](../../Morrey/Common/Basic), this paper uses [`Matrix.rank_le_one_iff_det_eq_zero_of_fin_two`](../../Morrey/Common/Basic/LinearAlgebra/Matrix/RankTwo.lean#L21) (for
+  `Mathlib/LinearAlgebra/Matrix/Rank.lean`), which depends only on Mathlib.
 - The `(H_n)`-conditions of [`Morrey/Pedregal/Hn/`](../../Morrey/Pedregal/Hn) (molds, their weights and mass points, and the laminate
   of a rank-one mold) are general and could become a small library on laminates, with Jensen's
-  inequality for rank-one convex functions, which the reduction of Theorem 1.1 (2) to (1) needs.
+  inequality for rank-one convex functions, which the reduction of Theorem 1.1 (2) to (1) needs;
+  the package [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), which Cassese's formalization uses, would be its
+  place.
 - [`External/Kakutani`](../../Morrey/Common/External/Kakutani) derives the upper semicontinuous form of Kakutani's theorem from the
   closed-graph form of lean4-fixed-point; other formalizations that cite Kakutani in that form can
   reuse it.
 - The density argument of E16 (Jensen's inequality for laminates, the continuity of rank-one
   convex functions, the approximation of periodic Lipschitz maps by maps of `ℙ_l`) would turn a
-  future proof of Theorem 1.1 (1) into Morrey's `2 × 2` case.
+  future proof of Theorem 1.1 (1) into Morrey's `2 × 2` case. Some of its ingredients are in the
+  package lean4-calculus-of-variations: the local Lipschitz continuity of rank-one convex functions
+  (`CalculusOfVariations.RankOneConvex.locallyLipschitz`), quasiconvexity tested with periodic
+  Lipschitz maps (`CalculusOfVariations.quasiconvexAtOn_iff_periodic`), and piecewise affine
+  interpolation on Kuhn–Freudenthal triangulations (`CalculusOfVariations.kuhnInterpolation`).
+  Jensen's inequality for laminates and the convergence of the gradient measures are not.

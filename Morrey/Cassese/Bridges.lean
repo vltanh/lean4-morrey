@@ -9,8 +9,9 @@ public import Mathlib.Analysis.Calculus.ContDiff.RCLike
 
 Three formalizations state the same notions in slightly different forms: each paper's statements
 are in its own terms (`Sverak.Defs`, `Cassese.Defs`, `Cassese.Toolkit`), and the results cited
-from the literature (`External/`) are in the textbook terms of `Basic.CalculusOfVariations`. The
-lemmas here connect them, so that a cited result can be applied to a statement of Cassese.
+from the literature (`External/`) are in the textbook terms of the package
+`CalculusOfVariations`. The lemmas here connect them, so that a cited result can be applied to a
+statement of Cassese.
 
 * Derivative matrices and cubes. `Sverak.jac`, `CalculusOfVariations.grad` and `Cassese.jac` are
   the same definition, and so are the three open unit cubes (`jac_eq`, `grad_eq`,

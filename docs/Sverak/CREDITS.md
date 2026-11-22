@@ -10,10 +10,10 @@ How the formalization of Šverák (1992) was made, from the run log and the sess
   VS Code extension, Claude Agent SDK), in one session: the main session and its sub-agents. It was
   the second round of the session, after the audit of Pedregal's paper; there was no earlier draft.
 - Procedure: the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill,
-  commit `020f253`.
+  commit `020f253` for the second round, version 4.2.0 (commit `f5e7420`) for the third.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
-  the paper, the formal proofs against the paper's, and the repository's README against the
-  sources.
+  the paper, the formal proofs against the paper's, the repository's README against the sources,
+  and, in the third round, every recorded departure and the rebuilt cut-off.
 
 ## Second round (21 November 2026)
 
@@ -52,3 +52,33 @@ completes [`REPORT.md`](REPORT.md) (13:41):
 - model calls: `claude-opus-5-5`, 192 by the main session and 554 by the sub-agents.
 
 From `scripts/session_stats.py` on the session transcript, and the run times of the sub-agents.
+
+## Third round (21–22 November 2026)
+
+In the round that made Cassese's formalization unconditional, at the user's request, the procedure
+moved to its version 4.2.0, under which a proof may depart from the paper's only for an error or a
+gap of the paper, a representation the formalization must use, or the user's decision. This round
+changed one construction of this paper: the cut-off of Lemma 1.
+
+How it was made (all agents Claude Opus 5.5, `claude-opus-5-5`, in Claude Code 2.1.330):
+
+- An independent agent audited, read-only, every recorded departure of the three papers. For this
+  paper it found that the cut-off of Lemma 1, a product of one-dimensional profiles with
+  `‖Dη_ε‖ ≤ 4nB/ε`, was not the paper's object (`|Dη_ε| ≤ 2/ε`), and that the docstrings misquoted
+  the paper's support condition.
+- In a run that also redid six of Cassese's proofs, one prover rebuilt the cut-off as the paper's:
+  the mollification of a Lipschitz profile, with `‖Dη_ε‖ ≤ 8/(5ε) ≤ 2/ε`. Another prover proved
+  the general mollification lemmas it uses, in
+  [`Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean). The statements of Lemma 1 did not
+  change. An independent agent reviewed the run's commits against the papers and found no
+  remaining departure; the build, the audit, the route check and Comparator passed.
+- An agent updated this paper's documents.
+
+Figures, from the session transcript (`scripts/session_stats.py` on each sub-agent's transcript):
+
+- the cut-off: one prover, 0.16 h (22 November, 00:04 to 00:14, UTC−6), 40 tool calls, 0.06 M
+  output tokens, 0.15 M input, 4 M cache reads, 39 model calls;
+- the mollification module: one prover, 0.10 h, 32 tool calls, 0.04 M output, 0.09 M input, 2 M
+  cache reads; the module also serves Cassese's proofs;
+- shared with Cassese's paper, not separated: the departure audit (0.33 h, for the three papers),
+  the lead of the run (1.16 h) and its reviewer (0.13 h), and the main session.
