@@ -424,19 +424,18 @@ Corollary 6.1 apply `HNVWExtrapolation` and `CoxVeraarDecoupling` (`hnvwExtrapol
 (the supremum norm of the entries). They are proved here (nonnegativity, `schattenNorm_nonneg`,
 in `Square.Schatten`), and bundled in `schattenNorm_renorms`. -/
 
-/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]` (Bhatia, Chapter IV).
+/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]` (Bhatia, Chapter IV, which was not
+accessible).
 
-Proof (`square_schattenNorm_add_le`, module `Square.Triangle`), by the standard argument through
-doubly substochastic matrices: with `v_k` the eigenvectors of `(A + B)ᵀ (A + B)` and
-`ξ_k = (A + B) v_k / s_k (A + B)`, `s_k (A + B) = ⟨ξ_k, A v_k⟩ + ⟨ξ_k, B v_k⟩`; the diagonal entries
-`|⟨ξ_k, A v_k⟩|` are dominated by a doubly substochastic average `Σ_j M_{kj} s_j (A)`
-(`M_{kj} = (⟨ξ_k, A y_j⟩² / s_j² + ⟨y_j, v_k⟩²) / 2`, Bessel's inequality), so that
-`Σ_k |⟨ξ_k, A v_k⟩|^q ≤ ‖A‖_{S_q}^q` (Jensen) and `|⟨ξ_k, A v_k⟩| ≤ ‖A‖_{S_∞}`; Minkowski's
-inequality in `ℓ^q` concludes. Departure from the source: Bhatia, Chapter IV, derives the
-triangle inequality from Ky Fan's dominance theorem (the Ky Fan `k`-norms are norms, and
-symmetric gauge functions are monotone under weak majorization); the argument here avoids the
-theory of majorization, which Mathlib lacks, and uses only Bessel's, Jensen's and Minkowski's
-inequalities. -/
+Proof (`square_schattenNorm_add_le`, module `Square.Triangle`): the package `BanachProbability`'s
+`schattenNorm_add_le`, which follows the open source J.-C. Bourin and T. Zhang, *Matrix triangle
+inequalities: past, present, and future*, arXiv:2610.30538 (2026), Proposition 3.13 by their
+Remark 3.14. For `q < ∞`, if `‖A‖_{S_q} = ‖B‖_{S_q} = 1` and `t ∈ [0, 1]`, von Neumann's
+convexity inequality `Tr g (t X + (1 − t) Y) ≤ t Tr g (X) + (1 − t) Tr g (Y)` (their (1.1), proved
+by Peierls's argument) for `g = |·|^q` and the Hermitian dilations `X = [[0, A], [Aᵀ, 0]]`,
+`Y = [[0, B], [Bᵀ, 0]]` gives `‖t A + (1 − t) B‖_{S_q} ≤ 1`; the general case follows with
+`A / ‖A‖_{S_q}`, `B / ‖B‖_{S_q}` and `t = ‖A‖_{S_q} / (‖A‖_{S_q} + ‖B‖_{S_q})`. For `q = ∞`, the
+first of Weyl's inequalities, `s_1 (A + B) ≤ s_1 (A) + s_1 (B)`. -/
 theorem schattenNorm_add_le {m : ℕ} {q : ℝ≥0∞} (hq : 1 ≤ q) (A B : Matrix (Fin d) (Fin m) ℝ) :
     schattenNorm q (A + B) ≤ schattenNorm q A + schattenNorm q B :=
   square_schattenNorm_add_le hq A B
