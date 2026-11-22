@@ -133,9 +133,11 @@ Proposition 7.2), in the direction used: `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑
 def HNVWTransference : Prop :=
   ∀ (k : ℕ) (p : ℝ), 1 ≤ k → 1 < p → beurlingPowNorm k p ≤ torusBeurlingPowNorm k p
 
-/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
-operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
-`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. Proved by
+/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling operator*,
+Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
+`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. The article's theorem is for
+`p > 2` (its standing assumption); the paper cites with it Carbonaro, Dragičević and Kovač, Math.
+Ann. 386 (2023), whose `‖𝓑²‖_p = ‖𝓑²‖_{p / (p − 1)}` (§1.3.1) gives `p < 2`. Proved by
 `dragicevicLowerBound_holds`. -/
 def DragicevicLowerBound : Prop :=
   ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
