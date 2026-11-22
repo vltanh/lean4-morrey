@@ -1055,10 +1055,9 @@ theorem fourByTwo_qcThreshold_le_chainOpNorm (N : ℕ) (ρ : ℝ) {p : ℝ} (hp 
   rw [← hK]
   exact iInf₂_le K ⟨ENNReal.toReal_nonneg, hqc⟩
 
--- The proof does not use the paper's hypothesis `0 < ρ` (see the docstring).
-set_option linter.unusedVariables false in
 /-- **Proposition 7.2** (`prop:qcbound`): for every `p ∈ (1, ∞)`,
-`C^{qc} (p, N, ρ) = ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`.
+`C^{qc} (p, N, ρ) = ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`, for every
+real `ρ`: the paper's setting has `ρ > 0`, which the proof does not use, so it is not assumed.
 
 Proof (the paper's, TeX lines 2807–2832). For a smooth periodic `u`, `h_j = ∂̄u_j − ρ ∂u_{j−1}`
 gives `P_ρ (∇u) = (h₀, …, h_N)` and `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (induction from
@@ -1072,9 +1071,8 @@ mean-zero functions, so `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`
 Implicit step filled (E28, a gap fill): the paper proves the identity for smooth `u`, and
 Lemma 2.2 tests with Lipschitz periodic maps; a Lipschitz periodic map is reached by mollification
 (`CalculusOfVariations.mollifyPi`) and dominated convergence
-(`fourByTwo_integral_nonneg_of_smooth`). No `L^p` bound for Fourier multipliers is needed. The
-hypothesis `0 < ρ` of the paper's setting is not used. -/
-theorem proposition7_2 (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ) {p : ℝ} (hp : 1 < p) :
+(`fourByTwo_integral_nonneg_of_smooth`). No `L^p` bound for Fourier multipliers is needed. -/
+theorem proposition7_2 (N : ℕ) {ρ : ℝ} {p : ℝ} (hp : 1 < p) :
     qcThreshold (chainF N p ρ) = chainOpNorm N p ρ :=
   le_antisymm (fourByTwo_qcThreshold_le_chainOpNorm N ρ hp)
     (fourByTwo_chainOpNorm_le_qcThreshold N ρ hp)

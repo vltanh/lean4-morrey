@@ -192,12 +192,16 @@ None.
 ## 5. Redundant hypotheses
 
 The proofs do not use: `A ∈ 𝓛` in the rank-one convexity of the quartic on `𝓛` (`cs-q-rc`; it holds
-from any base point); `ρ > 0` in Proposition 7.2; `d ≥ 2` in Corollary 6.3's upper bound; the
+from any base point); `d ≥ 2` in Corollary 6.3's upper bound; the
 homogeneity in Proposition 2.3 (a), and the homogeneity and `p > 1` in (b), (c); `1 < p` in the
 monotonicity of the homogeneous problem; the separability of the Hilbert space in Burkholder's
 inequalities (kept as `[SeparableSpace H]` in [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L61) and
 `squareFunction`). These are kept, as the paper states them. The section's standing assumption
 `q > p + 2` is not assumed by Proposition 4.1, which does not need it; Lemma 4.1 has no `q`.
+The identity of Proposition 7.2 does not use the setting's `ρ > 0`, and
+[`Cassese.proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1075) does not assume it: it holds for every real
+`ρ`, a generalization of the paper's statement. Its lower bound ([`proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1091)) keeps
+`ρ > 0`, which its proof uses (`‖ρ^N h‖ = ρ^N ‖h‖`).
 
 ## 6. How the formalization reads the paper
 
