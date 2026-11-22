@@ -28,7 +28,8 @@ for Hilbert-space-valued martingales, and its arguments are the ones followed.
   `squareFunction_of_martingale`), for real Hilbert spaces and Mathlib's `MeasureTheory.Martingale`,
   each a one-line proof from `BanachProbability.Burkholder.inequality`, `inequality_of_subordinate`,
   `squareFunction`, `squareFunction_of_martingale` of the package `BanachProbability`
-  (`lean4-banach-probability`, required by path at `../lean4-banach-probability`).
+  ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit
+  `250cd49`).
 - [`ScalarFunction.lean`](ScalarFunction.lean): the propositions `ScalarFunction` ((13), (14) for
   `u`) and `ScalarFunctionQ q` (the same for `u_q`), proved by `scalarFunction_holds` and, for
   every real `q ≥ 2`, `scalarFunctionQ_holds`, from the package's Burkholder function in

@@ -18,20 +18,20 @@ name = "FixedPoint"
 git = "https://github.com/vltanh/lean4-fixed-point.git"
 rev = "5f650f00b1db63837a452696331a98ca886b94a8"
 
-# Developed alongside the project; to be pinned by `git` and `rev` once it is published.
 [[require]]
 name = "HarmonicAnalysis"
-path = "../lean4-harmonic-analysis"
+git = "https://github.com/vltanh/lean4-harmonic-analysis"
+rev = "bf215c554db9ebbb94a34d87b98e28f3d5d25a62"
 
-# Developed alongside the project; to be pinned by `git` and `rev` once it is published.
 [[require]]
 name = "CalculusOfVariations"
-path = "../lean4-calculus-of-variations"
+git = "https://github.com/vltanh/lean4-calculus-of-variations"
+rev = "fc86bbb63e766c17600c3f88855dd804db4bcca3"
 
-# Developed alongside the project; to be pinned by `git` and `rev` once it is published.
 [[require]]
 name = "BanachProbability"
-path = "../lean4-banach-probability"
+git = "https://github.com/vltanh/lean4-banach-probability"
+rev = "250cd49b069629b28dde820dabac96ba4f19c878"
 
 [[lean_lib]]
 name = "Common"

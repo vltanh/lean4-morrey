@@ -29,8 +29,8 @@ The same statement is HNVW I, Proposition 4.2.3, which Cassese cites with it (se
 [`../HNVW`](../HNVW)); it is not stated separately.
 
 **Proof.** `BanachProbability.decoupling` in the package `BanachProbability`
-(`lean4-banach-probability`, required by path at `../lean4-banach-probability` while it is
-developed), the proof from the definition that Cox–Veraar attribute to Montgomery-Smith: with
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`),
+the proof from the definition that Cox–Veraar attribute to Montgomery-Smith: with
 `η_k = ε_k ε̃_k`, the map `(ε, ε̃) ↦ (ε, η)` preserves the uniform measure, and in the interleaved
 order `η_0, ε_0, η_1, ε_1, …` of the doubled cube `Σ ε̃_k ξ_k = Σ η_k ε_k ξ_k` is the transform of
 `Σ ε_k ξ_k` by the predictable signs `η_k`, and conversely. This gives both inequalities with the

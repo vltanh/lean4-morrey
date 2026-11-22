@@ -23,8 +23,8 @@ Status of the formalization:
   [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean). The proofs come from three Lake packages written for this
   formalization: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
   [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
-  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), not yet
-  published (the lakefile requires them by path).
+  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), which
+  the lakefile pins by commit (`bf215c5`, `250cd49` and `fc86bbb`).
 - **Nothing is assumed.** No statement takes a result of another work as a hypothesis. Two cited
   theorems that the paper quotes only as context, Kirchheim–Kristensen's Theorem 1.1 and
   Osękowski's characterization of Hilbert spaces (Proposition 2.6), are stated and not proved; no
@@ -785,9 +785,10 @@ claimed, not as proved.
   formalization covers the whole paper, including what the author's does not: Theorems 1.4 and
   1.5, Corollaries 1.6 and 5.2–5.4, Sections 6 and 7, and the cited results that the proofs use.
 - The cited results are proved in three Lake packages written for this formalization, which
-  depend only on Mathlib and are not yet published: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
-  [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
-  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations).
+  depend only on Mathlib and are published on GitHub, pinned by commit in the lakefile:
+  [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) (`bf215c5`),
+  [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) (`250cd49`) and
+  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) (`fc86bbb`).
 - Conti, Dolzmann and Dondl's Lean code for their `3 × 3` example
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc),
   Apache-2.0, written with Claude Opus 5.5 under the authors' guidance) shares the subject, not the

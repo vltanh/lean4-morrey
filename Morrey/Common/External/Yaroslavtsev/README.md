@@ -25,8 +25,9 @@ general filtrations):
 - `External.Yaroslavtsev.proposition3_7`: for `β > 0` and `U` zig-zag concave in the complex sense
   (`BanachProbability.IsComplexZigZagConcave p β U`), `UMD_{ℂ,p} (X) ≤ β`.
 
-**Proof.** In the package `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability` while it is developed). Lemma 3.2,
+**Proof.** In the package `BanachProbability`
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`).
+Lemma 3.2,
 `BanachProbability.umdConst_le_complexUMDConst_le`, by the standard averaging argument in place of
 the inaccessible HNVW I, Proposition 4.2.10: real signs are unimodular, and for `|λ| = 1`,
 `(1/2π) ∫ sgn cos (arg λ − φ) e^{iφ} dφ = (2/π) λ`, with the integral replaced by Riemann sums

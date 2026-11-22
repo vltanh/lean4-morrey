@@ -32,8 +32,9 @@ lines 2895–2900), `‖𝓑²‖₄ ≥ 21/5 = κ₂ (4)`. For `p < 2` the sour
 The norms are suprema over Schwartz functions (`HarmonicAnalysis.beurlingPowNorm`). General `n`
 is not formalized; Cassese uses only `n = 2`.
 
-**Proof.** In the package `HarmonicAnalysis` (`lean4-harmonic-analysis`, required by path while
-it is developed: `HarmonicAnalysis.beurlingKappa_two_le_beurlingPowNorm_two`,
+**Proof.** In the package `HarmonicAnalysis`
+([lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis), commit `bf215c5`:
+`HarmonicAnalysis.beurlingKappa_two_le_beurlingPowNorm_two`,
 `HarmonicAnalysis.beurlingPowNorm_conjExponent`), by the source's argument (lecture notes,
 Proposition 4.2), with its test functions `f_{2,α} (z) = z² |z|^{−2α} g₂ (|z|)`, `g₂ = 1` on
 `[0, 1]`, `g₂ (x) = exp (−(x − 1)²)` for `x > 1`, `0 < α < 1/p`: `𝓑² (∂̄² f) = ∂² f` (§4.1, after

@@ -26,8 +26,8 @@ Proposition 6.4 it gives (31) (TeX lines 2322–2328).
 
 **Proof.** `BanachProbability.ncKhintchine_lower_row`, `ncKhintchine_lower_col`,
 `ncKhintchine_upper` and `pisierXu_khintchine` in the package `BanachProbability`
-(`lean4-banach-probability`, required by path at `../lean4-banach-probability` while it is
-developed). The Handbook being inaccessible, the upper bound is proved by Mackey et al.'s method of
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`).
+The Handbook being inaccessible, the upper bound is proved by Mackey et al.'s method of
 exchangeable pairs, §7 (Corollary 7.3, the matrix Khintchine inequality for Hermitian matrices,
 constant `√(q − 1)` for `q ≥ 3`; Remark 7.2, constant `√(2 (q − 1))` for `2 < q < 3`, whose variant
 of the mean value trace inequality the source does not prove and the package proves), and §8 (the

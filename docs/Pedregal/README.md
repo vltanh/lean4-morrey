@@ -100,15 +100,14 @@ paper: the reduction takes the conclusion of the false Corollary 7.2 as a hypoth
   `v4.36.0-rc2`.
 - [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) (commit `5f650f0`):
   Kakutani's theorem, used only by the proofs. No other package: the three packages that Cassese's
-  formalization needs are not used here, but Lake loads them to build any part of the repository
-  (see the [overview's building instructions](../../README.md#building)).
+  formalization needs are not used here, but Lake fetches them whichever part of the repository is
+  built (see the [overview's building instructions](../../README.md#building)).
 - Palomar: this paper is its own submission: [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean) (statements, in
   Mathlib's vocabulary), [`Solution.lean`](../../palomar/Pedregal/Solution.lean) (proofs), [`comparator.json`](../../palomar/Pedregal/comparator.json) and
   [`formalization.yaml`](../../palomar/Pedregal/formalization.yaml), named by the workflow
   [`palomar_preflight_pedregal.yml`](../../.github/workflows/palomar_preflight_pedregal.yml).
 
-From the repository root, with the packages in place (and, for Comparator, the copies that the
-overview describes):
+From the repository root:
 
 ```sh
 lake exe cache get && lake build

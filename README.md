@@ -280,21 +280,18 @@ the proofs use four packages:
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
 | [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), commit `5f650f0` | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | Fourier multipliers on `ℝ²` and `𝕋²`, de Leeuw's transference, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions | Cassese |
-| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities, UMD spaces, Schatten classes, the non-commutative Khintchine inequality | Cassese |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), commit `fc86bbb` | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis), commit `bf215c5` | `HarmonicAnalysis` | Fourier multipliers on `ℝ²` and `𝕋²`, de Leeuw's transference, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions | Cassese |
+| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49` | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities, UMD spaces, Schatten classes, the non-commutative Khintchine inequality | Cassese |
 
 Šverák's library uses only Mathlib and `Common/Basic`. The dependencies run one way: no package
 imports this repository.
 
 ## Building
 
-Lean and Mathlib `v4.36.0-rc2`. lean4-fixed-point is pinned by its commit. The other three packages
-were developed alongside this repository and are to be published at
-`https://github.com/vltanh/<name>`; until then the lakefile requires them by path, as sibling
-directories (`../lean4-calculus-of-variations`, `../lean4-harmonic-analysis`,
-`../lean4-banach-probability`), and Lake needs all three to build any part of the repository. From
-the root, with the packages in place:
+Lean and Mathlib `v4.36.0-rc2`. [`lakefile.toml`](lakefile.toml) requires the four packages from
+their GitHub repositories, each pinned by its commit (the table above). Lake fetches all four into
+`.lake/packages`, whichever part of the repository is built. From the root:
 
 ```sh
 lake exe cache get && lake build
@@ -306,10 +303,6 @@ lake env lake comparator --config=palomar/Pedregal/comparator.json
 lake env lake comparator --config=palomar/Sverak/comparator.json
 lake env lake comparator --config=palomar/Cassese/comparator.json
 ```
-
-Comparator runs Lake in a sandbox that sees only this directory. Until the three packages are
-pinned by commit, run it with temporary copies of them under `.lake/`, the lakefile and the manifest
-pointed at the copies, and restore both files afterwards.
 
 ## Layout
 

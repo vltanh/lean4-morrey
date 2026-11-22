@@ -34,8 +34,9 @@ equivalence, and every admissible `β` bounds `UMD_p (X)`);
 homogeneous of degree `0`) and `transference_beurlingPow`, `m (ξ) = (ξ̄ / ξ)^k`.
 
 **Proofs.** One line each from a package, which uses a named standard argument in place of the
-inaccessible source. From `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability` while it is developed): Theorem 4.2.7 from
+inaccessible source. From `BanachProbability`
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`):
+Theorem 4.2.7 from
 `umdConst_lt_top_of_lt_top`, `umdConst_two_le_mul`, `umdConst_le_mul_umdConst_two`, by Burkholder's
 good-λ method (Ann. Probab. 1 (1973), 9 (1981); both open access on Project Euclid but not obtained,
 the site refusing automated download), in the form of Pisier's 2011 IHP course notes (Lemma 8.20,
@@ -47,7 +48,9 @@ argument (Ann. Probab. 9 (1981), 12 (1984), not obtained, as above; the standard
 midpoint concavity integrated along Paley–Walsh martingales, and a Bellman function for the
 converse); Theorem 6.2.4 from `kahaneKhintchine`, by hypercontractivity, Borell's proof
 (Séminaire de Probabilités XIII (1979), read; [`../Borell`](../Borell)). Corollary 5.7.6 from the
-package `HarmonicAnalysis` (by path; `multiplierNorm_le_torusMultiplierNorm`,
+package `HarmonicAnalysis`
+([lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis), commit `bf215c5`;
+`multiplierNorm_le_torusMultiplierNorm`,
 `beurlingPowNorm_le_torusBeurlingPowNorm`), by de Leeuw's argument (*On `L_p` multipliers*, Ann. of
 Math. 81 (1965), 364–379). Neither package's source contains a `sorry`.
 

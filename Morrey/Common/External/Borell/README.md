@@ -29,8 +29,8 @@ vector space (no completeness):
 
 **Proof.** `BanachProbability.hypercontractive_affine` and
 `BanachProbability.kahaneKhintchine_hypercontractive` in the package `BanachProbability`
-(`lean4-banach-probability`, required by path at `../lean4-banach-probability` while it is
-developed), by Borell's argument (§2), step by step: Borell's operator
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`),
+by Borell's argument (§2), step by step: Borell's operator
 `K̄ g (x) = E_y [(1 + ρ x y) g (y)]` on functions of one sign and its tensor powers `⊗ⁿ K̄`
 (`kBar`, `kBarTensor`); the elementary inequality `‖K̄ g‖_{L^q} ≤ ‖g‖_{L^p}` for real `g`
 (`kBar_twoPoint`); `‖(⊗ⁿ K̄) f‖_{L^q} ≤ ‖f‖_{L^p}` for real `f`, which Borell obtains by the Segal

@@ -238,23 +238,24 @@ related_formalizations:
     note: >-
       Written for this project by the same AI system: Fourier multipliers and duality, de Leeuw's
       transference from the torus to the plane, Poisson summation, Dragičević's lower bound for
-      the square of the Beurling-Ahlfors transform, smooth periodic Fourier series. Not yet
-      published; required by path in lakefile.toml.
+      the square of the Beurling-Ahlfors transform, smooth periodic Fourier series. Published;
+      lakefile.toml requires it from GitHub at commit bf215c554db9ebbb94a34d87b98e28f3d5d25a62.
   - id: "https://github.com/vltanh/lean4-banach-probability"
     relationship: "builds-on"
     note: >-
       Written for this project by the same AI system: Burkholder's inequality and function, UMD
       theory (decoupling, complex constants, Maurey's theorem, extrapolation, L^p, zig-zag
       concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, the non-commutative
-      Khintchine inequality, Randrianantoanina's non-commutative martingale transforms. Not yet
-      published; required by path in lakefile.toml.
+      Khintchine inequality, Randrianantoanina's non-commutative martingale transforms.
+      Published; lakefile.toml requires it from GitHub at commit
+      250cd49b069629b28dde820dabac96ba4f19c878.
   - id: "https://github.com/vltanh/lean4-calculus-of-variations"
     relationship: "builds-on"
     note: >-
       Written for this project by the same AI system: quasiconvexity and laminates, Dacorogna's
       formula, minors and null Lagrangians, quadratic forms, Kristensen's smoothing,
-      distributional second derivatives on R. Not yet published; required by path in
-      lakefile.toml.
+      distributional second derivatives on R. Published; lakefile.toml requires it from GitHub
+      at commit fc86bbb63e766c17600c3f88855dd804db4bcca3.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-

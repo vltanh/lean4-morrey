@@ -79,15 +79,14 @@ formalization reads the paper, its place in the literature and what comes next:
 The library uses only Mathlib, and one module shared with the other papers,
 [`Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean`](../../Morrey/Common/Basic/Analysis/Calculus/BumpFunction/Mollify.lean)
 (mollification, for the cut-off of Lemma 1). It uses none of the packages that Cassese's
-formalization needs, but Lake loads them to build any part of the repository: see the
+formalization needs, but Lake fetches them whichever part of the repository is built: see the
 [overview's building instructions](../../README.md#building). Lean and Mathlib `v4.36.0-rc2`.
 
 This paper is its own Palomar submission: [`Challenge.lean`](../../palomar/Sverak/Challenge.lean),
 [`Solution.lean`](../../palomar/Sverak/Solution.lean), [`comparator.json`](../../palomar/Sverak/comparator.json) and
 [`formalization.yaml`](../../palomar/Sverak/formalization.yaml), named by the workflow
 [`palomar_preflight_sverak.yml`](../../.github/workflows/palomar_preflight_sverak.yml). From the
-repository root, with the packages in place (and, for Comparator, the copies that the overview
-describes):
+repository root:
 
 ```sh
 lake exe cache get && lake build

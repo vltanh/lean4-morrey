@@ -124,8 +124,9 @@ How it was made:
   Proposition 6.1 (the multinomial moments), Proposition 4.2 and Remark 4.5 (mollification), and
   one step of Šverák's Lemma 1; an independent reviewer found no departure left.
 - The main session merged the work, built, and ran the audit, the route check and Comparator (the
-  last with copies of the packages, which its sandbox needs until they are pinned by git). An agent
-  wrote the READMEs of [`Morrey/Common/External/`](../../Morrey/Common/External), and a final pass cleaned up the project and the
+  last with copies of the packages, which its sandbox needed while the lakefile required them by
+  path; the packages are now published and pinned by commit, and Comparator runs without copies).
+  An agent wrote the READMEs of [`Morrey/Common/External/`](../../Morrey/Common/External), and a final pass cleaned up the project and the
   packages. Then an agent rewrote this paper's README, report, credits and metadata.
 - Afterwards, `lean4-banach-probability` re-proved the triangle inequality for Schatten norms by
   the argument of an open source (Bourin and Zhang, arXiv:2610.30538, Proposition 3.13), and the

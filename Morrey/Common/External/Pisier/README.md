@@ -19,8 +19,9 @@ general filtrations):
   real Banach space `B` and `p ∈ (1, ∞)`.
 
 **Proof.** `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le`
-in the package `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability` while it is developed), by the dyadic form of the source's
+in the package `BanachProbability`
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`),
+by the dyadic form of the source's
 Fubini argument, which needs neither σ-finiteness nor joint measurability: a Paley–Walsh martingale
 with values in `L^p (μ; B)` takes finitely many values, so for `μ`-almost every `s` its evaluation
 at `s` is a `B`-valued Paley–Walsh martingale and the transform commutes with evaluation; the
