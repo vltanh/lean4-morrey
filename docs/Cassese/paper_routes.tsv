@@ -54,7 +54,10 @@ cs-prop2.2	proposition	0
 # hand: line 559, "It follows that quasiconvexity at A of a continuous integrand f is equivalent to the
 # existence of a quasiconvex minorant g <= f with g(A) = f(A)".
 cs-qc-minorant	claim	1	cs-prop2.2
-# hand: Proposition 2.3 has no proof ("follows directly from the dual envelope formulas above").
+# hand: Proposition 2.3 has no proof ("follows directly from the dual envelope formulas above"):
+# (a), (b) follow from Propositions 2.1 and 2.2 (prop:rk1envelope, cs-prop2.2); (c) uses line 559, a
+# quasiconvex minorant, which is rank-one convex by Lemma 2.2 (cs-lem2.2), and the largest rank-one
+# convex minorant, an integrand by Lemma 2.1 (cs-lem2.1).
 prop:envelope	proposition	0	prop:rk1envelope,cs-prop2.2,cs-lem2.2,cs-lem2.1
 # hand: lines 573-578 ("Consequently ..."), and lines 206-209: f^rc(0), f^qc(0) in {0, -infinity};
 # rank-one convexity or quasiconvexity at a point implies it at 0.
@@ -98,6 +101,11 @@ prop:elem	proposition	1	prop:explicit,lem:order,cs-sec4.3-limit,cs-qc-minorant,c
 # Proposition 2.3), g itself as the integrand ("g_n is itself nowhere quasiconvex"), and the lifting of
 # the proof of Theorem 1.2 (Lemma 2.2). Label ours (Lean: theorem1_2_elementary, which proves the
 # unconditional Theorem 1.2).
+# hand: the u_q analogues of (13), (14) that the route uses (External.Burkholder.scalarFunctionQ_holds)
+# carry no label of the paper: the paper states (13), (14) for u_6 only (eq:scalar-properties, which
+# the prop:explicit row lists), and Remark 4.5 only says that such a U "can also be constructed"; the
+# general-q version is cited as Burkholder's (Burkholder 1988, proof of Theorem 1.1), so the row lists
+# no label for it.
 cs-thm1.2-elementary	theorem	1	lem:rankonecomplex,lem:order,cs-sec4.3-limit,cs-qc-minorant,cs-envelope-cons,cs-lem2.2
 # 
 # Section 5.

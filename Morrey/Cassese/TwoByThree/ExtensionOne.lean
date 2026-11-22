@@ -13,7 +13,10 @@ values on `L` matter. An `L`-valued rank-one Rademacher martingale is one whose 
 `L`.
 
 The proof uses Proposition 2.5 (`proposition2_5`, Toolkit) and Burkholder's inequality on the
-canonical space of signs (`Morrey/Cassese/TwoByThree/Rademacher.lean`). Helpers are prefixed
+canonical space of signs (`Morrey/Cassese/TwoByThree/Rademacher.lean`). The predictable
+correction (25) (`tbt1_corr`), Burkholder's inequality (27) for the Frobenius norm
+(`tbt1_burkholder_frob`) and Cauchy–Schwarz for the Frobenius inner product
+(`tbt1_abs_frobInner_le`) are shared with the proof of Lemma 5.1 (2). Helpers are prefixed
 `tbt1_`.
 -/
 
@@ -113,10 +116,13 @@ theorem tbt1_g_zero {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)} {g : Matrix
   · linarith
   · exact h'
 
-/-- "By homogeneity and Young's inequality" (proof of Lemma 5.1 (1)): for every `η' > 0` there is
-`C` with `|g (X + Y) − g (X)| ≤ η' |X|^p + C |Y|^p` on `L`. From the uniform continuity of `g` on
-the compact set `{Z ∈ L : |Z| ≤ 2}` (the case `|Y| < δ |X|`, after scaling `X` to the unit sphere)
-and the bound `|g (Z)| ≤ M |Z|^p` (the case `|Y| ≥ δ |X|`). -/
+/-- The estimate that the proof of Lemma 5.1 (1) takes "by homogeneity and Young's inequality"
+(TeX lines 1891–1895): for every `η' > 0` there is `C` with
+`|g (X + Y) − g (X)| ≤ η' |X|^p + C |Y|^p` on `L`. Gap of the paper, filled here: homogeneity and
+Young's inequality give this from a Lipschitz-type bound on `g`, but `g` is only continuous. The
+proof uses instead the uniform continuity of `g` on the compact set `{Z ∈ L : |Z| ≤ 2}` (the case
+`|Y| < δ |X|`, after scaling `X` to the unit sphere) and the bound `|g (Z)| ≤ M |Z|^p` from
+homogeneity (the case `|Y| ≥ δ |X|`). -/
 theorem tbt1_young {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)} {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hgc : ContinuousOn g L) {p : ℝ} (hp : 0 < p)
     (hgh : ∀ t : ℝ, 0 < t → ∀ X ∈ L, g (t • X) = t ^ p * g X) {η' : ℝ} (hη' : 0 < η') :
@@ -242,9 +248,75 @@ theorem tbt1_mart_mem {N : ℕ} (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
     (ε : Fin N → Bool) : mart ξ n ε ∈ L :=
   L.sum_mem fun k _ => L.smul_mem _ (h k ε)
 
+/-! ### Shared with Lemma 5.1 (2): Cauchy–Schwarz, the correction (25), and (27) -/
+
+/-- Cauchy–Schwarz for the Frobenius inner product. -/
+theorem tbt1_abs_frobInner_le (A B : Matrix (Fin d) (Fin m) ℝ) :
+    |frobInner A B| ≤ frobNorm A * frobNorm B := by
+  have h : frobInner A B = inner ℝ (tbt1Iota A) (tbt1Iota B) := by
+    simp only [frobInner, PiLp.inner_apply, tbt1Iota,
+      Fintype.sum_prod_type, RCLike.inner_apply, conj_trivial]
+    exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => mul_comm _ _
+  rw [h, ← tbt1_norm_iota, ← tbt1_norm_iota]
+  exact abs_real_inner_le_norm _ _
+
+/-- The predictable correction of (25): for every `R` a matrix `R_L ∈ L` of rank at most one,
+with `|π R − R_L| ≤ κ |π^⊥ R|` when `R` has rank at most one (`κ` replaced by `max κ 0`, which
+(25) also satisfies; `R_L = 0` for `R = 0`, inventory E16). -/
+theorem tbt1_corr {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
+    {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ} (hπ : IsFrobProj L π) {κ : ℝ}
+    (hκ : HasRankOneCorrection L π κ) :
+    ∃ corr : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ, (∀ R, corr R ∈ L) ∧
+      (∀ R, (corr R).rank ≤ 1) ∧
+      ∀ R, R.rank ≤ 1 → frobNorm (π R - corr R) ≤ max κ 0 * frobNorm (R - π R) := by
+  have hπ0 : π 0 = 0 := map_zero (tbt1ProjLin hπ)
+  have hcorr : ∀ R : Matrix (Fin d) (Fin m) ℝ, ∃ RL ∈ L, RL.rank ≤ 1 ∧
+      (R.rank ≤ 1 → frobNorm (π R - RL) ≤ max κ 0 * frobNorm (R - π R)) := by
+    intro R
+    by_cases h1 : R.rank = 1
+    · obtain ⟨RL, hRL, hr, hle⟩ := hκ R h1
+      exact ⟨RL, hRL, hr.le, fun _ => hle.trans (mul_le_mul_of_nonneg_right (le_max_left _ _)
+        (tbt1_frobNorm_nonneg _))⟩
+    · refine ⟨0, L.zero_mem, by rw [Matrix.rank_zero]; exact zero_le_one, fun hR => ?_⟩
+      have h0 : R = 0 := eq_zero_of_rank_eq_zero (by omega)
+      subst h0
+      rw [hπ0, sub_zero, show frobNorm (0 : Matrix (Fin d) (Fin m) ℝ) = 0 by
+        simp [frobNorm, frobSq], mul_zero]
+  choose corr hcorrL hcorrr hcorrle using hcorr
+  exact ⟨corr, hcorrL, hcorrr, hcorrle⟩
+
+/-- Burkholder's inequality (27) for matrix-valued Rademacher martingales with the Frobenius
+norm: if `|ξ_k| ≤ c |ζ_k|` pointwise, then
+`E |Σ ε_k ξ_k|^s ≤ (s* − 1)^s c^s E |Σ ε_k ζ_k|^s` (`tbt1_burkholder_avg` through the isometry
+`tbt1Iota`). -/
+theorem tbt1_burkholder_frob {N : ℕ} {ξ ζ : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin m) ℝ}
+    (hξ : IsPredictable ξ) (hζ : IsPredictable ζ) {c : ℝ} (hc : 0 ≤ c)
+    (hle : ∀ k ε, frobNorm (ξ k ε) ≤ c * frobNorm (ζ k ε)) {s : ℝ} (hs : 1 < s) :
+    avg (fun ε => frobNorm (mart ξ N ε) ^ s) ≤
+      (pStar s - 1) ^ s * c ^ s * avg (fun ε => frobNorm (mart ζ N ε) ^ s) := by
+  have hξ' : IsPredictable fun k ε => tbt1Iota (ξ k ε) := fun k ε ε' h => by
+    simp only [hξ k ε ε' h]
+  have hζ' : IsPredictable fun k ε => tbt1Iota (c • ζ k ε) := fun k ε ε' h => by
+    simp only [hζ k ε ε' h]
+  have := tbt1_burkholder_avg hξ' hζ' (fun k ε => by
+    rw [tbt1_norm_iota, tbt1_norm_iota, tbt1_frobNorm_smul, abs_of_nonneg hc]
+    exact hle k ε) hs
+  have e1 : ∀ ε, ‖mart (fun k ε => tbt1Iota (ξ k ε)) N ε‖ = frobNorm (mart ξ N ε) :=
+    fun ε => by rw [← tbt1_mart_map, tbt1_norm_iota]
+  have e2 : ∀ ε, ‖mart (fun k ε => tbt1Iota (c • ζ k ε)) N ε‖ ^ s =
+      c ^ s * frobNorm (mart ζ N ε) ^ s := fun ε => by
+    have : mart (fun k ε => tbt1Iota (c • ζ k ε)) N ε =
+        (tbt1Iota.comp (c • LinearMap.id)) (mart ζ N ε) := by
+      rw [tbt1_mart_map]; rfl
+    rw [this, LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply, tbt1_norm_iota,
+      tbt1_frobNorm_smul, abs_of_nonneg hc, Real.mul_rpow hc (tbt1_frobNorm_nonneg _)]
+  simp only [e1, e2, rad_avg_mul_left] at this
+  rw [mul_assoc]; exact this
+
 /-- **Lemma 5.1 (1), quantitative form** (`lem:extension-from-subspace`): under the hypotheses of
 `lemma5_1_part1`, if `C ≥ 0` is a constant of the homogeneity and Young estimate
-`|g (X + Y) − g (X)| ≤ (η/2) |X|^p + C |Y|^p` on `L`, then the penalty
+`|g (X + Y) − g (X)| ≤ (η/2) |X|^p + C |Y|^p` on `L` (one exists by `tbt1_young`, which fills a
+gap of the paper), then the penalty
 `Λ₀ = (C (p* − 1)^p (max κ 0)^p)^{1/p}` suffices: for every `Λ ≥ Λ₀`,
 `A ↦ g (π A) + Λ^p |π^⊥ A|^p` is rank-one convex at `0`. This is the proof of Lemma 5.1 (1) with
 its constants kept explicit; the proof of Theorem 1.3 (b) needs them to choose `Λ` uniformly in `p`
@@ -269,19 +341,7 @@ theorem lemma5_1_part1_quant
   set κ' := max κ 0 with hκ'_def
   have hκ' : 0 ≤ κ' := le_max_right _ _
   -- the predictable correction: a rank-one `R_L ∈ L` for each increment (`0` for `R = 0`)
-  have hcorr : ∀ R : Matrix (Fin d) (Fin m) ℝ, ∃ RL ∈ L, RL.rank ≤ 1 ∧
-      (R.rank ≤ 1 → frobNorm (π R - RL) ≤ κ' * frobNorm (R - π R)) := by
-    intro R
-    by_cases h1 : R.rank = 1
-    · obtain ⟨RL, hRL, hr, hle⟩ := hκ R h1
-      exact ⟨RL, hRL, hr.le, fun _ => hle.trans (mul_le_mul_of_nonneg_right (le_max_left _ _)
-        (tbt1_frobNorm_nonneg _))⟩
-    · refine ⟨0, L.zero_mem, by rw [Matrix.rank_zero]; exact zero_le_one, fun hR => ?_⟩
-      have h0 : R = 0 := eq_zero_of_rank_eq_zero (by omega)
-      subst h0
-      rw [hπ0, sub_zero, show frobNorm (0 : Matrix (Fin d) (Fin m) ℝ) = 0 by
-        simp [frobNorm, frobSq], mul_zero]
-  choose corr hcorrL hcorrr hcorrle using hcorr
+  obtain ⟨corr, hcorrL, hcorrr, hcorrle⟩ := tbt1_corr hπ hκ
   set K := C * ((pStar p - 1) ^ p * κ' ^ p) with hK_def
   have hpstar : 0 ≤ pStar p - 1 := by
     have : p ≤ pStar p := le_max_left _ _
@@ -332,25 +392,9 @@ theorem lemma5_1_part1_quant
     linarith
   -- (27), from Burkholder's inequality: `‖𝓔_N‖_p ≤ κ (p* − 1) ‖N_N‖_p`
   have hbk : avg (fun ε => frobNorm (E ε) ^ p) ≤
-      (pStar p - 1) ^ p * κ' ^ p * avg (fun ε => frobNorm (Nn ε) ^ p) := by
-    have hξ : IsPredictable fun k ε => tbt1Iota (π (A k ε) - B k ε) := fun k ε ε' h => by
-      simp only [B, hA.1 k ε ε' h]
-    have hζ : IsPredictable fun k ε => tbt1Iota (κ' • (A k ε - π (A k ε))) := fun k ε ε' h => by
-      simp only [hA.1 k ε ε' h]
-    have := tbt1_burkholder_avg hξ hζ (fun k ε => by
-      rw [tbt1_norm_iota, tbt1_norm_iota, tbt1_frobNorm_smul, abs_of_nonneg hκ']
-      exact hcorrle _ (hA.2 k ε)) hp
-    have e1 : ∀ ε, ‖mart (fun k ε => tbt1Iota (π (A k ε) - B k ε)) N ε‖ = frobNorm (E ε) :=
-      fun ε => by rw [← tbt1_mart_map, tbt1_norm_iota]
-    have e2 : ∀ ε, ‖mart (fun k ε => tbt1Iota (κ' • (A k ε - π (A k ε)))) N ε‖ ^ p =
-        κ' ^ p * frobNorm (Nn ε) ^ p := fun ε => by
-      have : mart (fun k ε => tbt1Iota (κ' • (A k ε - π (A k ε)))) N ε =
-          (tbt1Iota.comp (κ' • LinearMap.id)) (Nn ε) := by
-        rw [tbt1_mart_map]; rfl
-      rw [this, LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply, tbt1_norm_iota,
-        tbt1_frobNorm_smul, abs_of_nonneg hκ', Real.mul_rpow hκ' (tbt1_frobNorm_nonneg _)]
-    simp only [e1, e2, rad_avg_mul_left] at this
-    rw [mul_assoc]; exact this
+      (pStar p - 1) ^ p * κ' ^ p * avg (fun ε => frobNorm (Nn ε) ^ p) :=
+    tbt1_burkholder_frob (fun k ε ε' h => by simp only [hA.1 k ε ε' h])
+      (fun k ε ε' h => by simp only [hA.1 k ε ε' h]) hκ' (fun k ε => hcorrle _ (hA.2 k ε)) hp
   -- `E F (M_N) ≥ (Λ^p − C κ^p (p* − 1)^p) E |N_N|^p ≥ 0`
   have hNn : 0 ≤ avg (fun ε => frobNorm (Nn ε) ^ p) :=
     rad_avg_nonneg fun ε => Real.rpow_nonneg (tbt1_frobNorm_nonneg _) _
@@ -384,8 +428,10 @@ one; `0` for a zero increment, inventory E16), an `L`-valued rank-one martingale
 `N = π^⊥ M`, so Burkholder's inequality on the canonical space of signs gives (27),
 `E |𝓔_N|^p ≤ (κ (p* − 1))^p E |N_N|^p` (`tbt1_burkholder_avg`; `κ` is replaced by `max κ 0`, which
 (25) also satisfies). "By homogeneity and Young's inequality",
-`|g (X + Y) − g (X)| ≤ (η/2) |X|^p + C |Y|^p` on `L` (`tbt1_young`, from the uniform continuity of
-`g` on a compact ball of `L`), so `E g (π M_N) ≥ (η/2) E |M̃_N|^p − C E |𝓔_N|^p`, and
+`|g (X + Y) − g (X)| ≤ (η/2) |X|^p + C |Y|^p` on `L` (`tbt1_young`; gap of the paper, filled
+there: homogeneity and Young's inequality would need a Lipschitz-type bound on `g`, which is only
+continuous, so the estimate is proved from the uniform continuity of `g` on a compact ball of `L`
+and homogeneity), so `E g (π M_N) ≥ (η/2) E |M̃_N|^p − C E |𝓔_N|^p`, and
 `Λ^p ≥ C (κ (p* − 1))^p` makes `E F (M_N) ≥ 0`. -/
 theorem lemma5_1_part1
     (L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ))
@@ -398,7 +444,7 @@ theorem lemma5_1_part1
         η * avg (fun ε => frobNorm (radMart 0 A N ε) ^ p) ≤
           avg fun ε => g (radMart 0 A N ε)) :
     ∃ Λ₀ : ℝ, ∀ Λ ≥ Λ₀, RankOneConvexAt (fun A => g (π A) + Λ ^ p * frobNorm (A - π A) ^ p) 0 := by
-  -- "by homogeneity and Young's inequality"
+  -- "by homogeneity and Young's inequality" (a gap of the paper, filled by `tbt1_young`)
   obtain ⟨C, hC0, hC⟩ := tbt1_young hgc (by linarith) hgh (η' := η / 2) (by linarith)
   exact ⟨_, lemma5_1_part1_quant L π hπ κ hκ hp g hgc hgh hη hcoer C hC0 hC⟩
 

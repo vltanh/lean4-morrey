@@ -14,7 +14,8 @@ Theorems 5.20 and 5.25 (i).
 `External.Dacorogna.quadraticForm_quasiconvex` (Theorem 5.25 (i)). [`Plancherel.lean`](Plancherel.lean):
 the Fourier inequality `∫ Q (∇φ) ≥ 0` behind Theorem 5.25 (i).
 
-**Proofs.** Theorem 5.20 (the direction (iii) ⇒ (iv)): by induction on the number of rows; a
+**Proofs.** Theorem 5.20 (the direction (iii) ⇒ (iv)): by induction on the number of rows, in the
+classical spirit of Ball–Currie–Olver (Dacorogna's own proof could not be consulted offline); a
 rank-one affine function is affine in each row, and the minors are rank-one affine by the matrix
 determinant lemma; continuity is not needed. Theorem 5.25 (i): Dacorogna's Fourier–Plancherel
 argument, `∫ Q (∇φ) = 4π² ∫ [Q (Re φ̂ ⊗ ξ) + Q (Im φ̂ ⊗ ξ)] dξ ≥ 0` by the Legendre–Hadamard

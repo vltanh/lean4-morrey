@@ -21,16 +21,21 @@ public import Mathlib.Analysis.Calculus.Rademacher
 /-!
 # Rindler and Dacorogna: rank-one convex functions and quasiconvexity
 
-F. Rindler, *Calculus of variations*, Springer 2018, Lemma 5.6 and Propositions 5.1, 5.3;
-B. Dacorogna, *Direct methods in the calculus of variations*, 2nd ed., Springer 2008,
-Propositions 5.11, 5.13. Cassese quotes them as Lemma 2.1 and Lemma 2.2. They are standard and
-within reach (class Mod of the inventory). Proved here: Lemma 2.1 (`lemma5_6`), "quasiconvex ⇒
-rank-one convex" (`rankOneConvex_of_quasiconvex`) and the periodic form of Lemma 2.2
-(`quasiconvexAtOn_iff_periodic`), and the domain independence (`quasiconvexAtOn_iff`). Helpers are
-private, prefixed `rd_` (Lemma 5.6 is the general fact on separately convex functions of
+F. Rindler, *Calculus of variations*, Springer 2018; B. Dacorogna, *Direct methods in the calculus
+of variations*, 2nd ed., Springer 2008. Cassese quotes Lemma 2.1 from Rindler, Lemma 5.6, and
+Lemma 2.2 from Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11 and 5.13,
+cited together for the three assertions of the lemma (TeX 466–488). The books were not consulted
+here, so the citations below are the paper's ("as cited by the paper"); which of the four results
+gives which assertion is not verified (our recollection, unverified: in Dacorogna 2008,
+Proposition 5.11 is the independence of the domain, Proposition 5.13 the periodic test maps, and
+"quasiconvex ⇒ rank-one convex" is Theorem 5.3). They are standard and within reach (class Mod of
+the inventory). Proved here: Lemma 2.1 (`lemma5_6`), "quasiconvex ⇒ rank-one convex"
+(`rankOneConvex_of_quasiconvex`), the domain independence (`quasiconvexAtOn_iff`) and the periodic
+form of Lemma 2.2 (`quasiconvexAtOn_iff_periodic`). Helpers are private, prefixed `rd_` (Lemma 5.6
+is the general fact on separately convex functions of
 `Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex`), except the public
 `rd_quasiconvexAtOn_of_unitCube` (one direction of the domain independence, for bounded measurable
-sets), which `Cassese.Toolkit` uses.
+sets).
 
 Integrands are lower semicontinuous and locally bounded, as in Cassese (Section 1.5).
 -/
@@ -60,8 +65,15 @@ private lemma rank_single_one (i : Fin d) (j : Fin m) : (Matrix.single i j (1 : 
     simp at this
 
 /-- **Lemma 2.1** (`cs-lem2.1`) of Cassese, citing Rindler, Lemma 5.6: a rank-one convex
-integrand is locally Lipschitz. (`Matrix.of` identifies `ℝ^{d×m}` with `Fin d → Fin m → ℝ`, with
-its product metric.)
+function `f : ℝ^{d×m} → ℝ` is locally Lipschitz. (`Matrix.of` identifies `ℝ^{d×m}` with
+`Fin d → Fin m → ℝ`, with its product metric.)
+
+The statement assumes only that `f` is real-valued and rank-one convex, as in Rindler; the paper
+states the lemma for rank-one convex *integrands* (lower semicontinuous and locally bounded), a
+weaker statement. The stronger form is the one the paper needs: Propositions 2.4 and 2.5 and the
+envelope formulas apply Lemma 2.1 to the infimum `G`, which is real-valued and rank-one convex but
+not yet known to be an integrand (its continuity is what makes it one); the paper does not note
+this (a gap of the paper, inventory E21).
 
 Proof: the standard argument for separately convex functions (Rindler, proof of Lemma 5.6;
 Dacorogna 2008, Theorem 2.31). A rank-one convex `f` is convex along every coordinate direction
@@ -954,7 +966,7 @@ private lemma rd_grad_laminate {l : ℝ} (a : Fin d → ℝ) {n : Fin m → ℤ}
 
 /-- The two-point inequality along an integer rank-one direction, from the periodic laminate
 `u (x) = h_λ (n · x) a`: `f (A) ≤ λ f (A + (1 − λ) a ⊗ n) + (1 − λ) f (A − λ a ⊗ n)`
-(Rindler, proof of Proposition 5.1; Dacorogna 2008, Theorem 5.3, with periodic laminates). -/
+(the textbook laminate argument, see `rankOneConvex_of_quasiconvex`, with periodic laminates). -/
 private lemma rd_two_point {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hlsc : LowerSemicontinuous f)
     (hbdd : IsLocallyBounded f) {A : Matrix (Fin d) (Fin m) ℝ} (hper : QuasiconvexAtPeriodic f A)
     (a : Fin d → ℝ) {n : Fin m → ℤ} (hn : n ≠ 0) {l : ℝ} (hl0 : 0 < l) (hl1 : l < 1) :
@@ -1089,24 +1101,27 @@ private lemma rd_tendsto_floor_div (x : ℝ) :
     rw [div_le_iff₀ hN]
     linarith [Int.floor_le (((N : ℝ) + 1) * x), mul_comm x ((N : ℝ) + 1)]
 
-/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, first assertion, citing Rindler, Proposition 5.1, and
-Dacorogna, Proposition 5.11: a quasiconvex integrand is rank-one convex. 
+/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, first assertion: a quasiconvex integrand is rank-one
+convex. Cassese cites Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11
+and 5.13, for the whole of Lemma 2.2 (as cited by the paper; see the module docstring). 
 
-Proof: the standard laminate argument (Rindler, proof of Proposition 5.1; Dacorogna 2008,
-Theorem 5.3), with periodic test maps: by the periodic form of Lemma 2.2 (`rd_periodic_of_cube`),
-`f` is quasiconvex at every `A` with periodic test maps. For an integer direction `n ≠ 0`, a vector
+Proof: the standard laminate argument (in Dacorogna 2008 the implication is Theorem 5.3, by our
+unverified recollection), with periodic test maps: by the periodic form of Lemma 2.2
+(`rd_periodic_of_cube`), `f` is quasiconvex at every `A` with periodic test maps. For an integer direction `n ≠ 0`, a vector
 `a` and `λ ∈ (0, 1)`, the periodic laminate `u (x) = h_λ (n · x) a` (`h_λ` the sawtooth with slopes
 `1 − λ` and `−λ`) has `∇u = h_λ' (n · x) a ⊗ n`, and `∫_{(0,1)^m} F (n · x) dx = ∫_0^1 F` for
 `1`-periodic `F` (Fubini in a coordinate with `n_c ≠ 0`, `rd_integral_dir`), which gives
 `f (A) ≤ λ f (A + (1 − λ) a ⊗ n) + (1 − λ) f (A − λ a ⊗ n)` (`rd_two_point`). In the coordinate
 directions this makes `f` convex in each entry, hence continuous (the argument of Lemma 5.6); the
 inequality extends to rational directions by scaling and to real ones by continuity, and a rank-one
-matrix is `a ⊗ q` (`rd_rank_one_eq`). Departure from the sources: the textbook argument cuts off a laminate in an arbitrary direction
-`n ∈ ℝ^m` near the boundary of the cube; here the laminates are periodic, which needs integer
-directions, and the other directions follow by scaling and continuity. Reason (2): the volume
-fractions of the layers of a laminate in an irrational direction on the cube need an
-equidistribution estimate that is not available here, while for integer directions they are an
-exact computation (`rd_integral_dir`).-/
+matrix is `a ⊗ q` (`rd_rank_one_eq`). A variant of the textbook argument, chosen for convenience
+(this is a cited result, not an argument of the paper): the textbook argument, as we recall it (the
+books were not consulted), lays the laminate in the direction `n ∈ ℝ^m` on a domain adapted to `n`
+(a box with faces orthogonal to `n`, or the cube after a linear change of variables, by the domain
+independence proved below), which gives every real direction at once; here the laminates are
+periodic on the unit cube, which needs integer directions, where the volume fractions of the
+layers are an exact computation (`rd_integral_dir`), and the other directions follow by scaling
+and continuity.-/
 theorem rankOneConvex_of_quasiconvex {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hlsc : LowerSemicontinuous f) (hbdd : IsLocallyBounded f) (hf : Quasiconvex f) :
     RankOneConvex f := by
@@ -1294,7 +1309,9 @@ private lemma rd_ae_grad_eq_zero {φ : (Fin m → ℝ) → Fin d → ℝ} {K : N
 
 /-- Lemma 2.2 (ii), the direction used here: quasiconvexity at `A` on the unit cube gives it on
 every bounded measurable `Ω` (in particular on every bounded open set). The proof is the standard
-one (Dacorogna 2008, Proposition 5.11; Rindler, Proposition 5.3): put `Ω` in a cube
+one, by rescaling (the paper cites Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008,
+Propositions 5.11 and 5.13, for Lemma 2.2; Dacorogna's Proposition 5.11 by our unverified
+recollection): put `Ω` in a cube
 `Q_R = x₀ + R (0, 1)^m`; a test map `φ` on `Ω`, rescaled to the unit cube, gives
 `R^m f (A) ≤ ∫_{Q_R} f (A + ∇φ)`; on `Q_R ∖ Ω` the map vanishes, so its gradient vanishes almost
 everywhere (`rd_ae_grad_eq_zero`), and the inequality becomes `|Ω| f (A) ≤ ∫_Ω f (A + ∇φ)`. -/
@@ -1504,22 +1521,26 @@ private lemma rd_unitCube_of_quasiconvexAtOn {f : Matrix (Fin d) (Fin m) ℝ →
   have hRm : 0 < R ^ m := by positivity
   exact le_of_mul_le_mul_left hq hRm
 
-/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, second assertion, citing Rindler, Proposition 5.3,
-and Dacorogna, Proposition 5.13: quasiconvexity at `A` does not depend on the bounded open domain
-of the test maps. 
+/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, second assertion: quasiconvexity at `A` does not
+depend on the bounded open domain of the test maps. Cassese cites Rindler, Propositions 5.1 and
+5.3, and Dacorogna 2008, Propositions 5.11 and 5.13, for the whole of Lemma 2.2 (as cited by the
+paper; see the module docstring). The domain is assumed nonempty (`hne`), which the paper does not
+say but needs: for `Ω = ∅` the condition holds for every `f` (the only test map is `0`, and both
+sides vanish), so the equivalence would fail for every `f` that is not quasiconvex at `A`. 
 
-Proof: the standard argument by rescaling and restriction (Dacorogna 2008, Proposition 5.11;
-Rindler, Proposition 5.3), where those texts use a Vitali covering of the cube by copies of `Ω`:
+Proof: the standard argument by rescaling and restriction (Dacorogna 2008, Proposition 5.11, by our
+unverified recollection), where the textbooks use a Vitali covering of the cube by copies of `Ω`:
 quasiconvexity on a set passes to its measurable subsets, because a test map on the subset vanishes
 on the rest, so its gradient vanishes almost everywhere there (`rd_quasiconvexAtOn_mono`, from
 `rd_ae_fderiv_eq_zero`: at a density point of the zero set of a Lipschitz map, its derivative is
 `0`); and quasiconvexity on the unit cube is quasiconvexity on every cube `x₀ + R (0, 1)^m`, by the
 change of variables `x = x₀ + R y`. "⇒": `Ω` lies in a large cube (`rd_quasiconvexAtOn_of_unitCube`);
 "⇐": `Ω` contains a small cube (`rd_unitCube_of_quasiconvexAtOn`).
-Departure from the sources: they tile the cube by disjoint rescaled copies of `Ω` (Vitali), which
-needs `|∂Ω| = 0` or the same vanishing of gradients on zero sets; the formal proof uses the
-vanishing directly, with a single cube, which avoids the covering theorem (reason 2: no Vitali
-covering by copies of an arbitrary open set is available here).-/
+A variant of the textbook argument (this is a cited result, not an argument of the paper): the
+textbooks tile the cube by disjoint rescaled copies of `Ω` (Vitali), which needs `|∂Ω| = 0` or the
+same vanishing of gradients on zero sets; the formal proof uses the vanishing directly, with a
+single cube, which avoids the covering theorem (no Vitali covering by copies of an arbitrary open
+set is available here).-/
 theorem quasiconvexAtOn_iff {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hlsc : LowerSemicontinuous f)
     (hbdd : IsLocallyBounded f) (A : Matrix (Fin d) (Fin m) ℝ) {Ω : Set (Fin m → ℝ)}
     (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω) (hne : Ω.Nonempty) :
@@ -1527,11 +1548,13 @@ theorem quasiconvexAtOn_iff {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hlsc : Low
   ⟨rd_quasiconvexAtOn_of_unitCube hlsc hbdd hb hΩ.measurableSet,
     rd_unitCube_of_quasiconvexAtOn hlsc hbdd hΩ hb hne⟩
 
-/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, third assertion, citing Rindler, Proposition 5.3, and
-Dacorogna, Proposition 5.13: quasiconvexity at `A` is equivalent to the inequality for periodic
-Lipschitz test maps on the torus `𝕋^m = ℝ^m / ℤ^m`. 
+/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, third assertion: quasiconvexity at `A` is equivalent
+to the inequality for periodic Lipschitz test maps on the torus `𝕋^m = ℝ^m / ℤ^m`. Cassese cites
+Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11 and 5.13, for the whole of
+Lemma 2.2 (as cited by the paper; see the module docstring). 
 
-Proof: the standard argument (Dacorogna 2008, Proposition 5.13; the same cutoff as in Šverák's
+Proof: the standard argument (Dacorogna 2008, Proposition 5.13, by our unverified recollection;
+the same cutoff as in Šverák's
 Lemma 1, whose technique `Morrey/Sverak/Lemma1.lean` formalizes for smooth maps, here for Lipschitz
 ones). "⇒": for a periodic `φ`, the maps `ψ_j = η_{1/j} · j⁻² φ (j² ·)` vanish off the cube, where
 `η_δ = ∏ h_δ (x_i)` is a Lipschitz cutoff equal to `1` on `[δ, 1 − δ]^m`; their Lipschitz

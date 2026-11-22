@@ -19,10 +19,13 @@ integrand (30):
   every eigenvalue of `G` is `0` or `σ²`, and exactly two are `σ²` when `σ ≠ 0`;
 * the Schatten norms of a diagonal matrix: `‖diag (c)‖_{S_q} ≤ n^{1/q} max |c_i|`
   (`square_schattenNorm_diagonal_le`);
-* the moments of `Z = Σ_j e^{i θ_j}`: `E |Z|^{2m} ≤ m! d^m` (`square_moment_zc`), from
-  `E |w + e^{iθ}|^{2m} = Σ_k (m choose k)² |w|^{2k}` (`square_integral_norm_add_cexp_pow`), which
-  computes the paper's `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)²` one coordinate at a
-  time, and the bound `(m choose k)² k! ≤ (m choose k) m!`;
+* the moments of `Z = Σ_j e^{i θ_j}`: `E |Z|^{2m} ≤ m! d^m` (`square_moment_zc`), by induction on
+  the number `d` of angles. Adding one angle, `E |w + e^{iθ}|^{2m} = Σ_k (m choose k)² |w|^{2k}`
+  (`square_integral_norm_add_cexp_pow`, averaging over that angle alone); with the induction
+  hypothesis `E |Z_{d−1}|^{2k} ≤ k! (d − 1)^k` and `(m choose k)² k! ≤ (m choose k) m!` this gives
+  `E |Z_d|^{2m} ≤ m! Σ_k (m choose k) (d − 1)^k = m! d^m`. The paper's exact formula
+  `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)²` is not computed; only this bound, which is
+  what its proof uses, is proved;
 * the monotonicity of `L^p` norms on the unit cube (a probability space), by Jensen's inequality
   (`square_cube_lp_mono`), and the resulting `‖Z‖_{L^p} ≤ √(p d)` for `p ≥ 1`
   (`square_lp_zc_le`): `‖Z‖_{L^p} ≤ ‖Z‖_{L^{2m}} ≤ (m! d^m)^{1/(2m)} ≤ √(m d)` with
@@ -385,7 +388,10 @@ theorem square_integral_norm_add_cexp_pow (w : ℂ) (m : ℕ) :
     rw [ite_eq_right_iff.2 fun h => absurd h (by omega), mul_zero]
   · intro h; exact absurd hk h
 
-/-- **The moments of `Z`** (proof of Proposition 6.1): `E |Z|^{2m} ≤ m! d^m`. -/
+/-- **The moments of `Z`** (proof of Proposition 6.1): `E |Z|^{2m} ≤ m! d^m`. By induction on the
+number of angles: the one-angle recursion `square_integral_norm_add_cexp_pow` and
+`(m choose k)² k! ≤ (m choose k) m!` (the paper's exact multinomial formula for `E |Z|^{2m}` is not
+computed). -/
 theorem square_moment_zc (n m : ℕ) :
     ∫ x in unitCube n, ‖square_zc x‖ ^ (2 * m) ≤ (m.factorial : ℝ) * (n : ℝ) ^ m := by
   induction n generalizing m with

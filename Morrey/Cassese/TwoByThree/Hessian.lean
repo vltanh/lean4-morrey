@@ -256,122 +256,6 @@ theorem tbt5_hessB_hessian (X : Fin 3 → ℝ) :
   fin_cases i <;> fin_cases j <;>
   simp [hessB, tbtM, tbt5UD, tbt5c, pow_two, Complex.mul_re, Complex.mul_im] <;> ring
 
-/-- The Cauchy-type majorant of `|s|⁻⁴` used for the logarithmic bound. -/
-noncomputable def tbt5Maj (X : Fin 3 → ℝ) : ℝ := 72 / (1 + (X 0 ^ 2 + X 1 ^ 2)) *
-  (1 / (1 + (X 2 - √(X 0 ^ 2 + X 1 ^ 2)) ^ 2) + 1 / (1 + (X 2 + √(X 0 ^ 2 + X 1 ^ 2)) ^ 2))
-
-/-- `∫_{B_R} tbt5Maj ≤ 576 π² log (2 + R)` (the computation of `tbt_log_bound`). -/
-theorem tbt5_lintegral_Maj_le {R : ℝ} (hR : 0 ≤ R) :
-    ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, ENNReal.ofReal (tbt5Maj x) ≤
-      ENNReal.ofReal (576 * Real.pi ^ 2 * Real.log (2 + R)) := by
-  set B := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}
-  set Φ : (Fin 3 → ℝ) → ℝ := tbt5Maj
-  set Q := {X : Fin 3 → ℝ | |X 0| ≤ R ∧ |X 1| ≤ R}
-  have hlog : 0 ≤ Real.log (2 + R) := Real.log_nonneg (by linarith)
-  have hBQ : B ⊆ Q := by
-    intro X hX
-    have hX' : X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2 < R ^ 2 := by
-      simpa [B, Fin.sum_univ_three] using hX
-    have h0 : X 0 ^ 2 < R ^ 2 := by nlinarith [sq_nonneg (X 1), sq_nonneg (X 2)]
-    have h1 : X 1 ^ 2 < R ^ 2 := by nlinarith [sq_nonneg (X 0), sq_nonneg (X 2)]
-    exact ⟨(abs_lt_of_sq_lt_sq h0 hR).le, (abs_lt_of_sq_lt_sq h1 hR).le⟩
-  have hQm : MeasurableSet Q := by
-    have : Q = {X : Fin 3 → ℝ | |X 0| ≤ R} ∩ {X | |X 1| ≤ R} := rfl
-    rw [this]
-    exact (measurableSet_le (by fun_prop) measurable_const).inter
-      (measurableSet_le (by fun_prop) measurable_const)
-  calc ∫⁻ x in B, ENNReal.ofReal (Φ x)
-      ≤ ∫⁻ x in Q, ENNReal.ofReal (Φ x) := lintegral_mono_set hBQ
-    _ = ∫⁻ x, Q.indicator (fun X => ENNReal.ofReal (Φ X)) x := (lintegral_indicator hQm _).symm
-    _ ≤ ∫⁻ x, ∫⁻ y, ∫⁻ z, Q.indicator (fun X => ENNReal.ofReal (Φ X)) ![x, y, z] :=
-        tbt_lintegral_fin_three_le _
-    _ ≤ ∫⁻ x, (Set.Icc (-R) R).indicator (fun x => ∫⁻ y,
-          ENNReal.ofReal (2 * Real.pi * 72) * ENNReal.ofReal (1 / (√(1 + x ^ 2) ^ 2 + y ^ 2))) x := by
-        refine lintegral_mono fun x => ?_
-        by_cases hx : |x| ≤ R
-        · rw [Set.indicator_of_mem (abs_le.mp hx)]
-          refine lintegral_mono fun y => ?_
-          by_cases hy : |y| ≤ R
-          · have hQ : ∀ z, (![x, y, z] : Fin 3 → ℝ) ∈ Q := fun z => ⟨hx, hy⟩
-            simp_rw [Set.indicator_of_mem (hQ _)]
-            simp only [Φ, tbt5Maj, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
-              Matrix.head_cons, Matrix.tail_cons]
-            rw [tbt_lintegral_two_cauchy _ _ (by positivity), mul_comm, ← ENNReal.ofReal_mul
-              (by positivity), ← ENNReal.ofReal_mul (by positivity)]
-            apply ENNReal.ofReal_le_ofReal
-            rw [Real.sq_sqrt (by positivity)]
-            apply le_of_eq; field_simp; ring
-          · have hQ : ∀ z, (![x, y, z] : Fin 3 → ℝ) ∉ Q := fun z h => hy h.2
-            simp_rw [Set.indicator_of_notMem (hQ _)]
-            simp
-        · have hQ : ∀ y z, (![x, y, z] : Fin 3 → ℝ) ∉ Q := fun y z h => hx h.1
-          simp_rw [Set.indicator_of_notMem (hQ _ _)]
-          simp
-    _ = ∫⁻ x in Set.Icc (-R) R, ENNReal.ofReal (2 * Real.pi * 72 * Real.pi) *
-          ENNReal.ofReal (1 / √(1 + x ^ 2)) := by
-        rw [← lintegral_indicator measurableSet_Icc]
-        congr 1; funext x
-        by_cases hx : x ∈ Set.Icc (-R) R
-        · rw [Set.indicator_of_mem hx, Set.indicator_of_mem hx, lintegral_const_mul' _ _
-            ENNReal.ofReal_ne_top, tbt_lintegral_inv_sq_add_sq (Real.sqrt_pos.mpr (by positivity)),
-            ← ENNReal.ofReal_mul (by positivity), ← ENNReal.ofReal_mul (by positivity)]
-          congr 1; field_simp
-        · rw [Set.indicator_of_notMem hx, Set.indicator_of_notMem hx]
-    _ = ENNReal.ofReal (2 * Real.pi * 72 * Real.pi) * ENNReal.ofReal (2 * Real.arsinh R) := by
-        rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top, tbt_lintegral_Icc_inv_sqrt hR]
-    _ ≤ ENNReal.ofReal (576 * Real.pi ^ 2 * Real.log (2 + R)) := by
-        rw [← ENNReal.ofReal_mul (by positivity)]
-        apply ENNReal.ofReal_le_ofReal
-        have := tbt_arsinh_le_log hR
-        have hpi := Real.pi_pos
-        nlinarith [mul_pos hpi hpi]
-
-
-
-
-/-- A continuous `F ≥ 0` with `F ≤ c · tbt5Maj` has `∫_{B_R} F ≤ 576 π² c log (2 + R)`. -/
-theorem tbt5_log_bound_of_le {F : (Fin 3 → ℝ) → ℝ} (hF : Continuous F) (hF0 : ∀ x, 0 ≤ F x)
-    {c : ℝ} (hc : 0 ≤ c) (hle : ∀ x, F x ≤ c * tbt5Maj x) {R : ℝ} (hR : 0 ≤ R) :
-    ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, F x ≤
-      c * (576 * Real.pi ^ 2 * Real.log (2 + R)) := by
-  have hlog : 0 ≤ Real.log (2 + R) := Real.log_nonneg (by linarith)
-  rw [integral_eq_lintegral_of_nonneg_ae (Filter.Eventually.of_forall hF0)
-    hF.aestronglyMeasurable]
-  apply ENNReal.toReal_le_of_le_ofReal (by positivity)
-  have hM : ∀ x, 0 ≤ tbt5Maj x := fun x => by unfold tbt5Maj; positivity
-  calc ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, ENNReal.ofReal (F x)
-      ≤ ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2},
-          ENNReal.ofReal c * ENNReal.ofReal (tbt5Maj x) :=
-        lintegral_mono fun x => by rw [← ENNReal.ofReal_mul hc]; exact ENNReal.ofReal_le_ofReal (hle x)
-    _ = ENNReal.ofReal c * ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2},
-          ENNReal.ofReal (tbt5Maj x) := lintegral_const_mul' _ _ ENNReal.ofReal_ne_top
-    _ ≤ ENNReal.ofReal c * ENNReal.ofReal (576 * Real.pi ^ 2 * Real.log (2 + R)) :=
-        mul_le_mul_right (tbt5_lintegral_Maj_le hR) _
-    _ = ENNReal.ofReal (c * (576 * Real.pi ^ 2 * Real.log (2 + R))) :=
-        (ENNReal.ofReal_mul hc).symm
-
-/-- `144 / |s|⁴ ≤ tbt5Maj`, from `|s|⁴ = (1 + (t − |w|)²) (1 + (t + |w|)²)`. -/
-theorem tbt5_inv_S4_le (X : Fin 3 → ℝ) : 144 / ‖tbtS X‖ ^ 4 ≤ tbt5Maj X := by
-  have hS4 : ‖tbtS X‖ ^ 4 = (1 - X 2 ^ 2 + (X 0 ^ 2 + X 1 ^ 2)) ^ 2 + (-2 * X 2) ^ 2 := by
-    have : ‖tbtS X‖ ^ 4 = ‖tbtZ X‖ ^ 2 := by
-      rw [← tbt_S_sq, norm_pow]; ring
-    rw [this, Complex.sq_norm, Complex.normSq_apply, tbt_Z_re, tbt_Z_im]; ring
-  set r := √(X 0 ^ 2 + X 1 ^ 2) with hr
-  have hr2 : r ^ 2 = X 0 ^ 2 + X 1 ^ 2 := Real.sq_sqrt (by positivity)
-  set t := X 2
-  have hprod : ‖tbtS X‖ ^ 4 = (1 + (t - r) ^ 2) * (1 + (t + r) ^ 2) := by
-    rw [hS4, ← hr2]; ring
-  have hp : 0 < 1 + (t - r) ^ 2 := by positivity
-  have hq : 0 < 1 + (t + r) ^ 2 := by positivity
-  unfold tbt5Maj
-  calc 144 / ‖tbtS X‖ ^ 4 = 144 / ((1 + (t - r) ^ 2) * (1 + (t + r) ^ 2)) := by rw [hprod]
-    _ = 144 / (2 + 2 * t ^ 2 + 2 * r ^ 2) * (1 / (1 + (t - r) ^ 2) + 1 / (1 + (t + r) ^ 2)) := by
-      field_simp; ring
-    _ ≤ 72 / (1 + (X 0 ^ 2 + X 1 ^ 2)) * (1 / (1 + (t - r) ^ 2) + 1 / (1 + (t + r) ^ 2)) := by
-      refine mul_le_mul_of_nonneg_right ?_ (by positivity)
-      rw [div_le_div_iff₀ (by positivity) (by positivity), ← hr2]
-      nlinarith [sq_nonneg t, sq_nonneg r]
-
 /-- The bulk field of Corollary 5.4, `V = B D²φ`. -/
 theorem tbt5_V_mem_L3 (X : Fin 3 → ℝ) : hessB * hessian tbt5Pot X ∈ L3 := by
   rw [tbt5_hessB_hessian]; exact tbt5_M_mem_L3 _ _
@@ -392,8 +276,10 @@ theorem tbt5_q3_V_neg (X : Fin 3 → ℝ) : q3 (hessB * hessian tbt5Pot X) < 0 :
   have : 0 < (‖(1 + tbtZeta X) * tbtK X‖ ^ 2) ^ 2 * (1 - ‖tbtZeta X‖ ^ 2) ^ 6 := by positivity
   linarith
 
+/-- `|B D²φ| ≲ |s|⁻¹`, the bound `|∇u| ≲ M |s|⁻¹` of the proof of Proposition 5.2 with
+`M = ‖F'‖_∞ ≤ 2` (`F' (z) = 1 + z`): `|B D²φ|⁴ ≤ 16 · 144 / |s|⁴`. -/
 theorem tbt5_frobSq_V_sq_le (X : Fin 3 → ℝ) :
-    frobSq (hessB * hessian tbt5Pot X) ^ 2 ≤ 16 * tbt5Maj X := by
+    frobSq (hessB * hessian tbt5Pot X) ^ 2 ≤ 16 * (144 / ‖tbtS X‖ ^ 4) := by
   rw [tbt5_hessB_hessian]
   have hz := (tbt_norm_Zeta_lt_one X).le
   have h1 : ‖1 + tbtZeta X‖ ≤ 2 := by
@@ -412,8 +298,7 @@ theorem tbt5_frobSq_V_sq_le (X : Fin 3 → ℝ) :
     pow_le_pow_left₀ hF0 (by linarith) 2
   have he : (192 * ‖tbtK X‖ ^ 2) ^ 2 = 16 * (144 / ‖tbtS X‖ ^ 4) := by
     rw [hK]; field_simp; ring
-  have := tbt5_inv_S4_le X
-  nlinarith
+  linarith
 
 theorem tbt5_continuous_V : Continuous fun X => hessB * hessian tbt5Pot X := by
   have hc : Continuous fun X => hessian tbt5Pot X := by
@@ -423,11 +308,12 @@ theorem tbt5_continuous_V : Continuous fun X => hessB * hessian tbt5Pot X := by
     exact (h1.continuous_fderiv one_ne_zero).clm_apply continuous_const
   exact continuous_const.matrix_mul hc
 
-/-- `∫_{B_R} |B D²φ|⁴ ≲ log (2 + R)`. -/
+/-- `∫_{B_R} |B D²φ|⁴ ≲ log (2 + R)`: the energy estimate of the proof of Proposition 5.2, in the
+coordinates `(ζ, τ)` (`tbt_log_bound_of_le`, Morrey/Cassese/TwoByThree/Witness.lean). -/
 theorem tbt5_V_log_bound {R : ℝ} (hR : 0 ≤ R) :
     ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, frobSq (hessB * hessian tbt5Pot x) ^ 2 ≤
       16 * (576 * Real.pi ^ 2 * Real.log (2 + R)) :=
-  tbt5_log_bound_of_le ((tbt_continuous_frobSq.comp tbt5_continuous_V).pow 2)
+  tbt_log_bound_of_le ((tbt_continuous_frobSq.comp tbt5_continuous_V).pow 2)
     (fun x => sq_nonneg _)
     (by norm_num) tbt5_frobSq_V_sq_le hR
 

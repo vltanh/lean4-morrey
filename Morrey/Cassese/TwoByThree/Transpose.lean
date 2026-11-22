@@ -155,9 +155,12 @@ failure of quasiconvexity, the witness is `v_R = (φ_xx − φ_yy, 2 φ_xy, Δφ
 `φ_R` of `φ = r^{5/2} cos 3θ` (`tbt3V`, `tbt3PhiR`): `(∇v_R)ᵀ ∈ 𝓛₃` (symmetry of the third
 derivatives, `tbt3_jac_V_transpose`), so the normal penalty vanishes and
 `q̂_{δ,Λ} (∇v_R) = q₃ ((∇v_R)ᵀ) + δ |∇v_R|⁴` whatever `Λ`. In the bulk `2 < |x|² < R²`,
-`q₃ ≤ −c / |x|²` and `|∇v|⁴ ≤ C / |x|²` with `c = 75/8`, `C = 4·10⁶` (`tbt3_bulk_bounds`; the
-paper's numerical values are `c ≈ 1029.8`, `C ≈ 62938`, inventory E17, and any `c > 0`, `C < ∞`
-suffice); the inner region `|x|² ≤ 2` and the outer region `|x|² ≥ R²` (where `∇v_R (x) =
+`q₃ ≤ −c / |x|²` and `|∇v|⁴ ≤ C / |x|²` with `c = 75/8`, `C = 4·10⁶` (`tbt3_bulk_bounds`). The
+paper (TeX 2121–2123) says only "with `c, C > 0`" and gives no values; the sharper `c ≈ 1029.8`,
+`C ≈ 62938` come from the project's own numerical check of the paper's "direct calculation"
+(recorded in the project's inventory of the paper), not from the paper; any `c > 0`, `C < ∞`
+suffice, and the Lean uses the cruder values above with `δ₀ = 75/(64·10⁶)`. The inner region
+`|x|² ≤ 2` and the outer region `|x|² ≥ R²` (where `∇v_R (x) =
 R^{−1/2} ∇v_out (x/R)`, so its energy does not depend on `R`) contribute a bounded amount
 `M₁ + M₃`; hence for `0 < δ ≤ δ₀ = 75/(64·10⁶)`,
 `∫ q̂_{δ,Λ} (∇v_R) ≤ M₁ + M₃ − (75/32) log (R/4) < 0` for `R` large (`tbt3_integral_le`,

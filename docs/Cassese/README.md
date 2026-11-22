@@ -25,15 +25,15 @@ and Corollary 1.6. The documents of the formalization (report, credits) are not 
 
 | Paper | Lean | Statement | Assumes |
 | --- | --- | --- | --- |
-| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L2040) ⭐ | every `p > 1`: on `ℝ^{2×m}`, `m ≥ m₀(p)`, a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand | nothing (the route of Remark 4.5; the paper's proof, [`theorem1_2_umd`](../../Morrey/Cassese/Introduction.lean#L2001), assumes Pisier's and Yaroslavtsev's UMD bounds and the HNVW extrapolation) |
-| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2056), [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2081) ⭐ | a quartic homogeneous polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; and for `p` near `4` | nothing |
-| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2110) ⭐ | every `p > 1`: on `ℝ^{d×d}`, `d ≥ d₀(p)`, a conjugation- and transposition-invariant example | HNVW extrapolation, Randrianantoanina, Cox–Veraar decoupling, Pisier–Xu, Kahane–Khintchine |
-| Theorem 1.4, `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3356) ⭐ | the same at `p = 4`, for every `d ≥ 588` | nothing |
-| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2196) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević's lower bound |
-| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2244) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two | as Theorem 1.5 |
-| Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L176) ⭐ | the transposed quartic on `ℝ^{3×2}` | nothing |
-| Section 1.1, lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2270) ⭐ | with Šverák: Morrey's problem fails in every size `d × m` with `d, m ≥ 2` except `2 × 2` | nothing |
-| Lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2298) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | nothing |
+| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L2046) ⭐ | every `p > 1`: on `ℝ^{2×m}`, `m ≥ m₀(p)`, a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand | nothing (the route of Remark 4.5; the paper's proof, [`theorem1_2_umd`](../../Morrey/Cassese/Introduction.lean#L2007), assumes Pisier's and Yaroslavtsev's UMD bounds and the HNVW extrapolation) |
+| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2060), [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2085) ⭐ | a quartic homogeneous polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; and for `p` near `4` | nothing |
+| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2119) ⭐ | every `p > 1`: on `ℝ^{d×d}`, `d ≥ d₀(p)`, a conjugation- and transposition-invariant example | HNVW extrapolation, Randrianantoanina, Cox–Veraar decoupling, Pisier–Xu, Kahane–Khintchine |
+| Theorem 1.4, `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3613) ⭐ | the same at `p = 4`, for every `d ≥ 588` | nothing |
+| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2205) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević's lower bound |
+| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2253) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two | as Theorem 1.5 |
+| Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L179) ⭐ | the transposed quartic on `ℝ^{3×2}` | nothing |
+| Section 1.1, lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2279) ⭐ | with Šverák: Morrey's problem fails in every size `d × m` with `d, m ≥ 2` except `2 × 2` | nothing |
+| Lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2307) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | nothing |
 
 ⭐ in [`Challenge.lean`](../../palomar/Cassese/Challenge.lean), with a check of the definitions
 ([`projL3_mem`](../../Morrey/Cassese/TwoByThree/Basic.lean#L57)), proved in [`Solution.lean`](../../palomar/Cassese/Solution.lean) and checked by

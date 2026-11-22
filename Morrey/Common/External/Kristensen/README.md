@@ -1,8 +1,8 @@
 # Kristensen: smoothing a rank-one convex polynomial that is not quasiconvex
 
 **Sources.** J. Kristensen, *On the non-locality of quasiconvexity*, Ann. Inst. H. Poincaré Anal.
-Non Linéaire 16 (1999), Proposition 2 and its proof; S. Heinz, PhD thesis (2008), which was not
-consulted.
+Non Linéaire 16 (1999), Proposition 2 and its proof (pp. 6–7, read from a scan of the article);
+S. Heinz, PhD thesis (2008), which was not consulted.
 
 **Statement used by Cassese** (Corollary 5.2, "a standard smoothing argument applied to the
 polynomial integrand"). For `m ≥ 3`, a homogeneous quartic polynomial `P : ℝ^{2×m} → ℝ` that is

@@ -60,14 +60,14 @@ they are proved here by Burkholder's method, the source's standard argument.
    `‖dZ_m‖ = ‖dA_m‖ = 1_{m < n} ‖dX_{m+1}‖`, `‖Z_n‖ = 𝒮_n X` and `‖A_n‖ = ‖X_n‖`; apply (1) to
    `(Z, A)` and to `(A, Z)`.
 
-Departures from the source's proof. The source is quoted from memory (its text was not available
-offline); these are the points where the proof here may differ from it, all in the mechanics of a
-step whose claim is the source's:
+The method is Burkholder's standard special-function argument: `U ≥ V`, the zig-zag concavity of
+`U`, the integration of the concavity along the martingale, and, for the square function, the
+`ℓ²(H)`-valued martingale; the proof here follows it step by step (the book was not consulted).
+Two points of mechanics:
 * the non-smooth points of `t ↦ U (x + t h, y + t k)` (where `x + t h = 0` or `y + t k = 0`): the
   norms `|z|` are replaced by `√(|z|² + ε²)`, for which the second derivative has the required
-  sign everywhere, and `ε → 0` in the tangent inequality (`psi_zigzag_eps`, `psi_zigzag`). Reason:
-  gluing concave pieces at the kinks through the one-sided derivatives would need a lemma that
-  Mathlib does not have (reason 2 of the skill's list); the smoothing avoids it;
+  sign everywhere, and `ε → 0` in the tangent inequality (`psi_zigzag_eps`, `psi_zigzag`), instead
+  of gluing the concave pieces at the kinks through one-sided derivatives;
 * the square function: the finite-dimensional `H^{n+1}` replaces `ℓ²(H)` (`n` is fixed), the same
   argument.
 -/

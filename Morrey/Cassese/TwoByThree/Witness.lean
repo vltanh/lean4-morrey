@@ -10,6 +10,11 @@ public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 public import Mathlib.Analysis.SpecialFunctions.Arsinh
 public import Mathlib.MeasureTheory.Constructions.Pi
 public import Mathlib.Analysis.Calculus.Deriv.Star
+public import Mathlib.MeasureTheory.Function.Jacobian
+public import Mathlib.Analysis.Calculus.Deriv.Prod
+public import Mathlib.Analysis.SpecialFunctions.PolarCoord
+public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 
 /-!
 # Section 5.2: the quasiconvexity witness (Proposition 5.2)
@@ -19,7 +24,8 @@ The construction of the proof of Proposition 5.2 (TeX lines 1717–1796). Identi
 `s = √((1 − i t)² + |w|²)` (`tbtS`, written `exp (log z / 2)`), the root in the unit disc of
 `w̄ ζ² + 2 (t + i) ζ + w = 0` is `ζ = i w / (1 − i t + s)` (`tbtZeta`), and the witness is
 `u = ζ̄ + ζ² / 2` (`tbtU`, the profile `F (z) = z`, `G (z) = z² / 2`), as a map into `ℝ²`
-(`tbtWitness`).
+(`tbtWitness`). The integrals are evaluated, as in the paper, in the coordinates
+`(ζ, τ) ∈ 𝔻 × ℝ`, `τ = −Im s`, through the change of variables `(ζ, τ) ↦ (w, t)` (`tbtInv`).
 
 Helpers are prefixed `tbt_`.
 -/
@@ -178,6 +184,11 @@ theorem tbt_S_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbtS := by
       tbt_Z_contDiff.contDiffAt
   exact (Complex.contDiff_exp (𝕜 := ℝ)).contDiffAt.comp X (hlog.div_const 2)
 
+/-- `ζ` is smooth. The paper argues that `ζ` is the unique, simple root in the unit disc of
+`w̄ ζ² + 2 (t + i) ζ + w = 0` and hence smooth (TeX 1745–1752); here smoothness is read off the
+closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of a point of the slit plane
+(`tbt_S_contDiff`) and `Re (1 − i t + s) > 0`. This is a mechanical difference: the closed form
+is that root (`tbt_Zeta_eq`, `tbt_norm_Zeta_lt_one`). -/
 theorem tbt_Zeta_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbtZeta := by
   rw [contDiff_iff_contDiffAt]
   intro X
@@ -411,54 +422,6 @@ theorem tbt_one_le_sigma_sq (X : Fin 3 → ℝ) : 1 ≤ (tbtS X).re ^ 2 := by
     mul_neg_of_neg_of_pos (by linarith) (by positivity)
   nlinarith [sq_nonneg (X 0), sq_nonneg (X 1), sq_nonneg (tbtS X).re]
 
-/-- The decay of `q₃ (∇u)`: `|q₃ (∇u)| ≤ 4 / (1 + |X|²)²`. -/
-theorem tbt_abs_q3_le (X : Fin 3 → ℝ) :
-    |q3 (jac tbtWitness X)| ≤ 4 / (1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2)) ^ 2 := by
-  rw [tbt_q3_jac]
-  obtain ⟨h1, h2⟩ := tbt_S_parts X
-  have hσ := tbt_S_re_pos X
-  have hσ1 := tbt_one_le_sigma_sq X
-  have hsig := tbt_sigma_eq X
-  set σ := (tbtS X).re with hσ_def
-  set τ := (tbtS X).im with hτ_def
-  set ρ := 1 - ‖tbtZeta X‖ ^ 2 with hρ_def
-  have hρ0 : 0 < ρ := by
-    have := tbt_norm_Zeta_lt_one X
-    nlinarith [norm_nonneg (tbtZeta X)]
-  have hρ1 : ρ ≤ 1 := by nlinarith [norm_nonneg (tbtZeta X)]
-  -- `ρ (1 + σ) = 2`
-  have hρσ : ρ * (1 + σ) = 2 := by
-    have : ‖tbtZeta X‖ ^ 2 = 1 - ρ := by rw [hρ_def]; ring
-    rw [this] at hsig; linarith
-  have hK : ‖tbtK X‖ ^ 2 = 1 / (4 * (σ ^ 2 + τ ^ 2)) := by
-    rw [tbt_norm_K, Complex.sq_norm, Complex.normSq_apply, hσ_def, hτ_def]; ring
-  rw [hK]
-  -- `σ² (σ² + τ²) = σ⁴ + t² ≥ (1 + |X|²) / 2`
-  have hτσ : σ ^ 2 * τ ^ 2 = X 2 ^ 2 := by rw [← mul_pow, h2]; ring
-  have hlow : 1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2) ≤ 2 * (σ ^ 2 * (σ ^ 2 + τ ^ 2)) := by
-    nlinarith [sq_nonneg τ]
-  have hpos : 0 < σ ^ 2 + τ ^ 2 := by positivity
-  have hρσ' : ρ * σ ≤ 2 := by nlinarith
-  have hρ4 : ρ ^ 4 * σ ^ 4 ≤ 16 := by
-    have : (ρ * σ) ^ 4 ≤ 2 ^ 4 := pow_le_pow_left₀ (by positivity) hρσ' 4
-    nlinarith
-  have hρ6 : ρ ^ 6 ≤ ρ ^ 4 := pow_le_pow_of_le_one hρ0.le hρ1 (by norm_num)
-  have hA : 0 < 1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2) := by positivity
-  rw [abs_of_nonpos (by
-    have : 0 ≤ (1 / (4 * (σ ^ 2 + τ ^ 2))) ^ 2 * ρ ^ 6 := by positivity
-    linarith), neg_mul, neg_neg]
-  rw [div_pow, one_pow, div_mul_eq_mul_div, one_mul,
-    div_le_div_iff₀ (by positivity) (by positivity)]
-  -- `ρ⁶ (1 + |X|²)² ≤ 4 · 16 (σ² + τ²)²`
-  have h3 : ρ ^ 6 * (1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2)) ^ 2 ≤
-      ρ ^ 4 * (2 * (σ ^ 2 * (σ ^ 2 + τ ^ 2))) ^ 2 := by
-    calc ρ ^ 6 * (1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2)) ^ 2
-        ≤ ρ ^ 4 * (1 + (X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2)) ^ 2 := by gcongr
-      _ ≤ ρ ^ 4 * (2 * (σ ^ 2 * (σ ^ 2 + τ ^ 2))) ^ 2 := by gcongr
-  have h4 : ρ ^ 4 * (2 * (σ ^ 2 * (σ ^ 2 + τ ^ 2))) ^ 2 =
-      4 * (ρ ^ 4 * σ ^ 4) * (σ ^ 2 + τ ^ 2) ^ 2 := by ring
-  nlinarith [mul_le_mul_of_nonneg_right hρ4 (sq_nonneg (σ ^ 2 + τ ^ 2))]
-
 theorem tbt_frobSq_jac (X : Fin 3 → ℝ) :
     frobSq (jac tbtWitness X) = ∑ k, ‖tbtUD X k‖ ^ 2 := by
   simp only [frobSq, Fin.sum_univ_two, Fin.sum_univ_three, tbt_jac_zero, tbt_jac_one,
@@ -491,42 +454,18 @@ theorem tbt_norm_UD_le (X : Fin 3 → ℝ) (k : Fin 3) : ‖tbtUD X k‖ ≤ 4 *
     _ = ‖tbtZetaD X k‖ + ‖tbtZeta X‖ * ‖tbtZetaD X k‖ := by rw [Complex.norm_conj, norm_mul]
     _ ≤ 4 * ‖tbtK X‖ := by nlinarith [norm_nonneg (tbtZetaD X k)]
 
-/-- `|∇u|⁴ ≲ |s|⁻⁴`, in the form used for the logarithmic bound:
-`|∇u|⁴ ≤ 72 / (1 + |w|²) · (1 / (1 + (t − |w|)²) + 1 / (1 + (t + |w|)²))`, from
-`|s|⁴ = |(1 − i t)² + |w|²|² = (1 + (t − |w|)²) (1 + (t + |w|)²)`. -/
-theorem tbt_frobSq_sq_le (X : Fin 3 → ℝ) :
-    frobSq (jac tbtWitness X) ^ 2 ≤ 72 / (1 + (X 0 ^ 2 + X 1 ^ 2)) *
-      (1 / (1 + (X 2 - √(X 0 ^ 2 + X 1 ^ 2)) ^ 2) + 1 / (1 + (X 2 + √(X 0 ^ 2 + X 1 ^ 2)) ^ 2)) := by
+/-- `|∇u| ≲ |∂ζ| = 1 / (2 |s|)`, in the form `|∇u|⁴ ≤ 144 / |s|⁴` (TeX 1785: "`|∇u| ≲ M |s|⁻¹`",
+`M = ‖F'‖_∞ = 1`). -/
+theorem tbt_frobSq_sq_le_inv_S4 (X : Fin 3 → ℝ) :
+    frobSq (jac tbtWitness X) ^ 2 ≤ 144 / ‖tbtS X‖ ^ 4 := by
   have hF : frobSq (jac tbtWitness X) ≤ 48 * ‖tbtK X‖ ^ 2 := by
     rw [tbt_frobSq_jac, Fin.sum_univ_three]
     have := fun k => pow_le_pow_left₀ (norm_nonneg _) (tbt_norm_UD_le X k) 2
     nlinarith [this 0, this 1, this 2]
   have hF0 : 0 ≤ frobSq (jac tbtWitness X) := tbt_frobSq_nonneg _
-  -- `|s|⁴ = |z|²`
-  have hS4 : ‖tbtS X‖ ^ 4 = (1 - X 2 ^ 2 + (X 0 ^ 2 + X 1 ^ 2)) ^ 2 + (-2 * X 2) ^ 2 := by
-    have : ‖tbtS X‖ ^ 4 = ‖tbtZ X‖ ^ 2 := by
-      rw [← tbt_S_sq, norm_pow]; ring
-    rw [this, Complex.sq_norm, Complex.normSq_apply, tbt_Z_re, tbt_Z_im]; ring
   have hSpos : 0 < ‖tbtS X‖ := norm_pos_iff.mpr (tbt_S_ne_zero X)
-  have hK := tbt_norm_K X
-  set r := √(X 0 ^ 2 + X 1 ^ 2) with hr
-  have hr2 : r ^ 2 = X 0 ^ 2 + X 1 ^ 2 := Real.sq_sqrt (by positivity)
-  set t := X 2
-  -- `|s|⁴ = (1 + (t − r)²) (1 + (t + r)²)`
-  have hprod : ‖tbtS X‖ ^ 4 = (1 + (t - r) ^ 2) * (1 + (t + r) ^ 2) := by
-    rw [hS4, ← hr2]; ring
-  have hp : 0 < 1 + (t - r) ^ 2 := by positivity
-  have hq : 0 < 1 + (t + r) ^ 2 := by positivity
   calc frobSq (jac tbtWitness X) ^ 2 ≤ (48 * ‖tbtK X‖ ^ 2) ^ 2 := pow_le_pow_left₀ hF0 hF 2
-    _ = 144 / ‖tbtS X‖ ^ 4 := by rw [hK]; field_simp; ring
-    _ = 144 / ((1 + (t - r) ^ 2) * (1 + (t + r) ^ 2)) := by rw [hprod]
-    _ = 144 / (2 + 2 * t ^ 2 + 2 * r ^ 2) * (1 / (1 + (t - r) ^ 2) + 1 / (1 + (t + r) ^ 2)) := by
-      field_simp; ring
-    _ ≤ 72 / (1 + (X 0 ^ 2 + X 1 ^ 2)) * (1 / (1 + (t - r) ^ 2) + 1 / (1 + (t + r) ^ 2)) := by
-      refine mul_le_mul_of_nonneg_right ?_ (by positivity)
-      rw [div_le_div_iff₀ (by positivity) (by positivity), ← hr2]
-      nlinarith [sq_nonneg t, sq_nonneg r]
-
+    _ = 144 / ‖tbtS X‖ ^ 4 := by rw [tbt_norm_K]; field_simp; ring
 
 theorem tbt_lintegral_fin_three_le (F : (Fin 3 → ℝ) → ℝ≥0∞) :
     ∫⁻ X, F X ≤ ∫⁻ x, ∫⁻ y, ∫⁻ z, F ![x, y, z] := by
@@ -544,16 +483,6 @@ theorem tbt_lintegral_fin_three_le (F : (Fin 3 → ℝ) → ℝ≥0∞) :
   fin_cases i <;> rfl
 
 
-
-/-- `∫ (1 + (z + c)²)⁻¹ dz = π`. -/
-theorem tbt_lintegral_cauchy (c : ℝ) :
-    ∫⁻ z : ℝ, ENNReal.ofReal (1 / (1 + (z + c) ^ 2)) = ENNReal.ofReal Real.pi := by
-  have hi : Integrable fun z : ℝ => 1 / (1 + (z + c) ^ 2) := by
-    simpa [one_div] using integrable_inv_one_add_sq.comp_add_right c
-  rw [← ofReal_integral_eq_lintegral_ofReal hi (Filter.Eventually.of_forall fun z => by positivity)]
-  congr 1
-  rw [integral_add_right_eq_self (fun z : ℝ => 1 / (1 + z ^ 2)) c]
-  simp [one_div]
 
 /-- `∫ (a² + y²)⁻¹ dy = π / a` for `a > 0`. -/
 theorem tbt_integral_inv_sq_add_sq {a : ℝ} (ha : 0 < a) :
@@ -574,131 +503,622 @@ theorem tbt_lintegral_inv_sq_add_sq {a : ℝ} (ha : 0 < a) :
   rw [← ofReal_integral_eq_lintegral_ofReal hi (Filter.Eventually.of_forall fun z => by positivity),
     tbt_integral_inv_sq_add_sq ha]
 
-/-- `∫_{−R}^{R} (1 + x²)^{−1/2} dx = 2 arsinh R`. -/
-theorem tbt_lintegral_Icc_inv_sqrt {R : ℝ} (hR : 0 ≤ R) :
-    ∫⁻ x in Set.Icc (-R) R, ENNReal.ofReal (1 / √(1 + x ^ 2)) =
-      ENNReal.ofReal (2 * Real.arsinh R) := by
-  have hc : Continuous fun x : ℝ => 1 / √(1 + x ^ 2) := by
-    refine continuous_const.div (by fun_prop) fun x => ?_
-    exact (Real.sqrt_pos.mpr (by positivity)).ne'
-  have hi : IntegrableOn (fun x : ℝ => 1 / √(1 + x ^ 2)) (Set.Icc (-R) R) :=
-    hc.continuousOn.integrableOn_compact isCompact_Icc
-  rw [← ofReal_integral_eq_lintegral_ofReal hi
-    (Filter.Eventually.of_forall fun z => by positivity)]
-  congr 1
-  rw [integral_Icc_eq_integral_Ioc, ← intervalIntegral.integral_of_le (by linarith),
-    intervalIntegral.integral_eq_sub_of_hasDerivAt (fun x _ => by
-      simpa [one_div] using Real.hasDerivAt_arsinh x)
-      (hc.intervalIntegrable _ _), Real.arsinh_neg]
-  ring
-
-/-- `arsinh R ≤ 2 log (2 + R)` for `R ≥ 0`. -/
-theorem tbt_arsinh_le_log {R : ℝ} (hR : 0 ≤ R) : Real.arsinh R ≤ 2 * Real.log (2 + R) := by
-  rw [Real.arsinh, ← Real.log_rpow (by linarith)]
-  apply Real.log_le_log (by positivity)
-  have : √(1 + R ^ 2) ≤ 1 + R := by
-    rw [Real.sqrt_le_left (by linarith)]; nlinarith
-  rw [show ((2 : ℝ) + R) ^ (2 : ℝ) = (2 + R) ^ 2 by norm_cast]
-  nlinarith
-
-
-
 theorem tbt_continuous_jac {φ : (Fin 3 → ℝ) → Fin 2 → ℝ}
     (hφ : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) φ) : Continuous fun x => jac φ x := by
   refine continuous_pi fun i => continuous_pi fun k => ?_
   have hi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) fun y => φ y i := (contDiff_pi.1 hφ) i
   exact (hi.continuous_fderiv (by simp)).clm_apply continuous_const
 
-/-- The inner integral over `t`: `∫ (1 / (1 + (t − r)²) + 1 / (1 + (t + r)²)) dt = 2π`. -/
-theorem tbt_lintegral_two_cauchy (a r : ℝ) (ha : 0 ≤ a) :
-    ∫⁻ z : ℝ, ENNReal.ofReal (a * (1 / (1 + (z - r) ^ 2) + 1 / (1 + (z + r) ^ 2))) =
-      ENNReal.ofReal a * ENNReal.ofReal (2 * Real.pi) := by
-  have hm1 : Measurable fun z : ℝ => ENNReal.ofReal (1 / (1 + (z + -r) ^ 2)) := by fun_prop
-  have hm2 : Measurable fun z : ℝ => ENNReal.ofReal (1 / (1 + (z + r) ^ 2)) := by fun_prop
-  have h : ∀ z : ℝ, ENNReal.ofReal (a * (1 / (1 + (z - r) ^ 2) + 1 / (1 + (z + r) ^ 2))) =
-      ENNReal.ofReal a * (ENNReal.ofReal (1 / (1 + (z + -r) ^ 2)) +
-        ENNReal.ofReal (1 / (1 + (z + r) ^ 2))) := by
-    intro z
-    rw [ENNReal.ofReal_mul ha, ← ENNReal.ofReal_add (by positivity) (by positivity), sub_eq_add_neg]
+/-! ### The coordinates `(ζ, τ)` and the integrals
+
+The paper evaluates the integrals in the coordinates `(ζ, τ) ∈ 𝔻 × ℝ`, `τ = −Im s`
+(TeX 1768–1790). Here `p : Fin 3 → ℝ` stands for `(ζ, τ)` with `ζ = p 0 + i p 1`, `τ = p 2`. The
+inverse coordinates `w = −2 ζ (τ + i) / (1 − |ζ|²)`, `t = σ τ` (`tbtInv`) map `𝔻 × ℝ` bijectively
+onto `ℝ³` (`tbt_Inv_image`, `tbt_Inv_injOn`, with the left inverse `X ↦ (ζ (X), −Im s (X))`,
+`tbtCoord`), with Jacobian `4 |s|² / (1 − |ζ|²)²` (`tbt_Inv_det`), and Mathlib's change of variables
+formula (`lintegral_image_eq_lintegral_abs_det_fderiv_mul`) gives
+`dx dy dt = 4 |s|² (1 − |ζ|²)⁻² dA (ζ) dτ` (`tbt_lintegral_eq_coord`).
+-/
+
+/-- The domain `𝔻 × ℝ` of the coordinates `(ζ, τ)`, with `ζ = p 0 + i p 1` and `τ = p 2`. -/
+def tbtDom : Set (Fin 3 → ℝ) := {p | p 0 ^ 2 + p 1 ^ 2 < 1}
+
+/-- `1 − |ζ|²` in the coordinates `(ζ, τ)`. -/
+noncomputable def tbtRho (p : Fin 3 → ℝ) : ℝ := 1 - (p 0 ^ 2 + p 1 ^ 2)
+
+/-- `σ = (1 + |ζ|²) / (1 − |ζ|²)` in the coordinates `(ζ, τ)`. -/
+noncomputable def tbtSig (p : Fin 3 → ℝ) : ℝ := (1 + (p 0 ^ 2 + p 1 ^ 2)) / tbtRho p
+
+/-- The inverse coordinates `w = −2 ζ (τ + i) / (1 − |ζ|²)`, `t = σ τ`, as a map `ℝ³ → ℝ³`. -/
+noncomputable def tbtInv (p : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  ![-2 * (p 0 * p 2 - p 1) / tbtRho p, -2 * (p 0 + p 1 * p 2) / tbtRho p, tbtSig p * p 2]
+
+/-- The coordinates `(ζ, τ)` of `X`: `ζ` and `τ = −Im s`. -/
+noncomputable def tbtCoord (X : Fin 3 → ℝ) : Fin 3 → ℝ :=
+  ![(tbtZeta X).re, (tbtZeta X).im, -(tbtS X).im]
+
+theorem tbt_Dom_measurableSet : MeasurableSet tbtDom :=
+  measurableSet_lt (by fun_prop) measurable_const
+
+theorem tbt_Rho_pos {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) : 0 < tbtRho p := by
+  have : p 0 ^ 2 + p 1 ^ 2 < 1 := hp
+  unfold tbtRho; linarith
+
+/-- `(1 + σ) (1 − |ζ|²) = 2`. -/
+theorem tbt_one_add_Sig_mul_Rho {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    (1 + tbtSig p) * tbtRho p = 2 := by
+  have h := (tbt_Rho_pos hp).ne'
+  unfold tbtSig; field_simp; unfold tbtRho; ring
+
+theorem tbt_Sig_pos {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) : 0 < tbtSig p := by
+  have := tbt_Rho_pos hp
+  unfold tbtSig; positivity
+
+theorem tbt_normSq_Zeta (X : Fin 3 → ℝ) :
+    ‖tbtZeta X‖ ^ 2 = (tbtZeta X).re ^ 2 + (tbtZeta X).im ^ 2 := by
+  rw [Complex.sq_norm, Complex.normSq_apply]; ring
+
+/-- `(ζ, τ) ∈ 𝔻 × ℝ`. -/
+theorem tbt_Coord_mem (X : Fin 3 → ℝ) : tbtCoord X ∈ tbtDom := by
+  show (tbtCoord X) 0 ^ 2 + (tbtCoord X) 1 ^ 2 < 1
+  have h := tbt_norm_Zeta_lt_one X
+  have h' : ‖tbtZeta X‖ ^ 2 < 1 := by nlinarith [norm_nonneg (tbtZeta X)]
+  simpa [tbtCoord, tbt_normSq_Zeta] using h'
+
+/-- `(w, t)` is recovered from its coordinates `(ζ, τ)` by `w = −2 ζ (τ + i) / (1 − |ζ|²)` and
+`t = σ τ` (TeX 1771–1774). -/
+theorem tbt_Inv_Coord (X : Fin 3 → ℝ) : tbtInv (tbtCoord X) = X := by
+  set ζ := tbtZeta X
+  set σ := (tbtS X).re
+  set c := -(tbtS X).im
+  have hmem := tbt_Coord_mem X
+  have hρ : tbtRho (tbtCoord X) = 1 - ‖ζ‖ ^ 2 := by
+    simp [tbtRho, tbtCoord, tbt_normSq_Zeta, ζ]
+  have hρ0 := tbt_Rho_pos hmem
+  have hsig := tbt_sigma_eq X
+  have hSig : tbtSig (tbtCoord X) = σ := by
+    rw [tbtSig, hρ]
+    have h0 : (0 : ℝ) < 1 - ‖ζ‖ ^ 2 := by rw [← hρ]; exact hρ0
+    rw [div_eq_iff h0.ne']
+    have : 1 + ((tbtCoord X) 0 ^ 2 + (tbtCoord X) 1 ^ 2) = 1 + ‖ζ‖ ^ 2 := by
+      simp [tbtCoord, tbt_normSq_Zeta, ζ]
+    rw [this]; linarith
+  obtain ⟨-, hst⟩ := tbt_S_parts X
+  -- `t = σ c`
+  have ht : X 2 = σ * c := by simp only [σ, c]; linarith
+  -- `(1 + σ) ρ = 2`
+  have hσρ : (1 + σ) * (1 - ‖ζ‖ ^ 2) = 2 := by linarith
+  -- `w ρ = −2 ζ (c + i)`
+  have hw : tbtW X * ((1 - ‖ζ‖ ^ 2 : ℝ) : ℂ) = -2 * ζ * ((c : ℂ) + I) := by
+    have hD := tbt_Den_ne_zero X
+    have hζ : ζ * tbtDen X = I * tbtW X := by
+      simp only [ζ, tbtZeta]; field_simp
+    have hs : tbtS X = (σ : ℂ) - (c : ℂ) * I := by
+      apply Complex.ext <;> simp [σ, c]
+    have hden : tbtDen X = (1 + (σ : ℂ)) * (1 - (c : ℂ) * I) := by
+      rw [tbtDen, hs, ht]; push_cast; ring
+    have hσρ' : (1 + (σ : ℂ)) * ((1 - ‖ζ‖ ^ 2 : ℝ) : ℂ) = 2 := by exact_mod_cast hσρ
+    rw [hden] at hζ
+    linear_combination (I * ((1 - ‖ζ‖ ^ 2 : ℝ) : ℂ)) * hζ + (-I * ζ * (1 - (c : ℂ) * I)) * hσρ' +
+      (tbtW X * ((1 - ‖ζ‖ ^ 2 : ℝ) : ℂ) + 2 * ζ * c) * I_sq
+  have hre := congrArg Complex.re hw
+  have him := congrArg Complex.im hw
+  simp only [tbtW, mul_re, mul_im, add_re, add_im, ofReal_re, ofReal_im, I_re, I_im, neg_re,
+    neg_im, re_ofNat, im_ofNat] at hre him
+  have h0 : (0 : ℝ) < 1 - ‖ζ‖ ^ 2 := by rw [← hρ]; exact hρ0
+  ext i
+  fin_cases i
+  · simp only [tbtInv, Fin.zero_eta, Matrix.cons_val_zero, hρ]
+    rw [div_eq_iff h0.ne']
+    simp only [tbtCoord, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.tail_cons]
+    linear_combination -hre
+  · simp only [tbtInv, Fin.mk_one, Matrix.cons_val_one, Matrix.cons_val_zero, hρ]
+    rw [div_eq_iff h0.ne']
+    simp only [tbtCoord, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.tail_cons]
+    linear_combination -him
+  · simp only [tbtInv, Fin.reduceFinMk, Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons,
+      hSig]
+    simp only [tbtCoord, Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons]
+    rw [ht]
+
+/-- A square root with positive real part is the principal one. -/
+theorem tbt_S_eq_of_sq {X : Fin 3 → ℝ} {r : ℂ} (hr : r ^ 2 = tbtZ X) (hre : 0 < r.re) :
+    tbtS X = r := by
+  have h : (tbtS X - r) * (tbtS X + r) = 0 := by
+    linear_combination tbt_S_sq X - hr
+  rcases mul_eq_zero.mp h with h | h
+  · linear_combination h
+  · have := congrArg Complex.re h
+    rw [add_re, zero_re] at this
+    linarith [tbt_S_re_pos X]
+
+/-- At `X = (w, t)` given by the inverse coordinates, `s = σ − i τ`. -/
+theorem tbt_S_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    tbtS (tbtInv p) = (tbtSig p : ℂ) - (p 2 : ℂ) * I := by
+  have hρ := (tbt_Rho_pos hp).ne'
+  apply tbt_S_eq_of_sq
+  · apply Complex.ext
+    · rw [tbt_Z_re]
+      simp only [tbtInv, tbtSig, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+        Matrix.head_cons, Matrix.tail_cons, pow_two, mul_re, sub_re, sub_im, ofReal_re, ofReal_im,
+        mul_im, I_re, I_im]
+      field_simp
+      unfold tbtRho
+      ring
+    · rw [tbt_Z_im]
+      simp only [tbtInv, tbtSig, Matrix.cons_val_two,
+        Matrix.head_cons, Matrix.tail_cons, pow_two, mul_re, sub_re, sub_im, ofReal_re, ofReal_im,
+        mul_im, I_re, I_im]
+      ring
+  · simpa using tbt_Sig_pos hp
+
+/-- At `X = (w, t)` given by the inverse coordinates, `ζ (X) = ζ`. -/
+theorem tbt_Zeta_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    tbtZeta (tbtInv p) = (p 0 : ℂ) + (p 1 : ℂ) * I := by
+  have hρ := (tbt_Rho_pos hp).ne'
+  have h2 := tbt_one_add_Sig_mul_Rho hp
+  rw [tbtZeta, div_eq_iff (tbt_Den_ne_zero _), tbtDen, tbt_S_Inv hp]
+  apply Complex.ext
+  · simp only [tbtW, tbtInv, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.tail_cons, mul_re, mul_im, add_re, add_im, sub_re, sub_im,
+      ofReal_re, ofReal_im, I_re, I_im, one_re, one_im]
+    field_simp
+    linear_combination (-(p 0) - p 1 * p 2) * h2
+  · simp only [tbtW, tbtInv, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
+      Matrix.head_cons, Matrix.tail_cons, mul_re, mul_im, add_re, add_im, sub_re, sub_im,
+      ofReal_re, ofReal_im, I_re, I_im, one_re, one_im]
+    field_simp
+    linear_combination (p 0 * p 2 - p 1) * h2
+
+/-- The coordinates `(ζ, τ)` invert the inverse coordinates on `𝔻 × ℝ`. -/
+theorem tbt_Coord_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) : tbtCoord (tbtInv p) = p := by
+  ext i
+  fin_cases i
+  · simp [tbtCoord, tbt_Zeta_Inv hp]
+  · simp [tbtCoord, tbt_Zeta_Inv hp]
+  · simp [tbtCoord, tbt_S_Inv hp]
+
+theorem tbt_Inv_injOn : Set.InjOn tbtInv tbtDom := fun p hp q hq h => by
+  rw [← tbt_Coord_Inv hp, ← tbt_Coord_Inv hq, h]
+
+theorem tbt_Inv_image : tbtInv '' tbtDom = Set.univ :=
+  Set.eq_univ_of_forall fun X => ⟨tbtCoord X, tbt_Coord_mem X, tbt_Inv_Coord X⟩
+
+theorem tbt_Rho_differentiable : Differentiable ℝ tbtRho := by
+  unfold tbtRho; fun_prop
+
+theorem tbt_Inv_differentiableAt {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    DifferentiableAt ℝ tbtInv p := by
+  have hρ : 1 - (p 0 ^ 2 + p 1 ^ 2) ≠ 0 := (tbt_Rho_pos hp).ne'
+  rw [differentiableAt_pi]
+  intro i
+  fin_cases i <;>
+    simp only [tbtInv, tbtSig, tbtRho, Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk,
+      Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
+      Matrix.tail_cons] <;>
+    fun_prop (disch := exact hρ)
+
+/-- The directional derivatives of the inverse coordinates. -/
+theorem tbt_Inv_fderiv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) (v : Fin 3 → ℝ) :
+    fderiv ℝ tbtInv p v = ![
+      -2 * ((v 0 * p 2 + p 0 * v 2 - v 1) * tbtRho p +
+        (p 0 * p 2 - p 1) * (2 * (p 0 * v 0 + p 1 * v 1))) / tbtRho p ^ 2,
+      -2 * ((v 0 + v 1 * p 2 + p 1 * v 2) * tbtRho p +
+        (p 0 + p 1 * p 2) * (2 * (p 0 * v 0 + p 1 * v 1))) / tbtRho p ^ 2,
+      4 * (p 0 * v 0 + p 1 * v 1) / tbtRho p ^ 2 * p 2 + tbtSig p * v 2] := by
+  have hρ := (tbt_Rho_pos hp).ne'
+  have hline : HasDerivAt (fun τ : ℝ => tbtInv (p + τ • v)) (fderiv ℝ tbtInv p v) 0 :=
+    (tbt_Inv_differentiableAt hp).hasFDerivAt.comp_hasDerivAt_of_eq (0 : ℝ)
+      (tbt_hasDerivAt_line p v) (by simp)
+  have hq : ∀ k, HasDerivAt (fun τ : ℝ => (p + τ • v) k) (v k) 0 := fun k => by
+    simpa using ((hasDerivAt_id (0 : ℝ)).mul_const (v k)).const_add (p k)
+  have hR : HasDerivAt (fun τ : ℝ => tbtRho (p + τ • v)) (-(2 * (p 0 * v 0 + p 1 * v 1))) 0 := by
+    refine ((((hq 0).fun_pow 2).add ((hq 1).fun_pow 2)).const_sub 1).congr_deriv ?_
+    simp; ring
+  have hR0 : tbtRho (p + (0 : ℝ) • v) ≠ 0 := by simpa using hρ
+  ext i
+  fin_cases i
+  · have h := ((((hq 0).mul (hq 2)).sub (hq 1)).const_mul (-2)).div hR hR0
+    have h' := (hasDerivAt_pi.1 hline) 0
+    simp only [Fin.zero_eta, Matrix.cons_val_zero]
+    rw [h'.unique h]
+    simp only [zero_smul, add_zero, Pi.mul_apply, Pi.sub_apply, Pi.add_apply, Pi.zero_apply]
+    field_simp
+    ring
+  · have h := (((hq 0).add ((hq 1).mul (hq 2))).const_mul (-2)).div hR hR0
+    have h' := (hasDerivAt_pi.1 hline) 1
+    simp only [Fin.mk_one, Matrix.cons_val_one, Matrix.cons_val_zero]
+    rw [h'.unique h]
+    simp only [zero_smul, add_zero, Pi.mul_apply, Pi.add_apply, Pi.zero_apply]
+    field_simp
+    ring
+  · have h := (((((hq 0).fun_pow 2).add ((hq 1).fun_pow 2)).const_add 1).div hR hR0).mul (hq 2)
+    have h' := (hasDerivAt_pi.1 hline) 2
+    simp only [Fin.reduceFinMk, Matrix.cons_val_two, Matrix.tail_cons, Matrix.head_cons]
+    rw [h'.unique h]
+    simp only [zero_smul, add_zero, Pi.add_apply, Pi.zero_apply, Pi.div_apply, tbtSig,
+      Nat.cast_ofNat, Nat.add_one_sub_one, pow_one]
+    field_simp
+    unfold tbtRho
+    ring
+
+/-- The volume element: `det D (w, t) / D (ζ, τ) = 4 |s|² / (1 − |ζ|²)²`, `|s|² = σ² + τ²`. -/
+theorem tbt_Inv_det {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    (fderiv ℝ tbtInv p).det = 4 * (tbtSig p ^ 2 + p 2 ^ 2) / tbtRho p ^ 2 := by
+  have hρ := (tbt_Rho_pos hp).ne'
+  rw [ContinuousLinearMap.det, ← LinearMap.det_toMatrix', Matrix.det_fin_three]
+  simp only [LinearMap.toMatrix'_apply, ContinuousLinearMap.coe_coe, tbt_Inv_fderiv hp]
+  simp only [Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two, Matrix.head_cons,
+    Matrix.tail_cons, Pi.single_apply]
+  norm_num
+  simp only [tbtSig]
+  field_simp
+  unfold tbtRho
+  ring
+
+/-- The change of variables `(ζ, τ) ↦ (w, t)` (TeX 1768–1777):
+`dx dy dt = 4 |s|² (1 − |ζ|²)⁻² dA (ζ) dτ` on `𝔻 × ℝ`. -/
+theorem tbt_lintegral_eq_coord (g : (Fin 3 → ℝ) → ℝ≥0∞) :
+    ∫⁻ X, g X = ∫⁻ p in tbtDom,
+      ENNReal.ofReal (4 * (tbtSig p ^ 2 + p 2 ^ 2) / tbtRho p ^ 2) * g (tbtInv p) := by
+  rw [← setLIntegral_univ, ← tbt_Inv_image,
+    lintegral_image_eq_lintegral_abs_det_fderiv_mul volume tbt_Dom_measurableSet
+      (fun p hp => (tbt_Inv_differentiableAt hp).hasFDerivAt.hasFDerivWithinAt) tbt_Inv_injOn g]
+  refine setLIntegral_congr_fun tbt_Dom_measurableSet (fun p hp => ?_)
+  have := tbt_Rho_pos hp
+  rw [tbt_Inv_det hp, abs_of_nonneg (by positivity)]
+
+/-- `|s|² = σ² + τ²` in the coordinates. -/
+theorem tbt_normSq_S_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    ‖tbtS (tbtInv p)‖ ^ 2 = tbtSig p ^ 2 + p 2 ^ 2 := by
+  rw [tbt_S_Inv hp, Complex.sq_norm, Complex.normSq_apply]; simp; ring
+
+/-- `Re s = σ` in the coordinates. -/
+theorem tbt_re_S_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) : (tbtS (tbtInv p)).re = tbtSig p := by
+  rw [tbt_S_Inv hp]; simp
+
+theorem tbt_Rho_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    1 - ‖tbtZeta (tbtInv p)‖ ^ 2 = tbtRho p := by
+  rw [tbt_Zeta_Inv hp, Complex.sq_norm, Complex.normSq_apply]; simp [tbtRho]; ring
+
+/-- `|q₃ (∇u)| = |∂ζ|⁴ (1 − |ζ|²)⁶ = (1 − |ζ|²)⁶ / (16 |s|⁴)` in the coordinates. -/
+theorem tbt_abs_q3_Inv {p : Fin 3 → ℝ} (hp : p ∈ tbtDom) :
+    |q3 (jac tbtWitness (tbtInv p))| =
+      tbtRho p ^ 6 / (16 * (tbtSig p ^ 2 + p 2 ^ 2) ^ 2) := by
+  have h0 : 0 < tbtSig p ^ 2 + p 2 ^ 2 := by have := tbt_Sig_pos hp; positivity
+  rw [tbt_q3_jac, tbt_norm_K, tbt_normSq_S_Inv hp, tbt_Rho_Inv hp,
+    neg_mul, abs_neg, abs_of_nonneg (by positivity)]
+  field_simp
+  ring
+
+theorem tbt_lintegral_fin_three_eq {F : (Fin 3 → ℝ) → ℝ≥0∞} (hF : Measurable F) :
+    ∫⁻ X, F X = ∫⁻ x, ∫⁻ y, ∫⁻ z, F ![x, y, z] := by
+  set e := MeasurableEquiv.piFinSuccAbove (fun _ : Fin 3 => ℝ) 0
+  have he : MeasurePreserving e.symm volume volume :=
+    (volume_preserving_piFinSuccAbove (fun _ : Fin 3 => ℝ) 0).symm
+  rw [← he.lintegral_comp_emb e.symm.measurableEmbedding F]
+  rw [Measure.volume_eq_prod, lintegral_prod (fun z => F (e.symm z))
+    (hF.comp e.symm.measurable).aemeasurable]
+  refine lintegral_congr fun x => ?_
+  set f := MeasurableEquiv.finTwoArrow (α := ℝ)
+  have hf : MeasurePreserving f.symm volume volume := (volume_preserving_finTwoArrow ℝ).symm
+  rw [← hf.lintegral_comp_emb f.symm.measurableEmbedding, Measure.volume_eq_prod,
+    lintegral_prod (fun z => F (e.symm (x, f.symm z))) ((hF.comp e.symm.measurable).comp
+      (measurable_const.prodMk f.symm.measurable)).aemeasurable]
+  refine lintegral_congr fun y => lintegral_congr fun z => ?_
+  congr 1
+  funext i
+  fin_cases i <;> rfl
+
+/-- `∫ A / (σ² + τ²) dτ = π A / σ`. -/
+theorem tbt_lintegral_tau {A σ : ℝ} (hA : 0 ≤ A) (hσ : 0 < σ) :
+    ∫⁻ c : ℝ, ENNReal.ofReal (A / (σ ^ 2 + c ^ 2)) = ENNReal.ofReal (A * Real.pi / σ) := by
+  have h : ∀ c : ℝ, ENNReal.ofReal (A / (σ ^ 2 + c ^ 2)) =
+      ENNReal.ofReal A * ENNReal.ofReal (1 / (σ ^ 2 + c ^ 2)) := fun c => by
+    rw [← ENNReal.ofReal_mul hA, mul_one_div]
   simp_rw [h]
-  rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top, lintegral_add_left hm1, tbt_lintegral_cauchy,
-    tbt_lintegral_cauchy, ← ENNReal.ofReal_add Real.pi_pos.le Real.pi_pos.le, two_mul]
+  rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top, tbt_lintegral_inv_sq_add_sq hσ,
+    ← ENNReal.ofReal_mul hA, mul_div_assoc]
+
+/-- "Integrating gives `∫_{ℝ³} q₃ (∇u) = −(π/4) ∫_𝔻 (1 − |ζ|²)⁵ / (1 + |ζ|²) dA (ζ)`" (TeX
+1779–1783, `F' = 1`), for `|q₃ (∇u)| = −q₃ (∇u)`: in the coordinates `(ζ, τ)` the integrand is
+`(1 − |ζ|²)⁶ / (16 |s|⁴) · 4 |s|² / (1 − |ζ|²)² = (1 − |ζ|²)⁴ / (4 (σ² + τ²))`, and
+`∫ dτ / (σ² + τ²) = π / σ`. -/
+theorem tbt_lintegral_abs_q3 :
+    ∫⁻ X, ENNReal.ofReal |q3 (jac tbtWitness X)| =
+      ∫⁻ q : ℝ × ℝ, if q.1 ^ 2 + q.2 ^ 2 < 1 then
+        ENNReal.ofReal (Real.pi / 4 * (1 - (q.1 ^ 2 + q.2 ^ 2)) ^ 5 / (1 + (q.1 ^ 2 + q.2 ^ 2)))
+      else 0 := by
+  set G : (Fin 3 → ℝ) → ℝ≥0∞ :=
+    fun p => ENNReal.ofReal (tbtRho p ^ 4 / 4 / (tbtSig p ^ 2 + p 2 ^ 2)) with hGdef
+  have hG : Measurable G := by simp only [G, tbtRho, tbtSig]; fun_prop
+  have hif : Measurable fun q : ℝ × ℝ => if q.1 ^ 2 + q.2 ^ 2 < 1 then
+      ENNReal.ofReal (Real.pi / 4 * (1 - (q.1 ^ 2 + q.2 ^ 2)) ^ 5 / (1 + (q.1 ^ 2 + q.2 ^ 2)))
+      else 0 :=
+    Measurable.ite (measurableSet_lt (by fun_prop) measurable_const) (by fun_prop)
+      measurable_const
+  rw [tbt_lintegral_eq_coord, setLIntegral_congr_fun tbt_Dom_measurableSet (g := G)
+      (fun p hp => ?_), ← lintegral_indicator tbt_Dom_measurableSet,
+    tbt_lintegral_fin_three_eq (hG.indicator tbt_Dom_measurableSet), Measure.volume_eq_prod,
+    lintegral_prod _ hif.aemeasurable]
+  · refine lintegral_congr fun a => lintegral_congr fun b => ?_
+    split_ifs with h
+    · have hmem : ∀ c, (![a, b, c] : Fin 3 → ℝ) ∈ tbtDom := fun c => by simpa [tbtDom] using h
+      simp_rw [Set.indicator_of_mem (hmem _)]
+      have hρ : 0 < 1 - (a ^ 2 + b ^ 2) := by linarith
+      simp only [G, tbtRho, tbtSig, Matrix.cons_val_zero, Matrix.cons_val_one,
+        Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons]
+      rw [tbt_lintegral_tau (by positivity) (by positivity)]
+      congr 1
+      field_simp
+    · have hmem : ∀ c, (![a, b, c] : Fin 3 → ℝ) ∉ tbtDom := fun c => by simpa [tbtDom] using h
+      simp_rw [Set.indicator_of_notMem (hmem _)]
+      simp
+  · have h0 := tbt_Rho_pos hp
+    have h1 : 0 < tbtSig p ^ 2 + p 2 ^ 2 := by have := tbt_Sig_pos hp; positivity
+    simp only [G]
+    rw [tbt_abs_q3_Inv hp, ← ENNReal.ofReal_mul (by positivity)]
+    congr 1
+    field_simp
+    ring
+
+/-- `q₃ (∇u) ∈ L¹ (ℝ³)`: the integral of TeX 1779–1783 (`tbt_lintegral_abs_q3`) is finite, since
+`(1 − |ζ|²)⁵ / (1 + |ζ|²) ≤ 1` on the disc. -/
+theorem tbt_integrable_q3 : Integrable fun x => q3 (jac tbtWitness x) := by
+  have hc : Continuous fun x => q3 (jac tbtWitness x) :=
+    tbt_continuous_q3.comp (tbt_continuous_jac tbt_witness_contDiff)
+  refine ⟨hc.aestronglyMeasurable, ?_⟩
+  show ∫⁻ x, ‖q3 (jac tbtWitness x)‖ₑ < ⊤
+  simp_rw [Real.enorm_eq_ofReal_abs]
+  rw [tbt_lintegral_abs_q3]
+  refine lt_of_le_of_lt (lintegral_mono fun q => ?_ : _ ≤ ∫⁻ q : ℝ × ℝ,
+    (Metric.ball (0 : ℝ × ℝ) 1).indicator (fun _ => ENNReal.ofReal (Real.pi / 4)) q) ?_
+  · split_ifs with h
+    · have hq : q ∈ Metric.ball (0 : ℝ × ℝ) 1 := by
+        rw [Metric.mem_ball, dist_zero_right, Prod.norm_def, max_lt_iff, Real.norm_eq_abs,
+          Real.norm_eq_abs]
+        exact ⟨abs_lt.mpr (abs_lt_of_sq_lt_sq' (by nlinarith [sq_nonneg q.2]) (by norm_num)),
+          abs_lt.mpr (abs_lt_of_sq_lt_sq' (by nlinarith [sq_nonneg q.1]) (by norm_num))⟩
+      rw [Set.indicator_of_mem hq]
+      apply ENNReal.ofReal_le_ofReal
+      have hρ0 : 0 ≤ 1 - (q.1 ^ 2 + q.2 ^ 2) := by linarith
+      have hρ1 : 1 - (q.1 ^ 2 + q.2 ^ 2) ≤ 1 := by nlinarith [sq_nonneg q.1, sq_nonneg q.2]
+      have h5 : (1 - (q.1 ^ 2 + q.2 ^ 2)) ^ 5 ≤ 1 := pow_le_one₀ hρ0 hρ1
+      rw [mul_div_assoc]
+      have : (1 - (q.1 ^ 2 + q.2 ^ 2)) ^ 5 / (1 + (q.1 ^ 2 + q.2 ^ 2)) ≤ 1 := by
+        rw [div_le_one (by positivity)]; nlinarith [sq_nonneg q.1, sq_nonneg q.2]
+      have hpi := Real.pi_pos
+      nlinarith
+    · exact bot_le
+  · rw [lintegral_indicator_const Metric.isOpen_ball.measurableSet]
+    exact ENNReal.mul_lt_top ENNReal.ofReal_lt_top measure_ball_lt_top
+
+/-- `σ ≤ √(1 + R²)` on `B_R` (TeX 1787): `σ² = 1 + |w|² − t² + (Im s)²` and
+`(Im s)² = t² / σ² ≤ t²`. -/
+theorem tbt_re_S_le_sqrt {R : ℝ} {X : Fin 3 → ℝ} (hX : ∑ i, X i ^ 2 < R ^ 2) :
+    (tbtS X).re ≤ √(1 + R ^ 2) := by
+  obtain ⟨h1, h2⟩ := tbt_S_parts X
+  have hσ1 := tbt_one_le_sigma_sq X
+  have him : (tbtS X).im ^ 2 ≤ X 2 ^ 2 := by
+    have : (tbtS X).re ^ 2 * (tbtS X).im ^ 2 = X 2 ^ 2 := by rw [← mul_pow, h2]; ring
+    nlinarith [sq_nonneg (tbtS X).im]
+  have hX' : X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2 < R ^ 2 := by simpa [Fin.sum_univ_three] using hX
+  exact (le_abs_self _).trans (Real.abs_le_sqrt (by nlinarith))
+
+/-- The radial integral, by the substitution `σ = (1 + r²) / (1 − r²)`, `dσ = 4 r dr / (1 − r²)²`:
+`∫_0^{r_S} r dr / ((1 − r²) (1 + r²)) = ¼ ∫_1^S dσ / σ = ¼ log S`, `r_S² = (S − 1) / (S + 1)`. -/
+theorem tbt_integral_radial {S : ℝ} (hS : 1 ≤ S) :
+    ∫ r in (0 : ℝ)..√((S - 1) / (S + 1)), r / ((1 - r ^ 2) * (1 + r ^ 2)) =
+      1 / 4 * Real.log S := by
+  set k := (S - 1) / (S + 1) with hk
+  have hk0 : 0 ≤ k := div_nonneg (by linarith) (by linarith)
+  have hk1 : k < 1 := by rw [hk, div_lt_one (by linarith)]; linarith
+  have hsq : √k ^ 2 = k := Real.sq_sqrt hk0
+  have hI : ∀ x ∈ Set.uIcc 0 √k, 0 < 1 - x ^ 2 := fun x hx => by
+    rw [Set.uIcc_of_le (Real.sqrt_nonneg _)] at hx
+    have : x ^ 2 ≤ √k ^ 2 := pow_le_pow_left₀ hx.1 hx.2 2
+    linarith
+  set f : ℝ → ℝ := fun r => (1 + r ^ 2) / (1 - r ^ 2)
+  set f' : ℝ → ℝ := fun r => 4 * r / (1 - r ^ 2) ^ 2
+  have hf : ∀ x ∈ Set.uIcc 0 √k, HasDerivAt f (f' x) x := fun x hx => by
+    have h := ((hasDerivAt_pow 2 x).const_add 1).div ((hasDerivAt_pow 2 x).const_sub 1)
+      (hI x hx).ne'
+    refine h.congr_deriv ?_
+    have := (hI x hx).ne'
+    simp only [f']
+    field_simp
+    ring
+  have hf' : ContinuousOn f' (Set.uIcc 0 √k) :=
+    ContinuousOn.div (by fun_prop) (by fun_prop) fun x hx => by have := hI x hx; positivity
+  have hg : ContinuousOn (fun u : ℝ => 1 / u) (f '' Set.uIcc 0 √k) :=
+    ContinuousOn.div continuousOn_const continuousOn_id fun u hu => by
+      obtain ⟨x, hx, rfl⟩ := hu
+      have := hI x hx
+      simp only [f]; positivity
+  have hsub := intervalIntegral.integral_comp_mul_deriv' hf hf' hg
+  have hf0 : f 0 = 1 := by simp [f]
+  have hfk : f √k = S := by
+    simp only [f]
+    rw [hsq, hk]
+    have : S + 1 ≠ 0 := by linarith
+    field_simp
+    ring
+  rw [hf0, hfk, integral_one_div_of_pos one_pos (by linarith), div_one] at hsub
+  rw [← hsub, ← intervalIntegral.integral_const_mul]
+  refine intervalIntegral.integral_congr fun x hx => ?_
+  have := (hI x hx).ne'
+  have h2 : 1 + x ^ 2 ≠ 0 := by positivity
+  simp only [Function.comp, f, f']
+  field_simp
+
+/-- `∫_{B_R} |s|⁻⁴ ≲ ∫_1^{√(1+R²)} dσ / σ` (TeX 1785–1790). In the coordinates `(ζ, τ)` the
+integrand is `|s|⁻⁴ · 4 |s|² / (1 − |ζ|²)² = 4 / ((1 − |ζ|²)² (σ² + τ²))`, over `σ ≤ √(1 + R²)`;
+integrate in `τ` (`π / σ`), then over the disc in polar coordinates, `dA = r dr dθ`, and substitute
+`σ = (1 + r²) / (1 − r²)` (`tbt_integral_radial`). -/
+theorem tbt_lintegral_inv_S4_le (R : ℝ) :
+    ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, ENNReal.ofReal (144 / ‖tbtS x‖ ^ 4) ≤
+      ENNReal.ofReal (288 * Real.pi ^ 2 * Real.log √(1 + R ^ 2)) := by
+  set S := √(1 + R ^ 2) with hSdef
+  have hS1 : 1 ≤ S := by rw [hSdef, Real.le_sqrt (by norm_num) (by positivity)]; nlinarith
+  set k := (S - 1) / (S + 1) with hk
+  have hk0 : 0 ≤ k := div_nonneg (by linarith) (by linarith)
+  have hk1 : k < 1 := by rw [hk, div_lt_one (by linarith)]; linarith
+  set B := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}
+  set E := {X : Fin 3 → ℝ | (tbtS X).re ≤ S}
+  have hE : MeasurableSet E :=
+    measurableSet_le (Complex.continuous_re.comp (tbt_S_contDiff (n := 0)).continuous).measurable
+      measurable_const
+  set Φ : ℝ → ℝ≥0∞ := fun u => if u ≤ k then
+    ENNReal.ofReal (576 * Real.pi / ((1 - u) * (1 + u))) else 0 with hΦ
+  have hΦm : Measurable Φ := Measurable.ite measurableSet_Iic (by fun_prop) measurable_const
+  set G : (Fin 3 → ℝ) → ℝ≥0∞ := fun p => if tbtSig p ≤ S then
+    ENNReal.ofReal (576 / tbtRho p ^ 2 / (tbtSig p ^ 2 + p 2 ^ 2)) else 0
+  -- on the disc, `σ ≤ S ↔ |ζ|² ≤ k`
+  have hiff : ∀ u : ℝ, u < 1 → ((1 + u) / (1 - u) ≤ S ↔ u ≤ k) := fun u hu => by
+    rw [div_le_iff₀ (by linarith), hk, le_div_iff₀ (by linarith)]
+    constructor <;> intro h <;> linarith
+  have hlog : 0 ≤ Real.log S := Real.log_nonneg hS1
+  calc ∫⁻ x in B, ENNReal.ofReal (144 / ‖tbtS x‖ ^ 4)
+      ≤ ∫⁻ x in E, ENNReal.ofReal (144 / ‖tbtS x‖ ^ 4) :=
+        lintegral_mono_set fun X hX => tbt_re_S_le_sqrt hX
+    _ = ∫⁻ X, E.indicator (fun X => ENNReal.ofReal (144 / ‖tbtS X‖ ^ 4)) X :=
+        (lintegral_indicator hE _).symm
+    _ = ∫⁻ p in tbtDom, G p := by
+        rw [tbt_lintegral_eq_coord]
+        refine setLIntegral_congr_fun tbt_Dom_measurableSet fun p hp => ?_
+        have h0 := tbt_Rho_pos hp
+        have h1 : 0 < tbtSig p ^ 2 + p 2 ^ 2 := by have := tbt_Sig_pos hp; positivity
+        simp only [G, E, Set.indicator, Set.mem_ofPred_eq, tbt_re_S_Inv hp]
+        split_ifs
+        · rw [← ENNReal.ofReal_mul (by positivity)]
+          congr 1
+          rw [show ‖tbtS (tbtInv p)‖ ^ 4 = (‖tbtS (tbtInv p)‖ ^ 2) ^ 2 by ring,
+            tbt_normSq_S_Inv hp]
+          field_simp
+          ring
+        · simp
+    _ = ∫⁻ p, tbtDom.indicator G p := (lintegral_indicator tbt_Dom_measurableSet _).symm
+    _ ≤ ∫⁻ a, ∫⁻ b, ∫⁻ c, tbtDom.indicator G ![a, b, c] := tbt_lintegral_fin_three_le _
+    _ = ∫⁻ a, ∫⁻ b, Φ (a ^ 2 + b ^ 2) := by
+        refine lintegral_congr fun a => lintegral_congr fun b => ?_
+        by_cases h : a ^ 2 + b ^ 2 < 1
+        · have hmem : ∀ c, (![a, b, c] : Fin 3 → ℝ) ∈ tbtDom := fun c => by
+            simpa [tbtDom] using h
+          simp_rw [Set.indicator_of_mem (hmem _)]
+          have hρ : 0 < 1 - (a ^ 2 + b ^ 2) := by linarith
+          simp only [G, Φ, tbtRho, tbtSig, Matrix.cons_val_zero, Matrix.cons_val_one,
+            Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons, hiff _ h]
+          split_ifs
+          · rw [tbt_lintegral_tau (by positivity) (by positivity)]
+            congr 1
+            field_simp
+          · simp
+        · have hmem : ∀ c, (![a, b, c] : Fin 3 → ℝ) ∉ tbtDom := fun c => by
+            simpa [tbtDom] using h
+          simp_rw [Set.indicator_of_notMem (hmem _)]
+          have hk' : ¬ a ^ 2 + b ^ 2 ≤ k := by linarith
+          simp only [lintegral_const, zero_mul, Φ, hk', ite_false]
+    _ = ∫⁻ q : ℝ × ℝ, Φ (q.1 ^ 2 + q.2 ^ 2) := by
+        rw [Measure.volume_eq_prod, lintegral_prod (fun q : ℝ × ℝ => Φ (q.1 ^ 2 + q.2 ^ 2))
+          (hΦm.comp (by fun_prop)).aemeasurable]
+    _ = ∫⁻ p in Set.Ioi (0 : ℝ) ×ˢ Set.Ioo (-Real.pi) Real.pi,
+          ENNReal.ofReal p.1 * Φ (p.1 ^ 2) := by
+        rw [← lintegral_comp_polarCoord_symm, polarCoord_target]
+        refine lintegral_congr fun p => ?_
+        rw [polarCoord_symm_apply, smul_eq_mul, mul_pow, mul_pow, ← mul_add,
+          Real.cos_sq_add_sin_sq, mul_one]
+    _ ≤ ∫⁻ r in Set.Ioi (0 : ℝ), ∫⁻ θ in Set.Ioo (-Real.pi) Real.pi,
+          ENNReal.ofReal r * Φ (r ^ 2) := by
+        rw [Measure.volume_eq_prod, ← Measure.prod_restrict]
+        exact lintegral_prod_le _
+    _ = (∫⁻ r in Set.Ioi (0 : ℝ), ENNReal.ofReal r * Φ (r ^ 2)) *
+          ENNReal.ofReal (2 * Real.pi) := by
+        simp_rw [setLIntegral_const, Real.volume_Ioo]
+        rw [lintegral_mul_const' _ _ ENNReal.ofReal_ne_top]
+        congr 2; ring
+    _ = ENNReal.ofReal (∫ r in (0 : ℝ)..√k, 576 * Real.pi * (r / ((1 - r ^ 2) * (1 + r ^ 2)))) *
+          ENNReal.ofReal (2 * Real.pi) := by
+        congr 1
+        have hI : ∀ x ∈ Set.Icc 0 √k, 0 < 1 - x ^ 2 := fun x hx => by
+          have : x ^ 2 ≤ √k ^ 2 := pow_le_pow_left₀ hx.1 hx.2 2
+          rw [Real.sq_sqrt hk0] at this
+          linarith
+        have hcont : ContinuousOn (fun r : ℝ => 576 * Real.pi * (r / ((1 - r ^ 2) * (1 + r ^ 2))))
+            (Set.Icc 0 √k) :=
+          continuousOn_const.mul (ContinuousOn.div (by fun_prop) (by fun_prop) fun x hx => by
+            have := hI x hx; positivity)
+        rw [intervalIntegral.integral_of_le (Real.sqrt_nonneg _),
+          ofReal_integral_eq_lintegral_ofReal
+            ((hcont.integrableOn_Icc).mono_set Set.Ioc_subset_Icc_self)
+            ((ae_restrict_iff' measurableSet_Ioc).mpr (Filter.Eventually.of_forall fun x hx => by
+              have := hI x (Set.Ioc_subset_Icc_self hx)
+              have := hx.1.le
+              simp only [Pi.zero_apply]; positivity))]
+        rw [← Set.Ioi_inter_Iic, Set.inter_comm, ← Measure.restrict_restrict measurableSet_Iic,
+          ← lintegral_indicator measurableSet_Iic]
+        refine setLIntegral_congr_fun measurableSet_Ioi fun r (hr : 0 < r) => ?_
+        simp only [Φ, Set.indicator, Set.mem_Iic]
+        have hiff' := Real.le_sqrt hr.le hk0
+        split_ifs with h1 h2 h2
+        · have : 0 < 1 - r ^ 2 := by linarith
+          rw [← ENNReal.ofReal_mul hr.le]
+          congr 1
+          field_simp
+        · exact absurd (hiff'.mpr h1) h2
+        · exact absurd (hiff'.mp h2) h1
+        · simp
+    _ = ENNReal.ofReal (288 * Real.pi ^ 2 * Real.log S) := by
+        rw [intervalIntegral.integral_const_mul, tbt_integral_radial hS1,
+          ← ENNReal.ofReal_mul (by positivity)]
+        congr 1
+        ring
+
+
+/-- `∫_{B_R} F ≲ log (2 + R)` for every continuous `F ≥ 0` with `F ≤ c · 144 / |s|⁴`, from the
+computation in the coordinates `(ζ, τ)` (`tbt_lintegral_inv_S4_le`) and
+`log √(1 + R²) ≤ log (2 + R)`. -/
+theorem tbt_log_bound_of_le {F : (Fin 3 → ℝ) → ℝ} (hF : Continuous F) (hF0 : ∀ x, 0 ≤ F x)
+    {c : ℝ} (hc : 0 ≤ c) (hle : ∀ x, F x ≤ c * (144 / ‖tbtS x‖ ^ 4)) {R : ℝ} (hR : 0 ≤ R) :
+    ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, F x ≤
+      c * (576 * Real.pi ^ 2 * Real.log (2 + R)) := by
+  have hlog : 0 ≤ Real.log (2 + R) := Real.log_nonneg (by linarith)
+  have hS1 : 1 ≤ √(1 + R ^ 2) := by rw [Real.le_sqrt (by norm_num) (by positivity)]; nlinarith
+  have hS : Real.log √(1 + R ^ 2) ≤ Real.log (2 + R) := by
+    apply Real.log_le_log (by linarith)
+    rw [Real.sqrt_le_left (by linarith)]
+    nlinarith
+  rw [integral_eq_lintegral_of_nonneg_ae (Filter.Eventually.of_forall hF0)
+    hF.aestronglyMeasurable]
+  apply ENNReal.toReal_le_of_le_ofReal (by positivity)
+  calc ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, ENNReal.ofReal (F x)
+      ≤ ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2},
+          ENNReal.ofReal c * ENNReal.ofReal (144 / ‖tbtS x‖ ^ 4) :=
+        lintegral_mono fun x => by
+          rw [← ENNReal.ofReal_mul hc]; exact ENNReal.ofReal_le_ofReal (hle x)
+    _ = ENNReal.ofReal c * ∫⁻ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2},
+          ENNReal.ofReal (144 / ‖tbtS x‖ ^ 4) := lintegral_const_mul' _ _ ENNReal.ofReal_ne_top
+    _ ≤ ENNReal.ofReal c * ENNReal.ofReal (288 * Real.pi ^ 2 * Real.log √(1 + R ^ 2)) :=
+        mul_le_mul_right (tbt_lintegral_inv_S4_le R) _
+    _ ≤ ENNReal.ofReal (c * (576 * Real.pi ^ 2 * Real.log (2 + R))) := by
+        rw [← ENNReal.ofReal_mul hc]
+        apply ENNReal.ofReal_le_ofReal
+        have hpi := Real.pi_pos
+        have hl := Real.log_nonneg hS1
+        have : 288 * Real.pi ^ 2 * Real.log √(1 + R ^ 2) ≤
+            576 * Real.pi ^ 2 * Real.log (2 + R) := by nlinarith [sq_nonneg Real.pi]
+        exact mul_le_mul_of_nonneg_left this hc
 
 /-- The logarithmic bound: `∫_{B_R} |∇u|⁴ ≤ 576 π² log (2 + R)`. -/
 theorem tbt_log_bound {R : ℝ} (hR : 0 ≤ R) :
     ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}, frobSq (jac tbtWitness x) ^ 2 ≤
       576 * Real.pi ^ 2 * Real.log (2 + R) := by
-  set B := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < R ^ 2}
-  set Φ : (Fin 3 → ℝ) → ℝ := fun X => 72 / (1 + (X 0 ^ 2 + X 1 ^ 2)) *
-      (1 / (1 + (X 2 - √(X 0 ^ 2 + X 1 ^ 2)) ^ 2) + 1 / (1 + (X 2 + √(X 0 ^ 2 + X 1 ^ 2)) ^ 2))
-  set Q := {X : Fin 3 → ℝ | |X 0| ≤ R ∧ |X 1| ≤ R}
-  have hcont : Continuous fun x => frobSq (jac tbtWitness x) ^ 2 :=
-    (tbt_continuous_frobSq.comp (tbt_continuous_jac tbt_witness_contDiff)).pow 2
-  have hlog : 0 ≤ Real.log (2 + R) := Real.log_nonneg (by linarith)
-  rw [integral_eq_lintegral_of_nonneg_ae (Filter.Eventually.of_forall fun x => by positivity)
-    hcont.aestronglyMeasurable]
-  apply ENNReal.toReal_le_of_le_ofReal (by positivity)
-  have hBQ : B ⊆ Q := by
-    intro X hX
-    have hX' : X 0 ^ 2 + X 1 ^ 2 + X 2 ^ 2 < R ^ 2 := by
-      simpa [B, Fin.sum_univ_three] using hX
-    have h0 : X 0 ^ 2 < R ^ 2 := by nlinarith [sq_nonneg (X 1), sq_nonneg (X 2)]
-    have h1 : X 1 ^ 2 < R ^ 2 := by nlinarith [sq_nonneg (X 0), sq_nonneg (X 2)]
-    exact ⟨(abs_lt_of_sq_lt_sq h0 hR).le, (abs_lt_of_sq_lt_sq h1 hR).le⟩
-  have hQm : MeasurableSet Q := by
-    have : Q = {X : Fin 3 → ℝ | |X 0| ≤ R} ∩ {X | |X 1| ≤ R} := rfl
-    rw [this]
-    exact (measurableSet_le (by fun_prop) measurable_const).inter
-      (measurableSet_le (by fun_prop) measurable_const)
-  calc ∫⁻ x in B, ENNReal.ofReal (frobSq (jac tbtWitness x) ^ 2)
-      ≤ ∫⁻ x in B, ENNReal.ofReal (Φ x) :=
-        lintegral_mono fun x => ENNReal.ofReal_le_ofReal (tbt_frobSq_sq_le x)
-    _ ≤ ∫⁻ x in Q, ENNReal.ofReal (Φ x) := lintegral_mono_set hBQ
-    _ = ∫⁻ x, Q.indicator (fun X => ENNReal.ofReal (Φ X)) x := (lintegral_indicator hQm _).symm
-    _ ≤ ∫⁻ x, ∫⁻ y, ∫⁻ z, Q.indicator (fun X => ENNReal.ofReal (Φ X)) ![x, y, z] :=
-        tbt_lintegral_fin_three_le _
-    _ ≤ ∫⁻ x, (Set.Icc (-R) R).indicator (fun x => ∫⁻ y,
-          ENNReal.ofReal (2 * Real.pi * 72) * ENNReal.ofReal (1 / (√(1 + x ^ 2) ^ 2 + y ^ 2))) x := by
-        refine lintegral_mono fun x => ?_
-        by_cases hx : |x| ≤ R
-        · rw [Set.indicator_of_mem (abs_le.mp hx)]
-          refine lintegral_mono fun y => ?_
-          by_cases hy : |y| ≤ R
-          · have hQ : ∀ z, (![x, y, z] : Fin 3 → ℝ) ∈ Q := fun z => ⟨hx, hy⟩
-            simp_rw [Set.indicator_of_mem (hQ _)]
-            simp only [Φ, Matrix.cons_val_zero, Matrix.cons_val_one, Matrix.cons_val_two,
-              Matrix.head_cons, Matrix.tail_cons]
-            rw [tbt_lintegral_two_cauchy _ _ (by positivity), mul_comm, ← ENNReal.ofReal_mul
-              (by positivity), ← ENNReal.ofReal_mul (by positivity)]
-            apply ENNReal.ofReal_le_ofReal
-            rw [Real.sq_sqrt (by positivity)]
-            apply le_of_eq; field_simp; ring
-          · have hQ : ∀ z, (![x, y, z] : Fin 3 → ℝ) ∉ Q := fun z h => hy h.2
-            simp_rw [Set.indicator_of_notMem (hQ _)]
-            simp
-        · have hQ : ∀ y z, (![x, y, z] : Fin 3 → ℝ) ∉ Q := fun y z h => hx h.1
-          simp_rw [Set.indicator_of_notMem (hQ _ _)]
-          simp
-    _ = ∫⁻ x in Set.Icc (-R) R, ENNReal.ofReal (2 * Real.pi * 72 * Real.pi) *
-          ENNReal.ofReal (1 / √(1 + x ^ 2)) := by
-        rw [← lintegral_indicator measurableSet_Icc]
-        congr 1; funext x
-        by_cases hx : x ∈ Set.Icc (-R) R
-        · rw [Set.indicator_of_mem hx, Set.indicator_of_mem hx, lintegral_const_mul' _ _
-            ENNReal.ofReal_ne_top, tbt_lintegral_inv_sq_add_sq (Real.sqrt_pos.mpr (by positivity)),
-            ← ENNReal.ofReal_mul (by positivity), ← ENNReal.ofReal_mul (by positivity)]
-          congr 1; field_simp
-        · rw [Set.indicator_of_notMem hx, Set.indicator_of_notMem hx]
-    _ = ENNReal.ofReal (2 * Real.pi * 72 * Real.pi) * ENNReal.ofReal (2 * Real.arsinh R) := by
-        rw [lintegral_const_mul' _ _ ENNReal.ofReal_ne_top, tbt_lintegral_Icc_inv_sqrt hR]
-    _ ≤ ENNReal.ofReal (576 * Real.pi ^ 2 * Real.log (2 + R)) := by
-        rw [← ENNReal.ofReal_mul (by positivity)]
-        apply ENNReal.ofReal_le_ofReal
-        have := tbt_arsinh_le_log hR
-        have hpi := Real.pi_pos
-        nlinarith [mul_pos hpi hpi]
-
-
+  have h := tbt_log_bound_of_le
+    ((tbt_continuous_frobSq.comp (tbt_continuous_jac tbt_witness_contDiff)).pow 2)
+    (fun x => sq_nonneg _) zero_le_one
+    (fun x => by rw [one_mul]; exact tbt_frobSq_sq_le_inv_S4 x) hR
+  rwa [one_mul] at h
 
 theorem tbt_continuous_zCoord (k : Fin 3) :
     Continuous fun A : Matrix (Fin 2) (Fin 4) ℝ => zCoord A k := by
@@ -724,36 +1144,6 @@ theorem tbt_continuous_embedJ : Continuous embedJ := by
   · exact tbt_continuous_entry _ _
   · exact continuous_const
 
-theorem tbt_norm_le_sqrt (x : Fin 3 → ℝ) : ‖x‖ ≤ √(x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2) := by
-  refine (pi_norm_le_iff_of_nonneg (Real.sqrt_nonneg _)).mpr fun i => ?_
-  rw [Real.norm_eq_abs, ← Real.sqrt_sq_eq_abs]
-  apply Real.sqrt_le_sqrt
-  fin_cases i <;> simp <;> nlinarith [sq_nonneg (x 0), sq_nonneg (x 1), sq_nonneg (x 2)]
-
-/-- `q₃ (∇u) ∈ L¹ (ℝ³)`. -/
-theorem tbt_integrable_q3 : Integrable fun x => q3 (jac tbtWitness x) := by
-  have hc : Continuous fun x => q3 (jac tbtWitness x) :=
-    tbt_continuous_q3.comp (tbt_continuous_jac tbt_witness_contDiff)
-  have hi : Integrable fun x : Fin 3 → ℝ => (1 + ‖x‖) ^ (-(4 : ℝ)) :=
-    integrable_one_add_norm (by norm_num [Module.finrank_fin_fun])
-  refine (hi.const_mul 16).mono' hc.aestronglyMeasurable (Filter.Eventually.of_forall fun x => ?_)
-  rw [Real.norm_eq_abs]
-  refine (tbt_abs_q3_le x).trans ?_
-  set S := x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2
-  have hS : 0 ≤ S := by positivity
-  have hn := tbt_norm_le_sqrt x
-  have hn0 := norm_nonneg x
-  have hn2 : ‖x‖ ^ 2 ≤ S := by
-    calc ‖x‖ ^ 2 ≤ √S ^ 2 := pow_le_pow_left₀ hn0 hn 2
-      _ = S := Real.sq_sqrt hS
-  have h1 : (1 + ‖x‖) ^ 4 ≤ 4 * (1 + S) ^ 2 := by
-    have : (1 + ‖x‖) ^ 2 ≤ 2 * (1 + S) := by nlinarith [sq_nonneg (1 - ‖x‖)]
-    nlinarith [pow_le_pow_left₀ (by positivity) this 2]
-  rw [Real.rpow_neg (by positivity), show (4 : ℝ) = ((4 : ℕ) : ℝ) by norm_num, Real.rpow_natCast,
-    ← div_eq_mul_inv, div_le_div_iff₀ (by positivity) (by positivity)]
-  push_cast
-  nlinarith
-
 /-- `|u| ≤ 3/2`. -/
 theorem tbt_norm_witness_le (x : Fin 3 → ℝ) : ‖tbtWitness x‖ ≤ 3 / 2 := by
   have hU : ‖tbtU x‖ ≤ 3 / 2 := by
@@ -778,19 +1168,24 @@ of `w̄ ζ² + 2 t ζ + w = h (ζ)`, `h (ξ) = −2 i ξ`, explicitly `ζ = i w 
 `s = √((1 − i t)² + |w|²)` (`tbtZeta`; `|ζ| < 1` from `σ = Re s = (1 + |ζ|²) / (1 − |ζ|²)`,
 `tbt_sigma_eq`). Implicit differentiation gives `∂ζ = i / (2 s)`, `∂̄ζ = ζ² ∂ζ`, `ζ_t = 2 ζ ∂ζ`
 (`tbt_ZetaD_eq`), hence `∇u ∈ 𝓛₃` (`tbt_jac_mem_L3`) and, by (24),
-`q₃ (∇u) = −|∂ζ|⁴ (1 − |ζ|²)⁶ < 0` (`tbt_q3_jac`, `F' = 1`). For the integrability and the
-logarithmic bound we use `|∇u| ≲ |∂ζ| = 1 / (2 |s|)` as the paper does.
+`q₃ (∇u) = −|∂ζ|⁴ (1 − |ζ|²)⁶ < 0` (`tbt_q3_jac`, `F' = 1`). The integrals are evaluated in the
+coordinates `(ζ, τ)`, `τ = −Im s`: the inverse coordinates `w = −2 ζ (τ + i) / (1 − |ζ|²)`,
+`t = σ τ` map `𝔻 × ℝ` bijectively onto `ℝ³` with
+`dx dy dt = 4 |s|² (1 − |ζ|²)⁻² dA (ζ) dτ` (`tbt_lintegral_eq_coord`, by Mathlib's change of
+variables formula `lintegral_image_eq_lintegral_abs_det_fderiv_mul`, with the Jacobian
+`tbt_Inv_det`). Integrating in `τ` (`∫ dτ / (σ² + τ²) = π / σ`) gives
+`∫ |q₃ (∇u)| = (π/4) ∫_𝔻 (1 − |ζ|²)⁵ / (1 + |ζ|²) dA (ζ) < ∞` (`tbt_lintegral_abs_q3`,
+`tbt_integrable_q3`). For the energy, `|∇u| ≲ |∂ζ| = 1 / (2 |s|)` (`tbt_frobSq_sq_le_inv_S4`),
+`σ ≤ √(1 + R²)` on `B_R` (`tbt_re_S_le_sqrt`), and integrating in `τ`, then over the disc in polar
+coordinates with the substitution `σ = (1 + |ζ|²) / (1 − |ζ|²)`, gives
+`∫_{B_R} |∇u|⁴ ≤ 288 π² ∫_1^{√(1+R²)} dσ / σ ≤ 576 π² log (2 + R)` (`tbt_lintegral_inv_S4_le`,
+`tbt_integral_radial`, `tbt_log_bound`).
 
-Departure from the paper (reason 2, the change of variables): the paper evaluates the integrals in
-the coordinates `(ζ, τ)`, `dx dy dt = 4 |s|² (1 − |ζ|²)⁻² dA (ζ) dτ`; that change of variables needs
-the inverse map and its Jacobian, which Lean does not have and which would be long to build. Instead
-the same quantities are bounded in the coordinates `(x, y, t)`:
-`|q₃ (∇u)| = (1 − |ζ|²)⁶ / (16 |s|⁴) ≤ 4 / (1 + |X|²)²` (from `σ ≥ 1`, `(1 + σ) (1 − |ζ|²) = 2` and
-`σ² |s|² = σ⁴ + t²`; `tbt_abs_q3_le`), which is integrable on `ℝ³`; and
-`|s|⁴ = (1 + (t − |w|)²) (1 + (t + |w|)²)`, so that `|∇u|⁴ ≲ |s|⁻⁴` integrates first in `t` (two
-Cauchy kernels, `2π / (1 + |w|²)`), then over the square `[−R, R]²` (`∫ dy / (1 + x² + y²) =
-π / √(1 + x²)`, `∫_{−R}^{R} dx / √(1 + x²) = 2 arsinh R`), giving
-`∫_{B_R} |∇u|⁴ ≤ 576 π² log (2 + R)` (`tbt_log_bound`). -/
+Mechanical differences: smoothness of `ζ` is read off the closed form rather than from "unique
+simple root, hence smooth" (`tbt_Zeta_contDiff`); `q₃ (∇u) ∈ L¹` is concluded from the formula for
+`∫ |q₃ (∇u)|` (the paper writes the integral of `q₃`, which is `−∫ |q₃|` since `q₃ < 0`); and the
+radial integral `∫ r dr / ((1 − r²) (1 + r²))` is turned into `¼ ∫ dσ / σ` by the substitution
+theorem. -/
 theorem proposition5_2 :
     ∃ u : (Fin 3 → ℝ) → Fin 2 → ℝ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u ∧
       (∃ M : ℝ, ∀ x, ‖u x‖ ≤ M) ∧ (∀ x, jac u x ∈ L3) ∧ (∀ x, q3 (jac u x) < 0) ∧

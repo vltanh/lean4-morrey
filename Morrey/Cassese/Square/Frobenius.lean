@@ -6,6 +6,7 @@ public import Mathlib.LinearAlgebra.Dimension.FreeAndStrongRankCondition
 public import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 public import Mathlib.Analysis.Real.Sqrt
 public import Mathlib.Tactic.Module
+public import Mathlib.LinearAlgebra.Matrix.PosDef
 
 /-!
 # The Frobenius inner product and rank-one matrices
@@ -158,19 +159,22 @@ theorem square_zigzag_arith {a b c e w ρ p1 p2 pW : ℝ} (pa : 0 ≤ a) (pw : 0
   linarith
 
 set_option linter.unusedSimpArgs false in
-/-- **Zig-zag concavity of `U`** (proof of Corollary 6.4): for `X, D` symmetric and `Y, E`
-skew-symmetric with `D² + E² = λ Id`, `λ ≥ 0` (so that `EEᵀ ⪯ D²`), the second-order
-coefficient of `t ↦ U (X + t D, Y + t E)`, `U (X, Y) = ‖Y‖_{S_4}⁴ − (15/2) ‖YX‖_{S_2}² −
+/-- **Zig-zag concavity of `U`** (proof of Corollary 6.4, TeX lines 2668–2690): for `X, D`
+symmetric and `Y, E` skew-symmetric with `EEᵀ ⪯ D²`, the second-order coefficient of `t ↦ U (X + t D, Y + t E)`, `U (X, Y) = ‖Y‖_{S_4}⁴ − (15/2) ‖YX‖_{S_2}² −
 (95/4) ‖X‖_{S_4}⁴`, is `≤ 0`. In the paper's notation this coefficient is `φ''(0) / 2` with
 `φ''(0) = 2‖W‖² + 4a² − 15b² − 15c² + 15⟨W, Z⟩ − (95/2)ρ² − 95e²` (`W = YE + EY`,
 `Z = XD + DX`, `a = ‖YE‖`, `b = ‖YD‖`, `c = ‖EX‖`, `e = ‖XD‖`, `ρ = ‖Z‖`, all `S_2` norms), and
-the paper's bounds are `a ≤ b`, `c ≤ e` (from `EEᵀ ⪯ D²`), `⟨W, Z⟩ ≤ (2ae + 2bc)/3 + (2/3)(2aρ)`
+the paper's bounds are `a ≤ b`, `c ≤ e` (TeX lines 2672–2673: from `EEᵀ ⪯ D²`,
+`a² = tr (YᵀY EEᵀ) ≤ tr (YᵀY D²) = b²` and `c² = tr (EEᵀ XXᵀ) ≤ tr (D² XXᵀ) = e²`, the traces of
+products of positive semidefinite matrices being `≥ 0`), `⟨W, Z⟩ ≤ (2ae + 2bc)/3 + (2/3)(2aρ)`
 (inventory E7: `⟨W, Z⟩ = 2 tr (YEXD) + 2 tr (YEDX) ≤ 2bc + 2ae` and `⟨W, Z⟩ ≤ ‖W‖ ρ ≤ 2aρ`),
 and the quadratic-form chain
 `φ''(0) ≤ 12a² − 15b² − 15c² + 20aρ + 10ae + 10bc − (95/2)ρ² − 95e²
-  ≤ (29/2)(a² − b²) + 35(c² − e²) + (5/2)(ρ² − 4e²) ≤ 0`. -/
+  ≤ (29/2)(a² − b²) + 35(c² − e²) + (5/2)(ρ² − 4e²) ≤ 0`. The paper applies it to
+`D = Sym_{1/2} R`, `E = Skew R` with `R` of rank one, where `D² − EEᵀ = D² + E² = ¼ tr (R)² Id`
+(`square_rankOne_sq`, `square_zz_nonpos`). -/
 theorem square_zigzag {X Y D E : Matrix (Fin n) (Fin n) ℝ} (hX : Xᵀ = X) (hY : Yᵀ = -Y)
-    (hD : Dᵀ = D) (hE : Eᵀ = -E) {lam : ℝ} (hlam : 0 ≤ lam) (hDE : D * D + E * E = lam • 1) :
+    (hD : Dᵀ = D) (hE : Eᵀ = -E) (hDE : (D * D - E * Eᵀ).PosSemidef) :
     (squareFrob (Yᵀ * E + Eᵀ * Y) (Yᵀ * E + Eᵀ * Y) + 2 * squareFrob (Yᵀ * Y) (Eᵀ * E)) -
       15 / 2 * (squareFrob (Y * D + E * X) (Y * D + E * X) + 2 * squareFrob (Y * X) (E * D)) -
       95 / 4 * (squareFrob (Xᵀ * D + Dᵀ * X) (Xᵀ * D + Dᵀ * X) +
@@ -242,29 +246,34 @@ theorem square_zigzag {X Y D E : Matrix (Fin n) (Fin n) ℝ} (hX : Xᵀ = X) (hY
       rw [ne2]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]; rw [square_tr_cyc, square_tr_cyc]
     rw [e1, e2'] at h
     linarith
-  -- rank one: `b² − a² = λ ‖Y‖² ≥ 0`, `e² − c² = λ ‖X‖² ≥ 0` (`D² + E² = λ Id`)
+  -- `EEᵀ ⪯ D²`: `b² − a² = tr (Y (D² − EEᵀ) Yᵀ) ≥ 0`, `e² − c² = tr (Xᵀ (D² − EEᵀ) X) ≥ 0`
+  have hct : ∀ M : Matrix (Fin n) (Fin n) ℝ, Mᴴ = Mᵀ := fun M => by
+    ext i j; simp [Matrix.conjTranspose_apply]
   have fab : a2 ≤ b2 := by
-    have h1 : (D * (Y * (Y * D))).trace = (Y * (Y * (D * D))).trace := by rw [square_tr_cyc]
-    have h2 : (E * (Y * (Y * E))).trace = (Y * (Y * (E * E))).trace := by rw [square_tr_cyc]
-    have h3 : (Y * (Y * (D * D))).trace + (Y * (Y * (E * E))).trace = lam * (Y * Y).trace := by
-      rw [← Matrix.trace_add, ← Matrix.mul_add, ← Matrix.mul_add, hDE, Matrix.mul_smul,
-        Matrix.mul_one, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-    have hYY : squareFrob Y Y = -(Y * Y).trace := by
-      simp only [squareFrob, hY, Matrix.neg_mul, Matrix.trace_neg]
-    have := mul_nonneg hlam (squareFrob_self_nonneg Y)
-    rw [na2, nb2, h1, h2]
-    nlinarith
+    have h := (hDE.mul_mul_conjTranspose_same Y).trace_nonneg
+    rw [hct] at h
+    have e1 : (Y * (D * D - E * Eᵀ) * Yᵀ).trace = b2 - a2 := by
+      rw [hb2, ha2]
+      simp only [squareFrob, Matrix.mul_sub, Matrix.sub_mul, Matrix.trace_sub,
+        Matrix.transpose_mul, hD, Matrix.mul_assoc]
+      rw [Matrix.trace_mul_comm Y, Matrix.trace_mul_comm Y, Matrix.mul_assoc, Matrix.mul_assoc,
+        Matrix.mul_assoc, Matrix.mul_assoc]
+      rw [Matrix.trace_mul_comm D, Matrix.trace_mul_comm E]
+      simp only [Matrix.mul_assoc]
+    linarith
   have fce : c2 ≤ e2 := by
-    have h1 : (D * (X * (X * D))).trace = (X * (X * (D * D))).trace := by rw [square_tr_cyc]
-    have h2 : (X * (E * (E * X))).trace = (X * (X * (E * E))).trace := by
-      rw [square_tr_cyc, square_tr_cyc, square_tr_cyc]
-    have h3 : (X * (X * (D * D))).trace + (X * (X * (E * E))).trace = lam * (X * X).trace := by
-      rw [← Matrix.trace_add, ← Matrix.mul_add, ← Matrix.mul_add, hDE, Matrix.mul_smul,
-        Matrix.mul_one, Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-    have hXX : squareFrob X X = (X * X).trace := by simp only [squareFrob, hX]
-    have := mul_nonneg hlam (squareFrob_self_nonneg X)
-    rw [nc2, ne2, h1, h2]
-    nlinarith
+    have h := (hDE.conjTranspose_mul_mul_same X).trace_nonneg
+    rw [hct] at h
+    have e1 : (Xᵀ * (D * D - E * Eᵀ) * X).trace = e2 - c2 := by
+      have c1 : (D * (X * (X * D))).trace = (D * (D * (X * X))).trace := by
+        rw [square_tr_cyc, square_tr_cyc, square_tr_cyc]
+      have c2' : (X * (E * (E * X))).trace = (E * (E * (X * X))).trace := square_tr_cyc _ _ _ _
+      rw [he2, hc2]
+      simp only [squareFrob, Matrix.mul_sub, Matrix.sub_mul, Matrix.trace_sub,
+        Matrix.transpose_mul, hD, hX, hE, Matrix.neg_mul, Matrix.mul_neg, Matrix.trace_neg,
+        neg_neg, Matrix.mul_assoc]
+      rw [c1, c2', square_tr_cyc X]
+    linarith
   -- Cauchy–Schwarz
   have ha0 := squareFrob_self_nonneg (Y * E)
   have hb0 := squareFrob_self_nonneg (Y * D)

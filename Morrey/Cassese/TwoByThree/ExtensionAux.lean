@@ -18,15 +18,17 @@ The tools behind the proof of Lemma 5.1 (2) (`lemma5_1_part2`, in
 * for `f` `p`-homogeneous on `L` and `C²` away from the origin, the function
   `g = f ∘ π` on `V = Fin d → Fin m → ℝ` is differentiable everywhere and its derivative has the
   Lipschitz-type bound `‖Dg (Y) − Dg (Y')‖ ≤ C max (‖Y‖, ‖Y'‖)^{p−2} ‖Y − Y'‖` on `L`
-  (`tbt2_lipschitz`);
-* the comparison (28) for one step (`tbt2_comparison`), with the first-order cancellation;
-* the uniform convexity (29) for one step (`tbt2_gain`), an elementary inequality;
-* the absorption of (28) by (29) (`tbt2_absorb`);
-* a continuous midpoint-convex function of one variable is convex (`tbt2_convexOn_of_midpoint`).
+  (`tbt2_lipschitz`), across the origin too;
+* the second-order remainder of (28), `|f (X + W) − f (X + W − 𝓔) − Df (X) 𝓔|`, with the
+  first-order term taken at the starting point `X` (`tbt2_taylor`), and its splitting "for every
+  `0 < ε ≤ 1`" (`tbt2_young`);
+* the uniform convexity of `|·|^p` behind (29), pointwise with its first-order term
+  (`tbt2_gain`);
+* a continuous midpoint-convex function of one variable is convex (`tbt2_convexOn_of_midpoint`,
+  used by `Morrey/Cassese/TwoByThree/Folklore.lean`).
 
 Helpers are prefixed `tbt2_`.
 -/
-
 @[expose] public section
 
 open MeasureTheory Set
@@ -391,309 +393,353 @@ theorem tbt2_lipschitz : ∃ C : ℝ, 1 ≤ C ∧ ∀ Y Y' : Fin d → Fin m →
     exact mul_nonneg (mul_nonneg (by positivity) (Real.rpow_nonneg (le_max_of_le_left
       (norm_nonneg _)) _)) (norm_nonneg _)
 
-/-- (28) for one step, with the first-order cancellation (inventory E3): for `X, W, R_L ∈ L` and
-`𝓔 = W − R_L`, `|f (X + W) + f (X − W) − f (X + R_L) − f (X − R_L)|
-≤ 2 C (|X| + |W| + 2 |𝓔|)^{p−2} (|W| + 2 |𝓔|) |𝓔|`. The first-order terms `Dg (X) (±𝓔)` cancel
-because the two points `X ± R_L` are symmetric about `X`. -/
-theorem tbt2_comparison : ∃ C : ℝ, 1 ≤ C ∧ ∀ X W RL : Matrix (Fin d) (Fin m) ℝ, X ∈ L → W ∈ L →
-    RL ∈ L →
-    |(f (X + W) + f (X - W)) - (f (X + RL) + f (X - RL))| ≤
-      2 * C * (frobNorm X + frobNorm W + 2 * frobNorm (W - RL)) ^ (p - 2) *
-        (frobNorm W + 2 * frobNorm (W - RL)) * frobNorm (W - RL) := by
+/-- The second-order remainder in (28), with the first-order term taken at the starting point
+`X`: for `X, W, 𝓔 ∈ L`, `|f (X + W) − f (X + W − 𝓔) − Df (X) 𝓔|
+≤ C (|X| + |W| + |𝓔|)^{p−2} (|W| + |𝓔|) |𝓔|`. Along the segment from `X + W − 𝓔` to `X + W`,
+`Df (·) − Df (X)` is controlled by the Lipschitz-type bound `tbt2_lipschitz`. -/
+theorem tbt2_taylor : ∃ C : ℝ, 1 ≤ C ∧ ∀ X W E : Matrix (Fin d) (Fin m) ℝ, X ∈ L → W ∈ L →
+    E ∈ L →
+    |f (X + W) - f (X + W - E) -
+        fderiv ℝ (fun Y : Fin d → Fin m → ℝ => f (π (Matrix.of Y))) (Matrix.of.symm X)
+          (Matrix.of.symm E)| ≤
+      C * (frobNorm X + frobNorm W + frobNorm E) ^ (p - 2) * (frobNorm W + frobNorm E) *
+        frobNorm E := by
   obtain ⟨C, hC1, hC⟩ := tbt2_lipschitz hπ hp hhom hC2
-  refine ⟨C, hC1, fun X W RL hX hW hRL => ?_⟩
+  refine ⟨C, hC1, fun X W E hX hW hE => ?_⟩
   set g := fun Y : Fin d → Fin m → ℝ => f (π (Matrix.of Y)) with hg_def
   have hg := tbt2_differentiable hπ hp hhom hC2
   have hgZ : ∀ M ∈ L, g (Matrix.of.symm M) = f M := by
     intro M hM; simp only [g, Equiv.apply_symm_apply]; rw [tbt2_proj_of_mem hπ hM]
-  set E := W - RL with hE
-  have hEL : E ∈ L := L.sub_mem hW hRL
+  set ℓ := fderiv ℝ g (Matrix.of.symm X)
   set a := frobNorm X
   set w := frobNorm W
   set e := frobNorm E
-  have hRLe : RL = W - E := by rw [hE]; abel
-  -- `P s = X + R_L + s 𝓔`, `Q s = X − R_L − s 𝓔`
-  set P : ℝ → Fin d → Fin m → ℝ := fun s => Matrix.of.symm (X + RL) + s • Matrix.of.symm E
-  set Q : ℝ → Fin d → Fin m → ℝ := fun s => Matrix.of.symm (X - RL) - s • Matrix.of.symm E
-  have hPm : ∀ s : ℝ, P s = Matrix.of.symm (X + RL + s • E) := fun s => rfl
-  have hQm : ∀ s : ℝ, Q s = Matrix.of.symm (X - RL - s • E) := fun s => rfl
+  -- `P s = X + W − 𝓔 + s 𝓔`
+  set P : ℝ → Fin d → Fin m → ℝ := fun s => Matrix.of.symm (X + W - E) + s • Matrix.of.symm E
+  have hPm : ∀ s : ℝ, P s = Matrix.of.symm (X + W - E + s • E) := fun s => rfl
   have hPL : ∀ s : ℝ, tbt2_piV hπ (P s) = P s := fun s => by
     rw [tbt2_piV_eq_iff, hPm, Equiv.apply_symm_apply]
-    exact L.add_mem (L.add_mem hX hRL) (L.smul_mem s hEL)
-  have hQL : ∀ s : ℝ, tbt2_piV hπ (Q s) = Q s := fun s => by
-    rw [tbt2_piV_eq_iff, hQm, Equiv.apply_symm_apply]
-    exact L.sub_mem (L.sub_mem hX hRL) (L.smul_mem s hEL)
-  set ψ : ℝ → ℝ := fun s => g (P s) + g (Q s)
-  have hψ1 : ψ 1 = f (X + W) + f (X - W) := by
-    simp only [ψ, hPm, hQm, one_smul]
-    rw [show X + RL + E = X + W by rw [hRLe]; abel, show X - RL - E = X - W by rw [hRLe]; abel,
-      hgZ _ (L.add_mem hX hW), hgZ _ (L.sub_mem hX hW)]
-  have hψ0 : ψ 0 = f (X + RL) + f (X - RL) := by
-    simp only [ψ, hPm, hQm, zero_smul, add_zero, sub_zero]
-    rw [hgZ _ (L.add_mem hX hRL), hgZ _ (L.sub_mem hX hRL)]
-  set ψ' : ℝ → ℝ := fun s =>
-    fderiv ℝ g (P s) (Matrix.of.symm E) - fderiv ℝ g (Q s) (Matrix.of.symm E)
+    exact L.add_mem (L.sub_mem (L.add_mem hX hW) hE) (L.smul_mem s hE)
+  have hXL : tbt2_piV hπ (Matrix.of.symm X) = Matrix.of.symm X := by
+    rw [tbt2_piV_eq_iff, Equiv.apply_symm_apply]; exact hX
+  set ψ : ℝ → ℝ := fun s => g (P s) - s * ℓ (Matrix.of.symm E)
+  have hψ1 : ψ 1 = f (X + W) - ℓ (Matrix.of.symm E) := by
+    simp only [ψ, hPm, one_smul, one_mul, sub_add_cancel]
+    rw [hgZ _ (L.add_mem hX hW)]
+  have hψ0 : ψ 0 = f (X + W - E) := by
+    simp only [ψ, hPm, zero_smul, add_zero, zero_mul, sub_zero]
+    rw [hgZ _ (L.sub_mem (L.add_mem hX hW) hE)]
+  set ψ' : ℝ → ℝ := fun s => fderiv ℝ g (P s) (Matrix.of.symm E) - ℓ (Matrix.of.symm E)
   have hder : ∀ s : ℝ, HasDerivAt ψ (ψ' s) s := by
     intro s
     have hP : HasDerivAt P (Matrix.of.symm E) s :=
       (((hasDerivAt_id s).smul_const (Matrix.of.symm E)).const_add
-        (Matrix.of.symm (X + RL))).congr_deriv (by simp)
-    have hQ : HasDerivAt Q (-Matrix.of.symm E) s :=
-      (((hasDerivAt_id s).smul_const (Matrix.of.symm E)).const_sub
-        (Matrix.of.symm (X - RL))).congr_deriv (by simp)
+        (Matrix.of.symm (X + W - E))).congr_deriv (by simp)
     have h1 := (hg (P s)).hasFDerivAt.comp_hasDerivAt s hP
-    have h2 := (hg (Q s)).hasFDerivAt.comp_hasDerivAt s hQ
-    have h3 := h1.add h2
-    exact h3.congr_deriv (by simp [ψ', g, sub_eq_add_neg])
-  have hnE : ‖Matrix.of.symm E‖ ≤ e := tbt2_norm_le_frobNorm E
-  have hnX : ‖Matrix.of.symm X‖ ≤ a := tbt2_norm_le_frobNorm X
-  have hnW : ‖Matrix.of.symm W‖ ≤ w := tbt2_norm_le_frobNorm W
-  have hnRL : ‖Matrix.of.symm RL‖ ≤ w + e := by
-    have : Matrix.of.symm RL = Matrix.of.symm W - Matrix.of.symm E := by rw [hRLe]; rfl
-    rw [this]; exact (norm_sub_le _ _).trans (add_le_add hnW hnE)
+    have h2 := h1.sub ((hasDerivAt_id s).mul_const (ℓ (Matrix.of.symm E)))
+    exact h2.congr_deriv (by simp only [one_mul, ψ']; rfl)
+  have hnE : ‖(Matrix.of.symm E : Fin d → Fin m → ℝ)‖ ≤ e := tbt2_norm_le_frobNorm E
+  have hnX : ‖(Matrix.of.symm X : Fin d → Fin m → ℝ)‖ ≤ a := tbt2_norm_le_frobNorm X
+  have hnW : ‖(Matrix.of.symm W : Fin d → Fin m → ℝ)‖ ≤ w := tbt2_norm_le_frobNorm W
+  have ha0 : 0 ≤ a := Real.sqrt_nonneg _
+  have hw0 : 0 ≤ w := Real.sqrt_nonneg _
   have he0 : 0 ≤ e := Real.sqrt_nonneg _
   have hbound : ∀ s ∈ Set.Ico (0 : ℝ) 1, ‖ψ' s‖ ≤
-      2 * C * (a + w + 2 * e) ^ (p - 2) * (w + 2 * e) * e := by
+      C * (a + w + e) ^ (p - 2) * (w + e) * e := by
     intro s ⟨hs0, hs1⟩
-    have hnP : ‖P s‖ ≤ a + w + 2 * e := by
-      calc ‖P s‖ ≤ ‖Matrix.of.symm X‖ + ‖Matrix.of.symm RL‖ + s * ‖Matrix.of.symm E‖ := by
-            have : P s = Matrix.of.symm X + Matrix.of.symm RL + s • Matrix.of.symm E := rfl
-            rw [this]
-            refine (norm_add_le _ _).trans (add_le_add (norm_add_le _ _) ?_)
-            rw [norm_smul, Real.norm_of_nonneg hs0]
-        _ ≤ a + (w + e) + 1 * e := by gcongr
-        _ = a + w + 2 * e := by ring
-    have hnQ : ‖Q s‖ ≤ a + w + 2 * e := by
-      calc ‖Q s‖ ≤ ‖Matrix.of.symm X‖ + ‖Matrix.of.symm RL‖ + s * ‖Matrix.of.symm E‖ := by
-            have : Q s = Matrix.of.symm X - Matrix.of.symm RL - s • Matrix.of.symm E := rfl
-            rw [this]
-            refine (norm_sub_le _ _).trans (add_le_add (norm_sub_le _ _) ?_)
-            rw [norm_smul, Real.norm_of_nonneg hs0]
-        _ ≤ a + (w + e) + 1 * e := by gcongr
-        _ = a + w + 2 * e := by ring
-    have hPQ : ‖P s - Q s‖ ≤ 2 * (w + 2 * e) := by
-      have : P s - Q s = (2 : ℝ) • (Matrix.of.symm RL + s • Matrix.of.symm E) := by
-        show Matrix.of.symm (X + RL) + s • Matrix.of.symm E -
-          (Matrix.of.symm (X - RL) - s • Matrix.of.symm E) = _
-        ext i j; simp only [Matrix.of_symm_apply, Pi.add_apply, Pi.sub_apply, Pi.smul_apply,
-          smul_eq_mul, Matrix.add_apply, Matrix.sub_apply]; ring
-      rw [this, norm_smul, Real.norm_two]
-      gcongr
+    have hPs : P s - Matrix.of.symm X = Matrix.of.symm W - (1 - s) • Matrix.of.symm E := by
+      ext i j
+      simp only [P, Matrix.of_symm_apply, Pi.add_apply, Pi.sub_apply, Pi.smul_apply,
+        smul_eq_mul, Matrix.add_apply, Matrix.sub_apply]
+      ring
+    have hsub : ‖P s - Matrix.of.symm X‖ ≤ w + e := by
+      rw [hPs]
+      refine (norm_sub_le _ _).trans (add_le_add hnW ?_)
+      rw [norm_smul, Real.norm_of_nonneg (by linarith)]
+      nlinarith [norm_nonneg (Matrix.of.symm E : Fin d → Fin m → ℝ)]
+    have hnP : ‖P s‖ ≤ a + w + e := by
+      have : P s = Matrix.of.symm X + (P s - Matrix.of.symm X) := by abel
+      rw [this]
       refine (norm_add_le _ _).trans ?_
-      rw [norm_smul, Real.norm_of_nonneg hs0]
-      nlinarith [norm_nonneg (Matrix.of.symm E)]
-    have hmax : max ‖P s‖ ‖Q s‖ ^ (p - 2) ≤ (a + w + 2 * e) ^ (p - 2) :=
-      Real.rpow_le_rpow (le_max_of_le_left (norm_nonneg _)) (max_le hnP hnQ) (by linarith)
-    have hL := hC (P s) (Q s) (hPL s) (hQL s)
-    calc ‖ψ' s‖ = ‖(fderiv ℝ g (P s) - fderiv ℝ g (Q s)) (Matrix.of.symm E)‖ := rfl
-      _ ≤ ‖fderiv ℝ g (P s) - fderiv ℝ g (Q s)‖ * ‖Matrix.of.symm E‖ :=
+      linarith
+    have hmax : max ‖P s‖ ‖(Matrix.of.symm X : Fin d → Fin m → ℝ)‖ ^ (p - 2) ≤
+        (a + w + e) ^ (p - 2) :=
+      Real.rpow_le_rpow (le_max_of_le_left (norm_nonneg _)) (max_le hnP (by linarith))
+        (by linarith)
+    have hL := hC (P s) (Matrix.of.symm X) (hPL s) hXL
+    calc ‖ψ' s‖ = ‖(fderiv ℝ g (P s) - ℓ) (Matrix.of.symm E)‖ := rfl
+      _ ≤ ‖fderiv ℝ g (P s) - ℓ‖ * ‖(Matrix.of.symm E : Fin d → Fin m → ℝ)‖ :=
         ContinuousLinearMap.le_opNorm _ _
-      _ ≤ (C * max ‖P s‖ ‖Q s‖ ^ (p - 2) * ‖P s - Q s‖) * e :=
+      _ ≤ (C * max ‖P s‖ ‖(Matrix.of.symm X : Fin d → Fin m → ℝ)‖ ^ (p - 2) *
+            ‖P s - Matrix.of.symm X‖) * e :=
         mul_le_mul hL hnE (norm_nonneg _) (by positivity)
-      _ ≤ (C * (a + w + 2 * e) ^ (p - 2) * (2 * (w + 2 * e))) * e :=
-        mul_le_mul_of_nonneg_right (mul_le_mul (mul_le_mul_of_nonneg_left hmax (by linarith)) hPQ
-          (norm_nonneg _) (mul_nonneg (by linarith) (Real.rpow_nonneg (by
-            have : 0 ≤ a := Real.sqrt_nonneg _
-            have : 0 ≤ w := Real.sqrt_nonneg _
-            linarith) _))) he0
-      _ = 2 * C * (a + w + 2 * e) ^ (p - 2) * (w + 2 * e) * e := by ring
+      _ ≤ (C * (a + w + e) ^ (p - 2) * (w + e)) * e :=
+        mul_le_mul_of_nonneg_right (mul_le_mul (mul_le_mul_of_nonneg_left hmax (by linarith))
+          hsub (norm_nonneg _) (mul_nonneg (by linarith) (Real.rpow_nonneg (by linarith) _))) he0
   have key := norm_image_sub_le_of_norm_deriv_le_segment'
     (fun s _ => (hder s).hasDerivWithinAt) hbound 1 (Set.right_mem_Icc.mpr zero_le_one)
   rw [hψ1, hψ0, Real.norm_eq_abs, sub_zero, mul_one] at key
+  rw [show f (X + W) - f (X + W - E) - ℓ (Matrix.of.symm E) =
+    f (X + W) - ℓ (Matrix.of.symm E) - f (X + W - E) by ring]
   exact key
 
 end Smooth
 
-/-! ### (29) for one step: the elementary uniform convexity -/
+/-! ### Real inequalities: the splitting of (28) and the uniform convexity (29) -/
 
-/-- Bernoulli: `x^q + q x^{q−1} y ≤ (x + y)^q` for `x, y ≥ 0`, `q ≥ 1`. -/
-theorem tbt2_bernoulli {q x y : ℝ} (hq : 1 ≤ q) (hx : 0 ≤ x) (hy : 0 ≤ y) :
+/-- Bernoulli: `x^q + q x^{q−1} y ≤ (x + y)^q` for `x ≥ 0`, `x + y ≥ 0`, `q ≥ 1` (the tangent
+line of the convex `t ↦ t^q` at `x`). -/
+theorem tbt2_bernoulli {q x y : ℝ} (hq : 1 ≤ q) (hx : 0 ≤ x) (hxy : 0 ≤ x + y) :
     x ^ q + q * x ^ (q - 1) * y ≤ (x + y) ^ q := by
   rcases hx.lt_or_eq with hx | rfl
   · have h := one_add_mul_self_le_rpow_one_add (s := y / x) (by
-      have : 0 ≤ y / x := div_nonneg hy hx.le
-      linarith) hq
+      rw [le_div_iff₀ hx]; linarith) hq
     have e : x + y = x * (1 + y / x) := by field_simp
-    rw [e, Real.mul_rpow hx.le (by positivity)]
+    have h1 : 0 ≤ 1 + y / x := by
+      have : 0 ≤ (x + y) / x := div_nonneg hxy hx.le
+      rwa [add_div, div_self hx.ne'] at this
+    rw [e, Real.mul_rpow hx.le h1]
     have e2 : x ^ (q - 1) = x ^ q / x := Real.rpow_sub_one hx.ne' q
     rw [e2]
     have hxq : 0 < x ^ q := Real.rpow_pos_of_pos hx q
     calc x ^ q + q * (x ^ q / x) * y = x ^ q * (1 + q * (y / x)) := by field_simp
       _ ≤ x ^ q * (1 + y / x) ^ q := mul_le_mul_of_nonneg_left h hxq.le
-  · rcases hq.lt_or_eq with hq1 | rfl
-    · rw [Real.zero_rpow (by linarith), Real.zero_rpow (by linarith), zero_add, zero_add,
+  · rw [zero_add] at hxy ⊢
+    rcases hq.lt_or_eq with hq1 | rfl
+    · rw [Real.zero_rpow (by linarith), Real.zero_rpow (by linarith), zero_add,
         mul_zero, zero_mul]
-      exact Real.rpow_nonneg hy q
+      exact Real.rpow_nonneg hxy q
     · simp
 
-/-- (29) for one step: if `u + v = 2 (x + y)` (parallelogram), then
-`u^q + v^q − 2 x^q ≥ x^{q−1} y + y^q` for `q ≥ 1`. -/
-theorem tbt2_gain {q x y u v : ℝ} (hq : 1 ≤ q) (hx : 0 ≤ x) (hy : 0 ≤ y) (hu : 0 ≤ u)
-    (hv : 0 ≤ v) (huv : u + v = 2 * (x + y)) :
-    x ^ (q - 1) * y + y ^ q ≤ u ^ q + v ^ q - 2 * x ^ q := by
-  have hc := (convexOn_rpow hq).2 (Set.mem_Ici.mpr hu) (Set.mem_Ici.mpr hv)
-    (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num)
-  simp only [smul_eq_mul] at hc
-  rw [show 1 / 2 * u + 1 / 2 * v = x + y by linarith] at hc
-  have hb := tbt2_bernoulli hq hx hy
-  have hs := Real.add_rpow_le_rpow_add hx hy hq
-  have h1 : x ^ (q - 1) * y ≤ q * x ^ (q - 1) * y := by
-    have : 0 ≤ x ^ (q - 1) * y := mul_nonneg (Real.rpow_nonneg hx _) hy
-    nlinarith
-  linarith
+/-- `t^q = t^{q−1} t` for `t ≥ 0`, `q ≥ 1`. -/
+theorem tbt2_rpow_eq_mul {q t : ℝ} (hq : 1 ≤ q) (ht : 0 ≤ t) : t ^ q = t ^ (q - 1) * t := by
+  conv_lhs => rw [show q = (q - 1) + 1 by ring]
+  rw [Real.rpow_add' ht (by linarith), Real.rpow_one]
 
-/-! ### The absorption -/
+/-- The uniform convexity of `|·|^p` behind (29), pointwise (`p = 2q ≥ 2`): with `x = |α|²`,
+`y = |β|²` and `σ = 2 ⟨α, β⟩` (so `σ² ≤ 4 x y`),
+`|α + β|^p − |α|^p − p |α|^{p−2} ⟨α, β⟩ ≥ c (|α|^{p−2} |β|² + |β|^p)` for some `c = c_p > 0`.
+The paper invokes "uniform convexity of `|·|^p`" without proof or reference (a gap, filled here):
+if `|β| ≤ K |α|` (`K = 8q`), the tangent line of the convex `t ↦ t^q` at `x` (`tbt2_bernoulli`)
+gives the lower bound `q x^{q−1} y`, which controls both terms; otherwise
+`|α + β| ≥ (1 − 2/K) |β|` and the term `|β|^p` dominates. -/
+theorem tbt2_gain {q : ℝ} (hq : 1 ≤ q) : ∃ c : ℝ, 0 < c ∧ c ≤ 1 ∧ ∀ x y σ : ℝ, 0 ≤ x → 0 ≤ y →
+    σ ^ 2 ≤ 4 * x * y →
+      c * (x ^ (q - 1) * y + y ^ q) ≤ (x + σ + y) ^ q - x ^ q - q * x ^ (q - 1) * σ := by
+  set K : ℝ := 8 * q with hK
+  have hK8 : 8 ≤ K := by rw [hK]; linarith
+  set D : ℝ := (K ^ 2) ^ (q - 1)
+  have hD : 0 ≤ D := Real.rpow_nonneg (sq_nonneg _) _
+  refine ⟨1 / (8 * (1 + D)), by positivity, by
+    rw [div_le_one (by positivity)]; linarith, fun x y σ hx hy hσ => ?_⟩
+  have hc8 : 1 / (8 * (1 + D)) * (1 + D) = 1 / 8 := by field_simp
+  have hc0 : 0 < 1 / (8 * (1 + D)) := by positivity
+  have hcD : 1 / (8 * (1 + D)) ≤ 1 / 8 := by
+    rw [div_le_div_iff₀ (by positivity) (by norm_num)]; nlinarith
+  have hT : 0 ≤ x ^ (q - 1) := Real.rpow_nonneg hx _
+  have hY : 0 ≤ y ^ q := Real.rpow_nonneg hy _
+  -- `|σ| ≤ x + y`
+  have hσxy := abs_le_of_sq_le_sq' (show σ ^ 2 ≤ (x + y) ^ 2 by nlinarith [sq_nonneg (x - y)])
+    (by linarith)
+  rcases le_or_gt y (K ^ 2 * x) with hA | hB
+  · -- `|β| ≤ K |α|`: the tangent line gives `q |α|^{p−2} |β|²`
+    have hb := tbt2_bernoulli hq hx (show 0 ≤ x + (σ + y) by linarith)
+    have hyq : y ^ q ≤ D * (x ^ (q - 1) * y) := by
+      rw [tbt2_rpow_eq_mul hq hy]
+      calc y ^ (q - 1) * y ≤ (K ^ 2 * x) ^ (q - 1) * y :=
+            mul_le_mul_of_nonneg_right (Real.rpow_le_rpow hy hA (by linarith)) hy
+        _ = D * (x ^ (q - 1) * y) := by
+            rw [Real.mul_rpow (sq_nonneg _) hx]; ring
+    have hTy : 0 ≤ x ^ (q - 1) * y := mul_nonneg hT hy
+    have h1 : x ^ (q - 1) * y ≤ q * x ^ (q - 1) * y := by nlinarith
+    calc 1 / (8 * (1 + D)) * (x ^ (q - 1) * y + y ^ q)
+        ≤ 1 / (8 * (1 + D)) * ((1 + D) * (x ^ (q - 1) * y)) := by
+          apply mul_le_mul_of_nonneg_left _ hc0.le; nlinarith
+      _ = 1 / 8 * (x ^ (q - 1) * y) := by rw [← hc8]; ring
+      _ ≤ (x + σ + y) ^ q - x ^ q - q * x ^ (q - 1) * σ := by
+          rw [show x + σ + y = x + (σ + y) by ring]; nlinarith
+  · -- `|β| > K |α|`: the term `|β|^p`
+    have hy0 : 0 < y := lt_of_le_of_lt (by positivity) hB
+    have hxy : x ≤ y / K ^ 2 := by rw [le_div_iff₀ (by positivity)]; linarith
+    have hxy' : x ≤ y := hxy.trans (div_le_self hy (by nlinarith))
+    have hσ : |σ| ≤ 2 * y / K := by
+      apply abs_le_of_sq_le_sq _ (by positivity)
+      calc σ ^ 2 ≤ 4 * x * y := hσ
+        _ ≤ 4 * (y / K ^ 2) * y := by gcongr
+        _ = (2 * y / K) ^ 2 := by field_simp; ring
+    have hσ' := abs_le.mp hσ
+    have hK0 : 0 < K := by linarith
+    have hlow : y * (1 - 2 / K) ≤ x + σ + y := by
+      have : y * (1 - 2 / K) = y - 2 * y / K := by field_simp
+      linarith
+    have hpos : 0 ≤ y * (1 - 2 / K) := mul_nonneg hy (by
+      rw [sub_nonneg, div_le_one hK0]; linarith)
+    -- `(x + σ + y)^q ≥ y^q (1 − 2q/K)`
+    have h1 : y ^ q * (1 - 2 * q / K) ≤ (x + σ + y) ^ q := by
+      have hb := one_add_mul_self_le_rpow_one_add (s := -(2 / K)) (by
+        rw [neg_le_neg_iff, div_le_one hK0]; linarith) hq
+      calc y ^ q * (1 - 2 * q / K) = y ^ q * (1 + q * -(2 / K)) := by ring
+        _ ≤ y ^ q * (1 + -(2 / K)) ^ q := mul_le_mul_of_nonneg_left hb hY
+        _ = (y * (1 - 2 / K)) ^ q := by
+            rw [Real.mul_rpow hy (by rw [← sub_eq_add_neg] at *; nlinarith)]; ring_nf
+        _ ≤ (x + σ + y) ^ q := Real.rpow_le_rpow hpos hlow (by linarith)
+    have hTy : x ^ (q - 1) ≤ y ^ (q - 1) := Real.rpow_le_rpow hx hxy' (by linarith)
+    have hT' : 0 ≤ y ^ (q - 1) := Real.rpow_nonneg hy _
+    have hYe : y ^ q = y ^ (q - 1) * y := tbt2_rpow_eq_mul hq hy
+    -- `x^q ≤ y^q / K²`
+    have h2 : x ^ q ≤ y ^ q / K ^ 2 := by
+      rw [tbt2_rpow_eq_mul hq hx, hYe]
+      calc x ^ (q - 1) * x ≤ y ^ (q - 1) * (y / K ^ 2) := mul_le_mul hTy hxy hx hT'
+        _ = y ^ (q - 1) * y / K ^ 2 := by ring
+    -- `q x^{q−1} σ ≤ 2 q y^q / K`
+    have h3 : q * x ^ (q - 1) * σ ≤ 2 * q * y ^ q / K := by
+      rw [hYe]
+      have : x ^ (q - 1) * σ ≤ y ^ (q - 1) * (2 * y / K) := by
+        calc x ^ (q - 1) * σ ≤ x ^ (q - 1) * |σ| := mul_le_mul_of_nonneg_left (le_abs_self σ) hT
+          _ ≤ y ^ (q - 1) * (2 * y / K) := mul_le_mul hTy hσ (abs_nonneg _) hT'
+      calc q * x ^ (q - 1) * σ = q * (x ^ (q - 1) * σ) := by ring
+        _ ≤ q * (y ^ (q - 1) * (2 * y / K)) := mul_le_mul_of_nonneg_left this (by linarith)
+        _ = 2 * q * (y ^ (q - 1) * y) / K := by ring
+    have hk1 : 2 * q / K = 1 / 4 := by rw [hK]; field_simp; ring
+    have hk2 : 1 / K ^ 2 ≤ 1 / 64 := by
+      rw [div_le_div_iff₀ (by positivity) (by norm_num)]; nlinarith
+    have h4 : x ^ (q - 1) * y ≤ y ^ q := by
+      rw [hYe]; exact mul_le_mul_of_nonneg_right hTy hy
+    have e1 : y ^ q * (1 - 2 * q / K) = y ^ q - y ^ q * (2 * q / K) := by ring
+    have e2 : 2 * q * y ^ q / K = y ^ q * (2 * q / K) := by ring
+    have e3 : y ^ q / K ^ 2 = y ^ q * (1 / K ^ 2) := by ring
+    rw [hk1] at e1 e2 h1
+    have h5 : y ^ q * (1 / K ^ 2) ≤ y ^ q * (1 / 64) := mul_le_mul_of_nonneg_left hk2 hY
+    calc 1 / (8 * (1 + D)) * (x ^ (q - 1) * y + y ^ q) ≤ 1 / 8 * (y ^ q + y ^ q) :=
+          mul_le_mul hcD (by linarith) (by positivity) (by norm_num)
+      _ ≤ (x + σ + y) ^ q - x ^ q - q * x ^ (q - 1) * σ := by linarith
 
-theorem tbt2_aux_sq {B : ℝ} (hB : 1 ≤ B) : B ^ 2 + 8 * B ≤ B ^ 2 * (B + 2) ^ 2 := by
-  have h1 : 8 * B ≤ 8 * B ^ 2 := by nlinarith
-  have h2 : 9 ≤ (B + 2) ^ 2 := by nlinarith
-  have h3 : 0 ≤ B ^ 2 := sq_nonneg B
-  nlinarith
+/-- `(t²)^{p/2} = t^p` for `t ≥ 0`. -/
+theorem tbt2_sq_rpow {p t : ℝ} (ht : 0 ≤ t) : (t ^ 2) ^ (p / 2) = t ^ p := by
+  rw [← Real.rpow_natCast, ← Real.rpow_mul ht]
+  congr 1; push_cast; ring
 
-/-- The constant of Lemma 5.1 (2) from the Lipschitz constant `C` of `D (f ∘ π)` and `κ`. -/
-noncomputable def tbt2_c0 (p C K : ℝ) : ℝ :=
-  max (max 1 (2 * K)) (max (2 ^ (p - 1) * C * (2 ^ (p - 1) * C + 2) * K)
-    (2 ^ (p - 1) * C * 2 ^ (p - 1) * K))
+theorem tbt2_frobNorm_sq (A : Matrix (Fin d) (Fin m) ℝ) : frobNorm A ^ 2 = frobSq A :=
+  Real.sq_sqrt (tbt_frobSq_nonneg A)
 
-/-- The absorption of the error (28) by the gain (29), with `Λ ≥ c₀ / δ`. -/
-theorem tbt2_absorb {p C K δ Λ a w e n x : ℝ} (hp : 2 ≤ p) (hC : 1 ≤ C) (hK : 0 ≤ K)
-    (hδ : 0 < δ) (hδ1 : δ < 1) (hΛ : tbt2_c0 p C K / δ ≤ Λ) (ha : 0 ≤ a) (hw : 0 ≤ w)
-    (he : 0 ≤ e) (hn : 0 ≤ n) (hen : e ≤ K * n) (hx : a ^ 2 ≤ x) :
-    2 * C * (a + w + 2 * e) ^ (p - 2) * (w + 2 * e) * e ≤
-      δ * (x ^ (p / 2 - 1) * (w ^ 2 + Λ ^ 2 * n ^ 2) + (w ^ 2 + Λ ^ 2 * n ^ 2) ^ (p / 2)) := by
-  obtain ⟨B, hB_def⟩ : ∃ B : ℝ, B = 2 ^ (p - 1) * C := ⟨_, rfl⟩
-  have h2p : (1 : ℝ) ≤ 2 ^ (p - 1) := Real.one_le_rpow (by norm_num) (by linarith)
-  have hB1 : 1 ≤ B := by nlinarith
-  obtain ⟨c₀, hc₀_def⟩ : ∃ c₀ : ℝ, c₀ = tbt2_c0 p C K := ⟨_, rfl⟩
-  rw [← hc₀_def] at hΛ
-  have hc1 : 1 ≤ c₀ := hc₀_def ▸ le_max_of_le_left (le_max_left _ _)
-  have hc2 : 2 * K ≤ c₀ := hc₀_def ▸ le_max_of_le_left (le_max_right _ _)
-  have hc3 : B * (B + 2) * K ≤ c₀ := hc₀_def ▸ hB_def ▸ le_max_of_le_right (le_max_left _ _)
-  have hc4 : B * 2 ^ (p - 1) * K ≤ c₀ := hc₀_def ▸ hB_def ▸ le_max_of_le_right (le_max_right _ _)
-  have hΛc : c₀ ≤ Λ := by
-    calc c₀ ≤ c₀ / δ := by rw [le_div_iff₀ hδ]; nlinarith
-      _ ≤ Λ := hΛ
-  have hΛ0 : 0 < Λ := by linarith
-  have hδΛ : c₀ ≤ δ * Λ := by rwa [div_le_iff₀ hδ, mul_comm] at hΛ
-  obtain ⟨y, hy_def⟩ : ∃ y : ℝ, y = w ^ 2 + Λ ^ 2 * n ^ 2 := ⟨_, rfl⟩
-  rw [← hy_def]
-  have hy0 : 0 ≤ y := by rw [hy_def]; positivity
-  have hRHS : 0 ≤ δ * (x ^ (p / 2 - 1) * y + y ^ (p / 2)) := by
-    have hx0 : 0 ≤ x := (sq_nonneg a).trans hx
-    have := Real.rpow_nonneg hx0 (p / 2 - 1)
-    have := Real.rpow_nonneg hy0 (p / 2)
-    positivity
-  rcases he.lt_or_eq with he' | rfl
-  swap
-  · simpa using hRHS
-  have hx0 : 0 ≤ x := (sq_nonneg a).trans hx
+/-- The splitting of the error in (28), "for every `0 < ε ≤ 1`": pointwise,
+`C (|X| + |W| + |𝓔|)^{p−2} (|W| + |𝓔|) |𝓔|
+≤ ε (|X|^{p−2} |W|² + |W|^p) + C' (ε^{−1} |X|^{p−2} |𝓔|² + ε^{1−p} |𝓔|^p)`, with `C'` depending
+only on `C` and `p` (Young's inequality, in the elementary form of a case split on the sizes of
+`|X|`, `|W|`, `|𝓔|`). -/
+theorem tbt2_young {p C : ℝ} (hp : 2 ≤ p) (hC : 1 ≤ C) : ∃ C' : ℝ, 0 ≤ C' ∧
+    ∀ ε a w e : ℝ, 0 < ε → ε ≤ 1 → 0 ≤ a → 0 ≤ w → 0 ≤ e →
+      C * (a + w + e) ^ (p - 2) * (w + e) * e ≤
+        ε * (a ^ (p - 2) * w ^ 2 + w ^ p) +
+          C' * (ε⁻¹ * a ^ (p - 2) * e ^ 2 + ε ^ (1 - p) * e ^ p) := by
+  set B : ℝ := C * 2 ^ (p - 2)
+  set B' : ℝ := B * 2 ^ (p - 1)
+  have h2a : (1 : ℝ) ≤ 2 ^ (p - 2) := Real.one_le_rpow (by norm_num) (by linarith)
+  have h2b : (1 : ℝ) ≤ 2 ^ (p - 1) := Real.one_le_rpow (by norm_num) (by linarith)
+  have hB : 1 ≤ B := by nlinarith
+  have hB' : 1 ≤ B' := by nlinarith
+  have hB'p : B' ≤ B' ^ p := Real.self_le_rpow_of_one_le hB' (by linarith)
+  refine ⟨B ^ 2 + B + B' ^ p, by positivity, fun ε a w e hε hε1 ha hw he => ?_⟩
   have hp2 : 0 ≤ p - 2 := by linarith
-  have h2pm : (2 : ℝ) ^ (p - 1) = 2 ^ (p - 2) * 2 := by
-    rw [show p - 1 = (p - 2) + 1 by ring, Real.rpow_add_one (by norm_num)]
-  by_cases hcase : w + 2 * e ≤ a
-  · -- Case 1: use the term `x^{p/2-1} (w² + Λ² n²)` with `x^{p/2-1} ≥ a^{p-2}`
-    have hapow : (a + w + 2 * e) ^ (p - 2) ≤ 2 ^ (p - 2) * a ^ (p - 2) := by
+  have hAp : 0 ≤ a ^ (p - 2) := Real.rpow_nonneg ha _
+  have hwp : 0 ≤ w ^ p := Real.rpow_nonneg hw _
+  have hep : 0 ≤ e ^ p := Real.rpow_nonneg he _
+  have hεp : 1 ≤ ε ^ (1 - p) := Real.one_le_rpow_of_pos_of_le_one_of_nonpos hε hε1 (by linarith)
+  have hεi : 1 ≤ ε⁻¹ := by rw [le_inv_comm₀ one_pos hε, inv_one]; exact hε1
+  have hB'p0 : 0 ≤ B' ^ p := by positivity
+  -- the terms that are not used are nonnegative
+  have t1 : 0 ≤ ε * (a ^ (p - 2) * w ^ 2) := by positivity
+  have t2 : 0 ≤ ε * w ^ p := by positivity
+  have t3 : 0 ≤ ε⁻¹ * a ^ (p - 2) * e ^ 2 := by positivity
+  have t4 : 0 ≤ ε ^ (1 - p) * e ^ p := by positivity
+  have hsplit : ε * (a ^ (p - 2) * w ^ 2 + w ^ p) +
+      (B ^ 2 + B + B' ^ p) * (ε⁻¹ * a ^ (p - 2) * e ^ 2 + ε ^ (1 - p) * e ^ p) =
+      ε * (a ^ (p - 2) * w ^ 2) + ε * w ^ p + (B ^ 2 + B) * (ε⁻¹ * a ^ (p - 2) * e ^ 2) +
+        B' ^ p * (ε⁻¹ * a ^ (p - 2) * e ^ 2) + (B ^ 2 + B) * (ε ^ (1 - p) * e ^ p) +
+        B' ^ p * (ε ^ (1 - p) * e ^ p) := by ring
+  rw [hsplit]
+  have u1 : 0 ≤ B' ^ p * (ε⁻¹ * a ^ (p - 2) * e ^ 2) := by positivity
+  have u2 : 0 ≤ (B ^ 2 + B) * (ε ^ (1 - p) * e ^ p) := by positivity
+  have u3 : 0 ≤ (B ^ 2 + B) * (ε⁻¹ * a ^ (p - 2) * e ^ 2) := by positivity
+  have u4 : 0 ≤ B' ^ p * (ε ^ (1 - p) * e ^ p) := by positivity
+  rcases le_or_gt (w + e) a with h1 | h1
+  · -- `|W| + |𝓔| ≤ |X|`
+    have hpow : (a + w + e) ^ (p - 2) ≤ 2 ^ (p - 2) * a ^ (p - 2) := by
       rw [← Real.mul_rpow (by norm_num) ha]
       exact Real.rpow_le_rpow (by positivity) (by linarith) hp2
-    have hxpow : a ^ (p - 2) ≤ x ^ (p / 2 - 1) := by
-      have : a ^ (p - 2) = (a ^ 2) ^ (p / 2 - 1) := by
-        rw [← Real.rpow_two, ← Real.rpow_mul ha]; congr 1; ring
-      rw [this]
-      exact Real.rpow_le_rpow (sq_nonneg a) hx (by linarith)
-    have hap : 0 ≤ a ^ (p - 2) := Real.rpow_nonneg ha _
-    -- `B (w + 2e) e ≤ δ y`
-    have he2 : e ^ 2 ≤ K ^ 2 * n ^ 2 := by
-      rw [← mul_pow]; exact pow_le_pow_left₀ he hen 2
-    have hΛ2 : (B * (B + 2) * K) ^ 2 ≤ (δ * Λ) ^ 2 :=
-      pow_le_pow_left₀ (by positivity) (hc3.trans hδΛ) 2
-    have key : B * (w + 2 * e) * e ≤ δ * y := by
-      have t1 : 4 * δ * (B * w * e) ≤ 4 * δ ^ 2 * w ^ 2 + B ^ 2 * e ^ 2 := by
-        linear_combination sq_nonneg (2 * δ * w - B * e)
-      have hBe : 0 ≤ B * e ^ 2 := by positivity
-      have t2 : δ * (B * e ^ 2) ≤ B * e ^ 2 := mul_le_of_le_one_left hBe hδ1.le
-      have t3 : (B ^ 2 + 8 * B) * e ^ 2 ≤ (B ^ 2 + 8 * B) * (K ^ 2 * n ^ 2) :=
-        mul_le_mul_of_nonneg_left he2 (by positivity)
-      have t4 : (B ^ 2 + 8 * B) * K ^ 2 ≤ (δ * Λ) ^ 2 := by
-        have h1 : B ^ 2 + 8 * B ≤ B ^ 2 * (B + 2) ^ 2 := tbt2_aux_sq hB1
-        have h2 : (B ^ 2 + 8 * B) * K ^ 2 ≤ B ^ 2 * (B + 2) ^ 2 * K ^ 2 :=
-          mul_le_mul_of_nonneg_right h1 (sq_nonneg K)
-        have h3 : B ^ 2 * (B + 2) ^ 2 * K ^ 2 = (B * (B + 2) * K) ^ 2 := by ring
-        linarith
-      have t5 : (B ^ 2 + 8 * B) * (K ^ 2 * n ^ 2) ≤ 4 * δ ^ 2 * (Λ ^ 2 * n ^ 2) := by
-        have : (B ^ 2 + 8 * B) * (K ^ 2 * n ^ 2) = (B ^ 2 + 8 * B) * K ^ 2 * n ^ 2 := by ring
+    -- `B w e ≤ ε w² + B² e² / ε`
+    have hwe : B * w * e ≤ ε * w ^ 2 + B ^ 2 * ε⁻¹ * e ^ 2 := by
+      have hm : ε * (B * w * e) ≤ ε * (ε * w ^ 2 + B ^ 2 * ε⁻¹ * e ^ 2) := by
+        have : ε * (ε * w ^ 2 + B ^ 2 * ε⁻¹ * e ^ 2) = ε ^ 2 * w ^ 2 + B ^ 2 * e ^ 2 := by
+          field_simp
         rw [this]
-        have h6 : (δ * Λ) ^ 2 * n ^ 2 ≤ 4 * δ ^ 2 * (Λ ^ 2 * n ^ 2) := by
-          have : (δ * Λ) ^ 2 * n ^ 2 = δ ^ 2 * (Λ ^ 2 * n ^ 2) := by ring
-          rw [this]
-          have : 0 ≤ δ ^ 2 * (Λ ^ 2 * n ^ 2) := by positivity
-          linarith
-        exact (mul_le_mul_of_nonneg_right t4 (sq_nonneg n)).trans h6
-      have t6 : 4 * δ * (B * (w + 2 * e) * e) ≤ 4 * δ * (δ * y) := by
-        have e1 : 4 * δ * (B * (w + 2 * e) * e) = 4 * δ * (B * w * e) + 8 * (δ * (B * e ^ 2)) := by
-          ring
-        have e2 : 4 * δ * (δ * y) = 4 * δ ^ 2 * w ^ 2 + 4 * δ ^ 2 * (Λ ^ 2 * n ^ 2) := by
-          rw [hy_def]; ring
-        rw [e1, e2]
-        linear_combination t1 + 8 * t2 + t3 + t5
-      exact le_of_mul_le_mul_left t6 (by positivity)
-    calc 2 * C * (a + w + 2 * e) ^ (p - 2) * (w + 2 * e) * e
-        ≤ 2 * C * (2 ^ (p - 2) * a ^ (p - 2)) * (w + 2 * e) * e := by gcongr
-      _ = a ^ (p - 2) * (B * (w + 2 * e) * e) := by rw [hB_def, h2pm]; ring
-      _ ≤ a ^ (p - 2) * (δ * y) := mul_le_mul_of_nonneg_left key hap
-      _ ≤ x ^ (p / 2 - 1) * (δ * y) := mul_le_mul_of_nonneg_right hxpow (by positivity)
-      _ ≤ δ * (x ^ (p / 2 - 1) * y + y ^ (p / 2)) := by
-        have : 0 ≤ δ * y ^ (p / 2) := mul_nonneg hδ.le (Real.rpow_nonneg hy0 _)
-        rw [mul_add]; linarith
-  · -- Case 2: use the term `(w² + Λ² n²)^{p/2}`
-    push Not at hcase
-    obtain ⟨S, hS_def⟩ : ∃ S : ℝ, S = √y := ⟨_, rfl⟩
-    have hS0 : 0 ≤ S := hS_def ▸ Real.sqrt_nonneg _
-    have hSy : S ^ 2 = y := hS_def ▸ Real.sq_sqrt hy0
-    have hwS : w ≤ S := by
-      rw [show w = √(w ^ 2) from (Real.sqrt_sq hw).symm, hS_def]
-      exact Real.sqrt_le_sqrt (by rw [hy_def]; exact le_add_of_nonneg_right (by positivity))
-    have hnS : Λ * n ≤ S := by
-      rw [show Λ * n = √((Λ * n) ^ 2) from (Real.sqrt_sq (by positivity)).symm, hS_def]
-      exact Real.sqrt_le_sqrt (by rw [hy_def, mul_pow]; exact le_add_of_nonneg_left (sq_nonneg w))
-    have h2e : 2 * e ≤ S := by
-      calc 2 * e ≤ 2 * K * n := by linarith
-        _ ≤ Λ * n := mul_le_mul_of_nonneg_right (hc2.trans hΛc) hn
-        _ ≤ S := hnS
-    have hpow1 : (a + w + 2 * e) ^ (p - 2) ≤ 2 ^ (p - 2) * (w + 2 * e) ^ (p - 2) := by
-      rw [← Real.mul_rpow (by norm_num) (by positivity)]
+        nlinarith [sq_nonneg (ε * w - B * e), mul_nonneg (mul_nonneg hε.le
+          (by linarith : (0 : ℝ) ≤ B)) (mul_nonneg hw he)]
+      exact le_of_mul_le_mul_left hm hε
+    have hee : B * e ^ 2 ≤ B * ε⁻¹ * e ^ 2 := by
+      have : B * e ^ 2 = B * 1 * e ^ 2 := by ring
+      rw [this]; gcongr
+    calc C * (a + w + e) ^ (p - 2) * (w + e) * e
+        ≤ C * (2 ^ (p - 2) * a ^ (p - 2)) * (w + e) * e := by gcongr
+      _ = a ^ (p - 2) * (B * w * e + B * e ^ 2) := by ring
+      _ ≤ a ^ (p - 2) * (ε * w ^ 2 + B ^ 2 * ε⁻¹ * e ^ 2 + B * ε⁻¹ * e ^ 2) := by gcongr
+      _ = ε * (a ^ (p - 2) * w ^ 2) + (B ^ 2 + B) * (ε⁻¹ * a ^ (p - 2) * e ^ 2) := by ring
+      _ ≤ _ := by linarith
+  · -- `|X| < |W| + |𝓔|`
+    have hwe0 : 0 < w + e := lt_of_le_of_lt ha h1
+    have hpow : (a + w + e) ^ (p - 2) ≤ 2 ^ (p - 2) * (w + e) ^ (p - 2) := by
+      rw [← Real.mul_rpow (by norm_num) hwe0.le]
       exact Real.rpow_le_rpow (by positivity) (by linarith) hp2
-    have hwe : 0 < w + 2 * e := by linarith
-    have hpow2 : (w + 2 * e) ^ (p - 2) * (w + 2 * e) ≤ 2 ^ (p - 1) * S ^ (p - 1) := by
-      rw [← Real.rpow_add_one hwe.ne', show p - 2 + 1 = p - 1 by ring,
-        ← Real.mul_rpow (by norm_num) hS0]
-      exact Real.rpow_le_rpow hwe.le (by linarith) (by linarith)
-    have heS : e * Λ ≤ K * S := by
-      calc e * Λ ≤ K * n * Λ := mul_le_mul_of_nonneg_right hen hΛ0.le
-        _ = K * (Λ * n) := by ring
-        _ ≤ K * S := mul_le_mul_of_nonneg_left hnS hK
-    have hSpos : 0 < S := by linarith
-    have hSp : S ^ (p - 1) * S = y ^ (p / 2) := by
-      rw [← Real.rpow_add_one hSpos.ne', show p - 1 + 1 = p by ring, ← hSy, ← Real.rpow_two,
-        ← Real.rpow_mul hS0]
-      congr 1; ring
-    have hSp1 : 0 ≤ S ^ (p - 1) := Real.rpow_nonneg hS0 _
-    calc 2 * C * (a + w + 2 * e) ^ (p - 2) * (w + 2 * e) * e
-        ≤ 2 * C * (2 ^ (p - 2) * (w + 2 * e) ^ (p - 2)) * (w + 2 * e) * e := by gcongr
-      _ = B * ((w + 2 * e) ^ (p - 2) * (w + 2 * e)) * e := by rw [hB_def, h2pm]; ring
-      _ ≤ B * (2 ^ (p - 1) * S ^ (p - 1)) * e := by gcongr
-      _ = B * 2 ^ (p - 1) * S ^ (p - 1) * (e * Λ) / Λ := by field_simp
-      _ ≤ B * 2 ^ (p - 1) * S ^ (p - 1) * (K * S) / Λ := by
-        apply div_le_div_of_nonneg_right _ hΛ0.le
-        exact mul_le_mul_of_nonneg_left heS (by positivity)
-      _ = (B * 2 ^ (p - 1) * K) * (S ^ (p - 1) * S) / Λ := by ring
-      _ ≤ (δ * Λ) * (S ^ (p - 1) * S) / Λ := by
-        apply div_le_div_of_nonneg_right _ hΛ0.le
-        exact mul_le_mul_of_nonneg_right (hc4.trans hδΛ) (by positivity)
-      _ = δ * y ^ (p / 2) := by rw [hSp]; field_simp
-      _ ≤ δ * (x ^ (p / 2 - 1) * y + y ^ (p / 2)) := by
-        have : 0 ≤ δ * (x ^ (p / 2 - 1) * y) :=
-          mul_nonneg hδ.le (mul_nonneg (Real.rpow_nonneg hx0 _) hy0)
-        rw [mul_add]; linarith
+    have hstep : C * (a + w + e) ^ (p - 2) * (w + e) * e ≤ B * (w + e) ^ (p - 1) * e := by
+      calc C * (a + w + e) ^ (p - 2) * (w + e) * e
+          ≤ C * (2 ^ (p - 2) * (w + e) ^ (p - 2)) * (w + e) * e := by gcongr
+        _ = B * ((w + e) ^ (p - 2) * (w + e)) * e := by ring
+        _ = B * (w + e) ^ (p - 1) * e := by
+            rw [← Real.rpow_add_one hwe0.ne', show p - 2 + 1 = p - 1 by ring]
+    rcases le_or_gt e w with h2 | h2
+    · have hw0 : 0 < w := by linarith
+      have hpw : (w + e) ^ (p - 1) ≤ 2 ^ (p - 1) * w ^ (p - 1) := by
+        rw [← Real.mul_rpow (by norm_num) hw]
+        exact Real.rpow_le_rpow hwe0.le (by linarith) (by linarith)
+      have hstep2 : C * (a + w + e) ^ (p - 2) * (w + e) * e ≤ B' * w ^ (p - 1) * e := by
+        refine hstep.trans ?_
+        calc B * (w + e) ^ (p - 1) * e ≤ B * (2 ^ (p - 1) * w ^ (p - 1)) * e := by gcongr
+          _ = B' * w ^ (p - 1) * e := by ring
+      have hwp1 : 0 ≤ w ^ (p - 1) := Real.rpow_nonneg hw _
+      rcases le_or_gt (B' * e) (ε * w) with h3 | h3
+      · -- `B' |𝓔| ≤ ε |W|`
+        calc C * (a + w + e) ^ (p - 2) * (w + e) * e ≤ B' * w ^ (p - 1) * e := hstep2
+          _ = w ^ (p - 1) * (B' * e) := by ring
+          _ ≤ w ^ (p - 1) * (ε * w) := mul_le_mul_of_nonneg_left h3 hwp1
+          _ = ε * w ^ p := by rw [tbt2_rpow_eq_mul (q := p) (by linarith) hw]; ring
+          _ ≤ _ := by linarith
+      · -- `ε |W| < B' |𝓔|`
+        have hwle : w ≤ B' * ε⁻¹ * e := by
+          rw [mul_comm B', mul_assoc, ← div_eq_inv_mul, le_div_iff₀ hε]; linarith
+        have hpw2 : w ^ (p - 1) ≤ B' ^ (p - 1) * ε ^ (1 - p) * e ^ (p - 1) := by
+          calc w ^ (p - 1) ≤ (B' * ε⁻¹ * e) ^ (p - 1) :=
+                Real.rpow_le_rpow hw hwle (by linarith)
+            _ = B' ^ (p - 1) * ε ^ (1 - p) * e ^ (p - 1) := by
+                rw [Real.mul_rpow (by positivity) he, Real.mul_rpow (by positivity)
+                  (by positivity), Real.inv_rpow hε.le, ← Real.rpow_neg hε.le, neg_sub]
+        calc C * (a + w + e) ^ (p - 2) * (w + e) * e ≤ B' * w ^ (p - 1) * e := hstep2
+          _ ≤ B' * (B' ^ (p - 1) * ε ^ (1 - p) * e ^ (p - 1)) * e := by gcongr
+          _ = (B' * B' ^ (p - 1)) * ε ^ (1 - p) * (e ^ (p - 1) * e) := by ring
+          _ = B' ^ p * (ε ^ (1 - p) * e ^ p) := by
+              rw [← tbt2_rpow_eq_mul (q := p) (by linarith) he, mul_comm B',
+                ← tbt2_rpow_eq_mul (q := p) (by linarith) (by linarith)]; ring
+          _ ≤ _ := by linarith
+    · -- `|W| < |𝓔|`
+      have he0 : 0 < e := by linarith
+      have hpe : (w + e) ^ (p - 1) ≤ 2 ^ (p - 1) * e ^ (p - 1) := by
+        rw [← Real.mul_rpow (by norm_num) he]
+        exact Real.rpow_le_rpow hwe0.le (by linarith) (by linarith)
+      calc C * (a + w + e) ^ (p - 2) * (w + e) * e ≤ B * (w + e) ^ (p - 1) * e := hstep
+        _ ≤ B * (2 ^ (p - 1) * e ^ (p - 1)) * e := by gcongr
+        _ = B' * e ^ p := by rw [tbt2_rpow_eq_mul (q := p) (by linarith) he]; ring
+        _ ≤ B' ^ p * (1 * e ^ p) := by rw [one_mul]; exact mul_le_mul_of_nonneg_right hB'p hep
+        _ ≤ B' ^ p * (ε ^ (1 - p) * e ^ p) := by gcongr
+        _ ≤ _ := by linarith
 
 /-! ### Midpoint convexity -/
 
@@ -774,78 +820,5 @@ theorem tbt2_convexOn_of_midpoint {φ : ℝ → ℝ} (hc : Continuous φ)
       field_simp [show x - y ≠ 0 by linarith]; ring
     rw [e] at this
     linarith
-
-/-! ### One step of the argument: the midpoint inequality for (26) -/
-
-theorem tbt2_parallelogram (P V : Matrix (Fin d) (Fin m) ℝ) :
-    frobSq (P + V) + frobSq (P - V) = 2 * frobSq P + 2 * frobSq V := by
-  simp only [frobSq, Matrix.add_apply, Matrix.sub_apply, Finset.mul_sum,
-    ← Finset.sum_add_distrib]
-  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-
-theorem tbt2_frobNorm_sq (A : Matrix (Fin d) (Fin m) ℝ) : frobNorm A ^ 2 = frobSq A :=
-  Real.sq_sqrt (tbt_frobSq_nonneg A)
-
-/-- The midpoint inequality `2 F (A) ≤ F (A + R) + F (A − R)` for the map (26) and a rank-one
-`R`: the argument of the paper for a one-step rank-one martingale `M₁ = A ± R`. -/
-theorem tbt2_midpoint (hπ : IsFrobProj L π) (κ : ℝ) (hκ : HasRankOneCorrection L π κ) {p : ℝ}
-    (hp : 2 ≤ p) {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hrc : ∀ X ∈ L, ∀ R ∈ L, R.rank = 1 → ConvexOn ℝ Set.univ fun t : ℝ => f (X + t • R))
-    {C : ℝ} (hC1 : 1 ≤ C)
-    (hcmp : ∀ X W RL : Matrix (Fin d) (Fin m) ℝ, X ∈ L → W ∈ L → RL ∈ L →
-      |(f (X + W) + f (X - W)) - (f (X + RL) + f (X - RL))| ≤
-        2 * C * (frobNorm X + frobNorm W + 2 * frobNorm (W - RL)) ^ (p - 2) *
-          (frobNorm W + 2 * frobNorm (W - RL)) * frobNorm (W - RL))
-    {δ Λ : ℝ} (hδ : 0 < δ) (hδ1 : δ < 1) (hΛ : tbt2_c0 p C |κ| / δ ≤ Λ)
-    (A R : Matrix (Fin d) (Fin m) ℝ) (hR : R.rank = 1) :
-    2 * (f (π A) + δ * (frobSq (π A) + Λ ^ 2 * frobSq (A - π A)) ^ (p / 2)) ≤
-      (f (π (A + R)) + δ * (frobSq (π (A + R)) + Λ ^ 2 * frobSq (A + R - π (A + R))) ^ (p / 2)) +
-      (f (π (A - R)) + δ * (frobSq (π (A - R)) + Λ ^ 2 * frobSq (A - R - π (A - R))) ^ (p / 2)) := by
-  obtain ⟨RL, hRL, hRL1, hRLb⟩ := hκ R hR
-  set X := π A with hX_def
-  set W := π R with hW_def
-  have hXL : X ∈ L := (hπ A).1
-  have hWL : W ∈ L := (hπ R).1
-  rw [tbt2_proj_add hπ, tbt2_proj_sub hπ, ← hX_def, ← hW_def]
-  set N := R - W
-  set NA := A - X
-  rw [show A + R - (X + W) = NA + N by simp only [NA, N]; abel,
-    show A - R - (X - W) = NA - N by simp only [NA, N]; abel]
-  -- (a): rank-one convexity on `L`, `f (X + R_L) + f (X − R_L) ≥ 2 f (X)`
-  have ha : 2 * f X ≤ f (X + RL) + f (X - RL) := by
-    have := (hrc X hXL RL hRL hRL1).2 (Set.mem_univ (1 : ℝ)) (Set.mem_univ (-1 : ℝ))
-      (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num)
-    simp only [smul_eq_mul, one_smul, neg_smul, ← sub_eq_add_neg] at this
-    norm_num at this
-    linarith
-  -- (28)
-  have hc := hcmp X W RL hXL hWL hRL
-  -- (29)
-  set x := frobSq X + Λ ^ 2 * frobSq NA
-  set y := frobSq W + Λ ^ 2 * frobSq N
-  have hgain := tbt2_gain (q := p / 2) (x := x) (y := y)
-    (u := frobSq (X + W) + Λ ^ 2 * frobSq (NA + N)) (v := frobSq (X - W) + Λ ^ 2 * frobSq (NA - N))
-    (by linarith)
-    (add_nonneg (tbt_frobSq_nonneg _) (mul_nonneg (sq_nonneg _) (tbt_frobSq_nonneg _)))
-    (add_nonneg (tbt_frobSq_nonneg _) (mul_nonneg (sq_nonneg _) (tbt_frobSq_nonneg _)))
-    (add_nonneg (tbt_frobSq_nonneg _) (mul_nonneg (sq_nonneg _) (tbt_frobSq_nonneg _)))
-    (add_nonneg (tbt_frobSq_nonneg _) (mul_nonneg (sq_nonneg _) (tbt_frobSq_nonneg _)))
-    (by
-      have h1 := tbt2_parallelogram X W
-      have h2 := tbt2_parallelogram NA N
-      simp only [x, y]
-      linear_combination h1 + Λ ^ 2 * h2)
-  -- the absorption
-  have hen : frobNorm (W - RL) ≤ |κ| * frobNorm N :=
-    hRLb.trans (mul_le_mul_of_nonneg_right (le_abs_self κ) (Real.sqrt_nonneg _))
-  have hab := tbt2_absorb (a := frobNorm X) (w := frobNorm W) (e := frobNorm (W - RL))
-    (n := frobNorm N) (x := x) hp hC1 (abs_nonneg κ) hδ hδ1 hΛ (Real.sqrt_nonneg _)
-    (Real.sqrt_nonneg _) (Real.sqrt_nonneg _) (Real.sqrt_nonneg _) hen (by
-      rw [tbt2_frobNorm_sq]
-      exact le_add_of_nonneg_right (mul_nonneg (sq_nonneg _) (tbt_frobSq_nonneg _)))
-  rw [tbt2_frobNorm_sq, tbt2_frobNorm_sq] at hab
-  have habs := neg_abs_le ((f (X + W) + f (X - W)) - (f (X + RL) + f (X - RL)))
-  have hδg := mul_le_mul_of_nonneg_left hgain hδ.le
-  nlinarith
 
 end Cassese

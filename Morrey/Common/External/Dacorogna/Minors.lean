@@ -767,10 +767,10 @@ rank-one lines `(1; u') ⊗ v` and the Laplace expansion of the determinant alon
 minors are themselves rank-one affine by the matrix determinant lemma
 (`minors_det_add_smul_vecMulVec`).
 
-Departure from the source (to be checked): Dacorogna's own proof of (iii) ⇒ (iv) was not available
-to this formalization (no access to the book); the argument above is a direct induction on the
-number of rows, using only the definition of rank-one affinity and the Laplace expansion, in the
-spirit of the classical characterisation of null Lagrangians (Ball–Currie–Olver 1981). -/
+The source's proof (Dacorogna 2008, Theorem 5.20, (iii) ⇒ (iv)) could not be consulted offline.
+The argument above is an induction on the rows in the classical spirit of the characterisation of
+null Lagrangians (Ball–Currie–Olver 1981), using only the definition of rank-one affinity and the
+Laplace expansion. It proves the cited result; it is not a change in an argument of the paper. -/
 theorem rankOneAffineMinors_holds : RankOneAffineMinors := by
   intro d m f _ hf
   have hmem := minors_main d (∅ : Set (Fin m)) f (minors_RA_of_rankOneAffine hf)

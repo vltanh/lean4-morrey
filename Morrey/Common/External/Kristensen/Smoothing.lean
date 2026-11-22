@@ -21,9 +21,10 @@ these citations and no other proof.
 It is stated in the narrowest form in which Cassese uses it, not in the generality of the
 sources: on `ℝ^{2×m}` with `m ≥ 3`, for homogeneous quartic polynomials (the integrand to which
 Corollary 5.2 applies it is the quartic of Theorem 1.3, lifted from `ℝ^{2×3}` to `ℝ^{2×m}` through
-the first three columns). Heinz's thesis was not consulted, and the statement of Kristensen's
-Proposition 2 was not compared with this one; the proof below follows Kristensen's proof of
-Proposition 2 (p. 7), as transcribed for this formalization.
+the first three columns). Kristensen's article was read from a scan of it (pp. 6–7: Proposition 2,
+a statement about local quasiconvexity, and its proof, whose first step is the smoothing used
+here); the statement below is that smoothing step in the form Cassese applies it, and the proof
+below follows Kristensen's proof of Proposition 2 (p. 7). Heinz's thesis was not consulted.
 
 ## The proof (`smoothing_holds`)
 
@@ -81,8 +82,10 @@ open CalculusOfVariations
 the form Cassese uses for Corollary 5.2 (TeX lines 2048–2065): for `m ≥ 3`, if a homogeneous
 quartic polynomial `P : ℝ^{2×m} → ℝ` is rank-one convex and not quasiconvex at `0`, there are a
 smooth `h` and `c, C > 0` with `D²h (A) [H, H] ≥ c |H|²` for every `A` and every rank-one `H`,
-`c |A|² ≤ h (A) ≤ C (1 + |A|²)`, and `h` not quasiconvex at `0` (`|·|` the Frobenius norm). The
-sources were not consulted: this is the statement as Cassese applies it. -/
+`c |A|² ≤ h (A) ≤ C (1 + |A|²)`, and `h` not quasiconvex at `0` (`|·|` the Frobenius norm). It is
+the smoothing step of Kristensen's proof of Proposition 2 (p. 7, read from a scan of the article),
+stated as Cassese applies it; it is not the statement of Kristensen's Proposition 2. Heinz's thesis
+was not consulted. -/
 def Smoothing : Prop :=
   ∀ (m : ℕ), 3 ≤ m → ∀ P : MvPolynomial (Fin 2 × Fin m) ℝ, P.IsHomogeneous 4 →
     RankOneConvex

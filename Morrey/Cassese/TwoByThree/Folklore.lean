@@ -179,8 +179,9 @@ theorem tbt6_minors_extract {N : ℕ} {f₃ : Matrix (Fin d) (Fin m) ℝ → ℝ
   simpa using this
 
 /-- **Proposition 5.1** (`cs-prop5.1`): a polynomial `P : ℝ^{d×m} → ℝ` of degree at most `3` that
-is rank-one convex at `0` is quasiconvex. Conditional on Dacorogna's Theorem 5.20 (rank-one
-affine functions are affine combinations of minors), which its proof uses.
+is rank-one convex at `0` is quasiconvex. The proof uses Dacorogna's Theorem 5.20 (rank-one
+affine functions are affine combinations of minors), which is proved in the project
+(`External.Dacorogna.rankOneAffineMinors_holds`), so the statement has no hypothesis.
 
 Proof, after the paper (TeX lines 1402–1414). Write `P = P₀ + P₁ + P₂ + P₃` (homogeneous parts,
 `Q = P₃`). By the envelope formula (Proposition 2.1), `P (0) ≤ ∫ P dμ` for every prelaminate `μ`
@@ -195,18 +196,22 @@ quasiconvex (Dacorogna, Theorem 5.25 (i), `External.Dacorogna.quadraticForm_quas
 `P₁` is linear (`∫ ∇φ = 0`); and the `3 × 3` minors are quasiaffine (`tbt6_minor3_quasiaffine`).
 So `∫ P (A + ∇φ) ≥ P (A)`.
 
-Departures from the paper. (i) Inventory E9: "`Q` is rank-one affine at `0`. It follows that `Q`
+Departure from the paper. Inventory E9: "`Q` is rank-one affine at `0`. It follows that `Q`
 is rank-one affine" skips an argument; it is supplied by a prelaminate centred at `0` with an atom
 at an arbitrary `A` (symmetric splittings along the rank-one pieces of `A`), split once more along
 `±h R`, so that `Q (A + h R) + Q (A − h R) = 2 Q (A)` (reason 1, a repair). The paper's "`P − Q`
 is rank-one convex, since `P'' (0) = (P − Q)'' (0)`" is obtained in the same way, as the
-Legendre–Hadamard condition for `P₂`. (ii) The paper concludes from "`Q` is a linear combination
-of minors" without saying that minors are quasiaffine (null Lagrangians); that is the other
-direction of the cited Dacorogna Theorem 5.20, which `External.Dacorogna.RankOneAffineMinors`
-does not contain, and it
-is proved here by the standard divergence identities and mollification
-(`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`) (reason 1: a step the paper leaves
-implicit). -/
+Legendre–Hadamard condition for `P₂`.
+
+Not a departure: the paper concludes from "`Q` is a linear combination of minors" that `P` is
+quasiconvex, which uses that the `3 × 3` minors are quasiaffine (null Lagrangians). Dacorogna's
+Theorem 5.20, which the paper cites at this step, is the full equivalence "quasiaffine ⇔ rank-one
+affine ⇔ affine combination of minors"; the proposition `External.Dacorogna.RankOneAffineMinors`
+records only the direction "rank-one affine ⇒ affine combination of minors", and the direction
+"minors ⇒ quasiaffine" of the same cited theorem is proved here, by the standard divergence
+identities and mollification (`tbt6_minor3_quasiaffine`,
+`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`). This proves part of the cited result;
+the argument of the proposition is the paper's. -/
 theorem proposition5_1
     (P : MvPolynomial (Fin d × Fin m) ℝ) (hP : P.totalDegree ≤ 3)
     (hrc : RankOneConvexAt (fun A => MvPolynomial.eval (fun ij => A ij.1 ij.2) P) 0) :

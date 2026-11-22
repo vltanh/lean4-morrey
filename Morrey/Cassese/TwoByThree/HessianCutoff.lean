@@ -450,8 +450,14 @@ Proof, as in the paper (TeX 2159–2191: "the proof of Theorem 1.3 now applies u
 matrices of rank at most one (`tbt5_rankOneConvex_hessB`). Failure of Hessian quasiconvexity at
 `0`: the potential `φ` with `∇φ = Re Ψ (ζ)`, `Ψ = (z + z³/3, i (z − z³/3), z²)` (`F' = 1 + z`,
 `G' = z (1 + z)`), has `V = B D²φ ∈ 𝓛₃`, `q₃ (V) < 0` and `∫_{B_R} |V|⁴ ≲ log (2 + R)`
-(`Morrey/Cassese/TwoByThree/Hessian.lean`); it is cut off as `φ_R = χ (·/R) φ`, so that
-`B D²φ_R = χ_R V + E_R` with `E_R = B (∇χ_R ⊗ ∇φ + ∇φ ⊗ ∇χ_R + φ D²χ_R)` (Leibniz, scaling),
+(`Morrey/Cassese/TwoByThree/Hessian.lean`). As the paper says ("the negativity and integrability
+estimates for `u` in Proposition 5.2 still apply"), these are the estimates of the proof of
+Proposition 5.2, made in the coordinates `(ζ, τ)` of that proof: `q₃ (V) ∈ L¹` because
+`|q₃ (V)| ≤ 16 |q₃ (∇u)|` and `q₃ (∇u) ∈ L¹` by the change of variables to `(ζ, τ)`
+(`tbt6_integrable_q3_V`, `tbt_integrable_q3`), and the energy bound is `|V| ≲ |s|⁻¹`
+(`tbt5_frobSq_V_sq_le`) fed into the `(ζ, τ)` computation of `∫_{B_R} |s|⁻⁴`
+(`tbt5_V_log_bound`, `tbt_log_bound_of_le`, Morrey/Cassese/TwoByThree/Witness.lean). The
+potential is cut off as `φ_R = χ (·/R) φ`, so that `B D²φ_R = χ_R V + E_R` with `E_R = B (∇χ_R ⊗ ∇φ + ∇φ ⊗ ∇χ_R + φ D²χ_R)` (Leibniz, scaling),
 and `|E_R|² ≲ R⁻²` because `∇φ` is bounded and `φ` grows linearly (`tbt6_frobSq_ER_le`). The
 energy estimate of the proof of Theorem 1.3 (`tbt4_energy`, Morrey/Cassese/TwoByThree/
 WitnessCutoff.lean) gives `∫ q_{δ,Λ} (B D²φ_R) ≤ I₁ + O (√δ)` with `I₁ = ∫_{B₁} q₃ (V) < 0`

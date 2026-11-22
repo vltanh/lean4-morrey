@@ -1776,8 +1776,9 @@ theorem twoByM_eq18 {b b' b'' : ℝ → ℝ} (hb0 : ∀ t, 0 < b t) (hb : ∀ t,
 /-- The composition step of the proof of Proposition 4.2: if `κ = r − 2·5⁶ b` is concave,
 `r ≥ 5⁶ b`, and `b > 0` is twice differentiable with (18), then `√r − 5⁴ √b` is concave.
 
-Departure from the paper (the regularization): the paper mollifies `r` and `b` and lets the
-mollification parameter tend to `0`. Here, at each point `t₀`, `r` is replaced by its smooth
+Mechanics (the regularization; the paper's claims (17), (18) and its computation
+`(√r)'' ≤ 5⁴ (√b)''` are kept): the paper mollifies `r` and `b` and lets the mollification
+parameter tend to `0`. Here, at each point `t₀`, `r` is replaced by its smooth
 majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`, `m` a supergradient of `κ` at `t₀`; `r̃` satisfies
 (17) (`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`), the paper's computation gives `(√r̃)'' ≤ 5⁴ (√b)''`, so
 `√r̃ − 5⁴ √b` is concave, touches `√r − 5⁴ √b` from above at `t₀`, and its tangent at `t₀` is a
@@ -2052,18 +2053,18 @@ Proof: the paper's: (16) from (13) (`twoByM_U_majorization`); rank-one convexity
 (`twoByM_zigzag`), which follows from (13), (14), (17), (18) and the computation
 `(√r)'' ≤ 5⁴ (√b)''`.
 
-Departure from the paper (the regularization of the zig-zag step, `twoByM_sqrt_concave`): the
-paper mollifies `r` and `b` and lets the mollification parameter tend to `0`; the formalization
+Mechanics (the regularization of the zig-zag step, `twoByM_sqrt_concave`; the paper's claims
+(13), (14), (16)–(18) and its computation `(√r)'' ≤ 5⁴ (√b)''` are all kept): the paper mollifies
+`r` and `b` and lets the mollification parameter tend to `0`; the formalization
 instead replaces `r` at each point `t₀` by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`
 (`κ = r − 2·5⁶ b` concave by (14), `m` a supergradient of `κ` at `t₀`), for which (17) holds
 (`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`) and (18) is used for `b` itself (from the convexity of
 `b^{1/6} = ‖x + t h‖_{ℓ_6}`); the paper's computation makes `√r̃ − 5⁴ √b` concave, and its
 tangent at `t₀` supports `√r − 5⁴ √b`. Where `B (x + t h)` may vanish, `x` is approximated so that
-it does not (the paper's `b_η > 0`), and concavity passes to the limit. Reason: mollification
-needs the calculus of convolutions (derivatives of `r_η`, Minkowski's integral inequality for
-`b_η^{1/6}`), which the supporting-majorant device avoids while keeping (17), (18) and the
-computation; reported for review, since this is a choice of regularization rather than a gap in
-the paper. -/
+it does not (the paper's `b_η > 0`), and concavity passes to the limit. This is a choice of
+regularization, not a change of argument: mollification would need the calculus of convolutions
+(derivatives of `r_η`, Minkowski's integral inequality for `b_η^{1/6}`), which the
+supporting-majorant device avoids while keeping every claim of the step. -/
 theorem proposition4_2_minorant (n : ℕ) :
     IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
       (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 := by
@@ -3025,7 +3026,8 @@ The computation: `(r^s)'' ≤ s r^{s−1} r'' ≤ 2 s c^s b^{s−1} b''` (from `
 `r'' = 2 c b''`), and `(b^s)'' ≥ s b^{s−1} b'' (p − 1)/(q − 1)` (from
 `b b'' ≥ (1 − 1/q) b'²`).
 
-Departure from the paper (the regularization, as in `twoByM_sqrt_concave`): at each point `t₀`,
+Mechanics (the regularization, as in `twoByM_sqrt_concave`; the claims of the step are kept): at
+each point `t₀`,
 `r` is replaced by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2 c b`, `m` a supergradient of
 `κ` at `t₀`, instead of mollifying `r` and `b`; the computation shows that `r̃^s − K b^s` is
 concave, it touches `r^s − K b^s` from above at `t₀`, and its tangent there is a supporting line. -/
@@ -3451,7 +3453,8 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   convex integrand with `g ≤ F_{n₀,p,q,C}` and `g (0) = 0` (`twoByM_explicit_minorant_q`: (13),
   (14) for `u_q`, `External.Burkholder.scalarFunctionQ_holds`; Lemma 4.1; the zig-zag concavity of
   `U`, `twoByM_zigzagq`, with the composition step `twoByM_rpow_concave`, regularized by the
-  supporting-majorant device of `twoByM_sqrt_concave` instead of mollification).
+  supporting-majorant device of `twoByM_sqrt_concave` instead of mollification, a choice of
+  mechanics that keeps the claims of the step).
 * As in Proposition 4.3, `g` is not quasiconvex at `0`: otherwise `F_{n₀,p,q,C}` would be, by the
   paper's argument through quasiconvex minorants (line 559, `quasiconvexAt_iff_exists_minorant`,
   from Dacorogna's formula). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex

@@ -28,11 +28,13 @@ where their statements can live:
   `Morrey/Cassese/Hypotheses.lean`: `burkholderInequality_holds`,
   `burkholderSquareFunction_holds`);
 * Proposition 2.6 (`cs-prop2.6`): `External.Osekowski.HilbertCharacterization` (context only);
-* Definition 2.5: `umdConst`, `umdConstWith`, `complexUMDConst` (shared block);
-* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2),
-  `PisierLpUMD` (3), `YaroslavtsevComplexUMD` (5) (hypotheses, shared block), and
-  `HNVWDyadicUMD` (4), `HNVWZigZag` (6) (here; used only in Remark 4.1);
-* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (hypothesis, shared block).
+* Definition 2.5: `umdConstWith` (`Defs`, shared block), `umdConst`, `complexUMDConst` (`Defs`,
+  after the shared block);
+* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2)
+  (hypotheses, `Defs`, shared block), `PisierLpUMD` (3), `YaroslavtsevComplexUMD` (5)
+  (hypotheses, `Defs`, after the shared block), and `HNVWDyadicUMD` (4), `HNVWZigZag` (6) (here;
+  used only in Remark 4.1);
+* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (hypothesis, `Defs`, shared block).
 
 Definitions here:
 
@@ -64,8 +66,10 @@ Proofs (after the definitions; the private helpers are prefixed `tk`):
 * Proposition 2.4 by the paper's argument (`tk_midpoint_principle`, with the Bernstein–Doetsch
   theorem `tk_convex_of_midpoint` and Lemma 2.1 for continuity); it is stated before
   Proposition 2.1, which Remark 2.1 derives from it;
-* the envelopes as the largest minorants (`tk_rc_cases`, `tk_qc_cases`), and their transformations
-  (`tk_rc_transform`, `tk_qc_scale`) for Proposition 2.3 and its consequences;
+* the envelopes as the largest minorants (`tk_rc_cases`, `tk_qc_cases`), for line 559,
+  Proposition 2.3 (c) and the consequences of Proposition 2.3; Proposition 2.3 (a), (b) from the
+  dual formulas, by transporting prelaminates (`tk_prelaminate_image`, `tk_rc_transform`, for
+  Proposition 2.1) and the test maps of Dacorogna's formula (`tk_qc_scale`, `tk_ball_conj`);
 * public helpers that the later sections share: integrands, derivative matrices and the unit cube
   (`isIntegrand_of_continuous`, `abs_jac_le`, `measurable_jac`, `integrableOn_comp_jac`,
   `volume_unitCube`), the bridges that line 559 needs (`cov_quasiconvexAtOn_unitCube_iff`,
@@ -944,68 +948,121 @@ private lemma tk_qc_cases {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continu
     linarith
   exact ⟨Q, hQI, hQQ, hQf, fun h a b c => hmax h ⟨a, b, c⟩, hfin⟩
 
-/-! ### Transformations of minorants -/
+/-! ### Transformations of the envelopes -/
 
-/-- Precomposing a rank-one convex `G` with a linear map that preserves the rank, and scaling by
-`c ≥ 0`, gives a rank-one convex function. -/
-private lemma tk_rankOneConvex_comp {G : Matrix (Fin d) (Fin m) ℝ → ℝ} (hG : RankOneConvex G)
-    (L : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ) (hL : ∀ X, (L X).rank = X.rank)
-    {c : ℝ} (hc : 0 ≤ c) : RankOneConvex (fun A => c * G (L A)) := by
-  intro A B hAB
-  have h := (hG (L A) (L B) (by rw [← map_sub, hL, hAB])).smul hc
-  convert h using 2 with t
-  simp only [map_add, map_smul, smul_eq_mul]
+/-- Definition 2.3 makes each envelope `≡ −∞` or finite: if a function `g₀ ≤ f` of the class
+exists, `g₀ (A) ≤ sup ≤ f (A)`; otherwise the supremum is empty. -/
+private lemma tk_env_finite {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (P : (Matrix (Fin d) (Fin m) ℝ → ℝ) → Prop) (hP : ∀ g, P g → ∀ B, g B ≤ f B) :
+    (∀ A, (⨆ (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g), (g A : EReal)) = ⊥) ∨
+      ∃ G : Matrix (Fin d) (Fin m) ℝ → ℝ,
+        ∀ A, (⨆ (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g), (g A : EReal)) = G A := by
+  by_cases hex : ∃ g₀, P g₀
+  · obtain ⟨g₀, hg₀⟩ := hex
+    refine Or.inr ⟨fun A => (⨆ (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g), (g A : EReal)).toReal,
+      fun A => ?_⟩
+    have hge : (g₀ A : EReal) ≤ ⨆ (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g), (g A : EReal) :=
+      le_iSup₂ (f := fun (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g) => (g A : EReal)) g₀ hg₀
+    have hle : (⨆ (g : Matrix (Fin d) (Fin m) ℝ → ℝ) (_ : P g), (g A : EReal)) ≤ f A :=
+      iSup₂_le fun g hg => EReal.coe_le_coe_iff.2 (hP g hg A)
+    exact (EReal.coe_toReal (hle.trans_lt (EReal.coe_lt_top _)).ne
+      ((EReal.bot_lt_coe _).trans_le hge).ne').symm
+  · exact Or.inl fun A => iSup₂_eq_bot.2 fun g hg => (hex ⟨g, hg⟩).elim
 
-/-- If `G` is the largest rank-one convex integrand below `f`, `L` is a rank-preserving linear
-map and `c f (L B) ≤ f (B)`, then `c G (L A) ≤ G (A)`. -/
-private lemma tk_rc_transform {f G : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hG : IsIntegrand G ∧ RankOneConvex G ∧ ∀ B, G B ≤ f B)
-    (hmax : ∀ h : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand h → RankOneConvex h →
-      (∀ B, h B ≤ f B) → ∀ A, h A ≤ G A)
+/-- `f^{rc}` is `≡ −∞` or finite (Definition 2.3). -/
+private lemma tk_rc_finite (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    (∀ A, rcEnvelope f A = ⊥) ∨ ∃ G : Matrix (Fin d) (Fin m) ℝ → ℝ, ∀ A, rcEnvelope f A = G A :=
+  tk_env_finite (f := f) (fun g => IsIntegrand g ∧ RankOneConvex g ∧ ∀ B, g B ≤ f B)
+    fun _ hg => hg.2.2
+
+/-- `f^{qc}` is `≡ −∞` or finite (Definition 2.3). -/
+private lemma tk_qc_finite (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    (∀ A, qcEnvelope f A = ⊥) ∨ ∃ Q : Matrix (Fin d) (Fin m) ℝ → ℝ, ∀ A, qcEnvelope f A = Q A :=
+  tk_env_finite (f := f) (fun g => IsIntegrand g ∧ Quasiconvex g ∧ ∀ B, g B ≤ f B)
+    fun _ hg => hg.2.2
+
+/-- The image `L_# μ` of a prelaminate under a linear map `L` that preserves the rank is a
+prelaminate: the image of a splitting along `(t, R)` is the splitting of the image along
+`(t, L R)`. -/
+private lemma tk_isPrelaminate_map (L : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ)
+    (hL : ∀ X, (L X).rank = X.rank) {μ : Measure (Matrix (Fin d) (Fin m) ℝ)}
+    (h : IsPrelaminate μ) : IsPrelaminate (μ.map L) := by
+  have hLm : Measurable L := (LinearMap.continuous_of_finiteDimensional L).measurable
+  have hmap : ∀ (a : ℝ≥0∞) (X : Matrix (Fin d) (Fin m) ℝ),
+      (a • Measure.dirac X).map L = a • Measure.dirac (L X) := fun a X => by
+    rw [Measure.map_smul _ hLm.aemeasurable, Measure.map_dirac]
+  have hmap2 : ∀ (a b : ℝ≥0∞) (X : Matrix (Fin d) (Fin m) ℝ),
+      (a • b • Measure.dirac X).map L = a • b • Measure.dirac (L X) := fun a b X => by
+    rw [Measure.map_smul _ hLm.aemeasurable, hmap]
+  induction h with
+  | dirac A => rw [Measure.map_dirac]; exact .dirac _
+  | @split μ ν c A₀ R t _ he hR ht0 ht1 ih =>
+    have he' : μ.map L = c • Measure.dirac (L A₀) + ν.map L := by
+      rw [he, Measure.map_add _ _ hLm, hmap]
+    have := IsPrelaminate.split ih he' (by rw [hL]; exact hR) ht0 ht1
+    rw [Measure.map_add _ _ hLm, Measure.map_add _ _ hLm, hmap2, hmap2, map_add, map_sub, map_smul,
+      map_smul]
+    exact this
+
+/-- For a good `μ` and a linear `L`, `∫ (L X)_{ij} dμ = (L (bary μ))_{ij}`, by the linearity of the
+integral (`L X = Σ_{kl} X_{kl} L (E_{kl})`). -/
+private lemma tk_integral_linear {μ : Measure (Matrix (Fin d) (Fin m) ℝ)} (hμ : tkGood μ)
+    (L : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ) (i : Fin d) (j : Fin m) :
+    ∫ X, L X i j ∂μ = L (tkBary μ) i j := by
+  have hX : ∀ X : Matrix (Fin d) (Fin m) ℝ,
+      L X i j = ∑ k, ∑ l, X k l * L (Matrix.single k l 1) i j := by
+    intro X
+    conv_lhs => rw [Matrix.matrix_eq_sum_single X]
+    simp only [map_sum, Matrix.sum_apply]
+    refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
+    rw [show Matrix.single k l (X k l) = X k l • Matrix.single k l (1 : ℝ) by
+      rw [Matrix.smul_single, smul_eq_mul, mul_one], map_smul, Matrix.smul_apply, smul_eq_mul]
+  rw [show (fun X => L X i j) = fun X => ∑ k, ∑ l, X k l * L (Matrix.single k l 1) i j from
+    funext hX, hX (tkBary μ), integral_finsetSum _ fun k _ => hμ.2 _]
+  refine Finset.sum_congr rfl fun k _ => ?_
+  rw [integral_finsetSum _ fun l _ => hμ.2 _]
+  refine Finset.sum_congr rfl fun l _ => ?_
+  rw [integral_mul_const]
+  rfl
+
+/-- The image of a prelaminate `μ ∈ 𝒫ℒ (A)` under a rank-preserving linear map `L` is a
+prelaminate in `𝒫ℒ (L A)`, and `⟨f, L_# μ⟩ = ⟨f ∘ L, μ⟩`. -/
+private lemma tk_prelaminate_image (L : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ)
+    (hL : ∀ X, (L X).rank = X.rank) {μ : Measure (Matrix (Fin d) (Fin m) ℝ)}
+    {A : Matrix (Fin d) (Fin m) ℝ} (hμ : IsPrelaminate μ ∧ IsBarycentre μ A)
+    (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
+    (IsPrelaminate (μ.map L) ∧ IsBarycentre (μ.map L) (L A)) ∧
+      ∫ X, f X ∂(μ.map L) = ∫ X, f (L X) ∂μ := by
+  have hLm : Measurable L := (LinearMap.continuous_of_finiteDimensional L).measurable
+  have hμL := tk_isPrelaminate_map L hL hμ.1
+  have hgood := (tk_prelaminate hμ.1).1
+  have hgoodL := (tk_prelaminate hμL).1
+  refine ⟨⟨hμL, fun i j => ?_⟩, integral_map hLm.aemeasurable (hgoodL.2 f).aestronglyMeasurable⟩
+  rw [integral_map hLm.aemeasurable (hgoodL.2 _).aestronglyMeasurable,
+    tk_integral_linear hgood L i j, tk_isBarycentre_iff.1 hμ.2]
+
+/-- Proposition 2.1 transported by a linear map, for a finite `f^{rc} = G`: if `L` preserves the
+rank and `c f (L B) = f (B)` with `c ≥ 0`, then `c G (L A) ≤ G (A)`. For `μ ∈ 𝒫ℒ (A)`,
+`L_# μ ∈ 𝒫ℒ (L A)` (`tk_prelaminate_image`), so `c G (L A) ≤ c ⟨f, L_# μ⟩ = ⟨c f ∘ L, μ⟩ = ⟨f, μ⟩`;
+take the infimum over `μ`. -/
+private lemma tk_rc_transform {f G : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
+    (hGe : ∀ A, rcEnvelope f A = G A)
     (L : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ) (hL : ∀ X, (L X).rank = X.rank)
-    {c : ℝ} (hc : 0 ≤ c) (hfL : ∀ B, c * f (L B) ≤ f B) (A : Matrix (Fin d) (Fin m) ℝ) :
+    {c : ℝ} (hc : 0 ≤ c) (hfL : ∀ B, c * f (L B) = f B) (A : Matrix (Fin d) (Fin m) ℝ) :
     c * G (L A) ≤ G A := by
-  have hrc := tk_rankOneConvex_comp hG.2.1 L hL hc
-  refine hmax _ (isIntegrand_of_continuous (tk_continuous_of_rankOneConvex hrc)) hrc
-    (fun B => (mul_le_mul_of_nonneg_left (hG.2.2 _) hc).trans (hfL B)) A
+  rw [← EReal.coe_le_coe_iff, ← hGe, proposition2_1 hf A]
+  refine le_iInf₂ fun μ hμ => ?_
+  obtain ⟨hμL, hint⟩ := tk_prelaminate_image L hL hμ f
+  have h1 : G (L A) ≤ ∫ X, f (L X) ∂μ := by
+    rw [← hint, ← EReal.coe_le_coe_iff, ← hGe, proposition2_1 hf (L A)]
+    exact iInf₂_le (μ.map L) hμL
+  rw [EReal.coe_le_coe_iff]
+  calc c * G (L A) ≤ c * ∫ X, f (L X) ∂μ := mul_le_mul_of_nonneg_left h1 hc
+    _ = ∫ X, f X ∂μ := by rw [← integral_const_mul]; simp only [hfL]
 
-/-- If `Q` is the largest quasiconvex integrand below `f`, `s ≠ 0` and `c f (s⁻¹ B) ≤ f (B)` with
-`c > 0`, then `c Q (s⁻¹ A) ≤ Q (A)`: `A ↦ c Q (s⁻¹ A)` is a quasiconvex integrand, since
-`s⁻¹ (A + ∇φ) = s⁻¹ A + ∇ (s⁻¹ φ)`. -/
-private lemma tk_qc_scale {f Q : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hQ : IsIntegrand Q ∧ Quasiconvex Q ∧ ∀ B, Q B ≤ f B)
-    (hmax : ∀ h : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand h → Quasiconvex h →
-      (∀ B, h B ≤ f B) → ∀ A, h A ≤ Q A)
-    {s c : ℝ} (hc : 0 < c) (hfL : ∀ B, c * f (s⁻¹ • B) ≤ f B)
-    (A : Matrix (Fin d) (Fin m) ℝ) : c * Q (s⁻¹ • A) ≤ Q A := by
-  obtain ⟨hQI, hQQ, hQf⟩ := hQ
-  have hI : IsIntegrand fun A => c * Q (s⁻¹ • A) := by
-    refine ⟨?_, fun A => ?_⟩
-    · have h1 : LowerSemicontinuous fun A : Matrix (Fin d) (Fin m) ℝ => Q (s⁻¹ • A) :=
-        hQI.1.comp (continuous_const_smul _)
-      have hcont : Continuous fun x : ℝ => c * x := continuous_const.mul continuous_id
-      exact hcont.comp_lowerSemicontinuous h1 fun a b hab => mul_le_mul_of_nonneg_left hab hc.le
-    · obtain ⟨U, hU, C, hC⟩ := hQI.2 (s⁻¹ • A)
-      refine ⟨(fun B => s⁻¹ • B) ⁻¹' U, (continuous_const_smul _).continuousAt.preimage_mem_nhds hU,
-        c * C, fun B hB => ?_⟩
-      rw [abs_mul, abs_of_pos hc]
-      exact mul_le_mul_of_nonneg_left (hC _ hB) hc.le
-  have hq : Quasiconvex fun A => c * Q (s⁻¹ • A) := by
-    intro B φ K hφ h0 _
-    have hψ : LipschitzWith (‖s⁻¹‖₊ * K) (fun y => s⁻¹ • φ y) := (lipschitzWith_smul s⁻¹).comp hφ
-    have h0' : ∀ x ∉ unitCube m, (fun y => s⁻¹ • φ y) x = 0 := fun x hx => by
-      simp [h0 x hx]
-    have key := hQQ (s⁻¹ • B) _ _ hψ h0' (tk_integrableOn_comp hQI _ hψ (by
-      rw [volume_unitCube]; exact ENNReal.one_lt_top))
-    have e : ∀ x, s⁻¹ • (B + jac φ x) = s⁻¹ • B + jac (fun y => s⁻¹ • φ y) x := fun x => by
-      rw [tk_jac_smul, smul_add]
-    simp only [e]
-    rw [integral_const_mul]
-    exact mul_le_mul_of_nonneg_left key hc.le
-  exact hmax _ hI hq (fun B => (mul_le_mul_of_nonneg_left (hQf _) hc.le).trans (hfL B)) A
-
-/-- The homogeneity of a maximal minorant: if `|s|^p G (s⁻¹ A) ≤ G (A)` whenever `f` is
-homogeneous under `s`, then `G (s A) = |s|^p G (A)` for every such `s`. -/
+/-- Homogeneity from the scaling inequality: if `|s|^p G (s⁻¹ A) ≤ G (A)` whenever `f` is
+homogeneous under `s`, then `G (s A) = |s|^p G (A)` for every such `s` (apply it to `s` and to
+`s⁻¹`). -/
 private lemma tk_hom_core {p : ℝ} {f G : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hprin : ∀ s : ℝ, s ≠ 0 → (∀ B, f (s • B) = |s| ^ p * f B) →
       ∀ A, |s| ^ p * G (s⁻¹ • A) ≤ G A)
@@ -1035,7 +1092,7 @@ private lemma tk_zero_of_hom {p : ℝ} (hp : 0 < p) {G : Matrix (Fin d) (Fin m) 
   have h2 : (1 : ℝ) < 2 ^ p := Real.one_lt_rpow (by norm_num) hp
   nlinarith [h]
 
-/-- The two homogeneity types, for a maximal minorant `G` of a homogeneous `f`. -/
+/-- The two homogeneity types, for a `G` satisfying the scaling inequality of `tk_hom_core`. -/
 private lemma tk_hom_types {p : ℝ} (hp : 0 < p) {f G : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hprin : ∀ s : ℝ, s ≠ 0 → (∀ B, f (s • B) = |s| ^ p * f B) →
       ∀ A, |s| ^ p * G (s⁻¹ • A) ≤ G A) :
@@ -1054,10 +1111,10 @@ private lemma tk_smul_linear_rank {s : ℝ} (hs : s ≠ 0) (X : Matrix (Fin d) (
   simp only [LinearMap.smul_apply, LinearMap.id_apply]
   exact Matrix.rank_smul_of_mem_nonZeroDivisors _ (mem_nonZeroDivisors_of_ne_zero hs)
 
-/-- The scaling inequality `|s|^p f (s⁻¹ B) ≤ f (B)` from the homogeneity of `f` under `s`. -/
+/-- The scaling identity `|s|^p f (s⁻¹ B) = f (B)` from the homogeneity of `f` under `s`. -/
 private lemma tk_scale_f {p : ℝ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ} {s : ℝ} (hs : s ≠ 0)
     (hfs : ∀ B, f (s • B) = |s| ^ p * f B) (B : Matrix (Fin d) (Fin m) ℝ) :
-    |s| ^ p * f (s⁻¹ • B) ≤ f B := by
+    |s| ^ p * f (s⁻¹ • B) = f B := by
   rw [← hfs, smul_smul, mul_inv_cancel₀ hs, one_smul]
 
 /-! ### Cassese's quasiconvexity and the textbook one -/
@@ -1155,22 +1212,76 @@ theorem quasiconvexAt_iff_exists_minorant
     exact (hgQ A φ K hφ h0 (tk_integrableOn_comp hgI A hφ hvol)).trans
       (setIntegral_mono (tk_integrableOn_comp hgI A hφ hvol) hint fun x => hgf _)
 
+/-- Dacorogna's formula (Proposition 2.2) for a finite `f^{qc} = Q`: `Q (A)` is below every
+average `⨍_B f (A + ∇φ)` over the test maps `φ` of the unit ball `B`, and is the largest such
+bound. -/
+private lemma tk_qc_formula {f Q : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
+    (hQe : ∀ A, qcEnvelope f A = Q A) (A : Matrix (Fin d) (Fin m) ℝ) :
+    (∀ φ : (Fin m → ℝ) → Fin d → ℝ, (∃ K, LipschitzWith K φ) →
+      (∀ x ∉ CalculusOfVariations.unitBall m, φ x = 0) →
+        Q A ≤ (volume (CalculusOfVariations.unitBall m)).toReal⁻¹ *
+          ∫ x in CalculusOfVariations.unitBall m, f (A + jac φ x)) ∧
+    ∀ y : ℝ, (∀ φ : (Fin m → ℝ) → Fin d → ℝ, (∃ K, LipschitzWith K φ) →
+      (∀ x ∉ CalculusOfVariations.unitBall m, φ x = 0) →
+        y ≤ (volume (CalculusOfVariations.unitBall m)).toReal⁻¹ *
+          ∫ x in CalculusOfVariations.unitBall m, f (A + jac φ x)) → y ≤ Q A := by
+  have hD : (Q A : EReal) = ⨅ (φ : (Fin m → ℝ) → Fin d → ℝ)
+      (_ : (∃ K, LipschitzWith K φ) ∧ ∀ x ∉ CalculusOfVariations.unitBall m, φ x = 0),
+      (((volume (CalculusOfVariations.unitBall m)).toReal⁻¹ *
+        ∫ x in CalculusOfVariations.unitBall m, f (A + jac φ x) : ℝ) : EReal) := by
+    rw [← hQe, ← cov_qcEnvelope_eq]
+    exact External.KinderlehrerPedregal.dacorognaFormula_holds d m f hf A
+  refine ⟨fun φ hK h0 => ?_, fun y hy => ?_⟩
+  · rw [← EReal.coe_le_coe_iff, hD]
+    exact iInf₂_le φ ⟨hK, h0⟩
+  · rw [← EReal.coe_le_coe_iff, hD]
+    exact le_iInf₂ fun φ hφ => EReal.coe_le_coe_iff.2 (hy φ hφ.1 hφ.2)
+
+/-- Dacorogna's formula under scaling, for a finite `f^{qc} = Q`: if `c f (s⁻¹ B) = f (B)` with
+`c ≥ 0`, then `c Q (s⁻¹ A) ≤ Q (A)`. For a test map `φ` of the ball, `s⁻¹ φ` is one, and
+`s⁻¹ A + ∇ (s⁻¹ φ) = s⁻¹ (A + ∇φ)`, so `c Q (s⁻¹ A) ≤ ⨍_B c f (s⁻¹ (A + ∇φ)) = ⨍_B f (A + ∇φ)`;
+take the infimum over `φ`. -/
+private lemma tk_qc_scale {f Q : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
+    (hQe : ∀ A, qcEnvelope f A = Q A) {s c : ℝ} (hc : 0 ≤ c) (hfL : ∀ B, c * f (s⁻¹ • B) = f B)
+    (A : Matrix (Fin d) (Fin m) ℝ) : c * Q (s⁻¹ • A) ≤ Q A := by
+  refine (tk_qc_formula hf hQe A).2 _ fun φ ⟨K, hK⟩ h0 => ?_
+  have hψ : LipschitzWith (‖s⁻¹‖₊ * K) (fun y => s⁻¹ • φ y) := (lipschitzWith_smul s⁻¹).comp hK
+  have h0' : ∀ x ∉ CalculusOfVariations.unitBall m, (fun y => s⁻¹ • φ y) x = 0 := fun x hx => by
+    simp [h0 x hx]
+  have h1 := (tk_qc_formula hf hQe (s⁻¹ • A)).1 _ ⟨_, hψ⟩ h0'
+  have e : ∀ x, s⁻¹ • A + jac (fun y => s⁻¹ • φ y) x = s⁻¹ • (A + jac φ x) := fun x => by
+    rw [tk_jac_smul, smul_add]
+  simp only [e] at h1
+  calc c * Q (s⁻¹ • A)
+      ≤ c * ((volume (CalculusOfVariations.unitBall m)).toReal⁻¹ *
+          ∫ x in CalculusOfVariations.unitBall m, f (s⁻¹ • (A + jac φ x))) :=
+        mul_le_mul_of_nonneg_left h1 hc
+    _ = (volume (CalculusOfVariations.unitBall m)).toReal⁻¹ *
+          ∫ x in CalculusOfVariations.unitBall m, f (A + jac φ x) := by
+        rw [mul_left_comm, ← integral_const_mul]; simp only [hfL]
+
 -- The proof does not use all of the paper's hypotheses (see the docstring).
 set_option linter.unusedVariables false in
 /-- **Proposition 2.3 (a)** (`prop:envelope`): for `p ∈ (1, ∞)` and a continuous `f` that is
 `p`-homogeneous or positively `p`-homogeneous, each of `f^{rc}`, `f^{qc}` is either identically
 `−∞` or finite-valued, and in the second case it has the same type of homogeneity as `f`. 
 
-Proof. The paper gives none ("follows directly from the dual envelope formulas above"). The
-formal proof argues with the definitions of the envelopes. Each envelope is `≡ −∞` when there is no
-minorant of its kind; otherwise it is the largest one (for `f^{rc}` by the proof of Proposition 2.4,
-`tk_rc_cases`; for `f^{qc}`, the supremum of quasiconvex integrands below `f` is one, `tk_qc_cases`),
-finite. For `s ≠ 0` under which `f` is homogeneous, `A ↦ |s|^p g (s⁻¹ A)` is again a minorant of the
-same kind (it is rank-one convex, resp. quasiconvex since `s⁻¹ (A + ∇φ) = s⁻¹ A + ∇ (s⁻¹ φ)`), which
-gives the homogeneity of the largest minorant (`tk_hom_core`), and the value `0` at `0` from
-`s = 2`. Dacorogna's formula, the dual formula for `f^{qc}`, is not a hypothesis here and is not
-used. The hypothesis `hhom` is not used (each homogeneity is concluded under its own hypothesis),
-and `1 < p` is used only as `0 < p`.-/
+Proof. The paper gives none ("follows directly from the dual envelope formulas above"); the formal
+proof derives it from those formulas. By Definition 2.3 each envelope is `≡ −∞` (no minorant of its
+kind) or finite (a minorant `g₀` gives `g₀ ≤ f^{•} ≤ f`; `tk_rc_finite`, `tk_qc_finite`). In the
+finite case, let `s ≠ 0` be such that `f` is homogeneous under `s`, so that
+`|s|^p f (s⁻¹ B) = f (B)`:
+* for `f^{rc}`, by Proposition 2.1 (`proposition2_1`): the image of a prelaminate `μ ∈ 𝒫ℒ (A)`
+  under `X ↦ s⁻¹ X` is a prelaminate in `𝒫ℒ (s⁻¹ A)` (a splitting along `(t, R)` becomes one along
+  `(t, s⁻¹ R)`), so `|s|^p f^{rc} (s⁻¹ A) ≤ |s|^p ⟨f, (s⁻¹ ·)_# μ⟩ = ⟨f, μ⟩` (`tk_rc_transform`);
+* for `f^{qc}`, by Dacorogna's formula (Proposition 2.2,
+  `External.KinderlehrerPedregal.dacorognaFormula_holds`): for a test map `φ` of the unit ball,
+  `s⁻¹ φ` is one, and `s⁻¹ A + ∇ (s⁻¹ φ) = s⁻¹ (A + ∇φ)`, so
+  `|s|^p f^{qc} (s⁻¹ A) ≤ ⨍_B f (A + ∇φ)` (`tk_qc_scale`).
+Taking the infimum over `μ`, resp. `φ`, gives `|s|^p f^{•} (s⁻¹ A) ≤ f^{•} (A)`; applied to `s` and
+`s⁻¹` this is the homogeneity under `s` (`tk_hom_core`), and `s = 2` gives the value `0` at `0`
+for a `p`-homogeneous `f`. The hypothesis `hhom` is not used (each homogeneity is concluded under
+its own hypothesis), and `1 < p` is used only as `0 < p`.-/
 theorem proposition2_3_a {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hf : Continuous f) (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) :
     ((∀ A, rcEnvelope f A = ⊥) ∨
@@ -1183,7 +1294,8 @@ theorem proposition2_3_a {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ 
         (IsPosPHomogeneous p f → IsPosPHomogeneous p fun A => (qcEnvelope f A).toReal))) := by
   have hp0 : 0 < p := by linarith
   refine ⟨?_, ?_⟩
-  · rcases tk_rc_cases hf with ⟨_, hbot⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
+  · -- `f^{rc}`: images of prelaminates (Proposition 2.1)
+    rcases tk_rc_finite f with hbot | ⟨G, hGe⟩
     · exact Or.inl hbot
     · right
       have hval : (fun A => (rcEnvelope f A).toReal) = G := funext fun A => by
@@ -1191,9 +1303,10 @@ theorem proposition2_3_a {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ 
       rw [hval]
       refine ⟨fun A => by rw [hGe]; exact ⟨EReal.coe_ne_bot _, EReal.coe_ne_top _⟩,
         tk_hom_types hp0 fun s hs hfs A => ?_⟩
-      exact tk_rc_transform ⟨hGI, hGR, hGf⟩ hmax _ (tk_smul_linear_rank (inv_ne_zero hs))
+      exact tk_rc_transform hf hGe _ (tk_smul_linear_rank (inv_ne_zero hs))
         (Real.rpow_nonneg (abs_nonneg s) p) (tk_scale_f hs hfs) A
-  · rcases tk_qc_cases hf with ⟨_, hbot⟩ | ⟨Q, hQI, hQQ, hQf, hmax, hQe⟩
+  · -- `f^{qc}`: rescaled test maps (Dacorogna's formula)
+    rcases tk_qc_finite f with hbot | ⟨Q, hQe⟩
     · exact Or.inl hbot
     · right
       have hval : (fun A => (qcEnvelope f A).toReal) = Q := funext fun A => by
@@ -1201,8 +1314,7 @@ theorem proposition2_3_a {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ 
       rw [hval]
       refine ⟨fun A => by rw [hQe]; exact ⟨EReal.coe_ne_bot _, EReal.coe_ne_top _⟩,
         tk_hom_types hp0 fun s hs hfs A => ?_⟩
-      exact tk_qc_scale ⟨hQI, hQQ, hQf⟩ hmax (Real.rpow_pos_of_pos (abs_pos.2 hs) p)
-        (tk_scale_f hs hfs) A
+      exact tk_qc_scale hf hQe (Real.rpow_nonneg (abs_nonneg s) p) (tk_scale_f hs hfs) A
 
 /-- Matrix multiplication by an orthogonal matrix preserves Lebesgue measure. -/
 private lemma tk_measurePreserving_orth {V : Matrix (Fin d) (Fin d) ℝ}
@@ -1257,80 +1369,68 @@ private lemma tk_grad_conj {φ : (Fin d → ℝ) → Fin d → ℝ} (V : Matrix 
   simp only [Matrix.of_apply]
   ring
 
-/-- Conjugation by an orthogonal `V` preserves quasiconvexity: with `ψ (y) = V φ (Vᵀ y)`, which
-vanishes off the rotated cube `V ((0, 1)^d)`, `∫_{(0,1)^d} g (V (B + ∇φ) Vᵀ) = ∫_{V (0,1)^d}
-g (V B Vᵀ + ∇ψ)` (orthogonal change of variables), and `g` is quasiconvex on the rotated cube
-(Lemma 2.2, domain independence). -/
-private lemma tk_quasiconvex_conj {g : Matrix (Fin d) (Fin d) ℝ → ℝ} (hgI : IsIntegrand g)
-    (hgQ : Quasiconvex g) {V : Matrix (Fin d) (Fin d) ℝ}
-    (hV : V ∈ Matrix.orthogonalGroup (Fin d) ℝ) : Quasiconvex fun B => g (V * B * Vᵀ) := by
-  intro B φ K hφ h0 _
+/-- `∑ (W z)_i² = ∑ z_i²` for `Wᵀ W = 1`. -/
+private lemma tk_sum_sq_orth {W : Matrix (Fin d) (Fin d) ℝ} (hW : Wᵀ * W = 1) (z : Fin d → ℝ) :
+    ∑ i, (W *ᵥ z) i ^ 2 = ∑ i, z i ^ 2 := by
+  have h : (W *ᵥ z) ⬝ᵥ (W *ᵥ z) = z ⬝ᵥ z := by
+    rw [Matrix.dotProduct_mulVec, ← Matrix.mulVec_transpose, Matrix.mulVec_mulVec, hW,
+      Matrix.one_mulVec]
+  simpa [dotProduct, sq] using h
+
+/-- Conjugating a test map of the unit ball by `V ∈ O (d)`: `ψ (y) = V φ (Vᵀ y)` is again a
+Lipschitz map vanishing off the ball (which is `O (d)`-invariant), and the orthogonal change of
+variables `y = V x`, with `∇ψ (V x) = V ∇φ (x) Vᵀ`, gives
+`∫_B g (V A Vᵀ + ∇ψ) = ∫_B g (V (A + ∇φ) Vᵀ)`. -/
+private lemma tk_ball_conj {V : Matrix (Fin d) (Fin d) ℝ}
+    (hV : V ∈ Matrix.orthogonalGroup (Fin d) ℝ) {φ : (Fin d → ℝ) → Fin d → ℝ}
+    (hφ : (∃ K, LipschitzWith K φ) ∧ ∀ x ∉ CalculusOfVariations.unitBall d, φ x = 0) :
+    ((∃ K, LipschitzWith K fun z => V *ᵥ φ (Vᵀ *ᵥ z)) ∧
+        ∀ x ∉ CalculusOfVariations.unitBall d, V *ᵥ φ (Vᵀ *ᵥ x) = 0) ∧
+      ∀ (g : Matrix (Fin d) (Fin d) ℝ → ℝ) (A : Matrix (Fin d) (Fin d) ℝ),
+        ∫ y in CalculusOfVariations.unitBall d,
+            g (V * A * Vᵀ + CalculusOfVariations.grad (fun z => V *ᵥ φ (Vᵀ *ᵥ z)) y) =
+          ∫ x in CalculusOfVariations.unitBall d,
+            g (V * (A + CalculusOfVariations.grad φ x) * Vᵀ) := by
+  obtain ⟨⟨K, hK⟩, h0⟩ := hφ
   have hVV : Vᵀ * V = 1 := (Matrix.mem_orthogonalGroup_iff' (Fin d) ℝ).1 hV
   have hVV' : V * Vᵀ = 1 := (Matrix.mem_orthogonalGroup_iff (Fin d) ℝ).1 hV
-  have hVt : Vᵀ ∈ Matrix.orthogonalGroup (Fin d) ℝ := by
-    rw [Matrix.mem_orthogonalGroup_iff (Fin d) ℝ, Matrix.transpose_transpose]; exact hVV
   set L : (Fin d → ℝ) →L[ℝ] Fin d → ℝ := LinearMap.toContinuousLinearMap (Matrix.toLin' V)
   set Lt : (Fin d → ℝ) →L[ℝ] Fin d → ℝ := LinearMap.toContinuousLinearMap (Matrix.toLin' Vᵀ)
   have hL : ∀ z, L z = V *ᵥ z := fun z => rfl
   have hLt : ∀ z, Lt z = Vᵀ *ᵥ z := fun z => rfl
   have hLLt : ∀ z, Lt (L z) = z := fun z => by
     rw [hL, hLt, Matrix.mulVec_mulVec, hVV, Matrix.one_mulVec]
-  have hmpL : MeasurePreserving L volume volume := tk_measurePreserving_orth hV
-  have hmpLt : MeasurePreserving Lt volume volume := tk_measurePreserving_orth hVt
-  set ψ : (Fin d → ℝ) → Fin d → ℝ := fun z => V *ᵥ φ (Vᵀ *ᵥ z)
-  have hψ : LipschitzWith (‖L‖₊ * (K * ‖Lt‖₊)) ψ :=
-    L.lipschitzWith.comp (hφ.comp Lt.lipschitzWith)
-  set Ω : Set (Fin d → ℝ) := Lt ⁻¹' unitCube d
-  have hΩm : MeasurableSet Ω :=
-    Lt.continuous.measurable (MeasurableSet.univ_pi fun _ => measurableSet_Ioo)
-  have hΩb : Bornology.IsBounded Ω := by
-    rw [Metric.isBounded_iff_subset_closedBall 0]
-    refine ⟨‖L‖, fun y hy => ?_⟩
-    rw [Metric.mem_closedBall, dist_zero_right]
-    have h1 : ‖Lt y‖ ≤ 1 := by
-      rw [pi_norm_le_iff_of_nonneg zero_le_one]
-      intro i
-      have := hy i (Set.mem_univ _)
-      rw [Real.norm_eq_abs, abs_le]
-      exact ⟨by linarith [this.1], this.2.le⟩
-    calc ‖y‖ = ‖L (Lt y)‖ := by
-          rw [hL, hLt, Matrix.mulVec_mulVec, hVV', Matrix.one_mulVec]
-      _ ≤ ‖L‖ * ‖Lt y‖ := L.le_opNorm _
-      _ ≤ ‖L‖ * 1 := by gcongr
-      _ = ‖L‖ := mul_one _
-  have hΩvol : volume Ω = 1 := by
-    show volume (Lt ⁻¹' unitCube d) = 1
-    rw [hmpLt.measure_preimage (s := unitCube d)
-      (MeasurableSet.univ_pi fun _ => measurableSet_Ioo).nullMeasurableSet]
-    exact volume_unitCube d
-  have hΩfin : volume Ω < ⊤ := by rw [hΩvol]; exact ENNReal.one_lt_top
-  have hψ0 : ∀ y ∉ Ω, ψ y = 0 := fun y hy => by
-    have hy' : Vᵀ *ᵥ y ∉ unitCube d := hy
-    simp only [ψ, h0 _ hy', Matrix.mulVec_zero]
-  -- quasiconvexity of `g` at `V B Vᵀ` on the rotated cube
-  have hgΩ := External.Rindler.rd_quasiconvexAtOn_of_unitCube hgI.1 hgI.2 hΩb hΩm
-    ((cov_quasiconvexAtOn_unitCube_iff g (V * B * Vᵀ)).2 (hgQ _))
-  have key := hgΩ ψ _ hψ hψ0 (tk_integrableOn_comp hgI _ hψ hΩfin)
-  rw [hΩvol, ENNReal.toReal_one, one_mul] at key
-  -- change of variables `y = V x`
   have hLtL : ∀ z, L (Lt z) = z := fun z => by
     rw [hL, hLt, Matrix.mulVec_mulVec, hVV', Matrix.one_mulVec]
+  -- the ball is invariant under `V` and `Vᵀ`
+  have hballV : ∀ z, V *ᵥ z ∈ CalculusOfVariations.unitBall d ↔
+      z ∈ CalculusOfVariations.unitBall d := fun z => by
+    change (∑ i, (V *ᵥ z) i ^ 2 < 1) ↔ ∑ i, z i ^ 2 < 1
+    rw [tk_sum_sq_orth hVV z]
+  have hballVt : ∀ z, Vᵀ *ᵥ z ∈ CalculusOfVariations.unitBall d ↔
+      z ∈ CalculusOfVariations.unitBall d := fun z => by
+    change (∑ i, (Vᵀ *ᵥ z) i ^ 2 < 1) ↔ ∑ i, z i ^ 2 < 1
+    rw [tk_sum_sq_orth (by rw [Matrix.transpose_transpose]; exact hVV') z]
+  refine ⟨⟨⟨_, L.lipschitzWith.comp (hK.comp Lt.lipschitzWith)⟩, fun x hx => ?_⟩, fun g A => ?_⟩
+  · rw [h0 _ (mt (hballVt x).1 hx), Matrix.mulVec_zero]
+  -- change of variables `y = V x`
+  have hmpL : MeasurePreserving L volume volume := tk_measurePreserving_orth hV
   let e : (Fin d → ℝ) ≃ᵐ (Fin d → ℝ) :=
     { toFun := L, invFun := Lt, left_inv := hLLt, right_inv := hLtL,
       measurable_toFun := L.continuous.measurable, measurable_invFun := Lt.continuous.measurable }
   have hcv := hmpL.setIntegral_preimage_emb e.measurableEmbedding
-    (fun y => g (V * B * Vᵀ + CalculusOfVariations.grad ψ y)) Ω
-  have hpre : (L : (Fin d → ℝ) → Fin d → ℝ) ⁻¹' Ω = unitCube d := by
-    ext x; simp only [Ω, Set.mem_preimage, hLLt]
-  change (L : (Fin d → ℝ) → Fin d → ℝ) ⁻¹' Ω = _ at hpre
+    (fun y => g (V * A * Vᵀ + CalculusOfVariations.grad (fun z => V *ᵥ φ (Vᵀ *ᵥ z)) y))
+    (CalculusOfVariations.unitBall d)
+  have hpre : (L : (Fin d → ℝ) → Fin d → ℝ) ⁻¹' CalculusOfVariations.unitBall d =
+      CalculusOfVariations.unitBall d := by
+    ext x; exact hballV x
   rw [hpre] at hcv
-  rw [← hcv] at key
-  refine key.trans (le_of_eq (setIntegral_congr_ae
-    (MeasurableSet.univ_pi fun _ => measurableSet_Ioo) ?_))
-  filter_upwards [hφ.ae_differentiableAt] with x hx _
+  rw [← hcv]
+  refine setIntegral_congr_ae tk_unitBall_isOpen.measurableSet ?_
+  filter_upwards [hK.ae_differentiableAt] with x hx _
   have hgrad := tk_grad_conj (φ := φ) V (L x) (by rw [← hLt, hLLt]; exact hx)
   rw [← hLt, hLLt] at hgrad
-  show g (V * B * Vᵀ + jac ψ (L x)) = g (V * (B + jac φ x) * Vᵀ)
+  show g (V * A * Vᵀ + jac (fun z => V *ᵥ φ (Vᵀ *ᵥ z)) (L x)) = g (V * (A + jac φ x) * Vᵀ)
   rw [hgrad, Matrix.mul_add, Matrix.add_mul]
 
 -- The proof does not use all of the paper's hypotheses (see the docstring).
@@ -1339,16 +1439,21 @@ set_option linter.unusedVariables false in
 `ℝ^{d×d}` that is `p`-homogeneous or positively `p`-homogeneous, both envelopes preserve
 conjugation invariance, and the rank-one convex envelope preserves transposition invariance. 
 
-Proof. The paper gives none. For `f^{rc}`: conjugation `A ↦ V A Vᵀ` by an orthogonal `V` and
-transposition are linear and preserve the rank, so `A ↦ f^{rc} (V A Vᵀ)` and `A ↦ f^{rc} (Aᵀ)` are
-rank-one convex minorants of `f` (`tk_rc_transform`); hence `f^{rc} (V A Vᵀ) ≤ f^{rc} (A)` for every
-`V ∈ O (d)`, and equality follows by applying this to `Vᵀ`; the same for transposition. For `f^{qc}`
-the same argument, with the fact that `A ↦ g (V A Vᵀ)` is quasiconvex for a quasiconvex `g`
-(`tk_quasiconvex_conj`): with `ψ (y) = V φ (Vᵀ y)`, an orthogonal change of variables turns
-`∫_{(0,1)^d} g (V (B + ∇φ) Vᵀ)` into an integral over the rotated cube `V ((0, 1)^d)`, on which `g`
-is quasiconvex by Lemma 2.2 (domain independence,
-`External.Rindler.rd_quasiconvexAtOn_of_unitCube`); this is the use of Lemma 2.2 (ii) that the
-inventory notes (E8). The hypotheses `hp`, `hhom` are not used.-/
+Proof. The paper gives none ("follows directly from the dual envelope formulas above"); the formal
+proof derives it from those formulas. Conjugation `A ↦ V A Vᵀ` by an orthogonal `V` and
+transposition are linear and preserve the rank.
+* `f^{rc}`, by Proposition 2.1 (`proposition2_1`): for such a map `L` with `f ∘ L = f`, the image
+  `L_# μ` of a prelaminate `μ ∈ 𝒫ℒ (A)` is a prelaminate in `𝒫ℒ (L A)` (a splitting along
+  `(t, R)` becomes one along `(t, L R)`, `tk_prelaminate_image`), and
+  `⟨f, L_# μ⟩ = ⟨f ∘ L, μ⟩ = ⟨f, μ⟩`; so `f^{rc} (L A) ≤ f^{rc} (A)`.
+* `f^{qc}`, by Dacorogna's formula (Proposition 2.2,
+  `External.KinderlehrerPedregal.dacorognaFormula_holds`), whose domain, the unit ball, is
+  `O (d)`-invariant: for a test map `φ` of the ball, `ψ (y) = V φ (Vᵀ y)` is one, and the
+  orthogonal change of variables `y = V x` gives
+  `⨍_B f (V A Vᵀ + ∇ψ) = ⨍_B f (V (A + ∇φ) Vᵀ) = ⨍_B f (A + ∇φ)` (`tk_ball_conj`); so
+  `f^{qc} (V A Vᵀ) ≤ f^{qc} (A)`.
+Equality follows by applying the inequality to `Vᵀ`, resp. to `Aᵀ`. Neither Lemma 2.2 nor a
+largest minorant is needed. The hypotheses `hp`, `hhom` are not used.-/
 theorem proposition2_3_b {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin d) ℝ → ℝ}
     (hf : Continuous f) (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) :
     (IsConjugationInvariant f →
@@ -1380,48 +1485,39 @@ theorem proposition2_3_b {p : ℝ} (hp : 1 < p) {f : Matrix (Fin d) (Fin d) ℝ 
     { toFun := Matrix.transpose
       map_add' := Matrix.transpose_add
       map_smul' := fun c X => Matrix.transpose_smul c X }
+  -- `f^{rc}`: images of prelaminates (Proposition 2.1)
+  have hrc : ∀ L : Matrix (Fin d) (Fin d) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin d) ℝ,
+      (∀ X, (L X).rank = X.rank) → (∀ B, f (L B) = f B) →
+        ∀ A, rcEnvelope f (L A) ≤ rcEnvelope f A := by
+    intro L hL hfL A
+    rw [proposition2_1 hf, proposition2_1 hf]
+    refine le_iInf₂ fun μ hμ => ?_
+    obtain ⟨hμL, hint⟩ := tk_prelaminate_image L hL hμ f
+    refine (iInf₂_le (μ.map L) hμL).trans_eq ?_
+    rw [hint]
+    simp only [hfL]
+  -- `f^{qc}`: conjugated test maps of the ball (Dacorogna's formula)
+  have hqc : IsConjugationInvariant f → ∀ V ∈ Matrix.orthogonalGroup (Fin d) ℝ,
+      ∀ A, qcEnvelope f (V * A * Vᵀ) ≤ qcEnvelope f A := by
+    intro hconj V hV A
+    rw [← cov_qcEnvelope_eq, ← cov_qcEnvelope_eq,
+      External.KinderlehrerPedregal.dacorognaFormula_holds d d f hf,
+      External.KinderlehrerPedregal.dacorognaFormula_holds d d f hf]
+    refine le_iInf₂ fun φ hφ => ?_
+    obtain ⟨hψ, hint⟩ := tk_ball_conj hV hφ
+    refine (iInf₂_le (fun z => V *ᵥ φ (Vᵀ *ᵥ z)) hψ).trans_eq ?_
+    rw [hint f A]
+    simp only [hconj V hV]
   refine ⟨fun hconj => ⟨fun U hU A => ?_, fun U hU A => ?_⟩, fun htr A => ?_⟩
-  · -- `f^{rc}`: `A ↦ f^{rc} (V A Vᵀ)` is a rank-one convex minorant
-    rcases tk_rc_cases hf with ⟨_, hbot⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
-    · rw [hbot, hbot]
-    · have h1 : ∀ V ∈ Matrix.orthogonalGroup (Fin d) ℝ, ∀ X, G (V * X * Vᵀ) ≤ G X := by
-        intro V hV X
-        have := tk_rc_transform ⟨hGI, hGR, hGf⟩ hmax (conjL V) (hconjL V hV) zero_le_one
-          (fun B => by rw [one_mul]; exact (hconj V hV B).le) X
-        simpa [conjL] using this
-      rw [hGe, hGe, EReal.coe_eq_coe_iff]
-      refine le_antisymm (h1 U hU A) ?_
-      have := h1 Uᵀ (horth U hU) (U * A * Uᵀ)
-      rwa [hback U hU A] at this
-  · -- `f^{qc}`: conjugation of a quasiconvex minorant, on the rotated cube (Lemma 2.2)
-    rcases tk_qc_cases hf with ⟨_, hbot⟩ | ⟨Q, hQI, hQQ, hQf, hmax, hQe⟩
-    · rw [hbot, hbot]
-    · have h1 : ∀ V ∈ Matrix.orthogonalGroup (Fin d) ℝ, ∀ X, Q (V * X * Vᵀ) ≤ Q X := by
-        intro V hV X
-        have hc : Continuous fun B : Matrix (Fin d) (Fin d) ℝ => V * B * Vᵀ :=
-          (continuous_const.matrix_mul continuous_id).matrix_mul continuous_const
-        have hI : IsIntegrand fun B => Q (V * B * Vᵀ) := by
-          refine ⟨hQI.1.comp hc, fun A => ?_⟩
-          obtain ⟨W, hW, C, hC⟩ := hQI.2 (V * A * Vᵀ)
-          exact ⟨_, hc.continuousAt.preimage_mem_nhds hW, C, fun B hB => hC _ hB⟩
-        exact hmax _ hI (tk_quasiconvex_conj hQI hQQ hV)
-          (fun B => (hQf _).trans (hconj V hV B).le) X
-      rw [hQe, hQe, EReal.coe_eq_coe_iff]
-      refine le_antisymm (h1 U hU A) ?_
-      have := h1 Uᵀ (horth U hU) (U * A * Uᵀ)
-      rwa [hback U hU A] at this
-  · -- `f^{rc}`: `A ↦ f^{rc} (Aᵀ)` is a rank-one convex minorant
-    rcases tk_rc_cases hf with ⟨_, hbot⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
-    · rw [hbot, hbot]
-    · have h1 : ∀ X, G Xᵀ ≤ G X := by
-        intro X
-        have := tk_rc_transform ⟨hGI, hGR, hGf⟩ hmax trL (fun X => Matrix.rank_transpose X)
-          zero_le_one (fun B => by rw [one_mul]; exact (htr B).le) X
-        simpa [trL] using this
-      rw [hGe, hGe, EReal.coe_eq_coe_iff]
-      refine le_antisymm (h1 A) ?_
-      have := h1 Aᵀ
-      rwa [Matrix.transpose_transpose] at this
+  · refine le_antisymm (hrc (conjL U) (hconjL U hU) (hconj U hU) A) ?_
+    have := hrc (conjL Uᵀ) (hconjL Uᵀ (horth U hU)) (hconj Uᵀ (horth U hU)) (U * A * Uᵀ)
+    rwa [show conjL Uᵀ (U * A * Uᵀ) = A from hback U hU A] at this
+  · refine le_antisymm (hqc hconj U hU A) ?_
+    have := hqc hconj Uᵀ (horth U hU) (U * A * Uᵀ)
+    rwa [hback U hU A] at this
+  · refine le_antisymm (hrc trL (fun X => Matrix.rank_transpose X) htr A) ?_
+    have := hrc trL (fun X => Matrix.rank_transpose X) htr Aᵀ
+    rwa [show trL Aᵀ = A from Matrix.transpose_transpose A] at this
 
 /-- Both homogeneity types give `f (t B) = t^p f (B)` for `t > 0`. -/
 private lemma tk_pos_hom {p : ℝ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
@@ -1819,16 +1915,22 @@ Proof. "⇒" is the paper's (lines 661–688): the law of `M_N` is a dyadic prel
 barycentre `0` (`tk_law`: conditioning on the first sign, a splitting with `t = 1/2`, lines
 661–677), so for a rank-one convex minorant `g` with `g (0) = f (0)`, Proposition 2.4 gives
 `f (0) = g (0) ≤ f^{rc} (0) ≤ ⟨f, law (M_N)⟩ = E f (M_N)`.
-"⇐": Departure from the paper. The paper deduces it from Proposition 2.4 and the representation of
-every dyadic prelaminate by a rank-one Rademacher martingale (lines 661–663). Under the reading of
-Definition 2.4 used here (inventory E10: a splitting may take any part `c` of the mass of an
-atom), a dyadic prelaminate can have weights that are not dyadic (split a third of `δ₀`), and then
-it is the law of no martingale on the uniform binary tree; the step fails in this representation
-(reasons 1 and 3). The formal proof runs the paper's argument for Proposition 2.4 on the infimum
-`G (A) = inf E f (M_N)` over `Rad₁ (A)` instead (`tk_midpoint_principle` with `tkMartVals`:
-martingales are glued at a midpoint by a first increment `±(B − C)/2`, after padding to a common
-horizon), which gives a rank-one convex integrand `G ≤ f` with `G (0) ≥ f (0)` under the
-hypothesis.-/
+"⇐": Departure from the paper (reason 1: a gap of the paper, inventory E10). The paper deduces it
+from Proposition 2.4 and the claim (lines 661–663) that every dyadic prelaminate is the law of a
+rank-one Rademacher martingale. Definition 2.4 does not say whether the atoms `A_i` of
+`Σ c_i δ_{A_i}` are distinct, and neither reading makes both steps true. If a splitting may take
+any part of the mass at a point (repeated atoms, the reading used here), the claim of lines 661–663
+is false: splitting a third of `δ₀` with `t = 1/2` gives the weight `1/6`, which is not dyadic, so
+the result is the law of no martingale on the uniform binary tree. If a splitting takes the whole
+mass at a point (distinct atoms), the claim holds but the gluing in the proof of Proposition 2.4
+fails instead (coinciding atoms of `μ_B` and `μ_C` are split together). Only a reading on split
+trees makes both work. The formal proof repairs the step: it runs the paper's argument for
+Proposition 2.4 on the infimum `G (A) = inf E f (M_N)` over `Rad₁ (A)` instead
+(`tk_midpoint_principle` with `tkMartVals`: martingales are glued at a midpoint by a first
+increment `±(B − C)/2`, after padding to a common horizon), which gives a rank-one convex
+integrand `G ≤ f` with `G (0) ≥ f (0)` under the hypothesis. As in Proposition 2.4, `G` is an
+integrand because it is continuous, by Lemma 2.1 (`External.Rindler.lemma5_6`, applied to the
+real-valued rank-one convex `G` before it is known to be an integrand).-/
 theorem proposition2_5 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f) :
     RankOneConvexAt f 0 ↔
       ∀ (N : ℕ) (A : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin m) ℝ),

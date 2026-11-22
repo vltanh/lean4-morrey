@@ -26,6 +26,7 @@ import all Morrey.Cassese.Square.Hessian
 import all Morrey.Cassese.Square.Korn
 import all Morrey.Cassese.Square.Moments
 import all Morrey.Cassese.Square.Schatten
+import all Morrey.Cassese.Square.Sharpness
 import all Morrey.Cassese.Square.Torus
 import all Morrey.Cassese.Square.TorusTwo
 import all Morrey.Cassese.Square.Trace
@@ -165,8 +166,9 @@ meta def externalResults : List (String × Name) :=
    ("Cox–Veraar decoupling (Cassese Prop 2.8, assumed)", ``Cassese.CoxVeraarDecoupling),
    ("Pisier–Xu (Cassese Prop 6.3, assumed)", ``Cassese.PisierXuKhintchine),
    ("Kahane–Khintchine (Cassese Prop 6.4, assumed)", ``Cassese.KahaneKhintchine),
-   ("Sharpness of Burkholder's constant (Cassese Cor 6.3, assumed)",
-    ``Cassese.BurkholderSharpness),
+   ("Hypercontractive Kahane–Khintchine (Remark 6.3, Prop 6.5 at q = ∞, assumed)",
+    ``Cassese.KahaneKhintchineHypercontractive),
+   ("Sharpness of Burkholder's constant (Cassese Cor 6.3)", ``Cassese.burkholderSharpness_holds),
    ("HNVW transference (Cassese Prop 7.2, assumed)", ``Cassese.HNVWTransference),
    ("Dragičević's lower bound (Cassese Thm 7.1, assumed)", ``Cassese.DragicevicLowerBound),
    ("Dragičević's L⁴ bound (Cassese Cor 7.2, assumed)", ``Cassese.DragicevicL4Bound)]
@@ -295,7 +297,10 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Eq. (31)", ``Cassese.equation31),
    ("Cassese Remark 6.3", ``Cassese.remark6_3),
    ("Cassese Prop 6.5", ``Cassese.proposition6_5),
+   ("Cassese Prop 6.5 (q < ∞)", ``Cassese.proposition6_5_finite),
+   ("Cassese Prop 6.5 (q = ∞)", ``Cassese.proposition6_5_infty),
    ("Cassese Cor 6.1", ``Cassese.corollary6_1),
+   ("Cassese Cor 6.1 (every large d)", ``Cassese.corollary6_1_ge),
    ("Cassese Proof of Cor 6.1 (periodic Hessian test maps)",
     ``Cassese.not_hessianQuasiconvexAt_of_periodic),
    ("Cassese Proof of Cor 6.1 (periodic Hessian test maps)",

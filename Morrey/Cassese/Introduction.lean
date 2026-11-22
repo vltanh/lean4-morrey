@@ -59,12 +59,15 @@ open scoped Matrix
 
 namespace Cassese
 
-/-! ### Tools: blocks of matrices, lifted test maps, Jensen along test maps
+/-! ### Tools: Jensen along test maps, homogeneous polynomials
 
-Helpers for the claims of the introduction (prefix `intro_`). `lift_trunc` is the upper left
-`d' × m'` block of a `d × m` matrix; an integrand `f` on `ℝ^{d'×m'}` lifts to `f ∘ lift_trunc` on
-`ℝ^{d×m}`, and a periodic test map `φ` of `ℝ^{m'}` to the periodic test map
-`x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)` of `ℝ^m`, whose gradient has `∇φ` as upper left block. -/
+Helpers for the claims of the introduction (prefix `intro_`): test maps have mean-zero gradient
+and Jensen's inequality along them (`intro_integral_fderiv_eq_zero`,
+`intro_quasiconvexAt_of_convexOn`), and homogeneous polynomials are homogeneous functions
+(`intro_isPHomogeneous_of_isHomogeneousPolynomial`); and the rank-one matrices when `min (d, m) = 1`
+(`intro_rank_eq_one_of_min`). The lifting of integrands and periodic test
+maps from `ℝ^{d'×m'}` to `ℝ^{d×m}` (`lift_trunc`, `lift_quasiconvexAt_of_comp_trunc`) is in
+`Morrey/Cassese/Lifting.lean`. -/
 
 open MeasureTheory
 
@@ -1901,7 +1904,10 @@ theorem intro_convexOn_affine {φ : ℝ → ℝ} (hφ : ConvexOn ℝ univ φ) {c
 /-- Proof of Corollary 1.6, rank-one convexity (TeX lines 2925–2941): for `Λ` large, `G` is
 rank-one convex. By homogeneity a rank-one line `A + t R` is reduced to a normalized one,
 `E + t R̂` with `|E| = |R̂| = 1`, `E ⊥ R̂` (`intro_corG_line`); on rank-one lines through `0`,
-`G (t R) = |t| G (R)`. -/
+`G (t R) = |t| G (R)` with `G ≥ 0`, so `t ↦ G (A + t R)` is `|t + s₀| G (R)`, convex. (The paper's
+reason, TeX lines 2942–2943: on such a line `G = Λ |·|`, since `q (Y) = det (YᵀY) = 0` when `Y` has rank
+at most one; the proof uses only `1`-homogeneity and `G ≥ 0`, which give convexity without
+computing `G (R)`.) -/
 theorem intro_corG_rankOneConvex {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin 2) ℝ → ℝ}
     (hFc : Continuous F) (hFh : IsPHomogeneous p F) (hFR : RankOneConvex F) :
     ∃ Λ₀ : ℝ, ∀ Λ ≥ Λ₀, RankOneConvex (intro_corG Λ p F) := by
@@ -2043,9 +2049,7 @@ theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
   theorem1_2_elementary hp
 
 /-- **Theorem 1.3**, first assertion (`thm:2x4`): there is a homogeneous quartic polynomial
-`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. (The paper's proof of
-Lemma 5.1 (2) cites Burkholder's inequality; the formal proof, with one-step martingales, does not
-need it: see `lemma5_1_part2`.)
+`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex.
 
 Proof (the paper's, after Remark 5.2): `q_{δ, K/δ}` is a rank-one convex homogeneous quartic
 (`qDeltaLambda_rankOneConvex`, Lemma 5.1 (2) for `q₃` on `𝓛₃`); the cutoff `u_R` of the witness
@@ -2099,6 +2103,11 @@ Proposition 2.8 (decoupling, Cox–Veraar), Proposition 6.3 (non-commutative Khi
 Proposition 6.4 (Kahane–Khintchine, HNVW), which the proofs of Propositions 6.2 and 6.5 use
 (Proposition 6.5 also uses Burkholder's square function inequality, Theorem 2.3 (2), which is
 proved, `burkholderSquareFunction_holds`). For `p = 4` the unconditional `theorem1_4_four`.
+The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants:
+the proof uses Proposition 6.5 only for `q = 4 < ∞` (`proposition6_5_finite`), which does not
+need the hypercontractive bound (`KahaneKhintchineHypercontractive`). Statement change (this
+round): the text of the statement is unchanged, but `KahaneKhintchine` no longer bundles that
+bound, so the theorem assumes less.
 
 Proof (the paper's, running text after Propositions 6.2 and 6.5, "the same proof as
 Theorem 1.2"): with the Schatten exponent `q = 4`, `C^{qc} (S_4^{d×d}, p) ≳ d^{3/4} / min (√(d p), d)
@@ -2129,7 +2138,7 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
       rcThreshold (kornF d p q) ≤ ENNReal.ofReal (Cr * (d : ℝ) ^ (1 / 4 - 1 / (2 * 4) : ℝ)) := by
     rcases eq_or_ne p 2 with rfl | -
     · exact proposition6_2 hR hCV hPX hKK 4 (by norm_num)
-    · exact (proposition6_5 hH hR hCV hPX hKK).1 4 (by norm_num) p hp
+    · exact proposition6_5_finite hH hR hCV hPX hKK 4 (by norm_num) p hp
   set M : ℝ := Cr * √p / c with hMdef
   have hM : 0 ≤ M := by positivity
   refine ⟨⌈M ^ 8⌉₊ + 2, fun d hd => ?_⟩

@@ -344,7 +344,10 @@ def CoxVeraarDecoupling : Prop :=
 *Non-commutative `L^p`-spaces* (2003), Theorem 6.1: for `q ∈ [2, ∞)`, normal `d × d` matrices
 `x_i` and independent Rademacher `ε_i`,
 `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≲ √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`,
-with an absolute constant. (`‖B^{1/2}‖_{S_q} = ‖B‖_{S_{q/2}}^{1/2}` for `B = Σ x_i x_iᵀ ⪰ 0`.) -/
+with an absolute constant. Stated with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of the paper's
+`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`: the two are equal, since `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for
+`B = Σ x_i x_iᵀ ⪰ 0` and `q ≥ 2` (`schattenNorm_sqrt_sq` in `Morrey/Cassese/Square.lean`: fact (1),
+`‖A²‖_{S_{q/2}} = ‖A‖_{S_q}²`, applied to the positive semidefinite square root `A = B^{1/2}`). -/
 def PisierXuKhintchine : Prop :=
   ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
     (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
@@ -356,19 +359,14 @@ def PisierXuKhintchine : Prop :=
           C * √q * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
 
 /-- **Proposition 6.4** (`cs-prop6.4`), Kahane–Khintchine, citing HNVW, *Analysis in Banach
-spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): there are `k_{p,q}` such that for every
-Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher `ε_i`,
-`k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}` for
-`p, q ∈ (1, ∞)`; and, quantitatively, `k_{q,p} ≤ √((q − 1) / (p − 1))` for `1 < p ≤ q`.
-
-The quantitative clause. The paper's Proposition 6.4 names only constants `k_{p,q}`, but its route
-to Remark 6.3 (TeX lines 2425–2437) and to the case `q = ∞` of Proposition 6.5 (TeX lines
-2477–2479: "all the implied multiplicative constants in the above inequalities are at most
-polynomial in `q`") uses (31) (TeX lines 2322–2328) with constants that grow at most polynomially
-in `q`, which needs `k_{q,p}` to. The paper names no source for this growth. The form assumed is the
-standard bound `κ_{q,p} ≤ √((q − 1) / (p − 1))` for `1 < p ≤ q < ∞` (the Kahane–Khintchine
-inequality obtained from the hypercontractivity of Banach-valued Rademacher sums, as in HNVW II);
-neither HNVW II nor any other source for it was consulted for this formalization.
+spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)` there are constants
+`k_{p,q}` such that for every Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher
+`ε_i`, `k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
+statement, with no bound on the constants: the hypercontractive bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
+that Remark 6.3 and the case `q = ∞` of Proposition 6.5 need is the separate hypothesis
+`KahaneKhintchineHypercontractive`, taken only by the statements whose proofs use it. (An earlier
+version of this definition bundled that bound; it was split off, so every statement that takes
+`KahaneKhintchine` alone now assumes less.)
 
 Generality. It is stated for any seminorm `nrm` on a real vector space `E` (the hypotheses on
 `nrm` are the triangle inequality and absolute homogeneity, which give `nrm ≥ 0`), not only for
@@ -377,7 +375,6 @@ whose quotient by the kernel of `nrm` is a finite-dimensional, hence complete, n
 which the finite sums `Σ ε_i x_i` have the same norms. -/
 def KahaneKhintchine : Prop :=
   ∃ κ : ℝ → ℝ → ℝ, (∀ p q, 0 < κ p q) ∧
-    (∀ p q : ℝ, 1 < p → p ≤ q → κ q p ≤ √((q - 1) / (p - 1))) ∧
     ∀ p q : ℝ, 1 < p → 1 < q →
     ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
       (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
@@ -401,6 +398,36 @@ def DragicevicLowerBound : Prop :=
   ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
 
 -- END SHARED DEFINITIONS
+
+/-! ### The hypercontractive Kahane–Khintchine inequality
+
+Used by Remark 6.3 and by the case `q = ∞` of Proposition 6.5 only. No statement of the Challenge
+uses it, so it stands after the shared block. -/
+
+/-- The hypercontractive Kahane–Khintchine inequality: for `1 < p ≤ q < ∞`, every seminorm `nrm`
+on a real vector space `E` and `x₁, …, x_n ∈ E`,
+`‖Σ ε_i x_i‖_{L^q} ≤ √((q − 1) / (p − 1)) ‖Σ ε_i x_i‖_{L^p}`, that is,
+`k_{q,p} ≤ √((q − 1) / (p − 1))` in Proposition 6.4 (`KahaneKhintchine`).
+
+How the paper uses it. The paper's Proposition 6.4 names only constants `k_{p,q}`, but its route
+to Remark 6.3 (TeX lines 2425–2437) and to the case `q = ∞` of Proposition 6.5 (TeX lines
+2477–2479: "all the implied multiplicative constants in the above inequalities are at most
+polynomial in `q`") uses (31) (TeX lines 2322–2328) with constants that grow at most polynomially
+in `q`, which needs `k_{q,p}` to. The paper names no source for this growth. The form assumed is
+the standard hypercontractive bound for Banach-valued Rademacher sums (from the hypercontractivity
+of the Rademacher semigroup; Hytönen–van Neerven–Veraar–Weis, *Analysis in Banach spaces II*,
+2017, Chapter 6); neither that book nor any other source for it was consulted for this
+formalization. A hypothesis (assumed, not proved) of `remark6_3`, `proposition6_5_infty` and
+`proposition6_5` only (and of their helpers `square_eq31_two`, `square_eq31_q`). As for
+`KahaneKhintchine`, it is stated for seminorms; the Banach case gives it through the quotient by the
+kernel of `nrm` of the span of the `x_i`. -/
+def KahaneKhintchineHypercontractive : Prop :=
+  ∀ p q : ℝ, 1 < p → p ≤ q →
+    ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
+      (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
+      ∀ (n : ℕ) (x : Fin n → E),
+        lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
+          √((q - 1) / (p - 1)) * lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
 
 /-! ### Hypotheses of the paper's proof of Theorem 1.2
 

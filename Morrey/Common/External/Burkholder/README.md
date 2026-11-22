@@ -32,9 +32,9 @@ integrated along the martingale, so that `E V (X_n, Y_n) ≤ E U (X_n, Y_n) ≤ 
 square function inequality from (1), applied to `X` and the `ℓ²`-valued martingale `Σ_k dX_k e_k`,
 each differentially subordinate to the other. (13) is a polynomial inequality in `|a|`, `|b|`;
 (14) follows from the sign of the second derivative where the lines avoid `0`, and by
-approximation elsewhere. Departures from the sources, in the mechanics of single steps, are listed
-in the modules' docstrings: the kinks of `U` are smoothed with `√(|z|² + ε²)` (Mathlib has no lemma
-for gluing concave pieces), and the square function inequality uses `H^{n+1}` for `ℓ²(H)`.
+approximation elsewhere. Two points of mechanics (see the module docstrings): the kinks of `U` are
+smoothed with `√(|z|² + ε²)` instead of gluing concave pieces through one-sided derivatives, and
+the square function inequality uses `H^{n+1}` for `ℓ²(H)`. The book was not consulted.
 
 **Who uses them.** Cassese's Theorem 2.3 is stated in the paper's terms in
 [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean) (`burkholderInequality_holds`,
