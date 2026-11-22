@@ -1921,7 +1921,7 @@ characterization of quasiconvexity (Lemma 2.2; Šverák's Lemma 1, `Sverak.lemma
 
 Proof (`square_not_hessianQuasiconvexAt_of_periodic`, module `Square.Hessian`): the test maps are
 `ψ_K (x) = N_K⁻² η_K (x) φ (N_K x)`, with Šverák's cutoff `η_K = Sverak.l1_eta n K` (equal to `1`
-on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(2K), 1 − 1/(2K))^n`) and the oscillation
+on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(16K), 1 − 1/(16K))^n`) and the oscillation
 `N_K = K + a_K + b_K`, where `a_K`, `b_K` bound `‖D η_K‖`, `‖D² η_K‖` (finite: `η_K` is smooth with
 compact support). By Leibniz's rule `‖D² ψ_K‖ ≤ ‖D²φ‖_∞ + 2 ‖Dφ‖_∞ + ‖φ‖_∞` for `K ≥ 1`, and
 `D² ψ_K (x) = D²φ (N_K x)` on `(1/K, 1 − 1/K)^n`; dominated convergence and the averaging limit of

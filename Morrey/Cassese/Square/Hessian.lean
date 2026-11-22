@@ -13,7 +13,7 @@ The second-order analogue of the periodic characterization of quasiconvexity (Le
 quasiconvex at `A` (`square_not_hessianQuasiconvexAt_of_periodic`).
 
 The test maps are `ψ_K (x) = N_K⁻² η_K (x) φ (N_K x)`, with Šverák's cutoff `η_K = l1_eta n K`
-(equal to `1` on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(2K), 1 − 1/(2K))^n`) and an oscillation
+(equal to `1` on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(16K), 1 − 1/(16K))^n`) and an oscillation
 `N_K = K + a_K + b_K`, where `a_K`, `b_K` bound `‖D η_K‖` and `‖D² η_K‖`. By Leibniz's rule
 (`norm_iteratedFDeriv_mul_le`),
 `‖D² ψ_K‖ ≤ ‖D²φ‖_∞ + 2 (a_K / N_K) ‖Dφ‖_∞ + (b_K / N_K²) ‖φ‖_∞ ≤ ‖D²φ‖_∞ + 2 ‖Dφ‖_∞ + ‖φ‖_∞`
@@ -179,7 +179,7 @@ theorem square_hess_norm_iteratedFDeriv_two_mul_le {η g : (Fin n → ℝ) → �
 theorem square_hess_eta_hasCompactSupport {K : ℝ} (hK : 0 < K) :
     HasCompactSupport (Sverak.l1_eta n K) := by
   refine HasCompactSupport.intro (isCompact_univ_pi fun _ =>
-    isCompact_Icc (a := 1 / (2 * K)) (b := 1 - 1 / (2 * K))) fun x hx => ?_
+    isCompact_Icc (a := 1 / (16 * K)) (b := 1 - 1 / (16 * K))) fun x hx => ?_
   exact Sverak.l1_eta_eq_zero hK fun h => hx fun i _ => ⟨(h i).1.le, (h i).2.le⟩
 
 /-- The derivatives of `η_K` are bounded. -/
@@ -239,7 +239,7 @@ theorem square_not_hessianQuasiconvexAt_of_periodic {n : ℕ} {F : Matrix (Fin n
   have hsupp : ∀ K, 1 ≤ K → HasCompactSupport (ψ K) ∧ tsupport (ψ K) ⊆ unitCube n := by
     intro K hK
     have hK0 : 0 < K := by linarith
-    set S := Set.pi Set.univ fun _ : Fin n => Set.Icc (1 / (2 * K)) (1 - 1 / (2 * K))
+    set S := Set.pi Set.univ fun _ : Fin n => Set.Icc (1 / (16 * K)) (1 - 1 / (16 * K))
     have h0 : ∀ x, x ∉ S → ψ K x = 0 := fun x hx => by
       have : Sverak.l1_eta n K x = 0 :=
         Sverak.l1_eta_eq_zero hK0 fun h => hx fun i _ => ⟨(h i).1.le, (h i).2.le⟩
@@ -249,7 +249,7 @@ theorem square_not_hessianQuasiconvexAt_of_periodic {n : ℕ} {F : Matrix (Fin n
       (isClosed_set_pi fun _ _ => isClosed_Icc)).trans ?_
     intro x hx i _
     have := hx i (Set.mem_univ _)
-    have hp : 0 < 1 / (2 * K) := by positivity
+    have hp : 0 < 1 / (16 * K) := by positivity
     exact ⟨hp.trans_le this.1, by linarith [this.2]⟩
   -- the Hessians of `ψ_K` are bounded uniformly in `K ≥ 1`
   have hbound : ∀ K, 1 ≤ K → ∀ x i j, |hessian (ψ K) x i j| ≤ R := by
@@ -303,15 +303,15 @@ theorem square_not_hessianQuasiconvexAt_of_periodic {n : ℕ} {F : Matrix (Fin n
           rw [hR]
           nlinarith
   -- on `(1/K, 1 − 1/K)^n`, `D² ψ_K (x) = D² φ (N_K x)`
-  have hinner : ∀ K, 0 < K → ∀ x : Fin n → ℝ, (∀ i, 1 / K < x i ∧ x i < 1 - 1 / K) →
+  have hinner : ∀ K, 1 ≤ K → ∀ x : Fin n → ℝ, (∀ i, 1 / K < x i ∧ x i < 1 - 1 / K) →
       hessian (ψ K) x = hessian φ (N K • x) := by
-    intro K hK0 x hx
-    have hN0 : N K ≠ 0 := (hK0.trans_le (hKN K)).ne'
+    intro K hK1 x hx
+    have hN0 : N K ≠ 0 := ((zero_lt_one.trans_le hK1).trans_le (hKN K)).ne'
     have hev : ψ K =ᶠ[𝓝 x] fun y => (N K ^ 2)⁻¹ * φ (N K • y) := by
       have hO : IsOpen (Set.pi Set.univ fun _ : Fin n => Set.Ioo (1 / K) (1 - 1 / K)) :=
         isOpen_set_pi Set.finite_univ fun _ _ => isOpen_Ioo
       filter_upwards [hO.mem_nhds fun i _ => hx i] with y hy
-      have : Sverak.l1_eta n K y = 1 := Sverak.l1_eta_eq_one hK0 fun i =>
+      have : Sverak.l1_eta n K y = 1 := Sverak.l1_eta_eq_one hK1 fun i =>
         ⟨(hy i (Set.mem_univ _)).1.le, (hy i (Set.mem_univ _)).2.le⟩
       simp only [hψdef, this, one_mul]
     rw [square_hess_hessian_congr ((hψc K).of_le hle2) ((hgc K).of_le hle2) hev,
@@ -365,9 +365,9 @@ theorem square_not_hessianQuasiconvexAt_of_periodic {n : ℕ} {F : Matrix (Fin n
         filter_upwards [ht.eventually (Iio_mem_nhds hxi.1),
           ht.eventually (Iio_mem_nhds (sub_pos.2 hxi.2))] with K h1 h2
         exact ⟨h1, by linarith⟩
-      filter_upwards [hev, eventually_gt_atTop 0] with K hK hK0
+      filter_upwards [hev, eventually_ge_atTop 1] with K hK hK1
       show (0:ℝ) = F (A + hessian (ψ K) x) - F (A + hessian φ (N K • x))
-      rw [hinner K hK0 x hK, sub_self]
+      rw [hinner K hK1 x hK, sub_self]
   rw [integral_zero] at hlim
   -- by periodicity, `∫ F (A + D²φ (N_K x)) dx → ∫ F (A + D²φ)`
   have hNt : Tendsto N atTop atTop := tendsto_atTop_mono hKN tendsto_id
