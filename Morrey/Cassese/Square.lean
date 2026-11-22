@@ -1921,7 +1921,7 @@ characterization of quasiconvexity (Lemma 2.2; Šverák's Lemma 1, `Sverak.lemma
 
 Proof (`square_not_hessianQuasiconvexAt_of_periodic`, module `Square.Hessian`): the test maps are
 `ψ_K (x) = N_K⁻² η_K (x) φ (N_K x)`, with Šverák's cutoff `η_K = Sverak.l1_eta n K` (equal to `1`
-on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(2K), 1 − 1/(2K))^n`) and the oscillation
+on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(16K), 1 − 1/(16K))^n`) and the oscillation
 `N_K = K + a_K + b_K`, where `a_K`, `b_K` bound `‖D η_K‖`, `‖D² η_K‖` (finite: `η_K` is smooth with
 compact support). By Leibniz's rule `‖D² ψ_K‖ ≤ ‖D²φ‖_∞ + 2 ‖Dφ‖_∞ + ‖φ‖_∞` for `K ≥ 1`, and
 `D² ψ_K (x) = D²φ (N_K x)` on `(1/K, 1 − 1/K)^n`; dominated convergence and the averaging limit of
@@ -2616,8 +2616,10 @@ characterization `External.Rindler.quasiconvexAtOn_iff_periodic`, the paper's fo
 * `Sym (∇w) = diag (−Σ_j sin (θ_i − θ_j))` (`square_symPart_witness`) with
   `|Σ_j sin (θ_i − θ_j)| ≤ |Z|`, `Z = Σ_j e^{iθ_j}` (`square_abs_sum_sin_le`), so
   `‖Sym (∇w)‖_{S_q} ≤ d^{1/q} |Z|` (`square_schattenNorm_diagonal_le`, also for `q = ∞`); and
-  `|Z| ≤ d`, `‖Z‖_{L^p} ≤ √(p d)` (`square_lp_zc_le`: `E |Z|^{2m} ≤ m! d^m`, `square_moment_zc`,
-  and monotonicity of `L^p` norms), so `‖Sym (∇w)‖_{L^p (S_q)} ≤ d^{1/q} min (√(d p), d)`.
+  `|Z| ≤ d`, `‖Z‖_{L^p} ≤ √(p d)` (`square_lp_zc_le`: the exact moments
+  `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)² ≤ m! d^m`, `square_moment_zc_eq` and
+  `square_moment_zc`, and monotonicity of `L^p` norms), so
+  `‖Sym (∇w)‖_{L^p (S_q)} ≤ d^{1/q} min (√(d p), d)`.
 The ratio is at least `d^{1 − 1/q} / (8 min (√(d p), d))`. -/
 theorem proposition6_1 (q : ℝ≥0∞) (hq : 2 ≤ q) :
     ∃ c : ℝ, 0 < c ∧ ∀ d : ℕ, 2 ≤ d → ∀ p : ℝ, 1 ≤ p →

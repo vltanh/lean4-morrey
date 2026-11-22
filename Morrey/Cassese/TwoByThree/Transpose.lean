@@ -19,26 +19,41 @@ Helpers are prefixed `tbt3_`.
 @[expose] public section
 
 open MeasureTheory
-open scoped Matrix
+open scoped Matrix Real
 
 namespace Cassese
 
-/-- For `0 ≤ δ ≤ δ₀ = 75 / (64·10⁶)` there is `R > 4` with `∫ q̂_{δ,Λ} (∇v_R) < 0`. -/
+/-- Negativity (TeX 2131–2135): for `0 ≤ δ ≤ δ₀ = 75 / (64·10⁶)`, `−c + C δ ≤ −c/2 < 0`
+(`c = 75/8`, `C = 4·10⁶`), so the bound `2π (−c + C δ) log R + O(1)` of `tbt3_integral_le` is
+negative, and `∫ q̂_{δ,Λ} (∇v_R) < 0`, for all sufficiently large `R`. -/
 theorem tbt3_exists_R {δ : ℝ} (hδ : 0 ≤ δ) (hδ₀ : δ ≤ 75 / 64000000) (Λ : ℝ) :
-    ∃ R : ℝ, 4 < R ∧ ∫ x, qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) < 0 := by
-  set L := |32 / 75 * (tbt3M1 + tbt3M3)| + 1
-  refine ⟨4 * Real.exp L, ?_, ?_⟩
-  · have : 1 < Real.exp L := Real.one_lt_exp_iff.mpr (by positivity)
+    ∃ R₀ : ℝ, ∀ R ≥ R₀, 2 < R ∧ ∫ x, qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) < 0 := by
+  set L := |8 / (75 * π) * (tbt3M1 + tbt3M3)| + Real.log 2 + 1
+  have hlog2 : 0 < Real.log 2 := Real.log_pos one_lt_two
+  have hL : Real.log 2 < L := by have := abs_nonneg (8 / (75 * π) * (tbt3M1 + tbt3M3)); linarith
+  refine ⟨Real.exp L, fun R hR => ?_⟩
+  have hR2 : 2 < R :=
+    lt_of_lt_of_le (by rw [← Real.exp_log two_pos]; exact Real.exp_lt_exp.mpr hL) hR
+  refine ⟨hR2, lt_of_le_of_lt (tbt3_integral_le hR2 hδ (by linarith) Λ) ?_⟩
+  have hπ := Real.pi_pos
+  have hlogR : L ≤ Real.log R := by
+    rw [← Real.log_exp L]; exact Real.log_le_log (Real.exp_pos L) hR
+  -- `−c + C δ ≤ −c/2`
+  have hc : -(75 / 8) + 4000000 * δ ≤ -(75 / 16) := by linarith
+  have h1 : 2 * π * (-(75 / 8) + 4000000 * δ) * Real.log R ≤ -(75 * π / 8) * L := by
+    have := mul_le_mul_of_nonneg_right hc (hlog2.le.trans (hL.le.trans hlogR))
+    nlinarith
+  have h2 : π * (75 / 8 - 4000000 * δ) * Real.log 2 ≤ 75 * π / 8 * Real.log 2 := by
+    have : 0 ≤ π * (4000000 * δ) * Real.log 2 := by positivity
     linarith
-  · have hR : 4 < 4 * Real.exp L := by
-      have : 1 < Real.exp L := Real.one_lt_exp_iff.mpr (by positivity)
-      linarith
-    have h := tbt3_integral_le hR hδ hδ₀ Λ
-    have hl : Real.log (4 * Real.exp L / 4) = L := by
-      rw [mul_div_cancel_left₀ _ (by norm_num), Real.log_exp]
-    rw [hl] at h
-    have : 32 / 75 * (tbt3M1 + tbt3M3) ≤ |32 / 75 * (tbt3M1 + tbt3M3)| := le_abs_self _
+  have h3 : tbt3M1 + tbt3M3 ≤ 75 * π / 8 * |8 / (75 * π) * (tbt3M1 + tbt3M3)| := by
+    have h := mul_le_mul_of_nonneg_left (le_abs_self (8 / (75 * π) * (tbt3M1 + tbt3M3)))
+      (by positivity : (0 : ℝ) ≤ 75 * π / 8)
+    have e : 75 * π / 8 * (8 / (75 * π) * (tbt3M1 + tbt3M3)) = tbt3M1 + tbt3M3 := by
+      field_simp
     linarith
+  simp only [L] at h1
+  linarith
 
 /-- The translation of `jac`. -/
 theorem tbt3_jac_sub {n : ℕ} {W : (Fin 2 → ℝ) → Fin n → ℝ} (hW : Differentiable ℝ W)
@@ -56,12 +71,13 @@ theorem tbt3_tsupport_PhiR {R : ℝ} (hR : 0 < R) :
   by_contra h
   exact hz (tbt3_PhiR_zero hR (not_le.mp h).le)
 
-/-- `q̂_{δ,Λ}` is not quasiconvex at `0` for `0 < δ ≤ δ₀`: the rescaled witness
+/-- `q̂_{δ,Λ}` is not quasiconvex at `0` for `0 ≤ δ ≤ δ₀`: the rescaled witness
 `x ↦ λ v_R ((x − c) / λ)`, `c = (1/2, 1/2)`, `λ = 1/(8R)`, has compact support in the open unit
 square, the same gradients, and energy `λ² ∫ q̂ (∇v_R) < 0`. -/
 theorem tbt3_not_quasiconvexAt {δ : ℝ} (hδ : 0 ≤ δ) (hδ₀ : δ ≤ 75 / 64000000) (Λ : ℝ) :
     ¬ QuasiconvexAt (qHat δ Λ) 0 := by
-  obtain ⟨R, hR, hneg⟩ := tbt3_exists_R hδ hδ₀ Λ
+  obtain ⟨R, hR'⟩ := tbt3_exists_R hδ hδ₀ Λ
+  obtain ⟨hR, hneg⟩ := hR' R le_rfl
   have hR0 : 0 < R := by linarith
   set v := tbt3V (tbt3PhiR R)
   have hv : ContDiff ℝ tbt3Top v := tbt3_contDiff_V (tbt3_contDiff_PhiR R)
@@ -159,23 +175,25 @@ derivatives, `tbt3_jac_V_transpose`), so the normal penalty vanishes and
 paper (TeX 2121–2123) says only "with `c, C > 0`" and gives no values; the sharper `c ≈ 1029.8`,
 `C ≈ 62938` come from the project's own numerical check of the paper's "direct calculation"
 (recorded in the project's inventory of the paper), not from the paper; any `c > 0`, `C < ∞`
-suffice, and the Lean uses the cruder values above with `δ₀ = 75/(64·10⁶)`. The inner region
-`|x|² ≤ 2` and the outer region `|x|² ≥ R²` (where `∇v_R (x) =
-R^{−1/2} ∇v_out (x/R)`, so its energy does not depend on `R`) contribute a bounded amount
-`M₁ + M₃`; hence for `0 < δ ≤ δ₀ = 75/(64·10⁶)`,
-`∫ q̂_{δ,Λ} (∇v_R) ≤ M₁ + M₃ − (75/32) log (R/4) < 0` for `R` large (`tbt3_integral_le`,
-`tbt3_exists_R`), the paper's `2π (−c + Cδ) log R + O(1) < 0`. Rescaled into the open unit square
-the witness refutes quasiconvexity at `0` (`tbt3_not_quasiconvexAt`), and `4`-homogeneity gives
-"nowhere" (Toolkit's `nowhereQuasiconvex_of_not_quasiconvexAt_zero`, the consequence of
-Proposition 2.3 that the route `cs-envelope-cons` names).
+suffice, and the Lean uses the cruder values above with `δ₀ = 75/(64·10⁶)`. So
+`q̂_{δ,Λ} (∇v_R) ≤ (−c + C δ) / |x|²` in the bulk (`tbt3_bulk_le`), and in polar coordinates
+`∫_{2 < |x|² < R²} |x|⁻² dx = ∫_{−π}^{π} ∫_{√2}^{R} r⁻¹ dr dθ = 2π log (R/√2)`
+(`tbt3_integral_inv_Sq_bulk`). The inner region `|x|² ≤ 2` and the outer region `|x|² ≥ R²`
+(where `∇v_R (x) = R^{−1/2} ∇v_out (x/R)`, so its energy does not depend on `R`) contribute at
+most `M₁ + M₃` for `δ ≤ 1` (`tbt3_inner_le`, `tbt3_outer_le`). Hence, for `R > 2` and
+`0 ≤ δ ≤ 1`, `∫ q̂_{δ,Λ} (∇v_R) ≤ 2π (−c + C δ) log R + O(1)` with
+`O(1) = M₁ + M₃ + π (c − C δ) log 2` (`tbt3_integral_le`), the paper's bound; for
+`0 ≤ δ ≤ δ₀`, `−c + C δ ≤ −c/2 < 0`, so the energy is negative for all sufficiently large `R`
+(`tbt3_exists_R`). Rescaled into the open unit square the witness refutes quasiconvexity at `0`
+(`tbt3_not_quasiconvexAt`), and `4`-homogeneity gives "nowhere" (Toolkit's
+`nowhereQuasiconvex_of_not_quasiconvexAt_zero`, the consequence of Proposition 2.3 that the route
+`cs-envelope-cons` names).
 
 Details that the sketch leaves open, filled in (not departures of argument): the cut-offs are
 `σ (|x|² − 1)` and `σ (2 − |x|²/R²)` with `σ = Real.smoothTransition` (the paper: "cutting off
-`φ` smoothly at radii `1` and `R`"), and the outer profile `φ_out = σ (4|y|² − 1) σ (2 − |y|²) φ`
-carries an extra inner cut-off so that it is smooth (it is used only on `|y|² ≥ 1/2`); the
-logarithmic divergence `∫_{2 < |x|² < R²} |x|⁻² dx` is bounded below by `½ log (R/4)`, its integral
-over the triangle `2 < x₀ < R/2`, `0 < x₁ < x₀` (Tonelli, `tbt3_J_lower`), instead of being
-computed as `2π log (R/√2)` in polar coordinates; only its divergence is used. -/
+`φ` smoothly at radii `1` and `R`"), so that `φ_R = φ` on the bulk `2 < |x|² < R²`, that is
+`√2 < r < R`, and the outer profile `φ_out = σ (4|y|² − 1) σ (2 − |y|²) φ` carries an extra inner
+cut-off so that it is smooth (it is used only on `|y|² ≥ 1/2`). -/
 theorem corollary5_3 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       IsHomogeneousPolynomial 4 (qHat δ (K / δ)) ∧ RankOneConvex (qHat δ (K / δ)) ∧

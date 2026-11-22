@@ -1,7 +1,7 @@
 module
 
 public import Morrey.Sverak.Cube
-public import Mathlib.Analysis.SpecialFunctions.SmoothTransition
+public import Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
 public import Mathlib.Analysis.Calculus.FDeriv.Mul
 public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
@@ -25,10 +25,12 @@ paper's class does not depend on `Ω`, by [3] and [10] of the paper, which is no
 
 Helpers (prefix `l1_`):
 
-* the cutoff `η_ε` (`l1_eta`, for `ε = 1/K`): a product of one-dimensional profiles built from
-  `Real.smoothTransition`, equal to `1` on `[ε, 1 - ε]^n`, vanishing off `(ε/2, 1 - ε/2)^n`, with
-  `|D η_ε| ≤ 4 n B / ε` (`l1_eta_fderiv_bound`), where the paper asks `|D η_ε| ≤ 2 / ε`; the
-  paper's constant 2 is not used, any bound `C / ε` serves;
+* the paper's cutoff `η_ε` (`l1_eta`, for `ε = 1/K`): smooth, equal to `1` on `[ε, 1 - ε]^n`,
+  vanishing in a neighbourhood of the boundary of `[0, 1]^n` (off `(ε/16, 1 - ε/16)^n`), with
+  `|D η_ε| ≤ 2 / ε` (`l1_eta_fderiv_bound`). It is the mollification, by a normed bump of radius
+  `ε/16` (`l1_bump`), of the Lipschitz profile `p = min (1, max (0, (d - ε/8) · 8/(5ε)))`
+  (`l1_profile`) of the distance `d` to the boundary of the cube (`l1_dist`), so that `D η_ε` is
+  bounded by the Lipschitz constant `8/(5ε)` of `p`;
 * the periodic average identity `∫_{(0,1)^n} G (N x) dx = ∫_{(0,1)^n} G` for an integer `N ≥ 1`
   (`l1_setIntegral_comp_nsmul`), and the averaging limit `∫_{(0,1)^n} G (N x) dx → ∫_{(0,1)^n} G`
   as `N → ∞` through the reals (`l1_tendsto_setIntegral_comp_smul`);
@@ -39,7 +41,7 @@ Helpers (prefix `l1_`):
 @[expose] public section
 
 open MeasureTheory Filter Topology
-open scoped Pointwise
+open scoped Pointwise Convolution
 
 namespace Sverak
 
@@ -49,181 +51,149 @@ def IsPeriodic {m n : ℕ} (u : (Fin n → ℝ) → Fin m → ℝ) : Prop :=
 
 /-! ### The cutoff `η_ε` -/
 
-/-- The derivative of `Real.smoothTransition` is bounded (it is continuous and vanishes off
-`[0, 1]`). -/
-theorem l1_deriv_smoothTransition_bound :
-    ∃ B : ℝ, 0 ≤ B ∧ ∀ t, |deriv Real.smoothTransition t| ≤ B := by
-  have hc : Continuous (deriv Real.smoothTransition) :=
-    (Real.smoothTransition.contDiff (n := 1)).continuous_deriv le_rfl
-  have hs : HasCompactSupport (deriv Real.smoothTransition) := by
-    refine HasCompactSupport.intro (isCompact_Icc (a := (0:ℝ)) (b := 1)) fun t ht => ?_
-    rcases not_and_or.1 ht with h | h
-    · push Not at h
-      have : Real.smoothTransition =ᶠ[𝓝 t] fun _ => 0 := by
-        filter_upwards [Iio_mem_nhds h] with s hs
-        exact Real.smoothTransition.zero_of_nonpos hs.le
-      rw [this.deriv_eq]; simp
-    · push Not at h
-      have : Real.smoothTransition =ᶠ[𝓝 t] fun _ => 1 := by
-        filter_upwards [Ioi_mem_nhds h] with s hs
-        exact Real.smoothTransition.one_of_one_le hs.le
-      rw [this.deriv_eq]; simp
-  obtain ⟨C, hC⟩ := hc.bounded_above_of_compact_support hs
-  exact ⟨max C 0, le_max_right _ _, fun t => (hC t).trans (le_max_left _ _)⟩
+/-- The distance from `x ∈ [0, 1]^n` to the boundary of the cube, for the sup norm:
+`d (x) = min (1, minᵢ min (xᵢ, 1 - xᵢ))`. The `1` only matters for `n = 0`, where the cube is a
+point and `d = 1`. -/
+noncomputable def l1_dist (n : ℕ) (x : Fin n → ℝ) : ℝ :=
+  Finset.univ.fold min 1 fun i => min (x i) (1 - x i)
 
-/-- The one-dimensional profile of the cutoff, for `ε = 1/K`. -/
-noncomputable def l1_chi (K t : ℝ) : ℝ :=
-  Real.smoothTransition (2 * K * t - 1) * Real.smoothTransition (2 * K * (1 - t) - 1)
+theorem l1_le_dist_iff {n : ℕ} {x : Fin n → ℝ} {t : ℝ} :
+    t ≤ l1_dist n x ↔ t ≤ 1 ∧ ∀ i, t ≤ x i ∧ t ≤ 1 - x i := by
+  simp [l1_dist, Finset.le_fold_min]
 
-theorem l1_chi_nonneg (K t : ℝ) : 0 ≤ l1_chi K t :=
-  mul_nonneg (Real.smoothTransition.nonneg _) (Real.smoothTransition.nonneg _)
-
-theorem l1_chi_le_one (K t : ℝ) : l1_chi K t ≤ 1 := by
-  unfold l1_chi
-  nlinarith [Real.smoothTransition.le_one (2 * K * t - 1),
-    Real.smoothTransition.nonneg (2 * K * t - 1),
-    Real.smoothTransition.le_one (2 * K * (1 - t) - 1),
-    Real.smoothTransition.nonneg (2 * K * (1 - t) - 1)]
-
-theorem l1_chi_contDiff (K : ℝ) : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (l1_chi K) := by
-  unfold l1_chi
-  have h := Real.smoothTransition.contDiff (n := ⊤)
-  exact (h.comp (by fun_prop)).mul (h.comp (by fun_prop))
-
-/-- `χ = 1` on `[1/K, 1 - 1/K]`. -/
-theorem l1_chi_eq_one {K t : ℝ} (hK : 0 < K) (h1 : 1 / K ≤ t) (h2 : t ≤ 1 - 1 / K) :
-    l1_chi K t = 1 := by
-  unfold l1_chi
-  rw [Real.smoothTransition.one_of_one_le, Real.smoothTransition.one_of_one_le, one_mul]
-  · have : 1 ≤ K * (1 - t) := by
-      rw [le_sub_iff_add_le, ← le_sub_iff_add_le', div_le_iff₀ hK] at h2
-      nlinarith
-    linarith
-  · have : 1 ≤ K * t := by rwa [div_le_iff₀ hK, mul_comm] at h1
-    linarith
-
-/-- `χ = 0` off `(1/(2K), 1 - 1/(2K))`. -/
-theorem l1_chi_eq_zero {K t : ℝ} (hK : 0 < K) (h : t ≤ 1 / (2 * K) ∨ 1 - 1 / (2 * K) ≤ t) :
-    l1_chi K t = 0 := by
-  unfold l1_chi
+theorem l1_dist_le {n : ℕ} {x : Fin n → ℝ} {t : ℝ} (i : Fin n) (h : x i ≤ t ∨ 1 - x i ≤ t) :
+    l1_dist n x ≤ t := by
+  refine (Finset.fold_min_le _).2 (Or.inr ⟨i, Finset.mem_univ i, ?_⟩)
   rcases h with h | h
-  · rw [Real.smoothTransition.zero_of_nonpos, zero_mul]
-    rw [le_div_iff₀ (by positivity)] at h
-    linarith
-  · rw [Real.smoothTransition.zero_of_nonpos (x := 2 * K * (1 - t) - 1), mul_zero]
-    have : 1 - t ≤ 1 / (2 * K) := by linarith
-    rw [le_div_iff₀ (by positivity)] at this
-    linarith
+  · exact (min_le_left _ _).trans h
+  · exact (min_le_right _ _).trans h
 
-theorem l1_chi_hasDerivAt (K t : ℝ) :
-    HasDerivAt (l1_chi K)
-      (deriv Real.smoothTransition (2 * K * t - 1) * (2 * K) *
-          Real.smoothTransition (2 * K * (1 - t) - 1) +
-        Real.smoothTransition (2 * K * t - 1) *
-          (deriv Real.smoothTransition (2 * K * (1 - t) - 1) * (-(2 * K)))) t := by
-  have hd : ∀ s, HasDerivAt Real.smoothTransition (deriv Real.smoothTransition s) s := fun s =>
-    ((Real.smoothTransition.contDiff (n := 1)).differentiable one_ne_zero s).hasDerivAt
-  have h1 : HasDerivAt (fun t => 2 * K * t - 1) (2 * K) t := by
-    simpa using ((hasDerivAt_id t).const_mul (2 * K)).sub_const 1
-  have h2 : HasDerivAt (fun t => 2 * K * (1 - t) - 1) (-(2 * K)) t := by
-    simpa using (((hasDerivAt_id t).const_sub 1).const_mul (2 * K)).sub_const 1
-  exact ((hd _).comp t h1).mul ((hd _).comp t h2)
+/-- `d` is `1`-Lipschitz for the sup norm: `d (y) ≥ d (x) - ‖x - y‖`, since each `yᵢ` and
+`1 - yᵢ` is within `‖x - y‖` of `xᵢ` and `1 - xᵢ`. -/
+theorem l1_dist_lipschitzWith (n : ℕ) : LipschitzWith 1 (l1_dist n) := by
+  refine LipschitzWith.of_le_add fun x y => ?_
+  have h := (l1_le_dist_iff (x := x) (t := l1_dist n x)).1 le_rfl
+  have h' : l1_dist n x - dist x y ≤ l1_dist n y := by
+    refine l1_le_dist_iff.2 ⟨by linarith [h.1, dist_nonneg (x := x) (y := y)], fun i => ?_⟩
+    have hi := abs_le.1 ((Real.dist_eq _ _).symm.trans_le (dist_le_pi_dist x y i))
+    exact ⟨by linarith [(h.2 i).1], by linarith [(h.2 i).2]⟩
+  linarith
 
-/-- `|χ'| ≤ 4 K B = 4 B / ε`, where `B` bounds the derivative of the smooth transition. -/
-theorem l1_chi_deriv_bound {K B : ℝ} (hK : 0 < K)
-    (hB : ∀ s, |deriv Real.smoothTransition s| ≤ B) (t : ℝ) :
-    |deriv (l1_chi K) t| ≤ 4 * K * B := by
-  rw [(l1_chi_hasDerivAt K t).deriv]
-  set p := deriv Real.smoothTransition (2 * K * t - 1)
-  set q := deriv Real.smoothTransition (2 * K * (1 - t) - 1)
-  set b := Real.smoothTransition (2 * K * (1 - t) - 1)
-  set c := Real.smoothTransition (2 * K * t - 1)
-  have hb0 : 0 ≤ b := Real.smoothTransition.nonneg _
-  have hb1 : b ≤ 1 := Real.smoothTransition.le_one _
-  have hc0 : 0 ≤ c := Real.smoothTransition.nonneg _
-  have hc1 : c ≤ 1 := Real.smoothTransition.le_one _
-  have hB0 : 0 ≤ B := (abs_nonneg _).trans (hB 0)
-  have e1 : |p * b| ≤ B := by
-    rw [abs_mul, abs_of_nonneg hb0]
-    calc |p| * b ≤ B * 1 := mul_le_mul (hB _) hb1 hb0 hB0
-      _ = B := mul_one B
-  have e2 : |c * q| ≤ B := by
-    rw [abs_mul, abs_of_nonneg hc0]
-    calc c * |q| ≤ 1 * B := mul_le_mul hc1 (hB _) (abs_nonneg _) zero_le_one
-      _ = B := one_mul B
-  rw [show p * (2 * K) * b + c * (q * -(2 * K)) = 2 * K * (p * b) - 2 * K * (c * q) by ring]
-  refine (abs_sub _ _).trans ?_
-  rw [abs_mul (2 * K) (p * b), abs_mul (2 * K) (c * q), abs_of_pos (by positivity : (0:ℝ) < 2 * K)]
-  nlinarith
+/-- The Lipschitz profile of the cutoff, for `ε = 1/K`:
+`p (x) = min (1, max (0, (d (x) - ε/8) · 8/(5ε)))`, which is `0` where `d ≤ ε/8` and `1` where
+`d ≥ 3ε/4`. -/
+noncomputable def l1_profile (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : ℝ :=
+  min 1 (max 0 ((l1_dist n x - 1 / (8 * K)) * (8 * K / 5)))
 
-/-- The cutoff `η_ε` for `ε = 1/K`: `η_ε (x) = ∏ᵢ χ (xᵢ)`. It is smooth, takes values in `[0, 1]`,
-equals `1` on `[ε, 1 - ε]^n` and vanishes off `(ε/2, 1 - ε/2)^n`, as the paper asks. A note on the
-construction: its gradient satisfies `|D η_ε| ≤ 4 n B / ε` (`l1_eta_fderiv_bound`), with
-`B = sup |smoothTransition'|`, where the paper asks `|D η_ε| ≤ 2 / ε`. The paper's constant 2 is
-not used; any bound `C / ε` serves, since the proof only needs `ε² |D η_ε|` to be bounded. -/
-noncomputable def l1_eta (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : ℝ := ∏ i, l1_chi K (x i)
+theorem l1_profile_mem_Icc (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : l1_profile n K x ∈ Set.Icc 0 1 :=
+  ⟨le_min zero_le_one (le_max_left _ _), min_le_left _ _⟩
 
-theorem l1_eta_contDiff (n : ℕ) (K : ℝ) : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (l1_eta n K) := by
-  unfold l1_eta
-  exact contDiff_prod fun i _ => (l1_chi_contDiff K).comp (contDiff_apply ℝ (fun _ : Fin n => ℝ) i)
+theorem l1_continuous_profile (n : ℕ) (K : ℝ) : Continuous (l1_profile n K) :=
+  continuous_const.min (continuous_const.max
+    (((l1_dist_lipschitzWith n).continuous.sub continuous_const).mul continuous_const))
+
+/-- `p` is `8/(5ε)`-Lipschitz: `d` is `1`-Lipschitz, and the truncations `min 1`, `max 0` are
+`1`-Lipschitz. -/
+theorem l1_profile_lipschitzWith (n : ℕ) {K : ℝ} (hK : 0 ≤ K) :
+    LipschitzWith (Real.toNNReal (8 * K / 5)) (l1_profile n K) := by
+  have h : LipschitzWith (Real.toNNReal (8 * K / 5))
+      fun x => (l1_dist n x - 1 / (8 * K)) * (8 * K / 5) := by
+    refine LipschitzWith.of_dist_le' fun x y => ?_
+    rw [Real.dist_eq, ← sub_mul, sub_sub_sub_cancel_right, abs_mul,
+      abs_of_nonneg (by positivity : (0:ℝ) ≤ 8 * K / 5), mul_comm]
+    gcongr
+    simpa [Real.dist_eq] using (l1_dist_lipschitzWith n).dist_le_mul x y
+  exact (h.const_max 0).const_min 1
+
+/-- `p = 0` where `d ≤ ε/8`. -/
+theorem l1_profile_eq_zero {n : ℕ} {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
+    (h : l1_dist n x ≤ 1 / (8 * K)) : l1_profile n K x = 0 := by
+  have : (l1_dist n x - 1 / (8 * K)) * (8 * K / 5) ≤ 0 :=
+    mul_nonpos_of_nonpos_of_nonneg (by linarith) (by positivity)
+  rw [l1_profile, max_eq_left this, min_eq_right zero_le_one]
+
+/-- `p = 1` where `d ≥ 3ε/4`. -/
+theorem l1_profile_eq_one {n : ℕ} {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
+    (h : 3 / (4 * K) ≤ l1_dist n x) : l1_profile n K x = 1 := by
+  have : 1 ≤ (l1_dist n x - 1 / (8 * K)) * (8 * K / 5) := by
+    have e : (3 / (4 * K) - 1 / (8 * K)) * (8 * K / 5) = 1 := by field_simp; ring
+    calc (1:ℝ) = _ := e.symm
+      _ ≤ _ := by gcongr
+  rw [l1_profile, max_eq_right (zero_le_one.trans this), min_eq_left this]
+
+/-- The mollifier for `ε = 1/K > 0`: the normed bump of radius `ε/16` (`l1_bump_rOut`). -/
+noncomputable def l1_bump (n : ℕ) (K : ℝ) : ContDiffBump (0 : Fin n → ℝ) :=
+  if hK : 0 < K then ContDiffBump.ofRadius (r := 1 / (16 * K)) (by positivity)
+  else ContDiffBump.ofRadius one_pos
+
+theorem l1_bump_rOut {n : ℕ} {K : ℝ} (hK : 0 < K) : (l1_bump n K).rOut = 1 / (16 * K) := by
+  simp [l1_bump, hK]
+
+/-- The paper's cutoff `η_ε` for `ε = 1/K`: the mollification `ρ ⋆ p` of the Lipschitz profile
+`p` (`l1_profile`) by the normed bump `ρ` of radius `ε/16` (`l1_bump`). It is smooth
+(`l1_eta_contDiff`), takes values in `[0, 1]`, equals `1` on `[ε, 1 - ε]^n` (`l1_eta_eq_one`),
+vanishes in a neighbourhood of the boundary of `[0, 1]^n`, namely off `(ε/16, 1 - ε/16)^n`
+(`l1_eta_eq_zero`), and satisfies `|D η_ε| ≤ 2 / ε` (`l1_eta_fderiv_bound`). -/
+noncomputable def l1_eta (n : ℕ) (K : ℝ) : (Fin n → ℝ) → ℝ :=
+  (l1_bump n K).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] l1_profile n K
+
+/-- `η_ε` is smooth: the mollification of a continuous function. -/
+theorem l1_eta_contDiff (n : ℕ) (K : ℝ) : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) (l1_eta n K) :=
+  (l1_bump n K).contDiff_normed_convolution (l1_continuous_profile n K).locallyIntegrable
+
+theorem l1_eta_mem_Icc (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : l1_eta n K x ∈ Set.Icc 0 1 :=
+  (l1_bump n K).normed_convolution_mem_Icc (l1_continuous_profile n K).locallyIntegrable
+    (l1_profile_mem_Icc n K) x
 
 theorem l1_eta_nonneg (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : 0 ≤ l1_eta n K x :=
-  Finset.prod_nonneg fun i _ => l1_chi_nonneg K (x i)
+  (l1_eta_mem_Icc n K x).1
 
 theorem l1_eta_le_one (n : ℕ) (K : ℝ) (x : Fin n → ℝ) : l1_eta n K x ≤ 1 :=
-  Finset.prod_le_one₀ (fun i _ => l1_chi_nonneg K (x i)) fun i _ => l1_chi_le_one K (x i)
+  (l1_eta_mem_Icc n K x).2
 
-/-- `η_ε = 1` on `[ε, 1 - ε]^n`. -/
-theorem l1_eta_eq_one {n : ℕ} {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
-    (hx : ∀ i, 1 / K ≤ x i ∧ x i ≤ 1 - 1 / K) : l1_eta n K x = 1 :=
-  Finset.prod_eq_one fun i _ => l1_chi_eq_one hK (hx i).1 (hx i).2
+/-- `η_ε = 1` on `[ε, 1 - ε]^n` (for `ε ≤ 1`): on the ball of radius `ε/16` about such an `x`,
+`d ≥ 15ε/16 ≥ 3ε/4`, so `p = 1` there. -/
+theorem l1_eta_eq_one {n : ℕ} {K : ℝ} (hK : 1 ≤ K) {x : Fin n → ℝ}
+    (hx : ∀ i, 1 / K ≤ x i ∧ x i ≤ 1 - 1 / K) : l1_eta n K x = 1 := by
+  have hK0 : 0 < K := by linarith
+  unfold l1_eta
+  refine (l1_bump n K).normed_convolution_eq_of_forall_ball fun y hy => l1_profile_eq_one hK0 ?_
+  rw [l1_bump_rOut hK0, Metric.mem_ball, dist_pi_lt_iff (by positivity)] at hy
+  have e1 : 1 / (16 * K) = 1 / K / 16 := by ring
+  have e2 : 3 / (4 * K) = 3 / 4 * (1 / K) := by ring
+  have hK1 : 1 / K ≤ 1 := (div_le_one hK0).2 hK
+  have hKp : 0 < 1 / K := by positivity
+  refine l1_le_dist_iff.2 ⟨by linarith, fun i => ?_⟩
+  have h1 := abs_lt.1 ((Real.dist_eq _ _).symm.trans_lt (hy i))
+  have h2 := hx i
+  constructor <;> linarith [h1.1, h1.2, h2.1, h2.2]
 
-/-- `η_ε` vanishes off `(ε/2, 1 - ε/2)^n`, a neighbourhood of the boundary of `[0, 1]^n`. -/
+/-- `η_ε` vanishes off `(ε/16, 1 - ε/16)^n`, a neighbourhood of the boundary of `[0, 1]^n`: on the
+ball of radius `ε/16` about such an `x`, `d < ε/8`, so `p = 0` there. -/
 theorem l1_eta_eq_zero {n : ℕ} {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
-    (hx : ¬ ∀ i, 1 / (2 * K) < x i ∧ x i < 1 - 1 / (2 * K)) : l1_eta n K x = 0 := by
+    (hx : ¬ ∀ i, 1 / (16 * K) < x i ∧ x i < 1 - 1 / (16 * K)) : l1_eta n K x = 0 := by
   push Not at hx
   obtain ⟨i, hi⟩ := hx
-  refine Finset.prod_eq_zero (Finset.mem_univ i) (l1_chi_eq_zero hK ?_)
-  by_cases h : 1 / (2 * K) < x i
-  · exact Or.inr (hi h)
-  · exact Or.inl (not_lt.1 h)
+  unfold l1_eta
+  refine (l1_bump n K).normed_convolution_eq_of_forall_ball fun y hy => l1_profile_eq_zero hK ?_
+  rw [l1_bump_rOut hK, Metric.mem_ball, dist_pi_lt_iff (by positivity)] at hy
+  have h1 := abs_lt.1 ((Real.dist_eq _ _).symm.trans_lt (hy i))
+  have e : 1 / (8 * K) = 2 * (1 / (16 * K)) := by ring
+  refine l1_dist_le i ?_
+  by_cases h : 1 / (16 * K) < x i
+  · exact Or.inr (by linarith [hi h, h1.1, h1.2])
+  · exact Or.inl (by linarith [h1.1, h1.2])
 
-/-- The gradient bound `|D η_ε| ≤ 4 n B / ε` for `ε = 1/K`, with `B` a bound for the derivative of
-`Real.smoothTransition`. The paper asks `|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any
-bound `C / ε` serves (only the boundedness of `ε² |D η_ε|` enters, in
-`l1_fderiv_testMap_bound`). -/
-theorem l1_eta_fderiv_bound {n : ℕ} {K B : ℝ} (hK : 0 < K)
-    (hB : ∀ s, |deriv Real.smoothTransition s| ≤ B) (x : Fin n → ℝ) :
-    ‖fderiv ℝ (l1_eta n K) x‖ ≤ n * (4 * K * B) := by
-  classical
-  have hg : ∀ i ∈ (Finset.univ : Finset (Fin n)), HasFDerivAt (fun y : Fin n → ℝ => l1_chi K (y i))
-      (deriv (l1_chi K) (x i) • ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => ℝ) i) x :=
-    fun i _ => by
-      have h1 : HasDerivAt (l1_chi K) (deriv (l1_chi K) (x i)) ((fun y : Fin n → ℝ => y i) x) :=
-        (l1_chi_hasDerivAt K (x i)).differentiableAt.hasDerivAt
-      have h2 : HasFDerivAt (fun y : Fin n → ℝ => y i)
-          (ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => ℝ) i) x :=
-        hasFDerivAt_apply i x
-      exact h1.comp_hasFDerivAt x h2
-  have hd := HasFDerivAt.finsetProd hg
-  rw [show l1_eta n K = (∏ i ∈ Finset.univ, (fun y : Fin n → ℝ => l1_chi K (y i)) ·) from rfl,
-    hd.fderiv]
-  refine (norm_sum_le _ _).trans ?_
-  calc ∑ i, ‖(∏ j ∈ Finset.univ.erase i, l1_chi K (x j)) •
-        (deriv (l1_chi K) (x i) • ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => ℝ) i)‖
-      ≤ ∑ _i : Fin n, 4 * K * B := Finset.sum_le_sum fun i _ => ?_
-    _ = n * (4 * K * B) := by simp
-  have hproj : ‖ContinuousLinearMap.proj (R := ℝ) (φ := fun _ : Fin n => ℝ) i‖ ≤ 1 := by
-    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun y => ?_
-    simpa using norm_le_pi_norm y i
-  have hc : ‖∏ j ∈ Finset.univ.erase i, l1_chi K (x j)‖ ≤ 1 := by
-    rw [Real.norm_eq_abs, abs_of_nonneg (Finset.prod_nonneg fun j _ => l1_chi_nonneg K (x j))]
-    exact Finset.prod_le_one₀ (fun j _ => l1_chi_nonneg K (x j)) fun j _ => l1_chi_le_one K (x j)
-  have hd : ‖deriv (l1_chi K) (x i)‖ ≤ 4 * K * B := l1_chi_deriv_bound hK hB (x i)
-  have hB0 : 0 ≤ B := (abs_nonneg _).trans (hB 0)
-  rw [norm_smul, norm_smul]
-  calc _ ≤ 1 * (4 * K * B * 1) := by gcongr
-    _ = 4 * K * B := by ring
+/-- The paper's gradient bound `|D η_ε| ≤ 2 / ε` for `ε = 1/K`: the mollification keeps the
+Lipschitz constant `8/(5ε)` of `p` (`ContDiffBump.norm_fderiv_normed_convolution_le`). The norm is
+the operator norm for the sup norm on `ℝ^n`, the `ℓ¹` norm of the gradient, which dominates its
+Euclidean norm. -/
+theorem l1_eta_fderiv_bound {n : ℕ} {K : ℝ} (hK : 0 < K) (x : Fin n → ℝ) :
+    ‖fderiv ℝ (l1_eta n K) x‖ ≤ 2 * K := by
+  refine ((l1_bump n K).norm_fderiv_normed_convolution_le
+    (l1_profile_lipschitzWith n hK.le) x).trans ?_
+  rw [Real.coe_toNNReal _ (by positivity)]
+  linarith
 
 /-! ### Periodic functions -/
 
@@ -470,7 +440,7 @@ theorem l1_testMap_contDiff {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
 theorem l1_testMap_support {m n : ℕ} (u : (Fin n → ℝ) → Fin m → ℝ) {K : ℝ} (hK : 1 ≤ K) :
     HasCompactSupport (l1_testMap u K) ∧ tsupport (l1_testMap u K) ⊆ unitCube n := by
   have hK0 : 0 < K := by linarith
-  set S := Set.pi Set.univ fun _ : Fin n => Set.Icc (1 / (2 * K)) (1 - 1 / (2 * K))
+  set S := Set.pi Set.univ fun _ : Fin n => Set.Icc (1 / (16 * K)) (1 - 1 / (16 * K))
   have h0 : ∀ x, x ∉ S → l1_testMap u K x = 0 := fun x hx => by
     have : l1_eta n K x = 0 := l1_eta_eq_zero hK0 fun h => hx fun i _ => ⟨(h i).1.le, (h i).2.le⟩
     simp [l1_testMap, this]
@@ -479,12 +449,12 @@ theorem l1_testMap_support {m n : ℕ} (u : (Fin n → ℝ) → Fin m → ℝ) {
     (isClosed_set_pi fun _ _ => isClosed_Icc)).trans ?_
   intro x hx i _
   have := hx i (Set.mem_univ _)
-  have hp : 0 < 1 / (2 * K) := by positivity
+  have hp : 0 < 1 / (16 * K) := by positivity
   exact ⟨hp.trans_le this.1, by linarith [this.2]⟩
 
 /-- On `(ε, 1 - ε)^n`, `D u_ε (x) = D u (x / ε²)`. -/
 theorem l1_jac_testMap_inner {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
-    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) {K : ℝ} (hK : 0 < K) {x : Fin n → ℝ}
+    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) {K : ℝ} (hK : 1 ≤ K) {x : Fin n → ℝ}
     (hx : ∀ i, 1 / K < x i ∧ x i < 1 - 1 / K) :
     jac (l1_testMap u K) x = jac u ((K ^ 2) • x) := by
   have hev : l1_testMap u K =ᶠ[𝓝 x] fun y => (K ^ 2)⁻¹ • u ((K ^ 2) • y) := by
@@ -508,14 +478,14 @@ theorem l1_jac_testMap_inner {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
   have hK2 : K ^ 2 ≠ 0 := by positivity
   simp [hK2]
 
-/-- `D u_ε = ε² u (x/ε²) ⊗ D η_ε + η_ε D u (x/ε²)` is bounded uniformly in `ε = 1/K ≤ 1`: each row
-satisfies `|D (u_ε)ᵢ| ≤ D + 4 n B U ε ≤ D + 4 n B U`, where `U` bounds `|u|`, `D` bounds the rows of
-`D u`, and `B` bounds the derivative of `Real.smoothTransition` (so `|D η_ε| ≤ 4 n B / ε`). -/
+/-- `D u_ε = ε² u (x/ε²) ⊗ D η_ε + η_ε D u (x/ε²)` is bounded uniformly in `ε = 1/K ≤ 1`: with
+`|D η_ε| ≤ 2 / ε` (`l1_eta_fderiv_bound`), each row satisfies `|D (u_ε)ᵢ| ≤ D + 2 U ε ≤ D + 2 U`,
+where `U` bounds `|u|` and `D` bounds the rows of `D u`. -/
 theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → ℝ}
-    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) {K : ℝ} (hK : 1 ≤ K) {B U D : ℝ}
-    (hB : ∀ s, |deriv Real.smoothTransition s| ≤ B) (hU : ∀ y, ‖u y‖ ≤ U)
-    (hD : ∀ i y, ‖fderiv ℝ (fun y => u y i) y‖ ≤ D) (x : Fin n → ℝ) (i : Fin m) :
-    ‖fderiv ℝ (fun y => l1_testMap u K y i) x‖ ≤ D + n * (4 * B) * U := by
+    (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) {K : ℝ} (hK : 1 ≤ K) {U D : ℝ}
+    (hU : ∀ y, ‖u y‖ ≤ U) (hD : ∀ i y, ‖fderiv ℝ (fun y => u y i) y‖ ≤ D) (x : Fin n → ℝ)
+    (i : Fin m) :
+    ‖fderiv ℝ (fun y => l1_testMap u K y i) x‖ ≤ D + 2 * U := by
   have hK0 : 0 < K := by linarith
   have hη : HasFDerivAt (l1_eta n K) (fderiv ℝ (l1_eta n K) x) x :=
     ((l1_eta_contDiff n K).differentiable (by simp) x).hasFDerivAt
@@ -529,7 +499,6 @@ theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → �
   have hφ := (show HasFDerivAt (fun y => l1_testMap u K y i) _ x from h)
   rw [hφ.fderiv]
   have hU0 : 0 ≤ U := (norm_nonneg _).trans (hU 0)
-  have hB0 : 0 ≤ B := (abs_nonneg _).trans (hB 0)
   have hD0 : 0 ≤ D := (norm_nonneg _).trans (hD i 0)
   have hL : ‖(fderiv ℝ (fun y => u y i) ((K ^ 2) • x)).comp
       ((K ^ 2) • ContinuousLinearMap.id ℝ (Fin n → ℝ))‖ ≤ D * K ^ 2 := by
@@ -545,16 +514,16 @@ theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → �
     rw [Real.norm_of_nonneg (l1_eta_nonneg n K x)]; exact l1_eta_le_one n K x
   have hv1 : ‖((fun y => u y i) ∘ fun y => (K ^ 2) • y) x‖ ≤ U :=
     (norm_le_pi_norm (u ((K ^ 2) • x)) i).trans (hU _)
-  have hη' : ‖fderiv ℝ (l1_eta n K) x‖ ≤ n * (4 * K * B) := l1_eta_fderiv_bound hK0 hB x
-  calc _ ≤ (K ^ 2)⁻¹ * (1 * (D * K ^ 2) + U * (n * (4 * K * B))) := by
+  have hη' : ‖fderiv ℝ (l1_eta n K) x‖ ≤ 2 * K := l1_eta_fderiv_bound hK0 x
+  calc _ ≤ (K ^ 2)⁻¹ * (1 * (D * K ^ 2) + U * (2 * K)) := by
         rw [norm_smul, Real.norm_of_nonneg (by positivity)]
         gcongr
         refine (norm_add_le _ _).trans ?_
         rw [norm_smul, norm_smul]
         exact add_le_add (mul_le_mul hη1 hL (norm_nonneg _) zero_le_one)
           (mul_le_mul hv1 hη' (norm_nonneg _) hU0)
-    _ = D + n * (4 * B) * U / K := by field_simp
-    _ ≤ D + n * (4 * B) * U := by gcongr; exact div_le_self (by positivity) hK
+    _ = D + 2 * U / K := by field_simp
+    _ ≤ D + 2 * U := by gcongr; exact div_le_self (by positivity) hK
 
 /-- The limit in the proof of **Lemma 1** (`sv-lemma1`): for a continuous `f`, a smooth
 `ℤ^n`-periodic `u` and every matrix `A`, the paper's maps `u_ε = ε² η_ε u (· / ε²)`
@@ -565,18 +534,16 @@ theorem l1_fderiv_testMap_bound {m n : ℕ} {u : (Fin n → ℝ) → Fin m → �
 Proof: the integrands are bounded uniformly in `ε ≤ 1` (`l1_fderiv_testMap_bound`), and
 `D u_ε (x) = D u (x / ε²)` on `(ε, 1 - ε)^n` (`l1_jac_testMap_inner`), so by dominated convergence
 `∫ f (A + D u_ε) - ∫ f (A + D u (x / ε²)) → 0`; and `∫ f (A + D u (x / ε²)) → ∫ f (A + D u)` by
-periodicity (`l1_tendsto_setIntegral_comp_smul`, with `N = 1/ε²`, not an integer in general). A
-note on the construction: the cutoff `η_ε` (`l1_eta`) has `|D η_ε| ≤ 4 n B / ε`
-(`l1_eta_fderiv_bound`), with `B = sup |smoothTransition'|`, where the paper asks
-`|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any bound `C / ε` serves, since only the
-boundedness of `ε² |D η_ε|` enters. -/
+periodicity (`l1_tendsto_setIntegral_comp_smul`, with `N = 1/ε²`, not an integer in general). The
+cutoff `η_ε` (`l1_eta`) is the paper's: smooth, equal to `1` on `[ε, 1 - ε]^n`, vanishing in a
+neighbourhood of the boundary of `[0, 1]^n` (off `(ε/16, 1 - ε/16)^n`), with `|D η_ε| ≤ 2 / ε`
+(`l1_eta_fderiv_bound`). -/
 theorem lemma1_limit {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
     (A : Matrix (Fin m) (Fin n) ℝ) {u : (Fin n → ℝ) → Fin m → ℝ}
     (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) (hper : IsPeriodic u) :
     Tendsto (fun ε : ℝ => ∫ x in unitCube n, f (A + jac (l1_testMap u ε⁻¹) x)) (𝓝[>] 0)
       (𝓝 (∫ x in unitCube n, f (A + jac u x))) := by
-  -- uniform bounds: `|Dη_ε| ≤ 4 n B / ε`, `|u| ≤ U`, `|Du| ≤ D'`
-  obtain ⟨B, hB0, hB⟩ := l1_deriv_smoothTransition_bound
+  -- uniform bounds: `|u| ≤ U`, `|Du| ≤ D'` (and `|Dη_ε| ≤ 2 / ε`)
   obtain ⟨U, hU0, hU⟩ := l1_periodic_bounded hu.continuous hper
   have hDi : ∀ i, ∃ D, 0 ≤ D ∧ ∀ y, ‖fderiv ℝ (fun y => u y i) y‖ ≤ D := fun i =>
     l1_periodic_bounded (((contDiff_pi.1 hu) i).continuous_fderiv (by simp))
@@ -585,7 +552,7 @@ theorem lemma1_limit {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : 
   set D' := ∑ i, D i
   have hD' : ∀ i y, ‖fderiv ℝ (fun y => u y i) y‖ ≤ D' := fun i y =>
     (hD i y).trans (Finset.single_le_sum (fun j _ => hD0 j) (Finset.mem_univ i))
-  set R := D' + n * (4 * B) * U
+  set R := D' + 2 * U
   have hD'R : D' ≤ R := le_add_of_nonneg_right (by positivity)
   -- the integrand is bounded on the matrices with entries in `[-R, R]`
   set S : Set (Matrix (Fin m) (Fin n) ℝ) :=
@@ -618,7 +585,7 @@ theorem lemma1_limit {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : 
     · filter_upwards [eventually_ge_atTop 1] with K hK
       refine Eventually.of_forall fun x => ?_
       have h1 : ‖f (A + jac (l1_testMap u K) x)‖ ≤ M :=
-        hM _ (hmemS _ x fun i => l1_fderiv_testMap_bound hu hK hB hU hD' x i)
+        hM _ (hmemS _ x fun i => l1_fderiv_testMap_bound hu hK hU hD' x i)
       have h2 : ‖G ((K ^ 2) • x)‖ ≤ M := hM _ (hmemS u _ fun i => (hD' i _).trans hD'R)
       calc ‖H K x‖ ≤ ‖f (A + jac (l1_testMap u K) x)‖ + ‖G ((K ^ 2) • x)‖ := norm_sub_le _ _
         _ ≤ 2 * M := by linarith
@@ -634,9 +601,9 @@ theorem lemma1_limit {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : 
         filter_upwards [ht.eventually (Iio_mem_nhds hxi.1),
           ht.eventually (Iio_mem_nhds (sub_pos.2 hxi.2))] with K h1 h2
         exact ⟨h1, by linarith⟩
-      filter_upwards [hev, eventually_gt_atTop 0] with K hK hK0
+      filter_upwards [hev, eventually_ge_atTop 1] with K hK hK1
       show (0:ℝ) = f (A + jac (l1_testMap u K) x) - f (A + jac u ((K ^ 2) • x))
-      rw [l1_jac_testMap_inner hu hK0 hK, sub_self]
+      rw [l1_jac_testMap_inner hu hK1 hK, sub_self]
   rw [integral_zero] at hlim
   -- by periodicity, `∫ f (A + D u (x / ε²)) → ∫ f (A + D u)`
   have havg : Tendsto (fun K : ℝ => ∫ x in unitCube n, G ((K ^ 2) • x)) atTop
@@ -662,9 +629,10 @@ compact support in `(0, 1)^n` and `∫ f (A + ∇φ) < f (A)`, one of the paper'
 `0 < ε < 1/2`.
 
 Proof (the paper's): by the limit in the proof of Lemma 1 (`lemma1_limit`), the integrals
-`∫ f (A + D u_ε)` tend to `∫ f (A + D u) < f (A)` as `ε → 0⁺`, so one of them is `< f (A)`. A
-note on the construction: the cutoff `η_ε` (`l1_eta`) has `|D η_ε| ≤ 4 n B / ε` where the paper
-asks `|D η_ε| ≤ 2 / ε`; the paper's constant 2 is not used, any bound `C / ε` serves. -/
+`∫ f (A + D u_ε)` tend to `∫ f (A + D u) < f (A)` as `ε → 0⁺`, so one of them is `< f (A)`. The
+cutoff `η_ε` (`l1_eta`) is the paper's: equal to `1` on `[ε, 1 - ε]^n`, vanishing in a
+neighbourhood of the boundary of `[0, 1]^n` (off `(ε/16, 1 - ε/16)^n`), with `|D η_ε| ≤ 2 / ε`
+(`l1_eta_fderiv_bound`). -/
 theorem lemma1_witness {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ} (hf : Continuous f)
     {A : Matrix (Fin m) (Fin n) ℝ} {u : (Fin n → ℝ) → Fin m → ℝ}
     (hu : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u) (hper : IsPeriodic u)

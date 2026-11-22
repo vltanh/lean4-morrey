@@ -6,6 +6,8 @@ public import Mathlib.Analysis.Convex.Integral
 public import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
 public import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+public import Mathlib.Data.Nat.Choose.Multinomial
+public import Mathlib.MeasureTheory.Integral.Pi
 
 /-!
 # The torus witness of Proposition 6.1: singular values and moments
@@ -19,13 +21,12 @@ integrand (30):
   every eigenvalue of `G` is `0` or `σ²`, and exactly two are `σ²` when `σ ≠ 0`;
 * the Schatten norms of a diagonal matrix: `‖diag (c)‖_{S_q} ≤ n^{1/q} max |c_i|`
   (`square_schattenNorm_diagonal_le`);
-* the moments of `Z = Σ_j e^{i θ_j}`: `E |Z|^{2m} ≤ m! d^m` (`square_moment_zc`), by induction on
-  the number `d` of angles. Adding one angle, `E |w + e^{iθ}|^{2m} = Σ_k (m choose k)² |w|^{2k}`
-  (`square_integral_norm_add_cexp_pow`, averaging over that angle alone); with the induction
-  hypothesis `E |Z_{d−1}|^{2k} ≤ k! (d − 1)^k` and `(m choose k)² k! ≤ (m choose k) m!` this gives
-  `E |Z_d|^{2m} ≤ m! Σ_k (m choose k) (d − 1)^k = m! d^m`. The paper's exact formula
-  `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)²` is not computed; only this bound, which is
-  what its proof uses, is proved;
+* the moments of `Z = Σ_j e^{i θ_j}` (TeX 2262–2268): the exact formula
+  `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)²` (`square_moment_zc_eq`), from
+  `|Z|^{2m} = Z^m conj (Z^m)`, the multinomial theorem `Z^m = Σ_{|k| = m} (m; k) e^{i ⟨k, θ⟩}` and
+  the orthogonality `E e^{i ⟨k − l, θ⟩} = [k = l]` (`square_integral_cube_prod_cexp`, the product
+  over the coordinates of the one-dimensional `square_integral_cexp_int`); and the bound
+  `E |Z|^{2m} ≤ m! d^m` (`square_moment_zc`), from `(m; k) ≤ m!` and `Σ_{|k| = m} (m; k) = d^m`;
 * the monotonicity of `L^p` norms on the unit cube (a probability space), by Jensen's inequality
   (`square_cube_lp_mono`), and the resulting `‖Z‖_{L^p} ≤ √(p d)` for `p ≥ 1`
   (`square_lp_zc_le`): `‖Z‖_{L^p} ≤ ‖Z‖_{L^{2m}} ≤ (m! d^m)^{1/(2m)} ≤ √(m d)` with
@@ -351,93 +352,80 @@ theorem square_integral_cexp_int (k : ℤ) :
       exact Complex.exp_int_mul_two_pi_mul_I k
     rw [h1, Complex.ofReal_zero, mul_zero, Complex.exp_zero, sub_self, zero_div]
 
-/-- **One coordinate of the moment computation**: for `w ∈ ℂ`,
-`∫₀¹ |w + e^{2πit}|^{2m} dt = Σ_k (m choose k)² |w|^{2k}`. -/
-theorem square_integral_norm_add_cexp_pow (w : ℂ) (m : ℕ) :
-    ∫ t in Set.Ioo (0:ℝ) 1, ‖w + square_cexp t‖ ^ (2 * m) =
-      ∑ k ∈ Finset.range (m + 1), ((m.choose k : ℝ)) ^ 2 * ‖w‖ ^ (2 * k) := by
+/-- **Orthogonality on the unit cube**: for `k, l ∈ ℕ^n`,
+`∫_{(0,1)^n} e^{2πi ⟨k − l, x⟩} dx = [k = l]`. The integrand is the product of the one-dimensional
+characters `e^{2πi (k_i − l_i) x_i}`, so the integral over the product measure is the product of
+the integrals (`integral_fintype_prod_eq_prod`), each of which is `[k_i = l_i]`
+(`square_integral_cexp_int`). -/
+theorem square_integral_cube_prod_cexp {n : ℕ} (k l : Fin n → ℕ) :
+    ∫ x in unitCube n, ∏ i, Complex.exp (↑(2 * π * ((k i : ℤ) - l i : ℤ) * x i) * Complex.I) =
+      if k = l then 1 else 0 := by
+  rw [square_restrict_unitCube, integral_fintype_prod_eq_prod
+    (fun i t => Complex.exp (↑(2 * π * ((k i : ℤ) - l i : ℤ) * t) * Complex.I))]
+  simp_rw [square_integral_cexp_int, Fintype.prod_boole, sub_eq_zero, Nat.cast_inj, ← funext_iff]
+
+/-- **The moments of `Z`, exactly** (proof of Proposition 6.1, TeX 2262–2268):
+`E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)²`. As in the paper: `|Z|^{2m} = Z^m conj (Z^m)`,
+the multinomial theorem `Z^m = Σ_{|k| = m} (m; k) e^{2πi ⟨k, x⟩}`
+(`Finset.sum_pow_eq_sum_piAntidiag`), and the orthogonality
+`∫ e^{2πi ⟨k − l, x⟩} dx = [k = l]` (`square_integral_cube_prod_cexp`). -/
+theorem square_moment_zc_eq (n m : ℕ) :
+    ∫ x in unitCube n, ‖square_zc x‖ ^ (2 * m) =
+      ∑ k ∈ (Finset.univ : Finset (Fin n)).piAntidiag m,
+        (Nat.multinomial Finset.univ k : ℝ) ^ 2 := by
+  set A := (Finset.univ : Finset (Fin n)).piAntidiag m
   apply Complex.ofReal_injective
   rw [← integral_complex_ofReal]
-  have hpt : ∀ t : ℝ, ((‖w + square_cexp t‖ ^ (2 * m) : ℝ) : ℂ) =
-      ∑ k ∈ Finset.range (m + 1), ∑ l ∈ Finset.range (m + 1),
-        (w ^ k * (starRingEnd ℂ) w ^ l * ((m.choose k : ℂ) * (m.choose l : ℂ))) *
-          Complex.exp (↑(2 * π * (((m - k : ℕ) : ℤ) - ((m - l : ℕ) : ℤ) : ℤ) * t) *
-            Complex.I) := by
-    intro t
-    rw [pow_mul, Complex.ofReal_pow, Complex.ofReal_pow, ← Complex.mul_conj', mul_pow,
-      map_add, add_pow, add_pow, Finset.sum_mul_sum]
+  -- `|Z|^{2m} = Z^m conj (Z^m)`, expanded by the multinomial theorem
+  have hpt : ∀ x : Fin n → ℝ, ((‖square_zc x‖ ^ (2 * m) : ℝ) : ℂ) =
+      ∑ k ∈ A, ∑ l ∈ A,
+        ((Nat.multinomial Finset.univ k : ℂ) * (Nat.multinomial Finset.univ l : ℂ)) *
+          ∏ i, Complex.exp (↑(2 * π * ((k i : ℤ) - l i : ℤ) * x i) * Complex.I) := by
+    intro x
+    rw [pow_mul, Complex.ofReal_pow, Complex.ofReal_pow, ← Complex.mul_conj', mul_pow, ← map_pow,
+      square_zc, Finset.sum_pow_eq_sum_piAntidiag, map_sum, Finset.sum_mul_sum]
     refine Finset.sum_congr rfl fun k _ => Finset.sum_congr rfl fun l _ => ?_
-    rw [← square_cexp_pow_mul_conj_pow]
+    rw [Finset.prod_congr rfl fun i _ => (square_cexp_pow_mul_conj_pow (x i) (k i) (l i)).symm,
+      Finset.prod_mul_distrib, map_mul, map_natCast, map_prod]
+    simp only [map_pow]
     ring
   simp_rw [hpt]
-  have hint : ∀ (c : ℂ) (j : ℤ), IntegrableOn
-      (fun t : ℝ => c * Complex.exp (↑(2 * π * j * t) * Complex.I)) (Set.Ioo (0:ℝ) 1) :=
-    fun c j => (Continuous.integrableOn_Icc (by fun_prop)).mono_set Set.Ioo_subset_Icc_self
-  rw [integral_finsetSum _ fun k _ => integrable_finsetSum _ fun l _ => hint _ _]
-  simp_rw [integral_finsetSum _ fun l _ => hint _ _, integral_const_mul,
-    square_integral_cexp_int]
+  have hint : ∀ (c : ℂ) (k l : Fin n → ℕ), Integrable
+      (fun x : Fin n → ℝ =>
+        c * ∏ i, Complex.exp (↑(2 * π * ((k i : ℤ) - l i : ℤ) * x i) * Complex.I))
+      (volume.restrict (unitCube n)) := fun c k l =>
+    ((Continuous.continuousOn (by fun_prop)).integrableOn_compact
+      (isCompact_univ_pi fun _ => isCompact_Icc)).mono_set
+      (Set.pi_mono fun _ _ => Set.Ioo_subset_Icc_self)
+  rw [integral_finsetSum _ fun k _ => integrable_finsetSum _ fun l _ => hint _ k l]
+  simp_rw [integral_finsetSum _ fun l _ => hint _ _ l, integral_const_mul,
+    square_integral_cube_prod_cexp, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq]
   push_cast
   refine Finset.sum_congr rfl fun k hk => ?_
-  rw [Finset.sum_eq_single k]
-  · rw [sub_self, ite_eq_left_iff.2 fun h => absurd rfl h, mul_one, ← mul_pow,
-      Complex.mul_conj', ← pow_mul]
-    ring
-  · intro l hl hlk
-    have hkm : k ≤ m := Nat.lt_succ_iff.1 (Finset.mem_range.1 hk)
-    have hlm : l ≤ m := Nat.lt_succ_iff.1 (Finset.mem_range.1 hl)
-    rw [ite_eq_right_iff.2 fun h => absurd h (by omega), mul_zero]
-  · intro h; exact absurd hk h
+  rw [ite_eq_left hk, sq]
 
-/-- **The moments of `Z`** (proof of Proposition 6.1): `E |Z|^{2m} ≤ m! d^m`. By induction on the
-number of angles: the one-angle recursion `square_integral_norm_add_cexp_pow` and
-`(m choose k)² k! ≤ (m choose k) m!` (the paper's exact multinomial formula for `E |Z|^{2m}` is not
-computed). -/
+/-- **The moments of `Z`** (proof of Proposition 6.1, TeX 2262–2268): `E |Z|^{2m} ≤ m! d^m`. From
+the exact formula `E |Z|^{2m} = Σ_{|k| = m} (m; k)²` (`square_moment_zc_eq`), with
+`(m; k) ≤ m!` (`Nat.multinomial_spec`: `(∏_i k_i!) (m; k) = m!`) and `Σ_{|k| = m} (m; k) = d^m`
+(the multinomial theorem with all terms `1`): `Σ_k (m; k)² ≤ m! Σ_k (m; k) = m! d^m`. -/
 theorem square_moment_zc (n m : ℕ) :
     ∫ x in unitCube n, ‖square_zc x‖ ^ (2 * m) ≤ (m.factorial : ℝ) * (n : ℝ) ^ m := by
-  induction n generalizing m with
-  | zero =>
-    have : ∀ x : Fin 0 → ℝ, square_zc x = 0 := fun x => by simp [square_zc]
-    simp_rw [this, norm_zero, square_integral_cube_const]
-    rcases m with _ | m
-    · simp
-    · simp
-  | succ n ih =>
-    have hc1 := square_continuous_zc (n := n + 1)
-    rw [square_integral_cube_succ (by fun_prop) 0]
-    have hsplit : ∀ (y : Fin n → ℝ) (t : ℝ),
-        square_zc (Fin.insertNth 0 t y : Fin (n + 1) → ℝ) = square_zc y + square_cexp t := by
-      intro y t
-      rw [square_zc, Fin.sum_univ_succAbove _ 0, Fin.insertNth_apply_same, add_comm]
-      simp only [Fin.insertNth_apply_succAbove, square_zc]
-    simp_rw [hsplit, square_integral_norm_add_cexp_pow]
-    have hc0 := square_continuous_zc (n := n)
-    rw [integral_finsetSum _ fun k _ =>
-      (square_integrableOn_cube (by fun_prop)).const_mul _]
-    simp_rw [integral_const_mul]
-    calc ∑ k ∈ Finset.range (m + 1), ((m.choose k : ℝ)) ^ 2 *
-          ∫ y in unitCube n, ‖square_zc y‖ ^ (2 * k)
-        ≤ ∑ k ∈ Finset.range (m + 1), ((m.choose k : ℝ)) ^ 2 *
-            ((k.factorial : ℝ) * (n : ℝ) ^ k) :=
-          Finset.sum_le_sum fun k _ => mul_le_mul_of_nonneg_left (ih k) (by positivity)
-      _ ≤ ∑ k ∈ Finset.range (m + 1), (m.factorial : ℝ) * ((m.choose k : ℝ) * (n : ℝ) ^ k) := by
-          refine Finset.sum_le_sum fun k hk => ?_
-          have hkm : k ≤ m := Nat.lt_succ_iff.1 (Finset.mem_range.1 hk)
-          have h1 : m.choose k * k.factorial ≤ m.factorial := by
-            have := Nat.choose_mul_factorial_mul_factorial hkm
-            calc m.choose k * k.factorial ≤ m.choose k * k.factorial * (m - k).factorial :=
-                  Nat.le_mul_of_pos_right _ (Nat.factorial_pos _)
-              _ = m.factorial := this
-          have h1' : (m.choose k : ℝ) * k.factorial ≤ m.factorial := by exact_mod_cast h1
-          have hc : (0 : ℝ) ≤ m.choose k * (n : ℝ) ^ k := by positivity
-          calc ((m.choose k : ℝ)) ^ 2 * ((k.factorial : ℝ) * (n : ℝ) ^ k) =
-                ((m.choose k : ℝ) * k.factorial) * ((m.choose k : ℝ) * (n : ℝ) ^ k) := by ring
-            _ ≤ (m.factorial : ℝ) * ((m.choose k : ℝ) * (n : ℝ) ^ k) :=
-                mul_le_mul_of_nonneg_right h1' hc
-      _ = (m.factorial : ℝ) * ((n + 1 : ℕ) : ℝ) ^ m := by
-          rw [← Finset.mul_sum]
-          congr 1
-          rw [Nat.cast_add, Nat.cast_one, add_pow]
-          exact Finset.sum_congr rfl fun k _ => by rw [one_pow, mul_one, mul_comm]
+  rw [square_moment_zc_eq]
+  set A := (Finset.univ : Finset (Fin n)).piAntidiag m
+  have hsum : ∑ k ∈ A, (Nat.multinomial Finset.univ k : ℝ) = (n : ℝ) ^ m := by
+    have := Finset.sum_pow_eq_sum_piAntidiag (Finset.univ : Finset (Fin n)) (fun _ => (1 : ℝ)) m
+    simpa using this.symm
+  have hle : ∀ k ∈ A, (Nat.multinomial Finset.univ k : ℝ) ≤ m.factorial := by
+    intro k hk
+    have hspec := Nat.multinomial_spec Finset.univ k
+    rw [(Finset.mem_piAntidiag.1 hk).1] at hspec
+    exact_mod_cast (Nat.le_mul_of_pos_left _
+      (Finset.prod_pos fun i _ => Nat.factorial_pos (k i))).trans hspec.le
+  calc ∑ k ∈ A, (Nat.multinomial Finset.univ k : ℝ) ^ 2
+      ≤ ∑ k ∈ A, (m.factorial : ℝ) * Nat.multinomial Finset.univ k :=
+        Finset.sum_le_sum fun k hk => by
+          rw [sq]; exact mul_le_mul_of_nonneg_right (hle k hk) (Nat.cast_nonneg _)
+    _ = (m.factorial : ℝ) * (n : ℝ) ^ m := by rw [← Finset.mul_sum, hsum]
 
 /-! ### `L^p` norms on the unit cube -/
 

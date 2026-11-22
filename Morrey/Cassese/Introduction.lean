@@ -6,6 +6,7 @@ public import Morrey.Cassese.TwoByThree
 public import Morrey.Cassese.Square
 public import Morrey.Cassese.FourByTwo
 public import Morrey.Common.External.Rindler.Lemmas
+public import Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
 public import Morrey.Cassese.Lifting
 public import Mathlib.Analysis.Calculus.Rademacher
 public import Mathlib.Analysis.Convex.Integral
@@ -841,93 +842,85 @@ theorem intro_one_sub_le_rpow_neg {u a : ℝ} (hu : 0 ≤ u) (ha : 1 ≤ a) :
   have h2 : u / (1 + u) ≤ u := div_le_self hu (by linarith)
   nlinarith
 
-/-- The pointwise estimate of the witness of Corollary 1.6: with `s = |M|²`, `v = F (M)`,
-`Λ √(2 + ε² s) + (2 + ε² s)^{−(p+3)/2} ε^p v ≤ Λ √2 + 2^{−(p+3)/2} ε^p v + ε² E`. -/
-theorem intro_witness_est {Λ p s v S₀ V ε : ℝ} (hp : 0 < p) (hs : 0 ≤ s) (hsS : s ≤ S₀)
-    (hv : |v| ≤ V) (hε0 : 0 < ε) (hε1 : ε ≤ 1) :
-    Λ * √(2 + ε ^ 2 * s) + √(2 + ε ^ 2 * s) ^ (-p - 3) * (ε ^ p * v) ≤
-      Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * v) + ε ^ 2 * (|Λ| * S₀ + (p + 3) / 4 * S₀ * V) := by
+/-- The pointwise expansion of the witness of Corollary 1.6: with `s = |M|²`, `v = F (M)` and
+`0 ≤ q ≤ 1`, `Λ √(1 + ε² s) + q (1 + ε² s)^{−(p+3)/2} ε^p v = Λ + ε^p q v + O (ε²)`, with the
+constant `|Λ| S₀ + (p + 3) S₀ V / 2` for `s ≤ S₀`, `|v| ≤ V` and `ε ≤ 1`. -/
+theorem intro_witness_est {Λ p q s v S₀ V ε : ℝ} (hp : 0 < p) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+    (hs : 0 ≤ s) (hsS : s ≤ S₀) (hv : |v| ≤ V) (hε0 : 0 < ε) (hε1 : ε ≤ 1) :
+    |Λ * √(1 + ε ^ 2 * s) + q * √(1 + ε ^ 2 * s) ^ (-p - 3) * (ε ^ p * v) - Λ -
+      ε ^ p * (q * v)| ≤ ε ^ 2 * (|Λ| * S₀ + (p + 3) / 2 * S₀ * V) := by
   have hV : 0 ≤ V := (abs_nonneg v).trans hv
-  have hS₀ : 0 ≤ S₀ := hs.trans hsS
   have hx : 0 ≤ ε ^ 2 * s := by positivity
   have hεs : ε ^ 2 * s ≤ ε ^ 2 * S₀ := mul_le_mul_of_nonneg_left hsS (by positivity)
-  -- the norm term: `√(2 + x) − √2 ≤ x`
-  have hsq : |√(2 + ε ^ 2 * s) - √2| ≤ ε ^ 2 * s := by
-    have h2 : √2 ≤ √(2 + ε ^ 2 * s) := Real.sqrt_le_sqrt (by linarith)
-    rw [abs_of_nonneg (by linarith)]
-    have h3 : √(2 + ε ^ 2 * s) ≤ √2 + ε ^ 2 * s := by
+  -- the norm term: `|Λ (√(1 + x) − 1)| ≤ |Λ| x`
+  have hΛ : |Λ * (√(1 + ε ^ 2 * s) - 1)| ≤ |Λ| * (ε ^ 2 * s) := by
+    have h2 : 1 ≤ √(1 + ε ^ 2 * s) := Real.one_le_sqrt.2 (by linarith)
+    have h3 : √(1 + ε ^ 2 * s) ≤ 1 + ε ^ 2 * s := by
       rw [Real.sqrt_le_left (by positivity)]
-      nlinarith [Real.sq_sqrt (show (0 : ℝ) ≤ 2 by norm_num), Real.sqrt_nonneg 2,
-        show (1 : ℝ) ≤ √2 from Real.one_le_sqrt.2 (by norm_num)]
-    linarith
-  have hΛ : Λ * √(2 + ε ^ 2 * s) ≤ Λ * √2 + |Λ| * (ε ^ 2 * s) := by
-    have := mul_le_mul_of_nonneg_left hsq (abs_nonneg Λ)
-    rw [← abs_mul] at this
-    linarith [le_abs_self (Λ * (√(2 + ε ^ 2 * s) - √2))]
-  -- the power term: `(2 + x)^{−a} = 2^{−a} (1 + x/2)^{−a}`, `a = (p + 3)/2`
+      nlinarith
+    rw [abs_mul, abs_of_nonneg (by linarith : 0 ≤ √(1 + ε ^ 2 * s) - 1)]
+    exact mul_le_mul_of_nonneg_left (by linarith) (abs_nonneg Λ)
+  -- the power term: `√(1 + x)^{−p−3} = (1 + x)^{−a}` with `a = (p + 3)/2`, and
+  -- `1 − a x ≤ (1 + x)^{−a} ≤ 1`
   set a := (p + 3) / 2 with ha
-  have hpow : ∀ y : ℝ, 0 ≤ y → √y ^ (-p - 3) = y ^ (-a) := fun y hy => by
-    rw [Real.sqrt_eq_rpow, ← Real.rpow_mul hy]; congr 1; ring
-  rw [hpow _ (by linarith), hpow 2 (by norm_num)]
-  have hsplit : (2 + ε ^ 2 * s) ^ (-a) = 2 ^ (-a) * (1 + ε ^ 2 * s / 2) ^ (-a) := by
-    rw [← Real.mul_rpow (by norm_num) (by positivity)]; congr 1; ring
-  rw [hsplit]
-  set w := (1 + ε ^ 2 * s / 2) ^ (-a) with hw
-  have hu0 : 0 ≤ ε ^ 2 * s / 2 := by positivity
+  have hpow : √(1 + ε ^ 2 * s) ^ (-p - 3) = (1 + ε ^ 2 * s) ^ (-a) := by
+    rw [Real.sqrt_eq_rpow, ← Real.rpow_mul (by positivity)]; congr 1; ring
+  rw [hpow]
+  set w := (1 + ε ^ 2 * s) ^ (-a) with hw
   have hw1 : w ≤ 1 :=
     Real.rpow_le_one_of_one_le_of_nonpos (by linarith) (by rw [ha]; linarith)
-  have hw0 : 1 - a * (ε ^ 2 * s / 2) ≤ w := intro_one_sub_le_rpow_neg hu0 (by rw [ha]; linarith)
-  have h2a : 0 < (2 : ℝ) ^ (-a) := by positivity
-  have h2a1 : (2 : ℝ) ^ (-a) ≤ 1 := Real.rpow_le_one_of_one_le_of_nonpos (by norm_num)
-    (by rw [ha]; linarith)
+  have hw0 : 1 - a * (ε ^ 2 * s) ≤ w := intro_one_sub_le_rpow_neg hx (by rw [ha]; linarith)
   have hεp : 0 < ε ^ p := Real.rpow_pos_of_pos hε0 p
   have hεp1 : ε ^ p ≤ 1 := Real.rpow_le_one hε0.le hε1 hp.le
-  -- `2^{−a} w ε^p v − 2^{−a} ε^p v ≤ 2^{−a} ε^p |v| (1 − w) ≤ a ε² S₀ V / 2`
-  have hdiff : 2 ^ (-a) * w * (ε ^ p * v) - ε ^ p * (2 ^ (-a) * v) ≤
-      (p + 3) / 4 * (ε ^ 2 * S₀) * V := by
-    have e : 2 ^ (-a) * w * (ε ^ p * v) - ε ^ p * (2 ^ (-a) * v) =
-        2 ^ (-a) * ε ^ p * (v * (w - 1)) := by ring
-    rw [e]
-    have h1 : v * (w - 1) ≤ |v| * (1 - w) := by
-      have := neg_abs_le v; have := le_abs_self v; nlinarith
-    have h2 : |v| * (1 - w) ≤ V * (a * (ε ^ 2 * s / 2)) :=
+  -- `|q w ε^p v − q ε^p v| = q ε^p |v| (1 − w) ≤ a ε² S₀ V`
+  have hdiff : |q * w * (ε ^ p * v) - ε ^ p * (q * v)| ≤ a * (ε ^ 2 * S₀) * V := by
+    have e : q * w * (ε ^ p * v) - ε ^ p * (q * v) = q * ε ^ p * v * (w - 1) := by ring
+    rw [e, abs_mul, abs_mul, abs_of_nonneg (by positivity : 0 ≤ q * ε ^ p),
+      abs_of_nonpos (by linarith : w - 1 ≤ 0)]
+    have h1 : q * ε ^ p ≤ 1 := by nlinarith
+    have h2 : |v| * -(w - 1) ≤ V * (a * (ε ^ 2 * s)) :=
       mul_le_mul hv (by linarith) (by linarith) hV
-    have h3 : V * (a * (ε ^ 2 * s / 2)) ≤ (p + 3) / 4 * (ε ^ 2 * S₀) * V := by
-      rw [ha]
-      calc V * ((p + 3) / 2 * (ε ^ 2 * s / 2)) = (p + 3) / 4 * (ε ^ 2 * s) * V := by ring
-        _ ≤ (p + 3) / 4 * (ε ^ 2 * S₀) * V := by gcongr
-    have h4 : 2 ^ (-a) * ε ^ p * (v * (w - 1)) ≤ 2 ^ (-a) * ε ^ p * (|v| * (1 - w)) :=
-      mul_le_mul_of_nonneg_left h1 (by positivity)
-    have h5 : 0 ≤ |v| * (1 - w) := mul_nonneg (abs_nonneg _) (by linarith)
-    have h6 : 2 ^ (-a) * ε ^ p * (|v| * (1 - w)) ≤ |v| * (1 - w) := by
-      have : 2 ^ (-a) * ε ^ p ≤ 1 := by nlinarith
-      nlinarith
-    linarith
+    have h3 : V * (a * (ε ^ 2 * s)) ≤ a * (ε ^ 2 * S₀) * V := by
+      have : 0 ≤ a := by rw [ha]; linarith
+      calc V * (a * (ε ^ 2 * s)) = a * (ε ^ 2 * s) * V := by ring
+        _ ≤ a * (ε ^ 2 * S₀) * V := by gcongr
+    have h5 : 0 ≤ |v| * -(w - 1) := mul_nonneg (abs_nonneg _) (by linarith)
+    calc q * ε ^ p * |v| * -(w - 1) = q * ε ^ p * (|v| * -(w - 1)) := by ring
+      _ ≤ 1 * (|v| * -(w - 1)) := mul_le_mul_of_nonneg_right h1 h5
+      _ ≤ _ := by linarith
+  have e : Λ * √(1 + ε ^ 2 * s) + q * w * (ε ^ p * v) - Λ - ε ^ p * (q * v) =
+      Λ * (√(1 + ε ^ 2 * s) - 1) + (q * w * (ε ^ p * v) - ε ^ p * (q * v)) := by ring
+  rw [e]
+  refine (abs_add_le _ _).trans ?_
   nlinarith [mul_le_mul_of_nonneg_left hεs (abs_nonneg Λ)]
 
-/-- The matrix `B = (0, Y₀)` of the proof of Corollary 1.6: `X = 0`, and `Y₀` has the first two
-coordinate vectors as columns (rank `2`, `det (Y₀ᵀ Y₀) = 1`, `|Y₀|² = 2`; the paper normalizes
-`|B| = 1`, which changes nothing). -/
-def intro_B : Matrix (Fin 4) (Fin 4) ℝ :=
-  Matrix.of fun i j => if (i.val = 0 ∧ j.val = 2) ∨ (i.val = 1 ∧ j.val = 3) then 1 else 0
+/-- The matrix `B = (0, Y₀)` of the proof of Corollary 1.6 (TeX lines 2945–2946): `X = 0`, and
+`Y₀` has the columns `e₁ / √2`, `e₂ / √2`; `|B| = 1`, `rank Y₀ = 2` and
+`q (Y₀) = det (Y₀ᵀ Y₀) = 1/4` (`intro_rank_B`, `intro_Xc_B`, `intro_Yc_B`). -/
+noncomputable def intro_B : Matrix (Fin 4) (Fin 4) ℝ :=
+  Matrix.of fun i j => if (i.val = 0 ∧ j.val = 2) ∨ (i.val = 1 ∧ j.val = 3) then (√2)⁻¹ else 0
 
 theorem intro_rank_B : intro_B.rank = 2 := by
   apply le_antisymm
   · -- `B = U V` with `V` of two rows
-    have : intro_B = (Matrix.of fun (i : Fin 4) (k : Fin 2) => if i.val = k.val then (1 : ℝ) else 0) *
+    have : intro_B =
+        (Matrix.of fun (i : Fin 4) (k : Fin 2) => if i.val = k.val then (√2)⁻¹ else 0) *
         Matrix.of fun (k : Fin 2) (j : Fin 4) => if j.val = k.val + 2 then (1 : ℝ) else 0 := by
       ext i j
       fin_cases i <;> fin_cases j <;> simp [intro_B, Matrix.mul_apply, Fin.sum_univ_two]
     rw [this]
     exact (Matrix.rank_mul_le_right _ _).trans (Matrix.rank_le_height _)
-  · -- the block in rows `0, 1` and columns `2, 3` is the identity
+  · -- the block in rows `0, 1` and columns `2, 3` is `(√2)⁻¹ • 1`, invertible
     have hsub : intro_B.submatrix (fun i : Fin 2 => (⟨i.val, by omega⟩ : Fin 4))
-        (fun j : Fin 2 => (⟨j.val + 2, by omega⟩ : Fin 4)) = 1 := by
+        (fun j : Fin 2 => (⟨j.val + 2, by omega⟩ : Fin 4)) = (√2)⁻¹ • 1 := by
       ext i j
       fin_cases i <;> fin_cases j <;> simp [intro_B]
+    have hu : IsUnit ((√2)⁻¹ • (1 : Matrix (Fin 2) (Fin 2) ℝ)) := by
+      rw [Matrix.isUnit_iff_isUnit_det, Matrix.det_smul, Matrix.det_one, isUnit_iff_ne_zero]
+      positivity
     have := Matrix.rank_submatrix_le intro_B (fun i : Fin 2 => (⟨i.val, by omega⟩ : Fin 4))
       (fun j : Fin 2 => (⟨j.val + 2, by omega⟩ : Fin 4))
-    rw [hsub, Matrix.rank_one, Fintype.card_fin] at this
+    rw [hsub, Matrix.rank_of_isUnit _ hu, Fintype.card_fin] at this
     exact this
 
 theorem intro_Xc_add (A B : Matrix (Fin 4) (Fin 4) ℝ) :
@@ -940,11 +933,17 @@ theorem intro_Xc_B : intro_Xc intro_B = 0 := by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [intro_Xc, intro_B]
 
-theorem intro_Yc_B : ((intro_Yc intro_B)ᵀ * intro_Yc intro_B).det = 1 ∧
-    frobSq (intro_Yc intro_B) = 2 := by
+/-- `q (Y₀) = det (Y₀ᵀ Y₀) = 1/4` and `|Y₀|² = 1`. -/
+theorem intro_Yc_B : ((intro_Yc intro_B)ᵀ * intro_Yc intro_B).det = 1 / 4 ∧
+    frobSq (intro_Yc intro_B) = 1 := by
+  have h2 : (√2)⁻¹ ^ 2 = (1 / 2 : ℝ) := by
+    rw [inv_pow, Real.sq_sqrt (by norm_num), one_div]
   constructor
   · rw [Matrix.det_fin_two]
-    simp [intro_Yc, intro_B, Matrix.mul_apply, Fin.sum_univ_four]
+    simp only [intro_Yc, intro_B, Matrix.mul_apply, Fin.sum_univ_four, Matrix.transpose_apply,
+      Matrix.of_apply]
+    simp
+    nlinarith [h2]
   · simp only [frobSq, Fin.sum_univ_four, Fin.sum_univ_two, intro_Yc, intro_B, Matrix.of_apply]
     norm_num
 
@@ -960,11 +959,109 @@ theorem intro_fderiv_const_mul {E : Type*} [NormedAddCommGroup E] [NormedSpace �
       exact this)
     rw [fderiv_zero_of_not_differentiableAt h, fderiv_zero_of_not_differentiableAt h', smul_zero]
 
-/-- Proof of Corollary 1.6, the witness (TeX lines 2943–2953): `G` is not quasiconvex at
-`B = (0, Y₀)`. A periodic witness `φ` for `F` at `0` (Lemma 2.2, periodic form) gives
-`Ψ_ε (x, y) = ε φ (x)`, with
-`∫ [G (B + ∇Ψ_ε) − G (B)] ≤ ε^p q (Y₀) 2^{−(p+3)/2} ∫ F (∇φ) + O (ε²) < 0` for small `ε`, since
-`p < 2`; the periodic form of quasiconvexity (Lemma 2.2) concludes. -/
+/-- The entries of the derivative matrix of a `K`-Lipschitz map are bounded by `K`. -/
+theorem intro_abs_jac_le {d m : ℕ} {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal}
+    (hK : LipschitzWith K φ) (y : Fin m → ℝ) (i : Fin d) (k : Fin m) : |jac φ y i k| ≤ K := by
+  have hKi : LipschitzWith K fun y => φ y i := by
+    have h := (LipschitzWith.eval (α := fun _ : Fin d => ℝ) i).comp hK
+    rw [one_mul] at h
+    exact h
+  have h1 := (fderiv ℝ (fun z => φ z i) y).le_opNorm (Pi.single k 1)
+  have h2 := norm_fderiv_le_of_lipschitz ℝ hKi (x₀ := y)
+  have h3 : ‖(Pi.single k (1 : ℝ) : Fin m → ℝ)‖ ≤ 1 := by
+    rw [Pi.norm_single, norm_one]
+  rw [← Real.norm_eq_abs]
+  calc ‖jac φ y i k‖ ≤ ‖fderiv ℝ (fun z => φ z i) y‖ * ‖(Pi.single k 1 : Fin m → ℝ)‖ := h1
+    _ ≤ K * 1 := mul_le_mul h2 h3 (norm_nonneg _) K.2
+    _ = K := mul_one _
+
+open Filter Topology in
+open scoped Convolution ContDiff in
+/-- The smooth periodic witness of the proof of Corollary 1.6 (TeX lines 2946–2947), a density
+step that the paper does not state: if a `K`-Lipschitz `ℤ^m`-periodic `φ` has
+`∫_{(0,1)^m} F (∇φ) < 0` for a continuous `F` (the periodic form of quasiconvexity, Lemma 2.2,
+gives such a `φ`), then so has a smooth one, still `K`-Lipschitz and periodic.
+
+Proof, by mollification: the mollifications `φ_k = ρ_k ⋆ φ` (componentwise, `ρ_k` the normed bump
+of radius `1 / (k + 1)`, `ContDiffBump.ofRadius`) are smooth (`contDiff_normed_convolution`),
+`K`-Lipschitz (`normed_convolution_lipschitzWith`) and periodic (`normed_convolution_add_right`),
+and `∇φ_k → ∇φ` almost everywhere (`ae_tendsto_fderiv_normed_convolution`, with the radii in the
+ratio `2`); the entries of `∇φ_k` are bounded by `K` (`intro_abs_jac_le`) and `F` is bounded on
+that bounded set, so `∫ F (∇φ_k) → ∫ F (∇φ) < 0` by dominated convergence. -/
+theorem intro_smooth_periodic_witness {d m : ℕ} {F : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hFc : Continuous F) {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hK : LipschitzWith K φ)
+    (hper : ∀ (x : Fin m → ℝ) (z : Fin m → ℤ), φ (x + fun i => (z i : ℝ)) = φ x)
+    (hlt : ∫ y in CalculusOfVariations.unitCube m, F (jac φ y) < 0) :
+    ∃ ψ : (Fin m → ℝ) → Fin d → ℝ, ContDiff ℝ ∞ ψ ∧ LipschitzWith K ψ ∧
+      (∀ (x : Fin m → ℝ) (z : Fin m → ℤ), ψ (x + fun i => (z i : ℝ)) = ψ x) ∧
+      IntegrableOn (fun y => F (jac ψ y)) (CalculusOfVariations.unitCube m) ∧
+      ∫ y in CalculusOfVariations.unitCube m, F (jac ψ y) < 0 := by
+  -- the components of `φ` are `K`-Lipschitz
+  have hKi : ∀ i, LipschitzWith K fun y => φ y i := fun i => by
+    have h := (LipschitzWith.eval (α := fun _ : Fin d => ℝ) i).comp hK
+    rw [one_mul] at h
+    exact h
+  -- the mollifiers `ρ_k` of radius `1 / (k + 1)` and the mollifications `φ_k = ρ_k ⋆ φ`
+  set b : ℕ → ContDiffBump (0 : Fin m → ℝ) := fun k =>
+    ContDiffBump.ofRadius (Nat.one_div_pos_of_nat (n := k)) with hb
+  set ψ : ℕ → (Fin m → ℝ) → Fin d → ℝ := fun k x i =>
+    ((b k).normed volume ⋆[ContinuousLinearMap.lsmul ℝ ℝ, volume] fun y => φ y i) x with hψ
+  have hψs : ∀ k, ContDiff ℝ ∞ (ψ k) := fun k =>
+    contDiff_pi.2 fun i => (b k).contDiff_normed_convolution (hKi i).continuous.locallyIntegrable
+  have hψK : ∀ k, LipschitzWith K (ψ k) := fun k =>
+    LipschitzWith.of_dist_le_mul fun x y => (dist_pi_le_iff (by positivity)).2 fun i =>
+      ((b k).normed_convolution_lipschitzWith (μ := volume) (hKi i)).dist_le_mul x y
+  have hψper : ∀ k (x : Fin m → ℝ) (z : Fin m → ℤ), ψ k (x + fun i => (z i : ℝ)) = ψ k x :=
+    fun k x z => funext fun i => (b k).normed_convolution_add_right (fun y => by rw [hper]) x
+  -- `∇φ_k → ∇φ` almost everywhere
+  have hrad : Tendsto (fun k => (b k).rOut) atTop (𝓝 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hrat : ∀ᶠ k in atTop, (b k).rOut ≤ 2 * (b k).rIn := Eventually.of_forall fun k => by
+    simp only [hb, ContDiffBump.ofRadius_rOut, ContDiffBump.ofRadius_rIn]
+    linarith
+  have hae : ∀ᵐ y ∂volume, Tendsto (fun k => jac (ψ k) y) atTop (𝓝 (jac φ y)) := by
+    have h : ∀ i j, ∀ᵐ y ∂(volume : Measure (Fin m → ℝ)),
+        Tendsto (fun k => jac (ψ k) y i j) atTop (𝓝 (jac φ y i j)) := fun i j =>
+      ContDiffBump.ae_tendsto_fderiv_normed_convolution hrad hrat (hKi i) (Pi.single j 1)
+    have h' : ∀ᵐ y ∂(volume : Measure (Fin m → ℝ)), ∀ i j,
+        Tendsto (fun k => jac (ψ k) y i j) atTop (𝓝 (jac φ y i j)) := by
+      rw [ae_all_iff]
+      exact fun i => ae_all_iff.2 (h i)
+    filter_upwards [h'] with y hy
+    exact tendsto_pi_nhds.2 fun i => tendsto_pi_nhds.2 fun j => hy i j
+  -- `F (∇φ_k)` is bounded: `|∇φ_k| ≤ K`, and `F` is bounded on the ball of radius `K`
+  obtain ⟨C, hC⟩ := (isCompact_closedBall (0 : Fin d → Fin m → ℝ) K).exists_bound_of_continuousOn
+    (f := fun X => F (Matrix.of X)) hFc.continuousOn
+  have hbd : ∀ k y, ‖F (jac (ψ k) y)‖ ≤ C := fun k y => by
+    have hm : Matrix.of.symm (jac (ψ k) y) ∈ Metric.closedBall (0 : Fin d → Fin m → ℝ) K := by
+      rw [mem_closedBall_zero_iff]
+      exact (pi_norm_le_iff_of_nonneg K.2).2 fun i => (pi_norm_le_iff_of_nonneg K.2).2 fun j => by
+        rw [Real.norm_eq_abs]; exact intro_abs_jac_le (hψK k) y i j
+    simpa using hC _ hm
+  have hFm : ∀ u : (Fin m → ℝ) → Fin d → ℝ, AEStronglyMeasurable (fun y => F (jac u y))
+      (volume.restrict (CalculusOfVariations.unitCube m)) := fun u => by
+    have hjm : Measurable fun y => Matrix.of.symm (jac u y) :=
+      Measurable.of_eval fun i => Measurable.of_eval fun k => measurable_fderiv_apply_const ℝ _ _
+    exact ((show Continuous fun X : Fin d → Fin m → ℝ => F (Matrix.of X) from hFc).measurable.comp
+      hjm).aestronglyMeasurable
+  have : IsFiniteMeasure (volume.restrict (CalculusOfVariations.unitCube m)) :=
+    ⟨by rw [Measure.restrict_apply_univ, unitCube_eq_cov, volume_unitCube]
+        exact ENNReal.one_lt_top⟩
+  -- dominated convergence: `∫ F (∇φ_k) → ∫ F (∇φ) < 0`
+  have hlim := tendsto_integral_of_dominated_convergence (fun _ => C) (fun k => hFm (ψ k))
+    (integrable_const C) (fun k => ae_of_all _ (hbd k))
+    (ae_restrict_of_ae (hae.mono fun y hy => (hFc.tendsto _).comp hy))
+  obtain ⟨k, hk⟩ := (hlim.eventually (gt_mem_nhds hlt)).exists
+  exact ⟨ψ k, hψs k, hψK k, hψper k, Integrable.of_bound (hFm _) C (ae_of_all _ (hbd k)), hk⟩
+
+/-- Proof of Corollary 1.6, the witness (TeX lines 2945–2954): `G` is not quasiconvex at
+`B = (0, Y₀)`, `|B| = 1`, `rank Y₀ = 2`. Take a smooth periodic `φ : 𝕋² → ℝ⁴` with
+`∫_{𝕋²} F (∇φ) < 0` (`intro_smooth_periodic_witness`, from the Lipschitz periodic witness of the
+periodic form of quasiconvexity, Lemma 2.2) and `Ψ_ε (x, y) = ε φ (x)`. Then
+`G (B + ∇Ψ_ε) = Λ √(1 + ε² |∇φ|²) + q (Y₀) (1 + ε² |∇φ|²)^{−(p+3)/2} ε^p F (∇φ)` and `G (B) = Λ`,
+so `∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)] = ε^p q (Y₀) ∫_{𝕋²} F (∇φ) + O (ε²)` (`intro_witness_est`,
+`∇φ` is bounded), which is `< 0` for small `ε > 0` since `p < 2`; this contradicts the periodic
+form of quasiconvexity of `G` at `B` (Lemma 2.2), `Ψ_ε` being Lipschitz and periodic. -/
 theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
     {F : Matrix (Fin 4) (Fin 2) ℝ → ℝ} (hFc : Continuous F) (hFh : IsPHomogeneous p F)
     (hFq : ¬ QuasiconvexAt F 0) (Λ : ℝ) : ¬ QuasiconvexAt (intro_corG Λ p F) intro_B := by
@@ -977,28 +1074,18 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
     have := hFh 0 0
     rwa [zero_smul, abs_zero, Real.zero_rpow hp0.ne', zero_mul] at this
   obtain ⟨hdet, hfr⟩ := intro_Yc_B
-  -- a periodic Lipschitz witness `φ` for `F` at `0` (Lemma 2.2)
+  -- a Lipschitz periodic witness for `F` at `0` (Lemma 2.2), and from it a smooth periodic `φ`
+  -- with `∫_{(0,1)²} F (∇φ) < 0`
   have hFper : ¬ CalculusOfVariations.QuasiconvexAtPeriodic F 0 := fun h =>
     hFq ((cov_quasiconvexAtOn_unitCube_iff F 0).1
       ((External.Rindler.quasiconvexAtOn_iff_periodic hFI.1 hFI.2 0).2 h))
   simp only [CalculusOfVariations.QuasiconvexAtPeriodic, not_forall, not_le] at hFper
-  obtain ⟨φ, K, hK, hper, hint, hlt⟩ := hFper
-  simp only [zero_add, hF0, grad_eq] at hint hlt
+  obtain ⟨φ₀, K, hK₀, hper₀, -, hlt₀⟩ := hFper
+  simp only [zero_add, hF0, grad_eq] at hlt₀
+  obtain ⟨φ, -, hK, hper, hint, hlt⟩ := intro_smooth_periodic_witness hFc hK₀ hper₀ hlt₀
   set I := ∫ y in CalculusOfVariations.unitCube 2, F (jac φ y) with hIdef
   -- bounds on `∇φ` and `F (∇φ)`
-  have hKi : ∀ i, LipschitzWith K fun y => φ y i := fun i => by
-    have h := (LipschitzWith.eval (α := fun _ : Fin 4 => ℝ) i).comp hK
-    rw [one_mul] at h
-    exact h
-  have hent : ∀ y i k, |jac φ y i k| ≤ K := fun y i k => by
-    have h1 := (fderiv ℝ (fun z => φ z i) y).le_opNorm (Pi.single k 1)
-    have h2 := norm_fderiv_le_of_lipschitz ℝ (hKi i) (x₀ := y)
-    have h3 : ‖(Pi.single k (1 : ℝ) : Fin 2 → ℝ)‖ ≤ 1 := by
-      rw [Pi.norm_single, norm_one]
-    rw [← Real.norm_eq_abs]
-    calc ‖jac φ y i k‖ ≤ ‖fderiv ℝ (fun z => φ z i) y‖ * ‖(Pi.single k 1 : Fin 2 → ℝ)‖ := h1
-      _ ≤ K * 1 := mul_le_mul h2 h3 (norm_nonneg _) K.2
-      _ = K := mul_one _
+  have hent : ∀ y i k, |jac φ y i k| ≤ K := intro_abs_jac_le hK
   have hnorm : ∀ y, ‖Matrix.of.symm (jac φ y)‖ ≤ K := fun y =>
     (pi_norm_le_iff_of_nonneg K.2).2 fun i => (pi_norm_le_iff_of_nonneg K.2).2 fun k => by
       rw [Real.norm_eq_abs]; exact hent y i k
@@ -1015,10 +1102,10 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   -- the constants, and `ε` with `ε^{2−p} E < c`
   set S₀ : ℝ := 8 * (K : ℝ) ^ 2 with hS₀
   set V : ℝ := CF * (K : ℝ) ^ p with hV
-  set E : ℝ := |Λ| * S₀ + (p + 3) / 4 * S₀ * V with hE
+  set E : ℝ := |Λ| * S₀ + (p + 3) / 2 * S₀ * V with hE
   have hE0 : 0 ≤ E := by positivity
-  set c : ℝ := √2 ^ (-p - 3) * (-I) with hc
-  have hc0 : 0 < c := mul_pos (Real.rpow_pos_of_pos (by positivity) _) (by linarith)
+  set c : ℝ := 1 / 4 * (-I) with hc
+  have hc0 : 0 < c := mul_pos (by norm_num) (by linarith)
   set ε : ℝ := min 1 ((c / (E + 1)) ^ (1 / (2 - p))) with hεdef
   have hε0 : 0 < ε := lt_min one_pos (Real.rpow_pos_of_pos (by positivity) _)
   have hε1 : ε ≤ 1 := min_le_left _ _
@@ -1073,25 +1160,25 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
         omega
       · rfl
     rw [this, map_zero, mul_zero]
-  -- `G (B + ∇Ψ_ε (x)) = g (∇φ (x₁, x₂))`
-  set g : Matrix (Fin 4) (Fin 2) ℝ → ℝ := fun M => Λ * √(2 + ε ^ 2 * frobSq M) +
-    √(2 + ε ^ 2 * frobSq M) ^ (-p - 3) * (ε ^ p * F M) with hgdef
+  -- `G (B + ∇Ψ_ε (x)) = g (∇φ (x₁, x₂))`, with `|B + ∇Ψ_ε|² = 1 + ε² |∇φ|²`, and `G (B) = Λ`
+  set g : Matrix (Fin 4) (Fin 2) ℝ → ℝ := fun M => Λ * √(1 + ε ^ 2 * frobSq M) +
+    1 / 4 * √(1 + ε ^ 2 * frobSq M) ^ (-p - 3) * (ε ^ p * F M) with hgdef
   have hGg : ∀ x, intro_corG Λ p F (intro_B + jac Ψ x) = g (jac φ (lift_projX h24 x)) := by
     intro x
     simp only [intro_corG, intro_schattenNorm_two, intro_Xc_add, intro_Yc_add, hjX, hjY,
-      intro_Xc_B, add_zero, zero_add, hdet, one_mul, hgdef]
+      intro_Xc_B, add_zero, zero_add, hdet, hgdef]
     rw [intro_frobSq_Xc_Yc, intro_Xc_add, intro_Yc_add, hjX, hjY, intro_Xc_B, zero_add, add_zero,
-      hfr, tbt_frobSq_smul, hFh, abs_of_pos hε0, add_comm (ε ^ 2 * _) 2]
-  have hGB : intro_corG Λ p F intro_B = Λ * √2 := by
-    simp only [intro_corG, intro_schattenNorm_two, hdet, one_mul]
+      hfr, tbt_frobSq_smul, hFh, abs_of_pos hε0, add_comm (ε ^ 2 * _) 1]
+  have hGB : intro_corG Λ p F intro_B = Λ := by
+    simp only [intro_corG, intro_schattenNorm_two, hdet]
     rw [intro_frobSq_Xc_Yc, intro_Xc_B, hfr, hF0]
     simp [frobSq]
   -- `g ∘ ∇φ` is integrable on the unit square
   have hgc : Continuous g := by
-    have hs : Continuous fun M : Matrix (Fin 4) (Fin 2) ℝ => √(2 + ε ^ 2 * frobSq M) :=
+    have hs : Continuous fun M : Matrix (Fin 4) (Fin 2) ℝ => √(1 + ε ^ 2 * frobSq M) :=
       (continuous_const.add (continuous_const.mul intro_continuous_frobSq)).sqrt
-    refine (continuous_const.mul hs).add ((hs.rpow_const fun M => Or.inl ?_).mul
-      (continuous_const.mul hFc))
+    refine (continuous_const.mul hs).add
+      ((continuous_const.mul (hs.rpow_const fun M => Or.inl ?_)).mul (continuous_const.mul hFc))
     exact (Real.sqrt_pos.2 (by positivity [tbt_frobSq_nonneg M])).ne'
   have hjm : Measurable fun y => Matrix.of.symm (jac φ y) := by
     refine Measurable.of_eval fun i => Measurable.of_eval fun k => ?_
@@ -1099,34 +1186,34 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   have hgm : AEStronglyMeasurable (fun y => g (jac φ y)) (volume.restrict (unitCube 2)) :=
     ((show Continuous fun X : Fin 4 → Fin 2 → ℝ => g (Matrix.of X) from hgc).measurable.comp
       hjm).aestronglyMeasurable
-  have hgb : ∀ y, |g (jac φ y)| ≤ |Λ| * √(2 + S₀) + V := fun y => by
-    have hν1 : 1 ≤ √(2 + ε ^ 2 * frobSq (jac φ y)) :=
+  have hgb : ∀ y, |g (jac φ y)| ≤ |Λ| * √(1 + S₀) + V := fun y => by
+    have hν1 : 1 ≤ √(1 + ε ^ 2 * frobSq (jac φ y)) :=
       Real.one_le_sqrt.2 (by nlinarith [tbt_frobSq_nonneg (jac φ y)])
-    have hν2 : √(2 + ε ^ 2 * frobSq (jac φ y)) ≤ √(2 + S₀) := Real.sqrt_le_sqrt (by
+    have hν2 : √(1 + ε ^ 2 * frobSq (jac φ y)) ≤ √(1 + S₀) := Real.sqrt_le_sqrt (by
       have := hS y
       have : ε ^ 2 ≤ 1 := pow_le_one₀ hε0.le hε1
       nlinarith [tbt_frobSq_nonneg (jac φ y)])
-    have hpw : √(2 + ε ^ 2 * frobSq (jac φ y)) ^ (-p - 3) ≤ 1 :=
+    have hpw : √(1 + ε ^ 2 * frobSq (jac φ y)) ^ (-p - 3) ≤ 1 :=
       Real.rpow_le_one_of_one_le_of_nonpos hν1 (by linarith)
+    have hpw0 : 0 ≤ √(1 + ε ^ 2 * frobSq (jac φ y)) ^ (-p - 3) :=
+      Real.rpow_nonneg (Real.sqrt_nonneg _) _
     have hεp : ε ^ p ≤ 1 := Real.rpow_le_one hε0.le hε1 hp0.le
     simp only [hgdef]
     refine (abs_add_le _ _).trans (add_le_add ?_ ?_)
     · rw [abs_mul, abs_of_nonneg (Real.sqrt_nonneg _)]
       exact mul_le_mul_of_nonneg_left hν2 (abs_nonneg _)
-    · rw [abs_mul, abs_mul, abs_of_nonneg (Real.rpow_nonneg (Real.sqrt_nonneg _) _),
-        abs_of_nonneg (Real.rpow_nonneg hε0.le _)]
-      calc _ ≤ 1 * (1 * V) := mul_le_mul hpw (mul_le_mul hεp (hFb y) (abs_nonneg _) zero_le_one)
+    · rw [abs_mul, abs_mul, abs_mul, abs_of_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 4),
+        abs_of_nonneg hpw0, abs_of_nonneg (Real.rpow_nonneg hε0.le p)]
+      calc _ ≤ 1 * (1 * V) := mul_le_mul (by linarith)
+            (mul_le_mul hεp (hFb y) (abs_nonneg _) zero_le_one)
             (mul_nonneg (Real.rpow_nonneg hε0.le _) (abs_nonneg _)) zero_le_one
         _ = V := by ring
   have hfin : IsFiniteMeasure (volume.restrict (unitCube 2)) :=
     ⟨by rw [Measure.restrict_apply_univ, volume_unitCube]; exact ENNReal.one_lt_top⟩
   have hfin' : IsFiniteMeasure (volume.restrict (CalculusOfVariations.unitCube 2)) := hfin
-  have hgi : IntegrableOn (fun y => g (jac φ y)) (unitCube 2) := by
+  have hgi : IntegrableOn (fun y => g (jac φ y)) (CalculusOfVariations.unitCube 2) := by
     exact Integrable.of_bound hgm _ (ae_of_all _ fun y => by rw [Real.norm_eq_abs]; exact hgb y)
-  -- the periodic form of quasiconvexity of `G` at `B`, tested with `Ψ_ε`
-  intro hq
-  have hper' := (External.Rindler.quasiconvexAtOn_iff_periodic hGI.1 hGI.2 intro_B).1
-    ((cov_quasiconvexAtOn_unitCube_iff _ _).2 hq)
+  -- `∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)] = ∫_{(0,1)²} [g (∇φ) − Λ]`: `Ψ_ε` depends on `x₁, x₂` only
   have hmp := lift_measurePreserving_projX h24
   have hfun : (fun x => intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x)) =
       (fun y => g (jac φ y)) ∘ lift_projX h24 := funext fun x => hGg x
@@ -1134,51 +1221,67 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
       (CalculusOfVariations.unitCube 4) := by
     rw [hfun]
     exact (hmp.integrable_comp hgm).2 hgi
-  have key := hper' Ψ _ hΨK hΨper hint'
-  rw [hfun] at key
-  have heq : ∫ x in CalculusOfVariations.unitCube 4, ((fun y => g (jac φ y)) ∘ lift_projX h24) x =
-      ∫ y in CalculusOfVariations.unitCube 2, g (jac φ y) := by
+  have hvol : ∀ n, volume.real (CalculusOfVariations.unitCube n) = 1 := fun n => by
+    rw [Measure.real, unitCube_eq_cov, volume_unitCube, ENNReal.toReal_one]
+  have heq : ∫ x in CalculusOfVariations.unitCube 4,
+      (intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x) - intro_corG Λ p F intro_B) =
+      ∫ y in CalculusOfVariations.unitCube 2, (g (jac φ y) - Λ) := by
+    have hfin4 : IsFiniteMeasure (volume.restrict (CalculusOfVariations.unitCube 4)) :=
+      ⟨by rw [Measure.restrict_apply_univ, unitCube_eq_cov, volume_unitCube]
+          exact ENNReal.one_lt_top⟩
+    rw [integral_sub hint' (integrable_const _), integral_sub hgi (integrable_const _),
+      setIntegral_const, setIntegral_const, hvol, hvol, hfun, hGB]
+    congr 1
     change ∫ x, g (jac φ (lift_projX h24 x)) ∂(volume.restrict (unitCube 4)) =
       ∫ y, g (jac φ y) ∂(volume.restrict (unitCube 2))
     rw [← integral_map (f := fun y => g (jac φ y)) hmp.measurable.aemeasurable
       (by rw [hmp.map_eq]; exact hgm), hmp.map_eq]
-  rw [heq, hGB] at key
-  -- the estimate `∫ g (∇φ) ≤ Λ √2 + ε^p 2^{−(p+3)/2} I + ε² E < Λ √2`
-  have hpt : ∀ y, g (jac φ y) ≤
-      Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ y)) + ε ^ 2 * E := fun y =>
-    intro_witness_est hp0 (tbt_frobSq_nonneg (jac φ y)) (hS y) (hFb y) hε0 hε1
-  have hint2 : Integrable (fun y => Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ y)) + ε ^ 2 * E)
-      (volume.restrict (unitCube 2)) :=
-    ((integrable_const _).add ((hint.const_mul _).const_mul _)).add (integrable_const _)
-  have hle := integral_mono hgi hint2 hpt
-  have hR : ∫ x in unitCube 2, (Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ x)) + ε ^ 2 * E) =
-      Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * I) + ε ^ 2 * E := by
-    have h1 : Integrable (fun x => ε ^ p * (√2 ^ (-p - 3) * F (jac φ x)))
-        (volume.restrict (unitCube 2)) := (hint.const_mul _).const_mul _
-    have h01 : Integrable (fun x => Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ x)))
-        (volume.restrict (unitCube 2)) := (integrable_const _).add h1
-    rw [integral_add h01 (integrable_const _), integral_add (integrable_const _) h1,
-      integral_const_mul, integral_const_mul, integral_const, integral_const]
-    simp only [Measure.real, Measure.restrict_apply_univ, volume_unitCube, ENNReal.toReal_one,
-      one_smul, hIdef]
-    rw [integral_const_mul]
-    rfl
-  rw [hR] at hle
-  have hneg : ε ^ p * (√2 ^ (-p - 3) * I) + ε ^ 2 * E < 0 := by
+  -- the expansion `∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)] = ε^p q (Y₀) ∫ F (∇φ) + O (ε²)`
+  have hexp : |(∫ x in CalculusOfVariations.unitCube 4,
+      (intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x) - intro_corG Λ p F intro_B)) -
+      ε ^ p * (1 / 4 * I)| ≤ ε ^ 2 * E := by
+    have hF' : Integrable (fun y => ε ^ p * (1 / 4 * F (jac φ y)))
+        (volume.restrict (CalculusOfVariations.unitCube 2)) := (hint.const_mul _).const_mul _
+    have hgΛ : Integrable (fun y => g (jac φ y) - Λ)
+        (volume.restrict (CalculusOfVariations.unitCube 2)) := hgi.sub (integrable_const _)
+    have e : (∫ y in CalculusOfVariations.unitCube 2, (g (jac φ y) - Λ)) - ε ^ p * (1 / 4 * I) =
+        ∫ y in CalculusOfVariations.unitCube 2,
+          (g (jac φ y) - Λ - ε ^ p * (1 / 4 * F (jac φ y))) := by
+      rw [integral_sub hgΛ hF', integral_const_mul, integral_const_mul]
+    rw [heq, e, ← Real.norm_eq_abs]
+    have hb := norm_setIntegral_le_of_norm_le_const (μ := volume)
+      (s := CalculusOfVariations.unitCube 2) (C := ε ^ 2 * E)
+      (f := fun y => g (jac φ y) - Λ - ε ^ p * (1 / 4 * F (jac φ y)))
+      (by rw [unitCube_eq_cov, volume_unitCube]; exact ENNReal.one_lt_top) fun y _ => by
+        rw [Real.norm_eq_abs]
+        exact intro_witness_est hp0 (by norm_num) (by norm_num) (tbt_frobSq_nonneg (jac φ y))
+          (hS y) (hFb y) hε0 hε1
+    rwa [hvol, mul_one] at hb
+  -- `ε^p q (Y₀) ∫ F (∇φ) + O (ε²) < 0` for small `ε`, since `p < 2`
+  have hneg : ε ^ p * (1 / 4 * I) + ε ^ 2 * E < 0 := by
     have h1 : ε ^ (2 : ℝ) = ε ^ p * ε ^ (2 - p) := by
       rw [← Real.rpow_add hε0]; congr 1; ring
     rw [show ε ^ 2 = ε ^ (2 : ℝ) by norm_cast, h1]
     have hεp : 0 < ε ^ p := Real.rpow_pos_of_pos hε0 p
-    have : ε ^ p * (√2 ^ (-p - 3) * I) + ε ^ p * ε ^ (2 - p) * E =
+    have : ε ^ p * (1 / 4 * I) + ε ^ p * ε ^ (2 - p) * E =
         ε ^ p * (ε ^ (2 - p) * E - c) := by rw [hc]; ring
     rw [this]
     exact mul_neg_of_pos_of_neg hεp (by linarith)
-  have : (∫ y in unitCube 2, g (jac φ y)) < Λ * √2 := by
-    have e : (∫ y in unitCube 2, g (jac φ y)) = ∫ y in CalculusOfVariations.unitCube 2,
-        g (jac φ y) := rfl
-    linarith
-  exact absurd key (not_le.2 this)
-
+  have hlt' : (∫ x in CalculusOfVariations.unitCube 4,
+      (intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x) - intro_corG Λ p F intro_B)) <
+      0 := by
+    linarith [(abs_le.1 hexp).2]
+  -- the periodic form of quasiconvexity of `G` at `B`, tested with `Ψ_ε`:
+  -- `0 ≤ ∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)]`
+  intro hq
+  have hper' := (External.Rindler.quasiconvexAtOn_iff_periodic hGI.1 hGI.2 intro_B).1
+    ((cov_quasiconvexAtOn_unitCube_iff _ _).2 hq)
+  have key := hper' Ψ _ hΨK hΨper hint'
+  have hfin4 : IsFiniteMeasure (volume.restrict (CalculusOfVariations.unitCube 4)) :=
+    ⟨by rw [Measure.restrict_apply_univ, unitCube_eq_cov, volume_unitCube]
+        exact ENNReal.one_lt_top⟩
+  rw [integral_sub hint' (integrable_const _), setIntegral_const, hvol, one_smul] at hlt'
+  linarith
 
 end Corollary16
 
@@ -2234,20 +2337,24 @@ Theorem 1.5, which its proof uses (at some `p ∈ (1, 2)`).
 Proof (the paper's, end of Section 7): `p = 3/2`, `F` from Theorem 1.5 (continuous by Lemma 2.1),
 `G (A) = Λ ‖A‖_{S₂} + q (Y) ‖A‖_{S₂}^{−p−3} F (X)` (`intro_corG`): continuous, `1`-homogeneous and
 nonnegative for `Λ` large (`intro_corG_basic`), rank-one convex for `Λ` large
-(`intro_corG_rankOneConvex`), not quasiconvex at `B = (0, Y₀)` of rank `2`
-(`intro_corG_not_quasiconvexAt`, `intro_rank_B`).
+(`intro_corG_rankOneConvex`), not quasiconvex at `B = (0, Y₀)` with `|B| = 1` and `rank Y₀ = 2`
+(`intro_corG_not_quasiconvexAt`, `intro_rank_B`): for a smooth periodic `φ : 𝕋² → ℝ⁴` with
+`∫_{𝕋²} F (∇φ) < 0` and `Ψ_ε (x, y) = ε φ (x)`,
+`∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)] = ε^p q (Y₀) ∫_{𝕋²} F (∇φ) + O (ε²) < 0` for small `ε > 0`.
 
-Departures from the paper. (1) Rank-one convexity: the paper bounds the distributional second
+Gap filled (TeX lines 2946–2947): the paper takes a smooth periodic `φ` with `∫_{𝕋²} F (∇φ) < 0`
+without saying where it comes from. The periodic form of quasiconvexity (Lemma 2.2) gives a
+Lipschitz periodic one; its mollifications are smooth, Lipschitz and periodic, and by dominated
+convergence one of them still has `∫_{𝕋²} F (∇φ) < 0` (`intro_smooth_periodic_witness`).
+
+Departure from the paper (rank-one convexity): the paper bounds the distributional second
 derivative, `(G ∘ A)'' = h f'' + (Λ r^{−3} + 2 h' f' + h'' f) dt ≥ (Λ − C) r^{−3} dt`, with `f = F ∘ X`
 only convex. Mathlib has no distributional derivatives of convex functions, nor the criterion
 "distributional second derivative `≥ 0` implies convex" (reason 2: mathematics that Lean lacks);
 the formalization proves the same inequality for second differences,
 `Δ²_δ (G ∘ A) ≥ δ² (Λ − C) r^{−3} / 3^{3/2}` for `δ ≤ 1` (`intro_line_midpoint`, from the same
 bounds `|h^{(j)}| ≲ r^{−p−1−j}`, `|f| + r |f'| ≲ r^p`), and concludes by the maximum principle for
-locally midpoint convex continuous functions (`intro_convexOn_of_local_midpoint`). (2) The
-witness: the paper takes a smooth periodic `φ` with `∫ F (∇φ) < 0`; the formalization takes the
-Lipschitz periodic witness that the periodic form of quasiconvexity (Lemma 2.2) provides, for
-which the same expansion works (`∇φ` is bounded); and `|B|² = 2` instead of `|B| = 1`. -/
+locally midpoint convex continuous functions (`intro_convexOn_of_local_midpoint`). -/
 theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
