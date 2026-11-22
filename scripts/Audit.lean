@@ -58,7 +58,6 @@ import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
 import all Morrey.Common.External.Borell.Hypercontractivity
-import all Morrey.Common.External.Burkholder.Inequality
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.CoxVeraar.Decoupling
 import all Morrey.Common.External.Dacorogna.Minors
@@ -73,6 +72,8 @@ import all Morrey.Common.External.KinderlehrerPedregal.Formula
 import all Morrey.Common.External.KirchheimKristensen.Theorem
 import all Morrey.Common.External.Kristensen.Smoothing
 import all Morrey.Common.External.Osekowski.HilbertCharacterization
+import all Morrey.Common.External.Osekowski.Inequality
+import all Morrey.Common.External.Osekowski.Sharpness
 import all Morrey.Common.External.Pisier.LpUMD
 import all Morrey.Common.External.PisierXu.Khintchine
 import all Morrey.Common.External.Randrianantoanina.SchattenUMD
@@ -143,9 +144,18 @@ stops at them. -/
 meta def externalResults : List (String × Name) :=
   [("Kakutani's fixed-point theorem (Thm 6.2)", ``External.Kakutani.exists_fixedPoint),
    -- Cassese: the cited results proved in `Morrey/Common/External`
-   ("Burkholder's inequality (Cassese Thm 2.3 (1))", ``External.Burkholder.inequality),
-   ("Burkholder's square function inequality (Cassese Thm 2.3 (2))",
-    ``External.Burkholder.squareFunction),
+   ("Osękowski Thm 3.5, Burkholder's inequality (Cassese Thm 2.3 (1))",
+    ``External.Osekowski.inequality),
+   ("Osękowski Thm 8.6, square function inequality (Cassese Thm 2.3 (2))",
+    ``External.Osekowski.squareFunction),
+   ("Osękowski Thm 3.5, differentially subordinate martingales", ``External.Osekowski.theorem3_5),
+   ("Osękowski Thm 8.6, square functions", ``External.Osekowski.theorem8_6),
+   ("Osękowski Thm 3.5, sharpness for dyadic martingales (Cassese Cor 6.3)",
+    ``External.Osekowski.exists_lt_lpNorm_transform),
+   ("Osękowski Thm 3.5, Rem 3.8, UMD constants of Hilbert spaces",
+    ``External.Osekowski.dyadicUMDConst_of_innerProductSpace),
+   ("Osękowski Thm 3.5, UMD constants of Hilbert spaces",
+    ``External.Osekowski.umdConst_of_innerProductSpace),
    ("Burkholder's scalar function u (Cassese (13), (14))",
     ``External.Burkholder.scalarFunction_holds),
    ("Burkholder's scalar function u_q (Cassese Remark 4.5)",

@@ -8,8 +8,8 @@ public import BanachProbability.Martingale.Burkholder.Function
 # Burkholder's function for the exponent `6`, and for a real exponent `q ≥ 2`
 
 D. L. Burkholder, *Sharp inequalities for martingales and stochastic integrals*, Colloque Paul
-Lévy, Astérisque 157–158 (1988) (read: Numdam), (1.6), (1.10) and Remark 1.2 (see also
-V. Vasyunin and A. Volberg 2010).
+Lévy, Astérisque 157–158 (1988) (read: Numdam), (1.6), (1.10) and Remark 1.2; the paper cites its
+proof of Theorem 1.1, "or [V. Vasyunin and A. Volberg 2010] for an alternative proof" (not used).
 Cassese uses two properties of `u (a, b) = α (|b| − 5 |a|) (|a| + |b|)^5`, `α = 6 (5/6)^5`, for
 complex `a`, `b` (the proof of Proposition 4.2, (13) and (14)): the proposition
 `ScalarFunction`, proved by `scalarFunction_holds`. Remark 4.5 extends the argument to
@@ -18,19 +18,19 @@ complex `a`, `b` (the proof of Proposition 4.2, (13) and (14)): the proposition
 (`ScalarFunctionQ q`), proved for every real `q ≥ 2` by `scalarFunctionQ_holds`. `uq_six`
 identifies `u_6` with `u6`.
 
-Proof: from the package `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability` while it is developed). For `q ≥ 2`, `p* = q` and `u_q` is the
-package's `BanachProbability.Burkholder.burkholderFun q` on the real inner product space `ℂ`
-(`uq_eq_burkholderFun`), Burkholder's function in Burkholder's notation (`a` the dominating, `b`
-the subordinate position). (13) is `burkholderFun_ge`, `u_q ≥ |b|^q − (q − 1)^q |a|^q`, and (14)
-is `burkholderFun_concaveOn_line` with the directions `h` and `ε h`, `|ε h| ≤ |h|`. (13) is
-Burkholder's (1.10), proved in the package by his argument: the elementary inequality (1.11) by
-the convexity and concavity of `log ((p − 1)^{p−1} / p^{p−2})`, then, by homogeneity on
-`|a| + |b| = 1`, the concave and convex pieces of his function `F`. (14) is his Remark 1.2,
-(1.17), which the paper states without proof; the package completes it from the paper's own steps:
-the proof of (1.12)–(1.14) (the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` on
-lines along which neither coordinate vanishes), and, for the other lines, the shift of the proof
-of (1.8) by a vector orthogonal to `ℂ` in `ℂ ⊕ ℝ`, letting the shift tend to `0`.
+Proof: from the package `BanachProbability` (`lean4-banach-probability`,
+`Martingale/Burkholder/Function.lean`). For `q ≥ 2`, `p* = q` and `u_q` is the package's
+`BanachProbability.Burkholder.burkholderFun q` on the real inner product space `ℂ`
+(`uq_eq_burkholderFun`), Burkholder's function in Burkholder's notation (`a` the dominating, `b` the
+subordinate position). (13) is `burkholderFun_ge`, `u_q ≥ |b|^q − (q − 1)^q |a|^q`, and (14) is
+`burkholderFun_concaveOn_line` with the directions `h` and `ε h`, `|ε h| ≤ |h|`. (13) is
+Burkholder's (1.10), proved in the package by his argument: the elementary inequality (1.11) by the
+convexity and concavity of `log ((p − 1)^{p−1} / p^{p−2})`, then, by homogeneity on `|a| + |b| = 1`,
+the concave and convex pieces of his function `F`. (14) is his Remark 1.2, (1.17), which the paper
+states without proof; the package completes it from the paper's own steps: the concavity in the
+proof of (1.12), by (1.14) (the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` on
+lines along which neither coordinate vanishes), and, for the other lines, the shift of the proof of
+(1.8) by a vector orthogonal to `ℂ` in `ℂ ⊕ ℝ`, letting the shift tend to `0`.
 -/
 
 @[expose] public section
@@ -114,8 +114,8 @@ theorem uq_eq_burkholderFun {q : ℝ} (hq : 2 ≤ q) (a b : ℂ) :
 /-- **Equations (13), (14) for a real exponent `q ≥ 2`** (Remark 4.5): Burkholder's function
 `u_q`. (The paper states them for `q = 6`, `scalarFunction_holds`.)
 
-Proof: Burkholder's argument (Burkholder 1988, (1.10); (1.17) completed from (1.12)–(1.14) and the
-shift of the proof of (1.8)), in the package: for `q ≥ 2`,
+Proof: Burkholder's argument (Burkholder 1988, (1.10); (1.17) completed from (1.14) and the shift
+of the proof of (1.8)), in the package: for `q ≥ 2`,
 `u_q = burkholderFun q` (`uq_eq_burkholderFun`); (13) is
 `BanachProbability.Burkholder.burkholderFun_ge` with `p* = q`, and (14) is
 `BanachProbability.Burkholder.burkholderFun_concaveOn_line` for the directions `h` and `ε h`, since
