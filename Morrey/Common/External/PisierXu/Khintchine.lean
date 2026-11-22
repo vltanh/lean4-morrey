@@ -32,12 +32,12 @@ Proof: in the package `HarmonicAnalysis` (`lean4-harmonic-analysis`),
 Astérisque 247 for the order of `B'_p`. The proof is that of Lust-Piquard–Pisier 1991 and of
 Astérisque 247, p. 106: the lower bound by (I.5)–(I.7); the Paley inequality of Theorem III.1 (i)
 for the Paley projection, by the factorization of matrix-valued `H¹` functions (Sarason 1967,
-Theorem 4, with Helson–Lowdenslager 1958 and 1961); Corollary III.4 with signs; and the upper
-bound by duality, with the Rademacher projection on `L^q (S_q)` bounded by a multiple of `√q`
-(type 2 of `S_q`, Tomczak-Jaegermann 1974, and K-convexity). Facts that these sources take from
-works that were not read, or state without proof, have named substitutes, listed in the README of
-this directory; the main one is (III.3), from Bourgain 1986 (not obtained), by Hytönen–van
-Neerven–Veraar–Weis (2016), Theorem 5.7.10 (2).
+Theorem 4, with Helson–Lowdenslager 1958 and 1961); the inequality (III.3), for every choice of
+signs, by McConnell 1984, Theorem 1.3, which Lust-Piquard and Pisier cite for it with Bourgain
+1986 (not obtained); Corollary III.4 with signs; and the upper bound by duality, with the
+Rademacher projection on `L^q (S_q)` bounded by a multiple of `√q` (type 2 of `S_q`,
+Tomczak-Jaegermann 1974, and K-convexity). Facts that these sources take from works that were not
+read, or state without proof, have named substitutes, listed in the README of this directory.
 
 A shorter proof of the upper bound, with the explicit constant `√(2 (q − 1))`, by the exchangeable
 pairs of Mackey, Jordan, Chen, Farrell and Tropp (2014), is

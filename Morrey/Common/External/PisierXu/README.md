@@ -34,8 +34,9 @@ by LPP and Astérisque 247, p. 106:
 - Paley's inequality in the Schatten classes, uniformly in `1 ≤ p ≤ 2` (LPP, Theorem III.1 (i) for the
   Paley projection): the factorization of matrix-valued `H¹` functions ((α), (β) of LPP, p. 252) is
   Sarason's Theorem 4 (Trans. Amer. Math. Soc. 127 (1967), 179–203), with Helson–Lowdenslager (Acta Math.
-  99 (1958) and 106 (1961)); the inequality (III.3) is the Littlewood–Paley inequality of UMD spaces,
-  averaged over the signs;
+  99 (1958) and 106 (1961)); (III.3), for every choice of signs, is McConnell's Littlewood–Paley inequality
+  for UMD spaces (Trans. Amer. Math. Soc. 285 (1984), 739–757, Theorem 1.3, from his multiplier
+  theorem, Theorem 1.1, `n = 1`), transferred to the circle;
 - Corollary III.4 with signs, by averaging (LPP, p. 243);
 - the upper bound by duality (LPP, pp. 254–255), with the Rademacher projection on `L^q (S_q)` bounded
   by a multiple of `√q` (Astérisque 247, p. 106): type 2 of `S_q` by Tomczak-Jaegermann (Studia Math. 50
@@ -45,16 +46,15 @@ by LPP and Astérisque 247, p. 106:
 **Constants.** Lower constant `1`, as in (6.4); upper constant `C √q`, `C` absolute and not made explicit
 (the source: `B'_p`, "of order `√p`").
 
-**Departures.** None from the argument of LPP. Facts that these sources take from works that were not
-read, or only recall, or state without proof, have named substitutes: (III.3) for every choice of signs,
-which LPP take from Bourgain 1986 (not obtained) and McConnell 1984 (not read), by Hytönen–van
-Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Theorem 5.7.10 (2), on average over the
-signs, which is all that the proof uses; Sarason's Lemma 10.3, from Helson's book (not read), by
+**Departures.** None from the argument of LPP. For (III.3) LPP give two references, Bourgain 1986 (not
+obtained) and McConnell 1984, Theorem 1.3; McConnell's proof is followed, for `n = 1`. Facts that these
+sources take from works that were not read, or only recall, or state without proof, have named
+substitutes: Sarason's Lemma 10.3, from Helson's book (not read), by
 Helson–Lowdenslager 1961, §§9–10; Szegő's theorem and the quotient by an outer function, from Hoffman's
 book (pp. 53, 75; not read), by Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end
 of Sarason's proof; the Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by HNVW
 I, Appendix D, and by Sutter, Berta and Tomamichel (Comm. Math. Phys. 352 (2017)); Maurey–Pisier, Remark
-2.10 (read, no proof), by HNVW II, Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick
+2.10 (read, no proof), by Hytönen–van Neerven–Veraar–Weis (HNVW) II, Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick
 as a known argument; here it is Randrianantoanina's theorem
 ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese cites for it.
 
