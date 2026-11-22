@@ -481,6 +481,9 @@ claims a solution of the `2 × 2` case.
   quasiconvex; its introduction says that a proof of the `2 × 2` case "has been proposed",
   citing this paper. Its Lean code, by its README, was written by Claude Opus 5.5 under the
   authors' guidance.
+- Iwaniec's conjecture on the Beurling–Ahlfors transform, which a positive answer in `2 × 2` would
+  imply, is claimed proved by a preprint of twenty authors ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October
+  2026). That claim neither confirms nor refutes the paper's: the implication goes one way.
 - No published response to the paper's argument, and no erratum, was found.
 
 ### Formalizations

@@ -289,6 +289,8 @@ proofs cite none.
 
 ## 11. What's next
 
+Plans for follow-up papers are kept in `NEXT.md`, which is not published.
+
 ### Open directions
 
 - **`2 × 2`.** Morrey's problem for two components in the plane is open. Šverák's mechanism cannot

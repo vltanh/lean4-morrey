@@ -448,6 +448,12 @@ claimed, not as proved.
   Kristensen and Scalabrino ([arXiv:2610.32444](https://arxiv.org/abs/2610.32444), 23 October 2026)
   cite the paper; Gammer ([arXiv:2610.35216](https://arxiv.org/abs/2610.35216), 26 October 2026) uses
   its integrand. No correction of the paper and no counterexample to it were found.
+- Agazzi, Astala, Bañuelos, Bruno, Cassese, Faraco, Guerra, Hormozi, Kirchheim, Koski, Kovač,
+  Kristensen, Pasqualotto, Prause, Saksman, Šverák, Székelyhidi, Tione, Volberg and Yang
+  ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), 23 September 2026, v2 8 October 2026) claim a proof of Iwaniec's
+  conjecture, `‖𝓑‖_{L^p} = p* − 1`, which the paper treats as open (§1.3, Remarks 4.3, 6.4, 7.1,
+  §8.1). By the paper's equivalence (lines 1158–1162), the integrands behind Theorem 1.2 would then
+  give no counterexample in `2 × 2` (the case `n = 1`); the `2 × 2` problem itself stays open.
 
 ### Formalizations
 
@@ -463,10 +469,14 @@ claimed, not as proved.
 
 ## 11. What's next
 
+Plans for follow-up papers are kept in `NEXT.md`, which is not published.
+
 ### Open directions (from the paper and the formalization)
 
 - **`2 × 2`.** The homogeneous problem in `2 × 2` is open; the paper expects a positive answer, and
   notes that it would imply Iwaniec's conjecture, so a proof must use features of the plane (§8.1).
+  Iwaniec's conjecture is now claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), Section 10), which removes
+  that obstruction but does not decide the problem.
 - **Quantitative `m₀`.** The proof gives no value of `m₀(p)`; the paper expects
   `m_*(p) ≤ m₀(p) ≤ 4` and conjectures `m_*(p) ≤ 3` (line 1385).
 - **`2 × 3` and `3 × 2` for every `p`.** Claimed for `p ∈ (3.6, 5.15)` (Remark 5.4); proved here on

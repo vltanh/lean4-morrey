@@ -21,6 +21,7 @@ exact certificates, failed routes and counterexample searches. Start with the
 The planar problem remains open in this work. Research scripts and hand proofs are distinguished
 from Lean theorems, and the historical payloads are preserved with checksums.
 
+
 ## The state of the problem
 
 **Morrey's problem**: does rank-one convexity imply quasiconvexity for `f : ℝ^{d×m} → ℝ`? A
@@ -115,8 +116,9 @@ transposition. In `2 × 2`, its mechanism cannot detect a failure of quasiconvex
   if it equals rank-one convexity;
 - the Burkholder function: Astala, Iwaniec, Prause and Saksman (2012) related the `2 × 2` problem
   to Burkholder's martingale inequalities; a positive answer in `2 × 2` would prove Iwaniec's
-  conjecture on the norm of the Beurling–Ahlfors transform, which is the stake of any claimed
-  proof;
+  conjecture on the norm of the Beurling–Ahlfors transform. That conjecture is now claimed proved,
+  by a preprint of twenty authors, Cassese and Šverák among them ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October
+  2026); the converse does not hold, so the claim leaves the `2 × 2` problem open;
 - analogues of Šverák's gradient measure in `2 × 2` (Pedregal 1996, Pedregal–Šverák 1998,
   Bandeira–Ornelas 2011) turned out to be laminates, and Sebestyén and Székelyhidi (2017) proved it
   for the whole class: in `2 × 2`, the gradient measure of a sum of three sawtooth waves along
@@ -195,7 +197,9 @@ How Cassese relates to the other two papers:
   Cassese's Proposition 2.1. Cassese expects the `2 × 2` homogeneous problem to have a positive
   answer, and notes that a positive answer would imply Iwaniec's conjecture; for the integrands
   behind his Theorem 1.2, the question in `2 × 2` (the case `n = 1`) is equivalent to Iwaniec's
-  conjecture, so a proof of it must use features specific to `2 × 2`.
+  conjecture, so a proof of it must use features specific to `2 × 2`. Iwaniec's conjecture has
+  since been claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311)); if the proof is right, those integrands give no
+  counterexample in `2 × 2`.
 - **Kristensen.** Cassese's Corollary 5.2 (by Kristensen's smoothing) states a smooth integrand on
   `ℝ^{2×m}`, `m ≥ 3`, uniformly rank-one convex with quadratic growth, that is not quasiconvex at
   `0`. With Kristensen's theorem, quasiconvexity is then not a local condition on `ℝ^{2×m}`,

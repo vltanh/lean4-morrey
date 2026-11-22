@@ -73,11 +73,13 @@ import all Morrey.Common.External.KirchheimKristensen.Theorem
 import all Morrey.Common.External.Kristensen.Smoothing
 import all Morrey.Common.External.Osekowski.HilbertCharacterization
 import all Morrey.Common.External.Rindler.Lemmas
+import all Morrey.Pedregal.Bridges
 import all Morrey.Pedregal.Checks
 import all Morrey.Pedregal.Defs
 import all Morrey.Pedregal.Hn.Laminate
 import all Morrey.Pedregal.Hn.Mold
 import all Morrey.Pedregal.Introduction
+import all Morrey.Pedregal.Jensen
 import all Morrey.Pedregal.LevelOne
 import all Morrey.Pedregal.Map
 import all Morrey.Pedregal.MoldTau
