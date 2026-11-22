@@ -24,7 +24,7 @@ Proposition 6.2 recalls it as `UMD₂ (S_q^{d×d}) ≲ q` for `q ≥ 2` (TeX lin
 **Proof.** `BanachProbability.umdConst_schattenSpace_le` (`UMD_q (S_q) ≤ K q*`, and
 `q* ≤ q² / (q − 1)`) and `BanachProbability.umdConst_two_schattenSpace_le` in the package
 `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability-int` while it is developed), by the source's argument on the
+`../lean4-banach-probability` while it is developed), by the source's argument on the
 finite-dimensional algebra `ℓ^∞ ({±1}^N) ⊗ M_n (ℝ)` with scalar predictable signs: Cuculescu's
 projections and the weak type `(1, 1)` (Theorem 3.1, with a rank count in place of the generalized
 singular values of Lemma 3.2, which gives the constant `52`); Marcinkiewicz interpolation and

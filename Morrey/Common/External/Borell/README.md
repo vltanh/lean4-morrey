@@ -25,7 +25,7 @@ vector space (no completeness):
 
 **Proof.** `BanachProbability.hypercontractive_affine` and
 `BanachProbability.kahaneKhintchine_hypercontractive` in the package `BanachProbability`
-(`lean4-banach-probability`, required by path at `../lean4-banach-probability-int` while it is
+(`lean4-banach-probability`, required by path at `../lean4-banach-probability` while it is
 developed). The scalar two-point inequality, for nonnegative two-point functions, follows
 O'Donnell's proof: the even binomial series for `1 < p ≤ q ≤ 2`, duality for `2 ≤ p ≤ q`
 (O'Donnell's Proposition 9.19), and the semigroup property through `L²` for `p < 2 < q`. Its

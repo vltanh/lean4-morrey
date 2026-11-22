@@ -26,7 +26,7 @@ general filtrations):
   (`BanachProbability.IsComplexZigZagConcave p β U`), `UMD_{ℂ,p} (X) ≤ β`.
 
 **Proof.** In the package `BanachProbability` (`lean4-banach-probability`, required by path at
-`../lean4-banach-probability-int` while it is developed). Lemma 3.2,
+`../lean4-banach-probability` while it is developed). Lemma 3.2,
 `BanachProbability.umdConst_le_complexUMDConst_le`, by the standard averaging argument in place of
 the inaccessible HNVW I, Proposition 4.2.10: real signs are unimodular, and for `|λ| = 1`,
 `(1/2π) ∫ sgn cos (arg λ − φ) e^{iφ} dφ = (2/π) λ`, with the integral replaced by Riemann sums
