@@ -16,14 +16,14 @@ notes, 2011, Corollary 8.19, "by Fubini").
 * `External.Pisier.corollary5_22_vector`: the vector-valued form,
   `UMD_p (L^p (μ; B)) ≤ UMD_p (B)` for a real Banach space `B`.
 
-Proof: `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le` in
-the package `BanachProbability` (`lean4-banach-probability`, required by path while it is
-developed), the dyadic form of the source's Fubini argument, which needs neither σ-finiteness nor
-joint measurability: a Paley–Walsh martingale with values in `L^p (μ; B)` takes finitely many
-values, so for `μ`-almost every `s` its evaluation at `s` is a `B`-valued Paley–Walsh martingale,
-and the transform commutes with evaluation; integrate the dyadic bound in `s`, and pass to general
-filtrations by Maurey's theorem. For `B = ℂ` (as the real Hilbert space `ℝ²`) the constant is
-`p* − 1`, Burkholder's.
+Proof: `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le` in the
+package `BanachProbability` (`lean4-banach-probability`), the dyadic form of the source's Fubini
+argument, which needs neither σ-finiteness nor joint measurability: a Paley–Walsh martingale with
+values in `L^p (μ; B)` takes finitely many values, so for `μ`-almost every `s` its evaluation at `s`
+is a `B`-valued Paley–Walsh martingale, and the transform commutes with evaluation; integrate the
+dyadic bound in `s`, and pass to general filtrations by HNVW I, Theorem 4.2.5
+(`External.HNVW.theorem4_2_5`). For `B = ℂ` (as the real Hilbert space `ℝ²`) the constant is
+`p* − 1` (Osękowski 2012, Theorem 3.5, `External.Osekowski.theorem3_5`).
 -/
 
 @[expose] public section

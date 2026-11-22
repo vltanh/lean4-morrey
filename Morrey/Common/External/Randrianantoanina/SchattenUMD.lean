@@ -22,16 +22,16 @@ norm):
 * `External.Randrianantoanina.remark4_6`: `UMD₂ (S_q^{n×n}) ≤ C (q* − 1)`, uniformly in `n` and
   `q ∈ (1, ∞)`, the form Cassese quotes.
 
-Proof: in the package `BanachProbability` (`lean4-banach-probability`, required by path while it
-is developed), `BanachProbability.umdConst_schattenSpace_le` (`UMD_q (S_q) ≤ K q*`, and
-`q* ≤ q² / (q − 1)`) and `BanachProbability.umdConst_two_schattenSpace_le`, by the source's
-argument on the finite-dimensional algebra `ℓ^∞ ({±1}^N) ⊗ M_n (ℝ)` of matrix-valued functions on
-the sign cube: Cuculescu's projections and the weak type `(1, 1)` of martingale transforms
-(Theorem 3.1, with a rank count in place of Lemma 3.2's generalized singular values, and the
-constant `52` in place of `14√3/3 + 28`), Marcinkiewicz interpolation and duality (Theorem 4.3,
+Proof: in the package `BanachProbability` (`lean4-banach-probability`),
+`BanachProbability.umdConst_schattenSpace_le` (`UMD_q (S_q) ≤ K q*`, and `q* ≤ q² / (q − 1)`) and
+`BanachProbability.umdConst_two_schattenSpace_le`, by the source's argument on the algebra
+`L^∞ (Ω) ⊗ M_n (ℝ)` of matrix-valued functions on a filtered probability space, with the conditional
+expectations entry by entry: Cuculescu's projections and the weak type `(1, 1)` of martingale
+transforms (Theorem 3.1, with a rank count in place of Lemma 3.2's generalized singular values, and
+the constant `52` in place of `14√3/3 + 28`), Marcinkiewicz interpolation and duality (Theorem 4.3,
 whose step "by interpolation" is carried out in three regimes so that the constant stays uniform
-near `q = 2`), the Hermitian dilation for non-symmetric matrices, extrapolation to the exponent
-`2` (HNVW I, Theorem 4.2.7) and Maurey's theorem (HNVW I, Theorem 4.2.5) for general filtrations.
+near `q = 2`), the Hermitian dilation for non-symmetric matrices, and extrapolation to the exponent
+`2` (Remark 4.6 (1); HNVW I, Theorem 4.2.7, in place of the theorem of Pisier it quotes).
 -/
 
 @[expose] public section

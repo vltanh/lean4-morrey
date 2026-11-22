@@ -24,15 +24,14 @@ Proposition 6.2 recalls it as `UMD₂ (S_q^{d×d}) ≲ q` for `q ≥ 2` (TeX lin
 **Proof.** `BanachProbability.umdConst_schattenSpace_le` (`UMD_q (S_q) ≤ K q*`, and
 `q* ≤ q² / (q − 1)`) and `BanachProbability.umdConst_two_schattenSpace_le` in the package
 `BanachProbability`
-([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`),
-by the source's argument on the
-finite-dimensional algebra `ℓ^∞ ({±1}^N) ⊗ M_n (ℝ)` with scalar predictable signs: Cuculescu's
-projections and the weak type `(1, 1)` (Theorem 3.1, with a rank count in place of the generalized
-singular values of Lemma 3.2, which gives the constant `52`); Marcinkiewicz interpolation and
-duality (Theorem 4.3, whose interpolation step, not detailed in the source, is carried out in three
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)),
+by the source's argument on the algebra `L^∞ (Ω) ⊗ M_n (ℝ)` of a filtered probability space, with
+scalar predictable signs: Cuculescu's projections and the weak type `(1, 1)` (Theorem 3.1, with a rank
+count in place of the generalized singular values of Lemma 3.2, which gives the constant `52`);
+Marcinkiewicz interpolation and duality (Theorem 4.3, whose interpolation step, not detailed in the source, is carried out in three
 ranges of exponents so that the constant stays uniform near `q = 2`); the Hermitian dilation for
-non-symmetric matrices; Maurey's theorem (HNVW I, Theorem 4.2.5) for general filtrations; and
-extrapolation to the exponent `2` (HNVW I, Theorem 4.2.7). The package's source contains no
+non-symmetric matrices; and extrapolation to the exponent `2` (HNVW I, Theorem 4.2.7, in place of the
+theorem of Pisier that the source quotes as its Theorem 4.2). The package's source contains no
 `sorry`.
 
 **Who uses it.** Cassese's `RandrianantoaninaSchattenUMD`

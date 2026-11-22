@@ -576,13 +576,15 @@ theorem coxVeraarDecoupling_holds : CoxVeraarDecoupling := by
 /-! ### Section 6: the Khintchine inequalities (Propositions 6.3, 6.4) -/
 
 /-- **Proposition 6.3** (`cs-prop6.3`), non-commutative Khintchine, citing Pisier–Xu,
-*Non-commutative `L^p`-spaces* (2003), Theorem 6.1: for `q ∈ [2, ∞)`, normal `d × d` matrices
-`x_i` and independent Rademacher `ε_i`,
+*Non-commutative `L^p`-spaces* (2003), Theorem 6.1: for `q ∈ [2, ∞)`, normal `d × d` matrices `x_i`
+and independent Rademacher `ε_i`,
 `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≲ √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`,
 with an absolute constant. Stated with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of the paper's
-`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`: the two are equal, since `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for
-`B = Σ x_i x_iᵀ ⪰ 0` and `q ≥ 2` (`schattenNorm_sqrt_sq` in `Morrey/Cassese/Square.lean`: fact (1),
-`‖A²‖_{S_{q/2}} = ‖A‖_{S_q}²`, applied to the positive semidefinite square root `A = B^{1/2}`). Proved by `pisierXuKhintchine_holds`, from `External.PisierXu.theorem6_1`. -/
+`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`: the two are equal, since
+`‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for `B = Σ x_i x_iᵀ ⪰ 0` and `q ≥ 2` (`schattenNorm_sqrt_sq` in
+`Morrey/Cassese/Square.lean`: fact (1), `‖A²‖_{S_{q/2}} = ‖A‖_{S_q}²`, applied to the positive
+semidefinite square root `A = B^{1/2}`). Proved by `pisierXuKhintchine_holds`, from
+`External.PisierXu.theorem6_1`. -/
 def PisierXuKhintchine : Prop :=
   ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
     (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →

@@ -187,6 +187,8 @@ meta def externalResults : List (String × Name) :=
    ("HNVW I Thm 4.5.6, zig-zag, the least constant", ``External.HNVW.theorem4_5_6_isLeast),
    ("Yaroslavtsev Prop 3.7, complex zig-zag (Cassese Prop 2.7 (6))",
     ``External.Yaroslavtsev.proposition3_7),
+   ("Yaroslavtsev Prop 3.7, complex zig-zag, the equivalence",
+    ``External.Yaroslavtsev.proposition3_7_iff),
    ("Cox–Veraar decoupling (Cassese Prop 2.8)", ``External.CoxVeraar.decoupling),
    ("Pisier–Xu Thm 6.1 (Cassese Prop 6.3)", ``External.PisierXu.theorem6_1),
    ("Pisier–Xu Thm 6.1, lower bounds", ``External.PisierXu.theorem6_1_lower),

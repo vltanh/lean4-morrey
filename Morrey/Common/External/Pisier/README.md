@@ -20,14 +20,13 @@ general filtrations):
 
 **Proof.** `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le`
 in the package `BanachProbability`
-([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49`),
-by the dyadic form of the source's
-Fubini argument, which needs neither σ-finiteness nor joint measurability: a Paley–Walsh martingale
-with values in `L^p (μ; B)` takes finitely many values, so for `μ`-almost every `s` its evaluation
-at `s` is a `B`-valued Paley–Walsh martingale and the transform commutes with evaluation; the
-dyadic bound of `B` is integrated in `s`, and Maurey's theorem (HNVW I, Theorem 4.2.5) passes to
-general filtrations. For `B = ℂ`, the real Hilbert space `ℝ²`, the constant is Burkholder's
-`p* − 1`. The package's source contains no `sorry`.
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)),
+by the dyadic form of the source's Fubini argument, which needs neither σ-finiteness nor joint
+measurability: a Paley–Walsh martingale with values in `L^p (μ; B)` takes finitely many values, so for
+`μ`-almost every `s` its evaluation at `s` is a `B`-valued Paley–Walsh martingale and the transform
+commutes with evaluation; the dyadic bound of `B` is integrated in `s`, and HNVW I, Theorem 4.2.5 (dyadic UMD equals UMD) passes to
+general filtrations. For `B = ℂ`, the real Hilbert space `ℝ²`, the constant is `p* − 1` (Osękowski
+2012, Theorem 3.5). The package's source contains no `sorry`.
 
 **Who uses it.** Cassese's `PisierLpUMD`
 ([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)) is derived from
