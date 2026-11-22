@@ -769,14 +769,14 @@ theorem proposition2_4 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous
 
 /-- **Proposition 2.1** (`prop:rk1envelope`): for a continuous integrand `f`,
 `f^{rc} (A) = inf_{μ ∈ 𝒫ℒ(A)} ∫ f dμ`, the infimum over the prelaminates with barycentre `A`.
-Quoted from Pedregal 1993 (Section 4) and Dacorogna 2008 (Theorem 6.10), whose proofs assume `f`
-bounded below; Remark 2.1 removes the assumption and notes that the proposition also follows from
-Proposition 2.4. 
+Quoted from Pedregal 1993 (Section 4) and Dacorogna 2008 (Theorem 6.10), whose proofs, says
+Remark 2.1, assume `f` bounded below (Dacorogna's theorem asks only for a rank-one convex minorant);
+the remark removes the assumption and notes that the proposition also follows from Proposition 2.4.
 
 Proof: Remark 2.1's second route, from Proposition 2.4. Jensen's inequality along the splittings
 gives `g (A) ≤ ⟨g, μ⟩ ≤ ⟨f, μ⟩` for every rank-one convex minorant `g` and every `μ ∈ 𝒫ℒ (A)`, so
 `f^{rc} (A) ≤ inf_{𝒫ℒ (A)} ⟨f, μ⟩`; dyadic prelaminates are prelaminates, so the infimum is at most
-`inf_{𝒫ℒ_dyad (A)} ⟨f, μ⟩ = f^{rc} (A)` (Proposition 2.4). No boundedness from below is needed.-/
+`inf_{𝒫ℒ_dyad (A)} ⟨f, μ⟩ = f^{rc} (A)` (Proposition 2.4). No boundedness from below is needed. -/
 theorem proposition2_1 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (A : Matrix (Fin d) (Fin m) ℝ) :
     rcEnvelope f A =
@@ -1186,7 +1186,7 @@ theorem quasiconvexAt_iff_exists_minorant
     -- Dacorogna's formula is an infimum over the unit ball; Definition 2.1 is on the unit cube,
     -- and Lemma 2.2 passes from one to the other
     have hball : CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitBall m) f A :=
-      (External.Rindler.quasiconvexAtOn_iff hf.lowerSemicontinuous hfI.2 A tk_unitBall_isOpen
+      (External.Rindler.quasiconvexAtOn_iff hf.measurable hfI.2 A tk_unitBall_isOpen
         tk_unitBall_isBounded tk_unitBall_nonempty).1
         ((cov_quasiconvexAtOn_unitCube_iff f A).2 hA)
     have hBfin : volume (CalculusOfVariations.unitBall m) < ⊤ :=
@@ -1572,7 +1572,7 @@ theorem proposition2_3_c {p : ℝ}
   -- (Lemma 2.2), so `g ≤ f^{rc} ≤ f`
   obtain ⟨g, hgI, hgQ, hgf, hg0⟩ := (quasiconvexAt_iff_exists_minorant hf 0).1 hqc
   have hgR : RankOneConvex g := tk_rankOneConvex_of_cov
-    (External.Rindler.rankOneConvex_of_quasiconvex hgI.1 hgI.2
+    (External.Rindler.rankOneConvex_of_quasiconvex hgI.1.measurable hgI.2
       fun A => (cov_quasiconvexAtOn_unitCube_iff g A).2 (hgQ A))
   rcases tk_rc_cases hf with ⟨hno, _⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
   · exact (hno g hgI hgR hgf).elim

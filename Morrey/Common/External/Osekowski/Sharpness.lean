@@ -11,10 +11,11 @@ dyadic martingales Remark 3.8 (p. 137) with p. 138, "the best constant in Paley'
 is equal to `p* − 1`, both in the real and the Hilbert-space-valued case". Cassese
 (arXiv:2608.03488v3) uses the dyadic form in the proof of the lower bound of Corollary 6.3 (TeX
 lines 2624–2633), where the only source he names is "see also" his own paper *Martingales, laminates
-and minimal Korn inequalities* (arXiv:2512.02784; J. Math. Pures Appl. 213 (2026)), whose Theorem
-2.3 quotes Burkholder (Ann. Probab. 12 (1984)) for the inequality, "see [Osękowski 2012] for an
-exposition", and says that it is sharp: "no smaller constant works among martingales defined on
-dyadic trees such that `‖dX_i‖ = ‖dY_i‖`".
+and minimal Korn inequalities* (arXiv:2512.02784; J. Math. Pures Appl. 213 (2026)). There the proof
+of Theorem 2.2 uses the sharpness stated in Theorem 2.3, which quotes Burkholder (Ann. Probab. 12
+(1984)) for the inequality, "see [Osękowski 2012] for an exposition", and says that it is sharp: "no
+smaller constant works among martingales defined on dyadic trees such that `‖dX_i‖ = ‖dY_i‖`". The
+form with signs is Burkholder 1984, Theorem 14.1 (p. 697).
 
 ## Main results
 

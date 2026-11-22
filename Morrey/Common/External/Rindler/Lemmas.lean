@@ -35,11 +35,10 @@ these results could not be checked. Each statement is proved, in the textbook te
 The last two are stated at one matrix `A`, as in the paper; the sources state them for functions
 that are quasiconvex at every matrix, and their proofs fix the matrix.
 
-Integrands are lower semicontinuous and locally bounded, as in Cassese (Section 1.5). The sources
-ask for Borel measurability and local boundedness; only the measurability is used of the lower
-semicontinuity. Quasiconvexity is tested on the unit cube, as in Cassese's Definition 2.1 ([R2]: on
-the unit ball, [D08]: on every bounded open set), with Lipschitz test maps that vanish outside the
-domain.
+The functions of Lemma 2.2 are Borel measurable and locally bounded, as in the sources; Cassese's
+integrands are lower semicontinuous and locally bounded (Section 1.5). Quasiconvexity is tested on
+the unit cube, as in Cassese's Definition 2.1 ([R2]: on the unit ball, [D08]: on every bounded open
+set), with Lipschitz test maps that vanish outside the domain.
 -/
 
 @[expose] public section
@@ -73,9 +72,10 @@ theorem lemma5_6 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : RankOneConvex f)
     LocallyLipschitz fun X : Fin d → Fin m → ℝ => f (Matrix.of X) :=
   RankOneConvex.locallyLipschitz hf
 
-/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, first assertion: a quasiconvex integrand is rank-one
-convex. Cassese cites Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11
-and 5.13, for the whole of Lemma 2.2 (see the module docstring).
+/-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, first assertion: a quasiconvex integrand (here: a Borel
+measurable, locally bounded quasiconvex function) is rank-one convex. Cassese cites Rindler,
+Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11 and 5.13, for the whole of Lemma 2.2
+(see the module docstring).
 
 Proof: [R2], Proposition 5.6, in the package (`CalculusOfVariations.rankOneConvex_of_quasiconvex`):
 a rank-one matrix is `a ⊗ n`; on a cube with two faces orthogonal to `n` (the unit cube after an
@@ -86,9 +86,9 @@ of the cut-off and of `k`, they are test maps whose energies converge, which giv
 `f (F) ≤ λ f (F + (1 − λ) a ⊗ n) + (1 − λ) f (F − λ a ⊗ n)` at every `F`, that is, convexity along
 every rank-one line. -/
 theorem rankOneConvex_of_quasiconvex {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hlsc : LowerSemicontinuous f) (hbdd : IsLocallyBounded f) (hf : Quasiconvex f) :
+    (hfm : Measurable f) (hbdd : IsLocallyBounded f) (hf : Quasiconvex f) :
     RankOneConvex f :=
-  CalculusOfVariations.rankOneConvex_of_quasiconvex hlsc hbdd hf
+  CalculusOfVariations.rankOneConvex_of_quasiconvex hfm hbdd hf
 
 /-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, second assertion: quasiconvexity at `A` does not depend
 on the bounded open domain of the test maps. Cassese cites Rindler, Propositions 5.1 and 5.3, and
@@ -106,11 +106,11 @@ vanishes almost everywhere outside the domain of the test map; in [D08] this is 
 the test maps and in [R2] the domains are Lipschitz, and for Lipschitz maps vanishing outside an
 arbitrary bounded open set it is proved (a Lipschitz map has zero gradient almost everywhere on its
 zero set). -/
-theorem quasiconvexAtOn_iff {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hlsc : LowerSemicontinuous f)
+theorem quasiconvexAtOn_iff {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hfm : Measurable f)
     (hbdd : IsLocallyBounded f) (A : Matrix (Fin d) (Fin m) ℝ) {Ω : Set (Fin m → ℝ)}
     (hΩ : IsOpen Ω) (hb : Bornology.IsBounded Ω) (hne : Ω.Nonempty) :
     QuasiconvexAtOn (unitCube m) f A ↔ QuasiconvexAtOn Ω f A :=
-  CalculusOfVariations.quasiconvexAtOn_iff hlsc hbdd A hΩ hb hne
+  CalculusOfVariations.quasiconvexAtOn_iff hfm hbdd A hΩ hb hne
 
 /-- **Lemma 2.2** (`cs-lem2.2`) of Cassese, third assertion: quasiconvexity at `A` is equivalent
 to the inequality for periodic Lipschitz test maps on the torus `𝕋^m = ℝ^m / ℤ^m`. Cassese cites
@@ -126,8 +126,8 @@ layer, since `f` is locally bounded. "⇐": a test map on the cube extends perio
 because it vanishes on the boundary of the cube. ([D08] takes the same scale for the cut-off and for
 the period; the package chooses them separately.) -/
 theorem quasiconvexAtOn_iff_periodic {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hlsc : LowerSemicontinuous f) (hbdd : IsLocallyBounded f) (A : Matrix (Fin d) (Fin m) ℝ) :
+    (hfm : Measurable f) (hbdd : IsLocallyBounded f) (A : Matrix (Fin d) (Fin m) ℝ) :
     QuasiconvexAtOn (unitCube m) f A ↔ QuasiconvexAtPeriodic f A :=
-  CalculusOfVariations.quasiconvexAtOn_iff_periodic hlsc hbdd A
+  CalculusOfVariations.quasiconvexAtOn_iff_periodic hfm hbdd A
 
 end External.Rindler

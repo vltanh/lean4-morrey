@@ -334,7 +334,8 @@ theorem fourByTwo_burkholder {d m : ℕ} {H : Type}
 Proof (the paper's). By Proposition 2.5 (`proposition2_5`), `f_{p,ρ,K}` with
 `K = (p* − 1) (Σ ρ^{2k})^{1/2}` is rank-one convex at `0` once `E |Q (M_n)|^p ≤ K^p E ‖P_ρ (M_n)‖^p`
 for every rank-one Rademacher martingale `M` started at `0`. "The results of [Cassese 2025]"
-(`C^{rc} ≤ (p* − 1) sup_{A ∈ ℛ₁} |Q (A)| / ‖P_ρ (A)‖`) are used in the form
+(`C^{rc} ≤ (p* − 1) sup_{A ∈ ℛ₁} |Q (A)| / ‖P_ρ (A)‖`; Theorem 2.1 there, stated for the orthogonal
+projections onto a subspace and its complement, whose proof carries over) are used in the form
 `fourByTwo_burkholder`, proved by their standard argument: `Q (M)` and `√S P_ρ (M)` are martingales
 in `ℂ^{N+1}` (`rad_martingale`) and the first is differentially subordinate to the second
 when `|Q| ≤ √S ‖P_ρ‖` on rank-one matrices, so Burkholder's inequality applies. That bound, with
@@ -886,7 +887,7 @@ theorem fourByTwo_chainOpNorm_le_qcThreshold (N : ℕ) (ρ : ℝ) {p : ℝ} (hp 
   -- Lemma 2.2: quasiconvexity at `0` with periodic test maps
   have hcont := fourByTwo_continuous_chainF N hp0.le ρ C
   have hper : CalculusOfVariations.QuasiconvexAtPeriodic (chainF N p ρ C) 0 :=
-    (External.Rindler.quasiconvexAtOn_iff_periodic hcont.lowerSemicontinuous
+    (External.Rindler.quasiconvexAtOn_iff_periodic hcont.measurable
       (fourByTwo_isLocallyBounded hcont) 0).mp
       ((cov_quasiconvexAtOn_unitCube_iff _ _).mpr hqc)
   -- the tuple, extended by `0`, and the solution `u` of `∂̄u_j = h_j + ρ ∂u_{j−1}`
@@ -1050,7 +1051,7 @@ theorem fourByTwo_qcThreshold_le_chainOpNorm (N : ℕ) (ρ : ℝ) {p : ℝ} (hp 
       (fun u hu hup => fourByTwo_integral_chainF_nonneg_of_smooth N ρ hp hfin hu hup) hφ hφper
   have hqc : QuasiconvexAt (chainF N p ρ K) 0 :=
     (cov_quasiconvexAtOn_unitCube_iff _ _).mp
-      ((External.Rindler.quasiconvexAtOn_iff_periodic hcont.lowerSemicontinuous
+      ((External.Rindler.quasiconvexAtOn_iff_periodic hcont.measurable
         (fourByTwo_isLocallyBounded hcont) 0).mpr hper)
   rw [← hK]
   exact iInf₂_le K ⟨ENNReal.toReal_nonneg, hqc⟩

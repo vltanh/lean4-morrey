@@ -24,14 +24,15 @@ lower bound of Corollary 6.3: for `p ∈ (1, ∞)` and `K < p* − 1` there are 
 How the paper cites it: the proof of Corollary 6.3 (TeX lines 2624–2633) lets "`f_n` be a dyadic
 martingale and `g_n` a `±1` transform of it" and says "by choosing the martingale-transform pair
 suitably (see also [Cassese 2025, *Martingales, laminates and minimal Korn inequalities*, J. Math.
-Pures Appl. 213]), this construction shows `C^{rc} (d) ≥ 4* − 1 = 3`"; it names no other source for
-the sharpness (inventory E30). Theorem 2.3 of that paper (arXiv:2512.02784) is Burkholder's
-inequality, quoted from Burkholder (Ann. Probab. 12 (1984)), "see [A. Osękowski, *Sharp Martingale
-and Semimartingale Inequalities*, 2012] for an exposition", and says in a footnote that "no smaller
-constant works among martingales defined on dyadic trees such that `‖dX_i‖ = ‖dY_i‖`"; its dyadic
-trees may split with any weights, while Corollary 6.3 needs the weights `1/2` of a Rademacher
-martingale. In this form the sharpness is Osękowski 2012, Theorem 3.5 with Remark 3.8 and p. 138
-(the best constants of `±1`-transforms are already the best possible for dyadic martingales).
+Pures Appl. 213]), this construction shows `C^{rc} (d) ≥ 4* − 1 = 3`"; it names no other source
+for the sharpness (inventory E30). The proof of Theorem 2.2 of that paper (arXiv:2512.02784) uses
+the sharpness stated in its Theorem 2.3, Burkholder's inequality, quoted from Burkholder (Ann.
+Probab. 12 (1984)), "see [A. Osękowski, *Sharp Martingale and Semimartingale Inequalities*, 2012]
+for an exposition", and says in a footnote that "no smaller constant works among martingales
+defined on dyadic trees such that `‖dX_i‖ = ‖dY_i‖`"; its dyadic trees may split with any weights,
+while Corollary 6.3 needs the weights `1/2` of a Rademacher martingale. In this form the sharpness
+is Burkholder 1984, Theorem 14.1 (p. 697), and Osękowski 2012, Theorem 3.5 with Remark 3.8 and p.
+138 (the best constants of `±1`-transforms are already the best possible for dyadic martingales).
 
 Proved by `burkholderSharpness_holds`, from `External.Osekowski.exists_lt_lpNorm_transform`, by
 Osękowski's proof (the second approach, pp. 56–57, run on the dyadic function `W⁰` of Theorem 3.34,

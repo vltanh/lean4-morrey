@@ -463,7 +463,8 @@ theorem quasiconvex_iff_convexOn_of_min_eq_one {d m : ℕ} (h : min d m = 1)
   constructor
   · -- quasiconvex ⇒ rank-one convex (Lemma 2.2) ⇒ convex
     intro hq
-    have := External.Rindler.rankOneConvex_of_quasiconvex hf.1 hf.2 ((cov_quasiconvex_iff f).2 hq)
+    have := External.Rindler.rankOneConvex_of_quasiconvex hf.1.measurable hf.2
+      ((cov_quasiconvex_iff f).2 hq)
     exact (rankOneConvex_iff_convexOn_of_min_eq_one h f).1 ((cov_rankOneConvex_iff f).1 this)
   · -- Jensen along test maps
     exact fun hc A => intro_quasiconvexAt_of_convexOn hc A
@@ -1078,7 +1079,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   -- with `∫_{(0,1)²} F (∇φ) < 0`
   have hFper : ¬ CalculusOfVariations.QuasiconvexAtPeriodic F 0 := fun h =>
     hFq ((cov_quasiconvexAtOn_unitCube_iff F 0).1
-      ((External.Rindler.quasiconvexAtOn_iff_periodic hFI.1 hFI.2 0).2 h))
+      ((External.Rindler.quasiconvexAtOn_iff_periodic hFI.1.measurable hFI.2 0).2 h))
   simp only [CalculusOfVariations.QuasiconvexAtPeriodic, not_forall, not_le] at hFper
   obtain ⟨φ₀, K, hK₀, hper₀, -, hlt₀⟩ := hFper
   simp only [zero_add, hF0, grad_eq] at hlt₀
@@ -1274,7 +1275,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   -- the periodic form of quasiconvexity of `G` at `B`, tested with `Ψ_ε`:
   -- `0 ≤ ∫_{𝕋⁴} [G (B + ∇Ψ_ε) − G (B)]`
   intro hq
-  have hper' := (External.Rindler.quasiconvexAtOn_iff_periodic hGI.1 hGI.2 intro_B).1
+  have hper' := (External.Rindler.quasiconvexAtOn_iff_periodic hGI.1.measurable hGI.2 intro_B).1
     ((cov_quasiconvexAtOn_unitCube_iff _ _).2 hq)
   have key := hper' Ψ _ hΨK hΨper hint'
   have hfin4 : IsFiniteMeasure (volume.restrict (CalculusOfVariations.unitCube 4)) :=

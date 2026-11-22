@@ -1890,10 +1890,8 @@ that for every `p ∈ (1, ∞)` there is `C_p` with `C^{rc} (S_∞^{d×d}, p) �
 every `d ≥ 2`. The proof uses Propositions 2.7 (1), (2), 2.8, 6.3, 6.4, Theorem 2.3 (2) and, for
 the case `q = ∞`, the hypercontractive Kahane–Khintchine bound
 (`KahaneKhintchineHypercontractive`), all proved (`Morrey/Cassese/Hypotheses.lean`). The two cases
-are `proposition6_5_finite` and `proposition6_5_infty`.
-
-Statement change: `α` is uniform in `p` (`∃ α, ∀ p`, a strengthening of the former `∀ p, ∃ α`;
-the proof gives `α = 3`). -/
+are `proposition6_5_finite` and `proposition6_5_infty`. The exponent `α` does not depend on `p` (the
+proof gives `α = 3`). -/
 theorem proposition6_5 :
     (∀ q : ℝ, 2 < q → ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p (ENNReal.ofReal q)) ≤
@@ -2729,7 +2727,7 @@ theorem proposition6_1 (q : ℝ≥0∞) (hq : 2 ≤ q) :
   -- Lemma 2.2: quasiconvexity at `0` is tested by the periodic Lipschitz maps
   have hfc := square_continuous_kornF (d := d) hp0.le hq1 C
   have hbdd := square_isLocallyBounded_of_continuous hfc
-  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.lowerSemicontinuous hbdd 0).1
+  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.measurable hbdd 0).1
     ((cov_quasiconvexAtOn_unitCube_iff _ 0).2 hC.2)
   obtain ⟨K, hK⟩ := square_lipschitz_witness (d := d)
   have := hper (squareWitness d) K hK (fun x z => squareWitness_periodic x z)
@@ -2777,7 +2775,7 @@ theorem proposition6_6 (d : ℕ) (hd : 2 ≤ d) :
       exact mul_neg_of_pos_of_neg (by positivity) (by linarith)
     -- Lemma 2.2: quasiconvexity at `0` is tested by the periodic Lipschitz maps
     have hfc := square_continuous_hF (d := n + 1) C
-    have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.lowerSemicontinuous
+    have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.measurable
       (square_isLocallyBounded_of_continuous hfc) 0).1 ((cov_quasiconvexAtOn_unitCube_iff _ 0).2 hqc)
     obtain ⟨K, hK⟩ := square_lipschitz_witness (d := n + 1)
     have := hper (squareWitness (n + 1)) K hK (fun x z => squareWitness_periodic x z)
@@ -2932,9 +2930,7 @@ theorem theorem6_2 {N : ℕ} (D : Fin N → (Fin N → Bool) → Matrix (Fin d) 
 
 /-- **Corollary 6.3** (`cor:uncond`), lower bound: `3 ≤ C^{rc} (d)` for every `d ≥ 2`.
 Unconditional: the sharpness of Burkholder's constant `4* − 1 = 3` for dyadic martingales that
-the proof uses is proved (`burkholderSharpness_holds`, module `Square.Sharpness`). Statement change:
-the hypothesis `hS : BurkholderSharpness` of the earlier, conditional version is
-removed.
+the proof uses is proved (`burkholderSharpness_holds`, module `Square.Sharpness`).
 
 Proof (the paper's): for `C < 3`, the sharpness gives a dyadic martingale `f_N` and a `±1`
 transform `g_N` with `‖g_N‖_{L⁴} > C ‖f_N‖_{L⁴}`; then `M_n = f_n Sym (e₁ ⊗ e₂) + g_n Skew (e₁ ⊗ e₂)`

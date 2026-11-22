@@ -25,7 +25,7 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 
 | Size | Answer | Settled by | Here |
 | --- | --- | --- | --- |
-| `d = 1` or `m = 1` | yes: both notions are convexity | classical | **proved** (Cassese, Section 1: [`Cassese.morreyPositive_of_min_le_one`](Morrey/Cassese/Introduction.lean#L475)) |
+| `d = 1` or `m = 1` | yes: both notions are convexity | classical | **proved** (Cassese, Section 1: [`Cassese.morreyPositive_of_min_le_one`](Morrey/Cassese/Introduction.lean#L476)) |
 | `d ≥ 3`, `m ≥ 2` | no | Šverák (1992), on `ℝ^{3×2}` | **proved** ([Šverák](docs/Sverak/README.md)) |
 | `d = 2`, `m ≥ 3` | no, claimed in two 2026 preprints | Cassese, on `ℝ^{2×3}`; Agazzi, Bruno, Guerra and Pasqualotto, on `ℝ^{2×4}` | **proved**: Cassese's quartic and the monotonicity ([Cassese](docs/Cassese/README.md)) |
 | `2 × 2` | **open** | Pedregal (2019–2026, preprint) claims yes | the proof fails: its Corollary 7.2 is **refuted** ([Pedregal](docs/Pedregal/README.md)) |

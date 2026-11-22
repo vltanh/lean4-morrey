@@ -31,9 +31,9 @@ context and not formalized.)
 **Lean.** [`Lemmas.lean`](Lemmas.lean): `External.Rindler.lemma5_6` (Lemma 2.1, for every real-valued
 rank-one convex function), from the package's `RankOneConvex.locallyLipschitz`; and
 `External.Rindler.rankOneConvex_of_quasiconvex`, `External.Rindler.quasiconvexAtOn_iff`,
-`External.Rindler.quasiconvexAtOn_iff_periodic` (Lemma 2.2), for lower semicontinuous, locally bounded
-integrands (Cassese's integrands; the sources: Borel and locally bounded), from the package's statements
-of the same names. Quasiconvexity is in the textbook form of the package `CalculusOfVariations`
+`External.Rindler.quasiconvexAtOn_iff_periodic` (Lemma 2.2), for Borel measurable, locally bounded
+functions, as in the sources (Cassese's integrands are lower semicontinuous and locally bounded), from
+the package's statements of the same names. Quasiconvexity is in the textbook form of the package `CalculusOfVariations`
 ([lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations)).
 
 **Proofs.** The sources'. Lemma 2.1: [R2], Lemma 5.9, with its bound (5.9): along rank-one lines (5.10),
@@ -41,7 +41,9 @@ then the singular value decomposition and the Cauchy–Schwarz inequality. "Quas
 convex": [R2], Proposition 5.6: laminates on a cube with faces orthogonal to the rank-one direction,
 multiplied by cut-offs, with a diagonal choice of the two indices. Domain independence: [D08],
 Proposition 5.11 (and [R2], Lemma 5.2 (i)): extend by zero, translate and scale. Periodic test maps:
-[D08], Proposition 5.13: rescaled periodic maps and cut-offs near the boundary.
+[D08], Proposition 5.13: rescaled periodic maps and cut-offs near the boundary. A slip of [R2], Lemma
+5.2 (i): the proof tests the second domain only with scaled copies of maps on the first; a copy of the
+second domain is to be put into the first, as in [D08].
 
 **Departures.** None in the arguments. Gap fills: the local boundedness of a rank-one convex function,
 which in [R2] is part of the definition (p. 111 refers to Kirchheim–Kristensen for it), by convexity in

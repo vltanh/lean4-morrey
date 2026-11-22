@@ -472,9 +472,7 @@ the item) takes `ε` in the unit disc (`IsComplexZigZagConcave`), and "`UMD_p`" 
 `hnvwZigZag_holds`, from `External.HNVW.theorem4_5_6` (real) and, for the complex case, from
 `External.Yaroslavtsev.proposition3_7_iff`, `proposition3_7` and `lemma3_2` (Proposition 3.7, for
 the closed unit disc, is about `UMD_{ℂ,p}`, which Lemma 3.2, Proposition 2.7 (5), compares with
-`UMD_p`).
-
-Statement change: an earlier version had, for a complex `X`, only the bound `β ≥ UMD_{ℂ,p} (X)`. -/
+`UMD_p`). -/
 def HNVWZigZag : Prop :=
   (∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
     (umdConst X p < ⊤ ↔ ∃ β : ℝ, 0 < β ∧ ∃ U : X → X → ℝ, IsZigZagConcave p β U) ∧

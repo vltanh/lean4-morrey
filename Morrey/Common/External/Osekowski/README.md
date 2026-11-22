@@ -63,8 +63,8 @@ Theorem 3.34 and Remark 3.8 (p. 137) with p. 138; Theorem 3.24 (pp. 120–121).
 **Differences and repairs.** In the statements: a fixed time `n` instead of `sup_n ‖·‖_{L^p}`, which is
 equivalent; (8.28) for martingales started at `0`; no separability of the Hilbert space; and, for the
 sharpness, transforms by *predictable* signs of Paley–Walsh martingales, as in Cassese's Definition 2.5,
-where the book has a deterministic sequence of signs, and one sign for each Haar function (Remark 3.8,
-p. 138): on the sign cube a coefficient and a sign for each Haar function are a predictable `φ_k` and a
+where the book has a deterministic sequence of signs, and one sign for each Haar function (Theorem
+3.34, (3.214), p. 137; Remark 3.8, p. 138, for the Hilbert-space-valued case): on the sign cube a coefficient and a sign for each Haar function are a predictable `φ_k` and a
 predictable `σ_k`. In the proofs: the second approach is run on `W⁰` (above), which the book uses for the
 dyadic case. The slips of the book on the pages listed above are repaired along its lines, and each is
 noted in the package: p. 11, the splice of two pairs with deterministic signs; pp. 27 and 29, signs;

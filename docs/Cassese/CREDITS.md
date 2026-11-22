@@ -44,6 +44,12 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
     metadata, README passages, `Statement.lean` and `Defs.lean` in part, the docstrings of eight
     files, the first lines of declarations, the proofs of six lemmas of one to three lines, and the
     beginning of two others.
+
+  A mechanical comparison on 22 November 2026 looked for common runs of 20 tokens (comments and
+  imports removed) between the Lean code of this repository and its packages (775,356 tokens) and
+  each of the two: 702 of those tokens are in such a run with MorreyTwoComponentsLean, in 11 files,
+  the longest run 33 tokens (two lines), and 123 with so3-r1c-and-not-qc, in 3 files, the longest
+  22. (For parts of Mathlib of the same size: 0 to 227.) The downloaded copies were then deleted.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
   the TeX source (twice), the formal proofs against the paper's (three reviewers) and the report,
   in the second round. In the third: the statements of each package (and the bridges between

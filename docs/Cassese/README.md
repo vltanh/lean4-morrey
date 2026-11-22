@@ -32,16 +32,16 @@ repository; the [overview](../../README.md) describes the problem and how the pa
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
-| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L1988) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}` for every `m ≥ m₀(p)` (the paper's proof, through UMD constants) |
+| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L1989) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}` for every `m ≥ m₀(p)` (the paper's proof, through UMD constants) |
 | Theorem 1.2, by Remark 4.5 | [`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480) | the same statement, by the paper's elementary route (Burkholder's scalar function `u_q`) |
-| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2026) ⭐, [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2051) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; a `p`-homogeneous one for every `p` near `4` |
+| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2027) ⭐, [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2052) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; a `p`-homogeneous one for every `p` near `4` |
 | Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L197) ⭐ | its transpose, on `ℝ^{3×2}` |
-| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2240) ⭐ | with Šverák's theorem: for `d, m ≥ 2` other than `2 × 2`, some rank-one convex integrand on `ℝ^{d×m}` is not quasiconvex |
-| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2268) ⭐ | at `p = 4` the homogeneous problem has a negative answer in every such size |
-| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2083) ⭐ | every `p > 1`: a conjugation- and transposition-invariant example on `ℝ^{d×d}` for every `d ≥ d₀(p)` |
-| Theorem 1.4 at `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3590) ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
-| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2166) ⭐ | every `p > 1` other than `2`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{4×2}` |
-| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214) ⭐ | a nonnegative `1`-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two |
+| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2241) ⭐ | with Šverák's theorem: for `d, m ≥ 2` other than `2 × 2`, some rank-one convex integrand on `ℝ^{d×m}` is not quasiconvex |
+| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2269) ⭐ | at `p = 4` the homogeneous problem has a negative answer in every such size |
+| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2084) ⭐ | every `p > 1`: a conjugation- and transposition-invariant example on `ℝ^{d×d}` for every `d ≥ d₀(p)` |
+| Theorem 1.4 at `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3586) ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
+| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2167) ⭐ | every `p > 1` other than `2`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{4×2}` |
+| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2215) ⭐ | a nonnegative `1`-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two |
 | Corollary 5.2 | [`corollary5_2`](../../Morrey/Cassese/NonLocality.lean#L32) | a smooth, uniformly Legendre–Hadamard integrand of quadratic growth on `ℝ^{2×m}`, `m ≥ 3`, not quasiconvex at `0` |
 
 ⭐ in [`Challenge.lean`](../../palomar/Cassese/Challenge.lean), which Comparator checks against
