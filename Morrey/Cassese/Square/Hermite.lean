@@ -91,7 +91,6 @@ theorem square_filter_all : (Finset.univ.filter fun k : Fin N => k.val < N) = Fi
 noncomputable def squarePhi (M V : Matrix (Fin n) (Fin n) ℝ) : ℝ :=
   squareFrob (Mᵀ * M) (Mᵀ * M) - 6 * squareFrob (Mᵀ * M) V + 3 * squareFrob V V
 
-set_option linter.unusedSimpArgs false in
 /-- **The supermartingale step** (proof of Theorem 6.2): for normal `M`, `D`, symmetric `Ṽ` and
 `c = ±1`, averaging `Φ` over the two signs of the new increment `± c D` gives at most
 `Φ (M, Ṽ)`: the difference is `‖W‖² − 4 tr (HV) − 2 tr V² ≤ 0`, with `W = MᵀD + DᵀM`,
@@ -131,8 +130,7 @@ theorem square_phi_step {M D V : Matrix (Fin n) (Fin n) ℝ} (hM : M * Mᵀ = M�
     squareFrob_smul_right, mul_add, hcc, hcc', squareFrob_comm (Dᵀ * M) (Mᵀ * D),
     squareFrob_comm (Dᵀ * D) (Mᵀ * M), squareFrob_comm (Mᵀ * D) (Mᵀ * M),
     squareFrob_comm (Dᵀ * M) (Mᵀ * M), squareFrob_comm (Dᵀ * D) (Mᵀ * D),
-    squareFrob_comm (Dᵀ * D) (Dᵀ * M), squareFrob_comm V (Mᵀ * M), squareFrob_comm V (Mᵀ * D),
-    squareFrob_comm V (Dᵀ * M), squareFrob_comm V (Dᵀ * D)] at hW ⊢
+    squareFrob_comm (Dᵀ * D) (Dᵀ * M), squareFrob_comm V (Dᵀ * D)] at hW ⊢
   linarith
 
 end Cassese
