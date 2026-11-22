@@ -54,8 +54,8 @@ theorem corollary5_2 {m : ℕ} (hm : 3 ≤ m) :
       (fun A : Matrix (Fin 2) (Fin m) ℝ => MvPolynomial.eval (fun ij => A ij.1 ij.2) Q') 0 := by
     rw [hfun, cov_quasiconvexAtOn_unitCube_iff]
     intro hq
-    have := lift_quasiconvexAt_of_comp_trunc le_rfl hm (intro_isIntegrand_of_continuous
-      (intro_continuous_of_isHomogeneousPolynomial ⟨Q, hQh, hQ⟩)) hq
+    have := lift_quasiconvexAt_of_comp_trunc le_rfl hm (isIntegrand_of_continuous
+      (IsHomogeneousPolynomial.continuous ⟨Q, hQh, hQ⟩)) hq
     rw [lift_trunc_zero] at this
     exact hnq 0 this
   -- Kristensen's smoothing

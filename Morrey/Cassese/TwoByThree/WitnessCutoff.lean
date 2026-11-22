@@ -194,7 +194,7 @@ theorem tbt4_pointwise {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
   have hE0 := tbt_frobSq_nonneg E
   have hPE : frobSq P ≤ frobSq E := by linarith
   have hNE : frobSq (E - P) ≤ frobSq E := by linarith
-  have hχG : frobSq (χ • G) = χ ^ 2 * frobSq G := tbt3_frobSq_smul χ G
+  have hχG : frobSq (χ • G) = χ ^ 2 * frobSq G := tbt_frobSq_smul χ G
   -- the quartic
   set a := √(frobSq (χ • G))
   set b := √(frobSq P)
@@ -279,7 +279,7 @@ theorem tbt4_lt_sum_sq {x : Fin 3 → ℝ} {r : ℝ} (hr : 0 ≤ r) (h : r < ‖
   linarith
 
 theorem tbt4_continuous_qDeltaLambda (δ Λ : ℝ) : Continuous (qDeltaLambda δ Λ) :=
-  tbt3_continuous_of_ihp (tbt_ihp_qDeltaLambda δ Λ)
+  (tbt_ihp_qDeltaLambda δ Λ).continuous
 
 theorem tbt4_isCompact_sum_sq_le (ρ : ℝ) :
     IsCompact {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ ρ} := by
@@ -339,15 +339,15 @@ theorem tbt4_energy {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
       simp only [f, h1, h2, zero_smul, add_zero, tbt4_qDeltaLambda_zero])
   -- the three terms of the bound
   have hi1 : Integrable fun x => χf x ^ 4 * q3 (Gf x) := by
-    refine hGi.norm.mono' ((hχc.pow 4).mul (tbt3_continuous_q3'.comp hGc)).aestronglyMeasurable
+    refine hGi.norm.mono' ((hχc.pow 4).mul (tbt_continuous_q3.comp hGc)).aestronglyMeasurable
       (Filter.Eventually.of_forall fun x => ?_)
     rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_mul, abs_of_nonneg (pow_nonneg (hχ0 x) 4)]
     have : χf x ^ 4 ≤ 1 := pow_le_one₀ (hχ0 x) (hχ1 x)
     nlinarith [abs_nonneg (q3 (Gf x))]
-  have hcG : Continuous fun x => frobSq (Gf x) ^ 2 := (tbt3_continuous_frobSq'.comp hGc).pow 2
+  have hcG : Continuous fun x => frobSq (Gf x) ^ 2 := (tbt_continuous_frobSq.comp hGc).pow 2
   have hi2 : Integrable (S.indicator fun x => frobSq (Gf x) ^ 2) :=
     (integrable_indicator_iff hSm).mpr (hcG.continuousOn.integrableOn_compact hSc)
-  have hcE : Continuous fun x => frobSq (Ef x) ^ 2 := (tbt3_continuous_frobSq'.comp hEc).pow 2
+  have hcE : Continuous fun x => frobSq (Ef x) ^ 2 := (tbt_continuous_frobSq.comp hEc).pow 2
   have hEbd : ∀ x, frobSq (Ef x) ^ 2 ≤
       (Metric.closedBall (0 : Fin 3 → ℝ) (2 * R)).indicator (fun _ => (C₂ / R ^ 2) ^ 2) x := by
     intro x
@@ -541,7 +541,7 @@ theorem tbt4_log_bound {u : (Fin 3 → ℝ) → Fin 2 → ℝ} (hu : ContDiff �
     ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}, frobSq (jac u x) ^ 2 ≤
       C * Real.log (2 + 2 * R) := by
   have hc : Continuous fun x => frobSq (jac u x) ^ 2 :=
-    (tbt3_continuous_frobSq'.comp (tbt_continuous_jac hu)).pow 2
+    (tbt_continuous_frobSq.comp (tbt_continuous_jac hu)).pow 2
   have hi : IntegrableOn (fun x => frobSq (jac u x) ^ 2)
       {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < (2 * R) ^ 2} :=
     (hc.continuousOn.integrableOn_compact (tbt4_isCompact_sum_sq_le ((2 * R) ^ 2))).mono_set

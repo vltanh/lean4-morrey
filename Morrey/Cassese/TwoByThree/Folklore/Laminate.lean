@@ -309,22 +309,11 @@ theorem tbt6_Es_sum (A : Matrix (Fin d) (Fin m) ℝ) : (tbt6Es A).sum = A := by
   conv_rhs => rw [Matrix.matrix_eq_sum_single A]
   rw [Fintype.sum_prod_type]
 
-theorem tbt6_rank_single {i : Fin d} {j : Fin m} {a : ℝ} (ha : a ≠ 0) :
-    (Matrix.single i j a).rank = 1 := by
-  have : Matrix.single i j a = Matrix.vecMulVec (Pi.single i a) (Pi.single j (1 : ℝ)) := by
-    ext k l
-    simp only [Matrix.single_apply, Matrix.vecMulVec_apply, Pi.single_apply]
-    split_ifs <;> simp_all
-  rw [this]
-  refine tbt_rank_vecMulVec ?_ ?_
-  · intro h; have := congrFun h i; simp at this; exact ha this
-  · intro h; have := congrFun h j; simp at this
-
 theorem tbt6_Es_rank (A : Matrix (Fin d) (Fin m) ℝ) : ∀ E ∈ tbt6Es A, E.rank = 1 := by
   intro E hE
   simp only [tbt6Es, List.mem_map, Finset.mem_toList, Finset.mem_filter] at hE
   obtain ⟨ij, ⟨-, hij⟩, rfl⟩ := hE
-  exact tbt6_rank_single hij
+  exact rank_single_eq_one hij
 
 theorem tbt6_dirac_eq (S : Matrix (Fin d) (Fin m) ℝ) :
     Measure.dirac S = ENNReal.ofReal 1 • Measure.dirac S + 0 := by simp

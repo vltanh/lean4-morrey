@@ -19,8 +19,8 @@ Two ingredients of the proof of Corollary 6.1 (`cor:symm`, TeX lines 2489–2520
   Proposition 2.3 (a) (`proposition2_3_a`).
 * `square_not_hessianQuasiconvexAt_of_zero`: the paper's "hence is nowhere Hessian-quasiconvex",
   for a continuous integrand on `ℝ^{n×n}` that is `p`-homogeneous on symmetric matrices: the
-  Hessian analogue of `quasiconvexAt_zero_of_quasiconvexAt` (scaling `φ ↦ λ φ` and dominated
-  convergence).
+  Hessian analogue of `quasiconvexAt_zero_of_quasiconvexAt`, proved by scaling (`φ ↦ λ φ`) and
+  dominated convergence.
 
 Helpers have the prefix `square_env_`.
 -/
@@ -189,9 +189,10 @@ is nowhere Hessian-quasiconvex"): for a continuous `F` on `ℝ^{n×n}` with `F (
 for symmetric `H` (`p > 0`), if `F` is not Hessian quasiconvex at `0` it is not Hessian
 quasiconvex at any symmetric `A`.
 
-Proof: the Hessian analogue of `quasiconvexAt_zero_of_quasiconvexAt`. `F (0) = 0` by
-homogeneity. For a test map `φ` and `λ > 0`, Hessian quasiconvexity at `A` tested with `λ φ`
-gives `F (A) ≤ ∫ F (A + λ D²φ) = λ^p ∫ F (λ⁻¹ A + D²φ)` (`A + λ D²φ = λ (λ⁻¹ A + D²φ)` is
+Proof, by scaling (the statement is the Hessian analogue of
+`quasiconvexAt_zero_of_quasiconvexAt`): `F (0) = 0` by homogeneity. For a test map `φ` and
+`λ > 0`, Hessian quasiconvexity at `A` tested with `λ φ` gives
+`F (A) ≤ ∫ F (A + λ D²φ) = λ^p ∫ F (λ⁻¹ A + D²φ)` (`A + λ D²φ = λ (λ⁻¹ A + D²φ)` is
 symmetric, `square_env_hessian_isSymm`); as `λ → ∞`, `λ^{−p} F (A) → 0` and
 `∫ F (λ⁻¹ A + D²φ) → ∫ F (D²φ)` by dominated convergence (`D²φ` is bounded: it is continuous with
 compact support), so `∫ F (D²φ) ≥ 0 = F (0)`: `F` would be Hessian quasiconvex at `0`. -/

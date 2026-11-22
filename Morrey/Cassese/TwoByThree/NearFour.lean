@@ -148,10 +148,6 @@ noncomputable def tbt1Fp (p δ : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) : ℝ :=
 noncomputable def tbt1G (p δ Λ : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) : ℝ :=
   tbt1Fp p δ (projL3 A) + Λ ^ p * frobNorm (A - projL3 A) ^ p
 
-theorem tbt1_mart_zero {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin N → (Fin N → Bool) → E) (ε : Fin N → Bool) : mart ξ 0 ε = 0 := by
-  simp [mart]
-
 /-- Along an `𝓛₃`-valued rank-one Rademacher martingale `M_n = Σ_{k<n} ε_k A_k`, `2 D (Z (J M_n))`
 and `H (Z (J M_n))` are Rademacher martingales, with increments `2 B (Z (J M_k), Z (J A_k))` and
 `2 C (Z (J M_k), Z (J A_k))` (the quadratic parts vanish on the increments, (21)). -/
@@ -165,7 +161,7 @@ theorem tbt1_DH_mart {N : ℕ} {A : Fin N → (Fin N → Bool) → Matrix (Fin 2
           (zCoord (embedJ (A k ε))) : ℝ)) : ℂ)) n ε := by
   induction n with
   | zero =>
-    simp only [tbt1_mart_zero, tbt1Dz, tbt1Hz, tbt1_zJ_zero]
+    simp only [rad_mart_zero, tbt1Dz, tbt1Hz, tbt1_zJ_zero]
     simp [tbtD, tbtH]
   | succ n ih =>
     rw [tbt1_mart_succ, tbt1_mart_succ, tbt1_mart_succ]
@@ -197,7 +193,7 @@ theorem tbt1_coercive {p : ℝ} (hp : 2 < p) (δ : ℝ) (N : ℕ)
     (((2 * tbt1C (zCoord (embedJ (mart A k.val ε))) (zCoord (embedJ (A k ε))) : ℝ)) : ℂ)
   have hpredM : ∀ (k : Fin N) (ε ε' : Fin N → Bool), (∀ j, j < k → ε j = ε' j) →
       mart A k.val ε = mart A k.val ε' := fun k ε ε' h =>
-    tbt1_mart_congr hA.1 k.val fun j hj => h j (Fin.lt_def.mpr hj)
+    rad_mart_congr hA.1 k.val fun j hj => h j (Fin.lt_def.mpr hj)
   have hξD : IsPredictable ξD := fun k ε ε' h => by
     simp only [ξD, hpredM k ε ε' h, hA.1 k ε ε' h]
   have hξH : IsPredictable ξH := fun k ε ε' h => by
@@ -218,7 +214,7 @@ theorem tbt1_coercive {p : ℝ} (hp : 2 < p) (δ : ℝ) (N : ℕ)
     rw [← (tbt1_DH_mart hA hL N ε).1, radMart, zero_add]
   simp only [e1, e2] at hbk
   simp only [tbt1Fp]
-  rw [tbt1_avg_add, tbt1_avg_sub, tbt1_avg_const_mul, tbt1_avg_const_mul]
+  rw [rad_avg_add, rad_avg_sub, rad_avg_mul_left, rad_avg_mul_left]
   linarith
 
 /-! ### The homogeneity and Young estimate, with explicit constants -/
@@ -566,14 +562,10 @@ theorem tbt1_Fp_smul {p : ℝ} (δ t : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) :
       (tbt1_frobNorm_nonneg _), tbt1_sq_rpow]
   ring
 
-theorem tbt1_projL3_smul (t : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) :
-    projL3 (t • A) = t • projL3 A := by
-  ext i j; fin_cases i <;> fin_cases j <;> simp [projL3] <;> ring
-
 /-- `g = f ∘ π + Λ^p |π^⊥ ·|^p` is `p`-homogeneous. -/
 theorem tbt1_G_isPHomogeneous (p δ Λ : ℝ) : IsPHomogeneous p (tbt1G p δ Λ) := by
   intro t A
-  simp only [tbt1G, tbt1_projL3_smul, tbt1_Fp_smul]
+  simp only [tbt1G, tbt3_projL3_smul, tbt1_Fp_smul]
   rw [show t • A - t • projL3 A = t • (A - projL3 A) by rw [smul_sub], tbt1_frobNorm_smul,
     Real.mul_rpow (abs_nonneg t) (tbt1_frobNorm_nonneg _)]
   ring
@@ -840,11 +832,6 @@ theorem tbt1_continuous_Fp {p : ℝ} (δ : ℝ) (hp : 0 < p) : Continuous (tbt1F
     fun _ => Or.inr h2)).sub (tbt1_continuous_Hz.abs.rpow_const fun _ => Or.inr h2)).add
     (continuous_const.mul (tbt1_continuous_frobNorm.rpow_const fun _ => Or.inr hp.le))
 
-theorem tbt1_qDeltaLambda_zero (δ Λ : ℝ) : qDeltaLambda δ Λ 0 = 0 := by
-  have hπ : projL3 0 = 0 := by simpa using tbt1_projL3_smul 0 0
-  have hq : q3 0 = 0 := by simpa using tbt_q3_smul 0 0
-  simp [qDeltaLambda, hπ, hq, frobSq]
-
 /-! ### Theorem 1.3 (b) -/
 
 /-- **Proof of Theorem 1.3 (b)** (`cs-thm1.3b-witness`, TeX lines 2031–2044): for `p`
@@ -885,7 +872,7 @@ theorem twoByThree_theorem1_3_b_witness :
   have hnq := hq δ hδ hδδ₀
   simp only [QuasiconvexAt, not_forall] at hnq
   obtain ⟨φ, K', hφ, h0, hint, hlt⟩ := hnq
-  rw [not_le, tbt1_qDeltaLambda_zero] at hlt
+  rw [not_le, tbt4_qDeltaLambda_zero] at hlt
   obtain ⟨hintp, hcont⟩ := tbt1_witness_integral (δ := δ) hΛ hφ
   have hI4 : ∫ x in unitCube 3, tbt1G 4 δ Λ (0 + jac φ x) < 0 :=
     (integral_mono (hintp 4 ⟨by norm_num, by norm_num⟩) hint

@@ -159,16 +159,16 @@ theorem square_korn_avg_frob_mart {N : ℕ} (ξ : Fin N → (Fin N → Bool) →
       avg (fun ε => ∑ k, squareFrob (ξ k ε) (ξ k ε)) := by
   set G : ℕ → (Fin N → Bool) → ℝ := fun m ε =>
     ∑ k ∈ Finset.univ.filter (fun k : Fin N => k.val < m), squareFrob (ξ k ε) (ξ k ε)
-  have hξflip : ∀ (k j : Fin N), j ≤ k → ∀ ε, ξ j (squareFlip k ε) = ξ j ε := by
+  have hξflip : ∀ (k j : Fin N), j ≤ k → ∀ ε, ξ j (rad_flip k ε) = ξ j ε := by
     intro k j hjk ε
-    exact hξ j _ _ fun i hi => squareFlip_apply_ne (ne_of_lt (lt_of_lt_of_le hi hjk)) ε
+    exact hξ j _ _ fun i hi => rad_flip_apply_ne (ne_of_lt (lt_of_lt_of_le hi hjk)) ε
   have hlt : ∀ m (hm : m < N) (j : Fin N), j ∈ Finset.univ.filter (fun k : Fin N => k.val < m) →
       j < ⟨m, hm⟩ := fun m hm j hj => Fin.lt_def.2 (Finset.mem_filter.1 hj).2
-  have hMflip : ∀ m (hm : m < N) ε, mart ξ m (squareFlip ⟨m, hm⟩ ε) = mart ξ m ε := by
+  have hMflip : ∀ m (hm : m < N) ε, mart ξ m (rad_flip ⟨m, hm⟩ ε) = mart ξ m ε := by
     intro m hm ε
     simp only [mart]
     refine Finset.sum_congr rfl fun j hj => ?_
-    rw [squareFlip_apply_ne (ne_of_lt (hlt m hm j hj)), hξflip _ j (hlt m hm j hj).le ε]
+    rw [rad_flip_apply_ne (ne_of_lt (hlt m hm j hj)), hξflip _ j (hlt m hm j hj).le ε]
   have hstep : ∀ m (hm : m < N),
       avg (fun ε => squareFrob (mart ξ (m + 1) ε) (mart ξ (m + 1) ε)) =
         avg (fun ε => squareFrob (mart ξ m ε) (mart ξ m ε)) +
@@ -177,7 +177,7 @@ theorem square_korn_avg_frob_mart {N : ℕ} (ξ : Fin N → (Fin N → Bool) →
     have hM1 : ∀ ε, mart ξ (m + 1) ε = mart ξ m ε + coin (ε ⟨m, hm⟩) • ξ ⟨m, hm⟩ ε :=
       fun ε => square_sum_filter_succ hm _
     set F := fun ε => squareFrob (mart ξ (m + 1) ε) (mart ξ (m + 1) ε)
-    have hpair : ∀ ε, F ε + F (squareFlip ⟨m, hm⟩ ε) =
+    have hpair : ∀ ε, F ε + F (rad_flip ⟨m, hm⟩ ε) =
         2 * (squareFrob (mart ξ m ε) (mart ξ m ε) + squareFrob (ξ ⟨m, hm⟩ ε) (ξ ⟨m, hm⟩ ε)) := by
       intro ε
       simp only [F]
@@ -186,12 +186,12 @@ theorem square_korn_avg_frob_mart {N : ℕ} (ξ : Fin N → (Fin N → Bool) →
       simp only [squareFrob_add_left, squareFrob_add_right, squareFrob_smul_left,
         squareFrob_smul_right, squareFrob_comm (ξ ⟨m, hm⟩ ε) (mart ξ m ε)]
       linear_combination (2 * squareFrob (ξ ⟨m, hm⟩ ε) (ξ ⟨m, hm⟩ ε)) * hc
-    calc avg F = avg (fun ε => (F ε + F (squareFlip ⟨m, hm⟩ ε)) / 2) := by
+    calc avg F = avg (fun ε => (F ε + F (rad_flip ⟨m, hm⟩ ε)) / 2) := by
           simp only [div_eq_mul_inv, mul_comm _ (2 : ℝ)⁻¹]
-          rw [square_avg_mul_left, square_avg_add, square_avg_flip ⟨m, hm⟩ F]; ring
+          rw [rad_avg_mul_left, rad_avg_add, square_avg_flip ⟨m, hm⟩ F]; ring
       _ = _ := by
           simp_rw [hpair]
-          rw [← square_avg_add]
+          rw [← rad_avg_add]
           congr 1; funext ε; ring
   have hind : ∀ m, m ≤ N → avg (fun ε => squareFrob (mart ξ m ε) (mart ξ m ε)) = avg (G m) := by
     intro m
@@ -208,7 +208,7 @@ theorem square_korn_avg_frob_mart {N : ℕ} (ξ : Fin N → (Fin N → Bool) →
       rw [hstep m hm', ih hm'.le]
       have : G (m + 1) = fun ε => G m ε + squareFrob (ξ ⟨m, hm'⟩ ε) (ξ ⟨m, hm'⟩ ε) :=
         funext fun ε => square_sum_filter_succ hm' _
-      rw [this, square_avg_add]
+      rw [this, rad_avg_add]
   rw [hind N le_rfl]
   simp only [G, square_filter_all]
 
@@ -275,7 +275,7 @@ theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
     rw [hm, square_korn_norm_toE, hsq _ (squareFrob_self_nonneg _)]
   simp only [hl, hr] at h1
   have hb0 : 0 ≤ (avg fun ε => squareFrob (mart ξ N ε) (mart ξ N ε) ^ (p / 2)) ^ (1 / p) :=
-    Real.rpow_nonneg (square_avg_nonneg fun ε =>
+    Real.rpow_nonneg (rad_avg_nonneg fun ε =>
       Real.rpow_nonneg (squareFrob_self_nonneg _) _) _
   exact (ENNReal.ofReal_le_ofReal_iff (mul_nonneg hβ hb0)).1 h1
 

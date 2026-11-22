@@ -625,7 +625,7 @@ theorem tbt5_rankOneConvex_hessB {q : Matrix (Fin 2) (Fin 3) ℝ → ℝ} (hq : 
     exact (Matrix.rank_mul_le_right _ _).trans hAA'.le
   rcases Nat.lt_or_ge (hessB * A - hessB * A').rank 1 with h0 | h1
   · have h0' : hessB * A - hessB * A' = 0 :=
-      tbt_eq_zero_of_rank_eq_zero _ (by omega)
+      eq_zero_of_rank_eq_zero (by omega)
     have hAeq : hessB * A = hessB * A' := sub_eq_zero.mp h0'
     simp_rw [hlin, hAeq, ← add_smul, add_sub_cancel, one_smul]
     exact convexOn_const _ (convex_Icc 0 1)

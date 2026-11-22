@@ -28,48 +28,17 @@ variable {d m : ℕ}
 
 /-! ### The orthogonal projection and the Frobenius norm -/
 
-theorem tbt1_frobInner_sub_left (A B C : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (A - B) C = frobInner A C - frobInner B C := by
-  simp only [frobInner, Matrix.sub_apply, sub_mul, Finset.sum_sub_distrib]
-
-theorem tbt1_frobInner_add_left (A B C : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (A + B) C = frobInner A C + frobInner B C := by
-  simp only [frobInner, Matrix.add_apply, add_mul, Finset.sum_add_distrib]
-
-theorem tbt1_frobInner_smul_left (c : ℝ) (A C : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (c • A) C = c * frobInner A C := by
-  simp only [frobInner, Matrix.smul_apply, smul_eq_mul, Finset.mul_sum, mul_assoc]
-
-theorem tbt1_frobInner_self (A : Matrix (Fin d) (Fin m) ℝ) : frobInner A A = frobSq A := by
-  simp only [frobInner, frobSq, pow_two]
-
-/-- The defining property determines `π A`. -/
-theorem tbt1_proj_unique {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
-    {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ} (hπ : IsFrobProj L π)
-    (A P : Matrix (Fin d) (Fin m) ℝ) (hP : P ∈ L) (h : ∀ B ∈ L, frobInner (A - P) B = 0) :
-    π A = P := by
-  have hD : π A - P ∈ L := L.sub_mem (hπ A).1 hP
-  have : frobSq (π A - P) = 0 := by
-    rw [← tbt1_frobInner_self, show π A - P = (A - P) - (A - π A) by abel,
-      tbt1_frobInner_sub_left, ← show π A - P = (A - P) - (A - π A) by abel, h _ hD,
-      (hπ A).2 _ hD, sub_zero]
-  exact sub_eq_zero.mp (tbt_eq_zero_of_frobSq_eq_zero this)
-
 /-- `π` as a linear map. -/
 noncomputable def tbt1ProjLin {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
     {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ} (hπ : IsFrobProj L π) :
     Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] Matrix (Fin d) (Fin m) ℝ where
   toFun := π
-  map_add' A B := tbt1_proj_unique hπ _ _ (L.add_mem (hπ A).1 (hπ B).1) fun C hC => by
-    rw [show A + B - (π A + π B) = (A - π A) + (B - π B) by abel, tbt1_frobInner_add_left,
+  map_add' A B := tbt_proj_unique hπ _ _ (L.add_mem (hπ A).1 (hπ B).1) fun C hC => by
+    rw [show A + B - (π A + π B) = (A - π A) + (B - π B) by abel, tbt_frobInner_add_left,
       (hπ A).2 C hC, (hπ B).2 C hC, add_zero]
-  map_smul' c A := tbt1_proj_unique hπ _ _ (L.smul_mem c (hπ A).1) fun C hC => by
+  map_smul' c A := tbt_proj_unique hπ _ _ (L.smul_mem c (hπ A).1) fun C hC => by
     rw [RingHom.id_apply, show c • A - c • π A = c • (A - π A) by rw [smul_sub],
-      tbt1_frobInner_smul_left, (hπ A).2 C hC, mul_zero]
-
-theorem tbt1_continuous_entry (i : Fin d) (j : Fin m) :
-    Continuous fun A : Matrix (Fin d) (Fin m) ℝ => A i j :=
-  (continuous_apply j).comp (continuous_apply i)
+      tbt_frobInner_smul_left, (hπ A).2 C hC, mul_zero]
 
 theorem tbt1_continuous_proj {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
     {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ} (hπ : IsFrobProj L π) :
@@ -85,7 +54,7 @@ theorem tbt1_continuous_proj {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
     rfl
   rw [h]
   exact continuous_finsetSum _ fun i _ => continuous_finsetSum _ fun j _ =>
-    (tbt1_continuous_entry i j).smul continuous_const
+    (tbt_continuous_entry i j).smul continuous_const
 
 /-- The isometry `ℝ^{d×m} → ℓ₂ (d × m)` of the Frobenius norm. -/
 noncomputable def tbt1Iota : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] EuclideanSpace ℝ (Fin d × Fin m) where
@@ -125,7 +94,7 @@ theorem tbt1_frobNorm_add_le (A B : Matrix (Fin d) (Fin m) ℝ) :
 theorem tbt1_continuous_frobNorm : Continuous fun A : Matrix (Fin d) (Fin m) ℝ => frobNorm A := by
   unfold frobNorm frobSq
   exact Real.continuous_sqrt.comp (continuous_finsetSum _ fun i _ =>
-    continuous_finsetSum _ fun j _ => (tbt1_continuous_entry i j).pow 2)
+    continuous_finsetSum _ fun j _ => (tbt_continuous_entry i j).pow 2)
 
 
 theorem tbt1_eq_zero_of_frobNorm_eq_zero {A : Matrix (Fin d) (Fin m) ℝ} (h : frobNorm A = 0) :
@@ -258,25 +227,6 @@ theorem tbt1_young {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)} {g : Matrix 
 
 /-! ### Averages and Rademacher sums -/
 
-theorem tbt1_avg_add {N : ℕ} (f h : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f ε + h ε) = avg f + avg h := by
-  simp only [avg, Finset.sum_add_distrib, add_div]
-
-theorem tbt1_avg_sub {N : ℕ} (f h : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f ε - h ε) = avg f - avg h := by
-  simp only [avg, Finset.sum_sub_distrib, sub_div]
-
-theorem tbt1_avg_const_mul {N : ℕ} (c : ℝ) (f : (Fin N → Bool) → ℝ) :
-    avg (fun ε => c * f ε) = c * avg f := by
-  simp only [avg, ← Finset.mul_sum, mul_div_assoc]
-
-theorem tbt1_avg_mono {N : ℕ} {f h : (Fin N → Bool) → ℝ} (hfh : ∀ ε, f ε ≤ h ε) :
-    avg f ≤ avg h :=
-  div_le_div_of_nonneg_right (Finset.sum_le_sum fun ε _ => hfh ε) (by positivity)
-
-theorem tbt1_avg_nonneg {N : ℕ} {f : (Fin N → Bool) → ℝ} (hf : ∀ ε, 0 ≤ f ε) : 0 ≤ avg f :=
-  div_nonneg (Finset.sum_nonneg fun ε _ => hf ε) (by positivity)
-
 theorem tbt1_mart_map {N : ℕ} {E F : Type*} [AddCommGroup E] [Module ℝ E] [AddCommGroup F]
     [Module ℝ F] (T : E →ₗ[ℝ] F) (ξ : Fin N → (Fin N → Bool) → E) (n : ℕ) (ε : Fin N → Bool) :
     T (mart ξ n ε) = mart (fun k ε => T (ξ k ε)) n ε := by
@@ -327,7 +277,7 @@ theorem lemma5_1_part1_quant
       exact ⟨RL, hRL, hr.le, fun _ => hle.trans (mul_le_mul_of_nonneg_right (le_max_left _ _)
         (tbt1_frobNorm_nonneg _))⟩
     · refine ⟨0, L.zero_mem, by rw [Matrix.rank_zero]; exact zero_le_one, fun hR => ?_⟩
-      have h0 : R = 0 := tbt_eq_zero_of_rank_eq_zero R (by omega)
+      have h0 : R = 0 := eq_zero_of_rank_eq_zero (by omega)
       subst h0
       rw [hπ0, sub_zero, show frobNorm (0 : Matrix (Fin d) (Fin m) ℝ) = 0 by
         simp [frobNorm, frobSq], mul_zero]
@@ -399,20 +349,20 @@ theorem lemma5_1_part1_quant
         rw [tbt1_mart_map]; rfl
       rw [this, LinearMap.comp_apply, LinearMap.smul_apply, LinearMap.id_apply, tbt1_norm_iota,
         tbt1_frobNorm_smul, abs_of_nonneg hκ', Real.mul_rpow hκ' (tbt1_frobNorm_nonneg _)]
-    simp only [e1, e2, tbt1_avg_const_mul] at this
+    simp only [e1, e2, rad_avg_mul_left] at this
     rw [mul_assoc]; exact this
   -- `E F (M_N) ≥ (Λ^p − C κ^p (p* − 1)^p) E |N_N|^p ≥ 0`
   have hNn : 0 ≤ avg (fun ε => frobNorm (Nn ε) ^ p) :=
-    tbt1_avg_nonneg fun ε => Real.rpow_nonneg (tbt1_frobNorm_nonneg _) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (tbt1_frobNorm_nonneg _) _
   have hMt : 0 ≤ avg (fun ε => frobNorm (radMart 0 B N ε) ^ p) :=
-    tbt1_avg_nonneg fun ε => Real.rpow_nonneg (tbt1_frobNorm_nonneg _) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (tbt1_frobNorm_nonneg _) _
   have hlow : ∀ ε, (g (radMart 0 B N ε) - (η / 2) * frobNorm (radMart 0 B N ε) ^ p -
       C * frobNorm (E ε) ^ p) + Λ ^ p * frobNorm (Nn ε) ^ p ≤
       g (π (radMart 0 A N ε)) + Λ ^ p * frobNorm (radMart 0 A N ε - π (radMart 0 A N ε)) ^ p :=
     fun ε => by rw [hperp]; linarith [hy ε]
-  refine le_trans ?_ (tbt1_avg_mono hlow)
-  rw [tbt1_avg_add, tbt1_avg_sub, tbt1_avg_sub, tbt1_avg_const_mul, tbt1_avg_const_mul,
-    tbt1_avg_const_mul]
+  refine le_trans ?_ (rad_avg_mono hlow)
+  rw [rad_avg_add, rad_avg_sub, rad_avg_sub, rad_avg_mul_left, rad_avg_mul_left,
+    rad_avg_mul_left]
   have h1 : C * avg (fun ε => frobNorm (E ε) ^ p) ≤ K * avg (fun ε => frobNorm (Nn ε) ^ p) := by
     rw [hK_def, mul_assoc]; exact mul_le_mul_of_nonneg_left hbk hC0
   have h2 : K * avg (fun ε => frobNorm (Nn ε) ^ p) ≤ Λ ^ p * avg (fun ε => frobNorm (Nn ε) ^ p) :=

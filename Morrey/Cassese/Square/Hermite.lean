@@ -2,12 +2,14 @@ module
 
 public import Morrey.Cassese.Square.Trace
 public import Morrey.Cassese.Square.Frobenius
+public import Morrey.Cassese.Rademacher
 
 /-!
 # The Hermite supermartingale of Theorem 6.2
 
-Tools for the proof of Theorem 6.2: averages over the signs (`avg`), the invariance of `avg`
-under flipping one sign (`square_avg_flip`), the Cauchy–Schwarz inequality for `avg`, and the
+Tools for the proof of Theorem 6.2: averages over the signs (`avg`, with the elementary lemmas
+`rad_avg_add`, … and the flip `rad_flip` of `Rademacher`), the invariance of `avg` under flipping
+one sign (`square_avg_flip`), the Cauchy–Schwarz inequality for `avg`, and the
 one-step inequality of the supermartingale
 `Φ_n = tr H_n² − 6 tr (H_n Ṽ_n) + 3 tr Ṽ_n²` (`H_n = M_nᵀ M_n`): averaging over the sign of the
 new increment, `Φ_n` decreases by at least `−(‖W_n‖² − 4 tr (H_{n−1} V_n) − 2 tr V_n²) ≥ 0`
@@ -24,58 +26,22 @@ variable {n N : ℕ}
 
 /-! ### Averages over the signs -/
 
-theorem square_avg_add (f g : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f ε + g ε) = avg f + avg g := by
-  simp only [avg, Finset.sum_add_distrib, add_div]
-
-theorem square_avg_sub (f g : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f ε - g ε) = avg f - avg g := by
-  simp only [avg, Finset.sum_sub_distrib, sub_div]
-
-theorem square_avg_mul_left (c : ℝ) (f : (Fin N → Bool) → ℝ) :
-    avg (fun ε => c * f ε) = c * avg f := by
-  simp only [avg, ← Finset.mul_sum, mul_div_assoc]
-
-theorem square_avg_mono {f g : (Fin N → Bool) → ℝ} (h : ∀ ε, f ε ≤ g ε) : avg f ≤ avg g :=
-  div_le_div_of_nonneg_right (Finset.sum_le_sum fun ε _ => h ε) (by positivity)
-
-theorem square_avg_nonneg {f : (Fin N → Bool) → ℝ} (h : ∀ ε, 0 ≤ f ε) : 0 ≤ avg f :=
-  div_nonneg (Finset.sum_nonneg fun ε _ => h ε) (by positivity)
-
 theorem square_avg_const (c : ℝ) : avg (fun _ : Fin N → Bool => c) = c := by
   simp only [avg, Finset.sum_const, Finset.card_univ, Fintype.card_fun, Fintype.card_bool,
     Fintype.card_fin, nsmul_eq_mul]
   push_cast
   field_simp
 
-/-- Flipping the sign `k`. -/
-def squareFlip (k : Fin N) (ε : Fin N → Bool) : Fin N → Bool :=
-  Function.update ε k (!ε k)
-
-theorem squareFlip_involutive (k : Fin N) : Function.Involutive (squareFlip k) := by
-  intro ε
-  funext j
-  by_cases h : j = k
-  · subst h; simp [squareFlip]
-  · simp [squareFlip, Function.update_of_ne h]
-
-theorem squareFlip_apply_self (k : Fin N) (ε : Fin N → Bool) : squareFlip k ε k = !ε k := by
-  simp [squareFlip]
-
-theorem squareFlip_apply_ne {k j : Fin N} (h : j ≠ k) (ε : Fin N → Bool) :
-    squareFlip k ε j = ε j := by
-  simp [squareFlip, Function.update_of_ne h]
-
 /-- `avg` is invariant under flipping one sign. -/
 theorem square_avg_flip (k : Fin N) (f : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f (squareFlip k ε)) = avg f := by
+    avg (fun ε => f (rad_flip k ε)) = avg f := by
   simp only [avg]
   congr 1
-  exact Equiv.sum_comp ((squareFlip_involutive k).toPerm _) f
+  exact Equiv.sum_comp ((rad_flip_involutive k).toPerm _) f
 
 theorem square_coin_flip (k : Fin N) (ε : Fin N → Bool) :
-    coin (squareFlip k ε k) = -coin (ε k) := by
-  rw [squareFlip_apply_self]; cases ε k <;> simp [coin]
+    coin (rad_flip k ε k) = -coin (ε k) := by
+  rw [rad_flip_apply_self]; cases ε k <;> simp [coin]
 
 theorem square_coin_sq (b : Bool) : coin b ^ 2 = 1 := by cases b <;> simp [coin]
 

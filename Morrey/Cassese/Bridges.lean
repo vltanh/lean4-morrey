@@ -26,9 +26,12 @@ lemmas here connect them, so that a cited result can be applied to a statement o
   compactly supported witness in the unit cube into a failure of `QuasiconvexAt`,
   `quasiconvexOn_of_quasiconvex` shows that Cassese's notion implies Šverák's on the unit cube,
   and `cov_quasiconvexAtOn_unitCube_iff` and `cov_quasiconvex_iff` identify Cassese's notion with
-  the textbook one on the unit cube (which has volume `1`).
+  the textbook one on the unit cube (which has volume `1`, `volume_unitCube`).
 * Integrands and envelopes. `IsIntegrand f` is `LowerSemicontinuous f ∧ IsLocallyBounded f`
   (`isIntegrand_iff`), and the two quasiconvex envelopes are equal (`cov_qcEnvelope_eq`).
+
+`volume_unitCube`, `cov_quasiconvexAtOn_unitCube_iff` and `cov_qcEnvelope_eq` are stated in
+`Toolkit`, which this module imports: the proof of line 559 there needs them.
 -/
 
 @[expose] public section
@@ -49,9 +52,6 @@ theorem grad_eq (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) :
 
 /-- The textbook unit cube is Cassese's. -/
 theorem unitCube_eq_cov (m : ℕ) : CalculusOfVariations.unitCube m = unitCube m := rfl
-
-/-- The unit cube has volume `1`. -/
-theorem volume_unitCube (m : ℕ) : volume (unitCube m) = 1 := Sverak.volume_unitCube
 
 /-- Šverák's rank-one convexity (convexity along rank-one lines) is Cassese's (convexity on every
 segment whose endpoints differ by a rank-one matrix). -/
@@ -131,28 +131,9 @@ theorem isIntegrand_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
     IsIntegrand f ↔ LowerSemicontinuous f ∧ CalculusOfVariations.IsLocallyBounded f :=
   Iff.rfl
 
-/-- The textbook quasiconvexity at `A` on the unit cube (`|Ω| f (A) ≤ ∫_Ω f (A + ∇φ)` with
-`Ω = (0, 1)^m`, `|Ω| = 1`) is Cassese's Definition 2.1. -/
-theorem cov_quasiconvexAtOn_unitCube_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
-    (A : Matrix (Fin d) (Fin m) ℝ) :
-    CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitCube m) f A ↔
-      QuasiconvexAt f A := by
-  have hv : (volume (CalculusOfVariations.unitCube m)).toReal = 1 := by
-    rw [unitCube_eq_cov, volume_unitCube, ENNReal.toReal_one]
-  simp only [CalculusOfVariations.QuasiconvexAtOn, hv, one_mul]
-  rfl
-
 /-- The textbook quasiconvexity (on the unit cube, at every matrix) is Cassese's. -/
 theorem cov_quasiconvex_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ) :
     CalculusOfVariations.Quasiconvex f ↔ Quasiconvex f :=
   forall_congr' fun A => cov_quasiconvexAtOn_unitCube_iff f A
-
-/-- The textbook quasiconvex envelope (over lower semicontinuous, locally bounded, quasiconvex
-minorants, the form of Dacorogna's formula in `External.KinderlehrerPedregal`) is Cassese's
-(Definition 2.3, over quasiconvex integrands). -/
-theorem cov_qcEnvelope_eq (f : Matrix (Fin d) (Fin m) ℝ → ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
-    CalculusOfVariations.qcEnvelope f A = qcEnvelope f A := by
-  refine iSup_congr fun g => iSup_congr_Prop ?_ fun _ => rfl
-  rw [cov_quasiconvex_iff, isIntegrand_iff, and_assoc]
 
 end Cassese

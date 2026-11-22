@@ -395,24 +395,6 @@ theorem fourByTwo_chainF_zero (N : ℕ) {p : ℝ} (hp : 0 < p) (ρ C : ℝ) :
   have hQ0 : chainQ (0 : Matrix (Fin (2 * (N + 1))) (Fin 2) ℝ) = 0 := (fourByTwo_QLin N).map_zero
   simp [chainF, hP0, hQ0, Real.zero_rpow hp.ne']
 
-theorem fourByTwo_measurable_jac {d m : ℕ} (φ : (Fin m → ℝ) → Fin d → ℝ) :
-    Measurable (jac φ) := by
-  unfold jac
-  exact measurable_pi_iff.mpr fun i => measurable_pi_iff.mpr fun k =>
-    measurable_fderiv_apply_const ℝ (fun y => φ y i) (Pi.single k 1)
-
-theorem fourByTwo_jac_bound {d m : ℕ} {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal}
-    (hφ : LipschitzWith K φ) (x : Fin m → ℝ) (i : Fin d) (k : Fin m) : |jac φ x i k| ≤ K := by
-  have hi : LipschitzWith K (fun y => φ y i) := by
-    simpa [Function.comp_def, Function.eval] using (LipschitzWith.eval i).comp hφ
-  have h1 := norm_fderiv_le_of_lipschitz ℝ hi (x₀ := x)
-  calc |jac φ x i k| = ‖fderiv ℝ (fun y => φ y i) x (Pi.single k 1)‖ := by
-        simp [jac, Real.norm_eq_abs]
-    _ ≤ ‖fderiv ℝ (fun y => φ y i) x‖ * ‖(Pi.single k 1 : Fin m → ℝ)‖ :=
-        ContinuousLinearMap.le_opNorm _ _
-    _ = ‖fderiv ℝ (fun y => φ y i) x‖ := by rw [Pi.norm_single, norm_one, mul_one]
-    _ ≤ K := h1
-
 /-- For a continuous `g` and a Lipschitz `φ`, `x ↦ g (∇φ (x))` is integrable on the unit cube. -/
 theorem fourByTwo_integrableOn_comp_jac {d m : ℕ} {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hg : Continuous g) {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ) :
@@ -421,12 +403,12 @@ theorem fourByTwo_integrableOn_comp_jac {d m : ℕ} {g : Matrix (Fin d) (Fin m) 
     isCompact_Icc (a := -(K : ℝ)) (b := K)).exists_bound_of_continuousOn hg.continuousOn
   simp only [zero_add]
   refine Measure.integrableOn_of_bounded (M := M) ?_
-    (hg.measurable.comp (fourByTwo_measurable_jac φ)).aestronglyMeasurable
+    (hg.measurable.comp (measurable_jac φ)).aestronglyMeasurable
     (ae_of_all _ fun x => hM _ ?_)
   · rw [unitCube, Real.volume_pi_Ioo]
     simp
   · exact Set.mem_univ_pi.mpr fun i => Set.mem_univ_pi.mpr fun k =>
-      abs_le.mp (fourByTwo_jac_bound hφ x i k)
+      abs_le.mp (abs_jac_le hφ x i k)
 
 /-! ### Proposition 7.2: trigonometric polynomials on `ℝ²`
 
@@ -1164,7 +1146,7 @@ theorem fourByTwo_norm_dφ_le {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 
   refine (norm_add_le _ _).trans ?_
   rw [norm_mul, Complex.norm_I, one_mul, Complex.norm_real, Complex.norm_real, Real.norm_eq_abs,
     Real.norm_eq_abs]
-  linarith [fourByTwo_jac_bound hφ x (rowBlock j 0) k, fourByTwo_jac_bound hφ x (rowBlock j 1) k]
+  linarith [abs_jac_le hφ x (rowBlock j 0) k, abs_jac_le hφ x (rowBlock j 1) k]
 
 theorem fourByTwo_dφ_isPeriodic {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
     (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x)
@@ -1186,7 +1168,7 @@ theorem fourByTwo_cubeFourierCoeff_dφ {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (
   have hmeas : ∀ r, AEStronglyMeasurable fun x => (jac φ x r k : ℂ) := fun r =>
     (Complex.measurable_ofReal.comp (fourByTwo_measurable_jac_apply φ r k)).aestronglyMeasurable
   have hbd : ∀ r x, ‖(jac φ x r k : ℂ)‖ ≤ L := fun r x => by
-    rw [Complex.norm_real, Real.norm_eq_abs]; exact fourByTwo_jac_bound hφ x r k
+    rw [Complex.norm_real, Real.norm_eq_abs]; exact abs_jac_le hφ x r k
   have hsum : ∑ i, (n i : ℂ) * (((Pi.single k (1 : ℝ) : Fin 2 → ℝ) i : ℝ) : ℂ) = n k := by
     fin_cases k <;> simp [Fin.sum_univ_two]
   have hd : ∀ r, UnitAddTorus.cubeFourierCoeff (fun x => (jac φ x r k : ℂ)) n =
@@ -1358,7 +1340,7 @@ theorem fourByTwo_integral_chainF_nonneg_of_periodic (N : ℕ) (ρ : ℝ) {p : �
   have hlim : Tendsto (fun i => ∫ x in unitCube 2, G (jac (u (ns i)) x)) atTop
       (𝓝 (∫ x in unitCube 2, G (jac φ x))) :=
     tendsto_integral_of_dominated_convergence (fun _ => B)
-      (fun i => (hGc.measurable.comp (fourByTwo_measurable_jac _)).aestronglyMeasurable)
+      (fun i => (hGc.measurable.comp (measurable_jac _)).aestronglyMeasurable)
       (integrableOn_const (by rw [volume_unitCube]; exact ENNReal.one_ne_top))
       (fun i => ae_of_all _ fun x => hB _ (hu_bd _ x))
       hconv
@@ -1554,11 +1536,6 @@ theorem fourByTwo_rankOneConvexAt_of_lt (N : ℕ) {p : ℝ} (hp : 0 < p) (ρ : �
   exact fourByTwo_rankOneConvexAt_mono N hp ρ h0
     ((ENNReal.ofReal_lt_ofReal_iff'.mp hlt).1.le) hrc
 
-/-- If `C < C^{qc}` (and `C ≥ 0`) then `f_{p,ρ,C}` is not quasiconvex at `0`. -/
-theorem fourByTwo_not_quasiconvexAt_of_lt {d m : ℕ} (F : ℝ → Matrix (Fin d) (Fin m) ℝ → ℝ)
-    {C : ℝ} (hC : 0 ≤ C) (h : ENNReal.ofReal C < qcThreshold F) : ¬ QuasiconvexAt (F C) 0 :=
-  fun hqc => (iInf₂_le C ⟨hC, hqc⟩ : qcThreshold F ≤ _).not_gt h
-
 /-- **Theorem 7.1** (`cs-thm7.1`): for `p ∈ (1, 2) ∪ (2, ∞)` there are linear maps
 `P_p : ℝ^{4×2} → ℝ^{2×2}`, `Q_p : ℝ^{4×2} → ℝ²` and `C (p) > 0` such that
 `A ↦ C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖_{ℓ₂}^p` is rank-one convex at `0` but not quasiconvex
@@ -1624,7 +1601,7 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     exact (ENNReal.ofReal_lt_ofReal_iff hC0).mpr hC1
   · -- Proposition 7.2: `C^{qc} (p, 1, ρ) ≥ ρ ‖𝓑²‖_p > C`
     rw [fourByTwo_integrand_eq]
-    apply fourByTwo_not_quasiconvexAt_of_lt _ hC0.le
+    apply not_quasiconvexAt_of_lt_qcThreshold hC0.le
     refine lt_of_lt_of_le hC2 ?_
     have h72 := proposition7_2_lower hT 1 hρ hp
     rw [pow_one] at h72
@@ -1635,11 +1612,6 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
 section HomPoly
 
 variable {d m : ℕ}
-
-theorem fourByTwo_isHomPoly_congr {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (h : ∀ A, f A = g A) (hf : IsHomogeneousPolynomial n f) : IsHomogeneousPolynomial n g := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  exact ⟨P, hP, fun A => (h A).symm.trans (hPf A)⟩
 
 /-- A linear form in the entries is a homogeneous polynomial of degree one. -/
 theorem fourByTwo_isHomPoly_linear (ℓ : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] ℝ) :
@@ -1657,34 +1629,13 @@ theorem fourByTwo_isHomPoly_linear (ℓ : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ]
   rw [show Matrix.single i j (A i j) = A i j • Matrix.single i j (1 : ℝ) by
     rw [Matrix.smul_single, smul_eq_mul, mul_one], map_smul, smul_eq_mul, mul_comm]
 
-theorem fourByTwo_isHomPoly_mul {a b : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial a f) (hg : IsHomogeneousPolynomial b g) :
-    IsHomogeneousPolynomial (a + b) fun A => f A * g A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  obtain ⟨Q, hQ, hQg⟩ := hg
-  exact ⟨P * Q, hP.mul hQ, fun A => by rw [map_mul, ← hPf, ← hQg]⟩
-
-theorem fourByTwo_isHomPoly_add {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial n g) :
-    IsHomogeneousPolynomial n fun A => f A + g A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  obtain ⟨Q, hQ, hQg⟩ := hg
-  exact ⟨P + Q, hP.add hQ, fun A => by rw [map_add, ← hPf, ← hQg]⟩
-
-theorem fourByTwo_isHomPoly_const_mul {n : ℕ} (c : ℝ) {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) : IsHomogeneousPolynomial n fun A => c * f A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  exact ⟨MvPolynomial.C c * P, hP.C_mul c, fun A => by
-    rw [map_mul, MvPolynomial.eval_C, ← hPf]⟩
-
 /-- `A ↦ |ℓ (A)|²` is a homogeneous quadratic polynomial for a real-linear `ℓ` with complex
 values. -/
 theorem fourByTwo_isHomPoly_normSq (ℓ : Matrix (Fin d) (Fin m) ℝ →ₗ[ℝ] ℂ) :
     IsHomogeneousPolynomial 2 fun A => ‖ℓ A‖ ^ 2 := by
   have hre := fourByTwo_isHomPoly_linear (Complex.reLm.comp ℓ)
   have him := fourByTwo_isHomPoly_linear (Complex.imLm.comp ℓ)
-  refine fourByTwo_isHomPoly_congr (fun A => ?_)
-    (fourByTwo_isHomPoly_add (fourByTwo_isHomPoly_mul hre hre) (fourByTwo_isHomPoly_mul him him))
+  refine ((hre.mul hre).add (him.mul him)).congr fun A => ?_
   simp [Complex.sq_norm, Complex.normSq_apply]
 
 end HomPoly
@@ -1857,19 +1808,17 @@ theorem fourByTwo_quartic_continuous : Continuous fourByTwo_quartic := by
 theorem fourByTwo_quartic_isHomPoly : IsHomogeneousPolynomial 4 fourByTwo_quartic := by
   have hℓ : ∀ j, IsHomogeneousPolynomial 2 fun A : Matrix (Fin 4) (Fin 2) ℝ =>
       ‖((√3 : ℝ) : ℂ) * chainP (N := 1) (√2) A j‖ ^ 2 := fun j =>
-    fourByTwo_isHomPoly_congr (fun A => by simp [Complex.real_smul]; rfl)
-      (fourByTwo_isHomPoly_normSq ((√3 : ℝ) • fourByTwo_PLin (N := 1) (√2) j))
+    (fourByTwo_isHomPoly_normSq ((√3 : ℝ) • fourByTwo_PLin (N := 1) (√2) j)).congr
+      fun A => by simp [Complex.real_smul]; rfl
   have hX : IsHomogeneousPolynomial 2 fun A : Matrix (Fin 4) (Fin 2) ℝ =>
       ∑ j, ‖((√3 : ℝ) : ℂ) * chainP (N := 1) (√2) A j‖ ^ 2 :=
-    fourByTwo_isHomPoly_congr (fun A => (Fin.sum_univ_two _).symm)
-      (fourByTwo_isHomPoly_add (hℓ 0) (hℓ 1))
+    ((hℓ 0).add (hℓ 1)).congr fun A =>
+      (Fin.sum_univ_two fun j => ‖((√3 : ℝ) : ℂ) * chainP (N := 1) (√2) A j‖ ^ 2).symm
   have hY : IsHomogeneousPolynomial 2 fun A : Matrix (Fin 4) (Fin 2) ℝ =>
       ‖chainQ (N := 1) A‖ ^ 2 :=
     fourByTwo_isHomPoly_normSq (fourByTwo_QLin 1)
-  refine fourByTwo_isHomPoly_congr (fun A => ?_)
-    (fourByTwo_isHomPoly_add (fourByTwo_isHomPoly_const_mul (-2) (fourByTwo_isHomPoly_mul hY hY))
-      (fourByTwo_isHomPoly_add (fourByTwo_isHomPoly_const_mul 20 (fourByTwo_isHomPoly_mul hX hY))
-        (fourByTwo_isHomPoly_const_mul 30 (fourByTwo_isHomPoly_mul hX hX))))
+  refine (((hY.mul hY).const_mul (-2)).add
+    (((hX.mul hY).const_mul 20).add ((hX.mul hX).const_mul 30))).congr fun A => ?_
   simp only [fourByTwo_quartic, fourByTwo_U]
   ring
 
@@ -1987,6 +1936,6 @@ theorem corollary7_2 (hT : HNVWTransference)
       Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
     norm_num
   exact fourByTwo_not_quasiconvexAt_of_le fourByTwo_quartic_continuous hle h0
-    (fourByTwo_not_quasiconvexAt_of_lt _ hC0.le hqc)
+    (not_quasiconvexAt_of_lt_qcThreshold hC0.le hqc)
 
 end Cassese

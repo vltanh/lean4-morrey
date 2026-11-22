@@ -327,63 +327,32 @@ theorem twoByM_eLpNorm_eq {p : ℝ} (hp : 0 < p) (f : (Fin N → Bool) → ℝ) 
     ENNReal.ofReal_rpow_of_nonneg (hf ε) hp.le, ENNReal.ofReal_inv_of_pos (by positivity)]
   simp
 
-/-- Keep the signs `ε_j`, `j < k`, and forget the others. -/
-def twoByM_proj (k : ℕ) (ε : Fin N → Bool) : Fin N → Bool :=
-  fun j => if j.val < k then ε j else false
-
-/-- The natural filtration of the signs: `ℱ_k = σ (ε_j : j < k)`. -/
-noncomputable def twoByM_filt (N' : ℕ) :
-    Filtration ℕ (inferInstance : MeasurableSpace (Fin N' → Bool)) where
-  seq k := MeasurableSpace.comap (twoByM_proj k) inferInstance
-  mono' i j hij := by
-    have h : (twoByM_proj i : (Fin N' → Bool) → _) = twoByM_proj i ∘ twoByM_proj j := by
-      funext ε l
-      simp only [twoByM_proj, Function.comp]
-      split_ifs with h1 h2 <;> first | rfl | omega
-    rintro s ⟨t, -, rfl⟩
-    exact ⟨twoByM_proj i ⁻¹' t, MeasurableSet.of_discrete, by rw [← Set.preimage_comp, ← h]⟩
-  le' k := Measurable.of_discrete.comap_le
-
 /-- A function of the signs `ε_j`, `j < k`, is `ℱ_k`-strongly measurable. -/
 theorem twoByM_stronglyMeasurable {E : Type*} [TopologicalSpace E] {k : ℕ}
     (f : (Fin N → Bool) → E)
     (hf : ∀ ε ε' : Fin N → Bool, (∀ j : Fin N, j.val < k → ε j = ε' j) → f ε = f ε') :
-    StronglyMeasurable[twoByM_filt N k] f := by
-  have h : f = f ∘ twoByM_proj k :=
-    funext fun ε => hf _ _ fun j hj => by simp [twoByM_proj, hj]
+    StronglyMeasurable[rad_filtration N k] f := by
+  have h : f = f ∘ rad_trunc k :=
+    funext fun ε => hf _ _ fun j hj => by simp [rad_trunc, hj]
   rw [h]
   exact StronglyMeasurable.of_discrete.comp_measurable (comap_measurable _)
 
 /-- Sets of `ℱ_k` are determined by the signs `ε_j`, `j < k`. -/
 theorem twoByM_measurableSet {k : ℕ} {s : Set (Fin N → Bool)}
-    (hs : MeasurableSet[twoByM_filt N k] s)
+    (hs : MeasurableSet[rad_filtration N k] s)
     {ε ε' : Fin N → Bool} (h : ∀ j : Fin N, j.val < k → ε j = ε' j) : ε ∈ s ↔ ε' ∈ s := by
   obtain ⟨t, -, rfl⟩ := hs
-  have : twoByM_proj k ε = twoByM_proj k ε' := funext fun j => by
-    simp only [twoByM_proj]; split_ifs with hj
+  have : rad_trunc k ε = rad_trunc k ε' := funext fun j => by
+    simp only [rad_trunc]; split_ifs with hj
     · exact h j hj
     · rfl
   simp only [Set.mem_preimage, this]
 
-/-- Flipping the sign `ε_i`. -/
-def twoByM_flip (i : Fin N) (ε : Fin N → Bool) : Fin N → Bool :=
-  Function.update ε i (!ε i)
-
-theorem twoByM_flip_involutive (i : Fin N) : Function.Involutive (twoByM_flip i) := by
-  intro ε
-  funext j
-  by_cases h : j = i
-  · subst h; simp [twoByM_flip]
-  · simp [twoByM_flip, Function.update_of_ne h]
-
-theorem twoByM_flip_apply_of_ne {i j : Fin N} (h : j ≠ i) (ε : Fin N → Bool) :
-    twoByM_flip i ε j = ε j := Function.update_of_ne h _ _
-
 /-- The sum over the signs of `coin (ε_i) • V (ε)`, with `V` independent of `ε_i`, vanishes, and
 so does its restriction to a set independent of `ε_i`. -/
 theorem twoByM_sum_coin_smul_eq_zero {E : Type*} [AddCommGroup E] [Module ℝ E] (i : Fin N)
-    (g : (Fin N → Bool) → E) (hg : ∀ ε, g (twoByM_flip i ε) = -g ε) : ∑ ε, g ε = 0 := by
-  have h := Equiv.sum_comp (Function.Involutive.toPerm _ (twoByM_flip_involutive i)) g
+    (g : (Fin N → Bool) → E) (hg : ∀ ε, g (rad_flip i ε) = -g ε) : ∑ ε, g ε = 0 := by
+  have h := Equiv.sum_comp (Function.Involutive.toPerm _ (rad_flip_involutive i)) g
   simp only [Function.Involutive.coe_toPerm, hg, Finset.sum_neg_distrib] at h
   have h2 : (2 : ℝ) • ∑ ε, g ε = 0 := by rw [two_smul]; nth_rw 1 [← h]; simp
   exact (smul_eq_zero.1 h2).resolve_left two_ne_zero
@@ -438,27 +407,6 @@ theorem twoByM_mart_succ_sub {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ 
     simp
   · exact Finset.sum_eq_zero fun k' _ => by rw [ite_eq_right]; omega
 
-/-- `M_k` depends only on the signs `ε_j`, `j < k`. -/
-theorem twoByM_mart_pred {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    {ξ : Fin N → (Fin N → Bool) → E} (hξ : IsPredictable ξ) (k : ℕ) (ε ε' : Fin N → Bool)
-    (h : ∀ j : Fin N, j.val < k → ε j = ε' j) : mart ξ k ε = mart ξ k ε' := by
-  unfold mart
-  refine Finset.sum_congr rfl fun k' hk' => ?_
-  have hk : k'.val < k := (Finset.mem_filter.1 hk').2
-  rw [h k' hk, hξ k' ε ε' fun j hj => h j (lt_trans (Fin.lt_def.1 hj) hk)]
-
-theorem twoByM_mart_zero {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin N → (Fin N → Bool) → E) (ε : Fin N → Bool) : mart ξ 0 ε = 0 := by
-  simp [mart]
-
-theorem twoByM_mart_top {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin N → (Fin N → Bool) → E) (ε : Fin N → Bool) :
-    mart ξ N ε = ∑ k, coin (ε k) • ξ k ε := by
-  unfold mart
-  congr 1
-  ext k; simp
-
-
 theorem twoByM_lqNorm_conj {n : ℕ} (q : ℝ) (z : Fin n → ℂ) :
     lqNorm q (fun j => conj (z j)) = lqNorm q z := by
   simp [lqNorm]
@@ -475,7 +423,7 @@ rank-one Rademacher martingale `(M_k)_{k ≤ N}` in `ℝ^{2×2n}` (any start `M�
 Proof: the paper's. With the increments `dM_k = ε_k A_k`, Lemma 4.1 gives the predictable unimodular
 `λ_k = λ (A_k)` with `Q_n (dM_k) = λ_k conj (P_n (dM_k))`; the martingale `conj (P_n (M_k − M₀))`,
 mapped into `ℓ_q` by the isometric embedding `ℓ_q^n ↪ ℓ_q` (`twoByM_emb`), is a martingale for the
-natural filtration of the signs on the canonical space (`twoByM_filt`, uniform measure), and (5),
+natural filtration of the signs on the canonical space (`rad_filtration`, uniform measure), and (5),
 the definition of `UMD_{ℂ,p} (ℓ_q)`, applied to it with the multipliers `λ_k` gives (9). -/
 theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     (M₀ : Matrix (Fin 2) (Fin (2 * n)) ℝ)
@@ -491,7 +439,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
   -- the unimodular `λ` of Lemma 4.1
   obtain ⟨lam, -, hlam⟩ := lemma4_1 n
   set μ := twoByM_μ N
-  set ℱ := twoByM_filt N
+  set ℱ := rad_filtration N
   -- the martingale `conj (P_n (M_k − M_0))`, in `ℓ_q`
   set Y : ℕ → (Fin N → Bool) → Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ) :=
     fun k ε => twoByM_emb q hq0 fun j => conj (wirtP (mart A k ε) j) with hY
@@ -529,7 +477,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     refine martingale_of_setIntegral_eq_succ (fun k => ?_) (fun k => Integrable.of_finite)
       (fun i s hs => ?_)
     · exact twoByM_stronglyMeasurable _ fun ε ε' h => by
-        simp only [hY]; rw [twoByM_mart_pred hA.1 k ε ε' h]
+        simp only [hY]; rw [rad_mart_congr hA.1 k h]
     · have hs' : MeasurableSet s := ℱ.le i s hs
       rw [← integral_indicator hs', ← integral_indicator hs', integral_fintype Integrable.of_finite,
         integral_fintype Integrable.of_finite]
@@ -539,15 +487,15 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
       rw [← sub_eq_zero, ← Finset.sum_sub_distrib]
       by_cases hi : i < N
       · refine twoByM_sum_coin_smul_eq_zero ⟨i, hi⟩ _ fun ε => ?_
-        have hmem : twoByM_flip ⟨i, hi⟩ ε ∈ s ↔ ε ∈ s :=
+        have hmem : rad_flip ⟨i, hi⟩ ε ∈ s ↔ ε ∈ s :=
           twoByM_measurableSet hs fun j hj =>
-            twoByM_flip_apply_of_ne (fun h => by rw [h] at hj; exact lt_irrefl _ hj) ε
-        have hD : twoByM_emb q hq0 (fun j => conj (wirtP (A ⟨i, hi⟩ (twoByM_flip ⟨i, hi⟩ ε)) j)) =
+            rad_flip_apply_ne (fun h => by rw [h] at hj; exact lt_irrefl _ hj) ε
+        have hD : twoByM_emb q hq0 (fun j => conj (wirtP (A ⟨i, hi⟩ (rad_flip ⟨i, hi⟩ ε)) j)) =
             twoByM_emb q hq0 (fun j => conj (wirtP (A ⟨i, hi⟩ ε) j)) := by
-          rw [hA.1 ⟨i, hi⟩ (twoByM_flip ⟨i, hi⟩ ε) ε fun j hj =>
-            twoByM_flip_apply_of_ne (ne_of_lt hj) ε]
-        have hcoin : coin (twoByM_flip ⟨i, hi⟩ ε ⟨i, hi⟩) = -coin (ε ⟨i, hi⟩) := by
-          simp only [twoByM_flip, Function.update_self]
+          rw [hA.1 ⟨i, hi⟩ (rad_flip ⟨i, hi⟩ ε) ε fun j hj =>
+            rad_flip_apply_ne (ne_of_lt hj) ε]
+        have hcoin : coin (rad_flip ⟨i, hi⟩ ε ⟨i, hi⟩) = -coin (ε ⟨i, hi⟩) := by
+          simp only [rad_flip, Function.update_self]
           cases ε ⟨i, hi⟩ <;> simp [coin]
         have key : ∀ ε', s.indicator (Y i) ε' - s.indicator (Y (i + 1)) ε' =
             -s.indicator (fun ε'' => (coin (ε'' ⟨i, hi⟩) : ℂ) •
@@ -564,7 +512,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
       · have : Y (i + 1) = Y i := funext (hinc' i (by omega))
         exact Finset.sum_eq_zero fun ε _ => by rw [this, sub_self]
   have hY0 : ∀ ε, Y 0 ε = 0 := fun ε => by
-    simp only [hY, twoByM_mart_zero, twoByM_wirtP_zero, Pi.zero_apply, map_zero]
+    simp only [hY, rad_mart_zero, twoByM_wirtP_zero, Pi.zero_apply, map_zero]
     exact twoByM_emb_zero hq0
   have hc1 : ∀ k ε, ‖c k ε‖ = 1 := fun k ε => by
     simp only [hc]; split_ifs
@@ -580,7 +528,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
   have htrans : ∀ ε, ∑ k ∈ Finset.range N, c (k + 1) ε • (Y (k + 1) ε - Y k ε) =
       twoByM_emb q hq0 (wirtQ (radMart M₀ A N ε) - wirtQ M₀) := by
     intro ε
-    rw [hradQ, twoByM_mart_top, twoByM_wirtQ_sum, twoByM_emb_sum,
+    rw [hradQ, rad_mart_top, twoByM_wirtQ_sum, twoByM_emb_sum,
       ← Fin.sum_univ_eq_sum_range (fun k => c (k + 1) ε • (Y (k + 1) ε - Y k ε))]
     refine Finset.sum_congr rfl fun k _ => ?_
     rw [hcsucc, dite_eq_left k.isLt, hinc k k.isLt]
@@ -647,17 +595,6 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
 theorem twoByM_lqNorm_zero {n : ℕ} {q : ℝ} (hq : 0 < q) : lqNorm q (0 : Fin n → ℂ) = 0 := by
   simp [lqNorm, Real.zero_rpow hq.ne', Real.zero_rpow (inv_pos.2 hq).ne']
 
-theorem twoByM_avg_sub {N : ℕ} (f g : (Fin N → Bool) → ℝ) :
-    avg (fun ε => f ε - g ε) = avg f - avg g := by
-  simp [avg, Finset.sum_sub_distrib, sub_div]
-
-theorem twoByM_avg_mul {N : ℕ} (c : ℝ) (f : (Fin N → Bool) → ℝ) :
-    avg (fun ε => c * f ε) = c * avg f := by
-  simp [avg, ← Finset.mul_sum, mul_div_assoc]
-
-theorem twoByM_avg_nonneg {N : ℕ} {f : (Fin N → Bool) → ℝ} (hf : ∀ ε, 0 ≤ f ε) : 0 ≤ avg f :=
-  div_nonneg (Finset.sum_nonneg fun ε _ => hf ε) (by positivity)
-
 theorem twoByM_continuous_lqNorm {n : ℕ} {q : ℝ} (hq : 0 < q) :
     Continuous (lqNorm q : (Fin n → ℂ) → ℝ) := by
   unfold lqNorm
@@ -702,9 +639,9 @@ theorem proposition4_1_nonneg {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     exact (ENNReal.not_lt_zero hC).elim
   set a := lpNormWith (lqNorm q) p fun ε => wirtP (radMart 0 A N ε) with ha
   set b := lpNormWith (lqNorm q) p fun ε => wirtQ (radMart 0 A N ε) with hb
-  have ha0 : 0 ≤ a := Real.rpow_nonneg (twoByM_avg_nonneg fun ε =>
+  have ha0 : 0 ≤ a := Real.rpow_nonneg (rad_avg_nonneg fun ε =>
     Real.rpow_nonneg (twoByM_lqNorm_nonneg q _) _) _
-  have hb0 : 0 ≤ b := Real.rpow_nonneg (twoByM_avg_nonneg fun ε =>
+  have hb0 : 0 ≤ b := Real.rpow_nonneg (rad_avg_nonneg fun ε =>
     Real.rpow_nonneg (twoByM_lqNorm_nonneg q _) _) _
   -- `‖Q_n (M_N)‖_{L^p} ≤ C ‖P_n (M_N)‖_{L^p}`
   have hba : b ≤ C * a := by
@@ -715,10 +652,10 @@ theorem proposition4_1_nonneg {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
   -- raise to the `p`-th power
   have hpow : ∀ (z : (Fin N → Bool) → Fin n → ℂ),
       (lpNormWith (lqNorm q) p z) ^ p = avg fun ε => lqNorm q (z ε) ^ p := fun z => by
-    rw [lpNormWith, ← Real.rpow_mul (twoByM_avg_nonneg fun ε =>
+    rw [lpNormWith, ← Real.rpow_mul (rad_avg_nonneg fun ε =>
       Real.rpow_nonneg (twoByM_lqNorm_nonneg q _) _), one_div_mul_cancel hp0.ne', Real.rpow_one]
   have : (avg fun ε => blockF n p q C (radMart 0 A N ε)) = C ^ p * a ^ p - b ^ p := by
-    rw [ha, hb, hpow, hpow, ← twoByM_avg_mul, ← twoByM_avg_sub]
+    rw [ha, hb, hpow, hpow, ← rad_avg_mul_left, ← rad_avg_sub]
     rfl
   rw [this, sub_nonneg, ← Real.mul_rpow hC0.le ha0]
   exact Real.rpow_le_rpow hb0 hba hp0.le
@@ -2105,22 +2042,32 @@ theorem twoByM_continuous_explicitG (n : ℕ) : Continuous (explicitG n) := by
       ((continuous_apply j).comp (twoByM_continuous_wirtP n))
   exact ((twoByM_continuous_zigzagU n).comp (hP.prodMk (twoByM_continuous_wirtQ n))).neg
 
-theorem twoByM_isIntegrand_of_continuous {d m : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : Continuous f) : IsIntegrand f := by
-  refine ⟨hf.lowerSemicontinuous, fun A => ⟨f ⁻¹' Set.Ioo (f A - 1) (f A + 1),
-    hf.continuousAt.preimage_mem_nhds (Ioo_mem_nhds (by linarith) (by linarith)), |f A| + 1,
-    fun B hB => ?_⟩⟩
-  obtain ⟨h1, h2⟩ := hB
-  rw [abs_le]; constructor <;> linarith [abs_le.1 (le_refl |f A|)]
+/-- **Proposition 4.2** (`prop:explicit`), the claim of its proof: `g_n` is a globally rank-one
+convex integrand with `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)`. By (13), (14)
+(`External.Burkholder.scalarFunction_holds`).
 
-/-- The claim of the proof of Proposition 4.2: `g_n` is a rank-one convex integrand with
-`g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)` (stated as `proposition4_2_minorant`). Rank-one
-convexity: along `B + t R`, `rank R = 1`, Lemma 4.1 gives `Q_n R = λ conj (P_n R)` with `|λ| = 1`,
-so `g_n = −U (x + t h, y + t λ h)`, which is convex by the zig-zag concavity of `U`. -/
-theorem twoByM_explicit_minorant (n : ℕ) :
+Proof: the paper's: (16) from (13) (`twoByM_U_majorization`); rank-one convexity along
+`B + t R`, `rank R = 1`: Lemma 4.1 gives `Q_n R = λ conj (P_n R)` with `|λ| = 1`, so
+`g_n = −U (x + t h, y + t λ h)`, which is convex by the zig-zag concavity of `U`
+(`twoByM_zigzag`), which follows from (13), (14), (17), (18) and the computation
+`(√r)'' ≤ 5⁴ (√b)''`.
+
+Departure from the paper (the regularization of the zig-zag step, `twoByM_sqrt_concave`): the
+paper mollifies `r` and `b` and lets the mollification parameter tend to `0`; the formalization
+instead replaces `r` at each point `t₀` by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`
+(`κ = r − 2·5⁶ b` concave by (14), `m` a supergradient of `κ` at `t₀`), for which (17) holds
+(`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`) and (18) is used for `b` itself (from the convexity of
+`b^{1/6} = ‖x + t h‖_{ℓ_6}`); the paper's computation makes `√r̃ − 5⁴ √b` concave, and its
+tangent at `t₀` supports `√r − 5⁴ √b`. Where `B (x + t h)` may vanish, `x` is approximated so that
+it does not (the paper's `b_η > 0`), and concavity passes to the limit. Reason: mollification
+needs the calculus of convolutions (derivatives of `r_η`, Minkowski's integral inequality for
+`b_η^{1/6}`), which the supporting-majorant device avoids while keeping (17), (18) and the
+computation; reported for review, since this is a choice of regularization rather than a gap in
+the paper. -/
+theorem proposition4_2_minorant (n : ℕ) :
     IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
       (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 := by
-  refine ⟨twoByM_isIntegrand_of_continuous (twoByM_continuous_explicitG n), fun A B hAB => ?_,
+  refine ⟨isIntegrand_of_continuous (twoByM_continuous_explicitG n), fun A B hAB => ?_,
     fun A => ?_, ?_, ?_⟩
   · -- along `B + t (A − B)`, `g_n = −U (x + t h, y + t λ h)` with `x = conj P B`,
     -- `h = conj P (A − B)`, `y = Q B`, and `λ = λ (A − B)` unimodular (Lemma 4.1)
@@ -2161,34 +2108,8 @@ Proof: the paper's: `g_n` is a rank-one convex minorant of `f_n` with `g_n (0) =
 (`proposition4_2_minorant`). -/
 theorem proposition4_2 (n : ℕ) :
     RankOneConvexAt (explicitF n) 0 := by
-  obtain ⟨h1, h2, h3, h4, h5⟩ := twoByM_explicit_minorant n
+  obtain ⟨h1, h2, h3, h4, h5⟩ := proposition4_2_minorant n
   exact ⟨explicitG n, h1, h2, h3, by rw [h4, h5]⟩
-
-/-- **Proposition 4.2** (`prop:explicit`), the claim of its proof: `g_n` is a globally rank-one
-convex integrand with `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)`. By (13), (14)
-(`External.Burkholder.scalarFunction_holds`).
-
-Proof: the paper's (`twoByM_explicit_minorant`): (16) from (13) (`twoByM_U_majorization`); rank-one
-convexity from Lemma 4.1 and the zig-zag concavity of `U` (`twoByM_zigzag`), which follows from
-(13),
-(14), (17), (18) and the computation `(√r)'' ≤ 5⁴ (√b)''`.
-
-Departure from the paper (the regularization of the zig-zag step, `twoByM_sqrt_concave`): the
-paper mollifies `r` and `b` and lets the mollification parameter tend to `0`; the formalization
-instead replaces `r` at each point `t₀` by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`
-(`κ = r − 2·5⁶ b` concave by (14), `m` a supergradient of `κ` at `t₀`), for which (17) holds
-(`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`) and (18) is used for `b` itself (from the convexity of
-`b^{1/6} = ‖x + t h‖_{ℓ_6}`); the paper's computation makes `√r̃ − 5⁴ √b` concave, and its tangent
-at
-`t₀` supports `√r − 5⁴ √b`. Where `B (x + t h)` may vanish, `x` is approximated so that it does not
-(the paper's `b_η > 0`), and concavity passes to the limit. Reason: mollification needs the
-calculus of convolutions (derivatives of `r_η`, Minkowski's integral inequality for `b_η^{1/6}`),
-which the supporting-majorant device avoids while keeping (17), (18) and the computation; reported
-for review, since this is a choice of regularization rather than a gap in the paper. -/
-theorem proposition4_2_minorant (n : ℕ) :
-    IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
-      (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 :=
-  twoByM_explicit_minorant n
 
 /-! ### Proposition 4.3: the limiting argument and the failure of quasiconvexity -/
 
@@ -3493,63 +3414,7 @@ theorem twoByM_explicit_minorant_q (n : ℕ) {p q : ℝ} (hp : 1 < p) (hpq : p <
     twoByM_rankOneConvex_gq n hp hpq hq, twoByM_gq_le_blockF n hp hq,
     twoByM_gq_zero n (by linarith) (by linarith)⟩
 
-/-- `C < C^{qc}` makes `F_C` fail to be quasiconvex at `0` (the definition of `C^{qc}`; the
-argument of `intro_not_quasiconvexAt_of_lt_qcThreshold`). -/
-theorem twoByM_not_quasiconvexAt_of_lt_qcThreshold {d m : ℕ}
-    {F : ℝ → Matrix (Fin d) (Fin m) ℝ → ℝ} {C : ℝ} (hC : 0 ≤ C)
-    (h : ENNReal.ofReal C < qcThreshold F) : ¬ QuasiconvexAt (F C) 0 :=
-  fun hq => h.not_ge (iInf₂_le (f := fun (C : ℝ) (_ : 0 ≤ C ∧ QuasiconvexAt (F C) 0) =>
-    ENNReal.ofReal C) C ⟨hC, hq⟩)
-
 /-! ### A minorant touching at `A` passes quasiconvexity at `A` upwards -/
-
-/-- `|∂_k φ_i| ≤ K` for a `K`-Lipschitz `φ`. -/
-private theorem twoByM_jac_abs_le {d m : ℕ} {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal}
-    (hφ : LipschitzWith K φ) (x : Fin m → ℝ) (i : Fin d) (k : Fin m) : |jac φ x i k| ≤ K := by
-  have hi : LipschitzWith K (fun y => φ y i) := by
-    have h := (LipschitzWith.eval (α := fun _ : Fin d => ℝ) i).comp hφ
-    rw [one_mul] at h
-    exact h
-  simp only [jac, Matrix.of_apply]
-  rw [← Real.norm_eq_abs]
-  calc ‖fderiv ℝ (fun y => φ y i) x (Pi.single k 1)‖
-      ≤ ‖fderiv ℝ (fun y => φ y i) x‖ * ‖(Pi.single k 1 : Fin m → ℝ)‖ :=
-        ContinuousLinearMap.le_opNorm _ _
-    _ ≤ K * 1 := by
-        gcongr
-        · exact norm_fderiv_le_of_lipschitz ℝ hi
-        · rw [Pi.norm_single, norm_one]
-    _ = K := mul_one _
-
-/-- For a continuous `g` and a Lipschitz `φ`, `x ↦ g (A + ∇φ (x))` is integrable on the unit
-cube (it is measurable and bounded). -/
-theorem twoByM_integrableOn_comp {d m : ℕ} {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (hg : Continuous g)
-    (A : Matrix (Fin d) (Fin m) ℝ) {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal}
-    (hφ : LipschitzWith K φ) : IntegrableOn (fun x => g (A + jac φ x)) (unitCube m) := by
-  have hbox : IsCompact {M : Matrix (Fin d) (Fin m) ℝ | ∀ i k, |M i k - A i k| ≤ K} := by
-    have : {M : Matrix (Fin d) (Fin m) ℝ | ∀ i k, |M i k - A i k| ≤ K} =
-        Set.pi Set.univ fun i => Set.pi Set.univ fun k =>
-          Set.Icc (A i k - K) (A i k + K) := by
-      ext M
-      constructor
-      · intro h i _ k _
-        exact ⟨by linarith [(abs_le.1 (h i k)).1], by linarith [(abs_le.1 (h i k)).2]⟩
-      · intro h i k
-        have := h i (Set.mem_univ _) k (Set.mem_univ _)
-        exact abs_le.2 ⟨by linarith [this.1], by linarith [this.2]⟩
-    rw [this]
-    exact isCompact_univ_pi fun i => isCompact_univ_pi fun k => isCompact_Icc
-  obtain ⟨C, hC⟩ := hbox.exists_bound_of_continuousOn hg.continuousOn
-  have hvol : volume (unitCube m) < ⊤ := by
-    simp [unitCube, Real.volume_pi_Ioo]
-  refine IntegrableOn.of_bound hvol ?_ C (Filter.Eventually.of_forall fun x => ?_)
-  · have hm : Measurable fun x => A + jac φ x := Measurable.of_eval_matrix _ fun i k => by
-      simp only [Matrix.add_apply, jac, Matrix.of_apply]
-      exact measurable_const.add (measurable_fderiv_apply_const ℝ (fun y => φ y i) _)
-    exact (hg.measurable.comp hm).aestronglyMeasurable
-  · exact hC _ fun i k => by
-      simp only [Matrix.add_apply, add_sub_cancel_left]
-      exact twoByM_jac_abs_le hφ x i k
 
 /-- If a continuous `g ≤ f` touches `f` at `A` and is quasiconvex at `A`, then so is `f`:
 `f (A) = g (A) ≤ ∫ g (A + ∇φ) ≤ ∫ f (A + ∇φ)` (the integral of `g (A + ∇φ)` exists since `g` is
@@ -3560,7 +3425,7 @@ theorem twoByM_quasiconvexAt_of_minorant {d m : ℕ} {f g : Matrix (Fin d) (Fin 
     (hg : Continuous g) (hgf : ∀ B, g B ≤ f B) {A : Matrix (Fin d) (Fin m) ℝ} (hA : g A = f A)
     (hq : QuasiconvexAt g A) : QuasiconvexAt f A := by
   intro φ K hφ h0 hint
-  have hgint := twoByM_integrableOn_comp hg A hφ
+  have hgint := integrableOn_comp_jac hg A hφ
   rw [← hA]
   exact (hq φ K hφ h0 hgint).trans (setIntegral_mono hgint hint fun x => hgf _)
 
@@ -3609,7 +3474,7 @@ theorem theorem1_2_elementary {p : ℝ} (hp : 1 < p) :
   obtain ⟨n₀, hn₀⟩ := ((lemma4_2 (q := q) hp (by linarith)).eventually
     (lt_mem_nhds (ENNReal.ofReal_lt_top (r := C)))).exists
   have hnq : ¬ QuasiconvexAt (blockF n₀ p q C) 0 :=
-    twoByM_not_quasiconvexAt_of_lt_qcThreshold (F := fun C => blockF n₀ p q C) hC0
+    not_quasiconvexAt_of_lt_qcThreshold (F := fun C => blockF n₀ p q C) hC0
       (hn₀.trans_le (twoByM_ratio_le_qcThreshold hp hq n₀))
   -- the explicit rank-one convex minorant `g` of Remark 4.5
   obtain ⟨hcont, hhom, hrc, hle, hg0⟩ := twoByM_explicit_minorant_q n₀ hp hpq hq2
@@ -3622,7 +3487,7 @@ theorem theorem1_2_elementary {p : ℝ} (hp : 1 < p) :
       ⟨g', hg'i, hg'q, fun B => (hg'le B).trans (hle B), by
         rw [hg'0, hg0, twoByM_blockF_zero n₀ (by linarith) (by linarith)]⟩)
   have hN := nowhereQuasiconvex_of_not_quasiconvexAt_zero hp hcont (Or.inl hhom) hgnq
-  have hI : IsIntegrand (twoByM_gq n₀ p q) := twoByM_isIntegrand_of_continuous hcont
+  have hI : IsIntegrand (twoByM_gq n₀ p q) := isIntegrand_of_continuous hcont
   -- lifted to `ℝ^{2×m}` by the projection onto the first `2 n₀` columns
   refine ⟨2 * n₀, fun m hm => ⟨fun A => twoByM_gq n₀ p q (lift_trunc le_rfl hm A),
     lift_isIntegrand_comp le_rfl hm hI, fun t A => ?_, lift_rankOneConvex_comp le_rfl hm hrc,

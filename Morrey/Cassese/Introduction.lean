@@ -45,9 +45,9 @@ The others are unconditional: the cited results that their proofs use are proved
 Tools (helpers, prefixed `intro_`): Jensen's inequality along test maps
 (`intro_quasiconvexAt_of_convexOn`); the rank-one convex envelope step
 of the main theorems (`intro_envelope`) and the families `C ↦ C^p N₁^p − N₂^p` with their thresholds
-(`intro_family`, `intro_rankOneConvexAt_of_rcThreshold_lt`,
-`intro_not_quasiconvexAt_of_lt_qcThreshold`, `intro_blockF`, `intro_kornF`); the integrand `G` of
-Corollary 1.6 and its three properties (`intro_corG`, `intro_corG_basic`,
+(`intro_family`, `intro_rankOneConvexAt_of_rcThreshold_lt`, with
+`not_quasiconvexAt_of_lt_qcThreshold` from `Toolkit`, `intro_blockF`, `intro_kornF`); the integrand
+`G` of Corollary 1.6 and its three properties (`intro_corG`, `intro_corG_basic`,
 `intro_corG_rankOneConvex`, `intro_corG_not_quasiconvexAt`). The lifting of integrands and
 witnesses from `ℝ^{d'×m'}` to `ℝ^{d×m}` (`lift_trunc`, `lift_quasiconvexAt_of_comp_trunc`) is in
 `Morrey/Cassese/Lifting.lean`.
@@ -67,22 +67,6 @@ Helpers for the claims of the introduction (prefix `intro_`). `lift_trunc` is th
 `x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)` of `ℝ^m`, whose gradient has `∇φ` as upper left block. -/
 
 open MeasureTheory
-
-section Integrand
-
-variable {d m : ℕ}
-
-/-- A continuous function is an integrand. -/
-theorem intro_isIntegrand_of_continuous {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f) :
-    IsIntegrand f := by
-  refine ⟨hf.lowerSemicontinuous, fun A => ⟨f ⁻¹' Set.Ioo (f A - 1) (f A + 1),
-    hf.continuousAt.preimage_mem_nhds (Ioo_mem_nhds (by linarith) (by linarith)), |f A| + 1,
-    fun B hB => ?_⟩⟩
-  obtain ⟨h1, h2⟩ := hB
-  rw [abs_le]
-  constructor <;> linarith [le_abs_self (f A), neg_abs_le (f A)]
-
-end Integrand
 
 section Jensen
 
@@ -209,14 +193,6 @@ theorem intro_eval_smul {σ : Type*} {Q : MvPolynomial σ ℝ} {n : ℕ} (hQ : Q
     Finset.prod_pow_eq_pow_sum, hdeg]
   ring
 
-/-- A polynomial is continuous. -/
-theorem intro_continuous_of_isHomogeneousPolynomial {n : ℕ} {P : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hP : IsHomogeneousPolynomial n P) : Continuous P := by
-  obtain ⟨Q, -, hQ⟩ := hP
-  rw [show P = fun A => MvPolynomial.eval (fun ij : Fin d × Fin m => A ij.1 ij.2) Q from funext hQ]
-  exact (MvPolynomial.continuous_eval Q).comp
-    (continuous_pi fun ij => continuous_id.matrix_elem ij.1 ij.2)
-
 /-- A homogeneous quartic polynomial is `4`-homogeneous. -/
 theorem intro_isPHomogeneous_of_isHomogeneousPolynomial {P : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hP : IsHomogeneousPolynomial 4 P) : IsPHomogeneous 4 P := by
@@ -237,7 +213,7 @@ theorem intro_rank_eq_one_of_min {d m : ℕ} (h : min d m = 1) {A : Matrix (Fin 
     rcases min_choice d m with h' | h'
     · rw [h'] at h; exact h ▸ A.rank_le_height
     · rw [h'] at h; exact h ▸ A.rank_le_width
-  have h0 : A.rank ≠ 0 := fun h0 => hA (lift_eq_zero_of_rank_eq_zero h0)
+  have h0 : A.rank ≠ 0 := fun h0 => hA (eq_zero_of_rank_eq_zero h0)
   omega
 
 
@@ -305,7 +281,7 @@ theorem intro_envelope {p : ℝ} (hp : 1 < p) {g : Matrix (Fin d) (Fin m) ℝ �
   have hhf : IsPHomogeneous p f := hhomE hhom
   have hnq0 : ¬ QuasiconvexAt f 0 := fun h =>
     hqc (proposition2_3_c_left hp hg (Or.inl hhom) hrc h)
-  exact ⟨hcoe, hcont, intro_isIntegrand_of_continuous hcont, hhf, hR,
+  exact ⟨hcoe, hcont, isIntegrand_of_continuous hcont, hhf, hR,
     nowhereQuasiconvex_of_not_quasiconvexAt_zero hp hcont (Or.inl hhf) hnq0⟩
 
 /-- A family `f_C = C^p N₁^p − N₂^p` built from nonnegative absolutely homogeneous `N₁`, `N₂`
@@ -340,12 +316,6 @@ theorem intro_rankOneConvexAt_of_rcThreshold_lt {F : ℝ → Matrix (Fin d) (Fin
   obtain ⟨⟨hC'0, g, hgI, hgR, hgle, hg0⟩, hlt⟩ := iInf_lt_iff.1 hC'
   have hCC' : C' ≤ C := (ENNReal.ofReal_lt_ofReal_iff'.1 hlt).1.le
   exact ⟨g, hgI, hgR, fun B => (hgle B).trans (hmono C C' hC'0 hCC' B), by rw [hg0, h0, h0]⟩
-
-/-- `C < C^{qc}` makes `f_C` fail to be quasiconvex at `0`. -/
-theorem intro_not_quasiconvexAt_of_lt_qcThreshold {F : ℝ → Matrix (Fin d) (Fin m) ℝ → ℝ}
-    {C : ℝ} (hC : 0 ≤ C) (h : ENNReal.ofReal C < qcThreshold F) : ¬ QuasiconvexAt (F C) 0 :=
-  fun hq => h.not_ge (iInf₂_le (f := fun (C : ℝ) (_ : 0 ≤ C ∧ QuasiconvexAt (F C) 0) =>
-    ENNReal.ofReal C) C ⟨hC, hq⟩)
 
 /-- A nonnegative function `N` with `N (A + B) ≤ N A + N B`, `N (−A) = N A` and
 `N A ≤ c ‖A‖` (sup norm of the entries) is continuous. -/
@@ -550,9 +520,6 @@ theorem intro_continuous_wirtBeta {m : ℕ} (k l : Fin m) :
   exact (Complex.continuous_ofReal.comp (((he 0 k).sub (he 1 l)).div_const 2)).add
     ((Complex.continuous_ofReal.comp (((he 1 k).add (he 0 l)).div_const 2)).mul continuous_const)
 
-theorem intro_lqNorm_nonneg {n : ℕ} (q : ℝ) (z : Fin n → ℂ) : 0 ≤ lqNorm q z :=
-  Real.rpow_nonneg (Finset.sum_nonneg fun _ _ => Real.rpow_nonneg (norm_nonneg _) _) _
-
 /-- `‖t z‖_{ℓ_q} = |t| ‖z‖_{ℓ_q}`. -/
 theorem intro_lqNorm_smul {n : ℕ} {q : ℝ} (hq : 0 < q) (t : ℝ) (z : Fin n → ℂ) :
     lqNorm q (fun j => (t : ℂ) * z j) = |t| * lqNorm q z := by
@@ -562,12 +529,6 @@ theorem intro_lqNorm_smul {n : ℕ} {q : ℝ} (hq : 0 < q) (t : ℝ) (z : Fin n 
   rw [← Finset.mul_sum, Real.mul_rpow (Real.rpow_nonneg (abs_nonneg t) _)
     (Finset.sum_nonneg fun j _ => Real.rpow_nonneg (norm_nonneg _) _), ← Real.rpow_mul
     (abs_nonneg t), mul_one_div_cancel hq.ne', Real.rpow_one]
-
-theorem intro_continuous_lqNorm {n : ℕ} {q : ℝ} (hq : 0 < q) :
-    Continuous (lqNorm (n := n) q) := by
-  unfold lqNorm
-  exact (continuous_finsetSum _ fun j _ => (Real.continuous_rpow_const hq.le).comp
-    (continuous_norm.comp (continuous_apply j))).rpow_const fun _ => Or.inr (by positivity)
 
 /-- The integrand (7), `F_{n,p,q,C}`: continuous, `p`-homogeneous, `0` at `0`, increasing in
 `C ≥ 0`. -/
@@ -587,12 +548,12 @@ theorem intro_blockF {n : ℕ} {p q : ℝ} (hp : 0 < p) (hq : 0 < q) :
       congr 1
       funext j
       exact intro_wirtBeta_smul t A _ _
-  obtain ⟨hh, h0, hmono⟩ := intro_family hp (fun A => intro_lqNorm_nonneg q _)
-    (fun A => intro_lqNorm_nonneg q _) hP hQ
+  obtain ⟨hh, h0, hmono⟩ := intro_family hp (fun A => twoByM_lqNorm_nonneg q _)
+    (fun A => twoByM_lqNorm_nonneg q _) hP hQ
   have hcP : Continuous fun A : Matrix (Fin 2) (Fin (2 * n)) ℝ => lqNorm q (wirtP A) :=
-    (intro_continuous_lqNorm hq).comp (continuous_pi fun j => intro_continuous_wirtAlpha _ _)
+    (twoByM_continuous_lqNorm hq).comp (continuous_pi fun j => intro_continuous_wirtAlpha _ _)
   have hcQ : Continuous fun A : Matrix (Fin 2) (Fin (2 * n)) ℝ => lqNorm q (wirtQ A) :=
-    (intro_continuous_lqNorm hq).comp (continuous_pi fun j => intro_continuous_wirtBeta _ _)
+    (twoByM_continuous_lqNorm hq).comp (continuous_pi fun j => intro_continuous_wirtBeta _ _)
   refine ⟨fun C => ?_, hh, h0, hmono⟩
   exact continuous_const.mul (hcP.rpow_const fun _ => Or.inr hp.le) |>.sub
     (hcQ.rpow_const fun _ => Or.inr hp.le)
@@ -682,13 +643,6 @@ theorem intro_schattenNorm_two {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) :
   rw [← htr', htr]
   simp only [sval, RCLike.ofReal_real_eq_id, id, Real.rpow_two, Real.sq_sqrt (hev _)]
 
-theorem intro_frobSq_nonneg {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) : 0 ≤ frobSq A :=
-  Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _
-
-theorem intro_frobSq_smul {d m : ℕ} (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
-    frobSq (t • A) = t ^ 2 * frobSq A := by
-  simp only [frobSq, Matrix.smul_apply, smul_eq_mul, mul_pow, Finset.mul_sum]
-
 /-- The entries are bounded by the Frobenius norm: `‖A‖_∞ ≤ |A|`. -/
 theorem intro_norm_le_sqrt_frobSq {d m : ℕ} (X : Fin d → Fin m → ℝ) :
     ‖X‖ ≤ √(frobSq (Matrix.of X)) := by
@@ -774,10 +728,10 @@ theorem intro_Yc_smul (t : ℝ) (A : Matrix (Fin 4) (Fin 4) ℝ) :
     intro_Yc (t • A) = t • intro_Yc A := rfl
 
 theorem intro_frobSq_Xc_le (A : Matrix (Fin 4) (Fin 4) ℝ) : frobSq (intro_Xc A) ≤ frobSq A := by
-  rw [intro_frobSq_Xc_Yc A]; linarith [intro_frobSq_nonneg (intro_Yc A)]
+  rw [intro_frobSq_Xc_Yc A]; linarith [tbt_frobSq_nonneg (intro_Yc A)]
 
 theorem intro_frobSq_Yc_le (A : Matrix (Fin 4) (Fin 4) ℝ) : frobSq (intro_Yc A) ≤ frobSq A := by
-  rw [intro_frobSq_Xc_Yc A]; linarith [intro_frobSq_nonneg (intro_Xc A)]
+  rw [intro_frobSq_Xc_Yc A]; linarith [tbt_frobSq_nonneg (intro_Xc A)]
 
 /-- The second term of `G` is bounded by `C ‖A‖`: `|q (Y)| ≤ |A|⁴` and `|F (X)| ≤ C |A|^p`. -/
 theorem intro_corG_bound {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 4) (Fin 2) ℝ → ℝ} {C : ℝ}
@@ -790,10 +744,10 @@ theorem intro_corG_bound {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 4) (Fin 2) ℝ 
   rcases hν0.eq_or_lt with h0 | hpos
   · rw [← h0, Real.zero_rpow (by linarith), mul_zero, zero_mul, abs_zero, mul_zero]
   obtain ⟨hq0, hq1⟩ := intro_det_gram (intro_Yc A)
-  have hfr : frobSq A = ν ^ 2 := (Real.sq_sqrt (intro_frobSq_nonneg A)).symm
+  have hfr : frobSq A = ν ^ 2 := (Real.sq_sqrt (tbt_frobSq_nonneg A)).symm
   have hq : ((intro_Yc A)ᵀ * intro_Yc A).det ≤ ν ^ (4 : ℝ) := by
     calc _ ≤ frobSq (intro_Yc A) ^ 2 := hq1
-      _ ≤ frobSq A ^ 2 := pow_le_pow_left₀ (intro_frobSq_nonneg _) (intro_frobSq_Yc_le A) 2
+      _ ≤ frobSq A ^ 2 := pow_le_pow_left₀ (tbt_frobSq_nonneg _) (intro_frobSq_Yc_le A) 2
       _ = ν ^ (4 : ℝ) := by rw [hfr, ← pow_mul]; norm_cast
   have hF : |F (intro_Xc A)| ≤ C * ν ^ p := by
     refine (hC _).trans (mul_le_mul_of_nonneg_left (Real.rpow_le_rpow (norm_nonneg _) ?_ hp.le) hC0)
@@ -850,7 +804,7 @@ theorem intro_corG_basic {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin 2) ℝ 
     · exact (continuousAt_const.mul hν.continuousAt).add ((hY.continuousAt.mul
         (hν.continuousAt.rpow_const (Or.inl hpos.ne'))).mul hX.continuousAt)
   · -- `1`-homogeneity: `q (t Y) = t⁴ q (Y)`, `‖t A‖ = |t| ‖A‖`, `F (t X) = |t|^p F (X)`
-    rw [hG, hG, intro_frobSq_smul, intro_Yc_smul, intro_Xc_smul, hFh,
+    rw [hG, hG, tbt_frobSq_smul, intro_Yc_smul, intro_Xc_smul, hFh,
       Real.sqrt_mul (sq_nonneg t), Real.sqrt_sq_eq_abs, Real.rpow_one, Matrix.transpose_smul,
       Matrix.smul_mul, Matrix.mul_smul, smul_smul, Matrix.det_smul, Fintype.card_fin]
     rcases eq_or_ne t 0 with rfl | ht
@@ -1014,8 +968,8 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   have hp0 : 0 < p := by linarith
   have h24 : 2 ≤ 4 := by norm_num
   obtain ⟨hGc, -, -⟩ := intro_corG_basic hp hFc hFh
-  have hFI := intro_isIntegrand_of_continuous hFc
-  have hGI := intro_isIntegrand_of_continuous (hGc Λ)
+  have hFI := isIntegrand_of_continuous hFc
+  have hGI := isIntegrand_of_continuous (hGc Λ)
   have hF0 : F 0 = 0 := by
     have := hFh 0 0
     rwa [zero_smul, abs_zero, Real.zero_rpow hp0.ne', zero_mul] at this
@@ -1124,7 +1078,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
     simp only [intro_corG, intro_schattenNorm_two, intro_Xc_add, intro_Yc_add, hjX, hjY,
       intro_Xc_B, add_zero, zero_add, hdet, one_mul, hgdef]
     rw [intro_frobSq_Xc_Yc, intro_Xc_add, intro_Yc_add, hjX, hjY, intro_Xc_B, zero_add, add_zero,
-      hfr, intro_frobSq_smul, hFh, abs_of_pos hε0, add_comm (ε ^ 2 * _) 2]
+      hfr, tbt_frobSq_smul, hFh, abs_of_pos hε0, add_comm (ε ^ 2 * _) 2]
   have hGB : intro_corG Λ p F intro_B = Λ * √2 := by
     simp only [intro_corG, intro_schattenNorm_two, hdet, one_mul]
     rw [intro_frobSq_Xc_Yc, intro_Xc_B, hfr, hF0]
@@ -1135,7 +1089,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
       (continuous_const.add (continuous_const.mul intro_continuous_frobSq)).sqrt
     refine (continuous_const.mul hs).add ((hs.rpow_const fun M => Or.inl ?_).mul
       (continuous_const.mul hFc))
-    exact (Real.sqrt_pos.2 (by positivity [intro_frobSq_nonneg M])).ne'
+    exact (Real.sqrt_pos.2 (by positivity [tbt_frobSq_nonneg M])).ne'
   have hjm : Measurable fun y => Matrix.of.symm (jac φ y) := by
     refine Measurable.of_eval fun i => Measurable.of_eval fun k => ?_
     exact measurable_fderiv_apply_const ℝ _ _
@@ -1144,11 +1098,11 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
       hjm).aestronglyMeasurable
   have hgb : ∀ y, |g (jac φ y)| ≤ |Λ| * √(2 + S₀) + V := fun y => by
     have hν1 : 1 ≤ √(2 + ε ^ 2 * frobSq (jac φ y)) :=
-      Real.one_le_sqrt.2 (by nlinarith [intro_frobSq_nonneg (jac φ y)])
+      Real.one_le_sqrt.2 (by nlinarith [tbt_frobSq_nonneg (jac φ y)])
     have hν2 : √(2 + ε ^ 2 * frobSq (jac φ y)) ≤ √(2 + S₀) := Real.sqrt_le_sqrt (by
       have := hS y
       have : ε ^ 2 ≤ 1 := pow_le_one₀ hε0.le hε1
-      nlinarith [intro_frobSq_nonneg (jac φ y)])
+      nlinarith [tbt_frobSq_nonneg (jac φ y)])
     have hpw : √(2 + ε ^ 2 * frobSq (jac φ y)) ^ (-p - 3) ≤ 1 :=
       Real.rpow_le_one_of_one_le_of_nonpos hν1 (by linarith)
     have hεp : ε ^ p ≤ 1 := Real.rpow_le_one hε0.le hε1 hp0.le
@@ -1189,7 +1143,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   -- the estimate `∫ g (∇φ) ≤ Λ √2 + ε^p 2^{−(p+3)/2} I + ε² E < Λ √2`
   have hpt : ∀ y, g (jac φ y) ≤
       Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ y)) + ε ^ 2 * E := fun y =>
-    intro_witness_est hp0 (intro_frobSq_nonneg (jac φ y)) (hS y) (hFb y) hε0 hε1
+    intro_witness_est hp0 (tbt_frobSq_nonneg (jac φ y)) (hS y) (hFb y) hε0 hε1
   have hint2 : Integrable (fun y => Λ * √2 + ε ^ p * (√2 ^ (-p - 3) * F (jac φ y)) + ε ^ 2 * E)
       (volume.restrict (unitCube 2)) :=
     ((integrable_const _).add ((hint.const_mul _).const_mul _)).add (integrable_const _)
@@ -1866,7 +1820,7 @@ theorem intro_corG_line {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin 2) ℝ �
     · simp only [hfdef, h0, smul_zero, add_zero]
       exact convexOn_const _ convex_univ
     · have h1 : (intro_Xc R).rank = 1 := by
-        have : (intro_Xc R).rank ≠ 0 := fun h => h0 (lift_eq_zero_of_rank_eq_zero h)
+        have : (intro_Xc R).rank ≠ 0 := fun h => h0 (eq_zero_of_rank_eq_zero h)
         omega
       exact (cov_rankOneConvex_iff F).2 hFR _ _ h1
   have hfc : ∀ t δ, 2 * f t ≤ f (t - δ) + f (t + δ) := fun t δ => by
@@ -1944,17 +1898,6 @@ theorem intro_convexOn_affine {φ : ℝ → ℝ} (hφ : ConvexOn ℝ univ φ) {c
     simpa [smul_eq_mul] using e]
   nlinarith [mul_le_mul_of_nonneg_left this hc]
 
-theorem intro_frobSq_eq_zero {d m : ℕ} {A : Matrix (Fin d) (Fin m) ℝ} (h : frobSq A = 0) :
-    A = 0 := by
-  ext i j
-  have := intro_abs_entry_le (A := A) (by rw [h]; norm_num) i j
-  have h2 : A i j ^ 2 ≤ frobSq A :=
-    (Finset.single_le_sum (f := fun j' => A i j' ^ 2) (fun _ _ => sq_nonneg _)
-      (Finset.mem_univ j)).trans (Finset.single_le_sum (f := fun i' => ∑ j', A i' j' ^ 2)
-        (fun _ _ => Finset.sum_nonneg fun _ _ => sq_nonneg _) (Finset.mem_univ i))
-  rw [h] at h2
-  simpa using (pow_eq_zero_iff (two_ne_zero)).1 (le_antisymm h2 (sq_nonneg _))
-
 /-- Proof of Corollary 1.6, rank-one convexity (TeX lines 2925–2941): for `Λ` large, `G` is
 rank-one convex. By homogeneity a rank-one line `A + t R` is reduced to a normalized one,
 `E + t R̂` with `|E| = |R̂| = 1`, `E ⊥ R̂` (`intro_corG_line`); on rank-one lines through `0`,
@@ -1973,7 +1916,7 @@ theorem intro_corG_rankOneConvex {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin
   intro A R hR1
   have hR0 : R ≠ 0 := fun h => by rw [h, Matrix.rank_zero] at hR1; exact zero_ne_one hR1
   have hRpos : 0 < frobSq R :=
-    lt_of_le_of_ne (intro_frobSq_nonneg R) fun h => hR0 (intro_frobSq_eq_zero h.symm)
+    lt_of_le_of_ne (tbt_frobSq_nonneg R) fun h => hR0 (tbt_eq_zero_of_frobSq_eq_zero h.symm)
   set s₀ := frobInner A R / frobSq R with hs₀
   set E' := A - s₀ • R with hE'
   have hinner : ∀ (X : Matrix (Fin 4) (Fin 4) ℝ) (c : ℝ),
@@ -2004,15 +1947,15 @@ theorem intro_corG_rankOneConvex {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin
     nlinarith [mul_le_mul_of_nonneg_left h1 (hnn R)]
   · -- a line off `0`: normalize
     have hE'pos : 0 < frobSq E' :=
-      lt_of_le_of_ne (intro_frobSq_nonneg E') fun h => hE0 (intro_frobSq_eq_zero h.symm)
+      lt_of_le_of_ne (tbt_frobSq_nonneg E') fun h => hE0 (tbt_eq_zero_of_frobSq_eq_zero h.symm)
     set e := √(frobSq E') with he
     set ρ := √(frobSq R) with hρ
     have he0 : 0 < e := Real.sqrt_pos.2 hE'pos
     have hρ0 : 0 < ρ := Real.sqrt_pos.2 hRpos
     have hE1 : frobSq (e⁻¹ • E') = 1 := by
-      rw [intro_frobSq_smul, inv_pow, he, Real.sq_sqrt hE'pos.le, inv_mul_cancel₀ hE'pos.ne']
+      rw [tbt_frobSq_smul, inv_pow, he, Real.sq_sqrt hE'pos.le, inv_mul_cancel₀ hE'pos.ne']
     have hR1' : frobSq (ρ⁻¹ • R) = 1 := by
-      rw [intro_frobSq_smul, inv_pow, hρ, Real.sq_sqrt hRpos.le, inv_mul_cancel₀ hRpos.ne']
+      rw [tbt_frobSq_smul, inv_pow, hρ, Real.sq_sqrt hRpos.le, inv_mul_cancel₀ hRpos.ne']
     have hER' : frobInner (e⁻¹ • E') (ρ⁻¹ • R) = 0 := by
       have : frobInner (e⁻¹ • E') (ρ⁻¹ • R) = e⁻¹ * ρ⁻¹ * frobInner E' R := by
         simp only [frobInner, Matrix.smul_apply, smul_eq_mul, Finset.mul_sum]
@@ -2076,7 +2019,7 @@ theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
   have hrc : RankOneConvexAt (blockF n₀ p q C) 0 :=
     intro_rankOneConvexAt_of_rcThreshold_lt h0 hmono ((equation10 hp hq n₀).trans_lt hUC)
   have hnq : ¬ QuasiconvexAt (blockF n₀ p q C) 0 :=
-    intro_not_quasiconvexAt_of_lt_qcThreshold (F := fun C => blockF n₀ p q C) hC0
+    not_quasiconvexAt_of_lt_qcThreshold (F := fun C => blockF n₀ p q C) hC0
       (hn₀.trans_le (twoByM_ratio_le_qcThreshold hp hq n₀))
   -- `f = F_{n₀,p,q,C}^{rc}` (Proposition 2.3), lifted to `ℝ^{2×m}` by the projection
   obtain ⟨-, -, hI, hH', hR, hN⟩ := intro_envelope hp (hcont C) (hhom C) hrc hnq
@@ -2123,7 +2066,7 @@ theorem theorem1_3_a :
   obtain ⟨hP, hR⟩ := hrc K₀ le_rfl δ hδ (min_le_right _ _)
   -- homogeneity makes it nowhere quasiconvex
   exact ⟨_, hP, hR, nowhereQuasiconvex_of_not_quasiconvexAt_zero (by norm_num : (1 : ℝ) < 4)
-    (intro_continuous_of_isHomogeneousPolynomial hP)
+    hP.continuous
     (Or.inl (intro_isPHomogeneous_of_isHomogeneousPolynomial hP)) (hnq δ hδ hδ₁)⟩
 
 /-- **Theorem 1.3**, second assertion (`thm:2x4`): for `p` sufficiently close to `4` there is a
@@ -2234,7 +2177,7 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
   have hrc0 : RankOneConvexAt (kornF d p q C) 0 :=
     intro_rankOneConvexAt_of_rcThreshold_lt h0 hmono hrcC
   have hnq : ¬ QuasiconvexAt (kornF d p q C) 0 :=
-    intro_not_quasiconvexAt_of_lt_qcThreshold (by linarith) hqcC
+    not_quasiconvexAt_of_lt_qcThreshold (by linarith) hqcC
   -- the envelope (Proposition 2.3), with its invariances (Proposition 2.3 (b))
   obtain ⟨-, -, hI, hH', hR', hN⟩ := intro_envelope hp (hcont C) (hhom C) hrc0 hnq
   obtain ⟨hb1, hb2⟩ := proposition2_3_b hp (hcont C) (Or.inl (hhom C))
@@ -2311,7 +2254,7 @@ theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
   obtain ⟨hGc, hGh, Λ₁, hΛ₁⟩ := intro_corG_basic hp hFc hFh
   obtain ⟨Λ₂, hΛ₂⟩ := intro_corG_rankOneConvex hp hFc hFh hFR
   set Λ := max Λ₁ Λ₂
-  exact ⟨intro_corG Λ (3 / 2) F, intro_isIntegrand_of_continuous (hGc Λ),
+  exact ⟨intro_corG Λ (3 / 2) F, isIntegrand_of_continuous (hGc Λ),
     hΛ₁ Λ (le_max_left _ _), hGh Λ, hΛ₂ Λ (le_max_right _ _), intro_B, intro_rank_B,
     intro_corG_not_quasiconvexAt hp hp2 hFc hFh (hFN 0) Λ⟩
 
@@ -2336,12 +2279,12 @@ theorem morrey_landscape {d m : ℕ} (hd : 2 ≤ d)
     obtain ⟨ε₀, hε₀, hS⟩ := sverak_example
     obtain ⟨k, -, hR, hq⟩ := hS ε₀ hε₀ le_rfl
     exact hq (morreyPositive_mono h3 hm hpos _
-      (intro_isIntegrand_of_continuous (Sverak.thm_sverakF_continuous ε₀ k)) hR 0)
+      (isIntegrand_of_continuous (Sverak.thm_sverakF_continuous ε₀ k)) hR 0)
   · -- `d = 2`, `m ≥ 3`: the quartic of Theorem 1.3 in `2 × 3`
     have hm3 : 3 ≤ m := by omega
     obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a
     exact hnq 0 (morreyPositive_mono hd hm3 hpos P
-      (intro_isIntegrand_of_continuous (intro_continuous_of_isHomogeneousPolynomial hP)) hR 0)
+      (isIntegrand_of_continuous hP.continuous) hR 0)
 
 /-- **The homogeneous landscape** (`cs-hom-landscape`, lines 254–256 and 2137–2142): with
 Corollary 5.3, the homogeneous Morrey problem (at `p = 4`) has a negative answer in every
@@ -2367,13 +2310,13 @@ theorem homMorrey_landscape {d m : ℕ}
     obtain ⟨δ₀, hδ₀, hδ⟩ := hK₀ K₀ le_rfl
     obtain ⟨hP, hR, hnq⟩ := hδ (δ₀ / 2) (by positivity) (by linarith)
     exact hnq 0 (homMorreyPositive_mono h14 h3 hm hpos _
-      (intro_isIntegrand_of_continuous (intro_continuous_of_isHomogeneousPolynomial hP))
+      (isIntegrand_of_continuous hP.continuous)
       (intro_isPHomogeneous_of_isHomogeneousPolynomial hP) hR)
   · -- `d = 2`, `m ≥ 3`: the quartic of Theorem 1.3 in `2 × 3`
     have hm3 : 3 ≤ m := by omega
     obtain ⟨P, hP, hR, hnq⟩ := theorem1_3_a
     exact hnq 0 (homMorreyPositive_mono h14 hd hm3 hpos P
-      (intro_isIntegrand_of_continuous (intro_continuous_of_isHomogeneousPolynomial hP))
+      (isIntegrand_of_continuous hP.continuous)
       (intro_isPHomogeneous_of_isHomogeneousPolynomial hP) hR)
 
 end Cassese

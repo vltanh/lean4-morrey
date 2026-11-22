@@ -1,6 +1,7 @@
 module
 
 public import Morrey.Cassese.Defs
+public import Morrey.Cassese.Rademacher
 public import Morrey.Common.External.KinderlehrerPedregal.Formula
 public import Mathlib.Analysis.Matrix.MeasurableSpace
 public import Mathlib.MeasureTheory.Measure.Dirac.Basic
@@ -9,6 +10,7 @@ public import Mathlib.Analysis.Calculus.ContDiff.Defs
 public import Mathlib.Analysis.SpecialFunctions.Pow.Real
 public import Mathlib.Data.Matrix.Basis
 public import Morrey.Common.External.Rindler.Lemmas
+public import Mathlib.Topology.Algebra.MvPolynomial
 
 /-!
 # Section 2: the toolkit
@@ -53,7 +55,7 @@ Reading of Definition 2.4 (inventory E10): the splitting rule applies to any dec
 `μ = c δ_{A₀} + ν` of a prelaminate, repeated atoms allowed (`c` need not be the whole mass of
 `μ` at `A₀`).
 
-Proofs (after the definitions; helpers are private, prefixed `tk`):
+Proofs (after the definitions; the private helpers are prefixed `tk`):
 
 * prelaminates are probability measures for which every function is integrable, their barycentre
   is preserved by the splittings, and rank-one convex functions satisfy Jensen's inequality on them
@@ -64,6 +66,12 @@ Proofs (after the definitions; helpers are private, prefixed `tk`):
   Proposition 2.1, which Remark 2.1 derives from it;
 * the envelopes as the largest minorants (`tk_rc_cases`, `tk_qc_cases`), and their transformations
   (`tk_rc_transform`, `tk_qc_scale`) for Proposition 2.3 and its consequences;
+* public helpers that the later sections share: integrands, derivative matrices and the unit cube
+  (`isIntegrand_of_continuous`, `abs_jac_le`, `measurable_jac`, `integrableOn_comp_jac`,
+  `volume_unitCube`), the bridges that line 559 needs (`cov_quasiconvexAtOn_unitCube_iff`,
+  `cov_qcEnvelope_eq`, see `Bridges`), ranks (`eq_zero_of_rank_eq_zero`, `rank_single_eq_one`),
+  the threshold `C^{qc}` (`not_quasiconvexAt_of_lt_qcThreshold`) and homogeneous polynomials
+  (`IsHomogeneousPolynomial.add`, `IsHomogeneousPolynomial.continuous`, …);
 * rank-one Rademacher martingales: conditioning on the first sign (`tk_avg_cons`,
   `tk_radMart_cons`), the law of `M_N` as a dyadic prelaminate (`tk_law`), and gluing
   (`tk_martVals_mid`) for Proposition 2.5.
@@ -351,7 +359,8 @@ private lemma tk_dyadic_glue {μ : Measure (Matrix (Fin d) (Fin m) ℝ)}
     simp only [smul_add, smul_smul, add_assoc]
     rw [show s * (ENNReal.ofReal (1 / 2) * c) = ENNReal.ofReal (1 / 2) * (s * c) by ring]
 
-private lemma tk_eq_zero_of_rank_eq_zero {A : Matrix (Fin d) (Fin m) ℝ} (h : A.rank = 0) :
+/-- A matrix of rank `0` is `0`. -/
+theorem eq_zero_of_rank_eq_zero {A : Matrix (Fin d) (Fin m) ℝ} (h : A.rank = 0) :
     A = 0 := by
   rw [Matrix.rank, Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at h
   ext i j
@@ -364,7 +373,7 @@ private lemma tk_dyadic_two_point {B C : Matrix (Fin d) (Fin m) ℝ} (hBC : (B -
     IsDyadicPrelaminate (ENNReal.ofReal (1 / 2) • Measure.dirac B +
       ENNReal.ofReal (1 / 2) • Measure.dirac C) := by
   rcases Nat.le_one_iff_eq_zero_or_eq_one.1 hBC with h0 | h1
-  · obtain rfl : B = C := sub_eq_zero.1 (tk_eq_zero_of_rank_eq_zero h0)
+  · obtain rfl : B = C := sub_eq_zero.1 (eq_zero_of_rank_eq_zero h0)
     rw [← add_smul, ← ENNReal.ofReal_add (by norm_num) (by norm_num)]
     norm_num
     exact .dirac B
@@ -546,7 +555,7 @@ private lemma tk_cov_of_rankOneConvex {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
     module
 
 /-- A continuous function is an integrand. -/
-private lemma tk_isIntegrand_of_continuous {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
+theorem isIntegrand_of_continuous {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hg : Continuous g) : IsIntegrand g := by
   refine ⟨hg.lowerSemicontinuous, fun A => ⟨g ⁻¹' Ioo (g A - 1) (g A + 1),
     hg.continuousAt.preimage_mem_nhds (Ioo_mem_nhds (by linarith) (by linarith)), |g A| + 1,
@@ -560,14 +569,15 @@ private lemma tk_continuous_of_rankOneConvex {g : Matrix (Fin d) (Fin m) ℝ →
     (hg : RankOneConvex g) : Continuous g :=
   (External.Rindler.lemma5_6 (tk_cov_of_rankOneConvex hg)).continuous
 
-private lemma tk_rank_single {i : Fin d} {j : Fin m} {c : ℝ} (hc : c ≠ 0) :
+/-- A matrix unit `c E_{ij}`, `c ≠ 0`, has rank one. -/
+theorem rank_single_eq_one {i : Fin d} {j : Fin m} {c : ℝ} (hc : c ≠ 0) :
     (Matrix.single i j c).rank = 1 := by
   rw [show Matrix.single i j c = c • Matrix.single i j 1 by simp [Matrix.smul_single],
     Matrix.rank_smul_of_mem_nonZeroDivisors _ (mem_nonZeroDivisors_of_ne_zero hc)]
   apply le_antisymm
   · rw [Matrix.single_eq_single_vecMulVec_single]; exact Matrix.rank_vecMulVec_le _ _
   · rw [Nat.one_le_iff_ne_zero]; intro h
-    have := congrArg (fun M => M i j) (tk_eq_zero_of_rank_eq_zero h)
+    have := congrArg (fun M => M i j) (eq_zero_of_rank_eq_zero h)
     simp at this
 
 /-- The argument of the proof of Proposition 2.4, for any family `S (A)` of real numbers (the
@@ -614,7 +624,7 @@ private lemma tk_midpoint_principle {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf
         rwa [show (1 / 2 : ℝ) • (A + s • R + (A + t • R)) = A + ((s + t) / 2) • R by module]
           at this
     have hrc := tk_rankOneConvex_of_cov hcov
-    exact ⟨g, tk_isIntegrand_of_continuous (tk_continuous_of_rankOneConvex hrc), hrc, hgf,
+    exact ⟨g, isIntegrand_of_continuous (tk_continuous_of_rankOneConvex hrc), hrc, hgf,
       hglb⟩
   · left
     push Not at hall
@@ -642,7 +652,7 @@ private lemma tk_midpoint_principle {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf
         intro X hX
         rcases eq_or_ne c 0 with rfl | hc
         · rwa [Matrix.single_zero, add_zero]
-        · exact hprop X _ hX (by rw [add_sub_cancel_left]; exact tk_rank_single hc)
+        · exact hprop X _ hX (by rw [add_sub_cancel_left]; exact rank_single_eq_one hc)
     intro A
     have := hstep (A - A₀) A₀ hA₀
     rwa [add_sub_cancel] at this
@@ -790,7 +800,7 @@ private lemma tk_rc_cases {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continu
   · exact Or.inr ⟨G, hGI, hGR, hGf, hmax, tk_rcEnvelope_eq ⟨hGI, hGR, hGf⟩ hmax⟩
 
 /-- `|∂_k φ_i| ≤ K` for a `K`-Lipschitz `φ`. -/
-private lemma tk_jac_abs_le {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ)
+theorem abs_jac_le {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ)
     (x : Fin m → ℝ) (i : Fin d) (k : Fin m) : |jac φ x i k| ≤ K := by
   have hi : LipschitzWith K (fun y => φ y i) := by
     have h := (LipschitzWith.eval (α := fun _ : Fin d => ℝ) i).comp hφ
@@ -807,7 +817,8 @@ private lemma tk_jac_abs_le {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal
         · rw [Pi.norm_single, norm_one]
     _ = K := mul_one _
 
-private lemma tk_measurable_jac (φ : (Fin m → ℝ) → Fin d → ℝ) :
+/-- The derivative matrix of any map is measurable. -/
+theorem measurable_jac (φ : (Fin m → ℝ) → Fin d → ℝ) :
     Measurable (jac φ) :=
   Measurable.of_eval_matrix _ fun i _ => measurable_fderiv_apply_const ℝ (fun y => φ y i) _
 
@@ -851,10 +862,19 @@ private lemma tk_integrableOn_comp {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (hg 
     apply hC
     intro i k
     simp only [Matrix.add_apply, add_sub_cancel_left]
-    exact tk_jac_abs_le hφ x i k
+    exact abs_jac_le hφ x i k
 
-private lemma tk_volume_unitCube (m : ℕ) : volume (unitCube m) = 1 := by
+/-- The unit cube has volume `1`. -/
+theorem volume_unitCube (m : ℕ) : volume (unitCube m) = 1 := by
   simp [unitCube, Real.volume_pi_Ioo]
+
+/-- For a continuous `g` and a Lipschitz `φ`, `x ↦ g (B + ∇φ (x))` is integrable on the unit
+cube. -/
+theorem integrableOn_comp_jac {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (hg : Continuous g)
+    (B : Matrix (Fin d) (Fin m) ℝ) {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal}
+    (hφ : LipschitzWith K φ) : IntegrableOn (fun x => g (B + jac φ x)) (unitCube m) :=
+  tk_integrableOn_comp (isIntegrand_of_continuous hg) B hφ
+    (by rw [volume_unitCube]; exact ENNReal.one_lt_top)
 
 private lemma tk_jac_smul (c : ℝ) (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) :
     jac (fun y => c • φ y) x = c • jac φ x := by
@@ -905,7 +925,7 @@ private lemma tk_qc_cases {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continu
       filter_upwards [hP.1.1 A y hlt] with B hB
       exact hB.trans_le (hmax h hP B)
     · obtain ⟨U, hU, C, hC⟩ := hg₀I.2 A
-      obtain ⟨V, hV, D, hD⟩ := (tk_isIntegrand_of_continuous hf).2 A
+      obtain ⟨V, hV, D, hD⟩ := (isIntegrand_of_continuous hf).2 A
       refine ⟨U ∩ V, Filter.inter_mem hU hV, max C D, fun B hB => abs_le.2 ⟨?_, ?_⟩⟩
       · have h1 := (abs_le.1 (hC B hB.1)).1
         have h2 := hmax g₀ ⟨hg₀I, hg₀Q, hg₀f⟩ B
@@ -917,10 +937,10 @@ private lemma tk_qc_cases {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continu
     refine le_of_forall_lt fun y hy => ?_
     obtain ⟨h, hP, hlt⟩ := happrox A y hy
     have h1 := hP.2.1 A φ K hφ h0 (tk_integrableOn_comp hP.1 A hφ (by
-      rw [tk_volume_unitCube]; exact ENNReal.one_lt_top))
+      rw [volume_unitCube]; exact ENNReal.one_lt_top))
     have h2 : ∫ x in unitCube m, h (A + jac φ x) ≤ ∫ x in unitCube m, Q (A + jac φ x) :=
       setIntegral_mono (tk_integrableOn_comp hP.1 A hφ (by
-        rw [tk_volume_unitCube]; exact ENNReal.one_lt_top)) hint fun x => hmax h hP _
+        rw [volume_unitCube]; exact ENNReal.one_lt_top)) hint fun x => hmax h hP _
     linarith
   exact ⟨Q, hQI, hQQ, hQf, fun h a b c => hmax h ⟨a, b, c⟩, hfin⟩
 
@@ -946,7 +966,7 @@ private lemma tk_rc_transform {f G : Matrix (Fin d) (Fin m) ℝ → ℝ}
     {c : ℝ} (hc : 0 ≤ c) (hfL : ∀ B, c * f (L B) ≤ f B) (A : Matrix (Fin d) (Fin m) ℝ) :
     c * G (L A) ≤ G A := by
   have hrc := tk_rankOneConvex_comp hG.2.1 L hL hc
-  refine hmax _ (tk_isIntegrand_of_continuous (tk_continuous_of_rankOneConvex hrc)) hrc
+  refine hmax _ (isIntegrand_of_continuous (tk_continuous_of_rankOneConvex hrc)) hrc
     (fun B => (mul_le_mul_of_nonneg_left (hG.2.2 _) hc).trans (hfL B)) A
 
 /-- If `Q` is the largest quasiconvex integrand below `f`, `s ≠ 0` and `c f (s⁻¹ B) ≤ f (B)` with
@@ -976,7 +996,7 @@ private lemma tk_qc_scale {f Q : Matrix (Fin d) (Fin m) ℝ → ℝ}
     have h0' : ∀ x ∉ unitCube m, (fun y => s⁻¹ • φ y) x = 0 := fun x hx => by
       simp [h0 x hx]
     have key := hQQ (s⁻¹ • B) _ _ hψ h0' (tk_integrableOn_comp hQI _ hψ (by
-      rw [tk_volume_unitCube]; exact ENNReal.one_lt_top))
+      rw [volume_unitCube]; exact ENNReal.one_lt_top))
     have e : ∀ x, s⁻¹ • (B + jac φ x) = s⁻¹ • B + jac (fun y => s⁻¹ • φ y) x := fun x => by
       rw [tk_jac_smul, smul_add]
     simp only [e]
@@ -1042,26 +1062,29 @@ private lemma tk_scale_f {p : ℝ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ} {s :
 
 /-! ### Cassese's quasiconvexity and the textbook one -/
 
-/-- The textbook quasiconvexity on the unit cube (factor `|Ω| = 1`) is Cassese's Definition 2.1
-(the argument of `Cassese.cov_quasiconvexAtOn_unitCube_iff` in `Bridges`, which imports this
-file). -/
-private lemma tk_cov_quasiconvexAtOn_unitCube_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
+/-- The textbook quasiconvexity at `A` on the unit cube (`|Ω| f (A) ≤ ∫_Ω f (A + ∇φ)` with
+`Ω = (0, 1)^m`, `|Ω| = 1`) is Cassese's Definition 2.1 (a bridge of `Bridges`, stated here because
+line 559 needs it). -/
+theorem cov_quasiconvexAtOn_unitCube_iff (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
     (A : Matrix (Fin d) (Fin m) ℝ) :
     CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitCube m) f A ↔
       QuasiconvexAt f A := by
   have hv : (volume (CalculusOfVariations.unitCube m)).toReal = 1 := by
-    rw [show CalculusOfVariations.unitCube m = unitCube m from rfl, tk_volume_unitCube,
+    rw [show CalculusOfVariations.unitCube m = unitCube m from rfl, volume_unitCube,
       ENNReal.toReal_one]
   simp only [CalculusOfVariations.QuasiconvexAtOn, hv, one_mul]
   rfl
 
-/-- The textbook quasiconvex envelope is Cassese's (`Cassese.cov_qcEnvelope_eq` in `Bridges`). -/
-private lemma tk_cov_qcEnvelope_eq (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
+/-- The textbook quasiconvex envelope (over lower semicontinuous, locally bounded, quasiconvex
+minorants, the form of Dacorogna's formula in `External.KinderlehrerPedregal`) is Cassese's
+(Definition 2.3, over quasiconvex integrands); a bridge of `Bridges`, stated here because line 559
+needs it. -/
+theorem cov_qcEnvelope_eq (f : Matrix (Fin d) (Fin m) ℝ → ℝ)
     (A : Matrix (Fin d) (Fin m) ℝ) :
     CalculusOfVariations.qcEnvelope f A = qcEnvelope f A := by
   refine iSup_congr fun g => iSup_congr_Prop ?_ fun _ => rfl
   rw [show CalculusOfVariations.Quasiconvex g ↔ Quasiconvex g from
-    forall_congr' fun A => tk_cov_quasiconvexAtOn_unitCube_iff g A]
+    forall_congr' fun A => cov_quasiconvexAtOn_unitCube_iff g A]
   exact ⟨fun ⟨h1, h2, h3, h4⟩ => ⟨⟨h1, h2⟩, h3, h4⟩, fun ⟨⟨h1, h2⟩, h3, h4⟩ => ⟨h1, h2, h3, h4⟩⟩
 
 private lemma tk_unitBall_isOpen : IsOpen (CalculusOfVariations.unitBall m) :=
@@ -1098,8 +1121,8 @@ theorem quasiconvexAt_iff_exists_minorant
     QuasiconvexAt f A ↔
       ∃ g : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand g ∧ Quasiconvex g ∧ (∀ B, g B ≤ f B) ∧
         g A = f A := by
-  have hfI := tk_isIntegrand_of_continuous hf
-  have hvol : volume (unitCube m) < ⊤ := by rw [tk_volume_unitCube]; exact ENNReal.one_lt_top
+  have hfI := isIntegrand_of_continuous hf
+  have hvol : volume (unitCube m) < ⊤ := by rw [volume_unitCube]; exact ENNReal.one_lt_top
   constructor
   · intro hA
     -- Dacorogna's formula is an infimum over the unit ball; Definition 2.1 is on the unit cube,
@@ -1107,14 +1130,14 @@ theorem quasiconvexAt_iff_exists_minorant
     have hball : CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitBall m) f A :=
       (External.Rindler.quasiconvexAtOn_iff hf.lowerSemicontinuous hfI.2 A tk_unitBall_isOpen
         tk_unitBall_isBounded tk_unitBall_nonempty).1
-        ((tk_cov_quasiconvexAtOn_unitCube_iff f A).2 hA)
+        ((cov_quasiconvexAtOn_unitCube_iff f A).2 hA)
     have hBfin : volume (CalculusOfVariations.unitBall m) < ⊤ :=
       tk_unitBall_isBounded.measure_lt_top
     have hBpos : 0 < (volume (CalculusOfVariations.unitBall m)).toReal :=
       ENNReal.toReal_pos (tk_unitBall_isOpen.measure_pos volume tk_unitBall_nonempty).ne' hBfin.ne
     -- so every average in Dacorogna's formula is at least `f (A)`: `f^{qc} (A) ≥ f (A)`
     have hge : (f A : EReal) ≤ qcEnvelope f A := by
-      rw [← tk_cov_qcEnvelope_eq, External.KinderlehrerPedregal.dacorognaFormula_holds d m f hf A]
+      rw [← cov_qcEnvelope_eq, External.KinderlehrerPedregal.dacorognaFormula_holds d m f hf A]
       refine le_iInf₂ fun φ hφ => ?_
       obtain ⟨⟨K, hK⟩, h0⟩ := hφ
       have := hball φ K hK h0 (tk_integrableOn_comp hfI A hK hBfin)
@@ -1279,14 +1302,14 @@ private lemma tk_quasiconvex_conj {g : Matrix (Fin d) (Fin d) ℝ → ℝ} (hgI 
     show volume (Lt ⁻¹' unitCube d) = 1
     rw [hmpLt.measure_preimage (s := unitCube d)
       (MeasurableSet.univ_pi fun _ => measurableSet_Ioo).nullMeasurableSet]
-    exact tk_volume_unitCube d
+    exact volume_unitCube d
   have hΩfin : volume Ω < ⊤ := by rw [hΩvol]; exact ENNReal.one_lt_top
   have hψ0 : ∀ y ∉ Ω, ψ y = 0 := fun y hy => by
     have hy' : Vᵀ *ᵥ y ∉ unitCube d := hy
     simp only [ψ, h0 _ hy', Matrix.mulVec_zero]
   -- quasiconvexity of `g` at `V B Vᵀ` on the rotated cube
   have hgΩ := External.Rindler.rd_quasiconvexAtOn_of_unitCube hgI.1 hgI.2 hΩb hΩm
-    ((tk_cov_quasiconvexAtOn_unitCube_iff g (V * B * Vᵀ)).2 (hgQ _))
+    ((cov_quasiconvexAtOn_unitCube_iff g (V * B * Vᵀ)).2 (hgQ _))
   have key := hgΩ ψ _ hψ hψ0 (tk_integrableOn_comp hgI _ hψ hΩfin)
   rw [hΩvol, ENNReal.toReal_one, one_mul] at key
   -- change of variables `y = V x`
@@ -1416,7 +1439,7 @@ private lemma tk_f_zero {p : ℝ} (hp : 0 < p) {f : Matrix (Fin d) (Fin m) ℝ �
 private lemma tk_c_left {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hrc : RankOneConvexAt f 0) (hqc : QuasiconvexAt (fun A => (rcEnvelope f A).toReal) 0) :
     QuasiconvexAt f 0 := by
-  have hvol : volume (unitCube m) < ⊤ := by rw [tk_volume_unitCube]; exact ENNReal.one_lt_top
+  have hvol : volume (unitCube m) < ⊤ := by rw [volume_unitCube]; exact ENNReal.one_lt_top
   obtain ⟨g, hgI, hgR, hgf, hg0⟩ := hrc
   rcases tk_rc_cases hf with ⟨hno, _⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
   · exact (hno g hgI hgR hgf).elim
@@ -1446,14 +1469,14 @@ theorem proposition2_3_c {p : ℝ}
     (hp : 1 < p) {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) (hrc : RankOneConvexAt f 0) :
     QuasiconvexAt (fun A => (rcEnvelope f A).toReal) 0 ↔ QuasiconvexAt f 0 := by
-  have hvol : volume (unitCube m) < ⊤ := by rw [tk_volume_unitCube]; exact ENNReal.one_lt_top
+  have hvol : volume (unitCube m) < ⊤ := by rw [volume_unitCube]; exact ENNReal.one_lt_top
   refine ⟨tk_c_left hf hrc, fun hqc => ?_⟩
   -- line 559: a quasiconvex minorant `g ≤ f` with `g (0) = f (0)`; it is rank-one convex
   -- (Lemma 2.2), so `g ≤ f^{rc} ≤ f`
   obtain ⟨g, hgI, hgQ, hgf, hg0⟩ := (quasiconvexAt_iff_exists_minorant hf 0).1 hqc
   have hgR : RankOneConvex g := tk_rankOneConvex_of_cov
     (External.Rindler.rankOneConvex_of_quasiconvex hgI.1 hgI.2
-      fun A => (tk_cov_quasiconvexAtOn_unitCube_iff g A).2 (hgQ A))
+      fun A => (cov_quasiconvexAtOn_unitCube_iff g A).2 (hgQ A))
   rcases tk_rc_cases hf with ⟨hno, _⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
   · exact (hno g hgI hgR hgf).elim
   · have hval : (fun A => (rcEnvelope f A).toReal) = G := funext fun A => by rw [hGe]; rfl
@@ -1529,95 +1552,86 @@ theorem rankOneConvexAt_zero_of_rankOneConvexAt {p : ℝ} (hp : 1 < p)
       · rw [hGe] at h; exact absurd h (EReal.coe_ne_bot _)
     exact ⟨G, hGI, hGR, hGf, h0.trans (tk_f_zero (by linarith) hhom).symm⟩
 
-/-- The entries of `A` are bounded by `Σ |A_{ik}|`. -/
-private lemma tk_abs_entry_le (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin d) (k : Fin m) :
-    |A i k| ≤ ∑ i', ∑ k', |A i' k'| :=
-  (Finset.single_le_sum (f := fun k' => |A i k'|) (fun _ _ => abs_nonneg _) (Finset.mem_univ k)).trans
-    (Finset.single_le_sum (f := fun i' => ∑ k', |A i' k'|)
-      (fun _ _ => Finset.sum_nonneg fun _ _ => abs_nonneg _) (Finset.mem_univ i))
-
 /-- **Consequence of Proposition 2.3** (`cs-envelope-cons`, lines 577–578 and 206–209): for
 `p ∈ (1, ∞)` and a continuous `f` that is `p`-homogeneous or positively `p`-homogeneous,
 quasiconvexity at any matrix implies quasiconvexity at `0`. 
 
-Proof: for `λ > 0`, the test map `λ φ` gives `f (A) ≤ ∫ f (A + λ ∇φ) = λ^p ∫ f (A/λ + ∇φ)`; as
-`λ → ∞`, `∫ f (A/λ + ∇φ) → ∫ f (∇φ)` by dominated convergence (`∇φ` is bounded and `f` is
-continuous), while `λ^{-p} f (A) → 0`; so `∫ f (∇φ) ≥ 0 = f (0)`.
-Departure from the paper: the paper obtains this from Proposition 2.3 through the envelope
-(`f^{qc} (0) ∈ {0, −∞}`, lines 573–578), and the step "quasiconvex at `A` ⇒ `f^{qc} (A) = f (A)`"
-is line 559, which needs Dacorogna's formula. When this proof was written that formula was an
-assumed result, not a hypothesis of this statement, so the formal proof uses the scaling argument
-instead (reason 2; inventory §5, elementary lemma (iii)). The formula is now proved
-(`External.KinderlehrerPedregal.dacorognaFormula_holds`), so the paper's route through the envelope
-is available; moving the proof onto it is an open item. -/
+Proof (lines 559 and 573–578): quasiconvexity at `A` gives a quasiconvex minorant `g ≤ f` (line 559,
+`quasiconvexAt_iff_exists_minorant`, by Dacorogna's formula), so `f^{qc}` is finite and is the
+largest quasiconvex integrand below `f` (`tk_qc_cases`); `f^{qc} (0) = 0 = f (0)` by
+`envelope_zero` and the homogeneity of `f`, so `f^{qc}` is a quasiconvex minorant equal to `f` at
+`0`, and `f` is quasiconvex at `0` by line 559 again.-/
 theorem quasiconvexAt_zero_of_quasiconvexAt {p : ℝ} (hp : 1 < p)
     {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) {A : Matrix (Fin d) (Fin m) ℝ}
     (hA : QuasiconvexAt f A) : QuasiconvexAt f 0 := by
-  have hp0 : 0 < p := by linarith
-  have hpos := tk_pos_hom hhom
-  have hfI := tk_isIntegrand_of_continuous hf
-  have hvol : volume (unitCube m) < ⊤ := by rw [tk_volume_unitCube]; exact ENNReal.one_lt_top
-  intro φ K hφ h0 _
-  rw [tk_f_zero hp0 hhom]
-  set F : ℝ → ℝ := fun s => ∫ x in unitCube m, f (s • A + jac φ x) with hF
-  -- `f (A) ≤ ∫ f (A + ∇ (λ φ)) = λ^p ∫ f (A/λ + ∇φ)`
-  have hscale : ∀ l : ℝ, 0 < l → (l ^ p)⁻¹ * f A ≤ F l⁻¹ := by
-    intro l hl
-    have hψ : LipschitzWith (‖l‖₊ * K) (fun y => l • φ y) := (lipschitzWith_smul l).comp hφ
-    have h0' : ∀ x ∉ unitCube m, (fun y => l • φ y) x = 0 := fun x hx => by simp [h0 x hx]
-    have key := hA _ _ hψ h0' (tk_integrableOn_comp hfI A hψ hvol)
-    have e : ∀ x, f (A + jac (fun y => l • φ y) x) = l ^ p * f (l⁻¹ • A + jac φ x) := fun x => by
-      rw [tk_jac_smul, ← hpos l hl, smul_add, smul_smul, mul_inv_cancel₀ hl.ne', one_smul]
-    simp only [e] at key
-    rw [integral_const_mul] at key
-    rw [inv_mul_le_iff₀ (Real.rpow_pos_of_pos hl p)]
-    exact key
-  -- `s ↦ ∫ f (s A + ∇φ)` is continuous at `0` (dominated convergence)
-  have hcont : ContinuousAt F 0 := by
-    obtain ⟨C, hC⟩ := tk_bdd_of_compact hfI (tk_isCompact_box 0 ((∑ i, ∑ k, |A i k|) + K))
-    have : IsFiniteMeasure (volume.restrict (unitCube m)) :=
-      ⟨by rw [Measure.restrict_apply_univ]; exact hvol⟩
-    have hm : ∀ s : ℝ, Measurable fun x => s • A + jac φ x := fun s =>
-      Measurable.of_eval_matrix _ fun i k => by
-        simp only [Matrix.add_apply, Matrix.smul_apply, jac, Matrix.of_apply]
-        exact measurable_const.add (measurable_fderiv_apply_const ℝ (fun y => φ y i) _)
-    refine continuousAt_of_dominated (bound := fun _ => C)
-      (Filter.Eventually.of_forall fun s => (hf.measurable.comp (hm s)).aestronglyMeasurable)
-      ?_ (integrable_const C) (Filter.Eventually.of_forall fun x => ?_)
-    · filter_upwards [Ioo_mem_nhds (show (-1 : ℝ) < 0 by norm_num) one_pos] with s hs
-      refine Filter.Eventually.of_forall fun x => ?_
-      rw [Real.norm_eq_abs]
-      apply hC
-      intro i k
-      simp only [Matrix.add_apply, Matrix.smul_apply, Matrix.zero_apply, sub_zero, smul_eq_mul]
-      have h1 := tk_abs_entry_le A i k
-      have h2 := tk_jac_abs_le hφ x i k
-      have h3 : |s| ≤ 1 := abs_le.2 ⟨hs.1.le, hs.2.le⟩
-      calc |s * A i k + jac φ x i k| ≤ |s * A i k| + |jac φ x i k| := abs_add_le _ _
-        _ ≤ 1 * |A i k| + K := by
-          rw [abs_mul]; gcongr
-        _ ≤ (∑ i, ∑ k, |A i k|) + K := by linarith
-    · exact (hf.comp ((continuous_id.smul continuous_const).add continuous_const)).continuousAt
-  have ht1 : Filter.Tendsto (fun l : ℝ => F l⁻¹) Filter.atTop (nhds (F 0)) :=
-    hcont.tendsto.comp tendsto_inv_atTop_zero
-  have ht2 : Filter.Tendsto (fun l : ℝ => (l ^ p)⁻¹ * f A) Filter.atTop (nhds 0) := by
-    have := (tendsto_inv_atTop_zero.comp (tendsto_rpow_atTop hp0)).mul_const (f A)
-    simpa using this
-  have := le_of_tendsto_of_tendsto ht2 ht1
-    ((Filter.eventually_gt_atTop 0).mono fun l hl => hscale l hl)
-  simpa [hF] using this
+  -- line 559: a quasiconvex minorant of `f`, so `f^{qc}` is the largest one
+  obtain ⟨g, hgI, hgQ, hgf, -⟩ := (quasiconvexAt_iff_exists_minorant hf A).1 hA
+  rcases tk_qc_cases hf with ⟨hno, _⟩ | ⟨Q, hQI, hQQ, hQf, _, hQe⟩
+  · exact (hno g hgI hgQ hgf).elim
+  · -- `f^{qc} (0) ∈ {0, −∞}` and `f^{qc}` is finite, so `f^{qc} (0) = 0 = f (0)`
+    have h0 : Q 0 = 0 := by
+      rcases (envelope_zero hp hf hhom).2 with h | h
+      · rw [hQe] at h; exact_mod_cast h
+      · rw [hQe] at h; exact absurd h (EReal.coe_ne_bot _)
+    -- line 559 again, with the minorant `f^{qc}`
+    exact (quasiconvexAt_iff_exists_minorant hf 0).2
+      ⟨Q, hQI, hQQ, hQf, h0.trans (tk_f_zero (by linarith) hhom).symm⟩
 
 /-- **Consequence of Proposition 2.3** (`cs-envelope-cons`, lines 206–209): for continuous
 (positively) homogeneous integrands, failure of quasiconvexity at `0` implies failure at every
 matrix. 
 
-Proof: the contrapositive of `quasiconvexAt_zero_of_quasiconvexAt` (with its departure).-/
+Proof: the contrapositive of `quasiconvexAt_zero_of_quasiconvexAt`.-/
 theorem nowhereQuasiconvex_of_not_quasiconvexAt_zero {p : ℝ} (hp : 1 < p)
     {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) (h0 : ¬ QuasiconvexAt f 0) :
     NowhereQuasiconvex f :=
   fun _ hA => h0 (quasiconvexAt_zero_of_quasiconvexAt hp hf hhom hA)
+
+/-! ### Helpers shared by the later sections -/
+
+/-- `C < C^{qc}` (with `C ≥ 0`) makes `F_C` fail to be quasiconvex at `0`: the definition of
+`C^{qc}`. -/
+theorem not_quasiconvexAt_of_lt_qcThreshold {F : ℝ → Matrix (Fin d) (Fin m) ℝ → ℝ}
+    {C : ℝ} (hC : 0 ≤ C) (h : ENNReal.ofReal C < qcThreshold F) : ¬ QuasiconvexAt (F C) 0 :=
+  fun hq => h.not_ge (iInf₂_le (f := fun (C : ℝ) (_ : 0 ≤ C ∧ QuasiconvexAt (F C) 0) =>
+    ENNReal.ofReal C) C ⟨hC, hq⟩)
+
+theorem IsHomogeneousPolynomial.congr {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : IsHomogeneousPolynomial n f) (h : ∀ A, f A = g A) : IsHomogeneousPolynomial n g := by
+  obtain ⟨P, hP, hPf⟩ := hf
+  exact ⟨P, hP, fun A => (h A).symm.trans (hPf A)⟩
+
+theorem IsHomogeneousPolynomial.add {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial n g) :
+    IsHomogeneousPolynomial n fun A => f A + g A := by
+  obtain ⟨P, hP, hPf⟩ := hf
+  obtain ⟨Q, hQ, hQg⟩ := hg
+  exact ⟨P + Q, hP.add hQ, fun A => by simp only [hPf A, hQg A, MvPolynomial.eval_add]⟩
+
+theorem IsHomogeneousPolynomial.mul {n k : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial k g) :
+    IsHomogeneousPolynomial (n + k) fun A => f A * g A := by
+  obtain ⟨P, hP, hPf⟩ := hf
+  obtain ⟨Q, hQ, hQg⟩ := hg
+  exact ⟨P * Q, hP.mul hQ, fun A => by simp only [hPf A, hQg A, MvPolynomial.eval_mul]⟩
+
+theorem IsHomogeneousPolynomial.const_mul {n : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : IsHomogeneousPolynomial n f) (c : ℝ) :
+    IsHomogeneousPolynomial n fun A => c * f A := by
+  obtain ⟨P, hP, hPf⟩ := hf
+  exact ⟨MvPolynomial.C c * P, hP.C_mul c, fun A => by
+    simp only [hPf A, MvPolynomial.eval_mul, MvPolynomial.eval_C]⟩
+
+/-- A polynomial is continuous. -/
+theorem IsHomogeneousPolynomial.continuous {n : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : IsHomogeneousPolynomial n f) : Continuous f := by
+  obtain ⟨P, -, hP⟩ := hf
+  rw [show f = fun A => MvPolynomial.eval (fun ij : Fin d × Fin m => A ij.1 ij.2) P from
+    funext hP]
+  exact (MvPolynomial.continuous_eval P).comp
+    (continuous_pi fun ij => (continuous_apply ij.2).comp (continuous_apply ij.1))
 
 /-! ### Rank-one Rademacher martingales -/
 
@@ -1640,16 +1654,10 @@ private lemma tk_avg_zero (g : (Fin 0 → Bool) → ℝ) (ε₀ : Fin 0 → Bool
   congr 1
   exact Subsingleton.elim _ _
 
-private lemma tk_mart_full {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin N → (Fin N → Bool) → E) (ε : Fin N → Bool) :
-    mart ξ N ε = ∑ k, coin (ε k) • ξ k ε := by
-  simp only [mart]
-  rw [Finset.filter_true_of_mem fun k _ => k.isLt]
-
 private lemma tk_radMart_zero (M₀ : Matrix (Fin d) (Fin m) ℝ)
     (A : Fin 0 → (Fin 0 → Bool) → Matrix (Fin d) (Fin m) ℝ) (ε : Fin 0 → Bool) :
     radMart M₀ A 0 ε = M₀ := by
-  simp [radMart, tk_mart_full]
+  simp [radMart, rad_mart_top]
 
 /-- A martingale of horizon `N + 1`, conditioned on the first sign `b`: a martingale of horizon
 `N` started at `M₀ + b A₀`. -/
@@ -1658,7 +1666,7 @@ private lemma tk_radMart_cons {N : ℕ} (M₀ : Matrix (Fin d) (Fin m) ℝ)
     (ε' : Fin N → Bool) :
     radMart M₀ A (N + 1) (Fin.cons b ε') =
       radMart (M₀ + coin b • A 0 (Fin.cons b ε')) (fun k ε' => A k.succ (Fin.cons b ε')) N ε' := by
-  simp only [radMart, tk_mart_full, Fin.sum_univ_succ, Fin.cons_zero, Fin.cons_succ]
+  simp only [radMart, rad_mart_top, Fin.sum_univ_succ, Fin.cons_zero, Fin.cons_succ]
   abel
 
 /-- The first increment of a predictable sequence is deterministic. -/

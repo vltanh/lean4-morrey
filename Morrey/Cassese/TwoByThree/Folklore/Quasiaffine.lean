@@ -67,17 +67,6 @@ theorem tbt6_jac_zero {x : Fin m → ℝ} (hx : x ∉ tbt6Icc m) : jac φ x = 0 
   simp only [jac, Matrix.of_apply, tbt6_fderiv_comp_zero h0 i hx]; rfl
 
 omit h0 in
-theorem tbt6_abs_jac_le (x : Fin m → ℝ) (i : Fin d) (k : Fin m) : |jac φ x i k| ≤ K := by
-  have h1 := norm_fderiv_le_of_lipschitz ℝ (tbt6_lip_comp hφ i) (x₀ := x)
-  have h2 : ‖(Pi.single k (1 : ℝ) : Fin m → ℝ)‖ ≤ 1 :=
-    (pi_norm_le_iff_of_nonneg zero_le_one).mpr fun j => by
-      by_cases h : j = k <;> simp [h]
-  calc |jac φ x i k| = ‖fderiv ℝ (fun y => φ y i) x (Pi.single k 1)‖ := rfl
-    _ ≤ ‖fderiv ℝ (fun y => φ y i) x‖ * ‖(Pi.single k (1 : ℝ) : Fin m → ℝ)‖ :=
-      ContinuousLinearMap.le_opNorm _ _
-    _ ≤ K * 1 := mul_le_mul h1 h2 (norm_nonneg _) K.2
-    _ = K := mul_one _
-
 omit hφ h0 in
 theorem tbt6_measurable_jac : Measurable fun x => jac φ x := by
   refine measurable_pi_iff.mpr fun i => measurable_pi_iff.mpr fun k => ?_
@@ -97,7 +86,7 @@ theorem tbt6_integrableOn_cube {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hΦ : 
     (((hΦ.comp (continuous_const.add continuous_id)).measurable.comp
       (tbt6_measurable_jac)).aestronglyMeasurable)
     (Filter.Eventually.of_forall fun x => hM _ fun i _ k _ => ?_)
-  have := abs_le.mp (tbt6_abs_jac_le hφ x i k)
+  have := abs_le.mp (abs_jac_le hφ x i k)
   simp only [Matrix.add_apply]
   constructor <;> linarith [this.1, this.2]
 

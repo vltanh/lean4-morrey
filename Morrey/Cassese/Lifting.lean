@@ -71,14 +71,6 @@ theorem lift_trunc_zero (hd : d' ≤ d) (hm : m' ≤ m) :
 theorem lift_continuous_trunc (hd : d' ≤ d) (hm : m' ≤ m) : Continuous (lift_trunc hd hm) :=
   continuous_id.matrix_submatrix (Fin.castLE hd) (Fin.castLE hm)
 
-/-- A matrix of rank `0` is `0`. -/
-theorem lift_eq_zero_of_rank_eq_zero {p q : ℕ} {A : Matrix (Fin p) (Fin q) ℝ}
-    (h : A.rank = 0) : A = 0 := by
-  rw [Matrix.rank, Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at h
-  ext i j
-  have := congrArg (fun f => f (Pi.single j 1) i) h
-  simpa [Matrix.mulVecLin_apply] using this
-
 /-- The block map sends rank-one lines to rank-one lines or to points: `f ∘ lift_trunc` is
 rank-one convex with `f`. -/
 theorem lift_rankOneConvex_comp (hd : d' ≤ d) (hm : m' ≤ m) {f : Matrix (Fin d') (Fin m') ℝ → ℝ}
@@ -90,7 +82,7 @@ theorem lift_rankOneConvex_comp (hd : d' ≤ d) (hm : m' ≤ m) {f : Matrix (Fin
     exact Matrix.rank_submatrix_le _ _ _
   by_cases h1 : (lift_trunc hd hm A - lift_trunc hd hm B).rank = 1
   · exact hf _ _ h1
-  · have h0 := lift_eq_zero_of_rank_eq_zero (show (lift_trunc hd hm A -
+  · have h0 := eq_zero_of_rank_eq_zero (show (lift_trunc hd hm A -
       lift_trunc hd hm B).rank = 0 by omega)
     rw [sub_eq_zero] at h0
     simp only [h0, ← add_smul, add_sub_cancel, one_smul]

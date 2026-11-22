@@ -15,8 +15,11 @@ Mathlib's martingales, Burkholder's inequalities among them, apply to them; and 
 space `L^p` norms are averages (`rad_eLpNorm_uniform`).
 
 Used by Section 7 (`FourByTwo.lean`, Burkholder's inequality for Proposition 7.1) and by Section 6
-(`Square/Korn.lean`, Burkholder's square function inequality in `S_2^{d×d}`). Helpers are prefixed
-`rad_`.
+(`Square/Korn.lean`, Burkholder's square function inequality in `S_2^{d×d}`). The sign-space
+helpers that the other sections share are here too: averages over the signs (`rad_avg_add`, …),
+the flip of one sign (`rad_flip`), and `M_0 = 0`, `M_N = Σ_k ε_k ξ_k`, and the dependence of `M_k`
+on the first `k` signs only (`rad_mart_zero`, `rad_mart_top`, `rad_mart_congr`). Helpers are
+prefixed `rad_`.
 -/
 
 @[expose] public section
@@ -80,6 +83,59 @@ theorem rad_mart_succ {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
 theorem rad_mart_zero {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
     (ξ : Fin n → (Fin n → Bool) → E) (ε : Fin n → Bool) : mart ξ 0 ε = 0 := by
   simp [mart]
+
+theorem rad_mart_top {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (ξ : Fin n → (Fin n → Bool) → E) (ε : Fin n → Bool) :
+    mart ξ n ε = ∑ k, coin (ε k) • ξ k ε := by
+  simp only [mart]
+  rw [Finset.filter_true_of_mem fun k _ => k.isLt]
+
+/-- `M_k = Σ_{j<k} ε_j ξ_j` depends only on the first `k` signs. -/
+theorem rad_mart_congr {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
+    {ξ : Fin n → (Fin n → Bool) → E} (hξ : IsPredictable ξ) (k : ℕ) {ε ε' : Fin n → Bool}
+    (h : ∀ j : Fin n, j.val < k → ε j = ε' j) : mart ξ k ε = mart ξ k ε' := by
+  unfold mart
+  refine Finset.sum_congr rfl fun j hj => ?_
+  have hj' : j.val < k := (Finset.mem_filter.mp hj).2
+  rw [h j hj', hξ j ε ε' fun i hi => h i (lt_trans (Fin.lt_def.mp hi) hj')]
+
+/-! ### Averages over the signs, and the flip of one sign -/
+
+theorem rad_avg_add {n : ℕ} (f g : (Fin n → Bool) → ℝ) :
+    avg (fun ε => f ε + g ε) = avg f + avg g := by
+  simp only [avg, Finset.sum_add_distrib, add_div]
+
+theorem rad_avg_sub {n : ℕ} (f g : (Fin n → Bool) → ℝ) :
+    avg (fun ε => f ε - g ε) = avg f - avg g := by
+  simp only [avg, Finset.sum_sub_distrib, sub_div]
+
+theorem rad_avg_mul_left {n : ℕ} (c : ℝ) (f : (Fin n → Bool) → ℝ) :
+    avg (fun ε => c * f ε) = c * avg f := by
+  simp only [avg, ← Finset.mul_sum, mul_div_assoc]
+
+theorem rad_avg_mono {n : ℕ} {f g : (Fin n → Bool) → ℝ} (h : ∀ ε, f ε ≤ g ε) : avg f ≤ avg g :=
+  div_le_div_of_nonneg_right (Finset.sum_le_sum fun ε _ => h ε) (by positivity)
+
+theorem rad_avg_nonneg {n : ℕ} {f : (Fin n → Bool) → ℝ} (h : ∀ ε, 0 ≤ f ε) : 0 ≤ avg f :=
+  div_nonneg (Finset.sum_nonneg fun ε _ => h ε) (by positivity)
+
+/-- Flipping the sign `ε_k`. -/
+def rad_flip {n : ℕ} (k : Fin n) (ε : Fin n → Bool) : Fin n → Bool :=
+  Function.update ε k (!ε k)
+
+theorem rad_flip_involutive {n : ℕ} (k : Fin n) : Function.Involutive (rad_flip k) := by
+  intro ε
+  funext j
+  by_cases h : j = k
+  · subst h; simp [rad_flip]
+  · simp [rad_flip, Function.update_of_ne h]
+
+theorem rad_flip_apply_self {n : ℕ} (k : Fin n) (ε : Fin n → Bool) : rad_flip k ε k = !ε k := by
+  simp [rad_flip]
+
+theorem rad_flip_apply_ne {n : ℕ} {k j : Fin n} (h : j ≠ k) (ε : Fin n → Bool) :
+    rad_flip k ε j = ε j :=
+  Function.update_of_ne h _ _
 
 theorem rad_coin_not (b : Bool) : coin (!b) = -coin b := by
   cases b <;> simp [coin]

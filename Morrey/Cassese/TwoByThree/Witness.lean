@@ -1,6 +1,7 @@
 module
 
 public import Morrey.Cassese.TwoByThree.Basic
+public import Morrey.Cassese.TwoByThree.Polynomial
 public import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.Calculus.ContDiff.RCLike
@@ -608,9 +609,6 @@ theorem tbt_continuous_jac {φ : (Fin 3 → ℝ) → Fin 2 → ℝ}
   have hi : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) fun y => φ y i := (contDiff_pi.1 hφ) i
   exact (hi.continuous_fderiv (by simp)).clm_apply continuous_const
 
-theorem tbt_continuous_frobSq {d m : ℕ} : Continuous fun A : Matrix (Fin d) (Fin m) ℝ => frobSq A := by
-  unfold frobSq; fun_prop
-
 /-- The inner integral over `t`: `∫ (1 / (1 + (t − r)²) + 1 / (1 + (t + r)²)) dt = 2π`. -/
 theorem tbt_lintegral_two_cauchy (a r : ℝ) (ha : 0 ≤ a) :
     ∫⁻ z : ℝ, ENNReal.ofReal (a * (1 / (1 + (z - r) ^ 2) + 1 / (1 + (z + r) ^ 2))) =
@@ -702,10 +700,6 @@ theorem tbt_log_bound {R : ℝ} (hR : 0 ≤ R) :
 
 
 
-theorem tbt_continuous_entry {d m : ℕ} (i : Fin d) (j : Fin m) :
-    Continuous fun A : Matrix (Fin d) (Fin m) ℝ => A i j :=
-  (continuous_apply j).comp (continuous_apply i)
-
 theorem tbt_continuous_zCoord (k : Fin 3) :
     Continuous fun A : Matrix (Fin 2) (Fin 4) ℝ => zCoord A k := by
   have hα : ∀ k l : Fin 4, Continuous fun A : Matrix (Fin 2) (Fin 4) ℝ => wirtAlpha A k l := by
@@ -723,22 +717,12 @@ theorem tbt_continuous_zCoord (k : Fin 3) :
   · exact Complex.continuous_conj.comp (hα 0 1)
   · exact hβ 0 1
 
-theorem tbt_continuous_quarticQ : Continuous quarticQ := by
-  have h0 := tbt_continuous_zCoord 0
-  have h1 := tbt_continuous_zCoord 1
-  have h2 := tbt_continuous_zCoord 2
-  unfold quarticQ
-  fun_prop
-
 theorem tbt_continuous_embedJ : Continuous embedJ := by
   refine continuous_pi fun i => continuous_pi fun j => ?_
   simp only [embedJ, Matrix.of_apply]
   split_ifs
   · exact tbt_continuous_entry _ _
   · exact continuous_const
-
-theorem tbt_continuous_q3 : Continuous q3 :=
-  tbt_continuous_quarticQ.comp tbt_continuous_embedJ
 
 theorem tbt_norm_le_sqrt (x : Fin 3 → ℝ) : ‖x‖ ≤ √(x 0 ^ 2 + x 1 ^ 2 + x 2 ^ 2) := by
   refine (pi_norm_le_iff_of_nonneg (Real.sqrt_nonneg _)).mpr fun i => ?_

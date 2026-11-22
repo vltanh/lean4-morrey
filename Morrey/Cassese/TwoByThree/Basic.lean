@@ -131,23 +131,13 @@ theorem tbt_exists_vecMulVec {n k : ℕ} (R : Matrix (Fin n) (Fin k) ℝ) (h : R
   simp only [SetLike.val_smul, Pi.smul_apply, smul_eq_mul] at this
   rw [Matrix.vecMulVec_apply, this, Matrix.row_apply]
 
-/-- A matrix of rank `0` is `0`. -/
-theorem tbt_eq_zero_of_rank_eq_zero {n k : ℕ} (R : Matrix (Fin n) (Fin k) ℝ) (h : R.rank = 0) :
-    R = 0 := by
-  rw [Matrix.rank, Submodule.finrank_eq_zero] at h
-  ext i j
-  have : R.mulVecLin (Pi.single j 1) ∈ LinearMap.range R.mulVecLin := ⟨_, rfl⟩
-  rw [h, Submodule.mem_bot] at this
-  have := congrFun this i
-  simpa [Matrix.mulVecLin_apply, Matrix.mulVec_single] using this
-
 /-- An outer product of nonzero vectors has rank one. -/
 theorem tbt_rank_vecMulVec {n k : ℕ} {v : Fin n → ℝ} {w : Fin k → ℝ} (hv : v ≠ 0) (hw : w ≠ 0) :
     (Matrix.vecMulVec v w).rank = 1 := by
   have h1 := Matrix.rank_vecMulVec_le v w
   rcases Nat.lt_or_ge (Matrix.vecMulVec v w).rank 1 with h | h
   · have h0 : (Matrix.vecMulVec v w).rank = 0 := by omega
-    have := tbt_eq_zero_of_rank_eq_zero _ h0
+    have := eq_zero_of_rank_eq_zero h0
     obtain ⟨i, hi⟩ := Function.ne_iff.mp hv
     obtain ⟨j, hj⟩ := Function.ne_iff.mp hw
     have := congrFun (congrFun this i) j
@@ -413,6 +403,45 @@ theorem tbt_eq_zero_of_frobSq_eq_zero {d m : ℕ} {A : Matrix (Fin d) (Fin m) �
   have h2 := (Finset.sum_eq_zero_iff_of_nonneg fun j _ => sq_nonneg (A i j)).mp h1 j
     (Finset.mem_univ _)
   simpa using h2
+
+theorem tbt_frobSq_smul {d m : ℕ} (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
+    frobSq (t • A) = t ^ 2 * frobSq A := by
+  simp only [frobSq, Matrix.smul_apply, smul_eq_mul, mul_pow, Finset.mul_sum]
+
+theorem tbt_continuous_entry {d m : ℕ} (i : Fin d) (j : Fin m) :
+    Continuous fun A : Matrix (Fin d) (Fin m) ℝ => A i j :=
+  (continuous_apply j).comp (continuous_apply i)
+
+theorem tbt_continuous_frobSq {d m : ℕ} :
+    Continuous fun A : Matrix (Fin d) (Fin m) ℝ => frobSq A := by
+  unfold frobSq; fun_prop
+
+theorem tbt_frobInner_sub_left (A B C : Matrix (Fin d) (Fin m) ℝ) :
+    frobInner (A - B) C = frobInner A C - frobInner B C := by
+  simp only [frobInner, Matrix.sub_apply, sub_mul, Finset.sum_sub_distrib]
+
+theorem tbt_frobInner_add_left (A B C : Matrix (Fin d) (Fin m) ℝ) :
+    frobInner (A + B) C = frobInner A C + frobInner B C := by
+  simp only [frobInner, Matrix.add_apply, add_mul, Finset.sum_add_distrib]
+
+theorem tbt_frobInner_smul_left (c : ℝ) (A C : Matrix (Fin d) (Fin m) ℝ) :
+    frobInner (c • A) C = c * frobInner A C := by
+  simp only [frobInner, Matrix.smul_apply, smul_eq_mul, Finset.mul_sum, mul_assoc]
+
+theorem tbt_frobInner_self (A : Matrix (Fin d) (Fin m) ℝ) : frobInner A A = frobSq A := by
+  simp only [frobInner, frobSq, pow_two]
+
+/-- The orthogonal projection is determined by its defining property. -/
+theorem tbt_proj_unique {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
+    {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ} (hπ : IsFrobProj L π)
+    (A P : Matrix (Fin d) (Fin m) ℝ) (hP : P ∈ L) (h : ∀ B ∈ L, frobInner (A - P) B = 0) :
+    π A = P := by
+  have hD : π A - P ∈ L := L.sub_mem (hπ A).1 hP
+  have : frobSq (π A - P) = 0 := by
+    rw [← tbt_frobInner_self, show π A - P = (A - P) - (A - π A) by abel,
+      tbt_frobInner_sub_left, ← show π A - P = (A - P) - (A - π A) by abel, h _ hD,
+      (hπ A).2 _ hD, sub_zero]
+  exact sub_eq_zero.mp (tbt_eq_zero_of_frobSq_eq_zero this)
 
 /-- `frobNorm A ≤ 2 frobNorm B` as soon as `|A|² ≤ 4 |B|²`. -/
 theorem tbt_frobNorm_le_two_mul {d m : ℕ} {A B : Matrix (Fin d) (Fin m) ℝ}

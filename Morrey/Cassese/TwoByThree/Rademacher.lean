@@ -2,6 +2,7 @@ module
 
 public import Morrey.Cassese.Defs
 public import Morrey.Cassese.Hypotheses
+public import Morrey.Cassese.Rademacher
 public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.MeasureTheory.Integral.Bochner.SumMeasure
 public import Mathlib.MeasureTheory.Measure.Count
@@ -103,14 +104,6 @@ theorem tbt1_mart_succ (ξ : Fin N → (Fin N → Bool) → H) (n : ℕ) (ε : F
     intro hk
     exact absurd (hk ▸ k.isLt) h
 
-/-- `Σ_{k<n} ε_k ξ_k` depends only on the first `n` signs. -/
-theorem tbt1_mart_congr {ξ : Fin N → (Fin N → Bool) → H} (hξ : IsPredictable ξ) (n : ℕ)
-    {ε ε' : Fin N → Bool} (h : ∀ j : Fin N, j.val < n → ε j = ε' j) : mart ξ n ε = mart ξ n ε' := by
-  unfold mart
-  refine Finset.sum_congr rfl fun k hk => ?_
-  have hk' : k.val < n := (Finset.mem_filter.mp hk).2
-  rw [h k hk', hξ k ε ε' fun j hj => h j (lt_trans (Fin.lt_def.mp hj) hk')]
-
 end Module
 
 variable {H : Type*} [NormedAddCommGroup H] [NormedSpace ℝ H]
@@ -205,7 +198,7 @@ theorem tbt1_martingale_mart {ξ : Fin N → (Fin N → Bool) → H} (hξ : IsPr
   refine martingale_of_setIntegral_eq_succ (fun n => ?_) (fun n => Integrable.of_finite)
     (fun n s hs => ?_)
   · have hm : Measurable[tbt1Sigma N n] (mart ξ n) := fun t _ ε ε' h => by
-      simp only [Set.mem_preimage, tbt1_mart_congr hξ n h]
+      simp only [Set.mem_preimage, rad_mart_congr hξ n h]
     exact hm.stronglyMeasurable
   · have : (fun ε => mart ξ (n + 1) ε) = fun ε => mart ξ n ε + tbt1D ξ n ε :=
       funext fun ε => tbt1_mart_succ ξ n ε

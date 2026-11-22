@@ -749,9 +749,9 @@ theorem square_decoupling (hCV : CoxVeraarDecoupling) {q u : ℝ} (hq : 1 < q) (
   have h2' : ENNReal.ofReal b ≤ umdConstWith (Fin d → Fin d → ℝ)
       (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) p * ENNReal.ofReal a := by
     rw [← hdec, ← hlp]; exact h2
-  have ha0 : 0 ≤ a := Real.rpow_nonneg (square_avg_nonneg fun ε => square_avg_nonneg fun ε' =>
+  have ha0 : 0 ≤ a := Real.rpow_nonneg (rad_avg_nonneg fun ε => rad_avg_nonneg fun ε' =>
     Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
-  have hb0 : 0 ≤ b := Real.rpow_nonneg (square_avg_nonneg fun ε =>
+  have hb0 : 0 ≤ b := Real.rpow_nonneg (rad_avg_nonneg fun ε =>
     Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
   constructor
   · have := h1'.trans (by gcongr : _ ≤ ENNReal.ofReal u * ENNReal.ofReal b)
@@ -880,9 +880,9 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
   set X : (Fin N → Bool) → ℝ := fun ε => schattenNorm r (∑ k, S k ε * (S k ε)ᵀ) with hX
   set Z : (Fin N → Bool) → ℝ := fun ε => schattenNorm r (∑ k, K k ε * (K k ε)ᵀ) with hZ
   set W : (Fin N → Bool) → ℝ := fun ε => (∑ k, S k ε * (S k ε)ᵀ).trace with hW
-  have hLS0 : 0 ≤ LS := square_avg_nonneg fun ε => sq_nonneg _
-  have hIS0 : ∀ ε, 0 ≤ IS ε := fun ε => square_avg_nonneg fun ε' => sq_nonneg _
-  have hIK0 : ∀ ε, 0 ≤ IK ε := fun ε => square_avg_nonneg fun ε' => sq_nonneg _
+  have hLS0 : 0 ≤ LS := rad_avg_nonneg fun ε => sq_nonneg _
+  have hIS0 : ∀ ε, 0 ≤ IS ε := fun ε => rad_avg_nonneg fun ε' => sq_nonneg _
+  have hIK0 : ∀ ε, 0 ≤ IK ε := fun ε => rad_avg_nonneg fun ε' => sq_nonneg _
   have hX0 : ∀ ε, 0 ≤ X ε := fun ε => schattenNorm_nonneg _ _
   have hZ0 : ∀ ε, 0 ≤ Z ε := fun ε => schattenNorm_nonneg _ _
   have hpsd : ∀ P : Matrix (Fin d) (Fin d) ℝ, (P * Pᵀ).PosSemidef := fun P => by
@@ -895,10 +895,10 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
   rw [square_lpNormWith_two] at hdS hdK
   simp only [Real.rpow_two, ← Real.sqrt_eq_rpow] at hdS hdK
   have hdS' : avg IS ≤ u ^ 2 * LS :=
-    square_sq_le_of_sqrt_le (square_avg_nonneg hIS0) hLS0 hdS
+    square_sq_le_of_sqrt_le (rad_avg_nonneg hIS0) hLS0 hdS
   have hdK' : LK ≤ u ^ 2 * avg IK :=
-    square_sq_le_of_sqrt_le (square_avg_nonneg fun ε => sq_nonneg _)
-      (square_avg_nonneg hIK0) hdK
+    square_sq_le_of_sqrt_le (rad_avg_nonneg fun ε => sq_nonneg _)
+      (rad_avg_nonneg hIK0) hdK
   -- (31) in the decoupled signs
   have h31K : ∀ ε, IK ε ≤ c ^ 2 * Z ε := fun ε => by
     have h := (h31 N (fun k => K k ε) fun i => by
@@ -917,12 +917,12 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
   have hpt : ∀ ε, Z ε ≤ √(X ε) * √(W ε) := fun ε =>
     square_rankOne_comparison hr1 (fun k => A k ε) fun k => hA.2 k ε
   have hcs : avg Z ≤ √(avg X) * √(avg W) :=
-    (square_avg_mono hpt).trans (square_avg_sqrt_mul_le hX0 hW0)
+    (rad_avg_mono hpt).trans (square_avg_sqrt_mul_le hX0 hW0)
   -- `E ‖𝔖_N f‖_{S_q}² ≤ c² u² ‖f_N‖²`
   have hXb : √(avg X) ≤ c * u * √LS := by
     have : avg X ≤ (c * u) ^ 2 * LS := by
-      calc avg X ≤ avg fun ε => c ^ 2 * IS ε := square_avg_mono h31S
-        _ = c ^ 2 * avg IS := square_avg_mul_left _ _
+      calc avg X ≤ avg fun ε => c ^ 2 * IS ε := rad_avg_mono h31S
+        _ = c ^ 2 * avg IS := rad_avg_mul_left _ _
         _ ≤ c ^ 2 * (u ^ 2 * LS) := mul_le_mul_of_nonneg_left hdS' (sq_nonneg _)
         _ = (c * u) ^ 2 * LS := by ring
     calc √(avg X) ≤ √((c * u) ^ 2 * LS) := Real.sqrt_le_sqrt this
@@ -945,14 +945,14 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
       rw [square_schattenNorm_two_sq, mul_pow] at h'
       exact h'
     have : avg W ≤ D ^ 2 * LS := by
-      rw [hWf, hLS, ← square_avg_mul_left]
-      exact square_avg_mono fun ε => h2q _
+      rw [hWf, hLS, ← rad_avg_mul_left]
+      exact rad_avg_mono fun ε => h2q _
     calc √(avg W) ≤ √(D ^ 2 * LS) := Real.sqrt_le_sqrt this
       _ = D * √LS := by rw [Real.sqrt_mul (sq_nonneg _), Real.sqrt_sq hD0]
   calc LK ≤ u ^ 2 * avg IK := hdK'
     _ ≤ u ^ 2 * (c ^ 2 * avg Z) := by
         refine mul_le_mul_of_nonneg_left ?_ (sq_nonneg _)
-        rw [← square_avg_mul_left]; exact square_avg_mono h31K
+        rw [← rad_avg_mul_left]; exact rad_avg_mono h31K
     _ ≤ u ^ 2 * (c ^ 2 * ((c * u * √LS) * (D * √LS))) := by
         gcongr
         exact hcs.trans (mul_le_mul hXb hWb (Real.sqrt_nonneg _)
@@ -1005,7 +1005,7 @@ theorem proposition6_2 (hR : RandrianantoaninaSchattenUMD)
       C ^ 2 * (avg fun ε => schattenNorm (ENNReal.ofReal q) (symPart (radMart 0 A N ε)) ^ 2) -
         avg fun ε => schattenNorm (ENNReal.ofReal q) (skewPart (radMart 0 A N ε)) ^ 2 := by
     simp only [kornF, Real.rpow_two]
-    rw [square_avg_sub, square_avg_mul_left]
+    rw [rad_avg_sub, rad_avg_mul_left]
   rw [hval, sub_nonneg, hC2]
   exact hb
 
@@ -1026,7 +1026,7 @@ theorem square_lpNormWith_mono {N : ℕ} {E : Type*} (nrm : E → ℝ) (hn : ∀
     rw [← Real.rpow_mul (hn _), mul_div_cancel₀ _ hp.ne']
   simp only [hpow, ← havg] at hJ
   have h0 : 0 ≤ avg fun ε => nrm (X ε) ^ p :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (hn _) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (hn _) _
   unfold lpNormWith
   calc (avg fun ε => nrm (X ε) ^ p) ^ (1 / p) =
         ((avg fun ε => nrm (X ε) ^ p) ^ (q / p)) ^ (1 / q) := by
@@ -1040,10 +1040,10 @@ theorem square_lpNormWith_two_le {N : ℕ} {E F : Type*} {n₁ : E → ℝ} {n�
     lpNormWith n₁ 2 X ≤ a * lpNormWith n₂ 2 Y := by
   rw [square_lpNormWith_two, square_lpNormWith_two]
   calc √(avg fun ε => n₁ (X ε) ^ 2) ≤ √(avg fun ε => a ^ 2 * n₂ (Y ε) ^ 2) :=
-        Real.sqrt_le_sqrt (square_avg_mono fun ε => by
+        Real.sqrt_le_sqrt (rad_avg_mono fun ε => by
           rw [← mul_pow]; exact pow_le_pow_left₀ (h0 ε) (h ε) 2)
     _ = a * √(avg fun ε => n₂ (Y ε) ^ 2) := by
-        rw [square_avg_mul_left, Real.sqrt_mul (sq_nonneg a), Real.sqrt_sq ha]
+        rw [rad_avg_mul_left, Real.sqrt_mul (sq_nonneg a), Real.sqrt_sq ha]
 
 /-- (31) at `p = 2` with a constant `c₀ √q` (the constant tracked in Remark 6.3): the
 non-commutative Khintchine inequality (Proposition 6.3) at the exponent `q`, the quantitative
@@ -1143,7 +1143,7 @@ theorem square_skew_le_sym_two_q (hR : RandrianantoaninaSchattenUMD)
           nlinarith [sq_nonneg (CR * c₀), sq_nonneg (CR * c₀ - 1), mul_nonneg hx0 (sq_nonneg (CR * c₀ - 1))]
   rw [square_lpNormWith_two, square_lpNormWith_two]
   set LS := avg fun ε => schattenNorm (ENNReal.ofReal q) (symPart (radMart 0 A N ε)) ^ 2
-  have hLS0 : 0 ≤ LS := square_avg_nonneg fun ε => sq_nonneg _
+  have hLS0 : 0 ≤ LS := rad_avg_nonneg fun ε => sq_nonneg _
   have hfin : (avg fun ε => schattenNorm (ENNReal.ofReal q) (skewPart (radMart 0 A N ε)) ^ 2) ≤
       (((CR * c₀) ^ 2 + 1) * q ^ 3 * D) ^ 2 * LS := by
     refine hb.trans ?_
@@ -1297,11 +1297,11 @@ theorem remark6_3 (hR : RandrianantoaninaSchattenUMD)
       Crc ^ 2 * (avg fun ε => schattenNorm ⊤ (symPart (radMart 0 A N ε)) ^ 2) -
         avg fun ε => schattenNorm ⊤ (skewPart (radMart 0 A N ε)) ^ 2 := by
     simp only [kornF, Real.rpow_two]
-    rw [square_avg_sub, square_avg_mul_left]
+    rw [rad_avg_sub, rad_avg_mul_left]
   rw [hval, sub_nonneg]
   have hS0 : 0 ≤ avg fun ε => schattenNorm ⊤ (symPart (radMart 0 A N ε)) ^ 2 :=
-    square_avg_nonneg fun ε => sq_nonneg _
-  have h3 := square_sq_le_of_sqrt_le (square_avg_nonneg fun ε => sq_nonneg _) hS0 h2
+    rad_avg_nonneg fun ε => sq_nonneg _
+  have h3 := square_sq_le_of_sqrt_le (rad_avg_nonneg fun ε => sq_nonneg _) hS0 h2
   have hC'0 : 0 ≤ C * (d : ℝ) ^ (1 / 4 : ℝ) * q ^ 3 * (d : ℝ) ^ (1 / (2 * q)) := by positivity
   exact h3.trans (mul_le_mul_of_nonneg_right (pow_le_pow_left₀ hC'0 hC' 2) hS0)
 
@@ -1383,11 +1383,11 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
   set X : (Fin N → Bool) → ℝ := fun ε => schattenNorm r (∑ k, S k ε * (S k ε)ᵀ) with hX
   set Z : (Fin N → Bool) → ℝ := fun ε => schattenNorm r (∑ k, K k ε * (K k ε)ᵀ) with hZ
   set W : (Fin N → Bool) → ℝ := fun ε => (∑ k, S k ε * (S k ε)ᵀ).trace with hW
-  have hbf0 : 0 ≤ bf := Real.rpow_nonneg (square_avg_nonneg fun ε =>
+  have hbf0 : 0 ≤ bf := Real.rpow_nonneg (rad_avg_nonneg fun ε =>
     Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
-  have hIS0 : ∀ ε, 0 ≤ IS ε := fun ε => square_avg_nonneg fun ε' =>
+  have hIS0 : ∀ ε, 0 ≤ IS ε := fun ε => rad_avg_nonneg fun ε' =>
     Real.rpow_nonneg (schattenNorm_nonneg _ _) _
-  have hIK0 : ∀ ε, 0 ≤ IK ε := fun ε => square_avg_nonneg fun ε' =>
+  have hIK0 : ∀ ε, 0 ≤ IK ε := fun ε => rad_avg_nonneg fun ε' =>
     Real.rpow_nonneg (schattenNorm_nonneg _ _) _
   have hX0 : ∀ ε, 0 ≤ X ε := fun ε => schattenNorm_nonneg _ _
   have hZ0 : ∀ ε, 0 ≤ Z ε := fun ε => schattenNorm_nonneg _ _
@@ -1396,11 +1396,11 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
   have hW0 : ∀ ε, 0 ≤ W ε := fun ε =>
     (Matrix.posSemidef_sum _ fun k _ => hpsd (S k ε)).trace_nonneg
   have hXp0 : 0 ≤ avg fun ε => X ε ^ (p / 2) :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (hX0 ε) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (hX0 ε) _
   have hWp0 : 0 ≤ avg fun ε => W ε ^ (p / 2) :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (hW0 ε) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (hW0 ε) _
   have hZp0 : 0 ≤ avg fun ε => Z ε ^ (p / 2) :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (hZ0 ε) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (hZ0 ε) _
   -- decoupling
   have hdS := (square_decoupling hCV hq1 hu hp hU S hSp).1
   have hdK := (square_decoupling hCV hq1 hu hp hU K hKp).2
@@ -1429,13 +1429,13 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
     convert h' using 3 <;> ring
   have hcs : (avg fun ε => Z ε ^ (p / 2)) ≤
       √(avg fun ε => X ε ^ (p / 2)) * √(avg fun ε => W ε ^ (p / 2)) :=
-    (square_avg_mono hpt).trans (square_avg_sqrt_mul_le (fun ε => Real.rpow_nonneg (hX0 ε) _)
+    (rad_avg_mono hpt).trans (square_avg_sqrt_mul_le (fun ε => Real.rpow_nonneg (hX0 ε) _)
       (fun ε => Real.rpow_nonneg (hW0 ε) _))
   -- `(E ‖𝔖 f‖_{S_q}^p)^{1/p} ≤ c u ‖f_N‖`
   have hXb : (avg fun ε => X ε ^ (p / 2)) ^ (1 / p) ≤ c * (u * bf) := by
     have : (avg fun ε => X ε ^ (p / 2)) ≤ c ^ p * avg IS := by
-      rw [← square_avg_mul_left]; exact square_avg_mono h31S
-    exact (square_rpow_one_div_le hXp0 (square_avg_nonneg hIS0) hc.le hp0 this).trans
+      rw [← rad_avg_mul_left]; exact rad_avg_mono h31S
+    exact (square_rpow_one_div_le hXp0 (rad_avg_nonneg hIS0) hc.le hp0 this).trans
       (mul_le_mul_of_nonneg_left hdS hc.le)
   -- `(E ‖𝔖 f‖_{S_2}^p)^{1/p} ≤ (p* − 1) d^{1/2 − 1/q} ‖f_N‖`
   set D := (d : ℝ) ^ (1 / 2 - 1 / q) with hD
@@ -1460,9 +1460,9 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
       rw [e]; exact h'
     have : (avg fun ε => squareFrob (mart S N ε) (mart S N ε) ^ (p / 2)) ≤
         D ^ p * avg fun ε => schattenNorm Q (mart S N ε) ^ p := by
-      rw [← square_avg_mul_left]; exact square_avg_mono fun ε => h2q _
-    exact square_rpow_one_div_le (square_avg_nonneg fun ε =>
-      Real.rpow_nonneg (squareFrob_self_nonneg _) _) (square_avg_nonneg fun ε =>
+      rw [← rad_avg_mul_left]; exact rad_avg_mono fun ε => h2q _
+    exact square_rpow_one_div_le (rad_avg_nonneg fun ε =>
+      Real.rpow_nonneg (squareFrob_self_nonneg _) _) (rad_avg_nonneg fun ε =>
         Real.rpow_nonneg (schattenNorm_nonneg _ _) _) hD0 hp0 this
   -- assemble
   have hZb : (avg fun ε => Z ε ^ (p / 2)) ^ (1 / p) ≤
@@ -1476,8 +1476,8 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
             ← Real.rpow_mul hWp0, ← Real.rpow_mul hXp0, ← Real.rpow_mul hWp0, mul_comm (1 / 2)]
   have hKb : (avg IK) ^ (1 / p) ≤ c * (avg fun ε => Z ε ^ (p / 2)) ^ (1 / p) := by
     have : avg IK ≤ c ^ p * avg fun ε => Z ε ^ (p / 2) := by
-      rw [← square_avg_mul_left]; exact square_avg_mono h31K
-    exact square_rpow_one_div_le (square_avg_nonneg hIK0) hZp0 hc.le hp0 this
+      rw [← rad_avg_mul_left]; exact rad_avg_mono h31K
+    exact square_rpow_one_div_le (rad_avg_nonneg hIK0) hZp0 hc.le hp0 this
   have hsD : √D = (d : ℝ) ^ (1 / 4 - 1 / (2 * q)) := by
     rw [hD, Real.sqrt_eq_rpow, ← Real.rpow_mul (Nat.cast_nonneg _)]; congr 1; ring
   have huc : 0 ≤ u * c := mul_nonneg hu hc.le
@@ -1499,10 +1499,10 @@ theorem square_lpNormWith_le {N : ℕ} {E F : Type*} {n₁ : E → ℝ} {n₂ : 
     {X : (Fin N → Bool) → E} {Y : (Fin N → Bool) → F} {a p : ℝ} (ha : 0 ≤ a) (hp : 0 < p)
     (h0 : ∀ ε, 0 ≤ n₁ (X ε)) (h0' : ∀ ε, 0 ≤ n₂ (Y ε)) (h : ∀ ε, n₁ (X ε) ≤ a * n₂ (Y ε)) :
     lpNormWith n₁ p X ≤ a * lpNormWith n₂ p Y := by
-  refine square_rpow_one_div_le (square_avg_nonneg fun ε => Real.rpow_nonneg (h0 ε) _)
-    (square_avg_nonneg fun ε => Real.rpow_nonneg (h0' ε) _) ha hp ?_
-  rw [← square_avg_mul_left]
-  refine square_avg_mono fun ε => ?_
+  refine square_rpow_one_div_le (rad_avg_nonneg fun ε => Real.rpow_nonneg (h0 ε) _)
+    (rad_avg_nonneg fun ε => Real.rpow_nonneg (h0' ε) _) ha hp ?_
+  rw [← rad_avg_mul_left]
+  refine rad_avg_mono fun ε => ?_
   rw [← Real.mul_rpow ha (h0' ε)]
   exact Real.rpow_le_rpow (h0 ε) (h ε) hp.le
 
@@ -1514,16 +1514,16 @@ theorem square_avg_kornF_nonneg {p : ℝ} (hp : 0 < p) {q : ℝ≥0∞} {C : ℝ
       C * lpNormWith (schattenNorm q) p (fun ε => symPart (M ε))) :
     0 ≤ avg fun ε => kornF d p q C (M ε) := by
   have hS0 : 0 ≤ avg fun ε => schattenNorm q (symPart (M ε)) ^ p :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _
   have hK0 : 0 ≤ avg fun ε => schattenNorm q (skewPart (M ε)) ^ p :=
-    square_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _
+    rad_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _
   have h' := square_le_rpow_of_rpow_one_div_le hK0 (Real.rpow_nonneg hS0 _) hC hp h
   rw [← Real.rpow_mul hS0, one_div_mul_cancel hp.ne', Real.rpow_one] at h'
   have hval : (avg fun ε => kornF d p q C (M ε)) =
       C ^ p * (avg fun ε => schattenNorm q (symPart (M ε)) ^ p) -
         avg fun ε => schattenNorm q (skewPart (M ε)) ^ p := by
     simp only [kornF]
-    rw [square_avg_sub, square_avg_mul_left]
+    rw [rad_avg_sub, rad_avg_mul_left]
   rw [hval, sub_nonneg]
   exact h'
 
@@ -1600,7 +1600,7 @@ theorem square_eq31_q (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine) {p : �
     (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
   have hs0 : 0 ≤ s := Real.sqrt_nonneg _
   have hLq0 : 0 ≤ Lq :=
-    Real.rpow_nonneg (square_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
+    Real.rpow_nonneg (rad_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
   have hc0 : 0 < c₀ * √q := mul_pos (by linarith) hsq
   rcases le_or_gt p q with hpq | hpq
   · -- `p ≤ q`
@@ -1802,7 +1802,7 @@ theorem proposition6_5 (hH : HNVWExtrapolation)
         _ ≤ K * (d : ℝ) ^ (1 / 4 : ℝ) * (250 * Real.log d ^ 3) := by gcongr
         _ = Crc := by rw [hCrc, hlog3]; ring
     have hf0 : 0 ≤ lpNormWith (schattenNorm ⊤) p (fun ε => symPart (radMart 0 A N ε)) :=
-      Real.rpow_nonneg (square_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
+      Real.rpow_nonneg (rad_avg_nonneg fun ε => Real.rpow_nonneg (schattenNorm_nonneg _ _) _) _
     have hKq0 : 0 ≤ u * c * √(u * c) * √(pStar p - 1) * (d : ℝ) ^ (1 / 4 - 1 / (2 * q)) := by
       have : 0 ≤ u * c := mul_nonneg hu hc.le
       positivity
@@ -2600,17 +2600,17 @@ theorem theorem6_2 {N : ℕ} (D : Fin N → (Fin N → Bool) → Matrix (Fin d) 
     simp only [mart, Matrix.transpose_sum, Matrix.transpose_smul, hs, Finset.smul_sum]
     exact Finset.sum_congr rfl fun k _ => smul_comm _ _ _
   -- predictability: the signs `ε_j`, `j ≥ n`, do not enter `M_n`, `Ṽ_n`, `D_n`
-  have hDflip : ∀ (k j : Fin N), j ≤ k → ∀ ε, D j (squareFlip k ε) = D j ε := by
+  have hDflip : ∀ (k j : Fin N), j ≤ k → ∀ ε, D j (rad_flip k ε) = D j ε := by
     intro k j hjk ε
-    exact hD j _ _ fun i hi => squareFlip_apply_ne (ne_of_lt (lt_of_lt_of_le hi hjk)) ε
+    exact hD j _ _ fun i hi => rad_flip_apply_ne (ne_of_lt (lt_of_lt_of_le hi hjk)) ε
   have hlt : ∀ n (hn : n < N) (j : Fin N), j ∈ Finset.univ.filter (fun k : Fin N => k.val < n) →
       j < ⟨n, hn⟩ := fun n hn j hj => Fin.lt_def.2 (Finset.mem_filter.1 hj).2
-  have hMflip : ∀ n (hn : n < N) ε, mart D n (squareFlip ⟨n, hn⟩ ε) = mart D n ε := by
+  have hMflip : ∀ n (hn : n < N) ε, mart D n (rad_flip ⟨n, hn⟩ ε) = mart D n ε := by
     intro n hn ε
     simp only [mart]
     refine Finset.sum_congr rfl fun j hj => ?_
-    rw [squareFlip_apply_ne (ne_of_lt (hlt n hn j hj)), hDflip _ j (hlt n hn j hj).le ε]
-  have hVflip : ∀ n (hn : n < N) ε, Vn n (squareFlip ⟨n, hn⟩ ε) = Vn n ε := by
+    rw [rad_flip_apply_ne (ne_of_lt (hlt n hn j hj)), hDflip _ j (hlt n hn j hj).le ε]
+  have hVflip : ∀ n (hn : n < N) ε, Vn n (rad_flip ⟨n, hn⟩ ε) = Vn n ε := by
     intro n hn ε
     simp only [Vn]
     refine Finset.sum_congr rfl fun j hj => ?_
@@ -2622,26 +2622,26 @@ theorem theorem6_2 {N : ℕ} (D : Fin N → (Fin N → Bool) → Matrix (Fin d) 
       fun ε => square_sum_filter_succ hn _
     have hV1 : ∀ ε, Vn (n + 1) ε = Vn n ε + (D ⟨n, hn⟩ ε)ᵀ * D ⟨n, hn⟩ ε := fun ε =>
       square_sum_filter_succ hn _
-    have hpair : ∀ ε, Φ (n + 1) ε + Φ (n + 1) (squareFlip ⟨n, hn⟩ ε) ≤ 2 * Φ n ε := by
+    have hpair : ∀ ε, Φ (n + 1) ε + Φ (n + 1) (rad_flip ⟨n, hn⟩ ε) ≤ 2 * Φ n ε := by
       intro ε
       have h1 : Φ (n + 1) ε = squarePhi (mart D n ε + coin (ε ⟨n, hn⟩) • D ⟨n, hn⟩ ε)
           (Vn n ε + (D ⟨n, hn⟩ ε)ᵀ * D ⟨n, hn⟩ ε) := by
         show squarePhi (mart D (n + 1) ε) (Vn (n + 1) ε) = _
         rw [hM1, hV1]
-      have h2 : Φ (n + 1) (squareFlip ⟨n, hn⟩ ε) =
+      have h2 : Φ (n + 1) (rad_flip ⟨n, hn⟩ ε) =
           squarePhi (mart D n ε + (-coin (ε ⟨n, hn⟩)) • D ⟨n, hn⟩ ε)
             (Vn n ε + (D ⟨n, hn⟩ ε)ᵀ * D ⟨n, hn⟩ ε) := by
-        show squarePhi (mart D (n + 1) (squareFlip ⟨n, hn⟩ ε))
-          (Vn (n + 1) (squareFlip ⟨n, hn⟩ ε)) = _
+        show squarePhi (mart D (n + 1) (rad_flip ⟨n, hn⟩ ε))
+          (Vn (n + 1) (rad_flip ⟨n, hn⟩ ε)) = _
         rw [hM1, hV1, hMflip n hn, hVflip n hn, hDflip _ _ le_rfl, square_coin_flip]
       rw [h1, h2]
       exact square_phi_step (hnormal (hMt n ε)) (hnormal (hs _ ε)) (square_coin_sq _)
     calc avg (Φ (n + 1)) =
-          avg (fun ε => (Φ (n + 1) ε + Φ (n + 1) (squareFlip ⟨n, hn⟩ ε)) / 2) := by
+          avg (fun ε => (Φ (n + 1) ε + Φ (n + 1) (rad_flip ⟨n, hn⟩ ε)) / 2) := by
           simp only [div_eq_mul_inv, mul_comm _ (2 : ℝ)⁻¹]
-          rw [square_avg_mul_left, square_avg_add,
+          rw [rad_avg_mul_left, rad_avg_add,
             square_avg_flip ⟨n, hn⟩ (Φ (n + 1))]; ring
-      _ ≤ avg (Φ n) := square_avg_mono fun ε => by linarith [hpair ε]
+      _ ≤ avg (Φ n) := rad_avg_mono fun ε => by linarith [hpair ε]
   have hΦ0 : avg (Φ 0) = 0 := by
     have : Φ 0 = fun _ => 0 := funext fun ε => by
       simp [Φ, Vn, mart, squarePhi, squareFrob]
@@ -2670,21 +2670,21 @@ theorem theorem6_2 {N : ℕ} (D : Fin N → (Fin N → Bool) → Matrix (Fin d) 
   have hVV : ∀ ε, 0 ≤ squareFrob (Vn N ε) (Vn N ε) := fun ε => squareFrob_self_nonneg _
   have hx2 : x ^ 2 = avg fun ε => squareFrob (H ε) (H ε) := by
     rw [show x = √(avg fun ε => schattenNorm 4 (mart D N ε) ^ 4) from rfl, hx,
-      Real.sq_sqrt (square_avg_nonneg hHH)]
+      Real.sq_sqrt (rad_avg_nonneg hHH)]
   have hy2 : y ^ 2 = avg fun ε => squareFrob (Vn N ε) (Vn N ε) := by
     rw [show y = √(avg fun ε => schattenNorm 2 (∑ k, (D k ε)ᵀ * D k ε) ^ 2) from rfl, hy,
-      Real.sq_sqrt (square_avg_nonneg hVV)]
+      Real.sq_sqrt (rad_avg_nonneg hVV)]
   have hxy : avg (fun ε => squareFrob (H ε) (Vn N ε)) ≤ x * y := by
     calc avg (fun ε => squareFrob (H ε) (Vn N ε))
         ≤ avg (fun ε => √(squareFrob (H ε) (H ε)) * √(squareFrob (Vn N ε) (Vn N ε))) :=
-          square_avg_mono fun ε => (le_abs_self _).trans (squareFrob_le_sqrt _ _)
+          rad_avg_mono fun ε => (le_abs_self _).trans (squareFrob_le_sqrt _ _)
       _ ≤ √(avg fun ε => squareFrob (H ε) (H ε)) * √(avg fun ε => squareFrob (Vn N ε) (Vn N ε)) :=
           square_avg_sqrt_mul_le hHH hVV
       _ = x * y := by rw [show x = √(avg fun ε => schattenNorm 4 (mart D N ε) ^ 4) from rfl,
             show y = √(avg fun ε => schattenNorm 2 (∑ k, (D k ε)ᵀ * D k ε) ^ 2) from rfl, hx, hy]
   have hΦN' : avg (Φ N) = x ^ 2 - 6 * avg (fun ε => squareFrob (H ε) (Vn N ε)) + 3 * y ^ 2 := by
-    rw [hx2, hy2, ← square_avg_mul_left, ← square_avg_mul_left, ← square_avg_sub,
-      ← square_avg_add]
+    rw [hx2, hy2, ← rad_avg_mul_left, ← rad_avg_mul_left, ← rad_avg_sub,
+      ← rad_avg_add]
     rfl
   have h32 : x ^ 2 - 6 * x * y + 3 * y ^ 2 ≤ 0 := by
     have := hxy; rw [hΦN'] at hΦN; nlinarith
@@ -2814,8 +2814,8 @@ theorem corollary6_3_lower (hS : BurkholderSharpness) (d : ℕ) (hd : 2 ≤ d) :
   set F := mart φ N
   set G := mart (fun k ε => σ k ε * φ k ε) N
   have h4 : avg (fun ε => G ε ^ 4) ≤ C ^ 4 * avg (fun ε => F ε ^ 4) := by
-    rw [square_avg_mul_left c (fun ε => C ^ 4 * F ε ^ 4 - G ε ^ 4), square_avg_sub,
-      square_avg_mul_left] at hineq
+    rw [rad_avg_mul_left c (fun ε => C ^ 4 * F ε ^ 4 - G ε ^ 4), rad_avg_sub,
+      rad_avg_mul_left] at hineq
     have := (mul_nonneg_iff_of_pos_left hc0).1 hineq
     linarith
   have hrpow : ∀ X : (Fin N → Bool) → ℝ, lpNormWith (fun x => |x|) 4 X =
@@ -2826,8 +2826,8 @@ theorem corollary6_3_lower (hS : BurkholderSharpness) (d : ℕ) (hd : 2 ≤ d) :
     rw [show (4 : ℝ) = ((4 : ℕ) : ℝ) by norm_num, Real.rpow_natCast, pow_abs,
       abs_of_nonneg (by positivity)]
   rw [hrpow, hrpow] at hlt
-  have hF0 : 0 ≤ avg fun ε => F ε ^ 4 := square_avg_nonneg fun ε => by positivity
-  have hG0 : 0 ≤ avg fun ε => G ε ^ 4 := square_avg_nonneg fun ε => by positivity
+  have hF0 : 0 ≤ avg fun ε => F ε ^ 4 := rad_avg_nonneg fun ε => by positivity
+  have hG0 : 0 ≤ avg fun ε => G ε ^ 4 := rad_avg_nonneg fun ε => by positivity
   have := Real.rpow_le_rpow hG0 h4 (by norm_num : (0 : ℝ) ≤ 1 / 4)
   rw [Real.mul_rpow (by positivity) hF0, show C ^ 4 = C ^ ((4 : ℕ) : ℝ) by
     rw [Real.rpow_natCast], ← Real.rpow_mul hC0] at this
@@ -2898,7 +2898,7 @@ theorem corollary6_3_upper (d : ℕ) (hd : 2 ≤ d) :
   set yE := √(avg fun ε => schattenNorm 2 (∑ k, (E k ε)ᵀ * E k ε) ^ 2)
   -- the rank-one Loewner fact: `Σ E_kᵀ E_k ⪯ Σ D_k²`, hence `‖𝔖 Skew M‖ ≤ ‖𝔖 Sym_{1/2} M‖`
   have hyEyD : yE ≤ yD := by
-    refine Real.sqrt_le_sqrt (square_avg_mono fun ε => ?_)
+    refine Real.sqrt_le_sqrt (rad_avg_mono fun ε => ?_)
     have hVE : (∑ k, (E k ε)ᵀ * E k ε).PosSemidef := Matrix.posSemidef_sum _ fun k _ => by
       simpa [square_conjTranspose_eq] using Matrix.posSemidef_conjTranspose_mul_self (E k ε)
     have hdiff : (∑ k, (D k ε)ᵀ * D k ε) - ∑ k, (E k ε)ᵀ * E k ε =
@@ -2924,11 +2924,11 @@ theorem corollary6_3_upper (d : ℕ) (hd : 2 ≤ d) :
       _ = (5 + 2 * √6) * xD := by rw [← hq]; ring
   -- `E h_{4,4,C} (M_N) = C⁴ x_D² − x_E² ≥ 0`
   have hxD2 : xD ^ 2 = avg fun ε => schattenNorm 4 (mart D N ε) ^ 4 :=
-    Real.sq_sqrt (square_avg_nonneg fun ε => by positivity)
+    Real.sq_sqrt (rad_avg_nonneg fun ε => by positivity)
   have hxE2 : xE ^ 2 = avg fun ε => schattenNorm 4 (mart E N ε) ^ 4 :=
-    Real.sq_sqrt (square_avg_nonneg fun ε => by positivity)
+    Real.sq_sqrt (rad_avg_nonneg fun ε => by positivity)
   have hval : (avg fun ε => hF d 4 4 C (radMart 0 A N ε)) = C ^ 4 * xD ^ 2 - xE ^ 2 := by
-    rw [hxD2, hxE2, ← square_avg_mul_left, ← square_avg_sub]
+    rw [hxD2, hxE2, ← rad_avg_mul_left, ← rad_avg_sub]
     congr 1; funext ε
     rw [hF, hMD, hME, show (4 : ℝ) = ((4 : ℕ) : ℝ) by norm_num, Real.rpow_natCast,
       Real.rpow_natCast, Real.rpow_natCast]
@@ -3268,31 +3268,6 @@ theorem square_gSquare_zero : gSquare d 0 = 0 := by
   rw [gSquare, square_squareU_eq, square_symHalfPart_zero, square_skewPart_zero]
   simp [squareFrob]
 
-/-- A continuous integrand composed with the gradient of a Lipschitz map is integrable on the
-unit cube (it is measurable and bounded). -/
-theorem square_integrableOn_comp_jac {m n : ℕ} {f : Matrix (Fin m) (Fin n) ℝ → ℝ}
-    (hf : Continuous f) (B : Matrix (Fin m) (Fin n) ℝ) {φ : (Fin n → ℝ) → Fin m → ℝ}
-    {K : NNReal} (hφ : LipschitzWith K φ) :
-    MeasureTheory.IntegrableOn (fun x => f (B + jac φ x)) (unitCube n) := by
-  set S : Set (Matrix (Fin m) (Fin n) ℝ) :=
-    Set.pi Set.univ fun _ => Set.pi Set.univ fun _ => Set.Icc (-(K : ℝ)) K
-  have hS : IsCompact S := isCompact_univ_pi fun _ => isCompact_univ_pi fun _ => isCompact_Icc
-  obtain ⟨C, hC⟩ := hS.exists_bound_of_continuousOn
-    (hf.comp (continuous_const.add continuous_id)).continuousOn
-  have hvol : MeasureTheory.volume (unitCube n) < ⊤ := by rw [volume_unitCube]; simp
-  refine MeasureTheory.IntegrableOn.of_bound hvol ?_ C (Filter.Eventually.of_forall fun x => ?_)
-  · have hm : Measurable fun x => B + jac φ x := Measurable.of_eval_matrix _ fun i k => by
-      simp only [Matrix.add_apply, jac, Matrix.of_apply]
-      exact measurable_const.add (measurable_fderiv_apply_const ℝ (fun y => φ y i) _)
-    exact (hf.measurable.comp hm).aestronglyMeasurable
-  · refine hC (jac φ x) fun i _ k _ => ?_
-    have hi : LipschitzWith K (fun y => φ y i) := by
-      have h := (LipschitzWith.eval (α := fun _ : Fin m => ℝ) i).comp hφ
-      rw [one_mul] at h
-      exact h
-    have := (Sverak.l1_abs_jac_le φ x i k).trans (norm_fderiv_le_of_lipschitz ℝ hi)
-    exact abs_le.1 this
-
 /-- If `g ≤ h`, `g (0) = h (0)` and `h` is not quasiconvex at `0`, neither is `g` (for a
 continuous `g`). -/
 theorem square_not_quasiconvexAt_of_le {m n : ℕ} {g h : Matrix (Fin m) (Fin n) ℝ → ℝ}
@@ -3301,7 +3276,7 @@ theorem square_not_quasiconvexAt_of_le {m n : ℕ} {g h : Matrix (Fin m) (Fin n)
   intro hqc
   apply hh
   intro φ K hφ hz hint
-  have hint' := square_integrableOn_comp_jac hg 0 hφ
+  have hint' := integrableOn_comp_jac hg 0 hφ
   calc h 0 = g 0 := h0.symm
     _ ≤ ∫ x in unitCube n, g (0 + jac φ x) := hqc φ K hφ hz hint'
     _ ≤ ∫ x in unitCube n, h (0 + jac φ x) :=

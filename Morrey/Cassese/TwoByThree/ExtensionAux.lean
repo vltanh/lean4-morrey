@@ -38,52 +38,26 @@ variable {d m : ℕ}
 
 /-! ### The projection -/
 
-theorem tbt2_frobInner_sub_left (A B Z : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (A - B) Z = frobInner A Z - frobInner B Z := by
-  simp only [frobInner, Matrix.sub_apply, sub_mul, Finset.sum_sub_distrib]
-
-theorem tbt2_frobInner_add_left (A B Z : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (A + B) Z = frobInner A Z + frobInner B Z := by
-  simp only [frobInner, Matrix.add_apply, add_mul, Finset.sum_add_distrib]
-
-theorem tbt2_frobInner_smul_left (c : ℝ) (A Z : Matrix (Fin d) (Fin m) ℝ) :
-    frobInner (c • A) Z = c * frobInner A Z := by
-  simp only [frobInner, Matrix.smul_apply, smul_eq_mul, Finset.mul_sum, mul_assoc]
-
-theorem tbt2_frobInner_self (A : Matrix (Fin d) (Fin m) ℝ) : frobInner A A = frobSq A := by
-  simp only [frobInner, frobSq, pow_two]
-
 variable {L : Submodule ℝ (Matrix (Fin d) (Fin m) ℝ)}
   {π : Matrix (Fin d) (Fin m) ℝ → Matrix (Fin d) (Fin m) ℝ}
-
-/-- The orthogonal projection is determined by its defining property. -/
-theorem tbt2_proj_unique (hπ : IsFrobProj L π) (A Y : Matrix (Fin d) (Fin m) ℝ) (hY : Y ∈ L)
-    (h : ∀ Z ∈ L, frobInner (A - Y) Z = 0) : π A = Y := by
-  obtain ⟨hA, hA'⟩ := hπ A
-  have hZ : π A - Y ∈ L := L.sub_mem hA hY
-  have : frobInner (π A - Y) (π A - Y) = 0 := by
-    have e : π A - Y = (A - Y) - (A - π A) := by abel
-    rw [e, tbt2_frobInner_sub_left, ← e, h _ hZ, hA' _ hZ, sub_zero]
-  rw [tbt2_frobInner_self] at this
-  exact sub_eq_zero.mp (tbt_eq_zero_of_frobSq_eq_zero this)
 
 theorem tbt2_proj_mem (hπ : IsFrobProj L π) (A : Matrix (Fin d) (Fin m) ℝ) : π A ∈ L :=
   (hπ A).1
 
 theorem tbt2_proj_of_mem (hπ : IsFrobProj L π) {X : Matrix (Fin d) (Fin m) ℝ} (hX : X ∈ L) :
     π X = X :=
-  tbt2_proj_unique hπ X X hX fun Z _ => by simp [frobInner]
+  tbt_proj_unique hπ X X hX fun Z _ => by simp [frobInner]
 
 theorem tbt2_proj_add (hπ : IsFrobProj L π) (A B : Matrix (Fin d) (Fin m) ℝ) :
     π (A + B) = π A + π B :=
-  tbt2_proj_unique hπ _ _ (L.add_mem (hπ A).1 (hπ B).1) fun Z hZ => by
-    rw [show A + B - (π A + π B) = (A - π A) + (B - π B) by abel, tbt2_frobInner_add_left,
+  tbt_proj_unique hπ _ _ (L.add_mem (hπ A).1 (hπ B).1) fun Z hZ => by
+    rw [show A + B - (π A + π B) = (A - π A) + (B - π B) by abel, tbt_frobInner_add_left,
       (hπ A).2 Z hZ, (hπ B).2 Z hZ, add_zero]
 
 theorem tbt2_proj_smul (hπ : IsFrobProj L π) (c : ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
     π (c • A) = c • π A :=
-  tbt2_proj_unique hπ _ _ (L.smul_mem c (hπ A).1) fun Z hZ => by
-    rw [show c • A - c • π A = c • (A - π A) by rw [smul_sub], tbt2_frobInner_smul_left,
+  tbt_proj_unique hπ _ _ (L.smul_mem c (hπ A).1) fun Z hZ => by
+    rw [show c • A - c • π A = c • (A - π A) by rw [smul_sub], tbt_frobInner_smul_left,
       (hπ A).2 Z hZ, mul_zero]
 
 theorem tbt2_proj_sub (hπ : IsFrobProj L π) (A B : Matrix (Fin d) (Fin m) ℝ) :

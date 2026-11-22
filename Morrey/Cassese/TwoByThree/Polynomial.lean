@@ -8,9 +8,12 @@ public import Mathlib.Algebra.MvPolynomial.Monad
 /-!
 # Section 5: `q₃` and `q_{δ,Λ}` are homogeneous quartic polynomials
 
-`IsHomogeneousPolynomial` is closed under sums, products and scalar multiples, and contains the
-linear functions of the entries (`tbt_ihp_linear`). From these, `q₃ ∘ π` and `q_{δ,Λ}` are
-homogeneous of degree `4` (`tbt_ihp_qDeltaLambda`), and `q₃` is `4`-homogeneous and smooth.
+`IsHomogeneousPolynomial` is closed under sums, products and scalar multiples
+(`IsHomogeneousPolynomial.add`, `IsHomogeneousPolynomial.mul`,
+`IsHomogeneousPolynomial.const_mul`, in `Toolkit`; differences and squares here), and contains
+the linear functions of the entries (`tbt_ihp_linear`). From these, `q₃ ∘ π` and `q_{δ,Λ}` are
+homogeneous of degree `4` (`tbt_ihp_qDeltaLambda`), and `q₃` is `4`-homogeneous and smooth
+(and continuous, `tbt_continuous_q3`).
 
 Helpers are prefixed `tbt_`.
 -/
@@ -24,18 +27,6 @@ namespace Cassese
 
 variable {d m : ℕ}
 
-theorem tbt_ihp_congr {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) (h : ∀ A, f A = g A) : IsHomogeneousPolynomial n g := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  exact ⟨P, hP, fun A => (h A).symm.trans (hPf A)⟩
-
-theorem tbt_ihp_add {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial n g) :
-    IsHomogeneousPolynomial n fun A => f A + g A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  obtain ⟨Q, hQ, hQg⟩ := hg
-  exact ⟨P + Q, hP.add hQ, fun A => by simp only [hPf A, hQg A, MvPolynomial.eval_add]⟩
-
 theorem tbt_ihp_sub {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial n g) :
     IsHomogeneousPolynomial n fun A => f A - g A := by
@@ -43,25 +34,11 @@ theorem tbt_ihp_sub {n : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
   obtain ⟨Q, hQ, hQg⟩ := hg
   exact ⟨P - Q, hP.sub hQ, fun A => by simp only [hPf A, hQg A, map_sub]⟩
 
-theorem tbt_ihp_mul {n k : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) (hg : IsHomogeneousPolynomial k g) :
-    IsHomogeneousPolynomial (n + k) fun A => f A * g A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  obtain ⟨Q, hQ, hQg⟩ := hg
-  exact ⟨P * Q, hP.mul hQ, fun A => by simp only [hPf A, hQg A, MvPolynomial.eval_mul]⟩
-
-theorem tbt_ihp_const_mul {n : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) (c : ℝ) :
-    IsHomogeneousPolynomial n fun A => c * f A := by
-  obtain ⟨P, hP, hPf⟩ := hf
-  exact ⟨MvPolynomial.C c * P, hP.C_mul c, fun A => by
-    simp only [hPf A, MvPolynomial.eval_mul, MvPolynomial.eval_C]⟩
-
 theorem tbt_ihp_sq {n : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hf : IsHomogeneousPolynomial n f) : IsHomogeneousPolynomial (2 * n) fun A => f A ^ 2 := by
-  have := tbt_ihp_mul hf hf
+  have := hf.mul hf
   rw [show n + n = 2 * n by ring] at this
-  exact tbt_ihp_congr this fun A => by ring
+  exact this.congr fun A => by ring
 
 /-- A linear function of the entries is a homogeneous polynomial of degree `1`. -/
 theorem tbt_ihp_linear (ℓ : Matrix (Fin d) (Fin m) ℝ → ℝ)
@@ -142,19 +119,19 @@ theorem tbt_ihp_q3 : IsHomogeneousPolynomial 4 q3 := by
   have h1i := hl ![![0, 1 / 2, 0], ![-(1 / 2), 0, 0]]
   have h2r := hl ![![1 / 2, 0, 0], ![0, -(1 / 2), 0]]
   have h2i := hl ![![0, 1 / 2, 0], ![1 / 2, 0, 0]]
-  have hD1 := tbt_ihp_sq (tbt_ihp_sub (tbt_ihp_sub (tbt_ihp_mul h0r h2r) (tbt_ihp_mul h0i h2i))
+  have hD1 := tbt_ihp_sq (tbt_ihp_sub (tbt_ihp_sub (h0r.mul h2r) (h0i.mul h2i))
     (tbt_ihp_sub (tbt_ihp_sq h1r) (tbt_ihp_sq h1i)))
-  have hD2 := tbt_ihp_sq (tbt_ihp_sub (tbt_ihp_add (tbt_ihp_mul h0r h2i) (tbt_ihp_mul h0i h2r))
-    (tbt_ihp_const_mul (tbt_ihp_mul h1r h1i) 2))
-  have hH := tbt_ihp_sq (tbt_ihp_sub (tbt_ihp_add (tbt_ihp_add (tbt_ihp_sq h0r) (tbt_ihp_sq h0i))
-    (tbt_ihp_add (tbt_ihp_sq h2r) (tbt_ihp_sq h2i)))
-    (tbt_ihp_const_mul (tbt_ihp_add (tbt_ihp_sq h1r) (tbt_ihp_sq h1i)) 2))
-  have := tbt_ihp_sub (tbt_ihp_const_mul (tbt_ihp_add hD1 hD2) 4) hH
-  refine tbt_ihp_congr this fun B => ?_
+  have hD2 := tbt_ihp_sq (tbt_ihp_sub ((h0r.mul h2i).add (h0i.mul h2r)) ((h1r.mul h1i).const_mul 2))
+  have hH := tbt_ihp_sq (tbt_ihp_sub (((tbt_ihp_sq h0r).add (tbt_ihp_sq h0i)).add
+    ((tbt_ihp_sq h2r).add (tbt_ihp_sq h2i))) (((tbt_ihp_sq h1r).add (tbt_ihp_sq h1i)).const_mul 2))
+  have := tbt_ihp_sub ((hD1.add hD2).const_mul 4) hH
+  refine this.congr fun B => ?_
   rw [tbt_q3_eq]
   simp only [Fin.sum_univ_two, Fin.sum_univ_three, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_two, Matrix.head_cons, Matrix.tail_cons]
   ring
+
+theorem tbt_continuous_q3 : Continuous q3 := tbt_ihp_q3.continuous
 
 theorem tbt_ihp_sum {ι : Type*} {n : ℕ} (s : Finset ι)
     (f : ι → Matrix (Fin d) (Fin m) ℝ → ℝ) (h : ∀ i ∈ s, IsHomogeneousPolynomial n (f i)) :
@@ -163,8 +140,8 @@ theorem tbt_ihp_sum {ι : Type*} {n : ℕ} (s : Finset ι)
   induction s using Finset.induction_on with
   | empty => exact ⟨0, MvPolynomial.isHomogeneous_zero _ _ _, fun A => by simp⟩
   | insert i s hi ih =>
-    refine tbt_ihp_congr (tbt_ihp_add (h i (Finset.mem_insert_self i s))
-      (ih fun j hj => h j (Finset.mem_insert_of_mem hj))) fun A => ?_
+    refine ((h i (Finset.mem_insert_self i s)).add
+      (ih fun j hj => h j (Finset.mem_insert_of_mem hj))).congr fun A => ?_
     rw [Finset.sum_insert hi]
 
 theorem tbt_ihp_frobSq :
@@ -189,8 +166,8 @@ theorem tbt_ihp_qDeltaLambda (δ Λ : ℝ) : IsHomogeneousPolynomial 4 (qDeltaLa
   have h2 := tbt_ihp_comp (tbt_ihp_frobSq (d := 2) (m := 3)) projL3 tbt_ihp_projL3_entry
   have h3 := tbt_ihp_comp (tbt_ihp_frobSq (d := 2) (m := 3)) (fun A => A - projL3 A)
     tbt_ihp_perp_entry
-  have h4 := tbt_ihp_const_mul (tbt_ihp_sq (tbt_ihp_add h2 (tbt_ihp_const_mul h3 (Λ ^ 2)))) δ
-  exact tbt_ihp_congr (tbt_ihp_add h1 h4) fun A => rfl
+  have h4 := (tbt_ihp_sq (h2.add (h3.const_mul (Λ ^ 2)))).const_mul δ
+  exact (h1.add h4).congr fun A => rfl
 
 /-- `q̂_{δ,Λ}` is a homogeneous quartic polynomial, for every `δ`, `Λ`. -/
 theorem tbt_ihp_qHat (δ Λ : ℝ) : IsHomogeneousPolynomial 4 (qHat δ Λ) :=

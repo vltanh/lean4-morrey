@@ -45,28 +45,15 @@ theorem tbt3_projL3_smul (r : ℝ) (B : Matrix (Fin 2) (Fin 3) ℝ) :
     projL3 (r • B) = r • projL3 B := by
   ext i j; fin_cases i <;> fin_cases j <;> simp [projL3] <;> ring
 
-theorem tbt3_frobSq_smul {d m : ℕ} (r : ℝ) (B : Matrix (Fin d) (Fin m) ℝ) :
-    frobSq (r • B) = r ^ 2 * frobSq B := by
-  simp only [frobSq, Matrix.smul_apply, smul_eq_mul, Finset.mul_sum]
-  exact Finset.sum_congr rfl fun i _ => Finset.sum_congr rfl fun j _ => by ring
-
 /-- `q̂_{δ,Λ}` is homogeneous of degree `4`. -/
 theorem tbt3_qHat_smul (δ Λ r : ℝ) (M : Matrix (Fin 3) (Fin 2) ℝ) :
     qHat δ Λ (r • M) = r ^ 4 * qHat δ Λ M := by
   simp only [qHat, qDeltaLambda, Matrix.transpose_smul, tbt3_projL3_smul, tbt_q3_smul,
-    tbt3_frobSq_smul, ← smul_sub]
+    tbt_frobSq_smul, ← smul_sub]
   ring
 
-theorem tbt3_continuous_of_ihp {d m n : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : IsHomogeneousPolynomial n f) : Continuous f := by
-  obtain ⟨P, -, hP⟩ := hf
-  have : f = fun A => MvPolynomial.eval (fun ij => A ij.1 ij.2) P := funext hP
-  rw [this]
-  exact (MvPolynomial.continuous_eval P).comp
-    (continuous_pi fun ij => (continuous_apply ij.2).comp (continuous_apply ij.1))
-
 theorem tbt3_continuous_qHat (δ Λ : ℝ) : Continuous (qHat δ Λ) :=
-  tbt3_continuous_of_ihp (tbt_ihp_qHat δ Λ)
+  (tbt_ihp_qHat δ Λ).continuous
 
 theorem tbt3_contDiff_V {ψ : (Fin 2 → ℝ) → ℝ} (h : ContDiff ℝ tbt3Top ψ) :
     ContDiff ℝ tbt3Top (tbt3V ψ) := by
@@ -313,12 +300,6 @@ noncomputable def tbt3M3 : ℝ :=
   |∫ x in {z : Fin 2 → ℝ | 1 ≤ tbt3Sq z}, q3 (tbt3TOut x)| +
     ∫ x in {z : Fin 2 → ℝ | 1 ≤ tbt3Sq z}, frobSq (tbt3TOut x) ^ 2
 
-theorem tbt3_continuous_q3' : Continuous q3 := tbt3_continuous_of_ihp tbt_ihp_q3
-
-theorem tbt3_continuous_frobSq' {d m : ℕ} :
-    Continuous fun A : Matrix (Fin d) (Fin m) ℝ => frobSq A :=
-  tbt3_continuous_of_ihp tbt_ihp_frobSq
-
 theorem tbt3_continuous_TIn : Continuous tbt3TIn :=
   (continuous_id.matrix_transpose).comp (tbt3_continuous_jac (tbt3_contDiff_V tbt3_contDiff_PhiIn))
 
@@ -349,9 +330,9 @@ theorem tbt3_inner_le {δ : ℝ} (hδ1 : δ ≤ 1) (Λ : ℝ) :
     ∫ x in {z : Fin 2 → ℝ | tbt3Sq z ≤ 2}, qHat δ Λ (jac (tbt3V tbt3PhiIn) x) ≤ tbt3M1 := by
   have hK := tbt3_isCompact_A1
   have h1 : IntegrableOn (fun x => q3 (tbt3TIn x)) {z : Fin 2 → ℝ | tbt3Sq z ≤ 2} :=
-    (tbt3_continuous_q3'.comp tbt3_continuous_TIn).continuousOn.integrableOn_compact hK
+    (tbt_continuous_q3.comp tbt3_continuous_TIn).continuousOn.integrableOn_compact hK
   have h2 : IntegrableOn (fun x => frobSq (tbt3TIn x) ^ 2) {z : Fin 2 → ℝ | tbt3Sq z ≤ 2} :=
-    ((tbt3_continuous_frobSq'.comp tbt3_continuous_TIn).pow 2).continuousOn.integrableOn_compact hK
+    ((tbt_continuous_frobSq.comp tbt3_continuous_TIn).pow 2).continuousOn.integrableOn_compact hK
   have e : ∀ x, qHat δ Λ (jac (tbt3V tbt3PhiIn) x) = q3 (tbt3TIn x) + δ * frobSq (tbt3TIn x) ^ 2 :=
     fun x => tbt3_qHat_jac δ Λ tbt3_contDiff_PhiIn x
   simp_rw [e]
@@ -368,12 +349,12 @@ theorem tbt3_outer_le {δ : ℝ} (hδ1 : δ ≤ 1) (Λ : ℝ) :
     ∫ x in {z : Fin 2 → ℝ | 1 ≤ tbt3Sq z}, qHat δ Λ (jac (tbt3V tbt3PhiOut) x) ≤ tbt3M3 := by
   have hc := tbt3_hasCompactSupport_TOut
   have h1 : Integrable fun x => q3 (tbt3TOut x) :=
-    (tbt3_continuous_q3'.comp tbt3_continuous_TOut).integrable_of_hasCompactSupport
+    (tbt_continuous_q3.comp tbt3_continuous_TOut).integrable_of_hasCompactSupport
       (hc.comp_left (g := q3) (by simp [tbt_q3_eq]))
   have h2 : Integrable fun x => frobSq (tbt3TOut x) ^ 2 := by
     have hcs : HasCompactSupport fun x => frobSq (tbt3TOut x) ^ 2 :=
       hc.comp_left (g := fun A => frobSq A ^ 2) (by simp [frobSq])
-    exact ((tbt3_continuous_frobSq'.comp tbt3_continuous_TOut).pow 2).integrable_of_hasCompactSupport
+    exact ((tbt_continuous_frobSq.comp tbt3_continuous_TOut).pow 2).integrable_of_hasCompactSupport
       hcs
   have e : ∀ x, qHat δ Λ (jac (tbt3V tbt3PhiOut) x) = q3 (tbt3TOut x) + δ * frobSq (tbt3TOut x) ^ 2 :=
     fun x => tbt3_qHat_jac δ Λ tbt3_contDiff_PhiOut x
