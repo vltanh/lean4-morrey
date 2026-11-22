@@ -254,7 +254,7 @@ Theorem 5.20, which the paper cites at this step, is the full equivalence "quasi
 affine ⇔ affine combination of minors"; the proposition `External.Dacorogna.RankOneAffineMinors`
 records only the direction "rank-one affine ⇒ affine combination of minors", and the direction
 "minors ⇒ quasiaffine" of the same cited theorem is `External.Dacorogna.minor3_quasiaffine`, by
-the divergence identities and mollification of Morrey 1952, Lemma 5.1 (in the package
+the divergence identities and density of Dacorogna's Theorem 8.35 (ii) (in the package
 `CalculusOfVariations`). This proves part of the cited result; the argument of the proposition is
 the paper's. -/
 theorem proposition5_1
@@ -287,7 +287,7 @@ theorem proposition5_1
   have hRA : CalculusOfVariations.RankOneAffine (fk 3) :=
     tbt6_rankOneAffine (hcont 3) fun A R hR h =>
       tbt6_sym hf hrc hsum h0 h1 (hhom 2) (hhom 3) A hR h
-  obtain ⟨a, ha⟩ := External.Dacorogna.rankOneAffineMinors_holds d m (fk 3) (hcont 3) hRA
+  obtain ⟨a, ha⟩ := External.Dacorogna.rankOneAffineMinors_holds d m (fk 3) hRA
   -- the quadratic part is a quasiconvex quadratic form
   set c : Fin d × Fin m → Fin d × Fin m → ℝ := fun ij kl =>
     (MvPolynomial.pderiv kl (MvPolynomial.pderiv ij
