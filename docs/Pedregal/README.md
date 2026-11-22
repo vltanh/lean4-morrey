@@ -4,7 +4,7 @@ One of the papers on Morrey's problem formalized in this repository; the
 [overview](../../README.md) describes the problem, the state of each case and how the papers relate.
 
 Morrey's problem asks whether every rank-one convex function `ψ : ℝ^{m×N} → ℝ` is quasiconvex.
-It is false for `m ≥ 3` (Šverák 1992, [formalized here](../../Morrey/Sverak)) and open for `2 × 2`
+It is false for `m ≥ 3` (Šverák 1992, [formalized here](../Sverak/README.md)) and open for `2 × 2`
 matrices. P. Pedregal,
 [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026), claims a proof for
 `2 × 2`: every gradient measure of a periodic piecewise affine map `ℝ² → ℝ²` is a laminate,
