@@ -258,7 +258,7 @@ proofs cite none.
   - G. Cassese ([arXiv:2608.03488](https://arxiv.org/abs/2608.03488)) claims the two-component case
     outside `2 × 2`, so that, with Šverák's theorem, only `2 × 2` would remain open. The paper is
     formalized in this repository ([`docs/Cassese/`](../Cassese/README.md)), and the combined
-    statement is proved there from this paper's theorem (`CasseseChallenge.morrey_landscape`). Its `2 × 3`
+    statement is proved there from this paper's theorem ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L544)). Its `2 × 3`
     quartic (Theorem 1.3) follows Šverák's architecture: a polynomial rank-one convex on a subspace
     with few rank-one directions, extended by a projection and a penalty (a homogeneous analogue of
     `k|X − PX|²`), and a witness with gradients in the subspace. Its transpose on `ℝ^{3×2}`
