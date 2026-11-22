@@ -303,7 +303,10 @@ proofs cite none.
   the "only if" half of Lemma 1. It does not have Lemma 2, the Theorem or the Corollary. No
   formalization of the whole paper was found.
 - Cassese formalized parts of his own paper in Lean.
-- Neither was consulted: the definitions and proofs here were written independently.
+- The proofs here were written without consulting either, and nothing from them was used. Parts of
+  both were displayed on 21 and 22 November 2026 by searches for earlier formalizations and for the
+  literature, and by checks of the documents
+  ([`docs/Cassese/CREDITS.md`](../Cassese/CREDITS.md) says which).
 
 ## 11. What's next
 

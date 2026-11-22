@@ -228,7 +228,9 @@ How Cassese relates to the other two papers:
   of the integral (4), and the "only if" half of his Lemma 1; not Lemma 2 or the Theorem.
 - Cassese formalized his Theorem 1.2 and Theorem 1.3 at `p = 4` in Lean, with an AI system (the
   paper names ChatGPT 5.6 Sol), and released the code without a license.
-- This repository does not use either: its definitions and proofs were written independently.
+- This repository does not use either: its proofs were written without consulting them. Parts of both
+  were displayed on 21 and 22 November 2026 by searches for earlier formalizations and for the
+  literature, and by checks of the documents; [Cassese's credits](docs/Cassese/CREDITS.md#who) say which.
 - We found no earlier formalization of Šverák's theorem or of Pedregal's paper.
 
 ## What the repository adds to the papers
@@ -249,8 +251,9 @@ How Cassese relates to the other two papers:
   multipliers and Dragičević's lower bound for the Beurling–Ahlfors transform; Dacorogna's formula
   for the quasiconvex envelope and his theorems on minors and quadratic forms; Rindler's lemmas;
   and Kristensen's smoothing. The general theories are in four packages (below);
-  [`Morrey/Common/External/`](Morrey/Common/External) states each result in its source's terms and proves it from them. The sharpness
-  of Burkholder's constant is proved in Cassese's library.
+  [`Morrey/Common/External/`](Morrey/Common/External) states each result in its source's terms and proves it from them, by the
+  source's own argument: Cassese's report lists the sources, the differences and the one departure (the
+  upper bound of the non-commutative Khintchine inequality).
 
 ## Trust
 
@@ -267,7 +270,8 @@ How Cassese relates to the other two papers:
   errors of the paper; Cassese's in [its report](docs/Cassese/REPORT.md).
 - Comparator accepts each paper's Solution against its Challenge.
 - Independent AI agents checked the statements against the papers, the formal proofs against the
-  papers' proofs, every recorded departure, and the documents. No person has reviewed the proofs.
+  papers' proofs and, for the cited results, against the sources', every recorded departure, and the
+  documents. No person has reviewed the proofs.
 
 ## Shared code and dependencies
 
@@ -279,10 +283,10 @@ the proofs use four packages:
 
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
-| [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), commit `5f650f0` | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), commit `fc86bbb` | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis), commit `bf215c5` | `HarmonicAnalysis` | Fourier multipliers on `ℝ²` and `𝕋²`, de Leeuw's transference, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions | Cassese |
-| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability), commit `250cd49` | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities, UMD spaces, Schatten classes, the non-commutative Khintchine inequality | Cassese |
+| [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | Fourier multipliers on `ℝ²` and `𝕋²`, transference from `𝕋²` to `ℝ²`, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions | Cassese |
+| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities with their sharpness, UMD spaces, Schatten classes, the non-commutative Khintchine inequality | Cassese |
 
 Šverák's library uses only Mathlib and `Common/Basic`. The dependencies run one way: no package
 imports this repository.
@@ -290,7 +294,7 @@ imports this repository.
 ## Building
 
 Lean and Mathlib `v4.36.0-rc2`. [`lakefile.toml`](lakefile.toml) requires the four packages from
-their GitHub repositories, each pinned by its commit (the table above). Lake fetches all four into
+their GitHub repositories, each pinned by its commit. Lake fetches all four into
 `.lake/packages`, whichever part of the repository is built. From the root:
 
 ```sh
@@ -330,7 +334,8 @@ Each preflight workflow names its paper's `comparator.json` and `formalization.y
 - Šverák: formalized on 21 November 2026; Lemma 1's cut-off rebuilt as the paper's on 21–22
   November: [`docs/Sverak/CREDITS.md`](docs/Sverak/CREDITS.md).
 - Cassese: formalized on 21 November 2026; every assumed result proved, and Theorem 1.2 by the
-  paper's route, on 21–22 November: [`docs/Cassese/CREDITS.md`](docs/Cassese/CREDITS.md).
+  paper's route, on 21–22 November; the cited results by their sources' proofs on 22 November:
+  [`docs/Cassese/CREDITS.md`](docs/Cassese/CREDITS.md).
 - Formalized by Claude (Anthropic): Claude Opus 5.5 in Claude Code (and Claude Haiku 5.5 for
   reading web pages), at the request of The-Anh Vu-Le, following the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person has

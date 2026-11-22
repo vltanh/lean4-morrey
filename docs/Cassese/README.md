@@ -39,7 +39,7 @@ repository; the [overview](../../README.md) describes the problem and how the pa
 | lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2240) ⭐ | with Šverák's theorem: for `d, m ≥ 2` other than `2 × 2`, some rank-one convex integrand on `ℝ^{d×m}` is not quasiconvex |
 | lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2268) ⭐ | at `p = 4` the homogeneous problem has a negative answer in every such size |
 | Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2083) ⭐ | every `p > 1`: a conjugation- and transposition-invariant example on `ℝ^{d×d}` for every `d ≥ d₀(p)` |
-| Theorem 1.4 at `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3588) ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
+| Theorem 1.4 at `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3590) ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
 | Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2166) ⭐ | every `p > 1` other than `2`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{4×2}` |
 | Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214) ⭐ | a nonnegative `1`-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two |
 | Corollary 5.2 | [`corollary5_2`](../../Morrey/Cassese/NonLocality.lean#L32) | a smooth, uniformly Legendre–Hadamard integrand of quadratic growth on `ℝ^{2×m}`, `m ≥ 3`, not quasiconvex at `0` |
@@ -57,15 +57,18 @@ No statement of the paper is false. The main findings
 | --- | --- |
 | E10 | with the reading of prelaminates that Proposition 2.4 needs, the step of Proposition 2.5 at lines 661–663 is false; the other reading breaks Proposition 2.4 |
 | E4 | Theorem 1.3 (b): "by continuity" in `p` needs the constants of Lemma 5.1 (1) uniform for `p` near `4` |
-| E27 | Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants polynomial in `q`, which Proposition 6.4 as stated does not give; the paper names no source |
+| E27 | Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants polynomial in `q`; Proposition 6.4 leaves them out, the theorem it cites has them |
+| E30 | the sharpness of `p* − 1` behind Corollary 6.3 has only "see also [Cassese 2025]" as a source; the chain ends at Burkholder (1984) and Osękowski (2012), whose proof is followed |
 | E5 | the constant `κ = 2` of Section 5 is asserted without proof; it holds, and `√2` already works |
 | E6, E19 | Proposition 6.6 and Corollary 5.2 have no proof in the paper |
 | E28, E29 | Proposition 7.2 and Corollary 6.1 pass from smooth to Lipschitz or compactly supported test maps without saying how |
 
-34 findings in all (E2–E35), most of them steps left to the reader, sketched proofs and misprints.
-Every proof follows the paper's argument except three, which repair a gap or a false step (E4,
-E9, E10); the cited results follow their sources, or a named argument from an open source where a
-source was not obtained
+40 findings in all (E2–E41), most of them steps left to the reader, sketched proofs, misprints and
+citations that say more or less than their sources. Every proof follows the paper's argument except
+three, which repair a gap or a false step (E4, E9, E10). The cited results follow their sources'
+proofs, with the gaps and slips of the sources repaired, except the upper bound of the
+non-commutative Khintchine inequality, proved at present by exchangeable pairs; the report lists each
+source, how it was read, and what is different
 ([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
@@ -82,8 +85,8 @@ source was not obtained
 - Comparator checks that the Solution proves exactly the Challenge's statements with those axioms
   ([`comparator.json`](../../palomar/Cassese/comparator.json)).
 - Independent AI agents checked the statements against the TeX source, the formal proofs against
-  the paper's, the departures from the paper, and the documents. No person has reviewed the
-  proofs.
+  the paper's and the packages' proofs against the cited sources, the departures from the paper, and
+  the documents. No person has reviewed the proofs.
 
 ## Dependencies
 
@@ -93,9 +96,9 @@ Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization, p
 
 | Package | What this paper uses from it |
 | --- | --- |
-| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis), commit `bf215c5` | Fourier multipliers and duality, de Leeuw's transference from `𝕋²` to `ℝ²`, Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7) |
-| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability), commit `250cd49` | Burkholder's inequality and function; UMD theory (decoupling, complex constants, Maurey's theorem, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes; the non-commutative Khintchine inequality; Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
-| [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations), commit `fc86bbb` | quasiconvexity and laminates, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
+| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7) |
+| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality, its sharpness and Burkholder's function; UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes; the non-commutative Khintchine inequality; Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
+| [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | rank-one convexity and quasiconvexity, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
 
 [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms and proves it from these
 packages; [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) restates it in
@@ -128,7 +131,8 @@ lake env lake comparator --config=palomar/Cassese/comparator.json
 
 - The paper's place among the work on Morrey's problem, the concurrent and later papers (among
   them a claimed proof of Iwaniec's conjecture), and other formalizations, including the author's
-  own Lean code for Theorems 1.2 and 1.3, which was not consulted:
+  own Lean code for Theorems 1.2 and 1.3, which the proofs did not consult (parts of it were displayed
+  by literature searches: [CREDITS.md](CREDITS.md#who)):
   [REPORT.md, Section 10](REPORT.md#10-the-paper-in-the-literature).
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following
   the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in

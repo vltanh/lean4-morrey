@@ -6,8 +6,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
 
 - Author and maintainer: The-Anh Vu-Le, who asked for the paper to be formalized in this
   repository, independently of the author's own Lean code; chose, in the second round, to build
-  every cited result that was large but feasible; and asked, in the third round, for every result
-  to be proved unconditionally.
+  every cited result that was large but feasible; asked, in the third round, for every result to be
+  proved unconditionally; and obtained, for the fourth, the cited books and articles that the session
+  could not, so that the cited results could follow them.
 - Formalization: Claude Opus 5.5 (`claude-opus-5-5`, Anthropic), in Claude Code 2.1.330 (the VS Code
   extension, Claude Agent SDK), in one session: the main session, its sub-agents, and the
   sub-agents that lead agents launched. Web pages were read by sub-agents. The same system wrote
@@ -19,10 +20,27 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   commit `020f253` in the second round, with the reference for several papers in one repository
   that the round wrote (commits `d385092`, `b04ce21`); version 4.2.0 (commit `f5e7420`) in the third
   round, which it wrote: the mathematics that Lean lacks is built, and is no reason to depart
-  from a proof.
-- Not consulted: the author's Lean formalization
-  ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) and
-  Conti, Dolzmann and Dondl's.
+  from a proof; versions 4.2.1 to 4.3.1 (commits `8d291b1` to
+  `f9198d5`) in the fourth.
+- Other Lean code: the proofs were written without consulting the author's Lean formalization
+  ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
+  Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
+  nothing from them was used; by the session's transcripts, no sub-agent that wrote proofs opened
+  either. Parts of both were displayed by the searches for earlier formalizations and for the
+  literature, and by the checks of the documents:
+  - on 21 and 22 November 2026, partly before the proofs: by the main session (21 November),
+    metadata, file lists, READMEs and first lines of declarations of both, and docstrings and the
+    beginning of `Sverak.lean` in so3-r1c-and-not-qc; by agents that wrote no proofs, the same, and, of
+    so3-r1c-and-not-qc, `Statement.lean`, the beginning of `Defs.lean` and passages of `Sverak.lean`
+    and `Periodic.lean`, and, of MorreyTwoComponentsLean, about 180 lines of `Morrey2x3.lean` (a search
+    for follow-up work, on 21 November);
+  - on 22 November 2026, after the proofs that overlap with them had been committed, by two
+    literature searches for the packages. MorreyTwoComponentsLean: repository metadata, the file
+    list, the first 80 lines of the README, the first lines of definitions (some with a one-line
+    body) and of some theorem statements, one docstring line, no proof. so3-r1c-and-not-qc:
+    metadata, README passages, `Statement.lean` and `Defs.lean` in part, the docstrings of eight
+    files, the first lines of declarations, the proofs of six lemmas of one to three lines, and the
+    beginning of two others.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
   the TeX source (twice), the formal proofs against the paper's (three reviewers) and the report,
   in the second round. In the third: the statements of each package (and the bridges between
@@ -33,7 +51,10 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   4.2.0 of the procedure (an audit). Then an independent agent checked the rewritten documents of
   the three papers (README, report, credits, metadata) against the code, the audit output, the TeX
   source and the cited works. Last, two independent reviewers checked the package's redone proofs
-  of Borell's and Burkholder's results against Borell (1979) and Burkholder (1988).
+  of Borell's and Burkholder's results against Borell (1979) and Burkholder (1988). In the fourth:
+  agents compared the cited results with their sources, and independent reviewers checked the
+  packages' redone proofs against the sources, the statements of [`Morrey/Common/External/`](../../Morrey/Common/External), the
+  restated Proposition 2.7 (6) and the updated documents.
 
 ## Second round (21 November 2026)
 
@@ -130,7 +151,7 @@ How it was made:
   packages. Then an agent rewrote this paper's README, report, credits and metadata.
 - Afterwards, `lean4-banach-probability` re-proved the triangle inequality for Schatten norms by
   the argument of an open source (Bourin and Zhang, arXiv:2610.30538, Proposition 3.13), and the
-  project's [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L439) became the package's theorem (commit `452cccc`). The documents
+  project's [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L441) became the package's theorem (commit `452cccc`). The documents
   were then checked independently (see Review) and corrected.
 - A check of the sources followed. Borell (Séminaire de Probabilités XIII, 1979) and Burkholder
   (Astérisque 157–158, 1988) were obtained from Numdam, and the package's proofs of
@@ -159,3 +180,52 @@ follow-up notes (`NEXT.md`) of this paper and of Šverák's with their checkers,
 rewriting and the check of the documents, the re-proof of the Schatten triangle inequality and
 the check of the sources, which came after. From `scripts/session_stats.py` on the session
 transcript, with `--since` and `--until` at the two times above.
+
+## Fourth round: the cited sources (22 November 2026)
+
+The user obtained the cited books and articles that the session could not, so that each cited
+result could be proved by its source's argument.
+
+How it was made:
+
+- Five agents compared, read-only, the proofs of the cited results with their sources: Burkholder's
+  papers and Osękowski; HNVW I and II; Bhatia and Pisier–Xu; de Leeuw and Dragičević; Dacorogna,
+  Rindler, Kinderlehrer and Pedregal. A sixth compared the Khintchine inequality with Lust-Piquard
+  and Pisier, when that article arrived. Two more read Burkholder's Annals articles for the first.
+- Four lead agents redid, in worktrees of the packages, every proof that differed from its source,
+  with six provers: in `lean4-banach-probability`, the items of HNVW (extrapolation, dyadic and
+  complex UMD constants, zig-zag functions, decoupling, Kahane–Khintchine), and Burkholder's
+  inequality and the sharpness of its constant by Osękowski's proofs; in `lean4-harmonic-analysis`,
+  the transference by HNVW's proof; in `lean4-calculus-of-variations`, Rindler's lemmas,
+  Dacorogna's formula by Kinderlehrer and Pedregal's proof, and Dacorogna's Theorem 5.20 by his own.
+  These replaced, among others, the proofs of the third round by Borell, Burkholder (1988; kept for
+  (13) and (14)), Müller, Conti–Dolzmann–Kirchheim–Müller and Pisier. The upper bound of the
+  non-commutative Khintchine inequality was not redone.
+- Five independent agents compared the redone proofs with the sources; they found no wrong step, and
+  their findings on the documentation, and a few on the code, were applied.
+- An integration agent moved the project onto the new packages: [`Morrey/Common/External/Osekowski`](../../Morrey/Common/External/Osekowski)
+  holds Theorem 2.3 and the sharpness, the directory of Borell's results was removed, Dacorogna's
+  Theorem 5.20 is stated without continuity, and Proposition 2.7 (6) with the equivalence for complex
+  spaces (commits `d065590` to `7b2462d`). Three independent agents checked the statements of
+  [`Morrey/Common/External/`](../../Morrey/Common/External) against the sources and Proposition 2.7 (6) against the TeX source.
+- An agent updated the documents of the three papers, and an independent agent checked the changed
+  passages against the TeX source, the sources and the code.
+
+Figures, from 2026-11-22 08:04:48 (UTC−6), when the user supplied the sources, to commit `7b2462d`
+(11:02:24 UTC−6), the last commit of the proofs:
+
+- elapsed time: 2.95 h;
+- on the steps above, up to the integration: 27 sub-agents (8 for the comparisons, 4 leads and 6
+  provers, 5 reviewers, the integrator and its 3 reviewers), 9.3 h of working time, 2,184 tool calls;
+  tokens: 2.9 M output, 16.3 M input, 409 M cache reads; 1,306 model calls;
+- the whole session in that window: 60 sub-agents (27 launched by the main session), at most 12
+  running at once, 6 resumptions, 17.4 h of working time; 4,437 tool calls; tokens: 5.45 M output,
+  28.73 M input, 655 M cache reads. Besides the steps above, it includes the publication of the
+  packages, their literature reviews and Palomar entries, the revision of the procedure with its
+  evaluation runs, and work on the planned proof of the Khintchine inequality;
+- main session: 166 tool calls; tokens: 0.16 M output, 1.50 M input, 104 M cache reads;
+- model calls: `claude-opus-5-5`, 168 by the main session and 2,343 by the sub-agents.
+
+From `scripts/session_stats.py` on the session transcript and on the sub-agents' transcripts, with
+`--since` and `--until` at the two times above. The figures leave out this update of the documents
+and its check.
