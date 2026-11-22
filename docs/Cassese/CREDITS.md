@@ -7,8 +7,8 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
 - Author and maintainer: The-Anh Vu-Le, who asked for the paper to be formalized in this
   repository, independently of the author's own Lean code; chose, in the second round, to build
   every cited result that was large but feasible; asked, in the third round, for every result to be
-  proved unconditionally; and obtained, for the fourth, the cited books and articles that the session
-  could not, so that the cited results could follow them.
+  proved unconditionally; and obtained, for the fourth, most of the cited books and articles that the
+  session could not, so that the cited results could follow them.
 - Formalization: Claude Opus 5.5 (`claude-opus-5-5`, Anthropic), in Claude Code 2.1.330 (the VS Code
   extension, Claude Agent SDK), in one session: the main session, its sub-agents, and the
   sub-agents that lead agents launched. Web pages were read by sub-agents. The same system wrote
@@ -26,14 +26,17 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
   Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
   nothing from them was used; by the session's transcripts, no sub-agent that wrote proofs opened
-  either. Parts of both were displayed by the searches for earlier formalizations and for the
-  literature, and by the checks of the documents:
-  - on 21 and 22 November 2026, partly before the proofs: by the main session (21 November),
+  either. Files of both were downloaded, and parts of them displayed, by the searches for earlier
+  formalizations and for the literature, and by the checks of the documents:
+  - on 21 November 2026, before the proofs of Šverák's and Cassese's papers, by the main session:
     metadata, file lists, READMEs and first lines of declarations of both, and docstrings and the
-    beginning of `Sverak.lean` in so3-r1c-and-not-qc; by agents that wrote no proofs, the same, and, of
-    so3-r1c-and-not-qc, `Statement.lean`, the beginning of `Defs.lean` and passages of `Sverak.lean`
-    and `Periodic.lean`, and, of MorreyTwoComponentsLean, about 180 lines of `Morrey2x3.lean` (a search
-    for follow-up work, on 21 November);
+    beginning of `Sverak.lean` in so3-r1c-and-not-qc. The main session then wrote Šverák's
+    definitions and statements, the first version of Cassese's `Defs.lean`, and a few short lemmas on
+    the definitions;
+  - on 21 and 22 November 2026, by agents that wrote no proofs: the same, and, of so3-r1c-and-not-qc,
+    `Statement.lean`, the beginning of `Defs.lean` and passages of `Sverak.lean` and `Periodic.lean`,
+    and, of MorreyTwoComponentsLean, about 180 lines of `Morrey2x3.lean` (a search for follow-up work,
+    on 21 November); whether these passages contain proofs was not checked;
   - on 22 November 2026, after the proofs that overlap with them had been committed, by two
     literature searches for the packages. MorreyTwoComponentsLean: repository metadata, the file
     list, the first 80 lines of the README, the first lines of definitions (some with a one-line
@@ -160,7 +163,7 @@ How it was made:
   (`lean4-banach-probability` commits `e8ecfc0`, `db668a4`, `44382e8`; the project's
   [`Morrey/Common/External/`](../../Morrey/Common/External) READMEs and docstrings in commit `3a9f2dd`). Burkholder's
   Annals of Probability papers (1973, 1981, 1984), open access on Project Euclid, could not be
-  obtained (the site refused automated download). Two independent reviewers checked the redone
+  obtained (the site refused automated download); the user supplied them in the fourth round. Two independent reviewers checked the redone
   proofs against these sources and found no departure.
 
 Figures, from 2026-11-21 22:36 (UTC−6), the user's request, to commit `6ae4899`
@@ -183,8 +186,9 @@ transcript, with `--since` and `--until` at the two times above.
 
 ## Fourth round: the cited sources (22 November 2026)
 
-The user obtained the cited books and articles that the session could not, so that each cited
-result could be proved by its source's argument.
+The user obtained most of the cited books and articles that the session could not (Section 7 of the
+report lists those that are still missing), so that the cited results could be proved by their
+sources' arguments.
 
 How it was made:
 
@@ -192,8 +196,8 @@ How it was made:
   papers and Osękowski; HNVW I and II; Bhatia and Pisier–Xu; de Leeuw and Dragičević; Dacorogna,
   Rindler, Kinderlehrer and Pedregal. A sixth compared the Khintchine inequality with Lust-Piquard
   and Pisier, when that article arrived. Two more read Burkholder's Annals articles for the first.
-- Four lead agents redid, in worktrees of the packages, every proof that differed from its source,
-  with six provers: in `lean4-banach-probability`, the items of HNVW (extrapolation, dyadic and
+- Four lead agents redid, in worktrees of the packages, every proof that differed from its source
+  (except the one below), with six provers: in `lean4-banach-probability`, the items of HNVW (extrapolation, dyadic and
   complex UMD constants, zig-zag functions, decoupling, Kahane–Khintchine), and Burkholder's
   inequality and the sharpness of its constant by Osękowski's proofs; in `lean4-harmonic-analysis`,
   the transference by HNVW's proof; in `lean4-calculus-of-variations`, Rindler's lemmas,
@@ -208,16 +212,17 @@ How it was made:
   Theorem 5.20 is stated without continuity, and Proposition 2.7 (6) with the equivalence for complex
   spaces (commits `d065590` to `7b2462d`). Three independent agents checked the statements of
   [`Morrey/Common/External/`](../../Morrey/Common/External) against the sources and Proposition 2.7 (6) against the TeX source.
-- An agent updated the documents of the three papers, and an independent agent checked the changed
-  passages against the TeX source, the sources and the code.
+- An agent updated the documents of the three papers, and two independent agents checked the changed
+  passages against the TeX source, the sources, the code and the transcripts; their findings were
+  applied.
 
 Figures, from 2026-11-22 08:04:48 (UTC−6), when the user supplied the sources, to commit `7b2462d`
 (11:02:24 UTC−6), the last commit of the proofs:
 
 - elapsed time: 2.95 h;
 - on the steps above, up to the integration: 27 sub-agents (8 for the comparisons, 4 leads and 6
-  provers, 5 reviewers, the integrator and its 3 reviewers), 9.3 h of working time, 2,184 tool calls;
-  tokens: 2.9 M output, 16.3 M input, 409 M cache reads; 1,306 model calls;
+  provers, 5 reviewers, the integrator and its 3 reviewers), 8.7 h of working time, 2,183 tool calls;
+  tokens: 2.9 M output, 16.3 M input, 410 M cache reads; 1,305 model calls;
 - the whole session in that window: 60 sub-agents (27 launched by the main session), at most 12
   running at once, 6 resumptions, 17.4 h of working time; 4,437 tool calls; tokens: 5.45 M output,
   28.73 M input, 655 M cache reads. Besides the steps above, it includes the publication of the

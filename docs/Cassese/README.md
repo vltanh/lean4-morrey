@@ -63,7 +63,7 @@ No statement of the paper is false. The main findings
 | E6, E19 | Proposition 6.6 and Corollary 5.2 have no proof in the paper |
 | E28, E29 | Proposition 7.2 and Corollary 6.1 pass from smooth to Lipschitz or compactly supported test maps without saying how |
 
-40 findings in all (E2–E41), most of them steps left to the reader, sketched proofs, misprints and
+41 findings in all (E2–E42), most of them steps left to the reader, sketched proofs, misprints and
 citations that say more or less than their sources. Every proof follows the paper's argument except
 three, which repair a gap or a false step (E4, E9, E10). The cited results follow their sources'
 proofs, with the gaps and slips of the sources repaired, except the upper bound of the
@@ -132,7 +132,8 @@ lake env lake comparator --config=palomar/Cassese/comparator.json
 - The paper's place among the work on Morrey's problem, the concurrent and later papers (among
   them a claimed proof of Iwaniec's conjecture), and other formalizations, including the author's
   own Lean code for Theorems 1.2 and 1.3, which the proofs did not consult (parts of it were displayed
-  by literature searches: [CREDITS.md](CREDITS.md#who)):
+  by searches for earlier formalizations and for the literature, and by checks of the documents:
+  [CREDITS.md](CREDITS.md#who)):
   [REPORT.md, Section 10](REPORT.md#10-the-paper-in-the-literature).
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following
   the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in

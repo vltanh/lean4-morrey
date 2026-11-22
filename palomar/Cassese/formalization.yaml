@@ -328,7 +328,7 @@ automation:
           round: 6.8 h elapsed to the last commit of the proofs, 37.3 h of sub-agent working
           time (the whole session in that window, which also includes follow-up notes, a step of
           Šverák's Lemma 1 and the revision of the procedure). Fourth round: 2.95 h elapsed to the
-          last commit of the proofs, 9.3 h of sub-agent working time on it (17.4 h for the whole
+          last commit of the proofs, 8.7 h of sub-agent working time on it (17.4 h for the whole
           session in that window).
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
@@ -338,7 +338,7 @@ automation:
         result that is large but feasible ("All"); then asked for every result to be proved
         unconditionally ("I think you need to formalize all of them unconditionally"), and let the
         agent decide without asking; then obtained the cited books and articles that the agent could
-        not, so that the cited results could follow them.
+        not (most of them), so that the cited results could follow them.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
@@ -373,12 +373,12 @@ fidelity:
     (docs/Cassese/REPORT.md, Section 3), among them the passage from smooth to Lipschitz periodic
     test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results: each
     by its source's argument, with one departure: the upper bound of the non-commutative Khintchine
-    inequality (Proposition 6.3), whose cited sources prove it by the factorization of
-    matrix-valued H^1 functions and duality (Lust-Piquard 1986, not obtained; Lust-Piquard-Pisier
-    1991; Pisier-Xu 2003 give no proof), is proved at present by the method of exchangeable pairs of
-    Mackey et al. (2014); it was proved before the 1991 article was obtained, and a proof by the
-    sources' argument is planned. Read in another edition: Rindler 2018 (the second edition),
-    Pisier 2016 (the 2011 lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993,
+    inequality (Proposition 6.3), which Lust-Piquard and Pisier (1991) prove by the factorization of
+    matrix-valued H^1 functions and duality (Pisier-Xu 2003 give no proof; Lust-Piquard 1986 was not
+    obtained), is proved at present by the method of exchangeable pairs of Mackey et al. (2014); it
+    was proved before the 1991 article was obtained, and a proof by the sources' argument is planned.
+    Proposition 2.1 is proved by the paper's second route (Remark 2.1), not by its sources'. Read in
+    another edition: Rindler 2018 (the second edition), Pisier 2016 (the 2011 lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993,
     Vasyunin-Volberg 2010. The triangle inequality of Schatten norms, which the paper uses without a
     source, is proved after Bourin-Zhang (2026), for real m x n matrices. Differences from the sources,
     each a repair of a gap or a slip along the source's lines, a step that the source leaves out, or
@@ -395,7 +395,11 @@ fidelity:
     proof, completed from his (1.14) and the shift of the proof of (1.8); Dragičević's sentence on
     W^{n,p}, stated without proof, replaced by a density argument; Pisier's Fubini argument on
     Paley-Walsh martingales; Mackey et al.'s Remark 7.2 for 2 < q < 3, whose unproved variant of the
-    mean value trace inequality is proved. See docs/Cassese/REPORT.md, Section 7.
+    mean value trace inequality is proved; HNVW I, Theorem 4.2.7, in place of the extrapolation
+    theorem that Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i).
+    Stated in the case the paper uses: Lemma 2.2 for lower semicontinuous integrands (the sources:
+    Borel), decoupling for Paley-Walsh martingales, one inequality of HNVW's Corollary 5.7.6, n = 2 in
+    Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
 
 review:
   status: "agent-reviewed"
@@ -475,5 +479,5 @@ alignment:
 acknowledgements: >-
   Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
   (Kristensen 1999, Burkholder 1988, Pisier 1998); the open lecture notes and preprints whose
-  arguments some results follow (Pisier 2011, Dragičević 2013, Mackey et al., Randrianantoanina,
+  arguments some results follow (Pisier 2011, Mackey et al., Randrianantoanina,
   Carbonaro-Dragičević-Kovač, Bourin-Zhang).

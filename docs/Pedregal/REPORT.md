@@ -498,8 +498,8 @@ claims a solution of the `2 × 2` case.
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)),
   with definitions of rank-one convexity and quasiconvexity (on the unit cube, with smooth test
   maps and an integrability condition). This work did not use their code, parts of which were
-  displayed by searches for earlier formalizations and by checks of the documents
-  ([`docs/Cassese/CREDITS.md`](../Cassese/CREDITS.md) says which); its [`Quasiconvex`](../../Morrey/Pedregal/Introduction.lean#L46)
+  displayed on 21 and 22 November 2026 by searches for earlier formalizations and for the literature,
+  and by checks of the documents ([`docs/Cassese/CREDITS.md`](../Cassese/CREDITS.md) says which); its [`Quasiconvex`](../../Morrey/Pedregal/Introduction.lean#L46)
   follows Theorem 1.2 instead (bounded open domains, Lipschitz test maps).
 - Kakutani's theorem comes from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point)
   (Brouwer's, Kakutani's and Schauder's theorems), a dependency of this project.
