@@ -25,7 +25,7 @@ case of Morrey's problem, and Theorem 1.1 (1) implies it. Nothing is assumed.
 | --- | --- |
 | §3 `(H_n)`-conditions, molds, Proposition 3.3 | proved |
 | §4 tri-dyadic molds for `τ_l` (Definition 4.1) | formalized; its conditions proved |
-| §5 the weights `Θ_l` (Definition 5.1, eqs. (5.10)–(5.15)) | proved |
+| §5 the weights `Θ_l` (Definition 5.1, eqs. (5.10)–(5.15)) | proved; (5.10) in corrected form (a missing factor `3^{−1}`, E6) |
 | §6 the map `𝐓`: Proposition 6.1, Subsection 6.1, Proposition 6.3 | proved |
 | §6 Kakutani's theorem (Theorem 6.2, cited) | proved, from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) |
 | §7 Proposition 7.1, Corollary 7.2, Step 2 of the proof (with Claim 7.5) | **false**: refuted |
@@ -91,8 +91,8 @@ paper: the reduction takes the conclusion of the false Corollary 7.2 as a hypoth
 - Comparator accepts [`Solution.lean`](../../palomar/Pedregal/Solution.lean) against [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean)
   ([`comparator.json`](../../palomar/Pedregal/comparator.json)).
 - Independent AI agents checked the statements and the counterexample against the TeX source,
-  the formal proofs against the paper's, the report, and every recorded departure. No person has
-  reviewed the proofs.
+  the formal proofs against the paper's, the report, every recorded departure, and the documents.
+  No person has reviewed the proofs.
 
 ## Dependencies, Palomar, building
 

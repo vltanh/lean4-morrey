@@ -30,7 +30,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   statements of the Challenge and of Proposition 7.2 that changed (against the TeX source), the
   redone proofs of the paper, the proof of Dacorogna's Theorem 5.20 against
   Conti–Dolzmann–Kirchheim–Müller's (two reviews), and every recorded departure under version
-  4.2.0 of the procedure (an audit). The rewritten report has not yet had an independent check.
+  4.2.0 of the procedure (an audit). Then an independent agent checked the rewritten documents of
+  the three papers (README, report, credits, metadata) against the code, the audit output, the TeX
+  source and the cited works.
 
 ## Second round (21 November 2026)
 
@@ -124,9 +126,13 @@ How it was made:
   last with copies of the packages, which its sandbox needs until they are pinned by git). An agent
   wrote the READMEs of `Morrey/Common/External/`, and a final pass cleaned up the project and the
   packages. Then an agent rewrote this paper's README, report, credits and metadata.
+- Afterwards, `lean4-banach-probability` re-proved the triangle inequality for Schatten norms by
+  the argument of an open source (Bourin and Zhang, arXiv:2610.30538, Proposition 3.13), and the
+  project's `schattenNorm_add_le` became the package's theorem (commit `452cccc`). The documents
+  were then checked independently (see Review) and corrected.
 
 Figures, from 2026-11-21 22:36 (UTC−6), the user's request, to commit `6ae4899`
-(2026-11-22 05:26 UTC−6), the last commit of the proofs:
+(2026-11-22 05:26 UTC−6), the last commit of the proofs before the documents were rewritten:
 
 - elapsed time: 6.8 h;
 - sub-agents: 103 (29 launched by the main session, the others by lead agents), at most 17 running
@@ -139,6 +145,6 @@ Figures, from 2026-11-21 22:36 (UTC−6), the user's request, to commit `6ae4899
 These are the figures of the whole session in that window. Besides this paper, they include the
 follow-up notes (`NEXT.md`) of this paper and of Šverák's with their checkers, the redone step of
 Šverák's Lemma 1, and the revision of the procedure with its evaluation runs. They leave out the
-rewriting of the documents and the publication of the packages, which came after. From
-`scripts/session_stats.py` on the session transcript, with `--since` and `--until` at the two
-times above.
+rewriting and the check of the documents and the re-proof of the Schatten triangle inequality,
+which came after. From `scripts/session_stats.py` on the session transcript, with `--since` and
+`--until` at the two times above.

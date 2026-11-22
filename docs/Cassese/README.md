@@ -1,7 +1,7 @@
 # Cassese (2026): Morrey's problem in `ℝ^{2×m}`, in Lean
 
-**The formalization is complete and unconditional.** Every result of G. Cassese, *A solution to
-Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3)
+**The formalization is complete and unconditional.** Every result that G. Cassese proves in *A
+solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3)
 (16 September 2026, a preprint), is proved in Lean 4 with Mathlib, and so is every result of other
 works that its proofs use. Nothing is assumed: no statement takes a result of another work as a
 hypothesis, and the proofs use only Lean's standard axioms.
@@ -10,9 +10,9 @@ The paper constructs rank-one convex integrands on `ℝ^{2×m}`, `m ≥ 3`, that
 quasiconvex. With Šverák's theorem ([formalized here](../Sverak/README.md)) this leaves `2 × 2` as
 the only size in which Morrey's problem can have a positive answer. It also answers Kirchheim and
 Kristensen's homogeneous problem negatively: there are `p`-homogeneous, rank-one convex, nowhere
-quasiconvex integrands for every `p > 1` in suitable sizes, and at `p = 4` in every size other
-than `2 × 2`. The paper is one of three on Morrey's problem formalized in this repository; the
-[overview](../../README.md) describes the problem and how the papers relate.
+quasiconvex integrands for every `p > 1` in suitable sizes, and at `p = 4` in every `d × m` with
+`d, m ≥ 2` other than `2 × 2`. The paper is one of three on Morrey's problem formalized in this
+repository; the [overview](../../README.md) describes the problem and how the papers relate.
 
 ## Status
 
@@ -26,7 +26,7 @@ than `2 × 2`. The paper is one of three on Morrey's problem formalized in this 
 | §7 (`4 × 2`): Propositions 7.1, 7.2, Theorem 7.1, Corollary 7.2 | proved |
 | Theorem 1.1 (Kirchheim–Kristensen) and Proposition 2.6 (Osękowski), quoted as context | stated; no proof uses them |
 | Conjecture 1 | stated |
-| Remarks, and claims that the paper asserts without proof (such as Corollary 1.6 for `p > 2`) | not formalized ([REPORT.md, Section 9](REPORT.md#9-not-formalized)) |
+| The other remarks, and claims that the paper asserts without proof (such as Corollary 1.6 for `p > 2`) | not formalized ([REPORT.md, Section 9](REPORT.md#9-not-formalized)) |
 
 ## Main results
 
@@ -82,12 +82,14 @@ source was not accessible
 - Comparator checks that the Solution proves exactly the Challenge's statements with those axioms
   ([`comparator.json`](../../palomar/Cassese/comparator.json)).
 - Independent AI agents checked the statements against the TeX source, the formal proofs against
-  the paper's, and the departures from the paper. No person has reviewed the proofs.
+  the paper's, the departures from the paper, and the documents. No person has reviewed the
+  proofs.
 
 ## Dependencies
 
-Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization, which the project
-requires in [`lakefile.toml`](../../lakefile.toml):
+Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization. They are not yet
+published: [`lakefile.toml`](../../lakefile.toml) requires them by path, as sibling directories
+(see the [overview's building instructions](../../README.md#building)):
 
 | Package | What this paper uses from it |
 | --- | --- |

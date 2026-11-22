@@ -16,7 +16,8 @@ How this formalization was made, from the run log and the session transcripts.
   (commit `5f650f0`), an earlier project made with the same procedure.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements and the
   counterexample against the TeX source, the formal proofs against the paper's, the report's
-  findings and literature section, and, in a later round, every recorded departure.
+  findings and literature section, and, in a later round, every recorded departure and the
+  documents of the three papers.
 
 ## First formalization (21 November 2026)
 
@@ -53,7 +54,7 @@ experiments' running time outside the agents' tool calls, and the work after tha
 ## Reorganization (21 November 2026)
 
 When Šverák (1992) and Cassese (2026) joined the repository, the paper's files moved into
-`Pedregal/` and its namespaces were renamed ([`Morrey`](../../Morrey) to `Pedregal`, `MorreyChallenge` to
+`Pedregal/` and its namespaces were renamed (Morrey to `Pedregal`, MorreyChallenge to
 `PedregalChallenge`). No statement or proof changed: the statement diff against the commit before
 the move shows only the renames, and the build, the audit, the route check and Comparator pass as
 before. The work is counted in the second round's figures

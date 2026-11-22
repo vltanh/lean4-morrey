@@ -4,7 +4,7 @@ V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc.
 120 (1992), 185–189. Formalized in Lean 4 with Mathlib (`v4.36.0-rc2`) from the published article,
 on 21–22 November 2026, in a repository that also formalizes two later papers on Morrey's problem
 ([overview](../../README.md)). The paper has no TeX source; the labels `sv-…` used in the code and in
-[`docs/paper_routes.tsv`](paper_routes.tsv) are ours.
+[`paper_routes.tsv`](paper_routes.tsv) are ours.
 
 ## Contents
 
@@ -127,8 +127,9 @@ The proof writes `f(0) ≤ ∫ f(Du_ε)`, the case `A = 0`. The general case fol
 
 ### E4. Implicit steps in Lemma 2
 
-- "The set `𝒦` is clearly compact." The rank-one matrices do not form a closed set (`0` is a limit
-  of them); within `𝒦` they do, because `|Y| = 1` excludes `Y = 0` and `rank Y ≤ 1` is closed.
+- "The set `𝒦` is clearly a compact subset of `M^{3×2} × M^{3×2}`." The rank-one matrices do not
+  form a closed set (`0` is a limit of them); within `𝒦` they do, because `|Y| = 1` excludes
+  `Y = 0` and `rank Y ≤ 1` is closed.
 - "It follows immediately that `Ȳ = PȲ`." This needs the first term of `g` to be bounded below on
   `𝒦`, so that `k|Y⁽ᵏ⁾ − PY⁽ᵏ⁾|²` stays bounded as `k → ∞`.
 - The conclusion passes from `|Y| = 1` to every rank-one `Y`, by the homogeneity of the second
@@ -297,9 +298,10 @@ proofs cite none.
 
 - Conti, Dolzmann and Dondl's Lean formalization of their `3 × 3` example
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc), October
-  2026) includes parts of this paper's argument: the test map `w`, its gradients in `L`, the
-  integral (4), and the "only if" half of Lemma 1. It does not have Lemma 2, the Theorem or the
-  Corollary. No formalization of the whole paper was found.
+  2026) includes adaptations of parts of this paper's argument to `ℝ³`: of the test map `w`
+  (`φ(x) = (sin x₁, sin x₂, −sin(x₁ + x₂))`), of its gradients in `L` and of the integral (4), and
+  the "only if" half of Lemma 1. It does not have Lemma 2, the Theorem or the Corollary. No
+  formalization of the whole paper was found.
 - Cassese formalized parts of his own paper in Lean.
 - Neither was consulted: the definitions and proofs here were written independently.
 
@@ -322,15 +324,12 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 ### Simpler proofs
 
 - **An explicit `k(ε)` in Lemma 2.** The compactness argument gives no value of `k`; a
-  quantitative form of "`f` is linear on the rank-one lines of `L`" gives one. For rank-one
-  `R = a ⊗ n`, write `|PR|² = ΣTᵢ` and `|R − PR|² = ΣSᵢ` with
-  `T = (a₁²n₁², a₂²n₂², a₃²(n₁ + n₂)²/2)` and `S = (a₁²n₂², a₂²n₁², a₃²(n₁ − n₂)²/2)`; comparing
-  them term by term (with `λ = n₂/n₁` and `h(λ) = λ² + ((1 − λ)/(1 + λ))² ≥ 6 − 4√2`) shows that
-  the orthogonal projection `R_L` of `PR` on one of the three rank-one lines of `L` satisfies
-  `|PR − R_L| ≤ κ|R − PR|`, `κ = 1 + 1/√2`. Since `D²f(PA)[R_L, R_L] = 0` and
-  `‖D²f(PA)‖ ≤ √(2/3)|PA|`, polarization gives `|D²f(PA)[PY, PY]| ≤ 2√(2/3)κ|A||Y||Y − PY|` for
-  rank-one `Y`, and the arithmetic–geometric mean inequality against
-  `4ε|A|²|Y|² + 2k|Y − PY|²` makes `F` rank-one convex for
+  quantitative form of "`f` is linear on the rank-one lines of `L`" gives one. For rank-one `R`,
+  let `R_L` be the orthogonal projection of `PR` on a suitable one of the three rank-one lines of
+  `L`; the bound `|PR − R_L| ≤ κ|R − PR|` holds with `κ = 1 + 1/√2`, the constant used below.
+  Since `D²f(PA)[R_L, R_L] = 0` and `‖D²f(PA)‖ ≤ √(2/3)|PA|`, polarization gives
+  `|D²f(PA)[PY, PY]| ≤ 2√(2/3)κ|A||Y||Y − PY|` for rank-one `Y`, and the arithmetic–geometric
+  mean inequality against `4ε|A|²|Y|² + 2k|Y − PY|²` makes `F` rank-one convex for
   `k ≥ κ²/(12ε) = (3 + 2√2)/(24ε) ≈ 0.25/ε`. With `∫ f(Dw) = −1/4`, `∫|Dw|² = 2` and
   `∫|Dw|⁴ = 19/4`, every `ε < 1/27` keeps `∫ F(Dw) < 0`; so
   `F(X) = −rst(PX) + (|X|² + |X|⁴)/30 + 13|X − PX|²` is an explicit example. Checked on paper and
@@ -342,7 +341,7 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
   maps vanishing outside the domain, in the package
   [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations)
   (`CalculusOfVariations.quasiconvexAtOn_iff`), which Cassese's formalization uses. With
-  [`Cassese.not_quasiconvexAt_of_smooth`](../../Morrey/Cassese/Bridges.lean#L97) (a smooth witness on the cube is a Lipschitz one), it would
+  [`Cassese.not_quasiconvexAt_of_smooth`](../../Morrey/Cassese/Bridges.lean#L98) (a smooth witness on the cube is a Lipschitz one), it would
   give that Šverák's `F` fails quasiconvexity with Lipschitz test maps on every bounded open set;
   that combination is not stated in Lean. Stating the Theorem on every bounded open `Ω` with the
   paper's smooth test maps needs, in addition, the approximation of Lipschitz test maps by smooth

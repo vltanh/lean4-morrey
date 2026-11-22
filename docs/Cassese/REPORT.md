@@ -23,14 +23,15 @@ Status of the formalization:
   `Morrey/Cassese/Hypotheses.lean`. The proofs come from three Lake packages written for this
   formalization: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
   [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
-  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations).
+  [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), not yet
+  published (the lakefile requires them by path).
 - **Nothing is assumed.** No statement takes a result of another work as a hypothesis. Two cited
   theorems that the paper quotes only as context, Kirchheim–Kristensen's Theorem 1.1 and
   Osękowski's characterization of Hilbert spaces (Proposition 2.6), are stated and not proved; no
   proof uses them. Conjecture 1 is stated.
 - `lake build` passes, with no `sorry` outside the Challenges and no `axiom`.
   [`scripts/Audit.lean`](../../scripts/Audit.lean) checks that every declaration of the
-  repository's library (3,549 at commit `6ae4899`, for the three papers and the shared code) uses
+  repository's library (3,521 at commit `452cccc`, for the three papers and the shared code) uses
   only `propext`, `Classical.choice` and `Quot.sound`, and lists the results of other works that
   each result of the paper uses (Section 8). Each package has an audit of the same kind.
 - [`palomar/Cassese/Challenge.lean`](../../palomar/Cassese/Challenge.lean) states the main results
@@ -76,14 +77,14 @@ needs, and misprints:
 | Errors | none: no statement is false. One intermediate claim, at lines 661–663, is false under the reading of prelaminates that Proposition 2.4 needs (E10) |
 | Gaps that change what must be proved | E4: Theorem 1.3 (b) needs the constants of Lemma 5.1 (1) uniform in `p`; E10: Proposition 2.5 "⇐" rests on the claim of lines 661–663; E27: Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants polynomial in `q` |
 | Results stated without proof | E5: `κ = 2` for `𝓛₃`; E6: Proposition 6.6; E8: Proposition 2.3; E19: Corollary 5.2 |
-| Proofs only sketched | E17: Corollary 5.3; E26: Remark 4.5; E31: Corollary 6.4; E32: Corollary 7.2 |
-| Steps left to the reader | E2, E3, E7, E9, E16, E21–E25, E28, E29, E33–E35 (Section 3) |
+| Proofs only sketched | E17: Corollary 5.3; E26: Remark 4.5; E31: Corollary 6.4 |
+| Steps left to the reader | E2, E3, E7, E9, E16, E21–E25, E28, E29, E32 (Corollary 7.2's "standard calculations"), E33–E35 (Section 3) |
 | Claims without proof, not formalized | E18: Corollary 1.6 for `p > 2` |
 | Not errors | E14: no value of `n₀` in Proposition 4.3; E20: `q₃(∇u) ∈ L¹` |
 | Misprints and wording | E11, E12, E13, E15 |
 | Missing hypotheses | none (Section 4) |
 | Redundant hypotheses | eight, among them the evenness in Lemma 5.1 (2), which Remark 5.2 needs to drop, and `ρ > 0` in Proposition 7.2 (Section 5) |
-| Use of cited results | correct, with five reservations: E27, E30, Randrianantoanina's Corollary 4.5, Kristensen's growth bound, Dragičević's theorem for `p < 2` (Section 2) |
+| Use of cited results | correct, with reservations (Section 2): applied loosely but correctly, Randrianantoanina's Corollary 4.5, Kristensen's growth bound and Dragičević's theorem for `p < 2`; no source named for the step, E27 and E30; silent steps, Lemma 2.1 for the minorant `G` (E21), the nonempty domain of Lemma 2.2, Proposition 2.2 from the ball to the cube (E22), `UMD_p` for `UMD_{ℂ,p}` in Remark 4.2 (E11); transference, whose exact form in the source could not be checked |
 
 ## 2. Results from prior work and how the paper uses them
 
@@ -97,20 +98,20 @@ accessible.
 
 | Result | Where the paper uses it | Source cited by the paper | Lean |
 | --- | --- | --- | --- |
-| Lemma 2.1: a rank-one convex function is locally Lipschitz | Propositions 2.3–2.5, Corollary 1.6 | Rindler 2018, Lemma 5.6 | `External.Rindler.lemma5_6` (CV) |
+| Lemma 2.1: a rank-one convex function is locally Lipschitz | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | Rindler 2018, Lemma 5.6 | `External.Rindler.lemma5_6` (CV) |
 | Lemma 2.2: quasiconvexity implies rank-one convexity, does not depend on the domain, and may be tested with periodic maps | Proposition 2.3, the thresholds, the lifting, Propositions 6.1, 7.2 | Rindler, Propositions 5.1, 5.3; Dacorogna 2008, Propositions 5.11, 5.13 | `External.Rindler.rankOneConvex_of_quasiconvex`, `External.Rindler.quasiconvexAtOn_iff`, `External.Rindler.quasiconvexAtOn_iff_periodic` (CV) |
 | Proposition 2.1: the rank-one convex envelope by prelaminates | Propositions 2.3, 5.1 | Pedregal 1993, §4; Dacorogna 2008, Theorem 6.10 | `proposition2_1`, in the library, by the paper's own route of Remark 2.1 (through Proposition 2.4) |
 | Proposition 2.2: Dacorogna's formula for the quasiconvex envelope | line 559, Propositions 2.3, 4.3 | Kinderlehrer–Pedregal 1991, Proposition 8.1 | `External.KinderlehrerPedregal.dacorognaFormula_holds` (CV) |
 | Theorem 2.3 (1): Burkholder's inequality, Hilbert-valued | Lemma 5.1, Theorem 1.3 (b), Proposition 7.1 | Osękowski 2012, Theorem 3.5 (Burkholder 1984) | `External.Burkholder.inequality` (BP) |
 | Theorem 2.3 (2): Burkholder's square function inequality | Proposition 6.5 | Osękowski 2012, Theorem 8.6 | `External.Burkholder.squareFunction` (BP) |
-| Proposition 2.7 (1): extrapolation of the UMD property, with constants | Section 4.4 (Theorem 1.2), Proposition 6.5, Corollary 6.1 | HNVW I, Theorem 4.2.7 | `External.HNVW.theorem4_2_7` (BP) |
+| Proposition 2.7 (1): extrapolation of the UMD property, with constants | Section 4.2 (for Theorem 1.2), Proposition 6.5, Corollary 6.1 | HNVW I, Theorem 4.2.7 | `External.HNVW.theorem4_2_7` (BP) |
 | Proposition 2.7 (2): `UMD₂(S_q) ≤ C (q* − 1)` | Propositions 6.2, 6.5, Remark 6.3 | Randrianantoanina 2002, Corollary 4.5 | `External.Randrianantoanina.remark4_6`, with `External.Randrianantoanina.corollary4_5` (BP) |
 | Proposition 2.7 (3): `L^p` is UMD | Section 4.2 (Theorem 1.2) | Pisier 2016, Corollary 5.22 | `External.Pisier.corollary5_22` (BP) |
 | Proposition 2.7 (4): the dyadic and the general UMD constants agree | no proof | HNVW I, Theorem 4.2.5 | `External.HNVW.theorem4_2_5` (BP) |
 | Proposition 2.7 (5): `UMD_p ≤ UMD_{ℂ,p} ≤ (π/2) UMD_p` | Section 4.2 (Theorem 1.2) | Yaroslavtsev 2018, Lemma 3.2 | `External.Yaroslavtsev.lemma3_2` (BP) |
 | Proposition 2.7 (6): zig-zag concave functions bound the UMD constants | no proof | HNVW I, Theorem 4.5.6; Yaroslavtsev 2018, Proposition 3.7 | `External.HNVW.theorem4_5_6`, `External.Yaroslavtsev.proposition3_7` (BP) |
 | Proposition 2.8: decoupling with the UMD constant | Propositions 6.2, 6.5, Remark 6.3 | Cox–Veraar 2007; HNVW I, Proposition 4.2.3 | `External.CoxVeraar.decoupling` (BP) |
-| (13), (14): Burkholder's functions `u = u₆` and `u_q` | Propositions 4.2, 4.3; Remark 4.5 | Burkholder 1988 | `External.Burkholder.scalarFunction_holds`, `External.Burkholder.scalarFunctionQ_holds` (BP) |
+| (13), (14): Burkholder's function `u`; the function `u_q` behind Remark 4.5's "such a `U` can also be constructed" | Propositions 4.2, 4.3; Remark 4.5 | Burkholder 1988 (for `u`) | `External.Burkholder.scalarFunction_holds`, `External.Burkholder.scalarFunctionQ_holds` (BP) |
 | rank-one affine functions are affine combinations of minors, and minors are quasiaffine | Proposition 5.1 | Dacorogna 2008, Theorem 5.20 | `External.Dacorogna.rankOneAffineMinors_holds`, `External.Dacorogna.minor3_quasiaffine` (CV) |
 | rank-one convex quadratic forms are quasiconvex | Proposition 5.1 | Dacorogna 2008, Theorem 5.25 (i) | `External.Dacorogna.quadraticForm_quasiconvex` (CV) |
 | a smoothing that keeps the failure of quasiconvexity | Corollary 5.2 | Kristensen 1999, Proposition 2; Heinz 2008 | `External.Kristensen.smoothing_holds` (CV) |
@@ -120,7 +121,7 @@ accessible.
 | the sharpness of `p* − 1` for dyadic `±1`-transforms | Corollary 6.3, lower bound | "see also [Cassese 2025]" (E30) | `burkholderSharpness_holds`, in the library (`Morrey/Cassese/Square/Sharpness.lean`) |
 | the bound `C^{rc} ≤ (p* − 1) sup ‖Q‖/‖P_ρ‖` | Proposition 7.1 | "the results of [Cassese 2025]" | from Burkholder's inequality, in `proposition7_1` |
 | transference: `‖𝓑^k‖_{L^p(ℝ²)} ≤ ‖𝓑^k‖_{L^p_0(𝕋²)}` | Proposition 7.2, lower bound | HNVW I, Corollary 5.7.6 | `External.HNVW.transference_beurlingPow` (HA) |
-| Dragičević's lower bound `‖𝓑²‖_p ≥ κ₂(p*) > p* − 1`, and `‖𝓑²‖₄ ≥ 21/5` | Theorem 7.1, Corollary 7.2 | Dragičević 2011, Theorem 1.1 | `External.Dragicevic.theorem1_1_two_pStar`, `External.Dragicevic.theorem1_1_two` (HA) |
+| Dragičević's lower bound `‖𝓑²‖_p ≥ κ₂(p*) > p* − 1`, with `κ₂(p) = (p − 1)(2p − 1)/(p + 1)`, and `‖𝓑²‖₄ ≥ 21/5` | Theorem 7.1, Corollary 7.2 | Dragičević 2011, Theorem 1.1 | `External.Dragicevic.theorem1_1_two_pStar`, `External.Dragicevic.theorem1_1_two` (HA) |
 
 Quoted for context, stated and not proved, used by no proof: Kirchheim–Kristensen 2016 (the
 paper's Theorem 1.1, `External.KirchheimKristensen.Theorem1_1`) and Osękowski 2012, Theorem 3.24
@@ -134,7 +135,7 @@ Nothing.
 
 | Fact | Where | In the formalization |
 | --- | --- | --- |
-| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and the triangle inequality | Section 6 | proved: `schattenNorm_mul_self` (fact (1), for every `q ≥ 1`: E2), `schattenNorm_add_le` (through doubly substochastic matrices), Weyl's monotonicity by Courant–Fischer (`Morrey/Cassese/Square/Weyl.lean`) |
+| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and the triangle inequality | Section 6 | proved: `schattenNorm_mul_self` (fact (1), for every `q ≥ 1`: E2), `schattenNorm_add_le` (BP's, after Bourin–Zhang, arXiv:2610.30538, Proposition 3.13; Section 7), Weyl's monotonicity by Courant–Fischer (`Morrey/Cassese/Square/Weyl.lean`) |
 | the Bernstein–Doetsch theorem: a midpoint convex function, locally bounded above, is convex | lines 643–646 (Proposition 2.4) | proved, in `tk_midpoint_principle` |
 | the uniform convexity of `\|·\|^p` | (29) | proved, `tbt2_gain` (E3) |
 | the strong law of large numbers with infinite mean, Fatou's lemma, Jensen's inequality | Lemma 4.2 | Mathlib, in `lemma4_2` |
@@ -150,14 +151,14 @@ Nothing.
 | Cited result | Where | Verdict |
 | --- | --- | --- |
 | Theorem 2.3 (Burkholder) | Sections 5–7 | correct. The paper asks for a separable Hilbert space; the proofs do not use separability (Section 5) |
-| (13), (14) (Burkholder's `u`, `u_q`) | Proposition 4.2, Remark 4.5 | correct |
-| Lemma 2.1 (Rindler) | Propositions 2.4, 2.5, the envelopes | correct in Rindler's form, for every real-valued rank-one convex function; the paper states it for integrands and applies it to an infimum `G` before `G` is known to be one (E21) |
+| (13), (14) (Burkholder's `u`) | Proposition 4.2 | correct |
+| Lemma 2.1 (Rindler) | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | correct. The paper uses the minorant `G` of Propositions 2.4 and 2.5 as a competitor without showing that it is an integrand; Lemma 2.1 in Rindler's form, for every real-valued rank-one convex function, supplies this (E21) |
 | Lemma 2.2 (Rindler, Dacorogna) | Sections 2, 4, 6, 7 | correct; the domain must be nonempty, which the paper does not say |
 | Proposition 2.1 (Pedregal, Dacorogna) | Propositions 2.3, 5.1 | correct; the paper's Remark 2.1 removes the sources' assumption that `f` is bounded below |
 | Proposition 2.2 (Kinderlehrer–Pedregal) | line 559 | correct; the passage from the ball of the formula to the cube of Definition 2.1 is silent (E22) |
 | Dacorogna, Theorems 5.20 and 5.25 (i) | Proposition 5.1 | correct |
 | Kristensen, Proposition 2 | Corollary 5.2 | applied loosely but correctly: the paper's form asks `c ‖A‖² ≤ h(A)` for every `A`, which Kristensen's function need not satisfy, since the cut-off polynomial can be negative; adding a constant repairs it and changes neither the second derivatives nor quasiconvexity at `0` |
-| Proposition 2.7 (1), (3), (5) | Section 4.2 | correct. Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11) |
+| Proposition 2.7 (1), (3), (5) | Section 4.2 (for Theorem 1.2) | correct. Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11) |
 | Proposition 2.7 (2) (Randrianantoanina) | Propositions 6.2, 6.5 | applied loosely but correctly: Corollary 4.5 bounds `UMD_q(S_q)` by `C q²/(q − 1)`; the bound at the exponent `2`, linear in `q*`, is the source's Remark 4.6 (1), through extrapolation |
 | Proposition 2.8 (Cox–Veraar, HNVW) | Propositions 6.2, 6.5 | correct; the case used is the Paley–Walsh case of Cox–Veraar's statement |
 | Propositions 6.3, 6.4 | (31) | correct; but Remark 6.3 and Proposition 6.5 at `q = ∞` need Kahane–Khintchine constants that grow polynomially in `q`, which Proposition 6.4 as stated does not give and for which no source is named (E27) |
@@ -197,8 +198,9 @@ homogeneity. Both are supplied in `lemma5_1_part2`, which follows the paper's `n
 
 ### E4. Lines 2031–2046: Theorem 1.3 (b)
 
-The proof ends "by continuity of the rank-one convexity and quasiconvexity estimates" in `p`.
-This needs the constant `Λ` of Lemma 5.1 (1), which is stated for a fixed `p`, to be uniform for
+The proof of (b) says that "the result follows by extending it via Lemma 5.1 (1) and continuity of
+the rank-one convexity and quasiconvexity estimates for `f`", the continuity being in `p`. This
+needs the constant `Λ` of Lemma 5.1 (1), which is stated for a fixed `p`, to be uniform for
 `p` near `4`, and the cut-off of the witness to be fixed before `p` varies: for `p < 4` the
 uncut integrand is positive far away, since `r* − 1 > 1` and `|H|/|2D| → 1`. The theorem holds:
 the formalization proves Lemma 5.1 (1) with explicit constants (`lemma5_1_part1_quant`), so that
@@ -228,17 +230,19 @@ The bound `⟨W, Z⟩ ≤ (1/3)(2ae + 2bc) + (2/3)(2aρ)` does not follow "by th
 
 ### E8. Lines 562–578: Proposition 2.3
 
-Proposition 2.3 has no proof ("follows directly"). The direction "`f` quasiconvex at `0` ⇒ `f^{rc}`
-quasiconvex at `0`" of (c) and the conjugation invariance of `f^{qc}` in (b) need Dacorogna's
-formula (line 559) and Lemma 2.2 (ii); what the main theorems use is elementary. Proved: (a) and
-(b) from the dual formulas of the envelopes, (c) through line 559 (`proposition2_3_a`,
-`proposition2_3_b`, `proposition2_3_c`).
+Proposition 2.3 has no proof ("follows directly"). The formalization splits it into (a), the
+dichotomy `≡ −∞` or finite and the homogeneity of the envelopes; (b), the invariances; (c), the
+equivalence at `0` (the paper's statement has no item labels). The conjugation invariance of
+`f^{qc}` in (b) needs Dacorogna's formula (Proposition 2.2), and the direction "`f` quasiconvex at
+`0` ⇒ `f^{rc}` quasiconvex at `0`" of (c) needs line 559 and Lemma 2.2; what the main theorems use
+is elementary. Proved: (a) and (b) from the dual formulas of the envelopes, (c) through line 559
+(`proposition2_3_a`, `proposition2_3_b`, `proposition2_3_c`).
 
 ### E9. Lines 1406–1411: Proposition 5.1
 
 Two steps are skipped: "`Q` is rank-one affine at `0`. It follows that `Q` is rank-one affine", and
-"since `P''(0) = (P − Q)''(0)`, `P − Q` is rank-one convex". Both hold: a prelaminate centred at
-`0` with an atom at an arbitrary `A`, split once more along `±hR`, gives
+"Since `P''(0) = (P − Q)''(0)`, the quadratic polynomial `P − Q` is rank-one convex". Both hold: a
+prelaminate centred at `0` with an atom at an arbitrary `A`, split once more along `±hR`, gives
 `Q(A + hR) + Q(A − hR) = 2 Q(A)`, and the same device gives the Legendre–Hadamard condition for
 the quadratic part. Supplied in `proposition5_1` (Section 7).
 
@@ -248,9 +252,9 @@ Definition 2.4 does not say whether the atoms `A_i` of `Σ c_i δ_{A_i}` are dis
 reading makes both Proposition 2.4 and Proposition 2.5 work. The gluing in the proof of
 Proposition 2.4 ("a midpoint split followed by dyadic splittings at `B` and `C`") needs repeated
 atoms: with distinct atoms, coinciding atoms of `μ_B` and `μ_C` are split together. With repeated
-atoms, the claim of lines 661–663, "every dyadic prelaminate is the law of a rank-one Rademacher
-martingale", is false: splitting a third of `δ₀` with `t = 1/2` gives the weight `1/6`, which is
-not dyadic. Only a reading on split trees makes both steps work. Proposition 2.5 still holds: the
+atoms, the claim of lines 661–663 that "a dyadic prelaminate has a representing martingale on the
+uniform binary tree, so the coordinates `(ε_k)` are independent Rademacher variables" is false:
+splitting a third of `δ₀` with `t = 1/2` gives the weight `1/6`, which is not dyadic. Only a reading on split trees makes both steps work. Proposition 2.5 still holds: the
 formalization reads Definition 2.4 with repeated atoms and proves "⇐" by running the argument of
 Proposition 2.4 on the infimum of `E f(M_N)` over rank-one Rademacher martingales
 (`proposition2_5`; Section 7).
@@ -258,8 +262,8 @@ Proposition 2.4 on the infimum of `E f(M_N)` over rank-one Rademacher martingale
 ### E14. Lines 1355–1366: Proposition 4.3
 
 No value of `n₀` is given. Not an error: the proofs are existence proofs. With `p = 3`, `q = 6`,
-`C^{qc}(3, 6, n)` grows like `n^{1/30}` (Remark 4.2), so a heuristic gives `n` of order `10^{80}`
-to pass `5⁴`.
+Remark 4.2 bounds `C^{qc}(3, 6, n)` below by a multiple of `n^{1/30}`; if that multiple is about
+`1`, passing `5⁴` needs `n > 625^{30} ≈ 7.6·10^{83}`, which suggests `n` of order `10^{84}`.
 
 ### E16. Lines 1821–1832: Lemma 5.1, hypothesis (25)
 
@@ -269,9 +273,9 @@ contains a rank-one matrix, and the proof only uses increments of rank at most o
 formalization keeps the hypothesis as stated (`HasRankOneCorrection`), and meets it for `𝓛₃` with
 `κ = 2` (E5).
 
-### E17. Lines 2090–2102, 2121–2123: Corollary 5.3
+### E17. Lines 2090–2102, 2121–2125: Corollary 5.3
 
-The proof is a sketch: "cutting off `φ` smoothly at radii `1` and `R`", and constants `c, C > 0`
+The proof is a sketch: "Cutting off `φ` smoothly at radii `1` and `R`", and constants `c, C > 0`
 that are only said to exist. The formalization completes it with explicit cut-offs and the
 constants `c = 75/8`, `C = 4·10⁶`, `δ₀ = 75/(64·10⁶)` (`corollary5_3`); a numerical evaluation of
 the paper's "direct calculation" gives the sharper `c ≈ 1029.8`, `C ≈ 62938`.
@@ -308,8 +312,8 @@ proves Lemma 2.1 in that form (`External.Rindler.lemma5_6`).
 ### E22. Line 559: from the ball to the cube
 
 Dacorogna's formula (Proposition 2.2) averages over the unit ball, and Definition 2.1 tests on the
-unit cube; the passage, silent in the paper, needs Lemma 2.2 (ii). Supplied
-(`quasiconvexAt_iff_exists_minorant`, with `External.Rindler.quasiconvexAtOn_iff`).
+unit cube; the passage, silent in the paper, needs the domain-independence clause of Lemma 2.2.
+Supplied (`quasiconvexAt_iff_exists_minorant`, with `External.Rindler.quasiconvexAtOn_iff`).
 
 ### E23. Lines 1047–1053: the limiting argument of Section 4.3
 
@@ -344,7 +348,7 @@ names no source. It holds by Borell's hypercontractive bound
 `κ_{q,p} ≤ √((q − 1)/(p − 1))`, proved here (`External.Borell.kahaneKhintchine_hypercontractive`,
 from O'Donnell's proof). Theorem 1.4 uses Proposition 6.5 only at `q = 4` and does not need it.
 
-### E28. Lines 2807–2821, 2211–2216: Proposition 7.2
+### E28. Lines 2807–2821, 915–919, 480–486: Proposition 7.2
 
 The inequality "`≤`" is argued with smooth periodic maps, while Lemma 2.2 tests with Lipschitz
 periodic maps; the density step between them is not stated. It holds: the mollification of a
@@ -370,8 +374,8 @@ construction, the standard extremal examples with a potential function
 
 ### E31. Lines 2658–2659, 2670: Corollary 6.4
 
-The corollary is "only sketched", and `8/5 U ≥ ‖Y‖⁴ − 98 ‖X‖⁴` is left to "standard
-calculations". Completed (`corollary6_4`, `corollary6_4_not_quasiconvexAt`).
+The paper only sketches the proof ("so we only sketch it"), and leaves `8/5 U ≥ ‖Y‖⁴ − 98 ‖X‖⁴` to
+"standard calculations". Completed (`corollary6_4`, `corollary6_4_not_quasiconvexAt`).
 
 ### E32. Lines 2891–2892: Corollary 7.2
 
@@ -380,7 +384,7 @@ Proved (`corollary7_2`). The bound is the identity
 `2U − (|y|⁴ − 130 |x|⁴) = (|y|² − 10 |x|²)²`; with `C₀⁴ = 1170` it gives
 `f_{4,√2,C₀} − 𝒫 = (30 |P_{√2}|² − |Q|²)² ≥ 0`. The zig-zag concavity reduces to a polynomial
 inequality in `|x|²`, `|y|²`, `Re⟨x, h⟩`, `Re(y k̄)`, `|h|²`, `|k|²` (`fourByTwo_U_core`). The
-margin of `C₀ = 1170^{1/4}` under Dragičević's `21√2/5` is about 1.6 %.
+margin of `C₀ = 1170^{1/4}` under Dragičević's `21√2/5` is about 1.5 %.
 
 ### E33. Lines 2184–2185: Corollary 5.4
 
@@ -421,15 +425,15 @@ None. Every statement is formalized as printed, with the readings of Section 6.
 
 ## 5. Redundant hypotheses
 
-The proofs do not use the following hypotheses. All but the last are kept in the Lean statements,
-as the paper states them.
+The proofs do not use the following hypotheses. All but the last two are kept in the Lean
+statements, as the paper states them.
 
 | Result | Hypothesis that the proof does not use | Lean |
 | --- | --- | --- |
 | Section 5.1: `q` is rank-one convex on `𝓛` (`cs-q-rc`) | `A ∈ 𝓛`: only the direction `R` must lie in `𝓛` | kept (`quarticQ_rankOneConvexOn_calL`) |
 | Lemma 5.1 (2) | the evenness of `f`: "`p`-homogeneous" means `f(tX) = \|t\|^p f(X)` for every real `t` (lines 158–163), and the proof uses it only for `t > 0`. Remark 5.2 applies the lemma to Šverák's `−rst`, which is only positively homogeneous, so it needs this | kept (`lemma5_1_part2`), as the paper states it |
 | Corollary 6.3, upper bound | `d ≥ 2` | kept (`corollary6_3_upper`) |
-| Proposition 2.3 | the homogeneity in (a); the homogeneity and `p > 1` in (b), (c) | kept |
+| Proposition 2.3 | the homogeneity, for the dichotomy `≡ −∞` or finite in (a) (the homogeneity of the envelopes uses it); the homogeneity and `p > 1` in (b), (c) (the formalization's split, E8) | kept |
 | Section 1.3: monotonicity of the homogeneous problem | `1 < p` | kept (`homMorreyPositive_mono`) |
 | Theorem 2.3 | the separability of the Hilbert space | kept in `External.Burkholder.inequality` and `External.Burkholder.squareFunction`; `External.Burkholder.inequality_of_subordinate` and `External.Burkholder.squareFunction_of_martingale` do without it |
 | Proposition 4.1 | the standing assumption `q > p + 2` of Section 4 | not assumed: `proposition4_1` asks only `1 < q` (Lemma 4.1 has no `q`) |
@@ -497,9 +501,9 @@ changes the results a proof uses (E10) is also in [`route_differences.tsv`](rout
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Theorem 1.3 (b) (`twoByThree_theorem1_3_b_witness`) | "by continuity of the rank-one convexity and quasiconvexity estimates" in `p` | the same continuity, made explicit: Lemma 5.1 (1) with explicit constants (`lemma5_1_part1_quant`), so that `Λ₀(p, δ)` is continuous in `p`; `K`, `δ` and the cut-off fixed before `p` varies; dominated convergence in `p` | the continuity needs constants uniform in `p`, which Lemma 5.1 (1), stated for a fixed `p`, does not give (a gap) | E4 |
+| Theorem 1.3 (b) (`twoByThree_theorem1_3_b_witness`) | "continuity of the rank-one convexity and quasiconvexity estimates for `f`", in `p` | the same continuity, made explicit: Lemma 5.1 (1) with explicit constants (`lemma5_1_part1_quant`), so that `Λ₀(p, δ)` is continuous in `p`; `K`, `δ` and the cut-off fixed before `p` varies; dominated convergence in `p` | the continuity needs constants uniform in `p`, which Lemma 5.1 (1), stated for a fixed `p`, does not give (a gap) | E4 |
 | Proposition 2.5, "⇐" (`proposition2_5`) | Proposition 2.4 and the claim of lines 661–663 that every dyadic prelaminate is the law of a rank-one Rademacher martingale | Proposition 2.4's gluing argument, run on the infimum `G(A) = inf E f(M_N)` over rank-one Rademacher martingales started at `A` | the claim is false under the reading of prelaminates that Proposition 2.4 needs, and the gluing of Proposition 2.4 fails under the other reading | E10 |
-| Proposition 5.1 (`proposition5_1`) | "`Q` is rank-one affine at `0`. It follows that `Q` is rank-one affine"; "`P − Q` is rank-one convex, since `P''(0) = (P − Q)''(0)`" | a prelaminate centred at `0` with an atom at an arbitrary `A`, split once more along `±hR`; the Legendre–Hadamard condition for the quadratic part by the same device | both steps are skipped (a gap) | E9 |
+| Proposition 5.1 (`proposition5_1`) | "`Q` is rank-one affine at `0`. It follows that `Q` is rank-one affine"; "Since `P''(0) = (P − Q)''(0)`, the quadratic polynomial `P − Q` is rank-one convex" | a prelaminate centred at `0` with an atom at an arbitrary `A`, split once more along `±hR`; the Legendre–Hadamard condition for the quadratic part by the same device | both steps are skipped (a gap) | E9 |
 
 Not departures: Theorem 1.2 is proved by the paper's route, and the route of Remark 4.5 is a
 second theorem, `theorem1_2_elementary`, which takes `f = g` (its `g` is already globally rank-one
@@ -548,7 +552,7 @@ Sources not accessible, and the argument used in place of each:
 | Dragičević 2011 | Theorem 7.1, Corollary 7.2 | his lecture notes, arXiv:2109.04555, Proposition 4.2, which reproduces the 2011 theorem and its proof (previous table) |
 | HNVW II, Theorem 6.2.4; Borell 1979 | Proposition 6.4; the constants of E27 | hypercontractivity, after O'Donnell, *Analysis of Boolean Functions*, §10.1 (Bonami's two-point inequality, then the passage to seminormed spaces and the tensorization) |
 | Pisier–Xu 2003 (the Handbook chapter); Lust-Piquard 1986 | Proposition 6.3 | Mackey–Jordan–Chen–Farrell–Tropp 2014: exchangeable pairs (Corollary 7.3, Remark 7.2) and the Hermitian dilation (§8); the lower bound by convexity |
-| Bhatia 1997 | the Schatten facts of Section 1.5 | Courant–Fischer for Weyl's inequalities; the triangle inequality through doubly substochastic matrices (Bessel's, Jensen's and Minkowski's inequalities), in place of Ky Fan's dominance theorem |
+| Bhatia 1997 | the Schatten facts of Section 1.5 | Courant–Fischer for Weyl's inequalities; the triangle inequality by Bourin and Zhang, *Matrix triangle inequalities: past, present, and future*, arXiv:2610.30538 (2026), Proposition 3.13, by the third proof of their Remark 3.14 (Hermitian dilations and the convexity inequality (1.1), proved by Peierls's standard argument; `q = ∞` by Weyl's inequality), proved in BP; the source treats complex square matrices, BP real `m × n` ones, by the same argument |
 
 Yaroslavtsev 2018 was read for its statements only; Heinz 2008, cited with Kristensen, was not
 consulted and is not needed.
@@ -676,15 +680,15 @@ definition rather than a statement.
   Remarks 2.2, 2.4, 4.1–4.4, 5.1–5.4, 6.1, 6.2, 6.4, 6.5, 7.1 and 7.2 (5.2: a positively
   3-homogeneous example from Šverák's; 5.3: the Cayley hyperdeterminant and extremality; 5.4:
   examples on `2 × 3` and `3 × 2` for `p ∈ (3.6, 5.15)`); the versions for `Sym₀`, `Skew_tr` and
-  `h_{p,q,C}` (lines 2521–2549); "`g(AJ)` gives another Hessian counterexample" (lines
-  2691–2692); `p = 4` in the proof of Theorem 7.1 (lines 2882–2884); the failure of the
+  `h_{p,q,C}` (lines 2521–2549); "Considering `g(AJ)` also gives another counterexample to
+  Hessian-quasiconvexity" (lines 2691–2692); `p = 4` in the proof of Theorem 7.1 (lines 2882–2884); the failure of the
   vector-valued estimate for `q > 4` (§8.2).
 - Interpretations that combine the paper with work not formalized here: "quasiconvexity is
-  non-local among smooth integrands" (lines 2061–2064, through Kristensen's theorem), the
+  nonlocal among smooth integrands" (lines 2061–2064, through Kristensen's theorem), the
   concentration interpretation (lines 279–288), and the relation of Corollary 1.6 to Gennaioli and
   Rindler's work (lines 303–312).
 - Context only: Kirchheim–Kristensen's theorem (Theorem 1.1) and its consequence at lines
-  186–188, Osękowski's Proposition 2.6, Grabovsky's examples (lines 196–199), Iwaniec's bound
+  186–188, Osękowski's Proposition 2.6, Grabovsky's examples (lines 144–156, 201–204), Iwaniec's bound
   `C^{rc} ≤ p* − 1` (lines 763–765), and the history of Remarks 2.3 and 3.1. Theorem 1.1 and
   Proposition 2.6 are stated (`External.KirchheimKristensen.Theorem1_1`,
   `External.Osekowski.HilbertCharacterization`) and not proved.
@@ -738,8 +742,11 @@ claimed, not as proved.
 
 ### Concurrent work
 
-- Bruno and Pasqualotto ([arXiv:2608.06367](https://arxiv.org/abs/2608.06367), 6 August 2026):
-  symmetry can force quasiconvexity.
+- Bruno and Pasqualotto ([arXiv:2608.06367](https://arxiv.org/abs/2608.06367), 6 August 2026),
+  *Quasiconvexity for the Dacorogna–Marcellini Energy*: the planar Dacorogna–Marcellini energy is
+  quasiconvex exactly when it is rank-one convex, that is when `|γ| ≤ 2/√3`; as a corollary,
+  quasiconvexity is equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant
+  under left and right rotations.
 - Agazzi, Bruno, Guerra and Pasqualotto ([arXiv:2608.12298](https://arxiv.org/abs/2608.12298),
   12 August 2026, between v1 and v2): a non-homogeneous example on `ℝ^{2×4}` from Grabovsky's
   integrand, and examples on symmetric matrices.
@@ -774,7 +781,7 @@ claimed, not as proved.
   formalization covers the whole paper, including what the author's does not: Theorems 1.4 and
   1.5, Corollaries 1.6 and 5.2–5.4, Sections 6 and 7, and the cited results that the proofs use.
 - The cited results are proved in three Lake packages written for this formalization, which
-  depend only on Mathlib: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
+  depend only on Mathlib and are not yet published: [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis),
   [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) and
   [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations).
 - Conti, Dolzmann and Dondl's Lean code for their `3 × 3` example
@@ -797,7 +804,7 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
   `m_*(p) ≤ m₀(p) ≤ 4` and conjectures `m_*(p) ≤ 3` (line 1385).
 - **`2 × 3` and `3 × 2` for every `p`.** Claimed for `p ∈ (3.6, 5.15)` (Remark 5.4); proved here
   on `2 × 3` for `p` near `4`, and on `3 × 2` at `p = 4`.
-- **Theorem 1.4.** `d₀ = 588` for `h_{4,4,C}` is not optimal (numerics suggest `260`;
+- **Theorem 1.4.** `d₀ = 588` for `h_{4,4,C}` is not expected to be optimal (numerics suggest `260`;
   Remark 6.4), and for the integrand (30) the paper expects `d = 3`.
 - **Remark 7.2** (`ρ = √2` for every `p`); **Remark 5.3** (the extremality of `q` and `q₃`);
   **§8.2** (the Banach-space geometry viewpoint); **Corollary 1.6** for `p > 2` (E18) and in lower
@@ -813,10 +820,10 @@ formal proofs follow the paper; the column "checked" says where each simpler arg
 | Step | The paper's argument | The simpler one, and what it saves | Checked |
 | --- | --- | --- | --- |
 | Proposition 4.3 (and the route of Remark 4.5) | if `g_n` were quasiconvex at `0`, `0 = g_n(0) = g_n^{qc}(0) ≤ f_n^{qc}(0) ≤ f_n(0) = 0`, which needs Dacorogna's formula for `g_n^{qc}(0) = g_n(0)` | for every test map, `∫ f_n(∇φ) ≥ ∫ g_n(∇φ) ≥ g_n(0) = f_n(0)`; no envelope, no Dacorogna's formula | in Lean: `twoByM_quasiconvexAt_of_minorant`, in the library, used by no proof |
-| Theorem 1.3 (a) (and Corollary 5.4) | `I = ∫_{ℝ³} q₃(∇u) < 0`, and Hölder's inequality for `∫ q₃(π∇u_R) = ∫ χ_R⁴ q₃(∇u) + O(R^{−1/4}(log R)^{3/4})` | since `q₃(∇u) < 0` everywhere, `∫ χ_R⁴ q₃(∇u) ≤ ∫_{B₁} q₃(∇u) < 0`, and the cross terms are bounded pointwise by Young's inequality `a³b ≤ η a⁴ + η⁻³ b⁴`, `η = R^{−1/4}`; saves `q₃(∇u) ∈ L¹` and Hölder | in Lean, in an earlier version of this library's proof (commit `cde348b`) |
-| Proposition 4.2's zig-zag step (and Remark 4.5's) | mollify `r` and `b`, prove (17), (18) and `(√r_η)'' ≤ 5⁴ (√b_η)''`, and let `η → 0` | at each `t₀`, replace `r` by the smooth majorant `κ(t₀) + m(t − t₀) + 2·5⁶ b` (`κ = r − 2·5⁶ b` is concave, `m` a supergradient at `t₀`), which satisfies (17) and touches `r` at `t₀`; `b` is already smooth and satisfies (18), and `x` is perturbed where `b` vanishes; the paper's computation makes the tangent at `t₀` a supporting line. Saves the convolution calculus and Minkowski's integral inequality | in Lean, commit `cde348b` |
-| Proposition 5.2, smoothness of `ζ` | `ζ` is the unique root of `w̄ ζ² + 2(t + i)ζ + w = 0` in the disc, a simple one, hence smooth by the implicit function theorem | the closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of `(1 − i t)² + \|w\|²`, which lies off the negative axis, with `Re(1 − i t + s) > 0`; smoothness by composition | in Lean, commit `cde348b` |
-| Corollary 1.6, the witness | a smooth periodic `φ` with `∫ F(∇φ) < 0` (E35) | the Lipschitz periodic `φ` that Lemma 2.2 gives: the expansion in `ε` needs only bounded `∇φ`; saves the density step | in Lean, commit `cde348b` |
+| Theorem 1.3 (a) (and Corollary 5.4) | `I = ∫_{ℝ³} q₃(∇u) < 0`, and Hölder's inequality for `∫ q₃(π∇u_R) = ∫ χ_R⁴ q₃(∇u) + O(R^{−1/4}(log R)^{3/4})` | since `q₃(∇u) < 0` everywhere, `∫ χ_R⁴ q₃(∇u) ≤ ∫_{B₁} q₃(∇u) < 0`, and the cross terms are bounded pointwise by Young's inequality `a³b ≤ η a⁴ + η⁻³ b⁴`, `η = R^{−1/4}`; saves `q₃(∇u) ∈ L¹` and Hölder | in Lean, outside the library |
+| Proposition 4.2's zig-zag step (and Remark 4.5's) | mollify `r` and `b`, prove (17), (18) and `(√r_η)'' ≤ 5⁴ (√b_η)''`, and let `η → 0` | at each `t₀`, replace `r` by the smooth majorant `κ(t₀) + m(t − t₀) + 2·5⁶ b` (`κ = r − 2·5⁶ b` is concave, `m` a supergradient at `t₀`), which satisfies (17) and touches `r` at `t₀`; `b` is already smooth and satisfies (18), and `x` is perturbed where `b` vanishes; the paper's computation makes the tangent at `t₀` a supporting line. Saves the convolution calculus and Minkowski's integral inequality | in Lean, outside the library |
+| Proposition 5.2, smoothness of `ζ` | `ζ` is the unique root of `w̄ ζ² + 2(t + i)ζ + w = 0` in the disc, a simple one, hence smooth by the implicit function theorem | the closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of `(1 − i t)² + \|w\|²`, which lies off the negative axis, with `Re(1 − i t + s) > 0`; smoothness by composition | in Lean, outside the library |
+| Corollary 1.6, the witness | a smooth periodic `φ` with `∫ F(∇φ) < 0` (E35) | the Lipschitz periodic `φ` that Lemma 2.2 gives: the expansion in `ε` needs only bounded `∇φ`; saves the density step | in Lean, outside the library |
 | Lemma 5.1 (2) | `n`-step rank-one Rademacher martingales, Burkholder's inequality, Proposition 2.5, the estimates (27)–(29) | for `f` that is `C²` away from `0`, the second derivative along rank-one lines: with `D²f[R_L, R_L] ≥ 0` and `\|D²f(X)\| ≤ C\|X\|^{p−2}`, polarization gives `D²f(πA)[πR, πR] ≥ −C' \|πA\|^{p−2} \|π^⊥R\| (\|πR\| + \|π^⊥R\|)`, and the inequality of arithmetic and geometric means against `D²(‖·‖_Λ^p)(A)[R, R] ≥ p ‖A‖_Λ^{p−2} ‖R‖_Λ²`, `‖A‖_Λ² = \|πA\|² + Λ²\|π^⊥A\|²`, gives `Λ ≳ 1/δ`; saves the martingales and Burkholder's inequality | on paper only |
 | Dacorogna, Theorem 5.20 (Proposition 5.1) | the book was not accessible; formalized by Conti–Dolzmann–Kirchheim–Müller's proof, which takes the derivatives of a continuous rank-one affine function in the sense of distributions | without continuity: a rank-one affine function is affine in each entry, hence a sum of products of distinct entries, and `t ↦ f(tF)` has degree `< k` when `F` is a sum of fewer than `k` rank-one matrices; saves the first half of their proof (the derivatives and the polynomial structure) | in Lean: `CalculusOfVariations.RankOneAffine.exists_eq_sum_minor`, in the package, used by no proof here |
 

@@ -56,7 +56,7 @@ claims of Cassese's preprint, and all are proved here.
 | --- | --- | --- | --- | --- |
 | V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A (1992) | a quartic polynomial on `ℝ^{3×2}`, rank-one convex and not quasiconvex; hence no for `d ≥ 3`, `m ≥ 2` | **proved**, every step by the paper's argument | no false statement; the steps left to the reader are supplied, chief among them the limit in Lemma 1, "easily seen" | [README](docs/Sverak/README.md), [REPORT](docs/Sverak/REPORT.md), [Challenge](palomar/Sverak/Challenge.lean) |
 | P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**; the rest of Sections 3–7, except Claim 7.3, is proved; Theorems 1.1 (2) and 1.2 are stated, not proved | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open | [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md), [Challenge](palomar/Pedregal/Challenge.lean) |
-| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result **proved**, with nothing assumed: Theorem 1.2 by the paper's UMD route; the UMD, Khintchine and Beurling–Ahlfors results behind Theorems 1.2, 1.4, 1.5 and Corollary 1.6 proved in packages | no false statement; the paper leaves gaps (the uniformity in `p` behind Theorem 1.3 (b), the constant `κ` of Section 5, a step of Proposition 2.5 false under the reading of prelaminates the paper needs, Proposition 6.6 and Corollary 5.2 without proof), all filled | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
+| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved**, with nothing assumed: Theorem 1.2 by the paper's UMD route; the UMD, Khintchine and Beurling–Ahlfors results behind Theorems 1.2, 1.4, 1.5 and Corollary 1.6 proved in packages | no false statement; the paper leaves gaps (the uniformity in `p` behind Theorem 1.3 (b), the constant `κ` of Section 5, a step of Proposition 2.5 false under the reading of prelaminates the paper needs, Proposition 6.6 and Corollary 5.2 without proof), all filled | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
 
 Each paper's report (`docs/<Paper>/REPORT.md`) gives its findings, how the formalization reads it,
 its departures from the paper's proofs, what each result depends on, its place in the literature
@@ -113,7 +113,7 @@ becomes quasiconvex after transposition. In `2 × 2`, its mechanism cannot detec
   to Burkholder's martingale inequalities; a positive answer in `2 × 2` would prove Iwaniec's
   conjecture on the norm of the Beurling–Ahlfors transform. That conjecture is now claimed proved,
   by a preprint of twenty authors, Cassese and Šverák among them ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October
-  2026); the converse does not hold, so the claim leaves the `2 × 2` problem open;
+  2026); the converse is not known, so the claim leaves the `2 × 2` problem open;
 - analogues of Šverák's gradient measure in `2 × 2` (Pedregal 1996, Pedregal–Šverák 1998,
   Bandeira–Ornelas 2011) turned out to be laminates, and Sebestyén and Székelyhidi (2017) proved it
   for the whole class: in `2 × 2`, the gradient measure of a sum of three sawtooth waves along
@@ -152,7 +152,7 @@ same cube measures with unequal weights.
 ### Cassese (2026): two components in higher dimension, and the homogeneous problem
 
 Cassese claims to settle the two-component case outside `2 × 2`. With Šverák's theorem and the
-monotonicity in the dimensions, `2 × 2` would then be the only size left open (lines 251–253 of the
+monotonicity in the dimensions, `2 × 2` would then be the only size left open (lines 251–254 of the
 TeX source). The preprint grew in three versions: v1 (4 August 2026) gave `2 × m` for large `m`;
 Agazzi, Bruno, Guerra and Pasqualotto's `2 × 4` example followed (12 August); v2 (28 August) added
 `2 × 4`, and v3 (16 September) `2 × 3`.
@@ -161,9 +161,12 @@ Most of the paper uses a method of its own. The integrands are real functions
 `C^p ‖P(A)‖^p − ‖Q(A)‖^p`, with `P` and `Q` taking values in a Banach space, or their rank-one convex
 envelopes; their rank-one convexity is controlled through the correspondence between laminates and
 martingales (UMD estimates, Burkholder's functions), and their failure of quasiconvexity is
-witnessed by explicit vector fields. That gives Theorems 1.2, 1.4 and 1.5. Symmetry can force
-quasiconvexity (Guerra–Kristensen 2022, for homogeneous isotropic integrands; Bruno–Pasqualotto
-2026), and Cassese conjectures that isotropic homogeneous rank-one convex integrands are
+witnessed by explicit vector fields. All four theorems, 1.2–1.5, follow this scheme. Symmetry can
+force quasiconvexity: Guerra and Kristensen (2022) proved it for homogeneous isotropic integrands,
+and Bruno and Pasqualotto (2026, a preprint) show that the planar Dacorogna–Marcellini energy is
+quasiconvex exactly when it is rank-one convex (`|γ| ≤ 2/√3`), and that quasiconvexity is
+equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant under left and right
+rotations. Cassese conjectures that isotropic homogeneous rank-one convex integrands are
 quasiconvex at `0` (Conjecture 1); Theorem 1.4's examples have only the weaker conjugation and
 transposition invariance. The paper also answers
 Kirchheim and Kristensen's homogeneous problem negatively, which Šverák's example cannot do: its
@@ -174,7 +177,7 @@ How Cassese relates to the other two papers:
 
 - **Šverák.** The `2 × 3` quartic of Theorem 1.3 follows Šverák's architecture: a polynomial that
   is rank-one convex on a subspace `L₃` with few rank-one directions, extended to all matrices by a
-  projection and a penalty `Λ²|π^⊥A|²` (Lemma 5.1, a homogeneous analogue of Šverák's
+  projection and a penalty `δ(|πA|² + Λ²|π^⊥A|²)²` (Lemma 5.1, a homogeneous analogue of Šverák's
   `k|X − PX|²`), and a witness whose gradients lie in `L₃`. Its transpose on `ℝ^{3×2}`
   (Corollary 5.3, sketched) stays non-quasiconvex, unlike Šverák's example, and gives a homogeneous
   proof of Šverák's theorem. Remark 5.2 adds, without proof, that Lemma 5.1 turns Šverák's example
@@ -185,8 +188,8 @@ How Cassese relates to the other two papers:
   Šverák uses smooth test maps on a domain and convexity along lines. The repository proves the two
   forms of rank-one convexity equivalent, Cassese's quasiconvexity stronger than Šverák's on the
   cube, and Šverák's example in Cassese's form ([`Morrey/Cassese/Sverak.lean`](Morrey/Cassese/Sverak.lean)).
-- **Pedregal.** Cassese does not cite Pedregal. Cassese's `2 × 3` example, proved here, refutes the
-  claim of Pedregal's versions 1–2 for two-component maps in dimension `3` and more (an inference of
+- **Pedregal.** Cassese does not cite Pedregal's claimed proof (arXiv:1905.06571). Cassese's
+  `2 × 3` example, proved here, refutes the claim of Pedregal's versions 1–2 for two-component maps in dimension `3` and more (an inference of
   this repository: Pedregal report, E17); the current version's `2 × 2` claim is untouched. Both papers rest on the same
   duality: the rank-one convex envelope is computed by (pre)laminates, Pedregal's starting point and
   Cassese's Proposition 2.1. Cassese expects the `2 × 2` homogeneous problem to have a positive
@@ -220,9 +223,9 @@ How Cassese relates to the other two papers:
 - Conti, Dolzmann and Dondl formalized their `3 × 3` example in Lean 4
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc),
   Apache-2.0), with its own definitions of rank-one convexity and quasiconvexity; by its README,
-  the code was written by Claude Opus 5.5 under the authors' guidance. It includes parts of
-  Šverák's argument: his test map, its gradients in `L`, the integral (4), and the "only if" half
-  of his Lemma 1; not Lemma 2 or the Theorem.
+  the code was written by Claude Opus 5.5 under the authors' guidance. It includes adaptations of
+  Šverák's test map (`φ(x) = (sin x₁, sin x₂, −sin(x₁ + x₂))` on `ℝ³`), of its gradients in `L` and
+  of the integral (4), and the "only if" half of his Lemma 1; not Lemma 2 or the Theorem.
 - Cassese formalized his Theorem 1.2 and Theorem 1.3 at `p = 4` in Lean, with an AI system (the
   paper names ChatGPT 5.6 Sol), and released the code without a license.
 - This repository does not use either: its definitions and proofs were written independently.

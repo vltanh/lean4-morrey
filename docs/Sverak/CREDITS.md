@@ -13,7 +13,8 @@ How the formalization of Šverák (1992) was made, from the run log and the sess
   commit `020f253` for the second round, version 4.2.0 (commit `f5e7420`) for the third.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
   the paper, the formal proofs against the paper's, the repository's README against the sources,
-  and, in the third round, every recorded departure and the rebuilt cut-off.
+  and, in the third round, every recorded departure, the rebuilt cut-off and the documents of the
+  three papers.
 
 ## Second round (21 November 2026)
 

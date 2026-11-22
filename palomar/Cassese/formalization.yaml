@@ -11,9 +11,9 @@ project:
     problem negatively.
 
 
-    Every result of the paper is proved, with no hypothesis beyond the paper's: Theorem 1.2
-    (every p > 1, 2 x m for m large, by the paper's UMD route, and a second time by its
-    elementary route), Theorem 1.3 (a quartic on 2 x 3, and p near 4), Corollary 5.3 (its
+    Every result that the paper proves is proved, with no hypothesis beyond the paper's:
+    Theorem 1.2 (every p > 1, 2 x m for m large, by the paper's UMD route, and a second time by
+    its elementary route), Theorem 1.3 (a quartic on 2 x 3, and p near 4), Corollary 5.3 (its
     transpose on 3 x 2), the consequences that only 2 x 2 remains, Theorem 1.4 (d x d, every
     p, and p = 4 for d >= 588), Theorem 1.5 (4 x 2, every p != 2) and Corollary 1.6. The results
     of other works that the proofs use are proved too, in their sources' terms: Burkholder's
@@ -43,8 +43,9 @@ sources:
     location: "https://arxiv.org/abs/2608.03488v3"
     relationship: "formalizes"
     note: >-
-      Formalized against the TeX source of v3 (16 September 2026). Every numbered result is
-      proved, unconditionally; Theorem 1.2 by the paper's route (Section 4.4), and its route of
+      Formalized against the TeX source of v3 (16 September 2026). Every numbered result that the
+      paper proves is proved, unconditionally (Theorem 1.1 and Proposition 2.6, quoted as context,
+      are stated and not proved); Theorem 1.2 by the paper's route (Section 4.4), and its route of
       Remark 4.5 as a second theorem. See status.scope.
     author_endorsement: "not-contacted"
   - title: "Rank-one convexity does not imply quasiconvexity"
@@ -136,6 +137,20 @@ sources:
     type: "book"
     relationship: "background"
     note: "Section 10.1, the argument used for Borell's hypercontractive bound and the Kahane-Khintchine inequality (Morrey/Common/External/Borell, HNVW)."
+  - title: "Matrix triangle inequalities: past, present, and future"
+    authors:
+      - "Jean-Christophe Bourin"
+      - "Teng Zhang"
+    id: "arXiv:2610.30538"
+    type: "preprint"
+    location: "https://arxiv.org/abs/2610.30538"
+    relationship: "background"
+    note: >-
+      Proposition 3.13, by the third proof of Remark 3.14 (Hermitian dilations and the convexity
+      inequality (1.1), proved by Peierls's argument; q = infinity by Weyl's inequality): the
+      argument for the triangle inequality of Schatten norms, which the paper takes from Bhatia,
+      Matrix Analysis, Chapter IV (not accessible). Proved in lean4-banach-probability for real
+      m x n matrices; the source treats complex square matrices, by the same argument.
   - title: "Some remarks on the L^p estimates for powers of the Ahlfors-Beurling operator"
     authors:
       - "Oliver Dragičević"
@@ -182,22 +197,23 @@ related_formalizations:
     note: >-
       Written for this project by the same AI system: Fourier multipliers and duality, de Leeuw's
       transference from the torus to the plane, Poisson summation, Dragičević's lower bound for
-      the square of the Beurling-Ahlfors transform, smooth periodic Fourier series. Required in
-      lakefile.toml.
+      the square of the Beurling-Ahlfors transform, smooth periodic Fourier series. Not yet
+      published; required by path in lakefile.toml.
   - id: "https://github.com/vltanh/lean4-banach-probability"
     relationship: "builds-on"
     note: >-
       Written for this project by the same AI system: Burkholder's inequality and function, UMD
       theory (decoupling, complex constants, Maurey's theorem, extrapolation, L^p, zig-zag
       concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, the non-commutative
-      Khintchine inequality, Randrianantoanina's non-commutative martingale transforms. Required
-      in lakefile.toml.
+      Khintchine inequality, Randrianantoanina's non-commutative martingale transforms. Not yet
+      published; required by path in lakefile.toml.
   - id: "https://github.com/vltanh/lean4-calculus-of-variations"
     relationship: "builds-on"
     note: >-
       Written for this project by the same AI system: quasiconvexity and laminates, Dacorogna's
       formula, minors and null Lagrangians, quadratic forms, Kristensen's smoothing,
-      distributional second derivatives on R. Required in lakefile.toml.
+      distributional second derivatives on R. Not yet published; required by path in
+      lakefile.toml.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-
@@ -217,12 +233,12 @@ related_formalizations:
 
 status:
   scope: >-
-    Complete and unconditional. Proved: every numbered result of the paper (Theorems 1.2-1.5,
-    Corollary 1.6, and every lemma, proposition and corollary of Sections 2 and 4-7, with
-    Remark 6.3, (10), (13), (14), (31)) and the claims of the running text that the proofs use,
-    among them the consequences after Theorem 1.3 (only 2 x 2 is left; at p = 4 the homogeneous
-    problem fails in every size above 2 x 2). Theorem 1.2 is proved by the paper's route and, a
-    second time, by the route of Remark 4.5. The results of other works that the proofs use are
+    Complete and unconditional. Proved: Theorems 1.2-1.5, Corollary 1.6, every lemma, proposition
+    and corollary of Sections 2 and 4-7 except Proposition 2.6, Remark 6.3, (10), (13), (14), (31),
+    and the claims of the running text that the proofs use, among them the consequences after
+    Theorem 1.3 (only 2 x 2 is left; at p = 4 the homogeneous problem fails in every size above
+    2 x 2). Theorem 1.2 is proved by the paper's route and, a second time, by the route of
+    Remark 4.5. The results of other works that the proofs use are
     proved in Morrey/Common/External from three packages; no statement takes them as hypotheses.
     Stated and not proved, used by no proof: Kirchheim-Kristensen's Theorem 1.1 and Osękowski's
     Proposition 2.6, quoted by the paper as context, and Conjecture 1. Not formalized: remarks and
@@ -270,8 +286,8 @@ automation:
     The AI system wrote the code, the three packages and the documents at the request of the
     author. No person has reviewed the proofs. Independent AI agents checked the statements
     against the TeX source, compared the formal proofs with the paper's, reviewed the packages'
-    statements and the changed statements, audited the departures, and checked the first version
-    of the report. See docs/Cassese/CREDITS.md.
+    statements and the changed statements, audited the departures, and checked the report and the
+    other documents. See docs/Cassese/CREDITS.md.
 
 fidelity:
   divergences: >-
@@ -286,8 +302,9 @@ fidelity:
     tuples; Hessian quasiconvexity (undefined in the paper) with smooth compactly supported test
     maps; Theorem 1.3 (b) as "there is eps > 0 with |p - 4| < eps"; Corollaries 5.3, 5.4 with
     Lambda = K/delta; Proposition 6.5 at q = infinity with one alpha for every p; Theorem 1.4 with
-    Schatten exponent q = 4. Generalizations: Proposition 7.2 for every real rho (the paper's
-    rho > 0 is not used); Lemma 2.1 for every real-valued rank-one convex function (E21).
+    Schatten exponent q = 4. Generalizations: the identity of Proposition 7.2 for every real rho
+    (its lower bound keeps rho > 0, which its proof uses); Lemma 2.1 for every real-valued
+    rank-one convex function (E21).
     Departures from the paper's proofs, each a repair of a gap or a false step: Theorem 1.3 (b)
     with explicit constants uniform in p (E4); Proposition 2.5 "<=" by Proposition 2.4's argument
     run on martingales (E10); Proposition 5.1's skipped step supplied (E9). Every other proof
@@ -302,7 +319,9 @@ fidelity:
     added constant; Randrianantoanina's projections read in the reduced algebra, his interpolation
     step done in three ranges of exponents, his Lemma 3.2 in a counting form; Mackey et al.'s
     Remark 7.2 for 2 < q < 3, whose unproved variant of the mean value trace inequality is
-    proved; Dragičević's test functions approximated by Schwartz functions.
+    proved; Dragičević's test functions approximated by Schwartz functions; Bourin-Zhang's
+    Proposition 3.13 (the Schatten triangle inequality, in place of Bhatia), stated for complex
+    square matrices, proved for real m x n ones by the same argument.
 
 review:
   status: "agent-reviewed"
@@ -313,7 +332,8 @@ review:
     TeX source (two reviewers), compared the formal proofs with the paper's (three reviewers), and
     checked the first version of the report against the sources; in the round that proved the
     cited results, they reviewed the packages' statements, the changed statements against the TeX
-    source, the redone proofs, and every recorded departure.
+    source, the redone proofs, and every recorded departure, and then checked the rewritten
+    documents against the code, the audit output, the TeX source and the cited works.
 
 alignment:
   namespace: "CasseseChallenge"
@@ -378,4 +398,4 @@ acknowledgements: >-
   Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
   (the scanned copy of Kristensen 1999); the open lecture notes and preprints whose arguments the
   cited results follow (Müller 1998, Pisier 2011, Dragičević 2013, Mackey et al., O'Donnell,
-  Randrianantoanina, Conti-Dolzmann-Kirchheim-Müller, Morrey 1952).
+  Randrianantoanina, Conti-Dolzmann-Kirchheim-Müller, Morrey 1952, Bourin-Zhang).

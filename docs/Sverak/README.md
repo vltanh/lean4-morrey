@@ -71,7 +71,8 @@ formalization reads the paper, its place in the literature and what comes next:
 - Comparator accepts [`Solution.lean`](../../palomar/Sverak/Solution.lean) against [`Challenge.lean`](../../palomar/Sverak/Challenge.lean)
   ([`comparator.json`](../../palomar/Sverak/comparator.json)).
 - Independent AI agents checked the statements against the paper, the formal proofs against the
-  paper's, and every recorded departure from the paper. No person has reviewed the proofs.
+  paper's, every recorded departure from the paper, and the documents. No person has reviewed the
+  proofs.
 
 ## Building and Palomar
 

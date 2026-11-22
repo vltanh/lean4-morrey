@@ -46,9 +46,10 @@ related_formalizations:
     relationship: "independent"
     note: >-
       Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
-      non-quasiconvex function on 3x3 matrices, with its own definitions. It includes parts of
-      Šverák's argument (the test map w, its gradients in L, the integral (4), the "only if" half
-      of Lemma 1), not Lemma 2, the Theorem or the Corollary. Not consulted.
+      non-quasiconvex function on 3x3 matrices, with its own definitions. It includes adaptations
+      to R^3 of parts of Šverák's argument (of the test map w, as phi(x) = (sin x1, sin x2,
+      -sin(x1 + x2)), of its gradients in L and of the integral (4)) and the "only if" half of
+      Lemma 1; not Lemma 2, the Theorem or the Corollary. Not consulted.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-
@@ -63,9 +64,9 @@ related_formalizations:
     relationship: "other"
     note: >-
       The formalization of Cassese, arXiv:2608.03488v3, in the same repository, with its own
-      Challenge and metadata (every result proved, unconditionally). It imports this library: it
-      restates Šverák's example in Cassese's definitions, and its periodic test maps use the
-      cut-off of Lemma 1.
+      Challenge and metadata (every result that the paper proves is proved, unconditionally). It
+      imports this library: it restates Šverák's example in Cassese's definitions, and its
+      periodic test maps use the cut-off of Lemma 1.
 
 status:
   scope: >-
@@ -100,7 +101,8 @@ automation:
   notes: >-
     The AI system wrote the code and the documents at the request of the author. No person has
     reviewed the proofs. Independent AI agents checked the statements against the paper, the
-    formal proofs against the paper's, and every recorded departure. See docs/Sverak/CREDITS.md.
+    formal proofs against the paper's, every recorded departure, and the documents. See
+    docs/Sverak/CREDITS.md.
 
 fidelity:
   divergences: >-
@@ -126,8 +128,8 @@ review:
     - "none"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
-    paper, compared the formal proofs with the paper's, and audited every recorded departure
-    against the paper.
+    paper, compared the formal proofs with the paper's, audited every recorded departure against
+    the paper, and checked the documents against the code and the paper.
 
 alignment:
   namespace: "SverakChallenge"

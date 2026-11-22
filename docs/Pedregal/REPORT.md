@@ -19,8 +19,8 @@ Status of the formalization:
   `𝐓` of Definition 6.1, and needs every value `𝐓(t)` to be nonempty, which is Corollary 7.2. So
   the paper does not prove Theorem 1.1 (E13).
 - Every other numbered result of Sections 3–7 except Claim 7.3 is correct and proved:
-  Proposition 3.3, the assertions of Definition 5.1 and eqs. (5.10)–(5.15), Proposition 6.1,
-  Subsection 6.1, Proposition 6.3, Claim 7.4, and the reduction
+  Proposition 3.3, the assertions of Definition 5.1 and eqs. (5.10)–(5.15) ((5.10) in the corrected
+  form of E6), Proposition 6.1, Subsection 6.1, Proposition 6.3, Claim 7.4, and the reduction
   [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
 - Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156)), by an explicit
   lamination: the paper's argument fails there too.
@@ -30,8 +30,8 @@ Status of the formalization:
 - `lake build` passes with no `sorry` outside [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean), no `axiom`, and every
   declaration depends only on [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound)
   ([`scripts/Audit.lean`](../../scripts/Audit.lean)). Comparator accepts [`Solution.lean`](../../palomar/Pedregal/Solution.lean) against [`Challenge.lean`](../../palomar/Pedregal/Challenge.lean).
-- No statement of the paper was changed: the false ones are stated as the paper states them and
-  refuted.
+- No statement of the paper was changed, apart from the misprint of (5.10) corrected in E6: the
+  false ones are stated as the paper states them and refuted.
 - Every proof of a correct result follows the paper's argument. Three departures, each forced by an
   error of the paper, are listed in Section 7.
 
@@ -44,7 +44,7 @@ Status of the formalization:
 | Missing hypotheses | E4: Theorem 1.2 takes "an arbitrary function", but its integral needs a measurable `ψ` |
 | Redundant hypotheses | none in the paper's results |
 | Use of cited results | Kakutani's theorem: stated correctly, but its non-emptiness hypothesis fails (E13) |
-| Later work | E17: counterexamples claimed in 2026 preprints on `ℝ^{2×3}` and `ℝ^{2×4}` would, if correct, contradict the claim of v1–v2 (2019) for two-component maps in dimension `N ≥ 3` |
+| Later work | E17: the claim of v1–v2 (2019) for two-component maps in dimension `N ≥ 3` is false, by Cassese's `2 × 3` example (2026), proved in this repository (the claim itself is not stated in Lean); a second 2026 preprint claims an example on `ℝ^{2×4}` |
 | Readings and wording | E7: Proposition 3.3's permutation is unique for ordered molds, as the paper's notation is |
 | Misprints and slips | E1–E3, E5, E6, E8–E12, E18 |
 
@@ -73,7 +73,7 @@ Status of the formalization:
 | Cited result | Where | Verdict |
 | --- | --- | --- |
 | Kakutani's theorem | Section 8 | stated correctly (Theorem 6.2); its hypotheses are checked correctly except non-emptiness of the values, which is false (E13) |
-| Approximation of Lipschitz maps by piecewise affine ones (Ekeland–Temam) | Sections 1, 4 | used for Theorem 1.1 (2) in "a standard density argument" that is not given (E16) |
+| Approximation of Lipschitz maps by piecewise affine ones (Ekeland–Temam) | cited at line 531 (Section 4), for the density argument of lines 163 and 777 | used for Theorem 1.1 (2) in "a standard density argument" that is not given (E16) |
 
 The other citations give context only: the history of Morrey's problem, examples of rank-one
 convex functions, numerical studies.
@@ -96,7 +96,7 @@ Different indices need `i_p < i_q`. A slip.
 The Dirac masses are missing: `μ_k = ∑_i s_i^{(k)} δ_{w_i^{(k)}}`, and likewise for `μ_m`. A
 misprint.
 
-### E4. Theorem 1.2 (lines 198–212)
+### E4. Theorem 1.2 (lines 198–215)
 
 The theorem takes "an arbitrary function" `ψ : 𝕄^{2×2} → ℝ`, but statement (2) integrates
 `ψ(F + ∇u)`, which needs `ψ` measurable; the Introduction works with continuous integrands
@@ -118,11 +118,11 @@ relative weights are `1/2` for `0 ≤ p ≤ m − 2`, and at `p = m − 1` (the 
 `t_{2k}/t_k^{(m−1)}`, not `1/2`. Slips: the argument only uses that the relative weights above the
 first level are `1/2` ([`point_dyadic_theta`](../../Morrey/Pedregal/Weights.lean#L151)).
 
-### E7. Proposition 3.3 (line 411): uniqueness of the permutation (a reading)
+### E7. Proposition 3.3 (line 412): uniqueness of the permutation (a reading)
 
 "There is always a unique permutation … such that mixtures always take place in the form
-`[2i − 1, 2i]`." Unique when the order inside a bracket counts, as it does in the paper's
-notation and for the sign of the direction (3.5); for unordered mixtures there would be
+`[2i − 1, 2i]` in all levels." Unique when the order inside a bracket counts, as it does in the
+paper's notation and for the sign of the direction (3.5); for unordered mixtures there would be
 `2^{2^m − 1}` such permutations (`[1, 2]` comes from the identity and from `(1 2)`). The
 paper's proof is "elementary". The formalization reads molds as ordered trees and proves the
 statement ([`proposition3_3`](../../Morrey/Pedregal/Hn/Mold.lean#L171)).
@@ -134,16 +134,17 @@ It is a partition of the index set into classes `𝒞_s` of six indices, one cla
 
 ### E9. Duplicate TeX labels
 
-`elementos` labels (3.7) and (5.12), and `pesos` labels Definition 5.1 and (7.2). There is no
-`\ref{pesos}`; the three references `\eqref{elementos}` (lines 708, 711, 787) print as (5.12),
-which is the intended one there (it repeats the notation of (3.7)). Harmless.
+`elementos` labels (3.7) and (5.12), and `pesos` labels Definition 5.1 and (7.2). The one
+reference to `pesos`, `\eqref{pesos}` at line 892, prints as (7.2), the intended one; the three
+references `\eqref{elementos}` (lines 708, 711, 787) print as (5.12), which is the intended one
+there (it repeats the notation of (3.7)). Harmless.
 
-### E10. Definition 6.1 (line 750): "for all `0 ≤ p ≤ m − 2`, `1 ≤ k ≤ 2^p`"
+### E10. Definition 6.1 (line 757): "for all `0 ≤ p ≤ m − 2`, `1 ≤ k ≤ 2^p`"
 
 The tri-dyadic mold is not dyadic: level `0` has one mixture, level `1` one mixture and a pair
 that passes through, and level `p ≥ 2` has `3 · 2^{p−2}` mixtures (`2^{p−2}` per sub-mold). So
-`1 ≤ k ≤ 2^p` is wrong at every level `p ≥ 1` (line 723 has the same slip). The intended condition
-is "at every mixture above the first level", which the formalization states ([`Pedregal.T`](../../palomar/Pedregal/Challenge.lean#L224)).
+`1 ≤ k ≤ 2^p` is wrong at every level `p ≥ 1` (lines 723, 744 and 850 have the same slip). The
+intended condition is "at every mixture above the first level", which the formalization states ([`Pedregal.T`](../../palomar/Pedregal/Challenge.lean#L224)).
 
 ### E11. Eq. (7.12) and line 998
 
@@ -220,7 +221,7 @@ checked in exact rational arithmetic, [`numerics/fixedpoint_exact.py`](numerics/
 
 ### E14. The summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5, is false
 
-The displayed summary after Step 2 (lines 1002–1004) asserts, for each sub-mold `j` separately,
+The displayed summary after Step 2 (lines 1001–1008) asserts, for each sub-mold `j` separately,
 weights `r_j ≥ 0` for which the decomposition directions of `w` are those of `u`, with the
 top-to-bottom procedure started from the barycenter `𝕌_j` of `u` (7.6); Claim 7.5 (line 966) is
 the positivity part. As the paper states it ([`Step2ClaimPaper`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L75)), it fails for a trivial reason:
@@ -251,7 +252,7 @@ E13 shows that the statement is false; these are the places where the argument f
 - The top-to-bottom procedure for `w` starts from the barycenter `𝕌_j` of `u` (7.6), which
   imposes `3 ∑_k r_k ∇w = 𝕌_j`; the proof never checks it (line 1024: "vectors `𝕌_j` … are the
   same for every `w`").
-- Step 3 (lines 1026–1043) averages vectors of weights `r_q` obtained for the translates `w_q`
+- Step 3 (lines 1026–1044) averages vectors of weights `r_q` obtained for the translates `w_q`
   of `w`, and appeals to the convexity of `𝐓(t)` (Proposition 6.3). But `r_q` makes the directions
   of `w_q`, not of `w`, parallel to those of `u`: Proposition 6.3 is about one function `v`, and
   says nothing about the average.
@@ -259,7 +260,7 @@ E13 shows that the statement is false; these are the places where the argument f
 ### E16. Theorem 1.1 (2) from Theorem 1.1 (1)
 
 The paper gets (2) from (1) "by a standard density argument about approximation by continuous,
-piece-wise affine mappings" (line 161) and Section 8. The argument is not given; it needs
+piece-wise affine mappings" (line 163) and Section 8. The argument is not given; it needs
 Jensen's inequality for laminates and rank-one convex functions, the continuity of rank-one
 convex functions, the approximation of periodic Lipschitz maps by `ℙ_l` maps with convergence of
 the gradient measures, and the equivalence of the periodic and the `W^{1,∞}_0` definitions of
@@ -292,7 +293,7 @@ not stated in Lean here; the `2 × 2` claim of v5 is untouched.
 ### E18. Misprints
 
 "counter-examble" (line 150), "Brower" (lines 176, 775), "subleties" (line 197), "full collection
-of triangle" (line 542), "important for." (line 488), "interfase" (line 620), "point or our
+of triangle" (line 543), "important for." (line 488), "interfase" (line 620), "point or our
 concern" (line 762), "alway" (line 990), and "(in press)" for a 2011 paper (line 1067).
 
 ## 4. Missing hypotheses
@@ -334,7 +335,7 @@ formalization states them for arbitrary functions `u, v`.
   which for the tri-dyadic molds is "every level `0 ≤ p ≤ m − 2`" (E10).
 - **Laminates** are laminates of finite order ([`IsLaminate`](../../palomar/Pedregal/Challenge.lean#L248)), finitely supported probability
   measures obtained from a Dirac mass by splitting atoms along rank-one segments: the paper's
-  "joint `(H_n)`-conditions whose decomposition directions are parallel" (Section 1).
+  "joint, … `(H_n)`-conditions whose decomposition directions are parallel" (Section 1, line 186).
 - **Proposition 7.1** ("with the given system of decomposition directions") means directions
   parallel to the given ones: the top-to-bottom step (7.7) splits along `S · 𝐔_k^{(p)}`.
 - **Step 2's summary** is stated as [`Step2ClaimPaper`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L75), for one sub-mold, with nonnegative weights
@@ -390,8 +391,8 @@ only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.
 | Thm 1.1 (1), l = 1 | [`Pedregal.theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156) | – |
 
 The route check ([`scripts/route_check.py`](../../scripts/route_check.py)) compares the results that each formal proof uses with
-those that the paper's proof cites ([`docs/paper_routes.tsv`](paper_routes.tsv)). Every difference is recorded with its
-reason in [`docs/route_differences.tsv`](route_differences.tsv): the refutations do not use the steps of the refuted proofs,
+those that the paper's proof cites ([`paper_routes.tsv`](paper_routes.tsv)). Every difference is recorded with its
+reason in [`route_differences.tsv`](route_differences.tsv): the refutations do not use the steps of the refuted proofs,
 [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
 Subsection 6.1 uses the linearity of Proposition 6.3 (the continuity that the paper invokes), and
 the assertions of Definition 5.1 are used without citation throughout.
@@ -478,8 +479,8 @@ claims a solution of the `2 × 2` case.
   integrands on `ℝ^{2×m}` that are nowhere quasiconvex for `m` large, and examples on
   `ℝ^{2×3}`; A. Agazzi, G. Bruno, A. Guerra and F. Pasqualotto,
   [arXiv:2608.12298](https://arxiv.org/abs/2608.12298) (August 2026), an explicit example on
-  `ℝ^{2×4}`. Both say that the `2 × 2` case remains open. If correct, they contradict the claim of
-  v1–v2 in dimension `N ≥ 3` (E17).
+  `ℝ^{2×4}`. Both say that the `2 × 2` case remains open. Cassese's `2 × 3` example, proved in this
+  repository, makes the claim of v1–v2 in dimension `N ≥ 3` false (E17).
 - S. Conti, G. Dolzmann and P. Dondl, [arXiv:2610.31886](https://arxiv.org/abs/2610.31886)
   (October 2026): a frame-indifferent rank-one convex function on `ℝ^{3×3}` that is not
   quasiconvex; its introduction says that a proof of the `2 × 2` case "has been proposed",

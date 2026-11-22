@@ -20,7 +20,11 @@ namespace Pedregal
 /-- **Theorem 1.1 (1)** (`objetivo`), the paper's argument with the conclusion of Corollary 7.2 as a
 hypothesis. If `𝐓(t)` is nonempty for every `t ∈ Θ_l`, then `𝐓` has a fixed point (Kakutani's
 theorem, with Proposition 6.3 and Subsection 6.1), and the gradient measure `ν` of `(u, v)` is a
-laminate (Proposition 6.1). The hypothesis does not hold in general (`Pedregal.corollary7_2_false`). -/
+laminate (Proposition 6.1). The hypothesis does not hold in general (`Pedregal.corollary7_2_false`).
+
+Departure from the paper (reason 1: the paper's step is wrong; REPORT.md, E13): Section 8 takes
+the non-emptiness of the values of `𝐓` from Corollary 7.2, which is false, and nothing along the
+paper's lines supplies it; so this theorem takes it as a hypothesis, and is not Theorem 1.1 (1). -/
 theorem theorem1_1_of_nonempty {l : ℕ} (S : TriMold l) {u v : (Fin 2 → ℝ) → ℝ} (hu : u ∈ PL l)
     (hv : v ∈ PL l) (hne : ∀ t ∈ Theta S, (T S u v t).Nonempty) :
     IsLaminate (gradMeasure l u v) := by
