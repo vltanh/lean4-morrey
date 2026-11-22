@@ -43,8 +43,6 @@ import all Morrey.Cassese.TwoByThree.ExtensionAux
 import all Morrey.Cassese.TwoByThree.ExtensionOne
 import all Morrey.Cassese.TwoByThree.Folklore
 import all Morrey.Cassese.TwoByThree.Folklore.Laminate
-import all Morrey.Cassese.TwoByThree.Folklore.NullLagrangian
-import all Morrey.Cassese.TwoByThree.Folklore.Quasiaffine
 import all Morrey.Cassese.TwoByThree.Hessian
 import all Morrey.Cassese.TwoByThree.HessianCutoff
 import all Morrey.Cassese.TwoByThree.NearFour
@@ -58,19 +56,14 @@ import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
-import all Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex
 import all Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
-import all Morrey.Common.Basic.CalculusOfVariations.Basic
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
 import all Morrey.Common.External.Burkholder.Inequality
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.Dacorogna.Minors
-import all Morrey.Common.External.Dacorogna.Plancherel
 import all Morrey.Common.External.Dragicevic.LowerBound
 import all Morrey.Common.External.HNVW.Transference
 import all Morrey.Common.External.Kakutani.Theorem
-import all Morrey.Common.External.KinderlehrerPedregal.Basic
-import all Morrey.Common.External.KinderlehrerPedregal.Envelope
 import all Morrey.Common.External.KinderlehrerPedregal.Formula
 import all Morrey.Common.External.KirchheimKristensen.Theorem
 import all Morrey.Common.External.Kristensen.Smoothing
@@ -155,6 +148,8 @@ meta def externalResults : List (String × Name) :=
    ("Rindler, periodic test maps (Cassese Lemma 2.2)",
     ``External.Rindler.quasiconvexAtOn_iff_periodic),
    ("Dacorogna Thm 5.20 (Cassese Prop 5.1)", ``External.Dacorogna.rankOneAffineMinors_holds),
+   ("Dacorogna Thm 5.20, minors quasiaffine (Cassese Prop 5.1)",
+    ``External.Dacorogna.minor3_quasiaffine),
    ("Dacorogna Thm 5.25 (i) (Cassese Prop 5.1)", ``External.Dacorogna.quadraticForm_quasiconvex),
    ("Dacorogna's formula (Cassese Prop 2.2)",
     ``External.KinderlehrerPedregal.dacorognaFormula_holds),

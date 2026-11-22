@@ -1,7 +1,7 @@
 # Dacorogna: rank-one affine functions and quadratic forms
 
 **Source.** B. Dacorogna, *Direct methods in the calculus of variations*, 2nd ed., Springer 2008,
-Theorems 5.20 and 5.25 (i).
+Theorems 5.20 and 5.25 (i) (paywalled, not consulted).
 
 **Statements used by Cassese** (proof of Proposition 5.1 only).
 
@@ -10,20 +10,22 @@ Theorems 5.20 and 5.25 (i).
 - Theorem 5.25 (i): a rank-one convex quadratic form is quasiconvex.
 
 **Lean.** [`Minors.lean`](Minors.lean): the proposition `External.Dacorogna.RankOneAffineMinors`
-(Theorem 5.20), proved by `rankOneAffineMinors_holds`, and
-`External.Dacorogna.quadraticForm_quasiconvex` (Theorem 5.25 (i)). [`Plancherel.lean`](Plancherel.lean):
-the Fourier inequality `∫ Q (∇φ) ≥ 0` behind Theorem 5.25 (i).
+(Theorem 5.20, (iii) ⇒ (iv)), proved by `rankOneAffineMinors_holds`;
+`External.Dacorogna.minor3_quasiaffine` (Theorem 5.20, the `3 × 3` minors are quasiaffine); and
+`External.Dacorogna.quadraticForm_quasiconvex` (Theorem 5.25 (i)). All three are proved from the
+package `CalculusOfVariations` (`Minors/RankOneAffine.lean`, `Minors/Quasiaffine.lean`,
+`QuadraticForm/Quasiconvex.lean`).
 
-**Proofs.** Theorem 5.20 (the direction (iii) ⇒ (iv)): by induction on the number of rows, in the
-classical spirit of Ball–Currie–Olver (Dacorogna's own proof could not be consulted offline); a
+**Proofs** (the book was not accessible; named arguments). Theorem 5.20, (iii) ⇒ (iv): by
+induction on the number of rows, an argument of our own in the spirit of Ball–Currie–Olver; a
 rank-one affine function is affine in each row, and the minors are rank-one affine by the matrix
-determinant lemma; continuity is not needed. Theorem 5.25 (i): Dacorogna's Fourier–Plancherel
-argument, `∫ Q (∇φ) = 4π² ∫ [Q (Re φ̂ ⊗ ξ) + Q (Im φ̂ ⊗ ξ)] dξ ≥ 0` by the Legendre–Hadamard
-condition. Departure from the source (Mathlib has Plancherel's theorem for Schwartz functions, not
-the rule `𝓕 (∂_k φ) = 2πi ξ_k 𝓕 φ` for Sobolev maps): the inequality is proved for smooth
-compactly supported maps and extended to Lipschitz ones by mollification.
+determinant lemma; continuity is not needed. Minors are quasiaffine: C. B. Morrey, Pacific J.
+Math. 2 (1952), Lemma 5.1 (divergence identities for smooth maps, then mollification). Theorem
+5.25 (i): Morrey 1952, Theorem 5.2: the linear term integrates to zero, and the quadratic term is
+nonnegative under the Legendre–Hadamard condition, for smooth maps (here by Plancherel's formula
+for Schwartz functions) and then for Lipschitz maps (here by mollification).
 
 **Who uses them.** Cassese's Proposition 5.1 (`Cassese.proposition5_1`,
 [`Morrey/Cassese/TwoByThree/Folklore.lean`](../../../Cassese/TwoByThree/Folklore.lean)). The other
-direction of Theorem 5.20, that minors are quasiaffine, which the paper also uses there, is proved
-in [`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`](../../../Cassese/TwoByThree/Folklore/NullLagrangian.lean).
+direction of Theorem 5.20, that minors are quasiaffine, which the paper also uses there, is
+`minor3_quasiaffine`.

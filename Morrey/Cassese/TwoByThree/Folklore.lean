@@ -1,7 +1,7 @@
 module
 
 public import Morrey.Cassese.TwoByThree.Folklore.Laminate
-public import Morrey.Cassese.TwoByThree.Folklore.Quasiaffine
+public import CalculusOfVariations.Minors.Quasiaffine
 public import Morrey.Cassese.TwoByThree.ExtensionAux
 public import Morrey.Common.External.Dacorogna.Minors
 public import Mathlib.RingTheory.MvPolynomial.EulerIdentity
@@ -13,8 +13,10 @@ public import Mathlib.Algebra.Polynomial.Roots
 "Interestingly, among polynomials, degree four is minimal" (TeX lines 1396–1414): a polynomial of
 degree at most `3` that is rank-one convex at `0` is quasiconvex.
 
-The pieces: `Folklore/Laminate.lean` (finite prelaminates and the limiting argument),
-`Folklore/NullLagrangian.lean` and `Folklore/Quasiaffine.lean` (`3 × 3` minors are quasiaffine).
+The pieces: `Folklore/Laminate.lean` (finite prelaminates and the limiting argument), and the
+quasiaffinity of the `3 × 3` minors (Dacorogna's Theorem 5.20,
+`External.Dacorogna.minor3_quasiaffine`, proved in the package `CalculusOfVariations`,
+`Minors/Quasiaffine.lean`).
 
 Helpers are prefixed `tbt6_`.
 -/
@@ -27,6 +29,49 @@ open scoped Matrix ENNReal
 namespace Cassese
 
 variable {d m : ℕ}
+
+section TestMap
+
+/-! The facts on Lipschitz test maps that the proof of Proposition 5.1 uses, from the package
+`CalculusOfVariations` (`Minors/Quasiaffine.lean`), in Cassese's notation (`jac`, `unitCube`). -/
+
+variable {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ)
+  (h0 : ∀ x ∉ unitCube m, φ x = 0)
+include hφ
+
+/-- For continuous `Φ`, `x ↦ Φ (B + ∇φ (x))` is integrable on every set of finite measure. -/
+private theorem tbt6_integrableOn_cube {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hΦ : Continuous Φ)
+    (B : Matrix (Fin d) (Fin m) ℝ) (s : Set (Fin m → ℝ)) (hs : volume s ≠ ⊤) :
+    IntegrableOn (fun x => Φ (B + jac φ x)) s :=
+  CalculusOfVariations.nl_integrableOn_cube hφ hΦ B s hs
+
+include h0
+
+/-- If `Φ (0) = 0`, then `x ↦ Φ (∇φ (x))` is integrable on `ℝ^m`. -/
+private theorem tbt6_integrable_of_zero {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hΦ : Continuous Φ)
+    (hΦ0 : Φ 0 = 0) : Integrable fun x => Φ (jac φ x) :=
+  CalculusOfVariations.nl_integrable_of_zero hφ h0 hΦ hΦ0
+
+omit hφ in
+/-- If `Φ (0) = 0`, the integral of `x ↦ Φ (∇φ (x))` over the open cube is its integral over
+`ℝ^m`. -/
+private theorem tbt6_setIntegral_cube_of_zero {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hΦ0 : Φ 0 = 0) : ∫ x in unitCube m, Φ (jac φ x) = ∫ x, Φ (jac φ x) :=
+  CalculusOfVariations.nl_setIntegral_cube_of_zero h0 hΦ0
+
+/-- `∫ ∂_k φ_i = 0`. -/
+private theorem tbt6_integral_jac (i : Fin d) (k : Fin m) : ∫ x, jac φ x i k = 0 :=
+  CalculusOfVariations.nl_integral_grad hφ h0 i k
+
+/-- `3 × 3` minors are quasiaffine (Dacorogna, Theorem 5.20,
+`External.Dacorogna.minor3_quasiaffine`): `∫_{(0,1)^m} det ((A + ∇φ)_{rc}) = det (A_{rc})`. -/
+private theorem tbt6_minor3_quasiaffine (A : Matrix (Fin d) (Fin m) ℝ) (r : Fin 3 ↪o Fin d)
+    (c : Fin 3 ↪o Fin m) :
+    ∫ x in unitCube m, External.Dacorogna.minor (A + jac φ x) r c =
+      External.Dacorogna.minor A r c :=
+  External.Dacorogna.minor3_quasiaffine hφ h0 A r c
+
+end TestMap
 
 /-- `A ↦ P (A)` for a polynomial `P` in the entries. -/
 noncomputable def tbt6Ev (P : MvPolynomial (Fin d × Fin m) ℝ) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
@@ -208,10 +253,10 @@ quasiconvex, which uses that the `3 × 3` minors are quasiaffine (null Lagrangia
 Theorem 5.20, which the paper cites at this step, is the full equivalence "quasiaffine ⇔ rank-one
 affine ⇔ affine combination of minors"; the proposition `External.Dacorogna.RankOneAffineMinors`
 records only the direction "rank-one affine ⇒ affine combination of minors", and the direction
-"minors ⇒ quasiaffine" of the same cited theorem is proved here, by the standard divergence
-identities and mollification (`tbt6_minor3_quasiaffine`,
-`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`). This proves part of the cited result;
-the argument of the proposition is the paper's. -/
+"minors ⇒ quasiaffine" of the same cited theorem is `External.Dacorogna.minor3_quasiaffine`, by
+the divergence identities and mollification of Morrey 1952, Lemma 5.1 (in the package
+`CalculusOfVariations`). This proves part of the cited result; the argument of the proposition is
+the paper's. -/
 theorem proposition5_1
     (P : MvPolynomial (Fin d × Fin m) ℝ) (hP : P.totalDegree ≤ 3)
     (hrc : RankOneConvexAt (fun A => MvPolynomial.eval (fun ij => A ij.1 ij.2) P) 0) :

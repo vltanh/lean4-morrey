@@ -1,6 +1,6 @@
 module
 
-public import Morrey.Common.Basic.CalculusOfVariations.Basic
+public import CalculusOfVariations.Basic
 
 /-!
 # Kirchheim–Kristensen: rank-one convex functions homogeneous of degree one
