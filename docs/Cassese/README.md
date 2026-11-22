@@ -66,9 +66,9 @@ No statement of the paper is false. The main findings
 41 findings in all (E2–E42), most of them steps left to the reader, sketched proofs, misprints and
 citations that say more or less than their sources. Every proof follows the paper's argument except
 three, which repair a gap or a false step (E4, E9, E10). The cited results follow their sources'
-proofs, with the gaps and slips of the sources repaired, except the upper bound of the
-non-commutative Khintchine inequality, proved at present by exchangeable pairs; the report lists each
-source, how it was read, and what is different
+proofs, with the gaps and slips of the sources repaired; some steps that the sources of the
+non-commutative Khintchine inequality take from works that were not read, only recall, or state without
+proof, follow named substitutes. The report lists each source, how it was read, and what is different
 ([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
@@ -96,9 +96,14 @@ Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization, p
 
 | Package | What this paper uses from it |
 | --- | --- |
-| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7) |
-| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality, its sharpness and Burkholder's function; UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes; the non-commutative Khintchine inequality; Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
+| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7); the non-commutative Khintchine inequality, with Littlewood–Paley theory in UMD spaces, matrix-valued Hardy functions and Paley's inequality in the Schatten classes (Proposition 6.3, used by Section 6) |
+| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality, its sharpness and Burkholder's function; UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes, real and complex; type 2 of the Schatten classes and K-convexity (for Proposition 6.3); Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
 | [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | rank-one convexity and quasiconvexity, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
+
+The vector-valued part of `lean4-harmonic-analysis` uses `lean4-banach-probability`; otherwise the
+packages depend only on Mathlib. At the pinned commits they have Palomar entries of their own, not
+submitted: eight in `lean4-banach-probability`, three in `lean4-calculus-of-variations`, and one in
+`lean4-harmonic-analysis`, for its scalar part.
 
 [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms and proves it from these
 packages; [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) restates it in

@@ -21,8 +21,9 @@ project:
     Kahane-Khintchine and non-commutative Khintchine inequalities, transference for homogeneous
     multipliers, Dragičević's lower bound for the square of the Beurling-Ahlfors transform,
     Dacorogna's formula for the quasiconvex envelope, Kristensen's smoothing and the textbook facts
-    of the calculus of variations, by the arguments of their sources except for the upper bound of
-    the non-commutative Khintchine inequality. They come from three Lake packages written for this project
+    of the calculus of variations, by the arguments of their sources (named substitutes stand for a few
+    steps that a source takes from a work that was not read, only recalls, or states without proof: see
+    fidelity). They come from three Lake packages written for this project
     (lean4-harmonic-analysis, lean4-banach-probability, lean4-calculus-of-variations). The paper
     is one of three on Morrey's problem formalized in this repository, each its own submission.
   authors:
@@ -106,7 +107,10 @@ sources:
       Yaroslavtsev's Lemma 3.2) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants. Proved in
       lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
-      probability spaces (Morrey/Common/External/HNVW).
+      probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
+      non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Sections 5.1-5.3
+      and 5.7 (Theorem 5.7.10 (2), in place of Bourgain 1986 and McConnell 1984) and Appendix D; Volume
+      II, Proposition 7.4.22 (type 2 implies K-convexity).
   - title: "Non-commutative martingale transforms"
     authors:
       - "Narcisse Randrianantoanina"
@@ -146,9 +150,9 @@ sources:
     relationship: "background"
     note: >-
       Read. Theorem 6.1 (the non-commutative Khintchine inequality, the paper's Proposition 6.3) has no
-      proof there; the chapter refers to Lust-Piquard (1986), not obtained, and to Lust-Piquard and
-      Pisier (1991). The lower bound is proved as there; the upper bound, at present, by the method
-      of Mackey, Jordan, Chen, Farrell and Tropp, Ann. Probab. 42 (2014), a departure (see fidelity)
+      proof there; the chapter refers to Lust-Piquard (C. R. Acad. Sci. Paris 303 (1986)), not obtained,
+      to Lust-Piquard and Pisier (1991), and, for the order of the upper constant, to Pisier (1998). (6.4)
+      for real square matrices is proved in lean4-harmonic-analysis by the argument of these two works
       (Morrey/Common/External/PisierXu).
   - title: "Non commutative Khintchine and Paley inequalities"
     authors:
@@ -157,7 +161,74 @@ sources:
     id: "Ark. Mat. 29 (1991), 241-260"
     type: "article"
     relationship: "background"
-    note: "Read. The lower bound of the non-commutative Khintchine inequality follows (I.5)-(I.7); its upper bound (Theorem III.1, Corollary III.4) is not followed at present."
+    note: >-
+      Read and followed for the non-commutative Khintchine inequality, proved in
+      lean4-harmonic-analysis: the lower bound by (I.5)-(I.7); the upper bound by Paley's inequality
+      in the Schatten classes (Theorem III.1 (i), for the Paley projection), Corollary III.4 with signs and
+      duality (pp. 246-248, 254-255). (III.3) on average over the signs, which is what the proof uses.
+  - title: "Non-commutative vector valued L_p-spaces and completely p-summing maps"
+    authors:
+      - "Gilles Pisier"
+    id: "Astérisque 247 (1998)"
+    type: "book"
+    location: "https://www.numdam.org/item/AST_1998__247__R1_0/"
+    relationship: "background"
+    note: "Read (pp. 101-108). The order sqrt(q) of the upper constant (p. 106) is proved by its argument."
+  - title: "Generalized interpolation in H^infinity"
+    authors:
+      - "Donald Sarason"
+    id: "Trans. Amer. Math. Soc. 127 (1967), 179-203"
+    type: "article"
+    relationship: "background"
+    note: >-
+      Read and followed (Section 10). Theorem 4, the factorization of matrix-valued H^1 functions that
+      Lust-Piquard and Pisier use, in finite dimension. The books that it cites (Helson 1964, Hoffman 1962) were
+      not read: their results are taken from Helson and Lowdenslager (1958, 1961).
+  - title: "Prediction theory and Fourier series in several variables"
+    authors:
+      - "Henry Helson"
+      - "David Lowdenslager"
+    id: "Acta Math. 99 (1958), 165-202"
+    type: "article"
+    relationship: "background"
+    note: "Read and followed: Jensen's inequality, and Szegő's theorem for matrix-valued functions (Theorems 2, 8, 9, Lemmas 5, 6), with a gap in the truncations of Lemma 2 repaired."
+  - title: "Prediction theory and Fourier series in several variables. II"
+    authors:
+      - "Henry Helson"
+      - "David Lowdenslager"
+    id: "Acta Math. 106 (1961), 175-213"
+    type: "article"
+    relationship: "background"
+    note: "Read and followed: outer functions and analytic range functions (Section 9, Theorems 8-10, 12, 13), with a step of p. 207 proved."
+  - title: "The moduli of smoothness and convexity and the Rademacher averages of trace classes S_p"
+    authors:
+      - "Nicole Tomczak-Jaegermann"
+    id: "Studia Math. 50 (1974), 163-182"
+    type: "article"
+    relationship: "background"
+    note: >-
+      Read and followed: the type 2 constant of the Schatten classes (Theorem 3.1 (ii), with Lemma 1.1
+      and Proposition 1.2), proved in lean4-banach-probability. Gohberg and Krein (1965), from which it
+      takes Horn's inequality and the three lines theorem, was not read: these are proved after
+      HNVW I, Appendix D, and Sutter, Berta and Tomamichel (2017).
+  - title: "Multivariate trace inequalities"
+    authors:
+      - "David Sutter"
+      - "Mario Berta"
+      - "Marco Tomamichel"
+    id: "Comm. Math. Phys. 352 (2017), 37-58; arXiv:1604.03023"
+    type: "article"
+    location: "https://arxiv.org/abs/1604.03023"
+    relationship: "background"
+    note: "Read (Theorem 3.1 and Appendix D) and followed for the three lines theorem for Schatten norms, with Hadamard's three lines theorem; proved in lean4-banach-probability."
+  - title: "Séries de variables aléatoires vectorielles indépendantes et propriétés géométriques des espaces de Banach"
+    authors:
+      - "Bernard Maurey"
+      - "Gilles Pisier"
+    id: "Studia Math. 58 (1976), 45-90"
+    type: "article"
+    relationship: "background"
+    note: "Read (Remark 2.10, type 2 implies K-convexity, which has no proof there). Proved in lean4-banach-probability by HNVW II, Proposition 7.4.22."
   - title: "Matrix triangle inequalities: past, present, and future"
     authors:
       - "Jean-Christophe Bourin"
@@ -244,16 +315,19 @@ related_formalizations:
     note: >-
       Written for this project by the same AI system: Fourier multipliers and duality, transference
       from the torus to the plane, Poisson summation, Dragičević's lower bound for the square of the
-      Beurling-Ahlfors transform, smooth periodic Fourier series. Published; lakefile.toml requires
-      it from GitHub at a pinned commit.
+      Beurling-Ahlfors transform, smooth periodic Fourier series; in its vector-valued part, which uses
+      lean4-banach-probability, the Hilbert transform and Littlewood-Paley inequalities in UMD spaces,
+      matrix-valued Hardy functions, Paley's inequality in the Schatten classes and the non-commutative
+      Khintchine inequality. Published; lakefile.toml requires it from GitHub at a pinned commit.
   - id: "https://github.com/vltanh/lean4-banach-probability"
     relationship: "builds-on"
     note: >-
       Written for this project by the same AI system: Burkholder's inequality, its sharpness and
       Burkholder's function, UMD theory (dyadic and complex constants, decoupling, extrapolation, L^p,
-      zig-zag concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, the
-      non-commutative Khintchine inequality, Randrianantoanina's non-commutative martingale
-      transforms. Published; lakefile.toml requires it from GitHub at a pinned commit.
+      zig-zag concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, type 2 and
+      K-convexity, Randrianantoanina's non-commutative martingale transforms (and the non-commutative
+      Khintchine inequality by exchangeable pairs, which is not used here). Published; lakefile.toml
+      requires it from GitHub at a pinned commit.
   - id: "https://github.com/vltanh/lean4-calculus-of-variations"
     relationship: "builds-on"
     note: >-
@@ -310,7 +384,8 @@ automation:
         The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper): commit
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
-        the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth. Second
+        the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth, and to
+        4.3.2 (commit 8e884d5) in the fifth. Second
         round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
@@ -320,7 +395,10 @@ automation:
         packages, integration agents and independent reviewers. Fourth round, which redid the cited
         results by their sources' proofs: 27 sub-agents (8 for the comparison with the sources, 4
         leads and 6 provers, 5 reviewers, an integrator and its 3 reviewers), besides the agents that
-        updated and checked the documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        updated and checked the documents. Fifth round, the non-commutative Khintchine inequality by
+        its sources' proof: a lead agent with 45 sub-agents (20 provers, 3 checkers of statements, 11
+        reviewers, 10 for revisions, one for the documents), besides the agents that updated and
+        checked this repository's documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
@@ -329,7 +407,8 @@ automation:
           time (the whole session in that window, which also includes follow-up notes, a step of
           Šverák's Lemma 1 and the revision of the procedure). Fourth round: 2.95 h elapsed to the
           last commit of the proofs, 8.7 h of sub-agent working time on it (17.4 h for the whole
-          session in that window).
+          session in that window). Fifth round: 5.1 h elapsed between its first and its last commit
+          (the first 50 minutes within the fourth round's), 13.8 h of sub-agent working time.
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -338,7 +417,8 @@ automation:
         result that is large but feasible ("All"); then asked for every result to be proved
         unconditionally ("I think you need to formalize all of them unconditionally"), and let the
         agent decide without asking; then obtained the cited books and articles that the agent could
-        not (most of them), so that the cited results could follow them.
+        not (most of them), so that the cited results could follow them; then asked for the sources'
+        proof of the non-commutative Khintchine inequality, with its general theory made reusable.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
@@ -372,14 +452,20 @@ fidelity:
     follows the paper's; the gaps it fills along the paper's own lines are findings of the audit
     (docs/Cassese/REPORT.md, Section 3), among them the passage from smooth to Lipschitz periodic
     test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results: each
-    by its source's argument, with one departure: the upper bound of the non-commutative Khintchine
-    inequality (Proposition 6.3), which Lust-Piquard and Pisier (1991) prove by the factorization of
-    matrix-valued H^1 functions and duality (Pisier-Xu 2003 give no proof; Lust-Piquard 1986 was not
-    obtained), is proved at present by the method of exchangeable pairs of Mackey et al. (2014); it
-    was proved before the 1991 article was obtained, and a proof by the sources' argument is planned.
-    Proposition 2.1 is proved by the paper's second route (Remark 2.1), not by its sources'. Read in
-    another edition: Rindler 2018 (the second edition), Pisier 2016 (the 2011 lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993,
-    Vasyunin-Volberg 2010. The triangle inequality of Schatten norms, which the paper uses without a
+    by its source's argument. Proposition 2.1 is proved by the paper's second route (Remark 2.1), not by
+    its sources'. Read in another edition: Rindler 2018 (the second edition), Pisier 2016 (the 2011
+    lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993, Vasyunin-Volberg 2010,
+    Lust-Piquard 1986 (Pisier-Xu 2003, the source cited first for Proposition 6.3, gives no proof;
+    Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed). Named
+    substitutes for steps that the sources of Proposition 6.3 take from works that were not read,
+    recall as known, or state without proof: HNVW I, Theorem 5.7.10 (2), on average over the signs, for
+    Bourgain 1986 (looked for, not found) and McConnell 1984; Randrianantoanina's theorem for the UMD
+    property of C_2p (recalled from Rubio de Francia 1986);
+    Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
+    Hölder's inequality and the duality of the Schatten classes (Simon 1979) and for Horn's inequality,
+    and Sutter-Berta-Tomamichel 2017 for the three lines theorem (Gohberg-Krein 1965); HNVW II, Proposition
+    7.4.22, for Maurey-Pisier 1976, Remark 2.10; an elementary inequality for the comparison of
+    multinomial coefficients that Tomczak-Jaegermann quotes. The triangle inequality of Schatten norms, which the paper uses without a
     source, is proved after Bourin-Zhang (2026), for real m x n matrices. Differences from the sources,
     each a repair of a gap or a slip along the source's lines, a step that the source leaves out, or
     a case of its statement: Kristensen's cut-offs as functions of |X|^2 (his xi_s exists only for
@@ -394,11 +480,14 @@ fidelity:
     run on the dyadic function of his Theorem 3.34; Burkholder's Remark 1.2 (1988), stated without
     proof, completed from his (1.14) and the shift of the proof of (1.8); Dragičević's sentence on
     W^{n,p}, stated without proof, replaced by a density argument; Pisier's Fubini argument on
-    Paley-Walsh martingales; Mackey et al.'s Remark 7.2 for 2 < q < 3, whose unproved variant of the
-    mean value trace inequality is proved; HNVW I, Theorem 4.2.7, in place of the extrapolation
-    theorem that Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i).
-    Stated in the case the paper uses: decoupling for Paley-Walsh martingales, one inequality of HNVW's Corollary 5.7.6, n = 2 in
-    Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
+    Paley-Walsh martingales; HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that
+    Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i);
+    Lust-Piquard and Pisier's Theorem III.1 (i) for the Paley projection and C_p, 1 <= p <= 2, with a
+    constant independent of p, and the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's
+    interpolation.
+    Stated in the case the paper uses: decoupling for Paley-Walsh martingales, Pisier-Xu's Theorem 6.1
+    for real square matrices and q >= 2, with a constant C sqrt(q), C not explicit, one inequality of
+    HNVW's Corollary 5.7.6, n = 2 in Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
 
 review:
   status: "agent-reviewed"
@@ -414,7 +503,8 @@ review:
     that redid the cited results by their sources' proofs, agents compared these results with the
     sources, independent reviewers checked the redone proofs of the packages against the sources, the
     statements of Morrey/Common/External, the restated Proposition 2.7 (6) and the updated
-    documents.
+    documents. In the round that redid the non-commutative Khintchine inequality, independent reviewers
+    checked the packages' new statements, their proofs against the sources, and the updated documents.
 
 alignment:
   namespace: "CasseseChallenge"
@@ -477,6 +567,7 @@ alignment:
 
 acknowledgements: >-
   Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
-  (Kristensen 1999, Burkholder 1988, Pisier 1998); the open lecture notes and preprints whose
-  arguments some results follow (Pisier 2011, Mackey et al., Randrianantoanina,
-  Carbonaro-Dragičević-Kovač, Bourin-Zhang).
+  (Kristensen 1999, Burkholder 1988, Pisier 1998) and the other open archives (Helson-Lowdenslager
+  1958, Tomczak-Jaegermann 1974, Maurey-Pisier 1976); the open lecture notes and preprints whose
+  arguments some results follow (Pisier 2011, Randrianantoanina, Carbonaro-Dragičević-Kovač,
+  Bourin-Zhang, Sutter-Berta-Tomamichel).

@@ -252,8 +252,8 @@ How Cassese relates to the other two papers:
   for the quasiconvex envelope and his theorems on minors and quadratic forms; Rindler's lemmas;
   and Kristensen's smoothing. The general theories are in four packages (below);
   [`Morrey/Common/External/`](Morrey/Common/External) states each result in its source's terms and proves it from them, by the
-  source's own argument: Cassese's report lists the sources, the differences and the one departure (the
-  upper bound of the non-commutative Khintchine inequality).
+  source's own argument: Cassese's report lists the sources, the differences, and the named substitutes
+  for steps that a source takes from a work that was not read, only recalls, or states without proof.
 
 ## Trust
 
@@ -284,12 +284,13 @@ the proofs use four packages:
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
 | [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | Fourier multipliers on `ℝ²` and `𝕋²`, transference from `𝕋²` to `ℝ²`, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions | Cassese |
-| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities with their sharpness, UMD spaces, Schatten classes, the non-commutative Khintchine inequality | Cassese |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors, null Lagrangians and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar: Fourier multipliers on `ℝ²` and `𝕋²`, transference from `𝕋²` to `ℝ²`, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions; vector-valued: the Hilbert transform and the right-hand Littlewood–Paley inequality in UMD spaces, transference from `ℝ` to `𝕋`, matrix-valued Hardy functions, Szegő's theorem and Sarason's factorization of `H¹`, Paley's inequality in the Schatten classes, the non-commutative Khintchine inequality | Cassese |
+| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities with their sharpness, UMD spaces, Schatten classes (real and complex) and Randrianantoanina's martingale transforms, type 2 and K-convexity; also the non-commutative Khintchine inequality by exchangeable pairs, which is not used here | Cassese |
 
 Šverák's library uses only Mathlib and `Common/Basic`. The dependencies run one way: no package
-imports this repository.
+imports this repository. Among the packages, the vector-valued part of `HarmonicAnalysis` imports
+`BanachProbability`; the others use only Mathlib.
 
 ## Building
 

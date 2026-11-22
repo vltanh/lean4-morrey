@@ -7,8 +7,10 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
 - Author and maintainer: The-Anh Vu-Le, who asked for the paper to be formalized in this
   repository, independently of the author's own Lean code; chose, in the second round, to build
   every cited result that was large but feasible; asked, in the third round, for every result to be
-  proved unconditionally; and obtained, for the fourth, most of the cited books and articles that the
-  session could not, so that the cited results could follow them.
+  proved unconditionally; obtained, for the fourth, most of the cited books and articles that the
+  session could not, and, for the fifth, Sarason (1967) and Helson–Lowdenslager (1961), so that the cited
+  results could follow them; and asked, for the fifth, for the sources' proof of the non-commutative
+  Khintchine inequality, with its general theory made reusable.
 - Formalization: Claude Opus 5.5 (`claude-opus-5-5`, Anthropic), in Claude Code 2.1.330 (the VS Code
   extension, Claude Agent SDK), in one session: the main session, its sub-agents, and the
   sub-agents that lead agents launched. Web pages were read by sub-agents. The same system wrote
@@ -21,7 +23,7 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   that the round wrote (commits `d385092`, `b04ce21`); version 4.2.0 (commit `f5e7420`) in the third
   round, which it wrote: the mathematics that Lean lacks is built, and is no reason to depart
   from a proof; versions 4.2.1 to 4.3.1 (commits `8d291b1` to
-  `f9198d5`) in the fourth.
+  `f9198d5`) in the fourth; versions 4.3.1 and 4.3.2 (commit `8e884d5`) in the fifth.
 - Other Lean code: the proofs were written without consulting the author's Lean formalization
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
   Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
@@ -49,7 +51,10 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   imports removed) between the Lean code of this repository and its packages (775,356 tokens) and
   each of the two: 702 of those tokens are in such a run with MorreyTwoComponentsLean, in 11 files,
   the longest run 33 tokens (two lines), and 123 with so3-r1c-and-not-qc, in 3 files, the longest
-  22. (For parts of Mathlib of the same size: 0 to 227.) The downloaded copies were then deleted.
+  22. (For parts of Mathlib of the same size: 0 to 227.) The downloaded copies were then deleted. That
+  comparison (11:41) is older than the fifth round's code in `lean4-harmonic-analysis` and
+  `lean4-banach-probability`; by the transcripts, no sub-agent that worked on that round's proofs opened
+  either repository, and its literature searches excluded both.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
   the TeX source (twice), the formal proofs against the paper's (three reviewers) and the report,
   in the second round. In the third: the statements of each package (and the bridges between
@@ -63,7 +68,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   of Borell's and Burkholder's results against Borell (1979) and Burkholder (1988). In the fourth:
   agents compared the cited results with their sources, and independent reviewers checked the
   packages' redone proofs against the sources, the statements of [`Morrey/Common/External/`](../../Morrey/Common/External), the
-  restated Proposition 2.7 (6) and the updated documents.
+  restated Proposition 2.7 (6) and the updated documents. In the fifth: independent reviewers checked
+  the new statements of the packages, and their proofs against the sources; another checked the updated
+  documents.
 
 ## Second round (21 November 2026)
 
@@ -203,14 +210,14 @@ How it was made:
   Rindler, Kinderlehrer and Pedregal. A sixth compared the Khintchine inequality with Lust-Piquard
   and Pisier, when that article arrived. Two more read Burkholder's Annals articles for the first.
 - Four lead agents redid, in worktrees of the packages, every proof that differed from its source
-  (except the one below), with six provers: in `lean4-banach-probability`, the items of HNVW (extrapolation, dyadic and
+  (except the Khintchine inequality's), with six provers: in `lean4-banach-probability`, the items of HNVW (extrapolation, dyadic and
   complex UMD constants, zig-zag functions, decoupling, Kahane–Khintchine), and Burkholder's
   inequality and the sharpness of its constant by Osękowski's proofs; in `lean4-harmonic-analysis`,
   the transference by HNVW's proof; in `lean4-calculus-of-variations`, Rindler's lemmas,
   Dacorogna's formula by Kinderlehrer and Pedregal's proof, and Dacorogna's Theorem 5.20 by his own.
   These replaced, among others, the proofs of the third round by Borell, Burkholder (1988; kept for
   (13) and (14)), Müller, Conti–Dolzmann–Kirchheim–Müller and Pisier. The upper bound of the
-  non-commutative Khintchine inequality was not redone.
+  non-commutative Khintchine inequality was redone in the fifth round.
 - Five independent agents compared the redone proofs with the sources; they found no wrong step, and
   their findings on the documentation, and a few on the code, were applied.
 - An integration agent moved the project onto the new packages: [`Morrey/Common/External/Osekowski`](../../Morrey/Common/External/Osekowski)
@@ -233,10 +240,69 @@ Figures, from 2026-11-22 08:04:48 (UTC−6), when the user supplied the sources,
   running at once, 6 resumptions, 17.4 h of working time; 4,437 tool calls; tokens: 5.45 M output,
   28.73 M input, 655 M cache reads. Besides the steps above, it includes the publication of the
   packages, their literature reviews and Palomar entries, the revision of the procedure with its
-  evaluation runs, and work on the planned proof of the Khintchine inequality;
+  evaluation runs, and the first part of the fifth round;
 - main session: 166 tool calls; tokens: 0.16 M output, 1.50 M input, 104 M cache reads;
 - model calls: `claude-opus-5-5`, 168 by the main session and 2,343 by the sub-agents.
 
 From `scripts/session_stats.py` on the session transcript and on the sub-agents' transcripts, with
 `--since` and `--until` at the two times above. The figures leave out this update of the documents
 and its check.
+
+## Fifth round: the non-commutative Khintchine inequality (22 November 2026)
+
+The comparison of the fourth round had shown that the upper bound of Proposition 6.3 followed none of
+the sources that the paper cites. The user asked for their proof, with its general theory made reusable
+and the shorter proof documented ("can we pull out the general theory part for reuse? and just
+faithfully follow, with documented shortcut?"). The theory was first written as a package of its own; the
+user then agreed to include it in `lean4-harmonic-analysis`.
+
+Sources: Lust-Piquard–Pisier (1991), Sarason (1967) and Helson–Lowdenslager (1961) were supplied by the
+user, as Pisier–Xu and the two volumes of HNVW had been; Astérisque 247 (1998), Tomczak-Jaegermann
+(1974), Maurey–Pisier (1976) and Helson–Lowdenslager (1958) were found by the session in open archives.
+Lust-Piquard (1986) and Bourgain (1986), for which the user looked, were not found. Section 7 of the
+report lists the other works behind the sources that were not read (McConnell, Simon, Gohberg–Krein,
+Rubio de Francia, the books of Helson and Hoffman; no search for them is recorded), with what stands for
+them.
+
+How it was made:
+
+- One lead agent, with 45 sub-agents that it launched: 20 provers, 3 checkers of statements, 11
+  reviewers that compared the proofs with the sources, 10 for revisions and one that checked the
+  documents. They worked in a worktree of `lean4-banach-probability` and in the new package.
+- First version: statements (commits `f3b4bc0`, now in the history of `lean4-harmonic-analysis`, and
+  `3b05655` of `lean4-banach-probability`, 10:12), every proof (`d0d081b`, `0a4084a`, 10:49), with the
+  factorization of `H¹` functions by Bekjan and Xu's argument; then, after three reviews, the
+  transference by HNVW's proof and the revisions (`f119fde`, `6fb92de`, 11:27–11:28; `a1bc4f2`, `8962532`, 11:54).
+- Second version: type 2 of the Schatten classes by Tomczak-Jaegermann's proof, K-convexity by HNVW's,
+  and Lust-Piquard and Pisier's duality for matrices that need not be symmetric (`3ecee00`, `434bb1e`,
+  12:17); reviewed and revised (`3efa520`, 12:44).
+- Third version: the factorization by Sarason's Theorem 4, with the theory of Helson and Lowdenslager
+  that it rests on (`1fecd57`, 13:55); compared with the sources (`e012030`, 14:10); Paley's inequality
+  with the exact factorization (`6760549`, 14:22).
+- The package was merged, with its history, into `lean4-harmonic-analysis`, which now requires
+  `lean4-banach-probability` (`46e966b`, 14:23, to `72d9c71`, 14:46); a last review of the redone proofs
+  and the revisions after it: `ec00cb2`, 15:12. The proof by exchangeable pairs stays in
+  `lean4-banach-probability` (`ncKhintchine_upper`).
+- The main session moved [`Morrey/Common/External/PisierXu`](../../Morrey/Common/External/PisierXu) onto the new proof, and stated Theorem 6.1
+  for all real square matrices as one theorem, [`External.PisierXu.theorem6_1_general`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L58), in place of two
+  (`af922cc`, 15:20).
+- Besides, an agent reviewed the literature and the formalizations of the vector-valued part (checked by
+  another), and an agent with two reviewers made the eight Palomar entries of `lean4-banach-probability`
+  (not submitted). An agent updated the documents of this repository, and an independent agent checked
+  the changed passages.
+
+Figures, by the times of the commits (UTC−6): 5.1 h from `f3b4bc0` (10:12:27) to `af922cc` (15:20:06), of
+which the first 50 minutes are in the window of the fourth round. From the transcripts, to the same
+commit:
+
+- the lead agent and its sub-agents (launched from 09:48 on): 46 agents, at most 6 running at once,
+  13.8 h of working time; 3,078 tool calls; tokens: 4.02 M output, 23.93 M input, 367 M cache reads;
+  1,557 model calls, all `claude-opus-5-5`;
+- the whole session after the window of the fourth round (from 11:02:24): 46 sub-agents, at most 8
+  running at once, 3 resumptions, 15.0 h of working time; 3,342 tool calls; tokens: 4.04 M output,
+  28.21 M input, 559 M cache reads; main session: 124 tool calls; tokens: 0.11 M output, 0.49 M input,
+  53 M cache reads; model calls: `claude-opus-5-5`, 109 by the main session and 1,777 by the sub-agents.
+  Besides the work above, these include the documents of the fourth round and the end of the work on
+  the Palomar entries of the other two packages.
+
+The figures leave out the update of the documents and its check.
