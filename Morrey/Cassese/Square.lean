@@ -798,9 +798,8 @@ theorem square_symPart_transpose (A : Matrix (Fin d) (Fin d) ℝ) : (symPart A)�
 /-- **Equation (31)** (`eq:KKgen`): for `q ∈ [2, ∞)` and `p ∈ (1, ∞)`,
 `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≈_{p,q} (E ‖Σ ε_i x_i‖_{S_q}^p)^{1/p}` for normal `d × d` matrices
 `x_i`, uniformly in `d` and `n`. Conditional on Propositions 6.3 and 6.4, which it combines
-(`KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants; the statement
-assumed less than before the hypercontractive bound was split off as
-`KahaneKhintchineHypercontractive`, which this proof does not use). Stated, like
+(`KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants; the
+hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used). Stated, like
 `PisierXuKhintchine`, with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`;
 the two are equal, `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for the positive semidefinite
 `B = Σ x_i x_iᵀ` (`schattenNorm_sqrt_sq`, fact (1) applied to the square root `B^{1/2}`).
@@ -1013,8 +1012,7 @@ last step implicit: `C^{rc}` is defined through rank-one convexity at `0`, which
 martingales started at `0`.
 
 The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants
-(the hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used here); this
-statement assumes less than before that bound was split off. -/
+(the hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used here). -/
 theorem proposition6_2 (hR : RandrianantoaninaSchattenUMD)
     (hCV : CoxVeraarDecoupling) (hPX : PisierXuKhintchine)
     (hKK : KahaneKhintchine) (q : ℝ) (hq : 2 < q) :
@@ -1208,10 +1206,8 @@ constants; with `q ≈ log d`, `C^{rc} (S_∞^{d×d}, 2) ≲ d^{1/4} log³ d`. C
 Proposition 2.7 (2) (Randrianantoanina), Proposition 2.8 (decoupling), Proposition 6.3
 (non-commutative Khintchine) and the hypercontractive Kahane–Khintchine bound
 `k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`), which gives the constants of
-Proposition 6.4 that the tracking of the constants needs. Statement change: the
-hypothesis `KahaneKhintchine` (which used to bundle that bound) is replaced by
-`KahaneKhintchineHypercontractive`; the proof uses only the bound, and the paper's Proposition 6.4
-without it (`KahaneKhintchine`) is no longer assumed here.
+Proposition 6.4 that the tracking of the constants needs; the proof uses only that bound, not
+`KahaneKhintchine` itself.
 
 Proof (the paper's: "tracking the constants in the proof", TeX lines 2425–2437): the bound of
 the proof of Proposition 6.2 (`square_skew_le_sym_two`) with `UMD₂ (S_q) ≤ C_R (q* − 1) ≤ C_R q`
@@ -1719,7 +1715,7 @@ there is `C_{q,p}` with `C^{rc} (S_q^{d×d}, p) ≤ C_{q,p} d^{1/4 − 1/(2q)}` 
 Conditional on Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 (Burkholder's square function inequality,
 Theorem 2.3 (2), is proved). The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4,
 with no bound on its constants: this case does not use the hypercontractive bound
-(`KahaneKhintchineHypercontractive`), and assumes less than before that bound was split off.
+(`KahaneKhintchineHypercontractive`).
 
 Proof (the paper's, TeX lines 2448–2480): the bound
 `‖Skew M_N‖_{L^p (S_q)} ≤ (u c)^{3/2} (p* − 1)^{1/2} d^{1/4 − 1/(2q)} ‖Sym M_N‖_{L^p (S_q)}`
@@ -2256,8 +2252,7 @@ on all of `ℝ^{d×d}`; only its values on symmetric matrices enter. Conditional
 `q ∈ (2, ∞)` of Proposition 6.5 (`proposition6_5_finite`), whose bound its proof uses: on
 Propositions 2.7 (1), (2), 2.8, 6.3 and 6.4. The hypothesis `KahaneKhintchine` is the paper's
 Proposition 6.4, with no bound on its constants (the hypercontractive bound,
-`KahaneKhintchineHypercontractive`, is not used); the statement assumes less than before that bound
-was split off. The proof is `square_cor61_core` (which also gives the periodic witness) and
+`KahaneKhintchineHypercontractive`, is not used). The proof is `square_cor61_core` (which also gives the periodic witness) and
 `square_cor61_conclusion`; `corollary6_1_ge` extends the conclusion to every larger `d`.
 
 Proof (the paper's), with `q = 4` and `d = 2n`, `n = m⁸` large: `J = diag (I_n, −I_n)`

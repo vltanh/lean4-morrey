@@ -429,9 +429,7 @@ spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)
 `ε_i`, `k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
 statement, with no bound on the constants: the hypercontractive bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
 that Remark 6.3 and the case `q = ∞` of Proposition 6.5 need is the separate hypothesis
-`KahaneKhintchineHypercontractive`, taken only by the statements whose proofs use it. (An earlier
-version of this definition bundled that bound; it was split off, so every statement that takes
-`KahaneKhintchine` alone now assumes less.)
+`KahaneKhintchineHypercontractive`, taken only by the statements whose proofs use it.
 
 Generality. It is stated for any seminorm `nrm` on a real vector space `E` (the hypotheses on
 `nrm` are the triangle inequality and absolute homogeneity, which give `nrm ≥ 0`), not only for

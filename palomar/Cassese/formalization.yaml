@@ -10,7 +10,7 @@ project:
     p-homogeneous examples answering Kirchheim and Kristensen's homogeneous problem.
 
 
-    Every result of the paper is proved. Theorem 1.2 (every p, 2 x m), Theorem 1.3 (a quartic on
+    Every result of the paper is proved, some conditionally. Theorem 1.2 (every p, 2 x m), Theorem 1.3 (a quartic on
     2 x 3, and p near 4), Corollary 5.3 (its transpose on 3 x 2), the landscape theorems and
     Theorem 1.4 at p = 4 (d >= 588) are unconditional. Theorem 1.4 for general p is conditional on
     UMD extrapolation, Randrianantoanina's Schatten-class UMD bound, Cox-Veraar decoupling, the
@@ -98,8 +98,8 @@ status:
     the landscape theorems (only 2 x 2 is left; at p = 4 the homogeneous problem fails in every
     size above 2 x 2), Theorem 1.4 at p = 4 for d >= 588, and every result of Sections 2, 4, 5 and
     of Sections 6-7 that does not use the hypotheses below. Conditional, on named hypotheses
-    stated in Morrey/Cassese/Defs.lean: Theorem 1.4 for general p and Propositions 6.2, 6.5,
-    eq. (31), Remark 6.3 (HNVW extrapolation, Randrianantoanina, Cox-Veraar, Pisier-Xu,
+    (stated in Morrey/Cassese/Defs.lean, FourByTwo.lean and Toolkit.lean): Theorem 1.4 for general p
+    and Propositions 6.2, 6.5, eq. (31), Remark 6.3, Corollary 6.1 (HNVW extrapolation, Randrianantoanina, Cox-Veraar, Pisier-Xu,
     Kahane-Khintchine, and for Remark 6.3 and Prop 6.5 at q = infinity the hypercontractive
     bound); Theorem 1.5, Corollary 1.6, Theorem 7.1, Corollary 7.2 and the lower bound of
     Proposition 7.2 (HNVW transference, Dragičević); Theorem 1.2 by the paper's own UMD route

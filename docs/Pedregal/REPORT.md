@@ -280,9 +280,9 @@ gradients of maps `ℝ^m → ℝ²`. If they are correct, the claim of v1–v2 i
 
 Cassese's paper is now formalized in this repository ([`docs/Cassese/`](../Cassese/README.md)),
 and its `2 × 3` example is proved there without assumptions: a quartic polynomial on `ℝ^{2×3}` that
-is rank-one convex and nowhere quasiconvex ([`CasseseChallenge.theorem1_3_a`](../../palomar/Cassese/Challenge.lean#L483)), and, with the
+is rank-one convex and nowhere quasiconvex ([`CasseseChallenge.theorem1_3_a`](../../palomar/Cassese/Challenge.lean#L481)), and, with the
 monotonicity in the dimensions, a rank-one convex integrand that is not quasiconvex on every
-`ℝ^{2×m}` with `m ≥ 3` ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L544)). So the claim of v1–v2 for `N ≥ 3` is
+`ℝ^{2×m}` with `m ≥ 3` ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L542)). So the claim of v1–v2 for `N ≥ 3` is
 false, in Cassese's definitions (Lipschitz test maps on the unit cube). The claim of v1–v2 itself is
 not stated in Lean here; the `2 × 2` claim of v5 is untouched.
 

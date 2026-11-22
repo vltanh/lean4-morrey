@@ -2105,9 +2105,7 @@ Proposition 6.4 (Kahane–Khintchine, HNVW), which the proofs of Propositions 6.
 proved, `burkholderSquareFunction_holds`). For `p = 4` the unconditional `theorem1_4_four`.
 The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants:
 the proof uses Proposition 6.5 only for `q = 4 < ∞` (`proposition6_5_finite`), which does not
-need the hypercontractive bound (`KahaneKhintchineHypercontractive`). Statement change (this
-round): the text of the statement is unchanged, but `KahaneKhintchine` no longer bundles that
-bound, so the theorem assumes less.
+need the hypercontractive bound (`KahaneKhintchineHypercontractive`).
 
 Proof (the paper's, running text after Propositions 6.2 and 6.5, "the same proof as
 Theorem 1.2"): with the Schatten exponent `q = 4`, `C^{qc} (S_4^{d×d}, p) ≳ d^{3/4} / min (√(d p), d)

@@ -11,13 +11,15 @@ Morrey's problem can have a positive answer. The paper also answers Kirchheim an
 homogeneous problem negatively: `p`-homogeneous, rank-one convex, nowhere quasiconvex integrands,
 for every `p > 1` in suitable sizes, and at `p = 4` in every size above `2 × 2`.
 
-**Every result of the paper is proved, and no statement of the paper is false.** The paper's
-two-component theorems are unconditional here: Theorem 1.2 (every `p`, `2 × m`), Theorem 1.3 (the
+**Every result of the paper is proved, some of them conditionally, and no statement of the paper
+is false.** The paper's two-component theorems are unconditional here: Theorem 1.2 (every `p`, `2 × m`), Theorem 1.3 (the
 quartic on `2 × 3`, and `p` near `4`), Corollary 5.3 (its transpose on `3 × 2`), and the theorem that
-only `2 × 2` remains. Three results rest on mathematics that no Lean library has: Theorem 1.4 for
-general `p` (UMD theory for Schatten classes, non-commutative Khintchine inequalities), Theorem 1.5
-and Corollary 1.6 (transference, and Dragičević's bound for the Beurling–Ahlfors transform). Each
-such result is a named hypothesis of the statements that use it. Theorem 1.4 at `p = 4` is
+only `2 × 2` remains. Some results rest on mathematics that no Lean library has, each a named hypothesis of
+the statements that use it: Theorem 1.4 for general `p`, with Propositions 6.2, 6.5, eq (31),
+Remark 6.3 and Corollary 6.1 (UMD theory for Schatten classes, decoupling, non-commutative and
+Kahane–Khintchine inequalities); Theorem 1.5 and Corollary 1.6, with Theorem 7.1, Corollary 7.2 and
+the lower bound of Proposition 7.2 (transference, and Dragičević's bound for the Beurling–Ahlfors
+transform); and the paper's own UMD route to Theorem 1.2, formalized beside the unconditional one. Theorem 1.4 at `p = 4` is
 unconditional.
 
 ## Main results
@@ -27,12 +29,12 @@ unconditional.
 | Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L2046) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}`, `m ≥ m₀(p)` | — (by the paper's Remark 4.5) |
 | Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2060), [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2085) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; and for `p` near `4` | — |
 | Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L179) ⭐ | its transpose on `ℝ^{3×2}` | — |
-| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2279) ⭐ | with Šverák: in every `d × m`, `d, m ≥ 2`, except `2 × 2`, rank-one convexity does not imply quasiconvexity | — |
-| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2307) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | — |
-| Theorem 1.4 | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3613) ⭐ | at `p = 4`: conjugation- and transposition-invariant examples on `ℝ^{d×d}`, every `d ≥ 588` | — |
-| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2119) ⭐ | every `p > 1`, `d ≥ d₀(p)` | UMD extrapolation, Randrianantoanina, Cox–Veraar, Pisier–Xu, Kahane–Khintchine |
-| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2205) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević |
-| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2253) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a rank-two matrix | transference, Dragičević |
+| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2277) ⭐ | with Šverák: in every `d × m`, `d, m ≥ 2`, except `2 × 2`, rank-one convexity does not imply quasiconvexity | — |
+| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2305) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | — |
+| Theorem 1.4 | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3608) ⭐ | at `p = 4`: conjugation- and transposition-invariant examples on `ℝ^{d×d}`, every `d ≥ 588` | — |
+| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2117) ⭐ | every `p > 1`, `d ≥ d₀(p)` | UMD extrapolation, Randrianantoanina, Cox–Veraar, Pisier–Xu, Kahane–Khintchine |
+| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2203) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević |
+| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2251) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a rank-two matrix | transference, Dragičević |
 
 ⭐ in [`Challenge.lean`](../../palomar/Cassese/Challenge.lean), checked by Comparator against
 [`Solution.lean`](../../palomar/Cassese/Solution.lean). The Challenge states each assumed result in
@@ -52,7 +54,7 @@ No statement is false. The paper leaves gaps, which the formalization fills
 | E27 | Remark 6.3 needs Kahane–Khintchine constants polynomial in `q`, which the cited result does not give |
 | E28, E29 | Proposition 7.2 and Corollary 6.1 pass from smooth to Lipschitz or compactly supported test maps without saying how |
 
-30 findings in all, with the misprints. The cited results the paper's proofs use are proved here
+33 findings in all, with the misprints and the proofs the paper only sketches. The cited results the paper's proofs use are proved here
 where Lean can reach them: Burkholder's inequality and square function inequality, Burkholder's
 functions `u_q`, the sharpness of Burkholder's constant, Dacorogna's formula for the quasiconvex
 envelope, Dacorogna's theorems on rank-one affine functions and quadratic forms, Rindler's lemmas,
@@ -89,7 +91,7 @@ lake env lake comparator --config=palomar/Cassese/comparator.json
 
 | Path | Content |
 | --- | --- |
-| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library: `Defs` (the definitions the Challenge copies, and the named hypotheses), `Introduction` (§1), `Toolkit` (§2), `TwoByM` (§4), `TwoByThree/` (§5), `NonLocality` (Cor 5.2), `Square/` (§6), `FourByTwo` (§7), `Bridges` (to Šverák's and the textbook definitions), `Sverak` (Šverák's example in Cassese's terms), `Hypotheses`, `Lifting`, `Rademacher` |
+| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library: `Defs` (the definitions the Challenge copies, and most named hypotheses; [`DragicevicL4Bound`](../../Morrey/Cassese/FourByTwo.lean#L109) is in `FourByTwo`, two unused ones in `Toolkit`), `Introduction` (§1), `Toolkit` (§2), `TwoByM` (§4), `TwoByThree/` (§5), `NonLocality` (Cor 5.2), `Square/` (§6), `FourByTwo` (§7), `Bridges` (to Šverák's and the textbook definitions), `Sverak` (Šverák's example in Cassese's terms), `Hypotheses`, `Lifting`, `Rademacher` |
 | [`Morrey/Common/External/`](../../Morrey/Common/External) | the cited results: Burkholder, Rindler, Dacorogna, Kinderlehrer–Pedregal, Kristensen (statements of Kirchheim–Kristensen and Osękowski for context) |
 | [`Morrey/Common/Basic/`](../../Morrey/Common/Basic) | general mathematics: the calculus-of-variations definitions of the cited results, Fourier series of Lipschitz periodic maps, separately convex functions |
 | [`palomar/Cassese/`](../../palomar/Cassese) | the Palomar submission |
