@@ -27,13 +27,13 @@ derived in the package `HarmonicAnalysis` (`lean4-harmonic-analysis`, required b
 `HarmonicAnalysis.beurlingPowNorm_le_torusBeurlingPowNorm`): sample `𝓕 f` on `R⁻¹ ℤ²`, bound the
 torus norms through the periodisation of `f` and Poisson summation on `ℤ²`, recognise the
 multiplied series as lattice Riemann sums of `T_m f` (by homogeneity), and conclude with Fatou's
-lemma. Some of the package's statements are still proved with `sorry`; its audit lists them, and
-the project's audit reports `sorryAx` for the results here until they are proved.
+lemma. The package proves them with no `sorry` and only Lean's standard axioms.
 
-**Who uses it.** Cassese's `HNVWTransference` ([`Morrey/Cassese/Defs.lean`](../../../Cassese/Defs.lean))
-is derived from `transference_beurlingPow` by `Cassese.hnvwTransference_holds`
-([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)). It is still a hypothesis
-of Proposition 7.2 (lower bound), Theorem 7.1, Corollary 7.2, Theorem 1.5 and Corollary 1.6.
+**Who uses it.** Cassese's `HNVWTransference`
+([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)) is derived from
+`transference_beurlingPow` by `Cassese.hnvwTransference_holds` there. Proposition 7.2 (lower
+bound), Theorem 7.1, Corollary 7.2, Theorem 1.5 and Corollary 1.6 use it through that theorem, and
+none of them takes it as a hypothesis.
 
 Other results of HNVW that Cassese cites (UMD spaces: extrapolation, decoupling, the dyadic and
 zig-zag characterisations, Khintchine inequalities) are not in this directory.

@@ -39,8 +39,8 @@ the introduction about the landscape of Morrey's problem:
 
 Conditional statements. The results of other works that are out of reach of this project are
 hypotheses, named after their sources, of every statement whose proof uses them: Theorem 1.4 for
-general `p`, Theorem 1.5, Corollary 1.6 and the paper's proof of Theorem 1.2 (see each docstring).
-The others are unconditional: the cited results that their proofs use are proved
+general `p` and the paper's proof of Theorem 1.2 (see each docstring). The others, Theorem 1.5 and
+Corollary 1.6 included, are unconditional: the cited results that their proofs use are proved
 (`Morrey/Cassese/Hypotheses.lean`, `Morrey/Common/External`).
 
 Tools (helpers, prefixed `intro_`): Jensen's inequality along test maps
@@ -2295,20 +2295,19 @@ theorem theorem1_4 (hH : HNVWExtrapolation)
     fun A => by simp only [hb2 (htr C) A], hH', hR', hN⟩
 
 /-- **Theorem 1.5** (`thm:lowdim`): for every `p ∈ (1, ∞) ∖ {2}` there is a `p`-homogeneous
-integrand `f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on
-transference for homogeneous multipliers (HNVW I, Corollary 5.7.6, through Proposition 7.2) and
-Dragičević's lower bound `‖𝓑²‖_{L^p} > p* − 1` (Theorem 7.1); Burkholder's inequality (Theorem 2.3,
-through Proposition 7.1) is proved.
+integrand `f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Unconditional: the
+results it rests on through Theorem 7.1 are proved, transference for homogeneous multipliers
+(HNVW I, Corollary 5.7.6, through Proposition 7.2), Dragičević's lower bound
+`‖𝓑²‖_{L^p} > p* − 1` and Burkholder's inequality (Theorem 2.3, through Proposition 7.1).
 
 Proof (the paper's, running text after Theorem 7.1): the integrand of Theorem 7.1 is continuous
 and `p`-homogeneous, rank-one convex but not quasiconvex at `0`; its rank-one convex envelope
 (Proposition 2.3, `intro_envelope`) is the integrand. -/
-theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
-    (hp : 1 < p) (hp2 : p ≠ 2) :
+theorem theorem1_5 {p : ℝ} (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   -- Theorem 7.1: `C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖^p` is rank-one convex, not quasiconvex, at `0`
-  obtain ⟨P, Q, C, -, hrc, hnq⟩ := theorem7_1 hT hD hp hp2
+  obtain ⟨P, Q, C, -, hrc, hnq⟩ := theorem7_1 hp hp2
   have hp0 : (0 : ℝ) < p := by linarith
   have h2 : (1 : ENNReal) ≤ 2 := one_le_two
   obtain ⟨hh, -, -⟩ := intro_family (N₁ := fun A => schattenNorm 2 (P A))
@@ -2331,7 +2330,7 @@ theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
   exact ⟨_, hI, hH, hR, hN⟩
 
 /-- **Corollary 1.6** (`cor:1-hom`): there is a `1`-homogeneous rank-one convex integrand
-`f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Conditional as
+`f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Unconditional, as
 Theorem 1.5, which its proof uses (at some `p ∈ (1, 2)`).
 
 Proof (the paper's, end of Section 7): `p = 3/2`, `F` from Theorem 1.5 (continuous by Lemma 2.1),
@@ -2355,13 +2354,13 @@ the formalization proves the same inequality for second differences,
 `Δ²_δ (G ∘ A) ≥ δ² (Λ − C) r^{−3} / 3^{3/2}` for `δ ≤ 1` (`intro_line_midpoint`, from the same
 bounds `|h^{(j)}| ≲ r^{−p−1−j}`, `|f| + r |f'| ≲ r^p`), and concludes by the maximum principle for
 locally midpoint convex continuous functions (`intro_convexOn_of_local_midpoint`). -/
-theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
+theorem corollary1_6 :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
   -- `p = 3/2 ∈ (1, 2)` and `F` from Theorem 1.5; `F` is continuous by Lemma 2.1
   have hp : (1 : ℝ) < 3 / 2 := by norm_num
   have hp2 : (3 / 2 : ℝ) < 2 := by norm_num
-  obtain ⟨F, -, hFh, hFR, hFN⟩ := theorem1_5 hT hD hp (by norm_num)
+  obtain ⟨F, -, hFh, hFR, hFN⟩ := theorem1_5 hp (by norm_num)
   have hFc : Continuous F :=
     (External.Rindler.lemma5_6 ((cov_rankOneConvex_iff F).2 hFR)).continuous
   -- `G` for `Λ` large

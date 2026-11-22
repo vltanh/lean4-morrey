@@ -14,8 +14,7 @@ was not accessible, so the exact form of its Corollary 5.7.6 was not consulted.
 The direction that Cassese uses, from the torus to the plane, is stated here for scalar symbols
 on `ℝ² ≅ ℂ` and derived by de Leeuw's argument (K. de Leeuw, *On `L_p` multipliers*, Ann. of
 Math. 81 (1965), 364–379) in the package `HarmonicAnalysis`
-(`HarmonicAnalysis.multiplierNorm_le_torusMultiplierNorm`), from statements some of which are
-still proved with `sorry` (its audit lists them):
+(`HarmonicAnalysis.multiplierNorm_le_torusMultiplierNorm`):
 
 * `External.HNVW.transference`: for a symbol `m : ℂ → ℂ`, continuous off `0` and homogeneous of
   degree `0` (`m (t ξ) = m (ξ)`, `t > 0`; such an `m` is bounded and measurable), and `1 < p < ∞`,

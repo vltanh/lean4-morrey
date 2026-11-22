@@ -172,9 +172,12 @@ meta def externalResults : List (String × Name) :=
    ("Hypercontractive Kahane–Khintchine (Remark 6.3, Prop 6.5 at q = ∞, assumed)",
     ``Cassese.KahaneKhintchineHypercontractive),
    ("Sharpness of Burkholder's constant (Cassese Cor 6.3)", ``Cassese.burkholderSharpness_holds),
-   ("HNVW transference (Cassese Prop 7.2, assumed)", ``Cassese.HNVWTransference),
-   ("Dragičević's lower bound (Cassese Thm 7.1, assumed)", ``Cassese.DragicevicLowerBound),
-   ("Dragičević's L⁴ bound (Cassese Cor 7.2, assumed)", ``Cassese.DragicevicL4Bound)]
+   -- Cassese, Section 7: the cited results proved in `Morrey/Common/External` from the package
+   -- `HarmonicAnalysis`
+   ("HNVW I Cor 5.7.6, transference (Cassese Prop 7.2)", ``External.HNVW.transference_beurlingPow),
+   ("Dragičević Thm 1.1 with p*, through CDK §1.3.1 (Cassese Thm 7.1)",
+    ``External.Dragicevic.theorem1_1_two_pStar),
+   ("Dragičević Thm 1.1, n = 2 (Cassese Cor 7.2)", ``External.Dragicevic.theorem1_1_two)]
 
 /-- The numbered results of the paper, in the order of the paper. -/
 meta def paperResults : List (String × Name) :=

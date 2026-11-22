@@ -46,16 +46,15 @@ theorem theorem1_4_four : ∀ d ≥ 588, ∃ f : Matrix (Fin d) (Fin d) ℝ → 
       IsPHomogeneous 4 f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
   Cassese.theorem1_4_four
 
-theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
-    (hp : 1 < p) (hp2 : p ≠ 2) :
+theorem theorem1_5 {p : ℝ} (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f :=
-  Cassese.theorem1_5 hT hD hp hp2
+  Cassese.theorem1_5 hp hp2
 
-theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
+theorem corollary1_6 :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A :=
-  Cassese.corollary1_6 hT hD
+  Cassese.corollary1_6
 
 theorem corollary5_3 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →

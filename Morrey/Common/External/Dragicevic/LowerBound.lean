@@ -27,8 +27,7 @@ with the Pochhammer symbol `(a)_n = a (a + 1) ⋯ (a + n − 1)`. Cassese uses t
 * `External.Dragicevic.theorem1_1_two_pStar`: `κ₂ (p*) ≤ ‖𝓑²‖_p` for every `p ∈ (1, ∞)`, from the
   two: for `p < 2`, `‖𝓑²‖_p = ‖𝓑²‖_q` and `q = p* > 2`.
 
-The package derives the theorem by the source's argument, from statements some of which are still
-proved with `sorry` (its audit lists them), with the source's test functions
+The package derives the theorem by the source's argument, with the source's test functions
 `f_{2,α} (z) = z² |z|^{−2α} g₂ (|z|)` (`HarmonicAnalysis.BeurlingAhlfors.testFun`). The norm of
 `𝓑²` is a supremum over Schwartz functions, which `f_{2,α}` is not; `f_{2,α} ∈ W^{2,p}` (lecture
 notes, Exercise 4.1) is approximated by Schwartz functions

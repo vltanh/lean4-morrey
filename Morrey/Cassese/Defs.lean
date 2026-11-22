@@ -47,17 +47,19 @@ matrices are `Matrix (Fin d) (Fin m) ℝ`, `ℝ^m` is `Fin m → ℝ`, and the g
   and `qHat` (Corollary 5.3).
 * The results of other works on which the main theorems of the Challenge are conditional, as
   propositions named after their sources (`HNVWExtrapolation`, `RandrianantoaninaSchattenUMD`,
-  `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`, `HNVWTransference`,
-  `DragicevicLowerBound`), and what they need: `pStar`, `p* = max (p, p')`; Rademacher signs on
-  the canonical space `Fin N → Bool` (`coin`, `avg`, `IsPredictable`, `mart`, `lpNormWith`); the
-  UMD constants of Definition 2.5 (`umdConstWith`); the Schatten norms (`sval`, `schattenNorm`);
-  the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²` (`beurlingSymbol`,
-  `beurlingPow`, `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`, `torusBeurlingPowNorm`). They
-  live here, and not in `External/`, because the Challenge states the main theorems with these
-  hypotheses and may import only Mathlib.
-* After the shared block: Proposition 2.7 (3), (5) (`PisierLpUMD`, `YaroslavtsevComplexUMD`) and
-  the constants they need (`umdConst`, `complexUMDConst`), hypotheses of the paper's proof of
-  Theorem 1.2 (`theorem1_2_umd`) only.
+  `CoxVeraarDecoupling`, `PisierXuKhintchine`, `KahaneKhintchine`), and what they need: `pStar`,
+  `p* = max (p, p')`; Rademacher signs on the canonical space `Fin N → Bool` (`coin`, `avg`,
+  `IsPredictable`, `mart`, `lpNormWith`); the UMD constants of Definition 2.5 (`umdConstWith`);
+  the Schatten norms (`sval`, `schattenNorm`). They live here, and not in `External/`, because the
+  Challenge states the main theorems with these hypotheses and may import only Mathlib.
+* After the shared block: the Beurling–Ahlfors transform and its powers on `ℝ²` and on `𝕋²`
+  (`beurlingSymbol`, `beurlingPow`, `beurlingPowNorm`, `trigPoly`, `torusBeurlingPow`,
+  `torusBeurlingPowNorm`), the objects of Section 7; no statement of the Challenge uses them, since
+  Theorem 1.5 and Corollary 1.6 no longer take the cited results of Section 7 (transference,
+  Dragičević's bound) as hypotheses: `Morrey/Cassese/Hypotheses.lean` states and proves them.
+  Then Proposition 2.7 (3), (5) (`PisierLpUMD`, `YaroslavtsevComplexUMD`) and the constants they
+  need (`umdConst`, `complexUMDConst`), hypotheses of the paper's proof of Theorem 1.2
+  (`theorem1_2_umd`) only.
 
 Representation choices. A Banach space in the hypotheses on UMD spaces is a complete normed space
 `E` renormed by an equivalent norm `nrm` (every Banach space is one, with `nrm = ‖·‖`; `S_q^{d×d}`
@@ -201,9 +203,9 @@ noncomputable def qHat (δ Λ : ℝ) (A : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
 
 /-! ### Tools for the conditional statements
 
-The main theorems are conditional on results of other works that are out of reach of this
-formalization. Each such result is a proposition below, named after its source; the definitions
-it needs come first. -/
+Theorem 1.4, for general `p`, is conditional on results of other works that are out of reach of
+this formalization. Each such result is a proposition below, named after its source; the
+definitions it needs come first. -/
 
 /-- Burkholder's exponent `p* = max (p, p / (p − 1))`. -/
 noncomputable def pStar (p : ℝ) : ℝ := max p (p / (p - 1))
@@ -264,40 +266,6 @@ noncomputable def sval {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin m) 
 `‖A‖_{S_∞} = max s_i`. -/
 noncomputable def schattenNorm {d m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
   if q = ⊤ then ⨆ i, sval A i else (∑ i, sval A i ^ q.toReal) ^ (1 / q.toReal)
-
-/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
-by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
-noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
-
-/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
-noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
-  FourierTransformInv.fourierInv
-    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
-
-/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
-functions `f`. -/
-noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
-      MeasureTheory.volume /
-    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
-
-/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
-noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
-  c.sum fun n a => a * UnitAddTorus.mFourier n x
-
-/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
-polynomial with coefficients `c`. -/
-noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
-    ℂ :=
-  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
-    UnitAddTorus.mFourier n x
-
-/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
-polynomials (`c₀ = 0`). -/
-noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
-    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
-      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
 
 /-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
 Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some
@@ -382,20 +350,47 @@ def KahaneKhintchine : Prop :=
           lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             κ p q * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
 
-/-- Transference for the powers of the Beurling–Ahlfors transform, citing HNVW I,
-Corollary 5.7.6 ("the standard transference identity for homogeneous multipliers", proof of
-Proposition 7.2), in the direction used: `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`,
-`p ∈ (1, ∞)`. -/
-def HNVWTransference : Prop :=
-  ∀ (k : ℕ) (p : ℝ), 1 ≤ k → 1 < p → beurlingPowNorm k p ≤ torusBeurlingPowNorm k p
-
-/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
-operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
-`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. -/
-def DragicevicLowerBound : Prop :=
-  ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
-
 -- END SHARED DEFINITIONS
+
+/-! ### Section 7: the Beurling–Ahlfors transform on `ℝ²` and on `𝕋²`
+
+The objects of Proposition 7.2, Theorem 7.1 and Corollary 7.2. No statement of the Challenge
+uses them (Theorem 1.5 and Corollary 1.6 are stated without them), so they stand after the shared
+block. -/
+
+/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
+by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
+noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
+
+/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
+noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
+  FourierTransformInv.fourierInv
+    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
+
+/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
+functions `f`. -/
+noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
+      MeasureTheory.volume /
+    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
+
+/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
+noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
+  c.sum fun n a => a * UnitAddTorus.mFourier n x
+
+/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
+polynomial with coefficients `c`. -/
+noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
+    ℂ :=
+  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
+    UnitAddTorus.mFourier n x
+
+/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
+polynomials (`c₀ = 0`). -/
+noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
+    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
+      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
 
 /-! ### The hypercontractive Kahane–Khintchine inequality
 

@@ -44,12 +44,11 @@ approximated by Schwartz functions, and a density statement
 (`HarmonicAnalysis.div_le_beurlingPowNorm_of_tendsto`) carries `‖∂² f‖_p ≤ ‖𝓑²‖_p ‖∂̄² f‖_p`
 over to it, as the hint of Exercise 2.19 does ("first consider smooth `h` and then approximate").
 There is no departure from the source's test functions. The duality follows
-Carbonaro–Dragičević–Kovač §1.3.1, for Fourier multipliers with bounded symbols. Some of the
-package's statements are still proved with `sorry`; its audit lists them, and the project's audit
-reports `sorryAx` for the results here until they are proved.
+Carbonaro–Dragičević–Kovač §1.3.1, for Fourier multipliers with bounded symbols. The package
+proves these with no `sorry` and only Lean's standard axioms.
 
-**Who uses it.** Cassese's `DragicevicLowerBound`
-([`Morrey/Cassese/Defs.lean`](../../../Cassese/Defs.lean)) and `DragicevicL4Bound`
+**Who uses it.** Cassese's `DragicevicLowerBound` and `DragicevicL4Bound`
 ([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)) are derived from these by
-`Cassese.dragicevicLowerBound_holds` and `Cassese.dragicevicL4Bound_holds`. They are still
-hypotheses of Theorem 7.1, Corollary 7.2, Theorem 1.5 and Corollary 1.6.
+`Cassese.dragicevicLowerBound_holds` and `Cassese.dragicevicL4Bound_holds` there. Theorem 7.1,
+Corollary 7.2, Theorem 1.5 and Corollary 1.6 use them through those theorems, and none of them
+takes them as hypotheses.

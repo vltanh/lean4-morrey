@@ -1401,19 +1401,20 @@ theorem proposition7_2 (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ) {p : ℝ} (hp : 1 < p
     (fourByTwo_chainOpNorm_le_qcThreshold N ρ hp)
 
 /-- **Proposition 7.2** (`prop:qcbound`), "in particular":
-`C^{qc} (p, N, ρ) ≥ ρ^N ‖𝓑^{N+1}‖_{L^p (ℝ²) → L^p (ℝ²)}`. Conditional on transference for
-homogeneous multipliers (HNVW I, Corollary 5.7.6).
+`C^{qc} (p, N, ρ) ≥ ρ^N ‖𝓑^{N+1}‖_{L^p (ℝ²) → L^p (ℝ²)}`. Unconditional: transference for
+homogeneous multipliers (HNVW I, Corollary 5.7.6) is proved (`hnvwTransference_holds`, from
+`External/HNVW`).
 
 Proof (the paper's): take `(h₀, …, h_N) = (h, 0, …, 0)` in the identity of Proposition 7.2, whose
 inequality `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` is `fourByTwo_chainOpNorm_le_qcThreshold`; this gives
-`C^{qc} ≥ ρ^N ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`, and transference (`HNVWTransference`) compares the torus
-norm with the norm on `ℝ²`. -/
-theorem proposition7_2_lower (hT : HNVWTransference) (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ)
+`C^{qc} ≥ ρ^N ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`, and transference (`hnvwTransference_holds`) compares the
+torus norm with the norm on `ℝ²`. -/
+theorem proposition7_2_lower (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ)
     {p : ℝ} (hp : 1 < p) :
     ENNReal.ofReal (ρ ^ N) * beurlingPowNorm (N + 1) p ≤ qcThreshold (chainF N p ρ) := by
   refine le_trans ?_ (fourByTwo_chainOpNorm_le_qcThreshold N ρ hp)
   -- transference: `‖𝓑^{N+1}‖_{L^p (ℝ²)} ≤ ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`
-  refine (mul_le_mul_right (hT (N + 1) p (by omega) hp) _).trans ?_
+  refine (mul_le_mul_right (hnvwTransference_holds (N + 1) p (by omega) hp) _).trans ?_
   -- the tuples `(h, 0, …, 0)`
   rw [torusBeurlingPowNorm, ENNReal.mul_iSup]
   refine iSup_le fun c => ?_
@@ -1530,8 +1531,9 @@ theorem fourByTwo_rankOneConvexAt_of_lt (N : ℕ) {p : ℝ} (hp : 0 < p) (ρ : �
 /-- **Theorem 7.1** (`cs-thm7.1`): for `p ∈ (1, 2) ∪ (2, ∞)` there are linear maps
 `P_p : ℝ^{4×2} → ℝ^{2×2}`, `Q_p : ℝ^{4×2} → ℝ²` and `C (p) > 0` such that
 `A ↦ C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖_{ℓ₂}^p` is rank-one convex at `0` but not quasiconvex
-at `0`. Conditional on transference (Proposition 7.2) and Dragičević's lower bound
-`‖𝓑²‖_p > p* − 1`; Burkholder's inequality (Theorem 2.3) enters through Proposition 7.1.
+at `0`. Unconditional: transference (Proposition 7.2) and Dragičević's lower bound
+`‖𝓑²‖_p > p* − 1` are proved (`hnvwTransference_holds`, `dragicevicLowerBound_holds`), and
+Burkholder's inequality (Theorem 2.3) enters through Proposition 7.1.
 
 Proof (the paper's): `N = 1`, with `ℝ^{4×2} ≅ Lin (ℂ, ℂ²)` and `ℝ^{2×2} ≅ ℂ²` (row `j` of `P_p (A)`
 is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the integrand is
@@ -1540,8 +1542,7 @@ is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the inte
 `ρ ‖𝓑²‖_p > (p* − 1) √(1 + ρ²)` for large `ρ` (explicitly `ρ = (p* − 1) / (‖𝓑²‖_p − p* + 1) + 1`,
 or `ρ = 1` if `‖𝓑²‖_p = ∞`), and `C` is chosen strictly between. Since `f_{p,ρ,C}` increases with
 `C`, `C > C^{rc}` gives rank-one convexity at `0` and `C < C^{qc}` its failure of quasiconvexity. -/
-theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
-    (hp : 1 < p) (hp2 : p ≠ 2) :
+theorem theorem7_1 {p : ℝ} (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ (P : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] Matrix (Fin 2) (Fin 2) ℝ)
       (Q : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] (Fin 2 → ℝ)) (C : ℝ), 0 < C ∧
       RankOneConvexAt
@@ -1563,7 +1564,7 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
       exact ENNReal.ofReal_lt_top
     · set b := (beurlingPowNorm 2 p).toReal with hbdef
       have hab : a < b := by
-        have h := hD p hp hp2
+        have h := dragicevicLowerBound_holds p hp hp2
         rw [← ENNReal.ofReal_toReal hb] at h
         exact (ENNReal.ofReal_lt_ofReal_iff'.mp h).1
       set ρ := a / (b - a) + 1 with hρdef
@@ -1594,7 +1595,7 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     rw [fourByTwo_integrand_eq]
     apply not_quasiconvexAt_of_lt_qcThreshold hC0.le
     refine lt_of_lt_of_le hC2 ?_
-    have h72 := proposition7_2_lower hT 1 hρ hp
+    have h72 := proposition7_2_lower 1 hρ hp
     rw [pow_one] at h72
     exact h72
 
@@ -1868,8 +1869,9 @@ theorem fourByTwo_not_quasiconvexAt_of_le {d m : ℕ} {f g : Matrix (Fin d) (Fin
     _ ≤ ∫ x in unitCube m, f (0 + jac φ x) := integral_mono hint' hint fun x => hle _
 
 /-- **Corollary 7.2** (`cs-cor7.2`): there is a homogeneous polynomial `𝒫 : ℝ^{4×2} → ℝ` of degree
-four which is rank-one convex but not quasiconvex at `0`. Conditional on transference
-(Proposition 7.2) and Dragičević's bound `‖𝓑²‖_{L⁴} ≥ 21/5`.
+four which is rank-one convex but not quasiconvex at `0`. Unconditional: transference
+(Proposition 7.2) and Dragičević's bound `‖𝓑²‖_{L⁴} ≥ 21/5` are proved (`hnvwTransference_holds`,
+`dragicevicL4Bound_holds`).
 
 Proof (the paper's): `U (x, y) = |y|⁴ − 10 |x|² |y|² − 15 |x|⁴` on `ℂ² × ℂ` (`fourByTwo_U`)
 satisfies `2U (x, y) ≥ |y|⁴ − 130 |x|⁴` (`fourByTwo_U_bound`) and is zig-zag concave:
@@ -1881,8 +1883,7 @@ because `|Q (R)| ≤ √3 ‖P_{√2} (R)‖` for rank-one `R` (the estimate of 
 `C₀ = 1170^{1/4}`, with the same value `0` at `0`. By Proposition 7.2 and Dragičević,
 `C^{qc} (4, 1, √2) ≥ √2 ‖𝓑²‖_{L⁴} ≥ 21 √2 / 5 > C₀`, so `f_{4,√2,C₀}`, and with it its minorant `𝒫`,
 is not quasiconvex at `0` (`fourByTwo_not_quasiconvexAt_of_le`). -/
-theorem corollary7_2 (hT : HNVWTransference)
-    (hD4 : DragicevicL4Bound) :
+theorem corollary7_2 :
     ∃ P : Matrix (Fin 4) (Fin 2) ℝ → ℝ, IsHomogeneousPolynomial 4 P ∧ RankOneConvex P ∧
       ¬ QuasiconvexAt P 0 := by
   refine ⟨fourByTwo_quartic, fourByTwo_quartic_isHomPoly, fourByTwo_quartic_rankOneConvex, ?_⟩
@@ -1917,9 +1918,9 @@ theorem corollary7_2 (hT : HNVWTransference)
     simp [fourByTwo_quartic, fourByTwo_U, hP0, hQ0]
   -- Proposition 7.2 and Dragičević: `C^{qc} (4, 1, √2) ≥ √2 ‖𝓑²‖_{L⁴} ≥ 21 √2 / 5 > C₀`
   have hqc : ENNReal.ofReal C0 < qcThreshold (chainF 1 4 (√2)) := by
-    have h72 := proposition7_2_lower hT 1 (Real.sqrt_pos.mpr two_pos) (by norm_num : (1 : ℝ) < 4)
+    have h72 := proposition7_2_lower 1 (Real.sqrt_pos.mpr two_pos) (by norm_num : (1 : ℝ) < 4)
     rw [pow_one] at h72
-    refine lt_of_lt_of_le ?_ ((mul_le_mul_right hD4 _).trans h72)
+    refine lt_of_lt_of_le ?_ ((mul_le_mul_right dragicevicL4Bound_holds _).trans h72)
     rw [← ENNReal.ofReal_mul (Real.sqrt_nonneg _),
       ENNReal.ofReal_lt_ofReal_iff (by positivity)]
     refine lt_of_pow_lt_pow_left₀ 4 (by positivity) ?_

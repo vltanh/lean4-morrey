@@ -24,9 +24,10 @@ The library's proofs use them through these two theorems. Earlier they were hypo
 statements that use them; they left the shared block of `Morrey/Cassese/Defs.lean`, which the
 Challenge copies, when no statement took them any more.
 
-The three results of Section 7 on the Beurling–Ahlfors transform, still hypotheses of the
-statements that use them, are derived here from `External/HNVW` and `External/Dragicevic`, whose
-proofs are those of the package `HarmonicAnalysis`:
+The three results that Section 7 cites on the Beurling–Ahlfors transform are stated here, as the
+propositions `HNVWTransference`, `DragicevicLowerBound` and `DragicevicL4Bound`, and proved from
+`External/HNVW` and `External/Dragicevic`, whose proofs are those of the package
+`HarmonicAnalysis`:
 
 * `hnvwTransference_holds : HNVWTransference` (proof of Proposition 7.2, citing HNVW I,
   Corollary 5.7.6), from `External.HNVW.transference_beurlingPow`;
@@ -36,7 +37,13 @@ proofs are those of the package `HarmonicAnalysis`:
 * `dragicevicL4Bound_holds : DragicevicL4Bound` (proof of Corollary 7.2), from
   `External.Dragicevic.theorem1_1_two` at `p = 4`, `κ₂ (4) = 21/5`.
 
-The shared definitions `beurlingPowNorm`, `torusBeurlingPowNorm` and `pStar` of
+Proposition 7.2 (lower bound), Theorem 7.1, Corollary 7.2, Theorem 1.5 and Corollary 1.6 use them
+through these three theorems. Earlier they were hypotheses of those statements;
+`HNVWTransference` and `DragicevicLowerBound` left the shared block of `Morrey/Cassese/Defs.lean`,
+with the six definitions of Section 7 that only they used there, when no statement of the
+Challenge took them any more.
+
+The definitions `beurlingPowNorm`, `torusBeurlingPowNorm` and `pStar` of
 `Morrey/Cassese/Defs.lean` are the package's, definitionally
 (`beurlingPowNorm_eq_harmonicAnalysis`, `torusBeurlingPowNorm_eq_harmonicAnalysis`,
 `pStar_eq_harmonicAnalysis`).
@@ -96,13 +103,24 @@ theorem burkholderSquareFunction_holds : BurkholderSquareFunction := by
 
 /-! ### Section 7: the Beurling–Ahlfors transform -/
 
+/-- Transference for the powers of the Beurling–Ahlfors transform, citing HNVW I,
+Corollary 5.7.6 ("the standard transference identity for homogeneous multipliers", proof of
+Proposition 7.2), in the direction used: `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`,
+`p ∈ (1, ∞)`. Proved by `hnvwTransference_holds`. -/
+def HNVWTransference : Prop :=
+  ∀ (k : ℕ) (p : ℝ), 1 ≤ k → 1 < p → beurlingPowNorm k p ≤ torusBeurlingPowNorm k p
+
+/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
+operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
+`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. Proved by
+`dragicevicLowerBound_holds`. -/
+def DragicevicLowerBound : Prop :=
+  ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
+
 /-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
 operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Corollary 7.2:
 `‖𝓑²‖_{L⁴ (ℝ²) → L⁴ (ℝ²)} ≥ 21 / 5`, Dragičević's constant `κ₂ (4) = (3/4 · 7/4) / (1/4 · 5/4)`.
-A hypothesis of `corollary7_2`. It is stated with the shared definitions of
-`Morrey/Cassese/Defs.lean`, like `DragicevicLowerBound`, but is not used by the Challenge, so it
-stands here rather than in the shared block. `dragicevicL4Bound_holds` derives it from
-`External.Dragicevic.theorem1_1_two`. -/
+Proved by `dragicevicL4Bound_holds`, from `External.Dragicevic.theorem1_1_two`. -/
 def DragicevicL4Bound : Prop :=
   ENNReal.ofReal (21 / 5) ≤ beurlingPowNorm 2 4
 

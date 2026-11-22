@@ -17,9 +17,6 @@ public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 public import Mathlib.Analysis.InnerProductSpace.Basic
 public import Mathlib.Analysis.Matrix.Spectrum
 public import Mathlib.Analysis.SpecialFunctions.Pow.Real
-public import Mathlib.Analysis.Fourier.FourierTransform
-public import Mathlib.Analysis.Distribution.SchwartzSpace.Basic
-public import Mathlib.Analysis.Fourier.AddCircleMulti
 
 /-!
 # Challenge: Cassese, a solution to Morrey's problem in `ℝ^{2×m}`
@@ -48,8 +45,9 @@ homogeneous problem at `p = 4` (`homMorrey_landscape`).
   non-commutative probability (below); `theorem1_4_four`: Theorem 1.4 at `p = 4`, with the
   dimension `d₀ (4) = 588` of the paper's Corollary 6.3, unconditional (the paper's "simple,
   somewhat quantitative proof" for `p = 4`, Section 6.4).
-* `theorem1_5`, `corollary1_6`: conditional on transference and on Dragičević's lower bound
-  (below).
+* `theorem1_5`, `corollary1_6`: unconditional. The results of other works that their proofs cite
+  in Section 7 (transference for homogeneous multipliers, Dragičević's lower bound) are proved in
+  the library (below).
 * `projL3_mem`: a check of the definitions of Section 5.2 (`projL3` maps into `𝓛₃`).
 
 ## Conventions
@@ -83,11 +81,8 @@ homogeneous problem at `p = 4` (`homMorrey_landscape`).
   `UMD_p` of a Banach space (Definition 2.5, `umdConstWith E nrm p`, the best `β` in
   `‖Σ_k σ_{k+1} dY_{k+1}‖_{L^p} ≤ β ‖Y_n‖_{L^p}` over all martingales `Y` and predictable signs
   `σ`, `∞` if there is none, for the complete normed space `E` renormed by the equivalent norm
-  `nrm`); the singular values `sval` and the Schatten norms `schattenNorm q`
-  (`‖A‖_{S_q} = (Σ s_i^q)^{1/q}`, `‖A‖_{S_∞} = max s_i`); and the norms of the powers of the
-  Beurling–Ahlfors transform `𝓑` (symbol `ξ̄ / ξ`, `beurlingSymbol`) on `L^p (ℝ²)`
-  (`beurlingPowNorm k p`, a supremum over Schwartz functions) and on the mean-zero `L^p_0 (𝕋²)`
-  (`torusBeurlingPowNorm k p`, a supremum over mean-zero trigonometric polynomials).
+  `nrm`); and the singular values `sval` and the Schatten norms `schattenNorm q`
+  (`‖A‖_{S_q} = (Σ s_i^q)^{1/q}`, `‖A‖_{S_∞} = max s_i`).
 
 ## The hypotheses
 
@@ -116,18 +111,15 @@ no Lean library has and that is a project of its own:
   of Banach-valued Rademacher sums, which Lean does not have. (The library's Remark 6.3 and the
   case `q = ∞` of its Proposition 6.5, which no statement here uses, also assume the
   hypercontractive bound `k_{q,p} ≤ √((q − 1) / (p − 1))`, `KahaneKhintchineHypercontractive`.)
-* `HNVWTransference` (HNVW I, Corollary 5.7.6, in the proof of Proposition 7.2):
-  `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`, `p ∈ (1, ∞)`. It needs the transference of
-  `L^p` Fourier multipliers from the torus to the plane.
-* `DragicevicLowerBound` (Dragičević, Arch. Math. 96 (2011), Theorem 1.1, in the proof of
-  Theorem 7.1): `‖𝓑²‖_{L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞) ∖ {2}`. It needs the `L^p` theory of
-  the Beurling–Ahlfors transform (Calderón–Zygmund operators on `L^p (ℝ²)`).
 
 The paper also cites Burkholder's inequalities for Hilbert-space-valued martingales (Theorem 2.3),
 Burkholder's scalar functions (13), (14), Dacorogna's formula for the quasiconvex envelope
 (Proposition 2.2), Dacorogna's theorems on rank-one affine functions and quadratic forms, Rindler's
-lemmas (Lemmas 2.1, 2.2) and Kristensen's smoothing argument: these are proved in the library, and
-no statement here assumes them.
+lemmas (Lemmas 2.1, 2.2), Kristensen's smoothing argument, and, for the Beurling–Ahlfors transform
+`𝓑` in Section 7, transference for homogeneous multipliers (HNVW I, Corollary 5.7.6:
+`‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}`) and Dragičević's lower bound (Arch. Math. 96 (2011),
+Theorem 1.1: `‖𝓑²‖_{L^p (ℝ²)} > p* − 1` for `p ≠ 2`, and `‖𝓑²‖_{L⁴} ≥ 21/5`): these are proved in
+the library, and no statement here assumes them.
 
 The definitions are copied word for word from `Morrey/Cassese/Defs.lean` (kept in sync by
 `scripts/sync_challenge_defs.py`); the theorems are proved in `palomar/Cassese/Solution.lean`.
@@ -266,9 +258,9 @@ noncomputable def qHat (δ Λ : ℝ) (A : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
 
 /-! ### Tools for the conditional statements
 
-The main theorems are conditional on results of other works that are out of reach of this
-formalization. Each such result is a proposition below, named after its source; the definitions
-it needs come first. -/
+Theorem 1.4, for general `p`, is conditional on results of other works that are out of reach of
+this formalization. Each such result is a proposition below, named after its source; the
+definitions it needs come first. -/
 
 /-- Burkholder's exponent `p* = max (p, p / (p − 1))`. -/
 noncomputable def pStar (p : ℝ) : ℝ := max p (p / (p - 1))
@@ -329,40 +321,6 @@ noncomputable def sval {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin m) 
 `‖A‖_{S_∞} = max s_i`. -/
 noncomputable def schattenNorm {d m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
   if q = ⊤ then ⨆ i, sval A i else (∑ i, sval A i ^ q.toReal) ^ (1 / q.toReal)
-
-/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
-by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
-noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
-
-/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
-noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
-  FourierTransformInv.fourierInv
-    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
-
-/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
-functions `f`. -/
-noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
-      MeasureTheory.volume /
-    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
-
-/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
-noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
-  c.sum fun n a => a * UnitAddTorus.mFourier n x
-
-/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
-polynomial with coefficients `c`. -/
-noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
-    ℂ :=
-  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
-    UnitAddTorus.mFourier n x
-
-/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
-polynomials (`c₀ = 0`). -/
-noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
-  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
-    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
-      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
 
 /-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
 Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some
@@ -447,19 +405,6 @@ def KahaneKhintchine : Prop :=
           lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             κ p q * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
 
-/-- Transference for the powers of the Beurling–Ahlfors transform, citing HNVW I,
-Corollary 5.7.6 ("the standard transference identity for homogeneous multipliers", proof of
-Proposition 7.2), in the direction used: `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`,
-`p ∈ (1, ∞)`. -/
-def HNVWTransference : Prop :=
-  ∀ (k : ℕ) (p : ℝ), 1 ≤ k → 1 < p → beurlingPowNorm k p ≤ torusBeurlingPowNorm k p
-
-/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
-operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
-`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. -/
-def DragicevicLowerBound : Prop :=
-  ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
-
 -- END SHARED DEFINITIONS
 
 end Cassese
@@ -512,18 +457,15 @@ theorem theorem1_4_four : ∀ d ≥ 588, ∃ f : Matrix (Fin d) (Fin d) ℝ → 
   sorry
 
 /-- **Theorem 1.5.** For every `p ∈ (1, ∞) ∖ {2}` there is a `p`-homogeneous integrand
-`f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on transference
-and Dragičević's lower bound. -/
-theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
-    (hp : 1 < p) (hp2 : p ≠ 2) :
+`f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Unconditional. -/
+theorem theorem1_5 {p : ℝ} (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
   sorry
 
 /-- **Corollary 1.6.** There is a `1`-homogeneous rank-one convex integrand
-`f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Conditional as
-Theorem 1.5. -/
-theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
+`f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Unconditional. -/
+theorem corollary1_6 :
     ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
       RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
   sorry
