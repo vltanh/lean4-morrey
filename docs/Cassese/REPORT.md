@@ -469,6 +469,8 @@ claimed, not as proved.
 
 ## 11. What's next
 
+Plans for follow-up papers are kept in `NEXT.md`, which is not published.
+
 ### Open directions (from the paper and the formalization)
 
 - **`2 × 2`.** The homogeneous problem in `2 × 2` is open; the paper expects a positive answer, and
