@@ -18,10 +18,10 @@ public import Morrey.Common.External.PisierXu.Khintchine
 # Cassese, arXiv:2608.03488v3: the cited results, stated in the paper's terms and proved
 
 The results of other works that the paper's proofs cite, stated as propositions named after their
-sources, in the paper's terms, and proved from `Morrey/Common/External`, where each is stated in
-its source's terms and proved from the packages `BanachProbability` (Sections 2, 4, 6) and
-`HarmonicAnalysis` (Section 7). No statement of the library or of the Challenge takes them as
-hypotheses: the proofs use them through the theorems `…_holds` below.
+sources, in the paper's terms, and proved from `Morrey/Common/External`, where each is stated in its
+source's terms or as the paper quotes it (or both), and proved from the packages `BanachProbability`
+(Sections 2, 6) and `HarmonicAnalysis` (Section 7). No statement of the library or of the Challenge
+takes them as hypotheses: the proofs use them through the theorems `…_holds` below.
 
 Section 2 (Theorem 2.3, Propositions 2.7, 2.8):
 
@@ -51,7 +51,8 @@ cites states it, inventory E27):
 
 Section 7 (the Beurling–Ahlfors transform): `hnvwTransference_holds : HNVWTransference` (HNVW I,
 Corollary 5.7.6), `dragicevicLowerBound_holds : DragicevicLowerBound` and
-`dragicevicL4Bound_holds : DragicevicL4Bound` (Dragičević 2011, Theorem 1.1).
+`dragicevicL4Bound_holds : DragicevicL4Bound` (Dragičević 2011, Theorem 1.1; for `p < 2`, with
+Carbonaro–Dragičević–Kovač 2023, §1.3.1).
 
 Since no statement takes them as hypotheses, they are defined here, outside the shared block of
 `Morrey/Cassese/Defs.lean` that the Challenge copies.
@@ -171,8 +172,8 @@ theorem hnvwTransference_holds : HNVWTransference := by
   rw [beurlingPowNorm_eq_harmonicAnalysis, torusBeurlingPowNorm_eq_harmonicAnalysis]
   exact External.HNVW.transference_beurlingPow k hp
 
-/-- Dragičević's lower bound (proof of Theorem 7.1, citing Dragičević 2011, Theorem 1.1):
-`‖𝓑²‖_{L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. From
+/-- Dragičević's lower bound (proof of Theorem 7.1, citing Dragičević 2011, Theorem 1.1, and
+Carbonaro–Dragičević–Kovač, for `p < 2`): `‖𝓑²‖_{L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. From
 `External.Dragicevic.theorem1_1_two_pStar`, `‖𝓑²‖_p ≥ κ₂ (p*)`, and `κ₂ (p*) > p* − 1`. -/
 theorem dragicevicLowerBound_holds : DragicevicLowerBound := by
   intro p hp hp2
@@ -465,7 +466,9 @@ def YaroslavtsevComplexUMD : Prop :=
 /-- **Proposition 2.7 (6)** (`prop:umd`), citing HNVW I, Theorem 4.5.6, and Yaroslavtsev,
 Proposition 3.7: a Banach space `X` is `UMD_p` if and only if there is a zig-zag concave `U` for
 some `β > 0`; then `β ≥ UMD_p (X)`, and `β ≥ UMD_{ℂ,p} (X)` when `X` is complex and `U` is
-zig-zag concave in the complex sense. Not used in any proof. Proved by `hnvwZigZag_holds`,
+zig-zag concave in the complex sense. (For a complex `X`, only this bound is stated here; the
+equivalence, with `ε` in the unit disc, is `External.Yaroslavtsev.proposition3_7_iff`.) Not used in
+any proof. Proved by `hnvwZigZag_holds`,
 from `External.HNVW.theorem4_5_6` and `External.Yaroslavtsev.proposition3_7`. -/
 def HNVWZigZag : Prop :=
   (∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →

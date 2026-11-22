@@ -33,11 +33,12 @@ Banach–Mazur distance `d_BM (X, H) ≲_p β`: there is an isomorphism `T : X �
 dependence on `β` cannot be improved in general; that sentence is not formalized.)
 
 The constant is required to be nonnegative (the paper's `β_p` is a bound for norms). Without that,
-the statement was false: for `X = 0` every `β` satisfies the hypothesis, and `β < 0` makes the
-conclusion impossible. With `β ≥ 0` that refutation is gone: for `X = 0` the conclusion holds with
-`H = 0` (both operator norms are `0`), and for `X ≠ 0` the hypothesis forces `β ≥ 1` (take `U = V` a
-nonzero martingale `U_n = ε x`, `n ≥ 1`, on two points), so `C_p β ≥ C_p > 0`. The hypothesis is
-asked of the martingales started at `0`, as in the paper (its convention, TeX lines 389–390).
+the statement would be false: for `X = 0` every `β` satisfies the hypothesis, and `β < 0` makes the
+conclusion impossible. With `β ≥ 0` there is no such refutation: for `X = 0` the conclusion holds
+with `H = 0` (both operator norms are `0`), and for `X ≠ 0` the hypothesis forces `β ≥ 1` (take
+`U = V` a nonzero martingale `U_n = ε x`, `n ≥ 1`, on two points), so `C_p β ≥ C_p > 0`. The
+hypothesis is asked of the martingales started at `0`, as in the paper (its convention, TeX lines
+389–390).
 
 Osękowski's Theorem 3.24 (i) asks the inequality, with one constant `β (p, B) < ∞`, for all pairs of
 martingales with `‖g_0‖ ≤ ‖f_0‖` and `‖dg_n‖ ≤ ‖df_n‖`, and concludes only that `B` is isomorphic to

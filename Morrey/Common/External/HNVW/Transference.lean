@@ -15,7 +15,7 @@ mean over the unit sphere), the boundedness of `T_m` from `L^p (ℝ^d; X)` to `L
 `T_{(m (k))_{k ≠ 0}}` from `L^p_0 (𝕋^d; X)` to `L^p_0 (𝕋^d; Y)` and of `T_{(m (k))}` from
 `L^p (𝕋^d; X)` to `L^p (𝕋^d; Y)` are equivalent, and the three norms `I`, `II`, `III` are equal.
 Cassese uses the inequality `I ≤ II`, from the torus to the plane, for scalar symbols on `ℝ² ≅ ℂ`,
-which is the case stated:
+which is the case stated (with `m (0)` arbitrary, as neither `I` nor `II` depends on it):
 
 * `External.HNVW.transference`: for a symbol `m : ℂ → ℂ`, continuous off `0` and homogeneous of
   degree `0` (`m (t ξ) = m (ξ)`, `t > 0`; such an `m` is bounded and measurable), and `1 < p < ∞`,
@@ -33,7 +33,9 @@ Proposition 5.7.4 (pp. 460–462) for a homogeneous symbol. For `f`, `g` with Fo
 `C_c^∞ (ℝ² ∖ {0})`, the pairing `∫ T_m f · g` is a limit of Riemann sums that are pairings of
 trigonometric polynomials on `𝕋²`; Hölder's inequality there, Lemma 5.7.5 (Poisson summation) for
 `f` in `L^p` and `g` in `L^{p'}`, and the density of such functions (Proposition 2.4.23) with
-duality give the bound. The slips of the book on these pages are repaired and listed in the package.
+duality give the bound; the book leaves the last step to the reader, and the limit in `f` is taken
+here in the pairing, before duality. The slips of the book on these pages are repaired and listed in
+the package.
 -/
 
 @[expose] public section

@@ -26,7 +26,8 @@ Carbonaro–Dragičević–Kovač §1.3.1:
   Carbonaro–Dragičević–Kovač §1.3.1 (`𝓑^{−n}` is the adjoint of `𝓑^n`, and
   `𝓑^{−n} f = conj (𝓑^n (conj f))`);
 * `External.Dragicevic.theorem1_1_two_pStar`: `κ₂ (p*) ≤ ‖𝓑²‖_p` for every `p ∈ (1, ∞)`, from the
-  two: for `p < 2`, `‖𝓑²‖_p = ‖𝓑²‖_q` and `q = p* > 2`.
+  two: for `p < 2`, `‖𝓑²‖_p = ‖𝓑²‖_q` and `q = p* > 2`. (For `p = 2`, where `κ₂ (2) = 1`, it is the
+  package's bound for `p > 1`; the paper does not use that case.)
 
 The package `HarmonicAnalysis` (`lean4-harmonic-analysis`) derives the theorem by the article's
 argument, with its test functions `f_{2,α} (z) = z² |z|^{−2α} g₂ (|z|)`, `g₂` its example

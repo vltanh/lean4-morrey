@@ -1,8 +1,9 @@
 # Osękowski: sharp inequalities for differentially subordinate martingales
 
 **Source.** A. Osękowski, *Sharp Martingale and Semimartingale Inequalities*, Monografie Matematyczne
-72, Birkhäuser 2012 (read): Theorem 3.5 (p. 53; proof pp. 53–59), Theorem 8.6 (p. 413; proof pp.
-414–415), Theorem 3.34 and Remark 3.8 (p. 137) with p. 138, Theorem 3.24 (pp. 120–121).
+72, Birkhäuser 2012 (read): Theorem 3.5 (p. 53; proof pp. 53–59), with Theorems 2.2 and 2.7 and §2.3
+(pp. 11, 16–17, 21–22) and the functions of pp. 26–30; Theorem 8.6 (p. 413; proof pp. 414–415);
+Theorem 3.34 and Remark 3.8 (p. 137) with p. 138; Theorem 3.24 (pp. 120–121).
 
 **Statements used by Cassese.**
 
@@ -16,9 +17,10 @@
   [Cassese 2025])". Theorem 2.3 of that paper (*Martingales, laminates and minimal Korn inequalities*,
   arXiv:2512.02784; J. Math. Pures Appl. 213 (2026)) quotes Burkholder's inequality from D. L.
   Burkholder, *Boundary value problems and sharp inequalities for martingale transforms*, Ann. Probab.
-  12 (1984), 647–702, "see [Osękowski 2012] for an exposition", with the footnote "no smaller constant
-  works among martingales defined on dyadic trees" (its dyadic trees may split with any weights; the
-  Rademacher martingales of Corollary 6.3 split with weights `1/2`). In the form needed, it is Theorem
+  12 (1984), 647–702, "see [Osękowski 2012] for an exposition", and says that it is sharp, "that is to
+  say, no smaller constant works among martingales defined on dyadic trees such that `‖dX_i‖ = ‖dY_i‖`"
+  (its dyadic trees may split with any weights; the Rademacher martingales of Corollary 6.3 split with
+  weights `1/2`). In the form needed, it is Theorem
   3.5 with Remark 3.8 and p. 138 of the book: the best constants of `±1`-transforms are the best ones
   already for dyadic martingales.
 - Proposition 2.6 (TeX lines 768–787), citing `[osekowski, Theorem 3.24]`: a Banach space in which
@@ -58,21 +60,27 @@
 - Theorem 8.6, (8.28): Theorem 3.5 applied, in `ℓ² (H)`, to `(X_m, 0, …)` and `(dX_1, …, dX_m, 0, …)`
   (p. 414, with §2.1.3, p. 16).
 
-**Departures.** None in the argument. The statements are at a fixed time `n` instead of for
-`sup_n ‖·‖_{L^p}`, which is equivalent; (8.28) is for martingales started at `0`; the separability of
-the Hilbert space is not used. The proofs repair, along the book's own lines, the slips on these pages
-(p. 11, the splice of two pairs with deterministic signs; pp. 27 and 29, signs; p. 54, the order of
-the convex and the concave part of `F`, its endpoint, and the constant of the integral formula; p. 56,
-`x / (2x + 1)` for `x / (2x − 1)`; p. 57, (3.66) for (3.65)), and they prove the two integral formulas
-for Burkholder's function (pp. 54 and 58), which the book states without proof; each is noted in the
-package. Theorem 3.5 (i) (`p ≤ 1`) and the sharpness clauses of Theorem 8.6 are not formalized: the
-paper does not use them.
+**Differences and repairs.** In the statements: a fixed time `n` instead of `sup_n ‖·‖_{L^p}`, which is
+equivalent; (8.28) for martingales started at `0`; no separability of the Hilbert space; and, for the
+sharpness, transforms by *predictable* signs of Paley–Walsh martingales, as in Cassese's Definition 2.5,
+where the book has a deterministic sequence of signs, and one sign for each Haar function (Remark 3.8,
+p. 138): on the sign cube a coefficient and a sign for each Haar function are a predictable `φ_k` and a
+predictable `σ_k`. In the proofs: the second approach is run on `W⁰` (above), which the book uses for the
+dyadic case. The slips of the book on the pages listed above are repaired along its lines, and each is
+noted in the package: p. 11, the splice of two pairs with deterministic signs; pp. 27 and 29, signs;
+p. 30, a missing absolute value; p. 54, the order of the convex and the concave part of `F` and the
+constant of the integral formula; p. 56, `x / (2x + 1)` for `x / (2x − 1)`; p. 57, (3.66) for (3.65). With
+the right order of its parts, the majorization `U_p ≥ V_p` (p. 54) also needs the sign of `F` at an
+endpoint, which the book does not mention: it is (1.11) of Burkholder 1988, whose proof of the same
+majorization (1.10) the package uses for this step. The two integral formulas for Burkholder's function
+(pp. 54 and 58), stated without proof, are proved. Theorem 3.5 (i) (`p ≤ 1`) and the sharpness clauses of
+Theorem 8.6 are not formalized: the paper does not use them.
 
 **Who uses them.** Cassese's Theorem 2.3 is stated in the paper's terms in
 [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean) (`burkholderInequality_holds`,
-`burkholderSquareFunction_holds`). The inequality is used by Lemma 5.1 (1) and the proof of
-Theorem 1.3 (b) (Section 5) and by Proposition 7.1 (Section 7, and so Theorem 7.1, Theorem 1.5 and
-Corollary 1.6); the square function inequality, in `S_2^{d×d}`, by Proposition 6.5 (and so
+`burkholderSquareFunction_holds`). The inequality is used by Lemma 5.1 (1), (2) (and so in the proofs of
+Theorem 1.3 (a), (b) and of Corollaries 5.2–5.4) and by Proposition 7.1 (Section 7, and so Theorem 7.1,
+Theorem 1.5 and Corollary 1.6); the square function inequality, in `S_2^{d×d}`, by Proposition 6.5 (and so
 Theorem 1.4 for general `p` and Corollary 6.1). The sharpness is `Cassese.BurkholderSharpness`,
 `burkholderSharpness_holds` ([`Morrey/Cassese/Square/Sharpness.lean`](../../../Cassese/Square/Sharpness.lean)),
 used by the lower bound of Corollary 6.3 (`Cassese.corollary6_3_lower`). None of these is a hypothesis

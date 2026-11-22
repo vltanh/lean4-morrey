@@ -9,7 +9,7 @@ G. Pisier, *Martingales in Banach spaces*, Cambridge University Press (2016), Co
 which Cassese (arXiv:2608.03488v3) cites as Proposition 2.7 (3) (TeX lines 835–836): for every
 measure space `(Ω, Σ, μ)` and `p ∈ (1, ∞)`, `L^p (Ω, Σ, μ)` is a UMD space. The book was read in
 its open draft (*Martingales in Banach spaces (in connection with type and cotype)*, IHP course
-notes, 2011, Corollary 8.19, "by Fubini").
+notes, 2011, Corollary 8.19, by Fubini's theorem).
 
 * `External.Pisier.corollary5_22`: `UMD_p (L^p (μ; ℂ)) < ∞`, for every measure `μ` and every
   `p ∈ (1, ∞)`, at the exponent `p` of the space, the complex `L^p` being a real Banach space;
@@ -22,8 +22,8 @@ argument, which needs neither σ-finiteness nor joint measurability: a Paley–W
 values in `L^p (μ; B)` takes finitely many values, so for `μ`-almost every `s` its evaluation at `s`
 is a `B`-valued Paley–Walsh martingale, and the transform commutes with evaluation; integrate the
 dyadic bound in `s`, and pass to general filtrations by HNVW I, Theorem 4.2.5
-(`External.HNVW.theorem4_2_5`). For `B = ℂ` (as the real Hilbert space `ℝ²`) the constant is
-`p* − 1` (Osękowski 2012, Theorem 3.5, `External.Osekowski.theorem3_5`).
+(`External.HNVW.theorem4_2_5`). For `B = ℂ` (as the real Hilbert space `ℝ²`) the constant is at most
+`p* − 1` (Osękowski 2012, Theorem 3.5, `External.Osekowski.umdConst_of_innerProductSpace`).
 -/
 
 @[expose] public section

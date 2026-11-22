@@ -14,9 +14,9 @@ optimal constant, `UMD_p^{dyad} (X) = UMD_p (X)`.
   and `p ∈ (1, ∞)`.
 
 The constants are those of Cassese's Definition 2.5: predictable signs, all probability spaces,
-martingales started at `0`. The book's `β_{p,X}` (Definition 4.2.1, p. 281) is for deterministic
-signs and σ-finite measure spaces, over the scalars of `X`; by its Theorem 4.2.25 (p. 300)
-predictable signs have the same constant.
+martingales started at `0`. The book's `β_{p,X}` (p. 282, after Definition 4.2.1) is for
+deterministic signs and σ-finite measure spaces, over the scalars of `X`; by its Theorem 4.2.25 (p.
+300) predictable signs have the same constant.
 
 Proof: `BanachProbability.dyadicUMDConst_eq_umdConst` in the package `BanachProbability`
 (`lean4-banach-probability`), by the book's alternative proof ("The result provides an alternative

@@ -35,6 +35,9 @@ and density. Then `f^{qc} ≤ f^#` because a quasiconvex minorant is quasiconvex
 supplied (gap fills). (i) needs `|∂D| = 0` for the domain `D` that is copied, which Proposition 8.1 does
 not state; it holds for the cube and the ball.
 
-**Who uses it.** Cassese's line 559 (`Cassese.quasiconvexAt_iff_exists_minorant`,
-[`Morrey/Cassese/Toolkit.lean`](../../../Cassese/Toolkit.lean)), and through it Proposition 2.3 (c),
+**Who uses it.** In [`Morrey/Cassese/Toolkit.lean`](../../../Cassese/Toolkit.lean): line 559 of the paper
+(`Cassese.quasiconvexAt_iff_exists_minorant`, with Lemma 2.2 for the unit cube), and Proposition 2.3 (a),
+(b) directly, and through them Proposition 2.3 (c) and the consequences of Proposition 2.3
+(`quasiconvexAt_zero_of_quasiconvexAt`, `nowhereQuasiconvex_of_not_quasiconvexAt_zero`), which give the
+conclusions "nowhere quasiconvex"; so also Theorems 1.2–1.5, Corollaries 1.6, 5.2, 5.3 and 6.1,
 Proposition 4.3 and the elementary route to Theorem 1.2.

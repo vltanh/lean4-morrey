@@ -4,7 +4,7 @@
 dimensions*, Indag. Math. 29 (2018), 1290–1309 (arXiv:1710.04958; §3 read), Lemma 3.2 and
 Proposition 3.7. Lemma 3.2 has no proof there: it is "proven in" T. Hytönen, J. van Neerven, M. Veraar,
 L. Weis, *Analysis in Banach Spaces. Volume I*, Springer 2016 (HNVW I; read), Proposition 4.2.10
-(pp. 285–286).
+(p. 286). (Theorem 3.4, cited in Remark 4.1, TeX line 1029, is context and not formalized.)
 
 **Statements used by Cassese.**
 
@@ -18,9 +18,9 @@ L. Weis, *Analysis in Banach Spaces. Volume I*, Springer 2016 (HNVW I; read), Pr
 - Proposition 2.7 (6), the complex half, Proposition 3.7 with HNVW I, Theorem 4.5.6 (TeX lines
   857–869): `X` is `UMD` if and only if there is `U` with `U (0, 0) = 0`,
   `U (x, y) ≥ ‖y‖^p − β^p ‖x‖^p` and `z ↦ U (x + z, y + ε z)` concave for every `ε` in the closed unit
-  disc; then `β ≥ UMD_{ℂ,p} (X)`. Yaroslavtsev states it for multipliers in any set `A ⊂ 𝕂`, without
-  `U (0, 0) = 0`, and adds that the smallest admissible `β` is the constant; the case used is the unit
-  disc.
+  disc; then `β ≥ UMD_{ℂ,p} (X)`. Yaroslavtsev states it for multipliers in a convex, bounded, closed
+  set `A ⊂ 𝕂` with at least two points (the assumption of his §3.2), without `U (0, 0) = 0`, and adds that
+  the smallest admissible `β` is the constant; the case used is the closed unit disc.
 
 **Lean.** [`ComplexUMD.lean`](ComplexUMD.lean), for a complex Banach space `X` and `p ∈ (1, ∞)`,
 with `UMD_p (X)` the constant of `X` as a real space (`BanachProbability.umdConst`) and

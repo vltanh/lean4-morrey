@@ -40,17 +40,19 @@ them by the book's arguments.
   `∫_0^∞ k (t) u (x / t, y / t) dt` with `k ≥ 0` and a simple function `u`, (3.6) or (3.12), for
   which Burkholder's method (Theorem 2.7) gives `E u (f_n / t, g_n / t) ≤ 0`. So
   `E V_p (f_n, g_n) ≤ E U_p (f_n, g_n) ≤ 0` by Fubini's theorem. The case `p = 2` is orthogonality.
-  The slips of the book on these pages (signs on pp. 27 and 29; on p. 54 the order of the concave
-  and the convex part of the function `F`, the sign of `F` at the endpoint, and the constant of the
-  integral formula) are repaired along the book's own lines, and noted in the package's files
-  `Martingale/Osekowski/`.
+  The slips of the book on these pages (signs on pp. 27 and 29, an absolute value on p. 30; on p. 54
+  the order of the concave and the convex part of the function `F` and the constant of the integral
+  formula) are repaired along the book's own lines, and noted in the package's files
+  `Martingale/Osekowski/`. With the right order, `U_p ≥ V_p` also needs the sign of `F` at an
+  endpoint, which the book does not mention; this is (1.11) of Burkholder 1988 (below), whose proof
+  of the majorization, (1.10), is the one used for that step.
 * Theorem 8.6, p. 414, by the device of §2.1.3 (p. 16): `(X_m, 0, 0, …)` and `(dX_1, …, dX_m, 0, …)`
   in `ℓ² (H)` are differentially subordinate to each other, and Theorem 3.5 applies to both pairs.
   Up to the time `n` both live in `H^{n+1}`, where the package works.
 
 The same inequalities, for Hilbert-space-valued martingales, are Theorems 1.1 and 3.1 of D. L.
 Burkholder, *Sharp inequalities for martingales and stochastic integrals*, Astérisque 157–158
-(1988); his proofs are not the ones followed.
+(1988); his proofs, apart from the majorization, are not the ones followed.
 -/
 
 @[expose] public section

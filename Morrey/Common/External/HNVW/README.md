@@ -29,9 +29,14 @@ book's.
   use it (inventory E27).
 - The proof of Proposition 7.2 (TeX lines 2832–2835), Corollary 5.7.6, "the standard transference
   identity for homogeneous multipliers": `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}`, `k ≥ 1`, `𝓑` the
-  Beurling–Ahlfors transform. The book: for `m` homogeneous of degree `0` and continuous off `0`, the
-  norms of `T_m` on `L^p (ℝ^d)`, `L^p_0 (𝕋^d)` and `L^p (𝕋^d)` are equal; only the inequality from the
-  torus to the plane is used.
+  Beurling–Ahlfors transform. The book: for `m` homogeneous of degree `0` and continuous off `0`, with
+  `m (0)` its mean over the unit sphere, the norms of `T_m` on `L^p (ℝ^d)`, `L^p_0 (𝕋^d)` and `L^p (𝕋^d)`
+  are equal; only the inequality from the torus (`L^p_0`) to the plane is used, in which `m (0)` plays no
+  role, and it is arbitrary in Lean.
+
+Cited for context only, and not formalized: Volume I, Chapters 1 and 2 (TeX line 411, Bochner spaces)
+and Section 3.1.b (TeX line 663, Rademacher variables); Volume III, Corollary 13.2.10 (a remark, TeX line
+1205).
 
 **Lean.** Real Banach spaces, `BanachProbability.umdConst` (predictable signs, any filtration of a
 probability space, martingales started at `0`), Paley–Walsh martingales on the sign cube `{±1}^N`:
@@ -41,7 +46,7 @@ probability space, martingales started at `0`), Paley–Walsh martingales on the
 - [`DyadicUMD.lean`](DyadicUMD.lean): `theorem4_2_5` (`dyadicUMDConst X p = umdConst X p`);
 - [`ZigZag.lean`](ZigZag.lean): `theorem4_5_6` (Cassese's form: the equivalence, and every admissible
   `β` bounds `UMD_p (X)`) and `theorem4_5_6_isLeast` (the book's final clause, with its functions, for
-  `X ≠ 0`);
+  `X ≠ 0`; that the infimum is attained is in the book's proof);
 - [`KahaneKhintchine.lean`](KahaneKhintchine.lean): `theorem6_2_4_hypercontractive`
   (`√((q − 1) / (p − 1))`, `1 < p ≤ q`, any seminorm), `theorem6_2_4_seminorm` and `theorem6_2_4`
   (normed spaces), with `κ_{p,q} = max (1, √((p − 1) / (q − 1)))`;
@@ -84,7 +89,9 @@ multipliers of the proof of (2)⇒(3) are constants in `[−1, 1]` instead of si
 repaired along its lines, and noted in the docstrings of the packages: the order of two steps in the
 proof of Theorem 4.5.6 (Lemma 4.5.2 is applied before the function is known to be finite), the first
 index in Lemma 3.5.14, a constant in Lemma 6.2.3 and the case `q = 1` in Theorem 6.2.4 of Volume II, the
-centred cell in Lemma 5.7.5, and the missing hypotheses and the norming of `T_m f` in Proposition 5.7.4.
+centred cell and the range of `p` in Lemma 5.7.5, and, in Proposition 5.7.4, the missing hypotheses, the
+interchanged `ε^{d/p}`, `ε^{d/p'}`, and the norming of `T_m f` (the book leaves the closing density and
+duality to the reader; here the limit in `f` is taken in the pairing, before duality).
 
 **Who uses it.** In [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean),
 `Cassese.hnvwExtrapolation_holds` is used by `Cassese.umdEllq_lt_top` (the paper's proof of Theorem

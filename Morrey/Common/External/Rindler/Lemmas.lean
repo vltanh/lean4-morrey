@@ -11,13 +11,15 @@ public import CalculusOfVariations.Quasiconvex.Periodic
 F. Rindler, *Calculus of variations*, Springer 2018; B. Dacorogna, *Direct methods in the calculus
 of variations*, 2nd ed., Springer 2008. Cassese quotes Lemma 2.1 from Rindler, Lemma 5.6, and
 Lemma 2.2 from Rindler, Propositions 5.1 and 5.3, and Dacorogna 2008, Propositions 5.11 and 5.13,
-cited together for the three assertions of the lemma (TeX 466–488).
+cited together for the three assertions of the lemma (TeX 468–487).
 
 What was read. Dacorogna 2008 ([D08]), and the second edition of Rindler's book (Graduate Texts in
 Mathematics 310, Springer, 2026; [R2]); the first edition, which the paper cites, was not obtained,
-so its numbers are matched with those of the second edition by content: Lemma 5.6 is Lemma 5.9 of
-[R2]; the two propositions are taken to be Proposition 5.6 of [R2] (quasiconvex ⇒ rank-one convex)
-and Lemma 5.2 (i) (the domain). Each statement is proved, in the textbook terms of the package
+so its results are matched with those of the second edition by content. Lemma 5.6, as the paper
+quotes it, is Lemma 5.9 of [R2]. Of the three assertions of Lemma 2.2, [R2] has the first as
+Proposition 5.6, the second as Lemma 5.2 (i), and the third as an exercise; its Proposition 5.1 is
+"all convex functions are quasiconvex", so whether the numbers 5.1 and 5.3 of the first edition are
+these results could not be checked. Each statement is proved, in the textbook terms of the package
 `CalculusOfVariations`, by its source's argument:
 
 * Lemma 2.1 (`lemma5_6`): [R2], Lemma 5.9 (pp. 114–115), through the bound along rank-one lines
@@ -29,6 +31,9 @@ and Lemma 5.2 (i) (the domain). Each statement is proved, in the textbook terms 
   [R2], Lemma 5.2 (i) (p. 106), extension by zero and rescaling;
 * the periodic form (`quasiconvexAtOn_iff_periodic`): [D08], Proposition 5.13 (pp. 173–174); [R2]
   has it as an exercise (Problem 5.2).
+
+The last two are stated at one matrix `A`, as in the paper; the sources state them for functions
+that are quasiconvex at every matrix, and their proofs fix the matrix.
 
 Integrands are lower semicontinuous and locally bounded, as in Cassese (Section 1.5). The sources
 ask for Borel measurability and local boundedness; only the measurability is used of the lower
@@ -52,12 +57,12 @@ function `f : ℝ^{d×m} → ℝ` is locally Lipschitz. (`Matrix.of` identifies 
 The statement assumes only that `f` is real-valued and rank-one convex; the paper states the lemma
 for rank-one convex *integrands* (lower semicontinuous and locally bounded), a weaker statement, and
 Rindler's definition of rank-one convexity asks for local boundedness and Borel measurability. The
-stronger form is the one the paper needs: Propositions 2.4 and 2.5 and the envelope formulas apply
-Lemma 2.1 to the infimum `G`, which is real-valued and rank-one convex but not yet known to be an
-integrand (its continuity is what makes it one); the paper does not note this (a gap of the paper,
-inventory E21).
+stronger form is the one needed: in Proposition 2.4 the paper uses the infimum `G`, real-valued and
+rank-one convex, as a rank-one convex minorant, without showing that it is an integrand (a gap of
+the paper, inventory E21). The formal proofs of Propositions 2.4 and 2.5 and of the envelope steps
+get its continuity from this lemma.
 
-Proof: [R2], Lemma 5.9 (the Lemma 5.6 of the first edition), in the package
+Proof: [R2], Lemma 5.9 (quoted by the paper as Lemma 5.6 of the first edition), in the package
 (`CalculusOfVariations.RankOneConvex.locallyLipschitz`): for `A, B ∈ B_r (F)` with
 `rank (A − B) ≤ 1`, convexity along the ray from `B` through `A` bounds `|f (A) − f (B)|` by
 `osc (f; B̄_{2r} (F)) / r · |A − B|` (5.10); for general `A, B`, the singular value decomposition of

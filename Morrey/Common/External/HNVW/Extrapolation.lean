@@ -23,12 +23,13 @@ for deterministic signs, with the same value by its Theorem 4.2.25).
 
 Proof: in the package `BanachProbability` (`lean4-banach-probability`),
 `BanachProbability.umdConst_le_mul_umdConst` and its special cases `umdConst_lt_top_of_lt_top`,
-`umdConst_two_le_mul`, `umdConst_le_mul_umdConst_two`, by the book's argument: for the transforms of
-Paley–Walsh martingales by fixed signs, the good-λ inequality (Lemmas 3.5.13, 3.5.14), its
-integration (Lemma 3.5.15, (3.59)), Doob's inequality and the adjoint transform (Lemma 3.5.3) give
-(3.49) of Theorem 3.5.4 (pp. 229–234), then the supremum over the transforms (Lemma 4.2.8) and the
-equality of the dyadic and the general constants (Theorem 4.2.5, `External.HNVW.theorem4_2_5`). The
-proof of (3.49) gives `80 (p/q + p'/q')`, stated with `100`, as in the book.
+`umdConst_two_le_mul`, `umdConst_le_mul_umdConst_two`, by the book's argument: for one transform `T`
+of Paley–Walsh martingales (the book: by deterministic signs; here by a predictable family of signs,
+the same for all martingales), the good-λ inequality (Lemmas 3.5.13, 3.5.14), its integration (Lemma
+3.5.15, (3.59)), Doob's inequality and the adjoint transform (Lemma 3.5.3) give (3.49) of Theorem
+3.5.4 (pp. 229–234), then the supremum over the transforms (Lemma 4.2.8) and the equality of the
+dyadic and the general constants (Theorem 4.2.5, `External.HNVW.theorem4_2_5`). The proof of (3.49)
+gives `80 (p/q + p'/q')`, stated with `100`, as in the book.
 -/
 
 @[expose] public section

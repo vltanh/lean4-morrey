@@ -13,8 +13,8 @@ is equal to `p* − 1`, both in the real and the Hilbert-space-valued case". Cas
 lines 2624–2633), where the only source he names is "see also" his own paper *Martingales, laminates
 and minimal Korn inequalities* (arXiv:2512.02784; J. Math. Pures Appl. 213 (2026)), whose Theorem
 2.3 quotes Burkholder (Ann. Probab. 12 (1984)) for the inequality, "see [Osękowski 2012] for an
-exposition", with the footnote that "no smaller constant works among martingales defined on dyadic
-trees".
+exposition", and says that it is sharp: "no smaller constant works among martingales defined on
+dyadic trees such that `‖dX_i‖ = ‖dY_i‖`".
 
 ## Main results
 
@@ -26,6 +26,11 @@ On the sign cube, `1 < p < ∞`, `p* = max (p, p / (p − 1))`:
 * `exists_lt_lpNorm_transform`: for `K < p* − 1` there are a real Paley–Walsh martingale
   `f = Σ ε_k φ_k` and a transform `g = Σ σ_k ε_k φ_k` of `f` by predictable signs with
   `K ‖f‖_p < ‖g‖_p`, the form that Corollary 6.3 uses.
+
+The signs are predictable, as in Cassese's Definition 2.5. The book's `±1`-transforms are by a
+deterministic sequence of signs, and in the dyadic case (Haar series) by one sign for each Haar
+function; on the sign cube, a coefficient and a sign for each Haar function are a predictable `φ_k`
+and a predictable `σ_k`.
 
 ## The proof
 

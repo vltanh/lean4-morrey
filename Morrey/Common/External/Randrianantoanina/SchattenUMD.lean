@@ -28,10 +28,12 @@ Proof: in the package `BanachProbability` (`lean4-banach-probability`),
 `L^∞ (Ω) ⊗ M_n (ℝ)` of matrix-valued functions on a filtered probability space, with the conditional
 expectations entry by entry: Cuculescu's projections and the weak type `(1, 1)` of martingale
 transforms (Theorem 3.1, with a rank count in place of Lemma 3.2's generalized singular values, and
-the constant `52` in place of `14√3/3 + 28`), Marcinkiewicz interpolation and duality (Theorem 4.3,
-whose step "by interpolation" is carried out in three regimes so that the constant stays uniform
-near `q = 2`), the Hermitian dilation for non-symmetric matrices, and extrapolation to the exponent
-`2` (Remark 4.6 (1); HNVW I, Theorem 4.2.7, in place of the theorem of Pisier it quotes).
+the constant `26` in (3.2), for positive `x`, and `52` in general; the source's value in (3.2) is
+`inf {24 α⁻¹ β⁻² + 2 (1 − α)⁻¹ : α, β ∈ (0, 1)}`, printed as `14√3/3 + 28`, a slip for `26 + 8√3`),
+Marcinkiewicz interpolation and duality (Theorem 4.3, whose step "by interpolation" is carried out
+in three regimes so that the constant stays uniform near `q = 2`), the Hermitian dilation for
+non-symmetric matrices, and extrapolation to the exponent `2` (Remark 4.6 (1); HNVW I, Theorem
+4.2.7, in place of the theorem of Pisier it quotes).
 -/
 
 @[expose] public section

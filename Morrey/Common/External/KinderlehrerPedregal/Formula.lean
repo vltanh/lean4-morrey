@@ -22,13 +22,16 @@ itself, the paper's statement, is not written there; it follows (a gap fill):
 * `f^# ≤ f^{qc}`: by (i) it is enough to treat the cube, where `f^#` is `≡ −∞` or, by (iii) and
   (iv), a continuous quasiconvex minorant of `f`.
 
-The steps, as in the source: (i) by Vitali's covering theorem, with copies of the domain, and gluing
+The steps of the source: (i) by Vitali's covering theorem, with copies of the domain, and gluing
 (this needs `|∂D| = 0` for the domain `D` whose copies are used, which is not stated in the
 proposition and holds for the ball and the cube); (ii) by laminates on a cube with a face orthogonal
 to the rank-one direction, cut off near its boundary, with independent test maps on the slabs; (iii)
-by the Lipschitz bound of Lemma 2.1; (iv) by gluing near-minimisers on the pieces of a piecewise
-affine map, as in Step 6 of the source's Proposition 7.2, and density. (B. Dacorogna, J. Funct.
-Anal. 46 (1982), has the formula on a hypercube for integrands with `a ≤ f ≤ b + c |F|^p`.)
+is "easy to check" in the source, and supplied here (`−∞` spreads along rank-one paths, and a finite
+rank-one convex function is locally Lipschitz, Lemma 2.1); (iv) by the technique of Step 6 of the
+proof of the source's Proposition 7.2, to which it refers (gluing near-minimisers on the pieces of a
+piecewise affine map), with the approximation by piecewise affine maps, which it does not prove. (B.
+Dacorogna, J. Funct. Anal. 46 (1982), has the formula on a hypercube for integrands with
+`a ≤ f ≤ b + c |F|^p`.)
 -/
 
 @[expose] public section

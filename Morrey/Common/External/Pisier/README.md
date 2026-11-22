@@ -3,7 +3,7 @@
 **Source.** G. Pisier, *Martingales in Banach Spaces*, Cambridge Studies in Advanced Mathematics
 155, Cambridge University Press 2016, Corollary 5.22. The book was read in its open draft,
 *Martingales in Banach spaces (in connection with type and cotype)*, the IHP course notes of 2011,
-where the result is Corollary 8.19, proved "by Fubini".
+where the result is Corollary 8.19, proved by Fubini's theorem.
 
 **Statement used by Cassese.** Proposition 2.7 (3) (TeX lines 835–836): for every measure space
 `(Ω, Σ, μ)` and `p ∈ (1, ∞)`, `L^p (Ω, Σ, μ)` is a UMD space. It is used for `ℓ_q`: "by
@@ -18,15 +18,20 @@ general filtrations):
 - `External.Pisier.corollary5_22_vector`: `UMD_p (L^p (μ; B)) ≤ UMD_p (B)` for every measure `μ`,
   real Banach space `B` and `p ∈ (1, ∞)`.
 
-**Proof.** `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le`
-in the package `BanachProbability`
-([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)),
-by the dyadic form of the source's Fubini argument, which needs neither σ-finiteness nor joint
-measurability: a Paley–Walsh martingale with values in `L^p (μ; B)` takes finitely many values, so for
-`μ`-almost every `s` its evaluation at `s` is a `B`-valued Paley–Walsh martingale and the transform
-commutes with evaluation; the dyadic bound of `B` is integrated in `s`, and HNVW I, Theorem 4.2.5 (dyadic UMD equals UMD) passes to
-general filtrations. For `B = ℂ`, the real Hilbert space `ℝ²`, the constant is `p* − 1` (Osękowski
-2012, Theorem 3.5). The package's source contains no `sorry`.
+**Proof.** `BanachProbability.umdConst_Lp_complex_lt_top` and `BanachProbability.umdConst_Lp_le` in the
+package `BanachProbability`
+([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)), by the dyadic form of
+the source's Fubini argument, which needs neither σ-finiteness nor joint measurability: a Paley–Walsh
+martingale with values in `L^p (μ; B)` takes finitely many values, so for `μ`-almost every `s` its
+evaluation at `s` is a `B`-valued Paley–Walsh martingale and the transform commutes with evaluation; the
+dyadic bound of `B` is integrated in `s`, and HNVW I, Theorem 4.2.5 (dyadic UMD equals UMD) passes to
+general filtrations. For `B = ℂ`, the real Hilbert space `ℝ²`, the constant is at most `p* − 1`
+(Osękowski 2012, Theorem 3.5). The package's source contains no `sorry`.
+
+**Constants.** `UMD_p (B)`, as in the source (Fubini); only finiteness is used.
+
+**Differences from the source.** The source applies Fubini's theorem to general martingales; here the
+passage through Paley–Walsh martingales, and back by HNVW I, Theorem 4.2.5, is added.
 
 **Who uses it.** Cassese's `PisierLpUMD`
 ([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)) is derived from

@@ -24,13 +24,13 @@ complex half of Proposition 2.7 (6) (Proposition 3.7, TeX lines 857–869):
 The predictable multipliers are Cassese's: Yaroslavtsev's constants `β^A_{p,X}` are for
 deterministic multipliers with values in a set `A ⊂ 𝕂`, and Lemma 3.2 is `β^{{−1,1}}_{p,X} ≤
 β^D_{p,X} = β_{p,X} ≤ (π / 2) β^{{−1,1}}_{p,X}`, `D` the closed unit disc; the two kinds of
-multipliers have the same constants (HNVW I, Theorem 4.2.25). Proposition 3.7 is for any `A` and
-without `U (0, 0) = 0`, and says that the smallest admissible `β` is `β^A_{p,X}`; the set used is
-`A = D`.
+multipliers have the same constants (HNVW I, Theorem 4.2.25). Proposition 3.7 is for a convex,
+bounded, closed `A` with at least two points (the assumption of §3.2) and without `U (0, 0) = 0`,
+and says that the smallest admissible `β` is `β^A_{p,X}`; the set used is `A = D`.
 
 Proofs: in the package `BanachProbability` (`lean4-banach-probability`). Lemma 3.2 gives no proof:
 it is "proven in" T. Hytönen, J. van Neerven, M. Veraar, L. Weis, *Analysis in Banach Spaces. Volume
-I* (HNVW I, 2016; read), Proposition 4.2.10 (pp. 285–286), whose argument is followed
+I* (HNVW I, 2016; read), Proposition 4.2.10 (p. 286), whose argument is followed
 (`BanachProbability.umdConst_le_complexUMDConst_le`): real signs are unimodular, and complex numbers
 `α_1, …, α_n` of modulus at most one are `(π / 2) Σ_j λ^{(j)} ε^{(j)}` with `ε^{(j)} ∈ {±1}^n` and
 `Σ_j |λ^{(j)}| ≤ 1` (Proposition 3.2.14, by Hahn–Banach and `∫₀¹ |cos (2π (s + t))| dt = 2/π`); the

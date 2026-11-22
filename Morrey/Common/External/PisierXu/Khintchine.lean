@@ -13,8 +13,8 @@ as Proposition 6.3 (TeX lines 2297–2311): for `q ∈ [2, ∞)` and normal matr
 x_i x_iᵀ)^{1/2}‖_{S_q} ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≲ √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`. The
 Handbook chapter (read, p. 1486) states the theorem for semifinite von Neumann algebras and
 `1 ≤ p < ∞`: for `p ≥ 2`, (6.4), the lower bound with constant `1` and the upper bound with a
-constant `B_p` that depends only on `p`, for the larger of the row and the column square function;
-by its Remark (i), `B_p` "is of order `√p` … (cf. [G. Pisier, Astérisque 247 (1998), p. 106])". For
+constant `B'_p` that depends only on `p`, for the larger of the row and the column square function;
+by its Remark (i), `B'_p` "is of order `√p` … (cf. [G. Pisier, Astérisque 247 (1998), p. 106])". For
 normal `x_i` the two square functions agree.
 
 Stated for real square matrices, with `‖(Σ y_i)^{1/2}‖_{S_q} = ‖Σ y_i‖_{S_{q/2}}^{1/2}` for the
@@ -29,16 +29,15 @@ positive semidefinite `Σ y_i`:
 Proof: in the package `BanachProbability` (`lean4-banach-probability`),
 `BanachProbability.ncKhintchine_lower_row`, `ncKhintchine_lower_col`, `ncKhintchine_upper` and
 `pisierXu_khintchine`. The Handbook chapter gives no proof (p. 1486): it refers to Lust-Piquard 1986
-(Schatten classes) and Lust-Piquard–Pisier 1991, and to Astérisque 247 for the order of `B_p`. The
-proof here is not theirs for the upper bound, which is
-proved by the method of exchangeable pairs of L. Mackey, M. I. Jordan, R. Y. Chen, B. Farrell,
-J. A. Tropp, *Matrix concentration inequalities via the method of exchangeable pairs*, Ann.
-Probab. 42 (2014) (arXiv:1201.6002), §7 (the matrix Khintchine inequality, Corollary 7.3 and
-Remark 7.2, for symmetric matrices; the variant of the mean value trace inequality that Remark 7.2
-needs, which the source does not prove, is proved in the package) and §8 (the Hermitian dilation
-for general square matrices). The lower bound is the standard convexity argument
-(`E [Yᵀ Y] = Σ x_iᵀ x_i` and the convexity of `‖·‖_{S_{q/2}}`), as in Lust-Piquard–Pisier 1991,
-(I.5)–(I.7).
+(Schatten classes) and Lust-Piquard–Pisier 1991, and to Astérisque 247 for the order of `B'_p`. The
+proof here is not theirs for the upper bound, which is proved by the method of exchangeable pairs of
+L. Mackey, M. I. Jordan, R. Y. Chen, B. Farrell, J. A. Tropp, *Matrix concentration inequalities via
+the method of exchangeable pairs*, Ann. Probab. 42 (2014) (arXiv:1201.6002), §7 (the matrix
+Khintchine inequality, Corollary 7.3 and Remark 7.2, for symmetric matrices; the variant of the mean
+value trace inequality that Remark 7.2 needs, which the source does not prove, is proved in the
+package) and §8 (the Hermitian dilation for general square matrices). The lower bound is the
+standard convexity argument (`E [Sᵀ S] = Σ x_iᵀ x_i` for `S = Σ ε_i x_i`, and the convexity of
+`‖·‖_{S_{q/2}}`), as in Lust-Piquard–Pisier 1991, (I.5)–(I.7).
 -/
 
 @[expose] public section

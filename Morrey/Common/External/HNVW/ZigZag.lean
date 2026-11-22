@@ -21,8 +21,8 @@ it with multipliers in `[−1, 1]` instead of signs).
 * `External.HNVW.theorem4_5_6`: both assertions of Proposition 2.7 (6), for a real Banach space and
   `p ∈ (1, ∞)` (`BanachProbability.IsZigZagConcave`);
 * `External.HNVW.theorem4_5_6_isLeast`: the book's final clause, with the book's functions
-  (`BanachProbability.IsSignZigZagConcave`), for `X ≠ 0` (for `X = 0` every `β` is possible, and
-  `UMD_p (X) = 0` with the constants used here).
+  (`BanachProbability.IsSignZigZagConcave`) and with the attainment that its proof gives, for
+  `X ≠ 0` (for `X = 0` every `β` is possible, and `UMD_p (X) = 0` with the constants used here).
 
 Proof: in the package `BanachProbability` (`lean4-banach-probability`),
 `BanachProbability.umdConst_lt_top_iff_exists_isZigZagConcave`, `umdConst_le_of_isZigZagConcave` and

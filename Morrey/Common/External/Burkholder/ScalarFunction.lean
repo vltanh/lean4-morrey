@@ -12,8 +12,8 @@ Lévy, Astérisque 157–158 (1988) (read: Numdam), (1.6), (1.10) and Remark 1.2
 proof of Theorem 1.1, "or [V. Vasyunin and A. Volberg 2010] for an alternative proof" (not used).
 Cassese uses two properties of `u (a, b) = α (|b| − 5 |a|) (|a| + |b|)^5`, `α = 6 (5/6)^5`, for
 complex `a`, `b` (the proof of Proposition 4.2, (13) and (14)): the proposition
-`ScalarFunction`, proved by `scalarFunction_holds`. Remark 4.5 extends the argument to
-`1 < p < ∞`, `p + 2 < q < ∞`; it needs the same two properties of
+`ScalarFunction`, proved by `scalarFunction_holds`. Remark 4.5 says that the argument extends to
+`1 < p < ∞`, `p + 2 < q < ∞`; the extension needs the same two properties of
 `u_q (a, b) = α_q (|b| − (q − 1) |a|) (|a| + |b|)^{q−1}`, `α_q = q (1 − 1/q)^{q−1}`
 (`ScalarFunctionQ q`), proved for every real `q ≥ 2` by `scalarFunctionQ_holds`. `uq_six`
 identifies `u_6` with `u6`.
@@ -26,11 +26,11 @@ subordinate position). (13) is `burkholderFun_ge`, `u_q ≥ |b|^q − (q − 1)^
 `burkholderFun_concaveOn_line` with the directions `h` and `ε h`, `|ε h| ≤ |h|`. (13) is
 Burkholder's (1.10), proved in the package by his argument: the elementary inequality (1.11) by the
 convexity and concavity of `log ((p − 1)^{p−1} / p^{p−2})`, then, by homogeneity on `|a| + |b| = 1`,
-the concave and convex pieces of his function `F`. (14) is his Remark 1.2, (1.17), which the paper
-states without proof; the package completes it from the paper's own steps: the concavity in the
-proof of (1.12), by (1.14) (the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` on
-lines along which neither coordinate vanishes), and, for the other lines, the shift of the proof of
-(1.8) by a vector orthogonal to `ℂ` in `ℂ ⊕ ℝ`, letting the shift tend to `0`.
+the concave and convex pieces of his function `F`. (14) is his Remark 1.2, (1.17), which his paper
+states without proof; the package completes it from its own steps: the concavity in the proof of
+(1.12), by (1.14) (the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` on lines along
+which neither coordinate vanishes), and, for the other lines, the shift of the proof of (1.8) by a
+vector orthogonal to `ℂ` in `ℂ ⊕ ℝ`, letting the shift tend to `0`.
 -/
 
 @[expose] public section
@@ -54,10 +54,10 @@ def ScalarFunction : Prop :=
 /-! ### Burkholder's function for a real exponent `q ≥ 2`
 
 The same two properties for `u_q (a, b) = α_q (|b| − (q − 1) |a|) (|a| + |b|)^{q−1}`,
-`α_q = q (1 − 1/q)^{q−1}`, and every real `q ≥ 2` (Burkholder 1988; Remark 4.5 of Cassese
-uses them for `q = p + 3`). For `q < 2` the formula is not Burkholder's function (his function for
-`1 < q < 2` has the constant `1/(q − 1)` in place of `q − 1`), and (13) fails there:
-`u_q (0, b) = α_q |b|^q` with `α_q < 1` for `q` near `1`. -/
+`α_q = q (1 − 1/q)^{q−1}`, and every real `q ≥ 2` (Burkholder 1988; Remark 4.5 of Cassese extends
+the argument to `q > p + 2`, and `Cassese.theorem1_2_elementary` takes `q = p + 3`). For `q < 2` the
+formula is not Burkholder's function (his function for `1 < q < 2` has the constant `1/(q − 1)` in
+place of `q − 1`), and (13) fails there: `u_q (0, b) = α_q |b|^q` with `α_q < 1` for `q` near `1`. -/
 
 /-- `α_q = q (1 − 1/q)^{q−1}`. -/
 noncomputable def alphaQ (q : ℝ) : ℝ := q * (1 - 1 / q) ^ (q - 1)
