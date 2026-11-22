@@ -1199,10 +1199,10 @@ for every rank-one Rademacher martingale `M` in `ℝ^{d×d}` started at `0`, wit
 constants; with `q ≈ log d`, `C^{rc} (S_∞^{d×d}, 2) ≲ d^{1/4} log³ d`. The proof uses
 Proposition 2.7 (2) (Randrianantoanina), Proposition 2.8 (decoupling), Proposition 6.3
 (non-commutative Khintchine) and the hypercontractive Kahane–Khintchine bound
-`k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`, Borell's), which gives the
-constants of Proposition 6.4 that the tracking of the constants needs (inventory E27: the paper
-names no source for it), all proved (`Morrey/Cassese/Hypotheses.lean`); it uses only that bound,
-not `KahaneKhintchine` itself.
+`k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`, part of HNVW II, Theorem 6.2.4,
+which Proposition 6.4 cites), the bound on the constants of Proposition 6.4 that the tracking of the
+constants needs (inventory E27: Proposition 6.4 leaves it out), all proved
+(`Morrey/Cassese/Hypotheses.lean`); it uses only that bound, not `KahaneKhintchine` itself.
 
 Proof (the paper's: "tracking the constants in the proof", TeX lines 2425–2437): the bound of
 the proof of Proposition 6.2 (`square_skew_le_sym_two`) with `UMD₂ (S_q) ≤ C_R (q* − 1) ≤ C_R q`
@@ -1751,8 +1751,8 @@ theorem proposition6_5_finite :
 `p ∈ (1, ∞)` there is `C_p` with `C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for every `d ≥ 2`;
 the proof gives `α = 3`. The proof uses Propositions 2.7 (1), (2), 2.8, 6.3, Theorem 2.3 (2) and
 the hypercontractive Kahane–Khintchine bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
-(`KahaneKhintchineHypercontractive`, Borell's), which gives the constants of Proposition 6.4
-polynomial in `q` that this case needs (inventory E27), all proved
+(`KahaneKhintchineHypercontractive`, part of HNVW II, Theorem 6.2.4), which makes the constants of
+Proposition 6.4 polynomial in `q`, as this case needs (inventory E27), all proved
 (`Morrey/Cassese/Hypotheses.lean`).
 
 Reading of the statement. The paper's "`C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for some

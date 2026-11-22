@@ -57,7 +57,6 @@ import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
-import all Morrey.Common.External.Borell.Hypercontractivity
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.CoxVeraar.Decoupling
 import all Morrey.Common.External.Dacorogna.Minors
@@ -176,14 +175,16 @@ meta def externalResults : List (String × Name) :=
    -- Cassese, Sections 2, 4, 6: the cited results proved in `Morrey/Common/External` from the
    -- package `BanachProbability`
    ("HNVW I Thm 4.2.7, extrapolation (Cassese Prop 2.7 (1))", ``External.HNVW.theorem4_2_7),
+   ("HNVW I Thm 4.2.7, extrapolation, general exponents", ``External.HNVW.theorem4_2_7_general),
    ("Randrianantoanina Cor 4.5 (Cassese Prop 2.7 (2))", ``External.Randrianantoanina.corollary4_5),
    ("Randrianantoanina Cor 4.5, Rem 4.6 (1) (Cassese Prop 2.7 (2))",
     ``External.Randrianantoanina.remark4_6),
    ("Pisier Cor 5.22 (Cassese Prop 2.7 (3))", ``External.Pisier.corollary5_22),
    ("Pisier Cor 5.22, vector-valued", ``External.Pisier.corollary5_22_vector),
-   ("HNVW I Thm 4.2.5, Maurey (Cassese Prop 2.7 (4))", ``External.HNVW.theorem4_2_5),
+   ("HNVW I Thm 4.2.5, dyadic UMD (Cassese Prop 2.7 (4))", ``External.HNVW.theorem4_2_5),
    ("Yaroslavtsev Lemma 3.2 (Cassese Prop 2.7 (5))", ``External.Yaroslavtsev.lemma3_2),
    ("HNVW I Thm 4.5.6, zig-zag (Cassese Prop 2.7 (6))", ``External.HNVW.theorem4_5_6),
+   ("HNVW I Thm 4.5.6, zig-zag, the least constant", ``External.HNVW.theorem4_5_6_isLeast),
    ("Yaroslavtsev Prop 3.7, complex zig-zag (Cassese Prop 2.7 (6))",
     ``External.Yaroslavtsev.proposition3_7),
    ("Cox–Veraar decoupling (Cassese Prop 2.8)", ``External.CoxVeraar.decoupling),
@@ -193,11 +194,8 @@ meta def externalResults : List (String × Name) :=
    ("HNVW II Thm 6.2.4, Kahane–Khintchine (Cassese Prop 6.4)",
     ``External.HNVW.theorem6_2_4_seminorm),
    ("HNVW II Thm 6.2.4, normed spaces", ``External.HNVW.theorem6_2_4),
-   ("Borell, hypercontractive Kahane–Khintchine (Cassese Remark 6.3, Prop 6.5 at q = ∞)",
-    ``External.Borell.kahaneKhintchine_hypercontractive),
-   ("Borell, hypercontractivity of affine Rademacher sums",
-    ``External.Borell.hypercontractive_affine),
-   ("Sharpness of Burkholder's constant (Cassese Cor 6.3)", ``Cassese.burkholderSharpness_holds),
+   ("HNVW II Thm 6.2.4, the constant (Cassese Remark 6.3, Prop 6.5 at q = ∞)",
+    ``External.HNVW.theorem6_2_4_hypercontractive),
    -- Cassese, Section 7: the cited results proved in `Morrey/Common/External` from the package
    -- `HarmonicAnalysis`
    ("HNVW I Cor 5.7.6, transference (Cassese Prop 7.2)", ``External.HNVW.transference_beurlingPow),

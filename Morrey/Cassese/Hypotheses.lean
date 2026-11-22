@@ -13,7 +13,6 @@ public import Morrey.Common.External.Pisier.LpUMD
 public import Morrey.Common.External.Yaroslavtsev.ComplexUMD
 public import Morrey.Common.External.Randrianantoanina.SchattenUMD
 public import Morrey.Common.External.PisierXu.Khintchine
-public import Morrey.Common.External.Borell.Hypercontractivity
 
 /-!
 # Cassese, arXiv:2608.03488v3: the cited results, stated in the paper's terms and proved
@@ -41,12 +40,14 @@ Section 2 (Theorem 2.3, Propositions 2.7, 2.8):
 * Proposition 2.8 (`cs-prop2.8`): `coxVeraarDecoupling_holds : CoxVeraarDecoupling` (Cox–Veraar
   2007; HNVW I, Proposition 4.2.3).
 
-Section 6 (Propositions 6.3, 6.4, and the growth of the constants of 6.4 that Remark 6.3 and
-Proposition 6.5 at `q = ∞` use, inventory E27):
+Section 6 (Propositions 6.3, 6.4, and the bound on the constants of 6.4 that Remark 6.3 and
+Proposition 6.5 at `q = ∞` use; the paper's Proposition 6.4 leaves it out, and the theorem that it
+cites states it, inventory E27):
 
 * `pisierXuKhintchine_holds : PisierXuKhintchine` (Pisier–Xu 2003, Theorem 6.1);
 * `kahaneKhintchine_holds : KahaneKhintchine` (HNVW II, Theorem 6.2.4);
-* `kahaneKhintchineHypercontractive_holds : KahaneKhintchineHypercontractive` (Borell 1979).
+* `kahaneKhintchineHypercontractive_holds : KahaneKhintchineHypercontractive` (HNVW II,
+  Theorem 6.2.4).
 
 Section 7 (the Beurling–Ahlfors transform): `hnvwTransference_holds : HNVWTransference` (HNVW I,
 Corollary 5.7.6), `dragicevicLowerBound_holds : DragicevicLowerBound` and
@@ -162,7 +163,7 @@ theorem pStar_eq_harmonicAnalysis (p : ℝ) : pStar p = HarmonicAnalysis.pStar p
 
 /-- Transference (proof of Proposition 7.2, citing HNVW I, Corollary 5.7.6):
 `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`, `p ∈ (1, ∞)`. From
-`External.HNVW.transference_beurlingPow`, de Leeuw's argument. -/
+`External.HNVW.transference_beurlingPow`, HNVW's argument. -/
 theorem hnvwTransference_holds : HNVWTransference := by
   intro k p _ hp
   rw [beurlingPowNorm_eq_harmonicAnalysis, torusBeurlingPowNorm_eq_harmonicAnalysis]
@@ -444,8 +445,8 @@ def PisierLpUMD : Prop :=
 
 /-- **Proposition 2.7 (4)** (`prop:umd`), citing HNVW I, Theorem 4.2.5: restricting (4) to dyadic
 martingales gives the same optimal constant, `UMD_p^{dyad} (X) = UMD_p (X)`. Used only in
-Remark 4.1 (no proof uses it). Proved by `hnvwDyadicUMD_holds`, from `External.HNVW.theorem4_2_5`
-(Maurey's theorem). -/
+Remark 4.1 (no proof uses it). Proved by `hnvwDyadicUMD_holds`, from
+`External.HNVW.theorem4_2_5`. -/
 def HNVWDyadicUMD : Prop :=
   ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
     dyadicUMDConst X p = umdConst X p
@@ -523,7 +524,7 @@ theorem pisierLpUMD_holds : PisierLpUMD := by
   exact External.Pisier.corollary5_22 μ p hp hpt
 
 /-- **Proposition 2.7 (4)** (`prop:umd`), HNVW I, Theorem 4.2.5: `UMD_p^{dyad} = UMD_p`. From
-`External.HNVW.theorem4_2_5` (Maurey's theorem). -/
+`External.HNVW.theorem4_2_5`. -/
 theorem hnvwDyadicUMD_holds : HNVWDyadicUMD := by
   intro X _ _ _ p hp
   exact External.HNVW.theorem4_2_5 hp
@@ -592,13 +593,14 @@ def PisierXuKhintchine : Prop :=
             (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
           C * √q * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
 
-/-- **Proposition 6.4** (`cs-prop6.4`), Kahane–Khintchine, citing HNVW, *Analysis in Banach
-spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)` there are constants
-`k_{p,q}` such that for every Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher
-`ε_i`, `k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
-statement, with no bound on the constants: the hypercontractive bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
-that Remark 6.3 and the case `q = ∞` of Proposition 6.5 need is the separate proposition
-`KahaneKhintchineHypercontractive`, used only by the proofs that need it.
+/-- **Proposition 6.4** (`cs-prop6.4`), Kahane–Khintchine, citing HNVW, *Analysis in Banach spaces
+II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)` there are constants `k_{p,q}`
+such that for every Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher `ε_i`,
+`k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
+statement, with no bound on the constants: the bound `k_{q,p} ≤ √((q − 1)/(p − 1))` of the cited
+theorem, which the paper leaves out and which Remark 6.3 and the case `q = ∞` of Proposition 6.5
+need, is the separate proposition `KahaneKhintchineHypercontractive`, used only by the proofs that
+need it.
 
 Generality. It is stated for any seminorm `nrm` on a real vector space `E` (the hypotheses on
 `nrm` are the triangle inequality and absolute homogeneity, which give `nrm ≥ 0`), not only for
@@ -615,8 +617,9 @@ def KahaneKhintchine : Prop :=
           lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             κ p q * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
 
-/-- The hypercontractive Kahane–Khintchine inequality: for `1 < p ≤ q < ∞`, every seminorm `nrm`
-on a real vector space `E` and `x₁, …, x_n ∈ E`,
+/-- The Kahane–Khintchine inequality with the constant of the cited theorem, HNVW II, Theorem 6.2.4
+(`κ_{q,p} ≤ √((q − 1) / (p − 1))` for real signs): for `1 < p ≤ q < ∞`, every seminorm `nrm` on a
+real vector space `E` and `x₁, …, x_n ∈ E`,
 `‖Σ ε_i x_i‖_{L^q} ≤ √((q − 1) / (p − 1)) ‖Σ ε_i x_i‖_{L^p}`, that is,
 `k_{q,p} ≤ √((q − 1) / (p − 1))` in Proposition 6.4 (`KahaneKhintchine`).
 
@@ -624,13 +627,11 @@ How the paper uses it. The paper's Proposition 6.4 names only constants `k_{p,q}
 to Remark 6.3 (TeX lines 2425–2437) and to the case `q = ∞` of Proposition 6.5 (TeX lines
 2477–2479: "all the implied multiplicative constants in the above inequalities are at most
 polynomial in `q`") uses (31) (TeX lines 2322–2328) with constants that grow at most polynomially
-in `q`, which needs `k_{q,p}` to. The paper names no source for this growth. The form stated is
-the standard hypercontractive bound for Banach-valued Rademacher sums, Borell's (C. Borell, *On the
-integrability of Banach space valued Walsh polynomials*, Séminaire de Probabilités XIII, 1979),
-from the hypercontractivity of the Rademacher semigroup. Proved by
-`kahaneKhintchineHypercontractive_holds`, from `External.Borell.kahaneKhintchine_hypercontractive`;
-used by the proofs of `remark6_3`, `proposition6_5_infty` and `proposition6_5` only (through their
-helpers `square_eq31_two`, `square_eq31_q`). As `KahaneKhintchine`, it is stated for seminorms. -/
+in `q`, which needs `k_{q,p}` to (inventory E27). The theorem that Proposition 6.4 cites says so.
+Proved by `kahaneKhintchineHypercontractive_holds`, from
+`External.HNVW.theorem6_2_4_hypercontractive`; used by the proofs of `remark6_3`,
+`proposition6_5_infty` and `proposition6_5` only (through their helpers `square_eq31_two`,
+`square_eq31_q`). As `KahaneKhintchine`, it is stated for seminorms. -/
 def KahaneKhintchineHypercontractive : Prop :=
   ∀ p q : ℝ, 1 < p → p ≤ q →
     ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
@@ -662,10 +663,11 @@ theorem kahaneKhintchine_holds : KahaneKhintchine := by
   rw [inv_mul_le_iff₀ (BanachProbability.kahaneKhintchineConst_pos q p)]
   exact External.HNVW.theorem6_2_4_seminorm (seminormOf nrm h1 h2) hq hp x
 
-/-- The hypercontractive Kahane–Khintchine bound `k_{q,p} ≤ √((q − 1) / (p − 1))`, `1 < p ≤ q`,
-for every seminorm (inventory E27). From `External.Borell.kahaneKhintchine_hypercontractive`. -/
+/-- The bound `k_{q,p} ≤ √((q − 1) / (p − 1))`, `1 < p ≤ q`, on the constants of Kahane–Khintchine,
+for every seminorm (HNVW II, Theorem 6.2.4; inventory E27). From
+`External.HNVW.theorem6_2_4_hypercontractive`. -/
 theorem kahaneKhintchineHypercontractive_holds : KahaneKhintchineHypercontractive := by
   intro p q hp hpq E _ _ nrm h1 h2 n x
-  exact External.Borell.kahaneKhintchine_hypercontractive (seminormOf nrm h1 h2) hp hpq x
+  exact External.HNVW.theorem6_2_4_hypercontractive (seminormOf nrm h1 h2) hp hpq x
 
 end Cassese
