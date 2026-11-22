@@ -1756,10 +1756,10 @@ the hypercontractive Kahane–Khintchine bound `k_{q,p} ≤ √((q − 1)/(p −
 polynomial in `q` that this case needs (inventory E27), all proved
 (`Morrey/Cassese/Hypotheses.lean`).
 
-Statement change. The paper's "`C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for some
-`α > 0`" was formalized with `α` depending on `p` (`∀ p, ∃ α`); it is now stated uniformly
-(`∃ α, ∀ p`), a strengthening that covers both readings, since the proof gives `α = 3` for every
-`p`.
+Reading of the statement. The paper's "`C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for some
+`α > 0`" does not say whether `α` may depend on `p`. The statement takes one `α` for every `p`
+(`∃ α, ∀ p`), which implies the reading with `α` depending on `p` (`∀ p, ∃ α`); the proof gives
+`α = 3` for every `p`.
 
 Proof (the paper's, TeX lines 2448–2480): "the same norm-comparison and optimisation argument as
 in Remark 6.3": the constants are polynomial in `q` (`UMD_p (S_q) ≤ 100 p* C_R q`, and (31) at `p`

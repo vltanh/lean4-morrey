@@ -52,8 +52,8 @@ Section 7 (the Beurling–Ahlfors transform): `hnvwTransference_holds : HNVWTran
 Corollary 5.7.6), `dragicevicLowerBound_holds : DragicevicLowerBound` and
 `dragicevicL4Bound_holds : DragicevicL4Bound` (Dragičević 2011, Theorem 1.1).
 
-Earlier each of them was a hypothesis of the statements that use it; they left the shared block of
-`Morrey/Cassese/Defs.lean`, which the Challenge copies, when no statement took them any more.
+Since no statement takes them as hypotheses, they are defined here, outside the shared block of
+`Morrey/Cassese/Defs.lean` that the Challenge copies.
 
 Bridges to the packages. The definitions of `Morrey/Cassese/Defs.lean` and `Toolkit.lean` that
 the propositions use are the package `BanachProbability`'s, definitionally (`pStar`, `coin`,
