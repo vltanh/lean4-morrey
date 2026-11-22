@@ -427,7 +427,7 @@ as the paper states them.
 | Result | Hypothesis that the proof does not use | Lean |
 | --- | --- | --- |
 | Section 5.1: `q` is rank-one convex on `𝓛` (`cs-q-rc`) | `A ∈ 𝓛`: only the direction `R` must lie in `𝓛` | kept (`quarticQ_rankOneConvexOn_calL`) |
-| Lemma 5.1 (2) | the evenness of `f`: "`p`-homogeneous" means `f(tX) = \|t\|^p f(X)` for every real `t` (lines 158–163), and the proof uses it only for `t > 0`. Remark 5.2 applies the lemma to Šverák's `−rst`, which is only positively homogeneous, so it needs this | kept (`lemma5_1_part2`). A copy of its proof with positive homogeneity only, in a scratch file outside the library, compiles against the library |
+| Lemma 5.1 (2) | the evenness of `f`: "`p`-homogeneous" means `f(tX) = \|t\|^p f(X)` for every real `t` (lines 158–163), and the proof uses it only for `t > 0`. Remark 5.2 applies the lemma to Šverák's `−rst`, which is only positively homogeneous, so it needs this | kept (`lemma5_1_part2`), as the paper states it |
 | Corollary 6.3, upper bound | `d ≥ 2` | kept (`corollary6_3_upper`) |
 | Proposition 2.3 | the homogeneity in (a); the homogeneity and `p > 1` in (b), (c) | kept |
 | Section 1.3: monotonicity of the homogeneous problem | `1 < p` | kept (`homMorreyPositive_mono`) |
