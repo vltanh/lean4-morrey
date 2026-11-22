@@ -56,7 +56,6 @@ import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
-import all Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
 import all Morrey.Common.External.Burkholder.Inequality
 import all Morrey.Common.External.Burkholder.ScalarFunction
