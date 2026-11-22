@@ -37,12 +37,16 @@ homogeneous of degree `0`) and `transference_beurlingPow`, `m (ξ) = (ξ̄ / ξ)
 inaccessible source. From `BanachProbability` (`lean4-banach-probability`, required by path at
 `../lean4-banach-probability` while it is developed): Theorem 4.2.7 from
 `umdConst_lt_top_of_lt_top`, `umdConst_two_le_mul`, `umdConst_le_mul_umdConst_two`, by Burkholder's
-good-λ method (Ann. Probab. 1 (1973), 9 (1981)) on Paley–Walsh martingales and Maurey's theorem;
+good-λ method (Ann. Probab. 1 (1973), 9 (1981); both open access on Project Euclid but not obtained,
+the site refusing automated download), in the form of Pisier's 2011 IHP course notes (Lemma 8.20,
+second proof of Theorem 8.12), on Paley–Walsh martingales and Maurey's theorem;
 Theorem 4.2.5 from `dyadicUMDConst_eq_umdConst`, by Maurey's argument as in Pisier 2016 (read
 in its open draft, the 2011 IHP course notes, Lemmas 8.29–8.31, Theorem 8.32); Theorem 4.5.6 from
 `umdConst_lt_top_iff_exists_isZigZagConcave`, `umdConst_le_of_isZigZagConcave`, by Burkholder's
-argument (1981, 1984; a Bellman function for the converse); Theorem 6.2.4 from
-`kahaneKhintchine`, by hypercontractivity ([`../Borell`](../Borell)). Corollary 5.7.6 from the
+argument (Ann. Probab. 9 (1981), 12 (1984), not obtained, as above; the standard argument:
+midpoint concavity integrated along Paley–Walsh martingales, and a Bellman function for the
+converse); Theorem 6.2.4 from `kahaneKhintchine`, by hypercontractivity, Borell's proof
+(Séminaire de Probabilités XIII (1979), read; [`../Borell`](../Borell)). Corollary 5.7.6 from the
 package `HarmonicAnalysis` (by path; `multiplierNorm_le_torusMultiplierNorm`,
 `beurlingPowNorm_le_torusBeurlingPowNorm`), by de Leeuw's argument (*On `L_p` multipliers*, Ann. of
 Math. 81 (1965), 364–379). Neither package's source contains a `sorry`.

@@ -8,7 +8,8 @@ public import BanachProbability.Martingale.Burkholder.Function
 # Burkholder's function for the exponent `6`, and for a real exponent `q ≥ 2`
 
 D. L. Burkholder, *Sharp inequalities for martingales and stochastic integrals*, Colloque Paul
-Lévy, Astérisque 157–158 (1988), proof of Theorem 1.1 (see also V. Vasyunin and A. Volberg 2010).
+Lévy, Astérisque 157–158 (1988) (read: Numdam), (1.6), (1.10) and Remark 1.2 (see also
+V. Vasyunin and A. Volberg 2010).
 Cassese uses two properties of `u (a, b) = α (|b| − 5 |a|) (|a| + |b|)^5`, `α = 6 (5/6)^5`, for
 complex `a`, `b` (the proof of Proposition 4.2, (13) and (14)): the proposition
 `ScalarFunction`, proved by `scalarFunction_holds`. Remark 4.5 extends the argument to
@@ -22,11 +23,14 @@ Proof: from the package `BanachProbability` (`lean4-banach-probability`, require
 package's `BanachProbability.Burkholder.burkholderFun q` on the real inner product space `ℂ`
 (`uq_eq_burkholderFun`), Burkholder's function in Burkholder's notation (`a` the dominating, `b`
 the subordinate position). (13) is `burkholderFun_ge`, `u_q ≥ |b|^q − (q − 1)^q |a|^q`, and (14)
-is `burkholderFun_concaveOn_line` with the directions `h` and `ε h`, `|ε h| ≤ |h|`: the package
-proves both by Burkholder's argument, the first by the sign of `∂_s (U − V)` on either side of its
-zero, the second from the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` off the
-(at most two) points where `a + t h` or `b + t k` vanishes, the concave pieces being glued there
-through their one-sided derivatives.
+is `burkholderFun_concaveOn_line` with the directions `h` and `ε h`, `|ε h| ≤ |h|`. (13) is
+Burkholder's (1.10), proved in the package by his argument: the elementary inequality (1.11) by
+the convexity and concavity of `log ((p − 1)^{p−1} / p^{p−2})`, then, by homogeneity on
+`|a| + |b| = 1`, the concave and convex pieces of his function `F`. (14) is his Remark 1.2,
+(1.17), which the paper states without proof; the package completes it from the paper's own steps:
+the proof of (1.12)–(1.14) (the sign of the second derivative of `t ↦ u_q (a + t h, b + t k)` on
+lines along which neither coordinate vanishes), and, for the other lines, the shift of the proof
+of (1.8) by a vector orthogonal to `ℂ` in `ℂ ⊕ ℝ`, letting the shift tend to `0`.
 -/
 
 @[expose] public section
@@ -50,7 +54,7 @@ def ScalarFunction : Prop :=
 /-! ### Burkholder's function for a real exponent `q ≥ 2`
 
 The same two properties for `u_q (a, b) = α_q (|b| − (q − 1) |a|) (|a| + |b|)^{q−1}`,
-`α_q = q (1 − 1/q)^{q−1}`, and every real `q ≥ 2` (Burkholder 1984, 1988; Remark 4.5 of Cassese
+`α_q = q (1 − 1/q)^{q−1}`, and every real `q ≥ 2` (Burkholder 1988; Remark 4.5 of Cassese
 uses them for `q = p + 3`). For `q < 2` the formula is not Burkholder's function (his function for
 `1 < q < 2` has the constant `1/(q − 1)` in place of `q − 1`), and (13) fails there:
 `u_q (0, b) = α_q |b|^q` with `α_q < 1` for `q` near `1`. -/
@@ -63,7 +67,7 @@ noncomputable def alphaQ (q : ℝ) : ℝ := q * (1 - 1 / q) ^ (q - 1)
 noncomputable def uq (q : ℝ) (a b : ℂ) : ℝ :=
   alphaQ q * (‖b‖ - (q - 1) * ‖a‖) * (‖a‖ + ‖b‖) ^ (q - 1)
 
-/-- **Equations (13), (14)** for the exponent `q` (Burkholder 1988, proof of Theorem 1.1):
+/-- **Equations (13), (14)** for the exponent `q` (Burkholder 1988, (1.10) and (1.17)):
 `u_q (a, b) ≥ |b|^q − (q − 1)^q |a|^q`, and `t ↦ u_q (a + t h, b + t ε h)` is concave for all
 complex `a`, `b`, `h` and `|ε| ≤ 1`. Proved for `q ≥ 2` in `scalarFunctionQ_holds`. -/
 def ScalarFunctionQ (q : ℝ) : Prop :=
@@ -110,7 +114,8 @@ theorem uq_eq_burkholderFun {q : ℝ} (hq : 2 ≤ q) (a b : ℂ) :
 /-- **Equations (13), (14) for a real exponent `q ≥ 2`** (Remark 4.5): Burkholder's function
 `u_q`. (The paper states them for `q = 6`, `scalarFunction_holds`.)
 
-Proof: Burkholder's argument (Burkholder 1988, proof of Theorem 1.1), in the package: for `q ≥ 2`,
+Proof: Burkholder's argument (Burkholder 1988, (1.10); (1.17) completed from (1.12)–(1.14) and the
+shift of the proof of (1.8)), in the package: for `q ≥ 2`,
 `u_q = burkholderFun q` (`uq_eq_burkholderFun`); (13) is
 `BanachProbability.Burkholder.burkholderFun_ge` with `p* = q`, and (14) is
 `BanachProbability.Burkholder.burkholderFun_concaveOn_line` for the directions `h` and `ε h`, since
@@ -132,7 +137,7 @@ theorem scalarFunctionQ_holds {q : ℝ} (hq : 2 ≤ q) : ScalarFunctionQ q := by
 /-- **Equations (13), (14)** (`eq:scalar-properties`, `eq:scalar-zigzag`), Burkholder's function
 for the exponent `6`.
 
-Proof: the case `q = 6` of `scalarFunctionQ_holds` (Burkholder 1988, proof of Theorem 1.1), with
+Proof: the case `q = 6` of `scalarFunctionQ_holds` (Burkholder 1988, (1.10) and (1.17)), with
 `u_6 = u6` (`uq_six`). -/
 theorem scalarFunction_holds : ScalarFunction := by
   obtain ⟨h13, h14⟩ := scalarFunctionQ_holds (q := 6) (by norm_num)

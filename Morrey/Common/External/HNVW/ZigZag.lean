@@ -18,11 +18,13 @@ half (`β ≥ UMD_{ℂ,p} (X)`) is Yaroslavtsev's Proposition 3.7 (`External.Yar
 
 Proof: in the package `BanachProbability` (`lean4-banach-probability`, required by path while it
 is developed), `BanachProbability.umdConst_lt_top_iff_exists_isZigZagConcave` and
-`umdConst_le_of_isZigZagConcave`. The source being inaccessible, the argument is Burkholder's
-(D. L. Burkholder, *A geometrical characterization of Banach spaces in which martingale difference
-sequences are unconditional*, Ann. Probab. 9 (1981); *Boundary value problems and sharp
-inequalities for martingale transforms*, Ann. Probab. 12 (1984)): for the bound, midpoint
-concavity along the zig-zag lines integrated along a Paley–Walsh martingale on the sign cube, then
+`umdConst_le_of_isZigZagConcave`. The source being inaccessible, the argument is the standard
+one, Burkholder's (D. L. Burkholder, *A geometrical characterization of Banach spaces in which
+martingale difference sequences are unconditional*, Ann. Probab. 9 (1981); *Boundary value
+problems and sharp inequalities for martingale transforms*, Ann. Probab. 12 (1984); both open
+access on Project Euclid but not obtained, the site refusing automated download): for the bound,
+midpoint concavity along the zig-zag lines integrated along a Paley–Walsh martingale on the sign
+cube, then
 Maurey's theorem; for the converse, the Bellman function
 `U (x, y) = sup E [‖y + g‖^p − β^p ‖x + f‖^p]` over Paley–Walsh pairs with predictable multipliers
 in `[−1, 1]`, `β > UMD_p (X)`, which is zig-zag concave by splicing and the Bernstein–Doetsch

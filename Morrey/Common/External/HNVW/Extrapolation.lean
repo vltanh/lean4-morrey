@@ -20,7 +20,8 @@ is developed), `BanachProbability.umdConst_lt_top_of_lt_top`, `umdConst_two_le_m
 `umdConst_le_mul_umdConst_two`. The source being inaccessible, the argument is Burkholder's good-λ
 method (D. L. Burkholder, *Distribution function inequalities for martingales*, Ann. Probab. 1
 (1973); *A geometrical characterization of Banach spaces in which martingale difference sequences
-are unconditional*, Ann. Probab. 9 (1981); for dyadic martingales, the second proof of the
+are unconditional*, Ann. Probab. 9 (1981); both open access on Project Euclid but not obtained, the
+site refusing automated download; for dyadic martingales, the second proof of the
 extrapolation theorem in Pisier, *Martingales in Banach spaces* (2016)), run on Paley–Walsh
 martingales, then lifted to general filtrations by Maurey's theorem (HNVW I, Theorem 4.2.5,
 `External.HNVW.theorem4_2_5`). It gives the constants `76 p` (`p ≥ 2`), `48 p'` (`p < 2`) and

@@ -20,9 +20,10 @@ statement is the one Cassese quotes, for `p, q ∈ (1, ∞)`.
 
 Proof: `BanachProbability.kahaneKhintchine` in the package `BanachProbability`
 (`lean4-banach-probability`, required by path while it is developed). The source being
-inaccessible, the argument is hypercontractivity (Bonami's two-point inequality as in
-R. O'Donnell, *Analysis of Boolean Functions* (2014), §10.1, carried to seminormed spaces by the
-triangle inequality and tensorised, C. Borell 1979; `External.Borell`): for `p ≤ q`,
+inaccessible, the argument is hypercontractivity, by the proof of C. Borell, *On the integrability
+of Banach space valued Walsh polynomials*, Séminaire de Probabilités XIII (1979), §2 (read;
+`External.Borell`: the two-point inequality, tensorised by the Segal lemma and carried to
+seminormed spaces by the positivity of the kernel): for `p ≤ q`,
 `‖·‖_{L^p} ≤ ‖·‖_{L^q}` (monotonicity of `L^p` norms); for `p > q`,
 `‖·‖_{L^p} ≤ √((p − 1) / (q − 1)) ‖·‖_{L^q}` (hypercontractivity). Not Kahane's original argument
 through Lévy's inequality, which gives no growth rate of the constants.

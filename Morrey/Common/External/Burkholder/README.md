@@ -1,10 +1,13 @@
 # Burkholder: sharp martingale inequalities and his scalar functions
 
-**Sources.** D. L. Burkholder, *Boundary value problems and sharp inequalities for martingale
-transforms*, Ann. Probab. 12 (1984); D. L. Burkholder, *Sharp inequalities for martingales and
-stochastic integrals*, Astérisque 157–158 (1988), proof of Theorem 1.1;
-A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2012, Theorems 3.5 and
-8.6.
+**Sources.** D. L. Burkholder, *Sharp inequalities for martingales and stochastic integrals*,
+Astérisque 157–158 (1988), 75–94 (read: Numdam,
+https://www.numdam.org/item/AST_1988__157-158__75_0/), Theorem 1.1 with (1.6), (1.10), (1.11),
+Remark 1.2, and Theorem 3.1. Cassese also cites D. L. Burkholder, *Boundary value problems and sharp inequalities for martingale transforms*, Ann.
+Probab. 12 (1984), open access on Project Euclid but not obtained (the site refused automated
+download), and A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2012,
+Theorems 3.5 and 8.6, not obtained. Burkholder 1988 proves the two inequalities Cassese quotes,
+for Hilbert-space-valued martingales, and its arguments are the ones followed.
 
 **Statements used by Cassese.**
 
@@ -33,17 +36,24 @@ A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2
   space `ℂ`, `u_q = burkholderFun q` for `q ≥ 2`, `uq_eq_burkholderFun`): (13) is
   `burkholderFun_ge`, (14) is `burkholderFun_concaveOn_line`; `u = u_6` (`uq_six`).
 
-**Proofs.** The package's proof follows Burkholder's method step by step: the special function
-`U ≥ V` with the zig-zag concavity property, integrated along the martingale, so that
-`E V (X_n, Y_n) ≤ E U (X_n, Y_n) ≤ U (0, 0) = 0`; at the kinks of `t ↦ U (x + t h, y + t k)`,
-where `x + t h = 0 ≠ h` or `y + t k = 0 ≠ k`, the concave pieces are glued through their one-sided
-derivatives. The square function inequality comes from (1) applied to `X` and the `ℓ²`-valued
-martingale `Σ_k dX_k e_k`, each differentially subordinate to the other, with `H^{n+1}` in place of
-`ℓ²(H)` (`n` is fixed). The separability of `H` is not used. (13) and (14) are the two
-properties of the special function in this method, `U ≥ V` and the concavity of
-`t ↦ U (x + t h, y + t k)` along lines, with the roles of the two arguments exchanged (Burkholder's
-`u (x, y)` has `x` dominating, the package's `U (x, y)` has `x` subordinate). Osękowski's book was
-not consulted. The package's source contains no `sorry`.
+**Proofs.** The package follows Burkholder 1988 step by step. Theorem 1.1 (proof, §1): (1.11),
+`(p − 1)^{p−1} / p^{p−2}` is `≤ 1` on `(1, 2]` and `≥ 1` on `[2, ∞)`, by the convexity of its
+logarithm on `[1, 2]`, its concavity on `[2, ∞)` and its growth; (1.10), `V ≤ U`, by homogeneity
+and the concave and convex pieces of Burkholder's function `F` on `[0, 1]`; (1.12), on lines along
+which neither coordinate vanishes, from the sign of the second derivative (1.14); (1.8),
+`E U (X_{k+1}, Y_{k+1}) ≤ E U (X_k, Y_k)`, by shifting both martingales by a vector orthogonal to
+`H` in `H ⊕ ℝ` (Burkholder's "enlarge `H` slightly"), integrating (1.12) (the martingale property
+removes the linear terms, (1.15)) and letting the shift tend to `0` by dominated convergence; so
+`E V (X_n, Y_n) ≤ E U (X_n, Y_n) ≤ U (0, 0) = 0`. Theorem 3.1 (proof, §3): Theorem 1.1 applied to
+the `ℓ²_H`-valued martingales `(X_m, 0, …)` and `(dX_1, …, dX_m, 0, …)`, each differentially
+subordinate to the other, in their subspace `H^{n+1}` (`n` is fixed). The separability of `H` is
+not used. (13) is (1.10), and (14) is Remark 1.2, (1.17), both with the roles of the two arguments
+exchanged (Burkholder's `u (x, y)` has `x` dominating, the package's `U (x, y)` has `x`
+subordinate). Remark 1.2 is stated in the paper without proof (a gap of the source); it is completed
+from the paper's own steps, (1.12)–(1.14) on the lines along which neither coordinate vanishes and,
+for the other lines, the shift of the proof of (1.8) with the shift tending to `0`. The equality
+cases and the sharpness of the constants are not formalized. The package's source contains no
+`sorry`.
 
 **Who uses them.** Cassese's Theorem 2.3 is stated in the paper's terms in
 [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean) (`burkholderInequality_holds`,
