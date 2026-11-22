@@ -27,10 +27,15 @@ with the Pochhammer symbol `(a)_n = a (a + 1) ⋯ (a + n − 1)`. Cassese uses t
 * `External.Dragicevic.theorem1_1_two_pStar`: `κ₂ (p*) ≤ ‖𝓑²‖_p` for every `p ∈ (1, ∞)`, from the
   two: for `p < 2`, `‖𝓑²‖_p = ‖𝓑²‖_q` and `q = p* > 2`.
 
-Departure from the source, in the package's proof: Dragičević's test functions
-`z² |z|^{−2α} g (|z|)` are not Schwartz functions, and the norm of `𝓑²` is a supremum over Schwartz
-functions; their smoothed versions at `α = 1/p` are used
-(`HarmonicAnalysis.BeurlingAhlfors.testFunction`).
+The package derives the theorem by the source's argument, from statements some of which are still
+proved with `sorry` (its audit lists them), with the source's test functions
+`f_{2,α} (z) = z² |z|^{−2α} g₂ (|z|)` (`HarmonicAnalysis.BeurlingAhlfors.testFun`). The norm of
+`𝓑²` is a supremum over Schwartz functions, which `f_{2,α}` is not; `f_{2,α} ∈ W^{2,p}` (lecture
+notes, Exercise 4.1) is approximated by Schwartz functions
+(`HarmonicAnalysis.BeurlingAhlfors.exists_schwartz_tendsto_testFun`), and the density statement
+`HarmonicAnalysis.div_le_beurlingPowNorm_of_tendsto` carries `‖∂²f‖_p ≤ ‖𝓑²‖_p ‖∂̄²f‖_p` over to
+it, as the lecture notes do (§4.1, after Exercise 4.1; the hint of Exercise 2.19 is "first
+consider smooth `h` and then approximate").
 -/
 
 @[expose] public section

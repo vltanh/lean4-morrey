@@ -32,17 +32,21 @@ lines 2895–2900), `‖𝓑²‖₄ ≥ 21/5 = κ₂ (4)`. For `p < 2` the sour
 The norms are suprema over Schwartz functions (`HarmonicAnalysis.beurlingPowNorm`). General `n`
 is not formalized; Cassese uses only `n = 2`.
 
-**Proof.** In the package `HarmonicAnalysis` (`lean4-harmonic-analysis`, required by path while it is developed)
-(`HarmonicAnalysis.beurlingKappa_two_le_beurlingPowNorm_two`,
+**Proof.** In the package `HarmonicAnalysis` (`lean4-harmonic-analysis`, required by path while
+it is developed: `HarmonicAnalysis.beurlingKappa_two_le_beurlingPowNorm_two`,
 `HarmonicAnalysis.beurlingPowNorm_conjExponent`), by the source's argument (lecture notes,
-Proposition 4.2): `𝓑² (∂̄² F) = ∂² F` (Exercise 2.19), explicit radial integrals of `|∂² F|^p` and
-`|∂̄² F|^p` over the unit disc, a bounded contribution outside it, and the limit of the ratio.
-Departure from the source, forced by the representation: the source's test functions
-`z² |z|^{−2α} g (|z|)`, `α < 1/p`, are not Schwartz functions, and `‖𝓑²‖_p` is a supremum over
-Schwartz functions, so the proof uses `z² (|z|² + ε²)^{−1/p} σ (|z|²)` with a smooth cutoff `σ`,
-at the critical exponent `α = 1/p`, and lets `ε → 0` instead of `α → 1/p` (Cassese mentions
-"standard smoothing arguments", TeX line 2908). The duality is proved as in
-Carbonaro–Dragičević–Kovač §1.3.1, for Fourier multipliers with bounded symbols.
+Proposition 4.2), with its test functions `f_{2,α} (z) = z² |z|^{−2α} g₂ (|z|)`, `g₂ = 1` on
+`[0, 1]`, `g₂ (x) = exp (−(x − 1)²)` for `x > 1`, `0 < α < 1/p`: `𝓑² (∂̄² f) = ∂² f` (§4.1, after
+Exercise 4.1; Exercise 2.19 for `𝓑`), the explicit integrals of `|∂² f|^p` and `|∂̄² f|^p` over
+the unit disc, a bounded contribution outside it, and the limit `α → 1/p`. Since `‖𝓑²‖_p` is a
+supremum over Schwartz functions and `f_{2,α}` is not one, `f_{2,α} ∈ W^{2,p}` (Exercise 4.1) is
+approximated by Schwartz functions, and a density statement
+(`HarmonicAnalysis.div_le_beurlingPowNorm_of_tendsto`) carries `‖∂² f‖_p ≤ ‖𝓑²‖_p ‖∂̄² f‖_p`
+over to it, as the hint of Exercise 2.19 does ("first consider smooth `h` and then approximate").
+There is no departure from the source's test functions. The duality follows
+Carbonaro–Dragičević–Kovač §1.3.1, for Fourier multipliers with bounded symbols. Some of the
+package's statements are still proved with `sorry`; its audit lists them, and the project's audit
+reports `sorryAx` for the results here until they are proved.
 
 **Who uses it.** Cassese's `DragicevicLowerBound`
 ([`Morrey/Cassese/Defs.lean`](../../../Cassese/Defs.lean)) and `DragicevicL4Bound`
