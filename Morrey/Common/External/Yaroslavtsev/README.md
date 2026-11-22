@@ -18,7 +18,7 @@ L. Weis, *Analysis in Banach Spaces. Volume I*, Springer 2016 (HNVW I; read), Pr
 - Proposition 2.7 (6), the complex half, Proposition 3.7 with HNVW I, Theorem 4.5.6 (TeX lines
   857–869): `X` is `UMD` if and only if there is `U` with `U (0, 0) = 0`,
   `U (x, y) ≥ ‖y‖^p − β^p ‖x‖^p` and `z ↦ U (x + z, y + ε z)` concave for every `ε` in the closed unit
-  disc; then `β ≥ UMD_{ℂ,p} (X)`. Yaroslavtsev states it for multipliers in a convex, bounded, closed
+  disc; then `β ≥ UMD_p (X)` and `β ≥ UMD_{ℂ,p} (X)`. Yaroslavtsev states it for multipliers in a convex, bounded, closed
   set `A ⊂ 𝕂` with at least two points (the assumption of his §3.2), without `U (0, 0) = 0`, and adds that
   the smallest admissible `β` is the constant; the case used is the closed unit disc.
 
@@ -54,8 +54,8 @@ and the martingales start at `0`, so the term `v_0 f_0` of HNVW's transforms van
 
 **Who uses it.** In [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean),
 Cassese's `YaroslavtsevComplexUMD` is derived from `lemma3_2` by
-`Cassese.yaroslavtsevComplexUMD_holds`, and the complex half of `HNVWZigZag` (the bound) from
-`proposition3_7` by `Cassese.hnvwZigZag_holds` (with `External.HNVW.theorem4_5_6`). The first is used by
-`Cassese.umdEllq_lt_top` (`UMD_{ℂ,p} (ℓ_q) < ∞`) in the paper's proof of Theorem 1.2
-(`Cassese.theorem1_2`), which does not take it as a hypothesis; the second is used by no proof, nor is
-`proposition3_7_iff`.
+`Cassese.yaroslavtsevComplexUMD_holds`, and the complex half of `HNVWZigZag` (the equivalence, with
+`UMD_p (X)` of `X` as a real space, and the two bounds) from `proposition3_7_iff`, `proposition3_7` and
+`lemma3_2` by `Cassese.hnvwZigZag_holds`. The first is used by `Cassese.umdEllq_lt_top`
+(`UMD_{ℂ,p} (ℓ_q) < ∞`) in the paper's proof of Theorem 1.2 (`Cassese.theorem1_2`), which does not take it
+as a hypothesis; the second is used by no proof.

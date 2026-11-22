@@ -465,19 +465,25 @@ def YaroslavtsevComplexUMD : Prop :=
 
 /-- **Proposition 2.7 (6)** (`prop:umd`), citing HNVW I, Theorem 4.5.6, and Yaroslavtsev,
 Proposition 3.7: a Banach space `X` is `UMD_p` if and only if there is a zig-zag concave `U` for
-some `β > 0`; then `β ≥ UMD_p (X)`, and `β ≥ UMD_{ℂ,p} (X)` when `X` is complex and `U` is
-zig-zag concave in the complex sense. (For a complex `X`, only this bound is stated here; the
-equivalence, with `ε` in the unit disc, is `External.Yaroslavtsev.proposition3_7_iff`.) Not used in
-any proof. Proved by `hnvwZigZag_holds`,
-from `External.HNVW.theorem4_5_6` and `External.Yaroslavtsev.proposition3_7`. -/
+some `β > 0`; then `β ≥ UMD_p (X)` and, if `X` is complex, `β ≥ UMD_{ℂ,p} (X)`. For a real `X`
+zig-zag concavity is for `ε ∈ [−1, 1]` (`IsZigZagConcave`); for a complex `X` the paper (footnote to
+the item) takes `ε` in the unit disc (`IsComplexZigZagConcave`), and "`UMD_p`" is, as in Definition
+2.5, for real signs, that is, for `X` as a real space. Not used in any proof. Proved by
+`hnvwZigZag_holds`, from `External.HNVW.theorem4_5_6` (real) and, for the complex case, from
+`External.Yaroslavtsev.proposition3_7_iff`, `proposition3_7` and `lemma3_2` (Proposition 3.7, for
+the closed unit disc, is about `UMD_{ℂ,p}`, which Lemma 3.2, Proposition 2.7 (5), compares with
+`UMD_p`).
+
+Statement change: an earlier version had, for a complex `X`, only the bound `β ≥ UMD_{ℂ,p} (X)`. -/
 def HNVWZigZag : Prop :=
   (∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
     (umdConst X p < ⊤ ↔ ∃ β : ℝ, 0 < β ∧ ∃ U : X → X → ℝ, IsZigZagConcave p β U) ∧
     ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsZigZagConcave p β U →
       umdConst X p ≤ ENNReal.ofReal β) ∧
   ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
+    (umdConst X p < ⊤ ↔ ∃ β : ℝ, 0 < β ∧ ∃ U : X → X → ℝ, IsComplexZigZagConcave p β U) ∧
     ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsComplexZigZagConcave p β U →
-      complexUMDConst X p ≤ ENNReal.ofReal β
+      umdConst X p ≤ ENNReal.ofReal β ∧ complexUMDConst X p ≤ ENNReal.ofReal β
 
 /-- **Proposition 2.8** (`cs-prop2.8`), decoupling, citing Cox–Veraar, Electron. Commun. Probab.
 12 (2007), and HNVW I, Proposition 4.2.3: for a Banach space `(E, nrm)`, `p ∈ (1, ∞)` and a
@@ -542,10 +548,18 @@ theorem yaroslavtsevComplexUMD_holds : YaroslavtsevComplexUMD := by
 
 /-- **Proposition 2.7 (6)** (`prop:umd`), HNVW I, Theorem 4.5.6, and Yaroslavtsev (2018),
 Proposition 3.7: the characterisation of `UMD_p` by zig-zag concave functions. From
-`External.HNVW.theorem4_5_6` (real) and `External.Yaroslavtsev.proposition3_7` (complex). -/
-theorem hnvwZigZag_holds : HNVWZigZag :=
-  ⟨fun _X _ _ _ _p hp => External.HNVW.theorem4_5_6 hp,
-    fun _X _ _ _ _p hp _β _U hβ hU => External.Yaroslavtsev.proposition3_7 hp hβ hU⟩
+`External.HNVW.theorem4_5_6` (real) and, for a complex `X`,
+`External.Yaroslavtsev.proposition3_7_iff` and `proposition3_7`, with
+`UMD_p (X) ≤ UMD_{ℂ,p} (X) ≤ (π / 2) UMD_p (X)` (`External.Yaroslavtsev.lemma3_2`), so that the two
+constants are finite together. -/
+theorem hnvwZigZag_holds : HNVWZigZag := by
+  refine ⟨fun _X _ _ _ _p hp => External.HNVW.theorem4_5_6 hp, fun X _ _ _ p hp => ?_⟩
+  obtain ⟨h1, h2⟩ := External.Yaroslavtsev.lemma3_2 (X := X) hp
+  refine ⟨?_, fun β U hβ hU => ?_⟩
+  · exact Iff.trans ⟨fun h => h2.trans_lt (ENNReal.mul_lt_top ENNReal.ofReal_lt_top h),
+      fun h => h1.trans_lt h⟩ (External.Yaroslavtsev.proposition3_7_iff hp)
+  · have h := External.Yaroslavtsev.proposition3_7 hp hβ hU
+    exact ⟨h1.trans h, h⟩
 
 /-- **Proposition 2.8** (`cs-prop2.8`), decoupling (Cox–Veraar 2007; HNVW I, Proposition 4.2.3),
 for every Banach space `(E, nrm)`. From `External.CoxVeraar.decoupling` for `Renormed E nrm`
