@@ -84,7 +84,7 @@ E31–E33).
 | Burkholder's square function inequality (Theorem 2.3 (2)) | Prop 6.5 | Osękowski 2012, Thm 8.6 | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1224) |
 | Burkholder's functions `u₆` and `u_q`, (13), (14) | Prop 4.2, Theorem 1.2 by Remark 4.5 | Burkholder 1988 | [`External.Burkholder.scalarFunction_holds`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean#L249), `scalarFunctionQ_holds` |
 | the sharpness of `p* − 1` for dyadic `±1`-transforms | Cor 6.3, lower bound | "see also [Cassese 2025]" (Burkholder 1984) | [`burkholderSharpness_holds`](../../Morrey/Cassese/Square/Sharpness.lean#L878) |
-| the bound `C^{rc} ≤ (p* − 1) sup ‖Q‖/‖P_ρ‖` | Prop 7.1 | "the results of [Cassese 2025]" | from Burkholder's inequality ([`proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L333)) |
+| the bound `C^{rc} ≤ (p* − 1) sup ‖Q‖/‖P_ρ‖` | Prop 7.1 | "the results of [Cassese 2025]" | from Burkholder's inequality ([`proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L324)) |
 | a rank-one convex function is locally Lipschitz (Lemma 2.1) | the envelopes, Cor 1.6 | Rindler 2018, Lemma 5.6 | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84) |
 | quasiconvexity: rank-one convexity, domains, periodic test maps (Lemma 2.2) | Prop 2.3, the thresholds, the lifting | Rindler, Props 5.1, 5.3; Dacorogna 2008, Props 5.11, 5.13 | `External.Rindler.*` |
 | the rank-one convex envelope by prelaminates (Prop 2.1) | Prop 2.3, Prop 5.1 | Pedregal 1993, §4; Dacorogna 2008, Thm 6.10 | [`proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L779), through Prop 2.4 (the route of Remark 2.1) |
@@ -108,8 +108,8 @@ Lemma 2.1 and Prop 2.2; the paper does not.
 ### Assumed: named hypotheses
 
 Each is a hypothesis of exactly the statements whose proofs use it, under its source's name. Most
-are defined in [`Morrey/Cassese/Defs.lean`](../../Morrey/Cassese/Defs.lean); [`DragicevicL4Bound`](../../Morrey/Cassese/FourByTwo.lean#L109) is
-in `FourByTwo.lean`, and [`HNVWDyadicUMD`](../../Morrey/Cassese/Toolkit.lean#L1980), [`HNVWZigZag`](../../Morrey/Cassese/Toolkit.lean#L2003) in `Toolkit.lean`.
+are defined in [`Morrey/Cassese/Defs.lean`](../../Morrey/Cassese/Defs.lean); [`DragicevicL4Bound`](../../Morrey/Cassese/Hypotheses.lean#L106) is
+in `Hypotheses.lean`, and [`HNVWDyadicUMD`](../../Morrey/Cassese/Toolkit.lean#L1980), [`HNVWZigZag`](../../Morrey/Cassese/Toolkit.lean#L2003) in `Toolkit.lean`.
 
 | Hypothesis | Source | Used by (numbered results) | What Lean lacks |
 | --- | --- | --- | --- |
@@ -122,7 +122,7 @@ in `FourByTwo.lean`, and [`HNVWDyadicUMD`](../../Morrey/Cassese/Toolkit.lean#L19
 | [`KahaneKhintchine`](../../palomar/Cassese/Challenge.lean#L439) | HNVW II, Thm 6.2.4 (the paper's Prop 6.4) | eq (31), Props 6.2, 6.5 ([`proposition6_5_finite`](../../Morrey/Cassese/Square.lean#L1726)), Cor 6.1, [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2117) | Khintchine inequalities |
 | [`KahaneKhintchineHypercontractive`](../../Morrey/Cassese/Defs.lean#L422) | the hypercontractive bound `κ_{q,p} ≤ √((q − 1)/(p − 1))`, standard (not consulted; no source in the paper, E27) | Remark 6.3, Prop 6.5 ([`proposition6_5_infty`](../../Morrey/Cassese/Square.lean#L1774)) | hypercontractivity |
 | [`HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454) | HNVW I, Cor 5.7.6 | Prop 7.2 (lower bound), Thm 7.1, Cor 7.2, [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2203), [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2251) | transference of multipliers |
-| [`DragicevicLowerBound`](../../palomar/Cassese/Challenge.lean#L460), [`DragicevicL4Bound`](../../Morrey/Cassese/FourByTwo.lean#L109) | Dragičević 2011, Thm 1.1 | Thm 7.1, [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2203), [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2251); Cor 7.2 | `L^p` bounds of the Beurling–Ahlfors transform |
+| [`DragicevicLowerBound`](../../palomar/Cassese/Challenge.lean#L460), [`DragicevicL4Bound`](../../Morrey/Cassese/Hypotheses.lean#L106) | Dragičević 2011, Thm 1.1 | Thm 7.1, [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2203), [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2251); Cor 7.2 | `L^p` bounds of the Beurling–Ahlfors transform |
 
 Both Kahane–Khintchine hypotheses are stated for any seminorm on a real vector space, more
 generally than the Banach-space source; the docstrings justify it (pass to the normed quotient;
@@ -301,8 +301,8 @@ appears there as the named hypothesis of the statement.
 | Section 2.1 (consequences of Prop 2.3) | [`Cassese.nowhereQuasiconvex_of_not_quasiconvexAt_zero`](../../Morrey/Cassese/Toolkit.lean#L1682) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1544), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L393) |
 | Prop 2.4 | [`Cassese.proposition2_4`](../../Morrey/Cassese/Toolkit.lean#L761) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84) |
 | Prop 2.5 | [`Cassese.proposition2_5`](../../Morrey/Cassese/Toolkit.lean#L1934) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84) |
-| Thm 2.3 (1) (Burkholder, cited) | [`Cassese.burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L65) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050) |
-| Thm 2.3 (2) (Burkholder, cited) | [`Cassese.burkholderSquareFunction_holds`](../../Morrey/Cassese/Hypotheses.lean#L74) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1224) |
+| Thm 2.3 (1) (Burkholder, cited) | [`Cassese.burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L84) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050) |
+| Thm 2.3 (2) (Burkholder, cited) | [`Cassese.burkholderSquareFunction_holds`](../../Morrey/Cassese/Hypotheses.lean#L93) | [`External.Burkholder.squareFunction`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1224) |
 | Prop 2.6 (Osękowski, quoted) | [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L42) | – |
 | Prop 2.7 (1) (HNVW, assumed) | [`Cassese.HNVWExtrapolation`](../../palomar/Cassese/Challenge.lean#L373) | – |
 | Prop 2.7 (2) (Randrianantoanina, assumed) | [`Cassese.RandrianantoaninaSchattenUMD`](../../palomar/Cassese/Challenge.lean#L386) | – |
@@ -361,11 +361,11 @@ appears there as the named hypothesis of the statement.
 | Cor 6.4 | [`Cassese.corollary6_4`](../../Morrey/Cassese/Square.lean#L3497) | – |
 | Cor 6.4 (not quasiconvex) | [`Cassese.corollary6_4_not_quasiconvexAt`](../../Morrey/Cassese/Square.lean#L3546) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567) |
 | Thm 1.4, p = 4 (Section 6.4) | [`Cassese.theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3608) | [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84), [`External.Rindler.quasiconvexAtOn_iff`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1544), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`External.KinderlehrerPedregal.dacorognaFormula_holds`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean#L393) |
-| Prop 7.1 | [`Cassese.proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L333) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84) |
-| Prop 7.2 | [`Cassese.proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1407) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567) |
-| Prop 7.2 (lower bound) | [`Cassese.proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1420) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454) |
-| Thm 7.1 | [`Cassese.theorem7_1`](../../Morrey/Cassese/FourByTwo.lean#L1552) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454), [`Cassese.DragicevicLowerBound`](../../palomar/Cassese/Challenge.lean#L460) |
-| Cor 7.2 | [`Cassese.corollary7_2`](../../Morrey/Cassese/FourByTwo.lean#L1893) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454), [`Cassese.DragicevicL4Bound`](../../Morrey/Cassese/FourByTwo.lean#L109) |
+| Prop 7.1 | [`Cassese.proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L324) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84) |
+| Prop 7.2 | [`Cassese.proposition7_2`](../../Morrey/Cassese/FourByTwo.lean#L1398) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567) |
+| Prop 7.2 (lower bound) | [`Cassese.proposition7_2_lower`](../../Morrey/Cassese/FourByTwo.lean#L1411) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454) |
+| Thm 7.1 | [`Cassese.theorem7_1`](../../Morrey/Cassese/FourByTwo.lean#L1543) | [`External.Burkholder.inequality`](../../Morrey/Common/External/Burkholder/Inequality.lean#L1050), [`External.Rindler.lemma5_6`](../../Morrey/Common/External/Rindler/Lemmas.lean#L84), [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454), [`Cassese.DragicevicLowerBound`](../../palomar/Cassese/Challenge.lean#L460) |
+| Cor 7.2 | [`Cassese.corollary7_2`](../../Morrey/Cassese/FourByTwo.lean#L1884) | [`External.Rindler.quasiconvexAtOn_iff_periodic`](../../Morrey/Common/External/Rindler/Lemmas.lean#L1567), [`Cassese.HNVWTransference`](../../palomar/Cassese/Challenge.lean#L454), [`Cassese.DragicevicL4Bound`](../../Morrey/Cassese/Hypotheses.lean#L106) |
 | Conjecture 1 (stated) | [`Cassese.Conjecture1`](../../Morrey/Cassese/Conclusion.lean#L18) | – |
 
 ## 9. Not formalized

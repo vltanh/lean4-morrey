@@ -100,15 +100,6 @@ noncomputable def chainOpNorm (N : ℕ) (p ρ : ℝ) : ℝ≥0∞ :=
         torusBeurlingPow (N + 1 - j.val) (c j) x) (ENNReal.ofReal p) volume /
       eLpNorm (fun x => √(∑ j, ‖trigPoly (c j) x‖ ^ 2)) (ENNReal.ofReal p) volume
 
-/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
-operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Corollary 7.2:
-`‖𝓑²‖_{L⁴ (ℝ²) → L⁴ (ℝ²)} ≥ 21 / 5`. Out of reach (class X of the inventory): a proposition with
-no proof, a hypothesis of every statement whose proof uses it. It is defined here rather than in
-`External/` because it is stated with the shared definitions of `Morrey/Cassese/Defs.lean`, like
-`DragicevicLowerBound`; the source's own formulation could not be consulted. -/
-def DragicevicL4Bound : Prop :=
-  ENNReal.ofReal (21 / 5) ≤ beurlingPowNorm 2 4
-
 /-! ### The coefficients `α_j`, `β_j`, `P_ρ`, `Q` are real-linear -/
 
 /-- `A ↦ α_j (A)` as a real-linear map. -/

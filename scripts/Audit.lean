@@ -65,6 +65,8 @@ import all Morrey.Common.External.Burkholder.Inequality
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.Dacorogna.Minors
 import all Morrey.Common.External.Dacorogna.Plancherel
+import all Morrey.Common.External.Dragicevic.LowerBound
+import all Morrey.Common.External.HNVW.Transference
 import all Morrey.Common.External.Kakutani.Theorem
 import all Morrey.Common.External.KinderlehrerPedregal.Basic
 import all Morrey.Common.External.KinderlehrerPedregal.Envelope

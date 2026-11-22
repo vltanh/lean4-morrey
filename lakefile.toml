@@ -18,6 +18,11 @@ name = "FixedPoint"
 git = "https://github.com/vltanh/lean4-fixed-point.git"
 rev = "5f650f00b1db63837a452696331a98ca886b94a8"
 
+# Developed alongside the project; to be pinned by `git` and `rev` once it is published.
+[[require]]
+name = "HarmonicAnalysis"
+path = "../lean4-harmonic-analysis"
+
 [[lean_lib]]
 name = "Common"
 globs = ["Morrey.Common.+"]
