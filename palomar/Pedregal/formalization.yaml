@@ -73,7 +73,9 @@ related_formalizations:
     note: >-
       Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
       non-quasiconvex function on 3x3 matrices, with its own definitions of rank-one convexity and
-      quasiconvexity. Not consulted for code; not a formalization of this paper.
+      quasiconvexity; not a formalization of this paper. The proofs here were written without
+      consulting it; searches and checks of 21-22 November 2026 displayed parts of it
+      (docs/Cassese/CREDITS.md), and nothing from it was used.
   - id: "palomar/Sverak in this repository"
     relationship: "other"
     note: >-

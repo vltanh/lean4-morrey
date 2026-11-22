@@ -49,12 +49,16 @@ related_formalizations:
       non-quasiconvex function on 3x3 matrices, with its own definitions. It includes adaptations
       to R^3 of parts of Šverák's argument (of the test map w, as phi(x) = (sin x1, sin x2,
       -sin(x1 + x2)), of its gradients in L and of the integral (4)) and the "only if" half of
-      Lemma 1; not Lemma 2, the Theorem or the Corollary. Not consulted.
+      Lemma 1; not Lemma 2, the Theorem or the Corollary. The proofs here were written without
+      consulting it; searches and checks of 21-22 November 2026 displayed parts of it
+      (docs/Cassese/CREDITS.md), and nothing from it was used.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-
-      Cassese's Lean formalization of results of arXiv:2608.03488 (2x m and 2x3 examples). Not
-      consulted; not a formalization of this paper.
+      Cassese's Lean formalization of results of arXiv:2608.03488 (2x m and 2x3 examples); not a
+      formalization of this paper. The proofs here were written without consulting it; searches and
+      checks of 21-22 November 2026 displayed parts of it (docs/Cassese/CREDITS.md), and nothing from
+      it was used.
   - id: "palomar/Pedregal in this repository"
     relationship: "other"
     note: >-

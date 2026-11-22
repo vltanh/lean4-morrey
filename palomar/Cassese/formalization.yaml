@@ -18,10 +18,11 @@ project:
     p, and p = 4 for d >= 588), Theorem 1.5 (4 x 2, every p != 2) and Corollary 1.6. The results
     of other works that the proofs use are proved too, in their sources' terms: Burkholder's
     inequalities and functions, UMD theory for L^p and the Schatten classes, decoupling, the
-    Kahane-Khintchine and non-commutative Khintchine inequalities, de Leeuw's transference,
-    Dragičević's lower bound for the square of the Beurling-Ahlfors transform, Dacorogna's
-    formula for the quasiconvex envelope, Kristensen's smoothing and the textbook facts of the
-    calculus of variations. They come from three Lake packages written for this project
+    Kahane-Khintchine and non-commutative Khintchine inequalities, transference for homogeneous
+    multipliers, Dragičević's lower bound for the square of the Beurling-Ahlfors transform,
+    Dacorogna's formula for the quasiconvex envelope, Kristensen's smoothing and the textbook facts
+    of the calculus of variations, by the arguments of their sources except for the upper bound of
+    the non-commutative Khintchine inequality. They come from three Lake packages written for this project
     (lean4-harmonic-analysis, lean4-banach-probability, lean4-calculus-of-variations). The paper
     is one of three on Morrey's problem formalized in this repository, each its own submission.
   authors:
@@ -62,11 +63,12 @@ sources:
     type: "book"
     relationship: "background"
     note: >-
-      Cited for Burkholder's inequality and square function inequality (Theorems 3.5, 8.6),
-      proved in Morrey/Common/External/Burkholder from lean4-banach-probability by the proofs of
-      Burkholder's Theorems 1.1 and 3.1 (Astérisque 157-158, 1988); the book was not obtained.
-      Theorem 3.24 (the paper's Proposition 2.6) is stated for context, not proved, and used by no
-      proof.
+      Read and followed. Theorems 3.5 and 8.6 (the paper's Theorem 2.3, Burkholder's inequality and
+      the square function inequality), and the sharpness of p* - 1 for dyadic martingales (Theorem
+      3.5, with Remark 3.8 and p. 138), which the paper's Corollary 6.3 uses: proved in
+      lean4-banach-probability by the book's proofs (integration method; second approach and
+      duality), with their slips repaired (Morrey/Common/External/Osekowski). Theorem 3.24 (the
+      paper's Proposition 2.6) is stated for context, not proved, and used by no proof.
   - title: "Sharp inequalities for martingales and stochastic integrals"
     authors:
       - "Donald L. Burkholder"
@@ -75,25 +77,20 @@ sources:
     location: "https://www.numdam.org/item/AST_1988__157-158__75_0/"
     relationship: "background"
     note: >-
-      Read (Numdam) and followed. Theorems 1.1 and 3.1 (the paper's Theorem 2.3 (1), (2)), in the
-      form that the paper quotes (martingales started at 0, a fixed time n), and Burkholder's
-      function with (1.10) and Remark 1.2 (the paper's (13), (14)), proved in
-      lean4-banach-probability by Burkholder's proofs (Morrey/Common/External/Burkholder).
-      Remark 1.2, stated without proof, is completed from (1.12)-(1.14) and the shift of the proof
-      of (1.8) (see fidelity). The equality cases and the sharpness are not formalized.
-  - title: "Burkholder's Annals of Probability papers (1 (1973), 9 (1981), 12 (1984))"
+      Read (Numdam) and followed for Burkholder's function, (1.10) and Remark 1.2 (the paper's (13),
+      (14)), proved in lean4-banach-probability (Morrey/Common/External/Burkholder). Remark 1.2, stated
+      without proof, is completed from (1.14) and the shift of the proof of (1.8) (see fidelity).
+  - title: "Martingales, laminates and minimal Korn inequalities"
     authors:
-      - "Donald L. Burkholder"
-    id: "Ann. Probab. 1 (1973); 9 (1981); 12 (1984)"
+      - "Gabriele Cassese"
+    id: "arXiv:2512.02784; J. Math. Pures Appl. 213 (2026)"
     type: "article"
+    location: "https://arxiv.org/abs/2512.02784"
     relationship: "background"
     note: >-
-      Open access on Project Euclid, but not obtained (the site refused automated download). The
-      good-lambda method (1973, 1981) and the zig-zag characterization (1981, 1984) are proved in
-      lean4-banach-probability by the standard arguments (Pisier's lecture notes; the Bellman
-      function); Burkholder's inequality (Theorem 2.3) by Burkholder 1988; the sharpness of p* - 1
-      (1984, and Bull. London Math. Soc. 17 (1985), not open access) by the standard extremal
-      examples, in Cassese's library.
+      Read. Cited for the sharpness of p* - 1 (its Theorem 2.3 quotes it from Burkholder, Ann. Probab.
+      12 (1984), and Osękowski 2012) and for Proposition 7.1 (its Theorem 2.1). Burkholder (1984) was
+      read and is not followed.
   - title: "Analysis in Banach Spaces, Volumes I and II"
     authors:
       - "Tuomas Hytönen"
@@ -104,11 +101,12 @@ sources:
     type: "book"
     relationship: "background"
     note: >-
-      Cited for Theorems 4.2.5, 4.2.7, 4.5.6, Proposition 4.2.3, Corollary 5.7.6 (I) and
-      Theorem 6.2.4 (II); proved in Morrey/Common/External/HNVW from the packages by named
-      arguments (Maurey's argument and Burkholder's good-lambda method as in Pisier's lecture
-      notes, de Leeuw's transference, hypercontractivity by Borell's proof), since the books were
-      not accessible.
+      Read and followed. Volume I: Theorems 4.2.5 (by the book's alternative proof, p. 334), 4.2.7 and
+      4.5.6, Proposition 4.2.3 (with Cox-Veraar), Proposition 4.2.10 and Theorem 4.2.25 (for
+      Yaroslavtsev's Lemma 3.2) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants. Proved in
+      lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
+      repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
+      probability spaces (Morrey/Common/External/HNVW).
   - title: "Non-commutative martingale transforms"
     authors:
       - "Narcisse Randrianantoanina"
@@ -116,14 +114,14 @@ sources:
     type: "article"
     location: "https://arxiv.org/abs/math/0111264"
     relationship: "background"
-    note: "Corollary 4.5 and Remark 4.6, proved in lean4-banach-probability by the source's route (Morrey/Common/External/Randrianantoanina)."
+    note: "Read (Sections 2-4). Corollary 4.5 and Remark 4.6 (1), proved in lean4-banach-probability by the source's route (Morrey/Common/External/Randrianantoanina)."
   - title: "Martingales in Banach spaces"
     authors:
       - "Gilles Pisier"
     id: "Cambridge Studies in Advanced Mathematics 155 (2016)"
     type: "book"
     relationship: "background"
-    note: "Corollary 5.22 (L^p is UMD), read in the 2011 IHP lecture notes and proved by its argument (Morrey/Common/External/Pisier); the notes also supply Maurey's theorem and extrapolation."
+    note: "Corollary 5.22 (L^p is UMD), read in the 2011 IHP lecture notes (Corollary 8.19); proved by its Fubini argument, applied to Paley-Walsh martingales, and HNVW I, Theorem 4.2.5 (Morrey/Common/External/Pisier). The book was not obtained."
   - title: "Some remarks on tangent martingale difference sequences in L^1-spaces"
     authors:
       - "Sonja Cox"
@@ -131,14 +129,14 @@ sources:
     id: "Electron. Commun. Probab. 12 (2007), 421-433"
     type: "article"
     relationship: "background"
-    note: "Decoupling (the paper's Proposition 2.8), proved by the argument Cox-Veraar credit to Montgomery-Smith (Morrey/Common/External/CoxVeraar)."
+    note: "Introduction read; it recalls decoupling (the paper's Proposition 2.8) without proof. Proved by HNVW I, Proposition 4.2.3, for Paley-Walsh martingales (Morrey/Common/External/CoxVeraar)."
   - title: "Even Fourier multipliers and martingale transforms in infinite dimensions"
     authors:
       - "Ivan Yaroslavtsev"
     id: "Indag. Math. 29 (2018), 1290-1309"
     type: "article"
     relationship: "background"
-    note: "Lemma 3.2 and Proposition 3.7 (complex UMD constants), proved in lean4-banach-probability (Morrey/Common/External/Yaroslavtsev)."
+    note: "Section 3 read. Lemma 3.2 (no proof there: HNVW I, Proposition 4.2.10) and Proposition 3.7 (complex UMD constants, for the closed unit disc), proved in lean4-banach-probability by HNVW's proofs (Morrey/Common/External/Yaroslavtsev)."
   - title: "Non-commutative L^p-spaces (Handbook of the Geometry of Banach Spaces 2)"
     authors:
       - "Gilles Pisier"
@@ -147,37 +145,19 @@ sources:
     type: "book chapter"
     relationship: "background"
     note: >-
-      Theorem 6.1 (the non-commutative Khintchine inequality, the paper's Proposition 6.3), proved
-      in lean4-banach-probability by the method of Mackey, Jordan, Chen, Farrell and Tropp, Ann.
-      Probab. 42 (2014), since the chapter and Lust-Piquard (1986) were not accessible.
-  - title: "On the integrability of Banach space valued Walsh polynomials"
+      Read. Theorem 6.1 (the non-commutative Khintchine inequality, the paper's Proposition 6.3) has no
+      proof there; the chapter refers to Lust-Piquard (1986), not obtained, and to Lust-Piquard and
+      Pisier (1991). The lower bound is proved as there; the upper bound, at present, by the method
+      of Mackey, Jordan, Chen, Farrell and Tropp, Ann. Probab. 42 (2014), a departure (see fidelity)
+      (Morrey/Common/External/PisierXu).
+  - title: "Non commutative Khintchine and Paley inequalities"
     authors:
-      - "Christer Borell"
-    id: "Séminaire de Probabilités XIII, Lecture Notes in Math. 721 (1979), 1-3"
+      - "Françoise Lust-Piquard"
+      - "Gilles Pisier"
+    id: "Ark. Mat. 29 (1991), 241-260"
     type: "article"
-    location: "https://www.numdam.org/item/SPS_1979__13__1_0/"
     relationship: "background"
-    note: >-
-      Read (Numdam) and followed. Theorem 1.1 for Walsh polynomials of degree at most 1 and the
-      largest lambda = sqrt((p - 1)/(q - 1)), which is what the paper uses: the hypercontractive
-      Kahane-Khintchine constants that Remark 6.3 and Proposition 6.5 at q = infinity need, for
-      which the paper names no source, and the Kahane-Khintchine inequality (Proposition 6.4,
-      HNVW II, Theorem 6.2.4). Proved in lean4-banach-probability by Borell's proof (Section 2:
-      the scalar two-point inequality, the Segal lemma, the positivity of his operator K-bar, and
-      its eigenvalues lambda^|alpha|), the two results he cites being proved by O'Donnell's
-      arguments (Morrey/Common/External/Borell).
-  - title: "Analysis of Boolean Functions"
-    authors:
-      - "Ryan O'Donnell"
-    id: "Cambridge University Press (2014); arXiv:2105.10386"
-    type: "book"
-    location: "https://arxiv.org/abs/2105.10386"
-    relationship: "background"
-    note: >-
-      Section 10.1 (after Janson) with Exercise 9.7, and Exercise 10.3 with Exercise 10.1: the
-      arguments used for the two results that Borell (1979) cites without proof, the scalar
-      two-point inequality (from Gross and Beckner) and the Segal lemma (from Beckner)
-      (Morrey/Common/External/Borell).
+    note: "Read. The lower bound of the non-commutative Khintchine inequality follows (I.5)-(I.7); its upper bound (Theorem III.1, Corollary III.4) is not followed at present."
   - title: "Matrix triangle inequalities: past, present, and future"
     authors:
       - "Jean-Christophe Bourin"
@@ -189,9 +169,17 @@ sources:
     note: >-
       Proposition 3.13, by the third proof of Remark 3.14 (Hermitian dilations and the convexity
       inequality (1.1), proved by Peierls's argument; q = infinity by Weyl's inequality): the
-      argument for the triangle inequality of Schatten norms, which the paper takes from Bhatia,
-      Matrix Analysis, Chapter IV (not accessible). Proved in lean4-banach-probability for real
-      m x n matrices; the source treats complex square matrices, by the same argument.
+      argument for the triangle inequality of Schatten norms, a standard fact that the paper uses
+      without a source (Bhatia, Matrix Analysis, Theorem IV.2.1, proves it by majorization). Proved in
+      lean4-banach-probability for real m x n matrices; the source treats complex square matrices,
+      by the same argument.
+  - title: "Matrix Analysis"
+    authors:
+      - "Rajendra Bhatia"
+    id: "Graduate Texts in Mathematics 169, Springer (1997)"
+    type: "book"
+    relationship: "background"
+    note: "Read (Chapters III, IV, in part). The paper's facts (1)-(3) on Schatten norms (Section 1.5), proved in Cassese's library by its arguments."
   - title: "Some remarks on the L^p estimates for powers of the Ahlfors-Beurling operator"
     authors:
       - "Oliver Dragičević"
@@ -199,20 +187,37 @@ sources:
     type: "article"
     relationship: "background"
     note: >-
-      Theorem 1.1 at n = 2, proved in lean4-harmonic-analysis by the argument of Dragičević's
-      lecture notes (arXiv:2109.04555, Proposition 4.2) with his test functions, and for p < 2 by
-      the duality of Carbonaro-Dragičević-Kovač (arXiv:2109.08369, §1.3.1); the article was not
-      accessible.
-  - title: "Variational models for microstructure and phase transitions"
+      Read and followed. Theorem 1.1 (for p > 2) at n = 2, proved in lean4-harmonic-analysis with the
+      article's test functions (Morrey/Common/External/Dragicevic); its sentence on W^{n,p}, stated
+      without proof, is replaced by what is used of it, by a density argument.
+  - title: "Sharp L^p estimates of powers of the complex Riesz transform"
     authors:
-      - "Stefan Müller"
-    id: "Lecture notes, MPI MiS Leipzig (1998)"
-    type: "lecture notes"
+      - "Andrea Carbonaro"
+      - "Oliver Dragičević"
+      - "Vjekoslav Kovač"
+    id: "Math. Ann. 386 (2023), 1081-1125; arXiv:2109.08369"
+    type: "article"
+    location: "https://arxiv.org/abs/2109.08369"
+    relationship: "background"
+    note: "Read. Section 1.3.1 (the norms of the powers of the Beurling-Ahlfors transform on L^p and on the dual space agree) gives p < 2 in the paper's Theorem 7.1."
+  - title: "Calculus of Variations"
+    authors:
+      - "Filip Rindler"
+    id: "Universitext, Springer (2018); 2nd ed., Graduate Texts in Mathematics 310 (2026)"
+    type: "book"
     relationship: "background"
     note: >-
-      The arguments used for the paper's Lemmas 2.1, 2.2 (cited from Rindler 2018 and Dacorogna
-      2008) and for Dacorogna's formula (Proposition 2.2, cited from Kinderlehrer-Pedregal 1991),
-      whose sources were not accessible; proved in lean4-calculus-of-variations.
+      The first edition, which the paper cites (Lemma 5.6, Propositions 5.1, 5.3), was not obtained; the
+      second one was read, and Lemma 5.9 (the paper's Lemma 2.1), Proposition 5.6 and Lemma 5.2 (i)
+      (Lemma 2.2) are followed in lean4-calculus-of-variations (Morrey/Common/External/Rindler).
+  - title: "Characterizations of Young measures generated by gradients"
+    authors:
+      - "David Kinderlehrer"
+      - "Pablo Pedregal"
+    id: "Arch. Rational Mech. Anal. 115 (1991), 329-365"
+    type: "article"
+    relationship: "background"
+    note: "Read and followed. Proposition 8.1, with Step 6 of Proposition 7.2 (Dacorogna's formula, the paper's Proposition 2.2), proved in lean4-calculus-of-variations (Morrey/Common/External/KinderlehrerPedregal)."
   - title: "Direct Methods in the Calculus of Variations"
     authors:
       - "Bernard Dacorogna"
@@ -220,9 +225,10 @@ sources:
     type: "book"
     relationship: "background"
     note: >-
-      Theorems 5.20 and 5.25 (i), proved in lean4-calculus-of-variations by the proofs of Conti,
-      Dolzmann, Kirchheim and Müller (J. Eur. Math. Soc. 8 (2006), Theorem 6.1) and of Morrey
-      (Pacific J. Math. 2 (1952), Lemma 5.1, Theorem 5.2); the book was not accessible.
+      Read and followed. Propositions 5.11 and 5.13 (Lemma 2.2), Theorem 5.20 with Lemma 5.24 repaired,
+      Theorem 8.35 (ii) and Theorem 5.25 (i) (Proposition 5.1), proved in lean4-calculus-of-variations
+      (Morrey/Common/External/Rindler, Morrey/Common/External/Dacorogna). Theorem 6.10, cited for
+      Proposition 2.1, is not used: the paper's second route is.
   - title: "On the non-locality of quasiconvexity"
     authors:
       - "Jan Kristensen"
@@ -236,36 +242,40 @@ related_formalizations:
   - id: "https://github.com/vltanh/lean4-harmonic-analysis"
     relationship: "builds-on"
     note: >-
-      Written for this project by the same AI system: Fourier multipliers and duality, de Leeuw's
-      transference from the torus to the plane, Poisson summation, Dragičević's lower bound for
-      the square of the Beurling-Ahlfors transform, smooth periodic Fourier series. Published;
-      lakefile.toml requires it from GitHub at commit bf215c554db9ebbb94a34d87b98e28f3d5d25a62.
+      Written for this project by the same AI system: Fourier multipliers and duality, transference
+      from the torus to the plane, Poisson summation, Dragičević's lower bound for the square of the
+      Beurling-Ahlfors transform, smooth periodic Fourier series. Published; lakefile.toml requires
+      it from GitHub at a pinned commit.
   - id: "https://github.com/vltanh/lean4-banach-probability"
     relationship: "builds-on"
     note: >-
-      Written for this project by the same AI system: Burkholder's inequality and function, UMD
-      theory (decoupling, complex constants, Maurey's theorem, extrapolation, L^p, zig-zag
-      concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, the non-commutative
-      Khintchine inequality, Randrianantoanina's non-commutative martingale transforms.
-      Published; lakefile.toml requires it from GitHub at commit
-      250cd49b069629b28dde820dabac96ba4f19c878.
+      Written for this project by the same AI system: Burkholder's inequality, its sharpness and
+      Burkholder's function, UMD theory (dyadic and complex constants, decoupling, extrapolation, L^p,
+      zig-zag concavity), Kahane-Khintchine and hypercontractivity, Schatten classes, the
+      non-commutative Khintchine inequality, Randrianantoanina's non-commutative martingale
+      transforms. Published; lakefile.toml requires it from GitHub at a pinned commit.
   - id: "https://github.com/vltanh/lean4-calculus-of-variations"
     relationship: "builds-on"
     note: >-
-      Written for this project by the same AI system: quasiconvexity and laminates, Dacorogna's
-      formula, minors and null Lagrangians, quadratic forms, Kristensen's smoothing,
-      distributional second derivatives on R. Published; lakefile.toml requires it from GitHub
-      at commit fc86bbb63e766c17600c3f88855dd804db4bcca3.
+      Written for this project by the same AI system: rank-one convexity and quasiconvexity,
+      Dacorogna's formula, minors and null Lagrangians, quadratic forms, Kristensen's smoothing,
+      distributional second derivatives on R. Published; lakefile.toml requires it from GitHub at a
+      pinned commit.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-
       The author's own Lean formalization of Theorem 1.2 and of Theorem 1.3 at p = 4, made with an
-      AI system and released without a license. Not consulted: this formalization was written
-      independently, and covers the whole paper (Theorems 1.4, 1.5, Corollaries 1.6, 5.2-5.4,
-      Sections 6 and 7) and the cited results that its proofs use.
+      AI system and released without a license. The proofs here were written without consulting it, and
+      nothing from it was used; searches and checks of 21-22 November 2026 displayed parts of it (README,
+      first lines of declarations, some statements, about 180 lines of one file: docs/Cassese/CREDITS.md).
+      This formalization covers the whole paper (Theorems 1.4, 1.5, Corollaries 1.6, 5.2-5.4, Sections 6
+      and 7) and the cited results that its proofs use.
   - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
     relationship: "independent"
-    note: "Conti, Dolzmann and Dondl's Lean formalization of a 3 x 3 example; not consulted; not a formalization of this paper."
+    note: >-
+      Conti, Dolzmann and Dondl's Lean formalization of a 3 x 3 example; not a formalization of this
+      paper. The proofs here were written without consulting it, and nothing from it was used; searches
+      and checks of 21-22 November 2026 displayed parts of it (docs/Cassese/CREDITS.md).
   - id: "palomar/Sverak in this repository"
     relationship: "other"
     note: "The formalization of Šverák (1992), imported by this library (Šverák's example, the consequences after Theorem 1.3)."
@@ -300,21 +310,26 @@ automation:
         The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper): commit
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
-        the third round. Second round: the main session and 28 sub-agents on this paper (an
+        the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth. Second
+        round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
         checker). Third round, which proved the cited results and redid the departures: the main
         session and 103 sub-agents (29 launched by the main session, the others by lead agents),
         among them scoping agents, a departure audit, the writers and provers of three Lake
-        packages, integration agents and independent reviewers. Lean v4.36.0-rc2, Mathlib
-        v4.36.0-rc2.
+        packages, integration agents and independent reviewers. Fourth round, which redid the cited
+        results by their sources' proofs: 27 sub-agents (8 for the comparison with the sources, 4
+        leads and 6 provers, 5 reviewers, an integrator and its 3 reviewers), besides the agents that
+        updated and checked the documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
           repository, in parallel), about 21 h of sub-agent working time on this paper. Third
           round: 6.8 h elapsed to the last commit of the proofs, 37.3 h of sub-agent working
           time (the whole session in that window, which also includes follow-up notes, a step of
-          Šverák's Lemma 1 and the revision of the procedure).
+          Šverák's Lemma 1 and the revision of the procedure). Fourth round: 2.95 h elapsed to the
+          last commit of the proofs, 9.3 h of sub-agent working time on it (17.4 h for the whole
+          session in that window).
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -322,14 +337,15 @@ automation:
         Pedregal's paper, independently of the author's Lean code, and chose to build every cited
         result that is large but feasible ("All"); then asked for every result to be proved
         unconditionally ("I think you need to formalize all of them unconditionally"), and let the
-        agent decide without asking.
+        agent decide without asking; then obtained the cited books and articles that the agent could
+        not, so that the cited results could follow them.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
     author. No person has reviewed the proofs. Independent AI agents checked the statements
-    against the TeX source, compared the formal proofs with the paper's, reviewed the packages'
-    statements and the changed statements, audited the departures, and checked the report and the
-    other documents. See docs/Cassese/CREDITS.md.
+    against the TeX source, compared the formal proofs with the paper's and the cited results with
+    their sources, reviewed the packages' statements and the changed statements, audited the
+    departures, and checked the report and the other documents. See docs/Cassese/CREDITS.md.
 
 fidelity:
   divergences: >-
@@ -346,28 +362,40 @@ fidelity:
     Lambda = K/delta; Proposition 6.5 at q = infinity with one alpha for every p; Theorem 1.4 with
     Schatten exponent q = 4. Generalizations: the identity of Proposition 7.2 for every real rho
     (its lower bound keeps rho > 0, which its proof uses); Lemma 2.1 for every real-valued
-    rank-one convex function (E21).
+    rank-one convex function (E21); Dacorogna's Theorem 5.20, (ii) => (iii'), without continuity, as
+    the book states it. Proposition 2.7 (6) is stated, as in the paper, with the equivalence also for
+    complex spaces (the functions concave for multipliers in the closed unit disc, and UMD_p that of
+    the underlying real space).
     Departures from the paper's proofs, each a repair of a gap or a false step: Theorem 1.3 (b)
     with explicit constants uniform in p (E4); Proposition 2.5 "<=" by Proposition 2.4's argument
     run on martingales (E10); Proposition 5.1's skipped step supplied (E9). Every other proof
     follows the paper's; the gaps it fills along the paper's own lines are findings of the audit
     (docs/Cassese/REPORT.md, Section 3), among them the passage from smooth to Lipschitz periodic
-    test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results:
-    each by its source's argument, or, where the source was not obtained, by a named argument
-    from an open source (HNVW I and II, Dacorogna 2008, Rindler 2018, Bhatia, Lust-Piquard, the
-    Pisier-Xu chapter, Osękowski 2012, Burkholder 1973, 1981, 1984 (open access on Project
-    Euclid, which refused automated download) and 1985 (not open access), de Leeuw 1965,
-    Dragičević 2011, Kinderlehrer-Pedregal 1991, Dacorogna 1982; docs/Cassese/REPORT.md,
-    Section 7). Differences from sources that were read: Kristensen's cut-offs as functions of
-    |X|^2 (his xi_s exists only for s < 3, a slip of the source) and an added constant;
-    Randrianantoanina's projections read in the reduced algebra, his interpolation step done in
-    three ranges of exponents, his Lemma 3.2 in a counting form; Mackey et al.'s
-    Remark 7.2 for 2 < q < 3, whose unproved variant of the mean value trace inequality is
-    proved; Dragičević's test functions approximated by Schwartz functions; Bourin-Zhang's
-    Proposition 3.13 (the Schatten triangle inequality, in place of Bhatia), stated for complex
-    square matrices, proved for real m x n ones by the same argument; Burkholder 1988: Remark 1.2,
-    stated without proof, completed from his (1.12)-(1.14) and the shift of his proof of (1.8),
-    as a pointwise limit of concave functions (a gap of the source).
+    test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results: each
+    by its source's argument, with one departure: the upper bound of the non-commutative Khintchine
+    inequality (Proposition 6.3), whose cited sources prove it by the factorization of
+    matrix-valued H^1 functions and duality (Lust-Piquard 1986, not obtained; Lust-Piquard-Pisier
+    1991; Pisier-Xu 2003 give no proof), is proved at present by the method of exchangeable pairs of
+    Mackey et al. (2014); it was proved before the 1991 article was obtained, and a proof by the
+    sources' argument is planned. Read in another edition: Rindler 2018 (the second edition),
+    Pisier 2016 (the 2011 lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993,
+    Vasyunin-Volberg 2010. The triangle inequality of Schatten norms, which the paper uses without a
+    source, is proved after Bourin-Zhang (2026), for real m x n matrices. Differences from the sources,
+    each a repair of a gap or a slip along the source's lines, a step that the source leaves out, or
+    a case of its statement: Kristensen's cut-offs as functions of |X|^2 (his xi_s exists only for
+    s < 3) and an added constant; Randrianantoanina's projections read in the reduced algebra, his
+    interpolation step done in three ranges of exponents, his Lemma 3.2 in a counting form;
+    Dacorogna's Lemma 5.24, Part 2, with the columns restricted first; the local boundedness of
+    rank-one convex functions, part of Rindler's definition, proved; Dacorogna's formula itself from
+    Kinderlehrer-Pedregal's Proposition 8.1; HNVW's UMD theorems for the paper's predictable signs, for
+    real spaces and probability spaces, Theorem 4.2.5 by the book's alternative proof (p. 334), and
+    steps of Lemma 3.5.14, Theorem 4.5.6 and Proposition 5.7.4 repaired; Osękowski's two integral
+    formulas proved, his majorization completed by Burkholder's (1.11), and his second approach
+    run on the dyadic function of his Theorem 3.34; Burkholder's Remark 1.2 (1988), stated without
+    proof, completed from his (1.14) and the shift of the proof of (1.8); Dragičević's sentence on
+    W^{n,p}, stated without proof, replaced by a density argument; Pisier's Fubini argument on
+    Paley-Walsh martingales; Mackey et al.'s Remark 7.2 for 2 < q < 3, whose unproved variant of the
+    mean value trace inequality is proved. See docs/Cassese/REPORT.md, Section 7.
 
 review:
   status: "agent-reviewed"
@@ -379,9 +407,11 @@ review:
     checked the first version of the report against the sources; in the round that proved the
     cited results, they reviewed the packages' statements, the changed statements against the TeX
     source, the redone proofs, and every recorded departure, and then checked the rewritten
-    documents against the code, the audit output, the TeX source and the cited works. Last, two
-    independent reviewers checked the package's redone proofs of Borell's and Burkholder's
-    results against Borell (1979) and Burkholder (1988) and found no departure.
+    documents against the code, the audit output, the TeX source and the cited works. In the round
+    that redid the cited results by their sources' proofs, agents compared these results with the
+    sources, independent reviewers checked the redone proofs of the packages against the sources, the
+    statements of Morrey/Common/External, the restated Proposition 2.7 (6) and the updated
+    documents.
 
 alignment:
   namespace: "CasseseChallenge"
@@ -444,6 +474,6 @@ alignment:
 
 acknowledgements: >-
   Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
-  (Kristensen 1999, Borell 1979, Burkholder 1988); the open lecture notes and preprints whose
-  arguments the cited results follow (Müller 1998, Pisier 2011, Dragičević 2013, Mackey et al.,
-  O'Donnell, Randrianantoanina, Conti-Dolzmann-Kirchheim-Müller, Morrey 1952, Bourin-Zhang).
+  (Kristensen 1999, Burkholder 1988, Pisier 1998); the open lecture notes and preprints whose
+  arguments some results follow (Pisier 2011, Dragičević 2013, Mackey et al., Randrianantoanina,
+  Carbonaro-Dragičević-Kovač, Bourin-Zhang).
