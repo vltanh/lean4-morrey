@@ -25,13 +25,13 @@ A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2
   `squareFunction_of_martingale`), for real Hilbert spaces and Mathlib's `MeasureTheory.Martingale`,
   each a one-line proof from `BanachProbability.Burkholder.inequality`, `inequality_of_subordinate`,
   `squareFunction`, `squareFunction_of_martingale` of the package `BanachProbability`
-  (`lean4-banach-probability`, required by path at `../lean4-banach-probability-int`).
+  (`lean4-banach-probability`, required by path at `../lean4-banach-probability`).
 - [`ScalarFunction.lean`](ScalarFunction.lean): the propositions `ScalarFunction` ((13), (14) for
-  `u`) and `ScalarFunctionQ q` (the same for `u_q`), proved here by `scalarFunction_holds` and, for
-  every real `q ≥ 2`, `scalarFunctionQ_holds`. Its mathematics, Burkholder's special function and
-  its concavity along lines, belongs with the package's `BanachProbability.Burkholder` (which has
-  `burkholderU`, `burkholderU_ge`, but keeps the concavity along lines private); it stays here until
-  the package exposes that concavity.
+  `u`) and `ScalarFunctionQ q` (the same for `u_q`), proved by `scalarFunction_holds` and, for
+  every real `q ≥ 2`, `scalarFunctionQ_holds`, from the package's Burkholder function in
+  Burkholder's notation, `BanachProbability.Burkholder.burkholderFun` (on the real inner product
+  space `ℂ`, `u_q = burkholderFun q` for `q ≥ 2`, `uq_eq_burkholderFun`): (13) is
+  `burkholderFun_ge`, (14) is `burkholderFun_concaveOn_line`; `u = u_6` (`uq_six`).
 
 **Proofs.** The package's proof follows Burkholder's method step by step: the special function
 `U ≥ V` with the zig-zag concavity property, integrated along the martingale, so that
@@ -39,10 +39,11 @@ A. Osękowski, *Sharp martingale and semimartingale inequalities*, Birkhäuser 2
 where `x + t h = 0 ≠ h` or `y + t k = 0 ≠ k`, the concave pieces are glued through their one-sided
 derivatives. The square function inequality comes from (1) applied to `X` and the `ℓ²`-valued
 martingale `Σ_k dX_k e_k`, each differentially subordinate to the other, with `H^{n+1}` in place of
-`ℓ²(H)` (`n` is fixed). The separability of `H` is not used. In `ScalarFunction.lean`, (13) is a
-polynomial inequality in `|a|`, `|b|`, and (14) follows from the sign of the second derivative
-where the lines avoid `0`, and by approximation elsewhere. Osękowski's book was not consulted. The
-package's source contains no `sorry`.
+`ℓ²(H)` (`n` is fixed). The separability of `H` is not used. (13) and (14) are the two
+properties of the special function in this method, `U ≥ V` and the concavity of
+`t ↦ U (x + t h, y + t k)` along lines, with the roles of the two arguments exchanged (Burkholder's
+`u (x, y)` has `x` dominating, the package's `U (x, y)` has `x` subordinate). Osękowski's book was
+not consulted. The package's source contains no `sorry`.
 
 **Who uses them.** Cassese's Theorem 2.3 is stated in the paper's terms in
 [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean) (`burkholderInequality_holds`,

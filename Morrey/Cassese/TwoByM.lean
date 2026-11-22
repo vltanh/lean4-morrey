@@ -11,6 +11,7 @@ public import Mathlib.Analysis.SpecialFunctions.Exp
 public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Convex.FunctionTopology
 public import Mathlib.Analysis.Normed.Lp.PiLp
 public import Mathlib.Probability.UniformOn
 public import Mathlib.Probability.Martingale.Basic
@@ -2006,7 +2007,10 @@ theorem twoByM_concaveOn_of_mollify {r b : ℝ → ℝ} (hr : Continuous r) (hb 
   set φ : ℕ → ContDiffBump (0 : ℝ) := fun k =>
     ContDiffBump.ofRadius (Nat.one_div_pos_of_nat : (0 : ℝ) < 1 / ((k : ℝ) + 1))
   have hφ : Tendsto (fun k => (φ k).rOut) atTop (𝓝 0) := tendsto_one_div_add_atTop_nhds_zero_nat
-  refine External.Burkholder.concaveOn_univ_of_tendsto (fun k => h (φ k)) fun t => ?_
+  refine isClosed_setOfPred_concaveOn.mem_of_tendsto (b := atTop)
+    (f := fun k t => Φ (((φ k).normed volume ⋆[lsmul ℝ ℝ, volume] r) t)
+      (((φ k).normed volume ⋆[lsmul ℝ ℝ, volume] b) t))
+    (tendsto_pi_nhds.2 fun t => ?_) (Eventually.of_forall fun k => h (φ k))
   exact (hΦ.tendsto (r t, b t)).comp
     ((ContDiffBump.tendsto_normed_convolution (μ := volume) hφ hr t).prodMk_nhds
       (ContDiffBump.tendsto_normed_convolution (μ := volume) hφ hb t))
