@@ -1,44 +1,54 @@
 module
 
-public import Morrey.Common.Basic.CalculusOfVariations.Basic
 public import Mathlib.Analysis.Convex.Continuous
 public import Mathlib.Data.Matrix.Basis
 
 /-!
-# Separately convex functions are locally Lipschitz
+# Functions on matrices that are convex in each entry are locally Lipschitz
 
-The argument of Rindler, *Calculus of variations* (2018), proof of Lemma 5.6 (Dacorogna 2008,
-Theorem 2.31), for a function `f : ℝ^{d×m} → ℝ` convex along each coordinate direction `E_{ij}`.
-Used in the proof of Dacorogna's formula (`Formula.lean`): the infimum formula is separately convex,
-hence continuous. The proof is that of `External.Rindler.lemma5_6` (Cassese's Lemma 2.1), copied
-because the files of `External/` import only Mathlib and `Morrey.Common.Basic`.
+A function `f` on the real `d × m` matrices that is convex along every line in the direction of a
+matrix unit `single i j 1` (separately convex) is locally Lipschitz, for the product metric on
+`Fin d → Fin m → ℝ` (`Matrix.locallyLipschitz_of_convexOn_single`).
+
+The standard argument (Dacorogna, *Direct methods in the calculus of variations*, 2nd ed. 2008,
+Theorem 2.31; Rindler, *Calculus of variations* 2018, proof of Lemma 5.6): on a cube
+`x + [−r, r]^{d×m}` (a closed ball of the product metric) `f` is bounded above by its values at the
+vertices (convexity in one entry at a time) and below by reflection in one entry at a time;
+convexity along each coordinate line with these bounds gives a Lipschitz bound along the line, and
+a path that changes one entry at a time gives the Lipschitz bound on the cube.
+
+Used for Rindler's Lemma 5.6 (`External.Rindler.lemma5_6`: rank-one convex functions are locally
+Lipschitz) and in the proof of Dacorogna's formula (`External.KinderlehrerPedregal.kpG_continuous`:
+the infimum formula is separately convex, hence continuous). Its place in Mathlib would be next to
+`ConvexOn.locallyLipschitz` (`Mathlib/Analysis/Convex/Continuous.lean`).
 -/
 
 @[expose] public section
 
-namespace External.KinderlehrerPedregal
+namespace Matrix
 
-open CalculusOfVariations Metric Set
+open Metric Set
 
 variable {d m : ℕ}
 
 /-- The coordinate direction `(i, j)` of `ℝ^{d×m} = Fin d → Fin m → ℝ`. -/
-def kpE (i : Fin d) (j : Fin m) : Fin d → Fin m → ℝ := fun a b => if i = a ∧ j = b then 1 else 0
+private def E (i : Fin d) (j : Fin m) : Fin d → Fin m → ℝ :=
+  fun a b => if i = a ∧ j = b then 1 else 0
 
-private lemma kpE_apply (i : Fin d) (j : Fin m) (a : Fin d) (b : Fin m) :
-    kpE i j a b = if i = a ∧ j = b then 1 else 0 := rfl
+private lemma E_apply (i : Fin d) (j : Fin m) (a : Fin d) (b : Fin m) :
+    E i j a b = if i = a ∧ j = b then 1 else 0 := rfl
 
-private lemma add_smul_kpE_apply (y : Fin d → Fin m → ℝ) (t : ℝ) (i : Fin d) (j : Fin m)
+private lemma add_smul_E_apply (y : Fin d → Fin m → ℝ) (t : ℝ) (i : Fin d) (j : Fin m)
     (a : Fin d) (b : Fin m) :
-    (y + t • kpE i j) a b = if i = a ∧ j = b then y a b + t else y a b := by
-  simp only [Pi.add_apply, Pi.smul_apply, kpE_apply, smul_eq_mul]
+    (y + t • E i j) a b = if i = a ∧ j = b then y a b + t else y a b := by
+  simp only [Pi.add_apply, Pi.smul_apply, E_apply, smul_eq_mul]
   split_ifs <;> ring
 
-theorem kp_of_add_smul_kpE (y : Fin d → Fin m → ℝ) (t : ℝ) (i : Fin d) (j : Fin m) :
-    Matrix.of (y + t • kpE i j) = Matrix.of y + t • Matrix.single i j 1 := by
+private lemma of_add_smul_E (y : Fin d → Fin m → ℝ) (t : ℝ) (i : Fin d) (j : Fin m) :
+    Matrix.of (y + t • E i j) = Matrix.of y + t • Matrix.single i j 1 := by
   ext a b
   simp only [Matrix.of_apply, Matrix.add_apply, Matrix.smul_apply, Matrix.single_apply,
-    add_smul_kpE_apply, smul_eq_mul]
+    add_smul_E_apply, smul_eq_mul]
   split_ifs <;> ring
 
 private lemma mem_closedBall_iff_entries {x y : Fin d → Fin m → ℝ} {r : ℝ} (hr : 0 ≤ r) :
@@ -55,7 +65,7 @@ private lemma abs_sub_le_dist (y z : Fin d → Fin m → ℝ) (a : Fin d) (b : F
 
 /-- Upper bound on a cube by the values at the vertices, by convexity in one entry at a time. -/
 private lemma upper_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
-      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • kpE i j))))
+      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • E i j))))
     (x : Fin d → Fin m → ℝ) {r : ℝ} (hr : 0 ≤ r) :
     ∃ M, ∀ y ∈ closedBall x r, f (Matrix.of y) ≤ M := by
   set F : (Fin d → Fin m → ℝ) → ℝ := fun X => f (Matrix.of X)
@@ -88,12 +98,12 @@ private lemma upper_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
     obtain ⟨M, hM⟩ := ih
     refine ⟨M, fun y hy hyT => ?_⟩
     obtain ⟨i, j⟩ := p
-    set y₀ := y + (x i j - y i j) • kpE i j with hy₀
-    have hent : ∀ s a b, (y₀ + s • kpE i j) a b = if i = a ∧ j = b then x a b + s else y a b := by
+    set y₀ := y + (x i j - y i j) • E i j with hy₀
+    have hent : ∀ s a b, (y₀ + s • E i j) a b = if i = a ∧ j = b then x a b + s else y a b := by
       intro s a b
-      simp only [hy₀, add_smul_kpE_apply]
+      simp only [hy₀, add_smul_E_apply]
       split_ifs with h1 <;> [(obtain ⟨rfl, rfl⟩ := h1; ring); ring]
-    have hmem : ∀ s, |s| ≤ r → y₀ + s • kpE i j ∈ closedBall x r := by
+    have hmem : ∀ s, |s| ≤ r → y₀ + s • E i j ∈ closedBall x r := by
       intro s hs
       rw [mem_closedBall_iff_entries hr]
       intro a b
@@ -101,7 +111,7 @@ private lemma upper_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
       split_ifs
       · simpa using hs
       · exact (mem_closedBall_iff_entries hr).1 hy a b
-    have hvert : ∀ s, |s| = r → F (y₀ + s • kpE i j) ≤ M := by
+    have hvert : ∀ s, |s| = r → F (y₀ + s • E i j) ≤ M := by
       intro s hs
       refine hM _ (hmem s hs.le) fun q hq => ?_
       rw [hent]
@@ -116,7 +126,7 @@ private lemma upper_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
       rw [segment_eq_Icc (by linarith)]
       exact abs_le.1 ((mem_closedBall_iff_entries hr).1 hy i j)
     have key := hconv.le_on_segment (mem_univ (-r)) (mem_univ r) hseg
-    have e : y₀ + (y i j - x i j) • kpE i j = y := by
+    have e : y₀ + (y i j - x i j) • E i j = y := by
       funext a b
       rw [hent]
       split_ifs with h1
@@ -127,7 +137,7 @@ private lemma upper_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
 
 /-- Lower bound on a cube, from the upper bound, by convexity in one entry at a time. -/
 private lemma lower_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
-      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • kpE i j))))
+      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • E i j))))
     (x : Fin d → Fin m → ℝ) {r : ℝ} (hr : 0 ≤ r) :
     ∃ L, ∀ y ∈ closedBall x r, L ≤ f (Matrix.of y) := by
   set F : (Fin d → Fin m → ℝ) → ℝ := fun X => f (Matrix.of X)
@@ -146,12 +156,12 @@ private lemma lower_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
     obtain ⟨L, hL⟩ := ih
     refine ⟨2 * L - M, fun y hy hyS => ?_⟩
     obtain ⟨i, j⟩ := p
-    set y₀ := y + (x i j - y i j) • kpE i j with hy₀
-    have hent : ∀ s a b, (y₀ + s • kpE i j) a b = if i = a ∧ j = b then x a b + s else y a b := by
+    set y₀ := y + (x i j - y i j) • E i j with hy₀
+    have hent : ∀ s a b, (y₀ + s • E i j) a b = if i = a ∧ j = b then x a b + s else y a b := by
       intro s a b
-      simp only [hy₀, add_smul_kpE_apply]
+      simp only [hy₀, add_smul_E_apply]
       split_ifs with h1 <;> [(obtain ⟨rfl, rfl⟩ := h1; ring); ring]
-    have hmem : ∀ s, |s| ≤ r → y₀ + s • kpE i j ∈ closedBall x r := by
+    have hmem : ∀ s, |s| ≤ r → y₀ + s • E i j ∈ closedBall x r := by
       intro s hs
       rw [mem_closedBall_iff_entries hr]
       intro a b
@@ -161,13 +171,13 @@ private lemma lower_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
       · exact (mem_closedBall_iff_entries hr).1 hy a b
     set t := y i j - x i j
     have ht : |t| ≤ r := (mem_closedBall_iff_entries hr).1 hy i j
-    have e : ∀ s, y₀ + s • kpE i j = (fun a b => if i = a ∧ j = b then x a b + s else y a b) :=
+    have e : ∀ s, y₀ + s • E i j = (fun a b => if i = a ∧ j = b then x a b + s else y a b) :=
       fun s => funext fun a => funext fun b => hent s a b
-    have ey : y₀ + t • kpE i j = y := by
+    have ey : y₀ + t • E i j = y := by
       rw [e]; funext a b; split_ifs with h1
       · obtain ⟨rfl, rfl⟩ := h1; simp [t]
       · rfl
-    have e0 : y₀ + (0 : ℝ) • kpE i j = y₀ := by simp
+    have e0 : y₀ + (0 : ℝ) • E i j = y₀ := by simp
     have hy0 : L ≤ F y₀ := by
       refine hL y₀ (e0 ▸ hmem 0 (by simp [hr])) fun q hq => ?_
       have := hent 0 q.1 q.2
@@ -183,19 +193,19 @@ private lemma lower_bound {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (
       (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num : (0 : ℝ) ≤ 1 / 2) (by norm_num)
     simp only [smul_eq_mul] at hconv
     rw [show 1 / 2 * t + 1 / 2 * -t = (0 : ℝ) by ring, e0] at hconv
-    have hrefl : F (y₀ + (-t) • kpE i j) ≤ M := hM _ (hmem _ (by rwa [abs_neg]))
-    change F y₀ ≤ 1 / 2 * F (y₀ + t • kpE i j) + 1 / 2 * F (y₀ + (-t) • kpE i j) at hconv
+    have hrefl : F (y₀ + (-t) • E i j) ≤ M := hM _ (hmem _ (by rwa [abs_neg]))
+    change F y₀ ≤ 1 / 2 * F (y₀ + t • E i j) + 1 / 2 * F (y₀ + (-t) • E i j) at hconv
     rw [ey] at hconv
     linarith
 
 /-- The Lipschitz bound along a coordinate line, from the convexity of the restriction and the
 bound on a larger cube. -/
 private lemma line_lipschitz {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
-      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • kpE i j))))
+      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • E i j))))
     (x : Fin d → Fin m → ℝ) {r : ℝ} (hr : 0 < r) :
     ∃ C, 0 ≤ C ∧ ∀ y ∈ closedBall x r, ∀ (i : Fin d) (j : Fin m) (t : ℝ),
-      y + t • kpE i j ∈ closedBall x r →
-        |f (Matrix.of (y + t • kpE i j)) - f (Matrix.of y)| ≤ C * |t| := by
+      y + t • E i j ∈ closedBall x r →
+        |f (Matrix.of (y + t • E i j)) - f (Matrix.of y)| ≤ C * |t| := by
   obtain ⟨M, hM⟩ := upper_bound hsep x (r := 5 * r) (by linarith)
   obtain ⟨L, hL⟩ := lower_bound hsep x (r := 5 * r) (by linarith)
   set K := max M (-L)
@@ -204,7 +214,7 @@ private lemma line_lipschitz {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : �
       (hM y hy).trans (le_max_left _ _)⟩
   have hK0 : 0 ≤ K := (abs_nonneg _).trans (hK x (mem_closedBall_self (by linarith)))
   refine ⟨2 * K / r, by positivity, fun y hy i j t hyt => ?_⟩
-  set g : ℝ → ℝ := fun s => f (Matrix.of (y + s • kpE i j))
+  set g : ℝ → ℝ := fun s => f (Matrix.of (y + s • E i j))
   have hg : ConvexOn ℝ (ball 0 (4 * r)) g :=
     (hsep y i j).subset (subset_univ _) (convex_ball _ _)
   have hgb : ∀ s, dist s 0 < 4 * r → |g s| ≤ K := by
@@ -212,7 +222,7 @@ private lemma line_lipschitz {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : �
     apply hK
     rw [mem_closedBall_iff_entries (by linarith)]
     intro a b
-    rw [add_smul_kpE_apply]
+    rw [add_smul_E_apply]
     have hya := abs_le.1 ((mem_closedBall_iff_entries hr.le).1 hy a b)
     rw [Real.dist_eq, sub_zero] at hs
     have hs' := abs_lt.1 hs
@@ -223,7 +233,7 @@ private lemma line_lipschitz {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : �
   have ht : |t| ≤ 2 * r := by
     have h1 := (mem_closedBall_iff_entries hr.le).1 hyt i j
     have h2 := abs_le.1 ((mem_closedBall_iff_entries hr.le).1 hy i j)
-    rw [add_smul_kpE_apply, ite_eq_left_iff.mpr (fun h => absurd ⟨rfl, rfl⟩ h)] at h1
+    rw [add_smul_E_apply, ite_eq_left_iff.mpr (fun h => absurd ⟨rfl, rfl⟩ h)] at h1
     have h1' := abs_le.1 h1
     exact abs_le.2 ⟨by linarith, by linarith⟩
   have h0 : (0 : ℝ) ∈ ball 0 (4 * r - r) := mem_ball_self (by linarith)
@@ -237,7 +247,7 @@ private lemma line_lipschitz {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hsep : �
 private lemma path_bound {F : (Fin d → Fin m → ℝ) → ℝ} {x : Fin d → Fin m → ℝ} {r C : ℝ}
     (hr : 0 ≤ r) (hC : 0 ≤ C)
     (hline : ∀ y ∈ closedBall x r, ∀ (i : Fin d) (j : Fin m) (t : ℝ),
-      y + t • kpE i j ∈ closedBall x r → |F (y + t • kpE i j) - F y| ≤ C * |t|) :
+      y + t • E i j ∈ closedBall x r → |F (y + t • E i j) - F y| ≤ C * |t|) :
     ∀ S : Finset (Fin d × Fin m), ∀ y ∈ closedBall x r, ∀ z ∈ closedBall x r,
       (∀ q ∉ S, y q.1 q.2 = z q.1 q.2) → |F y - F z| ≤ S.card * C * dist y z := by
   intro S
@@ -249,10 +259,10 @@ private lemma path_bound {F : (Fin d → Fin m → ℝ) → ℝ} {x : Fin d → 
   | insert p S hp ih =>
     intro y hy z hz hyz
     obtain ⟨i, j⟩ := p
-    set w := y + (z i j - y i j) • kpE i j with hw_def
+    set w := y + (z i j - y i j) • E i j with hw_def
     have hwent : ∀ a b, w a b = if i = a ∧ j = b then z a b else y a b := by
       intro a b
-      simp only [hw_def, add_smul_kpE_apply]
+      simp only [hw_def, add_smul_E_apply]
       split_ifs with h1
       · obtain ⟨rfl, rfl⟩ := h1; ring
       · rfl
@@ -295,15 +305,16 @@ private lemma path_bound {F : (Fin d → Fin m → ℝ) → ℝ} {x : Fin d → 
       mul_le_mul_of_nonneg_left hdwz (by positivity)
     exact abs_le.2 ⟨by nlinarith, by nlinarith⟩
 
-/-- A function convex in each entry is locally Lipschitz: the standard argument for separately
-convex functions (Rindler, proof of Lemma 5.6; Dacorogna 2008, Theorem 2.31), reproduced here from
-`External.Rindler` (which this file may not import): bounds above at the vertices of a cube and
-below by reflection, a Lipschitz bound along each coordinate line, and a path changing one entry
-at a time. -/
-theorem kp_locallyLipschitz_of_sep {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
-      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • kpE i j)))) :
+/-- A function on the real `d × m` matrices that is convex along every line in the direction of a
+matrix unit `single i j 1` is locally Lipschitz (for the product metric on `Fin d → Fin m → ℝ`,
+through `Matrix.of`). -/
+theorem locallyLipschitz_of_convexOn_single {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : ∀ (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin d) (j : Fin m),
+      ConvexOn ℝ univ fun t : ℝ => f (A + t • single i j 1)) :
     LocallyLipschitz fun X : Fin d → Fin m → ℝ => f (Matrix.of X) := by
+  have hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
+      ConvexOn ℝ univ (fun t : ℝ => f (Matrix.of (y + t • E i j))) := fun y i j => by
+    simpa only [of_add_smul_E] using hf (Matrix.of y) i j
   intro x
   obtain ⟨C, hC, hline⟩ := line_lipschitz hsep x one_pos
   refine ⟨(Fintype.card (Fin d × Fin m) * C).toNNReal, closedBall x 1,
@@ -314,6 +325,4 @@ theorem kp_locallyLipschitz_of_sep {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
   rw [Real.dist_eq, Real.coe_toNNReal _ (by positivity)]
   simpa [Finset.card_univ] using this
 
-
-
-end External.KinderlehrerPedregal
+end Matrix

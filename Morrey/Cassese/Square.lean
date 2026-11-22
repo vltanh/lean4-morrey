@@ -367,17 +367,8 @@ TeX lines 348–357; Bhatia, *Matrix analysis*, Chapter IV). Propositions 6.2, 6
 Corollary 6.1 apply `HNVWExtrapolation` and `CoxVeraarDecoupling` to `S_q^{d×d}`, that is to
 `E = Fin d → Fin d → ℝ` with `nrm X = ‖X‖_{S_q}`, which requires the hypotheses on `nrm` of those
 statements: the triangle inequality, absolute homogeneity, and equivalence with the norm of `E`
-(the supremum norm of the entries). They are proved here, and bundled in
-`schattenNorm_renorms`. -/
-
-/-- The Schatten norm is nonnegative. -/
-theorem schattenNorm_nonneg {m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) :
-    0 ≤ schattenNorm q A := by
-  unfold schattenNorm
-  split_ifs
-  · exact Real.iSup_nonneg fun i => Real.sqrt_nonneg _
-  · exact Real.rpow_nonneg (Finset.sum_nonneg fun i _ =>
-      Real.rpow_nonneg (Real.sqrt_nonneg _) _) _
+(the supremum norm of the entries). They are proved here (nonnegativity, `schattenNorm_nonneg`,
+in `Square.Schatten`), and bundled in `schattenNorm_renorms`. -/
 
 /-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]` (Bhatia, Chapter IV).
 
@@ -574,7 +565,7 @@ theorem square_continuous_symPart :
   unfold symPart
   fun_prop
 
-theorem square_continuous_skewPart' :
+theorem square_continuous_skewPart :
     Continuous (skewPart : Matrix (Fin d) (Fin d) ℝ → Matrix (Fin d) (Fin d) ℝ) := by
   unfold skewPart
   fun_prop
@@ -584,7 +575,7 @@ theorem square_continuous_kornF {p : ℝ} (hp : 0 ≤ p) {q : ℝ≥0∞} (hq : 
     Continuous (kornF d p q C) := by
   have hs := (square_continuous_schattenNorm (d := d) (m := d) hq).comp square_continuous_symPart
   have hk := (square_continuous_schattenNorm (d := d) (m := d) hq).comp
-    square_continuous_skewPart'
+    square_continuous_skewPart
   exact (continuous_const.mul (hs.rpow_const fun _ => Or.inr hp)).sub
     (hk.rpow_const fun _ => Or.inr hp)
 
@@ -2088,11 +2079,6 @@ theorem square_continuous_symHalfPart :
   unfold symHalfPart symPart
   fun_prop
 
-theorem square_continuous_skewPart :
-    Continuous (skewPart : Matrix (Fin d) (Fin d) ℝ → Matrix (Fin d) (Fin d) ℝ) := by
-  unfold skewPart
-  fun_prop
-
 /-- `h_{4,4,C}` is continuous (a polynomial in the entries). -/
 theorem square_continuous_hF (C : ℝ) : Continuous (hF d 4 4 C) := by
   have h1 := square_continuous_symHalfPart (d := d)
@@ -2411,7 +2397,7 @@ theorem proposition6_1 (q : ℝ≥0∞) (hq : 2 ≤ q) :
       square_continuous_symPart) 0 squareWitness_contDiff
   have hKc : Continuous K :=
     Sverak.gen_continuous_comp_jac ((square_continuous_schattenNorm hq1).comp
-      square_continuous_skewPart') 0 squareWitness_contDiff
+      square_continuous_skewPart) 0 squareWitness_contDiff
   have hS0 : ∀ x, 0 ≤ S x := fun x => schattenNorm_nonneg _ _
   have hK0 : ∀ x, 0 ≤ K x := fun x => schattenNorm_nonneg _ _
   have hSp : Continuous fun x => S x ^ p := hSc.rpow_const fun _ => Or.inr hp0.le
@@ -2848,8 +2834,11 @@ theorem corollary6_3_lower (hS : BurkholderSharpness) (d : ℕ) (hd : 2 ≤ d) :
   norm_num at this
   linarith
 
+-- The proof does not use the paper's hypothesis `d ≥ 2` (see the docstring).
+set_option linter.unusedVariables false in
 /-- **Corollary 6.3** (`cor:uncond`), upper bound:
-`C^{rc} (d) ≤ [3 (√3 + √2)² · ⅓ (√3 + √2)²]^{1/4} = √2 + √3` for every `d ≥ 2`.
+`C^{rc} (d) ≤ [3 (√3 + √2)² · ⅓ (√3 + √2)²]^{1/4} = √2 + √3` for every `d ≥ 2`. The hypothesis
+`d ≥ 2` is the paper's; the proof does not use it (for `d ≤ 1` the bound holds as well).
 
 Proof (the paper's): for a rank-one Rademacher martingale `M` started at `0`, Theorem 6.2 applied
 to the skew martingale `Skew (M)` and to the symmetric martingale `Sym_{1/2} (M)`, with the

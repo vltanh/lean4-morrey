@@ -10,6 +10,7 @@ public import Mathlib.Analysis.Convex.Deriv
 public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
 public import Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
 public import Morrey.Cassese.Hypotheses
+public import Morrey.Cassese.Rademacher
 
 /-!
 # Section 7: another example, `ℝ^{4×2}`
@@ -29,7 +30,8 @@ The helpers (prefix `fourByTwo_`) package the steps of the paper's proofs:
 
 * Proposition 7.1: linearity of `α_j`, `β_j`, `P_ρ`, `Q`; the rank-one estimate
   `|Q (R)|² ≤ (Σ_k ρ^{2k}) ‖P_ρ (R)‖²` (`fourByTwo_rankOne_bound`); Rademacher martingales on
-  `{±1}^n` as martingales of Mathlib (`fourByTwo_filtration`, `fourByTwo_martingale`), and
+  `{±1}^n` as martingales of Mathlib (`rad_filtration`, `rad_martingale`, in
+  `Morrey/Cassese/Rademacher.lean`), and
   Burkholder's inequality for their linear images (`fourByTwo_burkholder`).
 * Proposition 7.2: the periodic lift `Σ w_n e_n` of a trigonometric polynomial and its derivative
   (`fourByTwo_tp`), the test map `u` solving `∂̄u_j = h_j + ρ ∂u_{j−1}` (`fourByTwo_testMap`,
@@ -263,164 +265,6 @@ theorem fourByTwo_rankOne_bound {N : ℕ} {ρ : ℝ} (hρ : 0 ≤ ρ)
         pow_le_pow_left₀ (norm_nonneg _) h1 2
     _ ≤ _ := h2
 
-/-! ### Rademacher martingales on the canonical space are martingales
-
-The setting in which Burkholder's inequality (`burkholderInequality_holds`) is applied to rank-one
-Rademacher martingales: the space `Fin n → Bool` of `n` signs with the uniform probability
-(`ProbabilityTheory.uniformOn Set.univ`), and the natural filtration
-`ℱ_k = σ (ε₀, …, ε_{k−1})` (`fourByTwo_filtration`). -/
-
-/-- The truncation `ε ↦ (ε₀, …, ε_{k−1}, false, …, false)`. -/
-def fourByTwo_trunc {n : ℕ} (k : ℕ) (ε : Fin n → Bool) : Fin n → Bool :=
-  fun j => if j.val < k then ε j else false
-
-theorem fourByTwo_trunc_trunc {n : ℕ} {k k' : ℕ} (h : k ≤ k') (ε : Fin n → Bool) :
-    fourByTwo_trunc k (fourByTwo_trunc k' ε) = fourByTwo_trunc k ε := by
-  funext j
-  simp only [fourByTwo_trunc]
-  split_ifs <;> first | rfl | omega
-
-/-- The natural filtration of the signs: `ℱ_k = σ (ε₀, …, ε_{k−1})`. -/
-noncomputable def fourByTwo_filtration (n : ℕ) :
-    Filtration ℕ (inferInstance : MeasurableSpace (Fin n → Bool)) where
-  seq k := MeasurableSpace.comap (fourByTwo_trunc k) inferInstance
-  mono' k k' h := by
-    show MeasurableSpace.comap (fourByTwo_trunc k) _ ≤ MeasurableSpace.comap (fourByTwo_trunc k') _
-    rw [show (fourByTwo_trunc k : (Fin n → Bool) → (Fin n → Bool)) =
-        fourByTwo_trunc k ∘ fourByTwo_trunc k' from
-        funext fun ε => (fourByTwo_trunc_trunc h ε).symm, ← MeasurableSpace.comap_comp]
-    exact MeasurableSpace.comap_mono fun s _ => MeasurableSet.of_discrete
-  le' _ := fun _ _ => MeasurableSet.of_discrete
-
-theorem fourByTwo_mart_trunc {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin n → (Fin n → Bool) → E) (hξ : IsPredictable ξ) (k : ℕ) (ε : Fin n → Bool) :
-    mart ξ k (fourByTwo_trunc k ε) = mart ξ k ε := by
-  unfold mart
-  refine Finset.sum_congr rfl fun j hj => ?_
-  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hj
-  rw [hξ j (fourByTwo_trunc k ε) ε fun i hi => by
-    have : i.val < k := lt_trans (Fin.lt_def.mp hi) hj
-    simp [fourByTwo_trunc, this]]
-  simp [fourByTwo_trunc, hj]
-
-theorem fourByTwo_mart_succ {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin n → (Fin n → Bool) → E) (k : ℕ) (ε : Fin n → Bool) :
-    mart ξ (k + 1) ε = mart ξ k ε + if h : k < n then coin (ε ⟨k, h⟩) • ξ ⟨k, h⟩ ε else 0 := by
-  unfold mart
-  split_ifs with h
-  · rw [show Finset.univ.filter (fun j : Fin n => j.val < k + 1) =
-        insert ⟨k, h⟩ (Finset.univ.filter (fun j : Fin n => j.val < k)) from ?_,
-      Finset.sum_insert (by simp)]
-    · abel
-    · ext j
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_insert, Fin.ext_iff]
-      omega
-  · rw [add_zero]
-    congr 1
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-    omega
-
-theorem fourByTwo_mart_zero {n : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
-    (ξ : Fin n → (Fin n → Bool) → E) (ε : Fin n → Bool) : mart ξ 0 ε = 0 := by
-  simp [mart]
-
-theorem fourByTwo_coin_not (b : Bool) : coin (!b) = -coin b := by
-  cases b <;> simp [coin]
-
-theorem fourByTwo_uniformOn_singleton {n : ℕ} (ε : Fin n → Bool) :
-    (ProbabilityTheory.uniformOn (Set.univ : Set (Fin n → Bool))).real {ε} = 1 / 2 ^ n := by
-  rw [Measure.real, ProbabilityTheory.uniformOn_univ, Measure.count_singleton]
-  simp [Fintype.card_bool]
-
-/-- A Rademacher (Paley–Walsh) martingale `k ↦ Σ_{j<k} ε_j ξ_j` with predictable `ξ` is a
-martingale for the natural filtration of the signs and the uniform probability. -/
-theorem fourByTwo_martingale {n : ℕ} {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
-    [CompleteSpace E] (ξ : Fin n → (Fin n → Bool) → E) (hξ : IsPredictable ξ) :
-    Martingale (fun k => mart ξ k) (fourByTwo_filtration n)
-      (ProbabilityTheory.uniformOn Set.univ) := by
-  refine martingale_of_setIntegral_eq_succ (fun k => ?_) (fun k => Integrable.of_finite)
-    (fun k s hs => ?_)
-  · have : (mart ξ k) = (mart ξ k) ∘ fourByTwo_trunc k :=
-      funext fun ε => (fourByTwo_mart_trunc ξ hξ k ε).symm
-    show StronglyMeasurable[MeasurableSpace.comap (fourByTwo_trunc k) inferInstance] (mart ξ k)
-    rw [this]
-    exact StronglyMeasurable.of_discrete.comp_measurable (comap_measurable _)
-  · obtain ⟨t, -, rfl⟩ := hs
-    simp_rw [fourByTwo_mart_succ ξ k]
-    rw [integral_add Integrable.of_finite.integrableOn Integrable.of_finite.integrableOn,
-      left_eq_add]
-    split_ifs with h
-    swap
-    · simp
-    rw [← integral_indicator MeasurableSet.of_discrete, integral_fintype Integrable.of_finite]
-    simp_rw [fourByTwo_uniformOn_singleton]
-    rw [← Finset.smul_sum]
-    -- the flip of the `k`-th sign
-    set σ : (Fin n → Bool) ≃ (Fin n → Bool) :=
-      { toFun := fun ε => Function.update ε ⟨k, h⟩ (!ε ⟨k, h⟩)
-        invFun := fun ε => Function.update ε ⟨k, h⟩ (!ε ⟨k, h⟩)
-        left_inv := fun ε => by funext j; by_cases hj : j = ⟨k, h⟩ <;> simp [hj]
-        right_inv := fun ε => by funext j; by_cases hj : j = ⟨k, h⟩ <;> simp [hj] } with hσ
-    set g := (fourByTwo_trunc k ⁻¹' t).indicator
-      (fun ε => coin (ε ⟨k, h⟩) • ξ ⟨k, h⟩ ε) with hg
-    have hflip : ∀ ε, g (σ ε) = -g ε := by
-      intro ε
-      have htr : fourByTwo_trunc k (σ ε) = fourByTwo_trunc k ε := by
-        funext j
-        simp only [fourByTwo_trunc, hσ, Equiv.coe_fn_mk]
-        split_ifs with hj
-        · rw [Function.update_of_ne]
-          intro hjk
-          rw [hjk] at hj
-          exact lt_irrefl _ hj
-        · rfl
-      have hξσ : ξ ⟨k, h⟩ (σ ε) = ξ ⟨k, h⟩ ε := hξ _ _ _ fun i hi => by
-        simp only [hσ, Equiv.coe_fn_mk]
-        exact Function.update_of_ne (ne_of_lt hi) _ _
-      have hmem : σ ε ∈ fourByTwo_trunc k ⁻¹' t ↔ ε ∈ fourByTwo_trunc k ⁻¹' t := by
-        simp only [Set.mem_preimage, htr]
-      by_cases hε : ε ∈ fourByTwo_trunc k ⁻¹' t
-      · rw [hg, Set.indicator_of_mem (hmem.mpr hε), Set.indicator_of_mem hε, hξσ]
-        simp [hσ, fourByTwo_coin_not, neg_smul]
-      · rw [hg, Set.indicator_of_notMem (fun h' => hε (hmem.mp h')),
-          Set.indicator_of_notMem hε, neg_zero]
-    have hsum : ∑ ε, g ε = -∑ ε, g ε := by
-      conv_lhs => rw [← Equiv.sum_comp σ g]
-      rw [← Finset.sum_neg_distrib]
-      exact Finset.sum_congr rfl fun ε _ => hflip ε
-    have h2 : (2 : ℝ) • ∑ ε, g ε = 0 := by
-      rw [two_smul]
-      nth_rewrite 2 [hsum]
-      exact add_neg_cancel _
-    rw [smul_eq_zero.mp h2 |>.resolve_left two_ne_zero, smul_zero]
-
-/-- On the signs with the uniform probability,
-`‖f‖_{L^p} = (2^{−n} Σ_ε ‖f (ε)‖^p)^{1/p}`. -/
-theorem fourByTwo_eLpNorm_uniform {n : ℕ} {E : Type*} [NormedAddCommGroup E]
-    (f : (Fin n → Bool) → E) {p : ℝ} (hp : 0 < p) :
-    eLpNorm f (ENNReal.ofReal p) (ProbabilityTheory.uniformOn Set.univ) =
-      ENNReal.ofReal (((∑ ε, ‖f ε‖ ^ p) / 2 ^ n) ^ (1 / p)) := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simpa using hp) ENNReal.ofReal_ne_top
-    AEStronglyMeasurable.of_discrete, ENNReal.toReal_ofReal hp.le, lintegral_fintype]
-  have hμ : ∀ ε : Fin n → Bool,
-      (ProbabilityTheory.uniformOn (Set.univ : Set (Fin n → Bool))) {ε} =
-        ENNReal.ofReal (1 / 2 ^ n) := fun ε => by
-    rw [← fourByTwo_uniformOn_singleton ε, ofReal_measureReal]
-  have hsum : 0 ≤ (∑ ε, ‖f ε‖ ^ p) / 2 ^ n :=
-    div_nonneg (Finset.sum_nonneg fun ε _ => Real.rpow_nonneg (norm_nonneg _) _) (by positivity)
-  rw [← ENNReal.ofReal_rpow_of_nonneg hsum (by positivity)]
-  congr 1
-  have hterm : ∀ ε, ‖f ε‖ₑ ^ p * (ProbabilityTheory.uniformOn Set.univ) {ε} =
-      ENNReal.ofReal (‖f ε‖ ^ p * (1 / 2 ^ n)) := by
-    intro ε
-    rw [hμ, ← ofReal_norm, ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hp.le,
-      ENNReal.ofReal_mul (Real.rpow_nonneg (norm_nonneg _) _)]
-  rw [Finset.sum_congr rfl fun ε _ => hterm ε, ← ENNReal.ofReal_sum_of_nonneg fun ε _ =>
-    mul_nonneg (Real.rpow_nonneg (norm_nonneg _) _) (by positivity), ← Finset.sum_mul]
-  congr 1
-  ring
-
 /-- The results of [Cassese 2025] used in the proof of Proposition 7.1, through Burkholder's
 inequality (Theorem 2.3): if two linear maps `L_X`, `L_Y` into a separable Hilbert space satisfy
 `‖L_X (R)‖ ≤ ‖L_Y (R)‖` on the matrices of rank at most one, then for every rank-one Rademacher
@@ -448,17 +292,17 @@ theorem fourByTwo_burkholder {d m : ℕ} {H : Type}
   have hsub : ∀ k (ε : Fin n → Bool),
       ‖mart ξX (k + 1) ε - mart ξX k ε‖ ≤ ‖mart ξY (k + 1) ε - mart ξY k ε‖ := by
     intro k ε
-    rw [fourByTwo_mart_succ, fourByTwo_mart_succ, add_sub_cancel_left, add_sub_cancel_left]
+    rw [rad_mart_succ, rad_mart_succ, add_sub_cancel_left, add_sub_cancel_left]
     split_ifs with h
     · rw [norm_smul, norm_smul]
       exact mul_le_mul_of_nonneg_left (hXY _ (hA.2 _ _)) (norm_nonneg _)
     · simp
   have key := burkholderInequality_holds (Fin n → Bool) inferInstance
     (ProbabilityTheory.uniformOn Set.univ)
-    (fourByTwo_filtration n) H (fun k => mart ξX k) (fun k => mart ξY k) p hp
-    (fourByTwo_martingale ξX hpX) (fourByTwo_martingale ξY hpY) (fourByTwo_mart_zero ξX)
-    (fourByTwo_mart_zero ξY) (fun k => ae_of_all _ (hsub k)) n
-  rw [fourByTwo_eLpNorm_uniform _ hp0, fourByTwo_eLpNorm_uniform _ hp0,
+    (rad_filtration n) H (fun k => mart ξX k) (fun k => mart ξY k) p hp
+    (rad_martingale ξX hpX) (rad_martingale ξY hpY) (rad_mart_zero ξX)
+    (rad_mart_zero ξY) (fun k => ae_of_all _ (hsub k)) n
+  rw [rad_eLpNorm_uniform _ hp0, rad_eLpNorm_uniform _ hp0,
     ← ENNReal.ofReal_mul hp1] at key
   have hX0 : 0 ≤ (∑ ε, ‖mart ξX n ε‖ ^ p) / 2 ^ n :=
     div_nonneg (Finset.sum_nonneg fun ε _ => Real.rpow_nonneg (norm_nonneg _) _) (by positivity)
@@ -482,7 +326,7 @@ Proof (the paper's). By Proposition 2.5 (`proposition2_5`), `f_{p,ρ,K}` with
 for every rank-one Rademacher martingale `M` started at `0`. "The results of [Cassese 2025]"
 (`C^{rc} ≤ (p* − 1) sup_{A ∈ ℛ₁} |Q (A)| / ‖P_ρ (A)‖`) are used in the form
 `fourByTwo_burkholder`, proved by their standard argument: `Q (M)` and `√S P_ρ (M)` are martingales
-in `ℂ^{N+1}` (`fourByTwo_martingale`) and the first is differentially subordinate to the second
+in `ℂ^{N+1}` (`rad_martingale`) and the first is differentially subordinate to the second
 when `|Q| ≤ √S ‖P_ρ‖` on rank-one matrices, so Burkholder's inequality applies. That bound, with
 `√S = (Σ_{k=0}^N ρ^{2k})^{1/2}`, is the paper's computation (`fourByTwo_rankOne_bound`:
 `β_j = ω α_j`, `γ_j = α_j − ρ ω̄ α_{j−1}`, Cauchy–Schwarz). -/

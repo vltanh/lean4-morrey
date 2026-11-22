@@ -1538,18 +1538,18 @@ private lemma tk_abs_entry_le (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin d) (k : 
 
 /-- **Consequence of Proposition 2.3** (`cs-envelope-cons`, lines 577–578 and 206–209): for
 `p ∈ (1, ∞)` and a continuous `f` that is `p`-homogeneous or positively `p`-homogeneous,
-quasiconvexity at any matrix implies quasiconvexity at `0`. Stated without the hypothesis of
-Dacorogna's formula, through which the paper's envelope argument would pass: the scaling
-argument `∫ f (A + λ∇φ) = λ^p ∫ f (A/λ + ∇φ)` does not need it. 
+quasiconvexity at any matrix implies quasiconvexity at `0`. 
 
 Proof: for `λ > 0`, the test map `λ φ` gives `f (A) ≤ ∫ f (A + λ ∇φ) = λ^p ∫ f (A/λ + ∇φ)`; as
 `λ → ∞`, `∫ f (A/λ + ∇φ) → ∫ f (∇φ)` by dominated convergence (`∇φ` is bounded and `f` is
 continuous), while `λ^{-p} f (A) → 0`; so `∫ f (∇φ) ≥ 0 = f (0)`.
 Departure from the paper: the paper obtains this from Proposition 2.3 through the envelope
 (`f^{qc} (0) ∈ {0, −∞}`, lines 573–578), and the step "quasiconvex at `A` ⇒ `f^{qc} (A) = f (A)`"
-is line 559, which needs Dacorogna's formula; that formula is an assumed result (class L), not a
-hypothesis of this statement, so the formal proof uses the scaling argument instead (reason 2;
-inventory §5, elementary lemma (iii)).-/
+is line 559, which needs Dacorogna's formula. When this proof was written that formula was an
+assumed result, not a hypothesis of this statement, so the formal proof uses the scaling argument
+instead (reason 2; inventory §5, elementary lemma (iii)). The formula is now proved
+(`External.KinderlehrerPedregal.dacorognaFormula_holds`), so the paper's route through the envelope
+is available; moving the proof onto it is an open item. -/
 theorem quasiconvexAt_zero_of_quasiconvexAt {p : ℝ} (hp : 1 < p)
     {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hhom : IsPHomogeneous p f ∨ IsPosPHomogeneous p f) {A : Matrix (Fin d) (Fin m) ℝ}

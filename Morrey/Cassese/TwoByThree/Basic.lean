@@ -354,8 +354,11 @@ theorem tbt_rank_embedJ_le (R : Matrix (Fin 2) (Fin 3) ℝ) (hR1 : R.rank ≤ 1)
   exact Matrix.rank_vecMulVec_le _ _
 
 
+-- The proof does not use the paper's hypothesis `A ∈ 𝓛` (see the docstring).
+set_option linter.unusedVariables false in
 /-- **Section 5.1** (`cs-q-rc`, lines 1550–1555): `q` is globally rank-one convex on `𝓛`: for
-`A ∈ 𝓛` and rank-one `R ∈ 𝓛`, `t ↦ q (A + t R)` is convex.
+`A ∈ 𝓛` and rank-one `R ∈ 𝓛`, `t ↦ q (A + t R)` is convex. The hypothesis `A ∈ 𝓛` is the
+paper's; the proof does not use it (only the direction `R` needs to lie in `𝓛`).
 
 Proof. Lemma 4.1 gives `Z (R) = a (1, λ, λ²)` with `|λ| = 1` ((21)), on which the quadratic parts
 of `D` and `H` vanish; so along the line `q` is the quadratic `4 |D₀ + t a Γ|² − (H₀ + 2 t C)²`,

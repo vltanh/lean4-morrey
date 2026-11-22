@@ -442,7 +442,7 @@ theorem tbt6_not_hessianQuasiconvexAt (K : ℝ) :
 
 /-- **Corollary 5.4** (`cor:hessian-quartic`): for `K` sufficiently large and `δ > 0` sufficiently
 small, with `Λ = K/δ`, `h (A) = q_{δ,Λ} (B A)` on `ℝ^{3×3}` is rank-one convex but not Hessian
-quasiconvex at `0`. Burkholder's inequality (Theorem 2.3) enters through Lemma 5.1 (2).
+quasiconvex at `0`.
 
 Proof, as in the paper (TeX 2159–2191: "the proof of Theorem 1.3 now applies unchanged, with
 `Λ = K/δ` and `R = δ⁻⁴`"). Rank-one convexity: `q_{δ,K/δ}` is rank-one convex for `K ≥ K₀`,

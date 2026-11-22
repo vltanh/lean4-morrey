@@ -266,17 +266,9 @@ theorem square_cor_sym (n : ℕ) (z : Fin (n + n) → ℝ) :
 
 /-! ### The Schatten `4`-norm -/
 
-theorem square_cor_schattenNorm_nonneg {d m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) :
-    0 ≤ schattenNorm q A := by
-  unfold schattenNorm
-  split_ifs
-  · exact Real.iSup_nonneg fun i => Real.sqrt_nonneg _
-  · exact Real.rpow_nonneg (Finset.sum_nonneg fun i _ =>
-      Real.rpow_nonneg (Real.sqrt_nonneg _) _) _
-
 theorem square_cor_schattenNorm_four_eq {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) :
     schattenNorm 4 A = ((Aᵀ * A * (Aᵀ * A)).trace) ^ (1 / 4 : ℝ) := by
-  rw [← square_schattenNorm_four_rpow, ← Real.rpow_mul (square_cor_schattenNorm_nonneg _ _)]
+  rw [← square_schattenNorm_four_rpow, ← Real.rpow_mul (schattenNorm_nonneg _ _)]
   norm_num
 
 theorem square_cor_continuous_schattenNorm_four {X : Type*} [TopologicalSpace X] {d m : ℕ}
@@ -525,7 +517,7 @@ theorem square_cor_sym_upper (n : ℕ) {p : ℝ} (hp : 1 ≤ p) :
       (square_cor_abs_diag_le n z) (show (1 : ℝ≥0∞) ≤ 4 by norm_num)
     rwa [show ((4 : ℝ≥0∞)).toReal = 4 by norm_num] at this
   have hpt : ∀ z, S z ^ p ≤ c ^ p * (X z ^ p + Y z ^ p) := fun z => by
-    have hS0 : 0 ≤ S z := square_cor_schattenNorm_nonneg _ _
+    have hS0 : 0 ≤ S z := schattenNorm_nonneg _ _
     calc S z ^ p ≤ (c * max (X z) (Y z)) ^ p := Real.rpow_le_rpow hS0 (hle z) hp0.le
       _ = c ^ p * max (X z) (Y z) ^ p :=
           Real.mul_rpow hc0 (le_max_of_le_left (norm_nonneg _))
@@ -562,7 +554,7 @@ theorem square_cor_sym_upper (n : ℕ) {p : ℝ} (hp : 1 ≤ p) :
           · exact hLp _ (square_cor_sum_cy_sq n)
       _ = c ^ p * (2 * √(p * n) ^ p) := by ring
   have hI0 : 0 ≤ ∫ z in unitCube (n + n), S z ^ p :=
-    setIntegral_nonneg hcube fun z _ => Real.rpow_nonneg (square_cor_schattenNorm_nonneg _ _) _
+    setIntegral_nonneg hcube fun z _ => Real.rpow_nonneg (schattenNorm_nonneg _ _) _
   have hsq0 : 0 ≤ √(p * n) := Real.sqrt_nonneg _
   calc (∫ z in unitCube (n + n), S z ^ p) ^ (1 / p) ≤ (c ^ p * (2 * √(p * n) ^ p)) ^ (1 / p) :=
         Real.rpow_le_rpow hI0 hint (by positivity)
@@ -748,7 +740,7 @@ theorem square_cor_skew_lower {n : ℕ} (hn : 1 ≤ n) {p : ℝ} (hp : 1 ≤ p) 
       rw [show (4 : ℕ) = 2 * 2 by rfl, pow_mul, Real.sq_sqrt (by linarith [hT0 z])]
       ring
     have hm0 : 0 ≤ m z := Real.sqrt_nonneg _
-    refine (pow_le_pow_iff_left₀ hm0 (square_cor_schattenNorm_nonneg _ _)
+    refine (pow_le_pow_iff_left₀ hm0 (schattenNorm_nonneg _ _)
       (by norm_num : (4 : ℕ) ≠ 0)).1 ?_
     rw [hm4]
     show T z ^ 2 / 4 ≤ schattenNorm 4 (K z) ^ 4

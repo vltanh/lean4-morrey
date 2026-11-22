@@ -1,7 +1,7 @@
 module
 
 public import Morrey.Common.External.KinderlehrerPedregal.Basic
-public import Morrey.Common.External.KinderlehrerPedregal.SepConvex
+public import Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex
 public import Mathlib.Analysis.Convex.Measure
 public import Mathlib.MeasureTheory.Covering.Differentiation
 public import Mathlib.MeasureTheory.Integral.DominatedConvergence
@@ -1520,12 +1520,8 @@ theorem kpG_convexOn {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f
 Lipschitz). -/
 theorem kpG_continuous {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (hfin : ∀ A, kpQ f A ≠ ⊥) : Continuous (kpG f) := by
-  have hsep : ∀ (y : Fin d → Fin m → ℝ) (i : Fin d) (j : Fin m),
-      ConvexOn ℝ univ fun t : ℝ => kpG f (Matrix.of (y + t • kpE i j)) := by
-    intro y i j
-    simp only [kp_of_add_smul_kpE]
-    exact kpG_convexOn hf hfin (Matrix.of y) i j
-  exact (kp_locallyLipschitz_of_sep hsep).continuous
+  exact (Matrix.locallyLipschitz_of_convexOn_single fun A i j =>
+    kpG_convexOn hf hfin A i j).continuous
 
 /-- In the finite case, `kpQ f` is quasiconvex. -/
 theorem kpG_quasiconvex {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)

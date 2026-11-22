@@ -146,8 +146,7 @@ theorem tbt3_rankOneConvex_qHat {δ Λ : ℝ} (h : RankOneConvex (qDeltaLambda �
 
 /-- **Corollary 5.3** (`cor:transp`): for `K` sufficiently large and `δ > 0` sufficiently small,
 with `Λ = K/δ`, `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` on `ℝ^{3×2}` is a homogeneous quartic polynomial
-which is globally rank-one convex and nowhere quasiconvex. Burkholder's inequality (Theorem 2.3)
-enters through the rank-one convexity of `q_{δ,Λ}` (Lemma 5.1 (2)).
+which is globally rank-one convex and nowhere quasiconvex.
 
 Proof, after the paper's sketch (TeX 2102–2136). The rank-one convexity of `q_{δ,K/δ}` for `K ≥ K₀`,
 `0 < δ ≤ 1` (`qDeltaLambda_rankOneConvex`, from Lemma 5.1 (2)) passes to the transposes

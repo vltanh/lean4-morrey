@@ -15,7 +15,9 @@ import all Morrey.Cassese.Defs
 import all Morrey.Cassese.FourByTwo
 import all Morrey.Cassese.Hypotheses
 import all Morrey.Cassese.Introduction
+import all Morrey.Cassese.Lifting
 import all Morrey.Cassese.NonLocality
+import all Morrey.Cassese.Rademacher
 import all Morrey.Cassese.Square
 import all Morrey.Cassese.Square.Envelope
 import all Morrey.Cassese.Square.Frobenius
@@ -54,6 +56,7 @@ import all Morrey.Cassese.TwoByThree.Transpose.Potential
 import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
+import all Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex
 import all Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
 import all Morrey.Common.Basic.CalculusOfVariations.Basic
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
@@ -65,7 +68,6 @@ import all Morrey.Common.External.Kakutani.Theorem
 import all Morrey.Common.External.KinderlehrerPedregal.Basic
 import all Morrey.Common.External.KinderlehrerPedregal.Envelope
 import all Morrey.Common.External.KinderlehrerPedregal.Formula
-import all Morrey.Common.External.KinderlehrerPedregal.SepConvex
 import all Morrey.Common.External.KirchheimKristensen.Theorem
 import all Morrey.Common.External.Kristensen.Smoothing
 import all Morrey.Common.External.Osekowski.HilbertCharacterization

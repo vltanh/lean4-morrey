@@ -3,6 +3,7 @@ module
 public import Morrey.Cassese.Toolkit
 public import Morrey.Cassese.Bridges
 public import Morrey.Common.External.Burkholder.ScalarFunction
+public import Morrey.Cassese.Lifting
 public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 public import Mathlib.MeasureTheory.Measure.Count
 public import Mathlib.Analysis.SpecialFunctions.Exp
@@ -3563,232 +3564,6 @@ theorem twoByM_quasiconvexAt_of_minorant {d m : ℕ} {f g : Matrix (Fin d) (Fin 
   rw [← hA]
   exact (hq φ K hφ h0 hgint).trans (setIntegral_mono hgint hint fun x => hgf _)
 
-/-! ### Lifting from `ℝ^{2×2n}` to `ℝ^{2×m}`
-
-The projection `π` onto the upper left block, as in the proof of Theorem 1.2 (TeX lines
-1151–1156) and in `Introduction.lean` (`intro_trunc`, `intro_quasiconvexAt_of_comp_trunc`), which
-imports this file: the same constructions, here with the prefix `twoByM_`. -/
-
-section Lifting
-
-variable {d m d' m' : ℕ}
-
-/-- The upper left `d' × m'` block of a `d × m` matrix. -/
-def twoByM_trunc (hd : d' ≤ d) (hm : m' ≤ m) (A : Matrix (Fin d) (Fin m) ℝ) :
-    Matrix (Fin d') (Fin m') ℝ :=
-  A.submatrix (Fin.castLE hd) (Fin.castLE hm)
-
-theorem twoByM_trunc_add (hd : d' ≤ d) (hm : m' ≤ m) (A B : Matrix (Fin d) (Fin m) ℝ) :
-    twoByM_trunc hd hm (A + B) = twoByM_trunc hd hm A + twoByM_trunc hd hm B := by
-  ext i j
-  simp [twoByM_trunc]
-
-theorem twoByM_trunc_sub (hd : d' ≤ d) (hm : m' ≤ m) (A B : Matrix (Fin d) (Fin m) ℝ) :
-    twoByM_trunc hd hm (A - B) = twoByM_trunc hd hm A - twoByM_trunc hd hm B := by
-  ext i j
-  simp [twoByM_trunc]
-
-theorem twoByM_trunc_smul (hd : d' ≤ d) (hm : m' ≤ m) (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
-    twoByM_trunc hd hm (t • A) = t • twoByM_trunc hd hm A := by
-  ext i j
-  simp [twoByM_trunc]
-
-theorem twoByM_continuous_trunc (hd : d' ≤ d) (hm : m' ≤ m) :
-    Continuous (twoByM_trunc hd hm) :=
-  continuous_id.matrix_submatrix (Fin.castLE hd) (Fin.castLE hm)
-
-/-- A matrix of rank `0` is `0`. -/
-theorem twoByM_eq_zero_of_rank_eq_zero {p q : ℕ} {A : Matrix (Fin p) (Fin q) ℝ}
-    (h : A.rank = 0) : A = 0 := by
-  rw [Matrix.rank, Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at h
-  ext i j
-  have := congrArg (fun f => f (Pi.single j 1) i) h
-  simpa [Matrix.mulVecLin_apply] using this
-
-/-- `f ∘ π` is rank-one convex with `f`: `π` sends rank-one lines to rank-one lines or points. -/
-theorem twoByM_rankOneConvex_comp (hd : d' ≤ d) (hm : m' ≤ m)
-    {f : Matrix (Fin d') (Fin m') ℝ → ℝ} (hf : RankOneConvex f) :
-    RankOneConvex fun A => f (twoByM_trunc hd hm A) := by
-  intro A B hAB
-  simp_rw [twoByM_trunc_add, twoByM_trunc_smul]
-  have hle : (twoByM_trunc hd hm A - twoByM_trunc hd hm B).rank ≤ 1 := by
-    rw [← twoByM_trunc_sub, ← hAB]
-    exact Matrix.rank_submatrix_le _ _ _
-  by_cases h1 : (twoByM_trunc hd hm A - twoByM_trunc hd hm B).rank = 1
-  · exact hf _ _ h1
-  · have h0 := twoByM_eq_zero_of_rank_eq_zero (show (twoByM_trunc hd hm A -
-      twoByM_trunc hd hm B).rank = 0 by omega)
-    rw [sub_eq_zero] at h0
-    simp only [h0, ← add_smul, add_sub_cancel, one_smul]
-    exact convexOn_const _ (convex_Icc 0 1)
-
-theorem twoByM_isIntegrand_comp (hd : d' ≤ d) (hm : m' ≤ m)
-    {f : Matrix (Fin d') (Fin m') ℝ → ℝ} (hf : IsIntegrand f) :
-    IsIntegrand fun A => f (twoByM_trunc hd hm A) := by
-  refine ⟨hf.1.comp (twoByM_continuous_trunc hd hm), fun A => ?_⟩
-  obtain ⟨U, hU, C, hC⟩ := hf.2 (twoByM_trunc hd hm A)
-  exact ⟨twoByM_trunc hd hm ⁻¹' U,
-    (twoByM_continuous_trunc hd hm).continuousAt.preimage_mem_nhds hU, C, fun B hB => hC _ hB⟩
-
-/-- `(x₁, …, x_m) ↦ (x₁, …, x_{m'})`. -/
-noncomputable def twoByM_projX (hm : m' ≤ m) : (Fin m → ℝ) →L[ℝ] (Fin m' → ℝ) :=
-  ContinuousLinearMap.pi fun j => ContinuousLinearMap.proj (Fin.castLE hm j)
-
-/-- Padding a vector of `ℝ^{d'}` with zeros to a vector of `ℝ^d`. -/
-noncomputable def twoByM_padV (_hd : d' ≤ d) : (Fin d' → ℝ) →L[ℝ] (Fin d → ℝ) :=
-  ContinuousLinearMap.pi fun i =>
-    if h : i.val < d' then ContinuousLinearMap.proj ⟨i, h⟩ else 0
-
-theorem twoByM_projX_apply (hm : m' ≤ m) (x : Fin m → ℝ) (j : Fin m') :
-    twoByM_projX hm x j = x (Fin.castLE hm j) := rfl
-
-theorem twoByM_padV_castLE (hd : d' ≤ d) (v : Fin d' → ℝ) (i : Fin d') :
-    twoByM_padV hd v (Fin.castLE hd i) = v i := by
-  simp [twoByM_padV, i.2]
-
-theorem twoByM_projX_padV (hm : m' ≤ m) (z : Fin m' → ℝ) :
-    twoByM_projX hm (twoByM_padV hm z) = z := by
-  funext j
-  rw [twoByM_projX_apply, twoByM_padV_castLE]
-
-theorem twoByM_projX_single (hm : m' ≤ m) (k : Fin m') :
-    twoByM_projX hm (Pi.single (Fin.castLE hm k) 1) = Pi.single k 1 := by
-  funext j
-  simp only [twoByM_projX_apply, Pi.single_apply, (Fin.castLE_injective hm).eq_iff]
-
-/-- `g ∘ π` is differentiable at `x` exactly when `g` is differentiable at `π x`. -/
-theorem twoByM_differentiableAt_comp_projX_iff (hm : m' ≤ m) {g : (Fin m' → ℝ) → ℝ}
-    {x : Fin m → ℝ} :
-    DifferentiableAt ℝ (g ∘ twoByM_projX hm) x ↔ DifferentiableAt ℝ g (twoByM_projX hm x) := by
-  refine ⟨fun h => ?_, fun h => h.comp x (twoByM_projX hm).differentiableAt⟩
-  set E : (Fin m' → ℝ) → (Fin m → ℝ) := fun z => x + twoByM_padV hm (z - twoByM_projX hm x)
-  have hE : ∀ z, twoByM_projX hm (E z) = z := fun z => by
-    simp only [E, map_add, twoByM_projX_padV, add_sub_cancel]
-  have hEx : E (twoByM_projX hm x) = x := by simp [E]
-  have hdE : DifferentiableAt ℝ E (twoByM_projX hm x) :=
-    (differentiableAt_const x).add ((twoByM_padV hm).differentiableAt.comp _
-      (differentiableAt_id.sub_const _))
-  have h' : DifferentiableAt ℝ (g ∘ twoByM_projX hm) (E (twoByM_projX hm x)) := by rwa [hEx]
-  have := h'.comp (twoByM_projX hm x) hdE
-  convert this using 1
-  funext z
-  simp only [Function.comp, hE]
-
-theorem twoByM_fderiv_comp_projX (hm : m' ≤ m) (g : (Fin m' → ℝ) → ℝ) (x v : Fin m → ℝ) :
-    fderiv ℝ (g ∘ twoByM_projX hm) x v =
-      fderiv ℝ g (twoByM_projX hm x) (twoByM_projX hm v) := by
-  by_cases h : DifferentiableAt ℝ g (twoByM_projX hm x)
-  · rw [fderiv_comp x h (twoByM_projX hm).differentiableAt, ContinuousLinearMap.fderiv]
-    rfl
-  · rw [fderiv_zero_of_not_differentiableAt h, fderiv_zero_of_not_differentiableAt
-      (mt (twoByM_differentiableAt_comp_projX_iff hm).1 h)]
-    rfl
-
-/-- The upper left block of the gradient of the lifted map is the gradient of the map. -/
-theorem twoByM_trunc_jac (hd : d' ≤ d) (hm : m' ≤ m) (φ : (Fin m' → ℝ) → Fin d' → ℝ)
-    (x : Fin m → ℝ) :
-    twoByM_trunc hd hm (jac (fun y => twoByM_padV hd (φ (twoByM_projX hm y))) x) =
-      jac φ (twoByM_projX hm x) := by
-  ext i k
-  have hfun : (fun y => twoByM_padV hd (φ (twoByM_projX hm y)) (Fin.castLE hd i)) =
-      (fun z => φ z i) ∘ twoByM_projX hm := by
-    funext y
-    simp [twoByM_padV_castLE]
-  simp only [twoByM_trunc, jac, Matrix.submatrix_apply, Matrix.of_apply]
-  rw [hfun, twoByM_fderiv_comp_projX, twoByM_projX_single]
-
-/-- The image of the uniform measure on `(0, 1)^m` under `π` is the uniform measure on
-`(0, 1)^{m'}`. -/
-theorem twoByM_map_projX (hm : m' ≤ m) :
-    (volume.restrict (unitCube m)).map (twoByM_projX hm) = volume.restrict (unitCube m') := by
-  have h2 : volume.restrict (unitCube m') =
-      Measure.pi fun _ : Fin m' => volume.restrict (Set.Ioo (0 : ℝ) 1) := by
-    rw [unitCube, volume_pi, Measure.restrict_pi_pi]
-  rw [h2]
-  refine (Measure.pi_eq (μ := fun _ : Fin m' => volume.restrict (Set.Ioo (0 : ℝ) 1))
-    fun s hs => ?_).symm
-  have hmeas := MeasurableSet.univ_pi hs
-  rw [Measure.map_apply (twoByM_projX hm).continuous.measurable hmeas,
-    Measure.restrict_apply ((twoByM_projX hm).continuous.measurable hmeas)]
-  simp_rw [Measure.restrict_apply (hs _)]
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le hm
-  have hset : (twoByM_projX hm ⁻¹' Set.univ.pi s) ∩ unitCube (m' + l) =
-      Set.univ.pi fun i : Fin (m' + l) =>
-        if h : (i : ℕ) < m' then s ⟨i, h⟩ ∩ Set.Ioo 0 1 else Set.Ioo 0 1 := by
-    ext x
-    simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_pi, Set.mem_univ, true_implies,
-      twoByM_projX_apply, unitCube]
-    constructor
-    · rintro ⟨h1, h2⟩ i
-      by_cases hi : (i : ℕ) < m'
-      · simp only [hi, ↓reduceDIte]
-        refine ⟨?_, h2 i⟩
-        have := h1 ⟨i, hi⟩
-        have hc : Fin.castLE hm ⟨i, hi⟩ = i := Fin.ext rfl
-        rwa [hc] at this
-      · simp only [hi, ↓reduceDIte]; exact h2 i
-    · intro h
-      refine ⟨fun j => ?_, fun i => ?_⟩
-      · have := h (Fin.castLE hm j)
-        simp only [Fin.val_castLE, j.2, ↓reduceDIte] at this
-        exact this.1
-      · have := h i
-        by_cases hi : (i : ℕ) < m'
-        · simp only [hi, ↓reduceDIte] at this; exact this.2
-        · simp only [hi, ↓reduceDIte] at this; exact this
-  rw [hset, volume_pi_pi, Fin.prod_univ_add]
-  simp
-
-theorem twoByM_measurePreserving_projX (hm : m' ≤ m) :
-    MeasurePreserving (twoByM_projX hm) (volume.restrict (unitCube m))
-      (volume.restrict (unitCube m')) :=
-  ⟨(twoByM_projX hm).continuous.measurable, twoByM_map_projX hm⟩
-
-/-- Lifting a witness (TeX lines 1154–1156): if `f ∘ π` is quasiconvex at `A`, then `f` is
-quasiconvex at `π A`. Through the periodic form of quasiconvexity (Lemma 2.2,
-`External.Rindler.quasiconvexAtOn_iff_periodic`): a periodic test map `φ` of `ℝ^{m'}` lifts to the
-periodic test map `x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)` of `ℝ^m`, and the integrals over the unit
-cubes agree by Fubini. The argument of `intro_quasiconvexAt_of_comp_trunc`. -/
-theorem twoByM_quasiconvexAt_of_comp_trunc (hd : d' ≤ d) (hm : m' ≤ m)
-    {f : Matrix (Fin d') (Fin m') ℝ → ℝ} (hf : IsIntegrand f) {A : Matrix (Fin d) (Fin m) ℝ}
-    (h : QuasiconvexAt (fun B => f (twoByM_trunc hd hm B)) A) :
-    QuasiconvexAt f (twoByM_trunc hd hm A) := by
-  have hF := twoByM_isIntegrand_comp hd hm hf
-  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hF.1 hF.2 A).1
-    ((cov_quasiconvexAtOn_unitCube_iff _ A).2 h)
-  refine (cov_quasiconvexAtOn_unitCube_iff f _).1
-    ((External.Rindler.quasiconvexAtOn_iff_periodic hf.1 hf.2 _).2 ?_)
-  intro φ K hK hφper hint
-  set ψ : (Fin m → ℝ) → Fin d → ℝ := fun y => twoByM_padV hd (φ (twoByM_projX hm y)) with hψ
-  have hψK : LipschitzWith (‖twoByM_padV hd‖₊ * K * ‖twoByM_projX hm‖₊) ψ :=
-    ((twoByM_padV hd).lipschitzWith.comp hK).comp (twoByM_projX hm).lipschitzWith
-  have hψper : ∀ (x : Fin m → ℝ) (z : Fin m → ℤ), ψ (x + fun i => (z i : ℝ)) = ψ x := by
-    intro x z
-    have hz : twoByM_projX hm (fun i => (z i : ℝ)) =
-        fun j => ((z (Fin.castLE hm j) : ℤ) : ℝ) := rfl
-    simp only [hψ, map_add, hz, hφper]
-  set G : (Fin m' → ℝ) → ℝ := fun y => f (twoByM_trunc hd hm A + CalculusOfVariations.grad φ y)
-  have hG : (fun x => f (twoByM_trunc hd hm (A + CalculusOfVariations.grad ψ x))) =
-      G ∘ twoByM_projX hm := by
-    funext x
-    simp only [G, Function.comp, twoByM_trunc_add, grad_eq, hψ, twoByM_trunc_jac]
-  have hmp := twoByM_measurePreserving_projX hm
-  have hGm : AEStronglyMeasurable G (volume.restrict (unitCube m')) := hint.aestronglyMeasurable
-  have hint' : IntegrableOn (fun x => f (twoByM_trunc hd hm (A + CalculusOfVariations.grad ψ x)))
-      (CalculusOfVariations.unitCube m) := by
-    rw [hG]
-    exact (hmp.integrable_comp hGm).2 hint
-  have key := hper ψ _ hψK hψper hint'
-  rw [hG] at key
-  have heq : ∫ x in CalculusOfVariations.unitCube m, (G ∘ twoByM_projX hm) x =
-      ∫ y in CalculusOfVariations.unitCube m', G y := by
-    change ∫ x, G (twoByM_projX hm x) ∂(volume.restrict (unitCube m)) =
-      ∫ y, G y ∂(volume.restrict (unitCube m'))
-    rw [← integral_map hmp.measurable.aemeasurable (by rw [hmp.map_eq]; exact hGm), hmp.map_eq]
-  rw [heq] at key
-  exact key
-
-end Lifting
 
 /-- **Theorem 1.2, elementary route** (`cs-thm1.2-elementary`): for `p ∈ (1, ∞)` there is `m₀ (p)`
 such that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere
@@ -3818,7 +3593,7 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). No envelope is needed: `g` is already
   globally rank-one convex, so `f = g` for `m₀ = 2 n₀` (the paper takes `f = F^{rc}`).
 * For `m ≥ m₀`, `f ∘ π` with the projection `π` onto the first `m₀` columns, as in the paper; a
-  witness for `f` lifts to one for `f ∘ π` (`twoByM_quasiconvexAt_of_comp_trunc`, Lemma 2.2). -/
+  witness for `f` lifts to one for `f ∘ π` (`lift_quasiconvexAt_of_comp_trunc`, Lemma 2.2). -/
 theorem theorem1_2_elementary {p : ℝ} (hp : 1 < p) :
     ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -3849,12 +3624,12 @@ theorem theorem1_2_elementary {p : ℝ} (hp : 1 < p) :
   have hN := nowhereQuasiconvex_of_not_quasiconvexAt_zero hp hcont (Or.inl hhom) hgnq
   have hI : IsIntegrand (twoByM_gq n₀ p q) := twoByM_isIntegrand_of_continuous hcont
   -- lifted to `ℝ^{2×m}` by the projection onto the first `2 n₀` columns
-  refine ⟨2 * n₀, fun m hm => ⟨fun A => twoByM_gq n₀ p q (twoByM_trunc le_rfl hm A),
-    twoByM_isIntegrand_comp le_rfl hm hI, fun t A => ?_, twoByM_rankOneConvex_comp le_rfl hm hrc,
-    fun A hA => hN _ (twoByM_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
-  change twoByM_gq n₀ p q (twoByM_trunc le_rfl hm (t • A)) =
-    |t| ^ p * twoByM_gq n₀ p q (twoByM_trunc le_rfl hm A)
-  rw [twoByM_trunc_smul]
+  refine ⟨2 * n₀, fun m hm => ⟨fun A => twoByM_gq n₀ p q (lift_trunc le_rfl hm A),
+    lift_isIntegrand_comp le_rfl hm hI, fun t A => ?_, lift_rankOneConvex_comp le_rfl hm hrc,
+    fun A hA => hN _ (lift_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
+  change twoByM_gq n₀ p q (lift_trunc le_rfl hm (t • A)) =
+    |t| ^ p * twoByM_gq n₀ p q (lift_trunc le_rfl hm A)
+  rw [lift_trunc_smul]
   exact hhom t _
 
 end Cassese

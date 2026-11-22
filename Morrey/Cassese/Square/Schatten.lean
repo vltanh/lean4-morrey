@@ -25,6 +25,15 @@ namespace Cassese
 
 variable {d m : ℕ}
 
+/-- The Schatten norm is nonnegative. -/
+theorem schattenNorm_nonneg (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) :
+    0 ≤ schattenNorm q A := by
+  unfold schattenNorm
+  split_ifs
+  · exact Real.iSup_nonneg fun i => Real.sqrt_nonneg _
+  · exact Real.rpow_nonneg (Finset.sum_nonneg fun i _ =>
+      Real.rpow_nonneg (Real.sqrt_nonneg _) _) _
+
 /-- The spectral theorem for a real symmetric matrix: `B = U diag (λ) Uᵀ`. -/
 theorem square_spectral {n : ℕ} {B : Matrix (Fin n) (Fin n) ℝ} (hB : B.IsHermitian) :
     B = (hB.eigenvectorUnitary : Matrix (Fin n) (Fin n) ℝ) * Matrix.diagonal hB.eigenvalues *

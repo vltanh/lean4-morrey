@@ -1,7 +1,7 @@
 module
 
 public import Morrey.Cassese.Square.Hermite
-public import Morrey.Cassese.FourByTwo
+public import Morrey.Cassese.Rademacher
 public import Morrey.Cassese.Hypotheses
 public import Mathlib.LinearAlgebra.Matrix.PosDef
 public import Mathlib.Analysis.InnerProductSpace.PiL2
@@ -24,8 +24,8 @@ norm (`square_korn_avg_frob_mart`), and Burkholder's square function inequality
 (Theorem 2.3 (2), `burkholderSquareFunction_holds`) for such martingales in the Hilbert space
 `S_2^{d×d}` (`square_korn_burkholder`), through the model `EuclideanSpace ℝ (Fin d × Fin d)` of
 `S_2^{d×d}` (`square_korn_toE`, an isometry for the Frobenius norm) and the bridge of
-`Morrey/Cassese/FourByTwo.lean` from Rademacher martingales on the signs to
-`MeasureTheory.Martingale` (`fourByTwo_martingale`, `fourByTwo_eLpNorm_uniform`).
+`Morrey/Cassese/Rademacher.lean` from Rademacher martingales on the signs to
+`MeasureTheory.Martingale` (`rad_martingale`, `rad_eLpNorm_uniform`).
 -/
 
 @[expose] public section
@@ -247,9 +247,9 @@ theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
     intro k ε; simp [hζdef, mart, map_sum, map_smul]
   obtain ⟨h1, -⟩ := burkholderSquareFunction_holds (Fin N → Bool) inferInstance
     (ProbabilityTheory.uniformOn Set.univ)
-    (fourByTwo_filtration N) (EuclideanSpace ℝ (Fin n × Fin n)) (fun k => mart ζ k) p hp
-    (fourByTwo_martingale ζ hζ) (fourByTwo_mart_zero ζ) N
-  rw [fourByTwo_eLpNorm_uniform _ hp0, fourByTwo_eLpNorm_uniform _ hp0,
+    (rad_filtration N) (EuclideanSpace ℝ (Fin n × Fin n)) (fun k => mart ζ k) p hp
+    (rad_martingale ζ hζ) (rad_mart_zero ζ) N
+  rw [rad_eLpNorm_uniform _ hp0, rad_eLpNorm_uniform _ hp0,
     ← ENNReal.ofReal_mul hβ] at h1
   have hsq : ∀ x : ℝ, 0 ≤ x → √x ^ p = x ^ (p / 2) := fun x hx => by
     rw [Real.sqrt_eq_rpow, ← Real.rpow_mul hx]; congr 1; ring
@@ -258,7 +258,7 @@ theorem square_korn_burkholder {p : ℝ} (hp : 1 < p) {N : ℕ}
     intro ε
     rw [Finset.sum_range]
     refine Finset.sum_congr rfl fun k _ => ?_
-    rw [fourByTwo_mart_succ, add_sub_cancel_left]
+    rw [rad_mart_succ, add_sub_cancel_left]
     simp only [k.isLt, ↓reduceDIte]
     rw [norm_smul]
     have hc : ‖coin (ε k)‖ = 1 := by cases ε k <;> simp [coin]

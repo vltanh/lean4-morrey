@@ -30,8 +30,9 @@ variable {d m : ℕ}
 /-- **Lemma 5.1 (2)** (`lem:extension-from-subspace`): with `L`, `π`, `κ` as in (1), let `p ≥ 2`
 and let `f` be globally rank-one convex on `L`, `p`-homogeneous, and `C²` away from the origin.
 Then there is `c₀ = c₀ (f, L)` such that for every `δ ∈ (0, 1)` and every `Λ ≥ c₀ / δ`, the map
-(26) `A ↦ f (π A) + δ (|π A|² + Λ² |π^⊥ A|²)^{p/2}` is globally rank-one convex. Conditional on
-Burkholder's inequality (Theorem 2.3), which gives (27).
+(26) `A ↦ f (π A) + δ (|π A|² + Λ² |π^⊥ A|²)^{p/2}` is globally rank-one convex. (The paper's
+proof uses Burkholder's inequality, Theorem 2.3, for (27); this one does not need it: see the
+departures below.)
 
 Proof: the paper's argument (TeX lines 1870–1966) for a one-step rank-one Rademacher martingale
 `M₁ = A ± R`, which is all that global rank-one convexity needs: a continuous function is convex

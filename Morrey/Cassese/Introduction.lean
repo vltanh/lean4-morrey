@@ -6,6 +6,7 @@ public import Morrey.Cassese.TwoByThree
 public import Morrey.Cassese.Square
 public import Morrey.Cassese.FourByTwo
 public import Morrey.Common.External.Rindler.Lemmas
+public import Morrey.Cassese.Lifting
 public import Mathlib.Analysis.Calculus.Rademacher
 public import Mathlib.Analysis.Convex.Integral
 public import Mathlib.Analysis.Convex.Continuous
@@ -35,23 +36,21 @@ the introduction about the landscape of Morrey's problem:
   positive answer (`morrey_landscape`); and, with Corollary 5.3, the same for the homogeneous
   problem at `p = 4` (lines 254–256 and 2137–2142, `homMorrey_landscape`).
 
-Conditional statements. The results of other works that are out of reach of this project (or
-whose construction the user has not yet decided on) are hypotheses, named after their sources,
-of every statement whose proof uses them: see each docstring.
+Conditional statements. The results of other works that are out of reach of this project are
+hypotheses, named after their sources, of every statement whose proof uses them: Theorem 1.4 for
+general `p`, Theorem 1.5, Corollary 1.6 and the paper's proof of Theorem 1.2 (see each docstring).
+The others are unconditional: the cited results that their proofs use are proved
+(`Morrey/Cassese/Hypotheses.lean`, `Morrey/Common/External`).
 
-Tools (helpers, prefixed `intro_`): blocks of matrices and the lifting of witnesses through the
-periodic form of quasiconvexity (`intro_trunc`, `intro_quasiconvexAt_of_comp_trunc`); Jensen's
-inequality along test maps (`intro_quasiconvexAt_of_convexOn`); the rank-one convex envelope step
+Tools (helpers, prefixed `intro_`): Jensen's inequality along test maps
+(`intro_quasiconvexAt_of_convexOn`); the rank-one convex envelope step
 of the main theorems (`intro_envelope`) and the families `C ↦ C^p N₁^p − N₂^p` with their thresholds
 (`intro_family`, `intro_rankOneConvexAt_of_rcThreshold_lt`,
 `intro_not_quasiconvexAt_of_lt_qcThreshold`, `intro_blockF`, `intro_kornF`); the integrand `G` of
 Corollary 1.6 and its three properties (`intro_corG`, `intro_corG_basic`,
-`intro_corG_rankOneConvex`, `intro_corG_not_quasiconvexAt`).
-
-Not proved here: three statements that the proofs of Theorems 1.2 and 1.3 use and that the
-section files do not state (`twoByM_ratio_le_qcThreshold`,
-`twoByThree_not_quasiconvexAt_qDeltaLambda`, `twoByThree_theorem1_3_b_witness`, private, with
-`sorry`; see their docstrings).
+`intro_corG_rankOneConvex`, `intro_corG_not_quasiconvexAt`). The lifting of integrands and
+witnesses from `ℝ^{d'×m'}` to `ℝ^{d×m}` (`lift_trunc`, `lift_quasiconvexAt_of_comp_trunc`) is in
+`Morrey/Cassese/Lifting.lean`.
 -/
 
 @[expose] public section
@@ -62,62 +61,16 @@ namespace Cassese
 
 /-! ### Tools: blocks of matrices, lifted test maps, Jensen along test maps
 
-Helpers for the claims of the introduction (prefix `intro_`). `intro_trunc` is the upper left
-`d' × m'` block of a `d × m` matrix; an integrand `f` on `ℝ^{d'×m'}` lifts to `f ∘ intro_trunc` on
+Helpers for the claims of the introduction (prefix `intro_`). `lift_trunc` is the upper left
+`d' × m'` block of a `d × m` matrix; an integrand `f` on `ℝ^{d'×m'}` lifts to `f ∘ lift_trunc` on
 `ℝ^{d×m}`, and a periodic test map `φ` of `ℝ^{m'}` to the periodic test map
 `x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)` of `ℝ^m`, whose gradient has `∇φ` as upper left block. -/
 
 open MeasureTheory
 
-section Lifting
+section Integrand
 
-variable {d m d' m' : ℕ}
-
-/-- The upper left `d' × m'` block of a `d × m` matrix. -/
-def intro_trunc (hd : d' ≤ d) (hm : m' ≤ m) (A : Matrix (Fin d) (Fin m) ℝ) :
-    Matrix (Fin d') (Fin m') ℝ :=
-  A.submatrix (Fin.castLE hd) (Fin.castLE hm)
-
-/-- The `d × m` matrix with upper left block `A` and zeros elsewhere. -/
-def intro_pad (_hd : d' ≤ d) (_hm : m' ≤ m) (A : Matrix (Fin d') (Fin m') ℝ) :
-    Matrix (Fin d) (Fin m) ℝ :=
-  Matrix.of fun i j => if h : i.val < d' ∧ j.val < m' then A ⟨i, h.1⟩ ⟨j, h.2⟩ else 0
-
-theorem intro_trunc_pad (hd : d' ≤ d) (hm : m' ≤ m) (A : Matrix (Fin d') (Fin m') ℝ) :
-    intro_trunc hd hm (intro_pad hd hm A) = A := by
-  ext i j
-  simp [intro_trunc, intro_pad, i.2, j.2]
-
-theorem intro_trunc_add (hd : d' ≤ d) (hm : m' ≤ m) (A B : Matrix (Fin d) (Fin m) ℝ) :
-    intro_trunc hd hm (A + B) = intro_trunc hd hm A + intro_trunc hd hm B := by
-  ext i j
-  simp [intro_trunc]
-
-theorem intro_trunc_sub (hd : d' ≤ d) (hm : m' ≤ m) (A B : Matrix (Fin d) (Fin m) ℝ) :
-    intro_trunc hd hm (A - B) = intro_trunc hd hm A - intro_trunc hd hm B := by
-  ext i j
-  simp [intro_trunc]
-
-theorem intro_trunc_smul (hd : d' ≤ d) (hm : m' ≤ m) (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
-    intro_trunc hd hm (t • A) = t • intro_trunc hd hm A := by
-  ext i j
-  simp [intro_trunc]
-
-theorem intro_trunc_zero (hd : d' ≤ d) (hm : m' ≤ m) :
-    intro_trunc hd hm (0 : Matrix (Fin d) (Fin m) ℝ) = 0 := by
-  ext i j
-  simp [intro_trunc]
-
-theorem intro_continuous_trunc (hd : d' ≤ d) (hm : m' ≤ m) : Continuous (intro_trunc hd hm) :=
-  continuous_id.matrix_submatrix (Fin.castLE hd) (Fin.castLE hm)
-
-/-- A matrix of rank `0` is `0`. -/
-theorem intro_eq_zero_of_rank_eq_zero {p q : ℕ} {A : Matrix (Fin p) (Fin q) ℝ}
-    (h : A.rank = 0) : A = 0 := by
-  rw [Matrix.rank, Submodule.finrank_eq_zero, LinearMap.range_eq_bot] at h
-  ext i j
-  have := congrArg (fun f => f (Pi.single j 1) i) h
-  simpa [Matrix.mulVecLin_apply] using this
+variable {d m : ℕ}
 
 /-- A continuous function is an integrand. -/
 theorem intro_isIntegrand_of_continuous {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f) :
@@ -129,196 +82,7 @@ theorem intro_isIntegrand_of_continuous {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
   rw [abs_le]
   constructor <;> linarith [le_abs_self (f A), neg_abs_le (f A)]
 
-/-- The block map sends rank-one lines to rank-one lines or to points: `f ∘ intro_trunc` is
-rank-one convex with `f`. -/
-theorem intro_rankOneConvex_comp (hd : d' ≤ d) (hm : m' ≤ m) {f : Matrix (Fin d') (Fin m') ℝ → ℝ}
-    (hf : RankOneConvex f) : RankOneConvex fun A => f (intro_trunc hd hm A) := by
-  intro A B hAB
-  simp_rw [intro_trunc_add, intro_trunc_smul]
-  have hle : (intro_trunc hd hm A - intro_trunc hd hm B).rank ≤ 1 := by
-    rw [← intro_trunc_sub, ← hAB]
-    exact Matrix.rank_submatrix_le _ _ _
-  by_cases h1 : (intro_trunc hd hm A - intro_trunc hd hm B).rank = 1
-  · exact hf _ _ h1
-  · have h0 := intro_eq_zero_of_rank_eq_zero (show (intro_trunc hd hm A -
-      intro_trunc hd hm B).rank = 0 by omega)
-    rw [sub_eq_zero] at h0
-    simp only [h0, ← add_smul, add_sub_cancel, one_smul]
-    exact convexOn_const _ (convex_Icc 0 1)
-
-theorem intro_isIntegrand_comp (hd : d' ≤ d) (hm : m' ≤ m) {f : Matrix (Fin d') (Fin m') ℝ → ℝ}
-    (hf : IsIntegrand f) : IsIntegrand fun A => f (intro_trunc hd hm A) := by
-  refine ⟨hf.1.comp (intro_continuous_trunc hd hm), fun A => ?_⟩
-  obtain ⟨U, hU, C, hC⟩ := hf.2 (intro_trunc hd hm A)
-  exact ⟨intro_trunc hd hm ⁻¹' U, (intro_continuous_trunc hd hm).continuousAt.preimage_mem_nhds hU,
-    C, fun B hB => hC _ hB⟩
-
-theorem intro_isPHomogeneous_comp (hd : d' ≤ d) (hm : m' ≤ m) {p : ℝ}
-    {f : Matrix (Fin d') (Fin m') ℝ → ℝ} (hf : IsPHomogeneous p f) :
-    IsPHomogeneous p fun A => f (intro_trunc hd hm A) := by
-  intro t A
-  show f (intro_trunc hd hm (t • A)) = |t| ^ p * f (intro_trunc hd hm A)
-  rw [intro_trunc_smul]
-  exact hf t _
-
-/-- `(x₁, …, x_m) ↦ (x₁, …, x_{m'})`. -/
-noncomputable def intro_projX (hm : m' ≤ m) : (Fin m → ℝ) →L[ℝ] (Fin m' → ℝ) :=
-  ContinuousLinearMap.pi fun j => ContinuousLinearMap.proj (Fin.castLE hm j)
-
-/-- Padding a vector of `ℝ^{d'}` with zeros to a vector of `ℝ^d`. -/
-noncomputable def intro_padV (_hd : d' ≤ d) : (Fin d' → ℝ) →L[ℝ] (Fin d → ℝ) :=
-  ContinuousLinearMap.pi fun i =>
-    if h : i.val < d' then ContinuousLinearMap.proj ⟨i, h⟩ else 0
-
-theorem intro_projX_apply (hm : m' ≤ m) (x : Fin m → ℝ) (j : Fin m') :
-    intro_projX hm x j = x (Fin.castLE hm j) := rfl
-
-theorem intro_padV_castLE (hd : d' ≤ d) (v : Fin d' → ℝ) (i : Fin d') :
-    intro_padV hd v (Fin.castLE hd i) = v i := by
-  simp [intro_padV, i.2]
-
-theorem intro_projX_padV (hm : m' ≤ m) (z : Fin m' → ℝ) : intro_projX hm (intro_padV hm z) = z := by
-  funext j
-  rw [intro_projX_apply, intro_padV_castLE]
-
-theorem intro_projX_single (hm : m' ≤ m) (k : Fin m') :
-    intro_projX hm (Pi.single (Fin.castLE hm k) 1) = Pi.single k 1 := by
-  funext j
-  simp only [intro_projX_apply, Pi.single_apply, (Fin.castLE_injective hm).eq_iff]
-
-/-- `g ∘ intro_projX` is differentiable at `x` exactly when `g` is differentiable at the
-projection of `x` (the projection has an affine right inverse through `x`). -/
-theorem intro_differentiableAt_comp_projX_iff (hm : m' ≤ m) {g : (Fin m' → ℝ) → ℝ}
-    {x : Fin m → ℝ} :
-    DifferentiableAt ℝ (g ∘ intro_projX hm) x ↔ DifferentiableAt ℝ g (intro_projX hm x) := by
-  refine ⟨fun h => ?_, fun h => h.comp x (intro_projX hm).differentiableAt⟩
-  set E : (Fin m' → ℝ) → (Fin m → ℝ) := fun z => x + intro_padV hm (z - intro_projX hm x)
-  have hE : ∀ z, intro_projX hm (E z) = z := fun z => by
-    simp only [E, map_add, intro_projX_padV, add_sub_cancel]
-  have hEx : E (intro_projX hm x) = x := by simp [E]
-  have hdE : DifferentiableAt ℝ E (intro_projX hm x) :=
-    (differentiableAt_const x).add ((intro_padV hm).differentiableAt.comp _
-      (differentiableAt_id.sub_const _))
-  have h' : DifferentiableAt ℝ (g ∘ intro_projX hm) (E (intro_projX hm x)) := by rwa [hEx]
-  have := h'.comp (intro_projX hm x) hdE
-  convert this using 1
-  funext z
-  simp only [Function.comp, hE]
-
-theorem intro_fderiv_comp_projX (hm : m' ≤ m) (g : (Fin m' → ℝ) → ℝ) (x v : Fin m → ℝ) :
-    fderiv ℝ (g ∘ intro_projX hm) x v = fderiv ℝ g (intro_projX hm x) (intro_projX hm v) := by
-  by_cases h : DifferentiableAt ℝ g (intro_projX hm x)
-  · rw [fderiv_comp x h (intro_projX hm).differentiableAt, ContinuousLinearMap.fderiv]
-    rfl
-  · rw [fderiv_zero_of_not_differentiableAt h, fderiv_zero_of_not_differentiableAt
-      (mt (intro_differentiableAt_comp_projX_iff hm).1 h)]
-    rfl
-
-/-- The upper left block of the gradient of the lifted map is the gradient of the map. -/
-theorem intro_trunc_jac (hd : d' ≤ d) (hm : m' ≤ m) (φ : (Fin m' → ℝ) → Fin d' → ℝ)
-    (x : Fin m → ℝ) :
-    intro_trunc hd hm (jac (fun y => intro_padV hd (φ (intro_projX hm y))) x) =
-      jac φ (intro_projX hm x) := by
-  ext i k
-  have hfun : (fun y => intro_padV hd (φ (intro_projX hm y)) (Fin.castLE hd i)) =
-      (fun z => φ z i) ∘ intro_projX hm := by
-    funext y
-    simp [intro_padV_castLE]
-  simp only [intro_trunc, jac, Matrix.submatrix_apply, Matrix.of_apply]
-  rw [hfun, intro_fderiv_comp_projX, intro_projX_single]
-
-/-- The image of the uniform measure on `(0, 1)^m` under `(x₁, …, x_m) ↦ (x₁, …, x_{m'})` is the
-uniform measure on `(0, 1)^{m'}` (Fubini: the other factor has volume `1`). -/
-theorem intro_map_projX (hm : m' ≤ m) :
-    (volume.restrict (unitCube m)).map (intro_projX hm) = volume.restrict (unitCube m') := by
-  have h2 : volume.restrict (unitCube m') =
-      Measure.pi fun _ : Fin m' => volume.restrict (Set.Ioo (0 : ℝ) 1) := by
-    rw [unitCube, volume_pi, Measure.restrict_pi_pi]
-  rw [h2]
-  refine (Measure.pi_eq (μ := fun _ : Fin m' => volume.restrict (Set.Ioo (0 : ℝ) 1))
-    fun s hs => ?_).symm
-  have hmeas := MeasurableSet.univ_pi hs
-  rw [Measure.map_apply (intro_projX hm).continuous.measurable hmeas,
-    Measure.restrict_apply ((intro_projX hm).continuous.measurable hmeas)]
-  simp_rw [Measure.restrict_apply (hs _)]
-  obtain ⟨l, rfl⟩ := Nat.exists_eq_add_of_le hm
-  have hset : (intro_projX hm ⁻¹' Set.univ.pi s) ∩ unitCube (m' + l) =
-      Set.univ.pi fun i : Fin (m' + l) =>
-        if h : (i : ℕ) < m' then s ⟨i, h⟩ ∩ Set.Ioo 0 1 else Set.Ioo 0 1 := by
-    ext x
-    simp only [Set.mem_inter_iff, Set.mem_preimage, Set.mem_pi, Set.mem_univ, true_implies,
-      intro_projX_apply, unitCube]
-    constructor
-    · rintro ⟨h1, h2⟩ i
-      by_cases hi : (i : ℕ) < m'
-      · simp only [hi, ↓reduceDIte]
-        refine ⟨?_, h2 i⟩
-        have := h1 ⟨i, hi⟩
-        have hc : Fin.castLE hm ⟨i, hi⟩ = i := Fin.ext rfl
-        rwa [hc] at this
-      · simp only [hi, ↓reduceDIte]; exact h2 i
-    · intro h
-      refine ⟨fun j => ?_, fun i => ?_⟩
-      · have := h (Fin.castLE hm j)
-        simp only [Fin.val_castLE, j.2, ↓reduceDIte] at this
-        exact this.1
-      · have := h i
-        by_cases hi : (i : ℕ) < m'
-        · simp only [hi, ↓reduceDIte] at this; exact this.2
-        · simp only [hi, ↓reduceDIte] at this; exact this
-  rw [hset, volume_pi_pi, Fin.prod_univ_add]
-  simp
-
-theorem intro_measurePreserving_projX (hm : m' ≤ m) :
-    MeasurePreserving (intro_projX hm) (volume.restrict (unitCube m))
-      (volume.restrict (unitCube m')) :=
-  ⟨(intro_projX hm).continuous.measurable, intro_map_projX hm⟩
-
-/-- Lifting a witness (lines 105–107, 1154–1156): if `f ∘ intro_trunc` is quasiconvex at `A`,
-then `f` is quasiconvex at the upper left block of `A`. Through the periodic form of
-quasiconvexity (Lemma 2.2, `External.Rindler.quasiconvexAtOn_iff_periodic`, with the bridge
-`cov_quasiconvexAtOn_unitCube_iff`): a periodic test map `φ` of `ℝ^{m'}` lifts to the periodic
-test map `x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)` of `ℝ^m`, and the integrals over the unit cubes agree
-by Fubini. -/
-theorem intro_quasiconvexAt_of_comp_trunc (hd : d' ≤ d) (hm : m' ≤ m)
-    {f : Matrix (Fin d') (Fin m') ℝ → ℝ} (hf : IsIntegrand f) {A : Matrix (Fin d) (Fin m) ℝ}
-    (h : QuasiconvexAt (fun B => f (intro_trunc hd hm B)) A) :
-    QuasiconvexAt f (intro_trunc hd hm A) := by
-  have hF := intro_isIntegrand_comp hd hm hf
-  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hF.1 hF.2 A).1
-    ((cov_quasiconvexAtOn_unitCube_iff _ A).2 h)
-  refine (cov_quasiconvexAtOn_unitCube_iff f _).1
-    ((External.Rindler.quasiconvexAtOn_iff_periodic hf.1 hf.2 _).2 ?_)
-  intro φ K hK hφper hint
-  set ψ : (Fin m → ℝ) → Fin d → ℝ := fun y => intro_padV hd (φ (intro_projX hm y)) with hψ
-  have hψK : LipschitzWith (‖intro_padV hd‖₊ * K * ‖intro_projX hm‖₊) ψ :=
-    ((intro_padV hd).lipschitzWith.comp hK).comp (intro_projX hm).lipschitzWith
-  have hψper : ∀ (x : Fin m → ℝ) (z : Fin m → ℤ), ψ (x + fun i => (z i : ℝ)) = ψ x := by
-    intro x z
-    have hz : intro_projX hm (fun i => (z i : ℝ)) = fun j => ((z (Fin.castLE hm j) : ℤ) : ℝ) := rfl
-    simp only [hψ, map_add, hz, hφper]
-  set G : (Fin m' → ℝ) → ℝ := fun y => f (intro_trunc hd hm A + CalculusOfVariations.grad φ y)
-  have hG : (fun x => f (intro_trunc hd hm (A + CalculusOfVariations.grad ψ x))) =
-      G ∘ intro_projX hm := by
-    funext x
-    simp only [G, Function.comp, intro_trunc_add, grad_eq, hψ, intro_trunc_jac]
-  have hmp := intro_measurePreserving_projX hm
-  have hGm : AEStronglyMeasurable G (volume.restrict (unitCube m')) := hint.aestronglyMeasurable
-  have hint' : IntegrableOn (fun x => f (intro_trunc hd hm (A + CalculusOfVariations.grad ψ x)))
-      (CalculusOfVariations.unitCube m) := by
-    rw [hG]
-    exact (hmp.integrable_comp hGm).2 hint
-  have key := hper ψ _ hψK hψper hint'
-  rw [hG] at key
-  have heq : ∫ x in CalculusOfVariations.unitCube m, (G ∘ intro_projX hm) x =
-      ∫ y in CalculusOfVariations.unitCube m', G y := by
-    change ∫ x, G (intro_projX hm x) ∂(volume.restrict (unitCube m)) =
-      ∫ y, G y ∂(volume.restrict (unitCube m'))
-    rw [← integral_map hmp.measurable.aemeasurable (by rw [hmp.map_eq]; exact hGm), hmp.map_eq]
-  rw [heq] at key
-  exact key
-
-end Lifting
+end Integrand
 
 section Jensen
 
@@ -473,7 +237,7 @@ theorem intro_rank_eq_one_of_min {d m : ℕ} (h : min d m = 1) {A : Matrix (Fin 
     rcases min_choice d m with h' | h'
     · rw [h'] at h; exact h ▸ A.rank_le_height
     · rw [h'] at h; exact h ▸ A.rank_le_width
-  have h0 : A.rank ≠ 0 := fun h0 => hA (intro_eq_zero_of_rank_eq_zero h0)
+  have h0 : A.rank ≠ 0 := fun h0 => hA (lift_eq_zero_of_rank_eq_zero h0)
   omega
 
 
@@ -658,19 +422,19 @@ def HomMorreyPositive (p : ℝ) (d m : ℕ) : Prop :=
 failure propagates upwards).
 
 Proof (the paper gives none): an integrand `f` on `ℝ^{d'×m'}` lifts to `f ∘ T` on `ℝ^{d×m}`, `T A`
-the upper left block, which is a rank-one convex integrand with `f` (`intro_rankOneConvex_comp`);
+the upper left block, which is a rank-one convex integrand with `f` (`lift_rankOneConvex_comp`);
 quasiconvexity of `f ∘ T` at the padded matrix gives that of `f`
-(`intro_quasiconvexAt_of_comp_trunc`): a periodic test map `φ` of `ℝ^{m'}` lifts to the periodic
+(`lift_quasiconvexAt_of_comp_trunc`): a periodic test map `φ` of `ℝ^{m'}` lifts to the periodic
 test map `x ↦ (φ (x₁, …, x_{m'}), 0, …, 0)`, through the periodic form of quasiconvexity
 (Lemma 2.2, `External.Rindler.quasiconvexAtOn_iff_periodic`). Rows and columns are added in one
 step this way. -/
 theorem morreyPositive_mono {d m d' m' : ℕ} (hd : d' ≤ d) (hm : m' ≤ m)
     (h : MorreyPositive d m) : MorreyPositive d' m' := by
   intro f hf hR A
-  have hq := h _ (intro_isIntegrand_comp hd hm hf) (intro_rankOneConvex_comp hd hm hR)
-    (intro_pad hd hm A)
-  have := intro_quasiconvexAt_of_comp_trunc hd hm hf hq
-  rwa [intro_trunc_pad] at this
+  have hq := h _ (lift_isIntegrand_comp hd hm hf) (lift_rankOneConvex_comp hd hm hR)
+    (lift_pad hd hm A)
+  have := lift_quasiconvexAt_of_comp_trunc hd hm hf hq
+  rwa [lift_trunc_pad] at this
 
 /-- **Monotonicity of the homogeneous Morrey problem** (`cs-hom-monotone`, lines 209–210): as in
 the original problem, failure propagates upwards in the dimensions; that is, a positive answer in
@@ -682,10 +446,10 @@ theorem homMorreyPositive_mono {p : ℝ} (hp : 1 < p) {d m d' m' : ℕ} (hd : d'
     (h : HomMorreyPositive p d m) : HomMorreyPositive p d' m' := by
   have _ := hp  -- the exponent plays no role in the lifting
   intro f hf hhom hR
-  have hq := h _ (intro_isIntegrand_comp hd hm hf) (intro_isPHomogeneous_comp hd hm hhom)
-    (intro_rankOneConvex_comp hd hm hR)
-  have := intro_quasiconvexAt_of_comp_trunc hd hm hf hq
-  rwa [intro_trunc_zero] at this
+  have hq := h _ (lift_isIntegrand_comp hd hm hf) (lift_isPHomogeneous_comp hd hm hhom)
+    (lift_rankOneConvex_comp hd hm hR)
+  have := lift_quasiconvexAt_of_comp_trunc hd hm hf hq
+  rwa [lift_trunc_zero] at this
 
 /-- **Both notions reduce to convexity when min {d, m} = 1** (`cs-min-one`, lines 108–109):
 rank-one convexity is convexity. Proof: a nonzero matrix with one row or one column has rank one
@@ -1312,40 +1076,40 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
           rw [div_mul_eq_mul_div, div_lt_iff₀ (by linarith)]
           nlinarith
   -- the test map `Ψ_ε (x) = ε φ (x₁, x₂)` on `𝕋⁴`
-  set Ψ : (Fin 4 → ℝ) → Fin 4 → ℝ := fun x i => ε * φ (intro_projX h24 x) i with hΨ
-  have hΨeq : Ψ = (ε • ContinuousLinearMap.id ℝ (Fin 4 → ℝ)) ∘ φ ∘ intro_projX h24 := by
+  set Ψ : (Fin 4 → ℝ) → Fin 4 → ℝ := fun x i => ε * φ (lift_projX h24 x) i with hΨ
+  have hΨeq : Ψ = (ε • ContinuousLinearMap.id ℝ (Fin 4 → ℝ)) ∘ φ ∘ lift_projX h24 := by
     funext x i
     simp [hΨ]
   have hΨK : LipschitzWith (‖ε • ContinuousLinearMap.id ℝ (Fin 4 → ℝ)‖₊ * (K *
-      ‖intro_projX h24‖₊)) Ψ := by
+      ‖lift_projX h24‖₊)) Ψ := by
     rw [hΨeq]
     exact (ε • ContinuousLinearMap.id ℝ (Fin 4 → ℝ)).lipschitzWith.comp
-      (hK.comp (intro_projX h24).lipschitzWith)
+      (hK.comp (lift_projX h24).lipschitzWith)
   have hΨper : ∀ (x : Fin 4 → ℝ) (z : Fin 4 → ℤ), Ψ (x + fun i => (z i : ℝ)) = Ψ x := by
     intro x z
-    have hz : intro_projX h24 (fun i => (z i : ℝ)) =
+    have hz : lift_projX h24 (fun i => (z i : ℝ)) =
         fun j => ((z (Fin.castLE h24 j) : ℤ) : ℝ) := rfl
     simp only [hΨ, map_add, hz, hper]
   -- its gradient: `∇Ψ_ε = (ε ∇φ, 0)`
   have hjac : ∀ x i k, jac Ψ x i k =
-      ε * fderiv ℝ (fun z => φ z i) (intro_projX h24 x) (intro_projX h24 (Pi.single k 1)) := by
+      ε * fderiv ℝ (fun z => φ z i) (lift_projX h24 x) (lift_projX h24 (Pi.single k 1)) := by
     intro x i k
     simp only [jac, Matrix.of_apply, hΨ]
-    rw [intro_fderiv_const_mul hε0.ne' (fun y => φ (intro_projX h24 y) i)]
+    rw [intro_fderiv_const_mul hε0.ne' (fun y => φ (lift_projX h24 y) i)]
     simp only [smul_apply, smul_eq_mul]
-    rw [show (fun y => φ (intro_projX h24 y) i) = (fun z => φ z i) ∘ intro_projX h24 from rfl,
-      intro_fderiv_comp_projX]
-  have hjX : ∀ x, intro_Xc (jac Ψ x) = ε • jac φ (intro_projX h24 x) := fun x => by
+    rw [show (fun y => φ (lift_projX h24 y) i) = (fun z => φ z i) ∘ lift_projX h24 from rfl,
+      lift_fderiv_comp_projX]
+  have hjX : ∀ x, intro_Xc (jac Ψ x) = ε • jac φ (lift_projX h24 x) := fun x => by
     ext i j
     rw [intro_Xc, Matrix.of_apply, hjac, Matrix.smul_apply, smul_eq_mul,
-      show (⟨j.val, by omega⟩ : Fin 4) = Fin.castLE h24 j from rfl, intro_projX_single]
+      show (⟨j.val, by omega⟩ : Fin 4) = Fin.castLE h24 j from rfl, lift_projX_single]
     rfl
   have hjY : ∀ x, intro_Yc (jac Ψ x) = 0 := fun x => by
     ext i j
     simp only [intro_Yc, Matrix.of_apply, hjac, Matrix.zero_apply]
-    have : intro_projX h24 (Pi.single (⟨j.val + 2, by omega⟩ : Fin 4) 1) = 0 := by
+    have : lift_projX h24 (Pi.single (⟨j.val + 2, by omega⟩ : Fin 4) 1) = 0 := by
       funext j'
-      simp only [intro_projX_apply, Pi.single_apply, Pi.zero_apply]
+      simp only [lift_projX_apply, Pi.single_apply, Pi.zero_apply]
       split_ifs with h
       · have := congrArg Fin.val h
         simp at this
@@ -1355,7 +1119,7 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   -- `G (B + ∇Ψ_ε (x)) = g (∇φ (x₁, x₂))`
   set g : Matrix (Fin 4) (Fin 2) ℝ → ℝ := fun M => Λ * √(2 + ε ^ 2 * frobSq M) +
     √(2 + ε ^ 2 * frobSq M) ^ (-p - 3) * (ε ^ p * F M) with hgdef
-  have hGg : ∀ x, intro_corG Λ p F (intro_B + jac Ψ x) = g (jac φ (intro_projX h24 x)) := by
+  have hGg : ∀ x, intro_corG Λ p F (intro_B + jac Ψ x) = g (jac φ (lift_projX h24 x)) := by
     intro x
     simp only [intro_corG, intro_schattenNorm_two, intro_Xc_add, intro_Yc_add, hjX, hjY,
       intro_Xc_B, add_zero, zero_add, hdet, one_mul, hgdef]
@@ -1406,18 +1170,18 @@ theorem intro_corG_not_quasiconvexAt {p : ℝ} (hp : 1 < p) (hp2 : p < 2)
   intro hq
   have hper' := (External.Rindler.quasiconvexAtOn_iff_periodic hGI.1 hGI.2 intro_B).1
     ((cov_quasiconvexAtOn_unitCube_iff _ _).2 hq)
-  have hmp := intro_measurePreserving_projX h24
+  have hmp := lift_measurePreserving_projX h24
   have hfun : (fun x => intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x)) =
-      (fun y => g (jac φ y)) ∘ intro_projX h24 := funext fun x => hGg x
+      (fun y => g (jac φ y)) ∘ lift_projX h24 := funext fun x => hGg x
   have hint' : IntegrableOn (fun x => intro_corG Λ p F (intro_B + CalculusOfVariations.grad Ψ x))
       (CalculusOfVariations.unitCube 4) := by
     rw [hfun]
     exact (hmp.integrable_comp hgm).2 hgi
   have key := hper' Ψ _ hΨK hΨper hint'
   rw [hfun] at key
-  have heq : ∫ x in CalculusOfVariations.unitCube 4, ((fun y => g (jac φ y)) ∘ intro_projX h24) x =
+  have heq : ∫ x in CalculusOfVariations.unitCube 4, ((fun y => g (jac φ y)) ∘ lift_projX h24) x =
       ∫ y in CalculusOfVariations.unitCube 2, g (jac φ y) := by
-    change ∫ x, g (jac φ (intro_projX h24 x)) ∂(volume.restrict (unitCube 4)) =
+    change ∫ x, g (jac φ (lift_projX h24 x)) ∂(volume.restrict (unitCube 4)) =
       ∫ y, g (jac φ y) ∂(volume.restrict (unitCube 2))
     rw [← integral_map (f := fun y => g (jac φ y)) hmp.measurable.aemeasurable
       (by rw [hmp.map_eq]; exact hgm), hmp.map_eq]
@@ -2102,7 +1866,7 @@ theorem intro_corG_line {p : ℝ} (hp : 1 < p) {F : Matrix (Fin 4) (Fin 2) ℝ �
     · simp only [hfdef, h0, smul_zero, add_zero]
       exact convexOn_const _ convex_univ
     · have h1 : (intro_Xc R).rank = 1 := by
-        have : (intro_Xc R).rank ≠ 0 := fun h => h0 (intro_eq_zero_of_rank_eq_zero h)
+        have : (intro_Xc R).rank ≠ 0 := fun h => h0 (lift_eq_zero_of_rank_eq_zero h)
         omega
       exact (cov_rankOneConvex_iff F).2 hFR _ _ h1
   have hfc : ∀ t δ, 2 * f t ≤ f (t - δ) + f (t + δ) := fun t δ => by
@@ -2286,11 +2050,11 @@ Remark 4.5 (`theorem1_2_elementary`).
 Proof (the paper's, Section 4.4): `q = p + 3 > p + 2`; `C` above `UMD_{ℂ,p} (ℓ_q)`
 (`umdEllq_lt_top`), which bounds `C^{rc} (p, q, n)` for every `n` (10) (`equation10`); by (12)
 (`lemma4_2`) and the lower bound of `C^{qc}` by the ratio of the test map `u_n`
-(`twoByM_ratio_le_qcThreshold`, a statement of Section 4.3 that `TwoByM.lean` does not state, here
-without proof), `C < C^{qc} (p, q, n₀)` for some `n₀`; so `F_{n₀,p,q,C}` is rank-one convex but not
+(`twoByM_ratio_le_qcThreshold`, the limiting argument of Section 4.3), `C < C^{qc} (p, q, n₀)` for
+some `n₀`; so `F_{n₀,p,q,C}` is rank-one convex but not
 quasiconvex at `0`, and its rank-one convex envelope (Proposition 2.3, `intro_envelope`) is the
 integrand for `m₀ = 2 n₀`; for `m ≥ m₀` it is lifted by the projection onto the first `m₀`
-columns, witnesses lifting by Lemma 2.2 (`intro_quasiconvexAt_of_comp_trunc`). -/
+columns, witnesses lifting by Lemma 2.2 (`lift_quasiconvexAt_of_comp_trunc`). -/
 theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
     (hY : YaroslavtsevComplexUMD) {p : ℝ} (hp : 1 < p) :
     ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
@@ -2317,9 +2081,9 @@ theorem theorem1_2_umd (hP : PisierLpUMD) (hH : HNVWExtrapolation)
   -- `f = F_{n₀,p,q,C}^{rc}` (Proposition 2.3), lifted to `ℝ^{2×m}` by the projection
   obtain ⟨-, -, hI, hH', hR, hN⟩ := intro_envelope hp (hcont C) (hhom C) hrc hnq
   refine ⟨2 * n₀, fun m hm => ⟨fun A => (rcEnvelope (blockF n₀ p q C)
-    (intro_trunc le_rfl hm A)).toReal, intro_isIntegrand_comp le_rfl hm hI,
-    intro_isPHomogeneous_comp le_rfl hm hH', intro_rankOneConvex_comp le_rfl hm hR,
-    fun A hA => hN _ (intro_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
+    (lift_trunc le_rfl hm A)).toReal, lift_isIntegrand_comp le_rfl hm hI,
+    lift_isPHomogeneous_comp le_rfl hm hH', lift_rankOneConvex_comp le_rfl hm hR,
+    fun A hA => hN _ (lift_quasiconvexAt_of_comp_trunc le_rfl hm hI hA)⟩⟩
 
 /-- **Theorem 1.2** (`thm:morrey`): for `p ∈ (1, ∞)` there is `m₀ (p)` such that for every
 `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere quasiconvex integrand
@@ -2336,14 +2100,15 @@ theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
   theorem1_2_elementary hp
 
 /-- **Theorem 1.3**, first assertion (`thm:2x4`): there is a homogeneous quartic polynomial
-`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. The proof uses Burkholder's
-inequality (Theorem 2.3, `burkholderInequality_holds`) through Lemma 5.1 (2).
+`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. (The paper's proof of
+Lemma 5.1 (2) cites Burkholder's inequality; the formal proof, with one-step martingales, does not
+need it: see `lemma5_1_part2`.)
 
 Proof (the paper's, after Remark 5.2): `q_{δ, K/δ}` is a rank-one convex homogeneous quartic
 (`qDeltaLambda_rankOneConvex`, Lemma 5.1 (2) for `q₃` on `𝓛₃`); the cutoff `u_R` of the witness
 of Proposition 5.2 with `R = δ^{−4}` shows that it is not quasiconvex at `0` for `δ` small
-(`twoByThree_not_quasiconvexAt_qDeltaLambda`, the cutoff estimates of the proof, which
-`TwoByThree.lean` does not state: here without proof); homogeneity makes it nowhere quasiconvex
+(`twoByThree_not_quasiconvexAt_qDeltaLambda`, the cutoff estimates of the proof); homogeneity
+makes it nowhere quasiconvex
 (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). -/
 theorem theorem1_3_a :
     ∃ P : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
@@ -2367,9 +2132,9 @@ The proof uses Burkholder's inequality (Theorem 2.3, `burkholderInequality_holds
 
 Proof: the paper's last step, the rank-one convex envelope (Proposition 2.3, `intro_envelope`),
 applied to the integrand `g = f_{r,δ,C} ∘ π + Λ^p |π^⊥ ·|^p` of the proof, rank-one convex but not
-quasiconvex at `0` for `p` near `4` (`twoByThree_theorem1_3_b_witness`, here without proof: the
-paper's argument for it has the gap E4 of the inventory, the uniformity in `p` of the constant `Λ`
-of Lemma 5.1 (1)). -/
+quasiconvex at `0` for `p` near `4` (`twoByThree_theorem1_3_b_witness`; the paper's argument for
+it has the gap E4 of the inventory, the uniformity in `p` of the constant `Λ` of Lemma 5.1 (1),
+which that proof fills with the explicit constants of `lemma5_1_part1_quant`). -/
 theorem theorem1_3_b :
     ∃ ε > 0, ∀ p : ℝ, |p - 4| < ε → ∃ f : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
       IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
@@ -2389,8 +2154,8 @@ theorem theorem1_3_b :
 Proposition 2.7 (1), (2) (UMD extrapolation, HNVW; the UMD constant of `S_q`, Randrianantoanina),
 Proposition 2.8 (decoupling, Cox–Veraar), Proposition 6.3 (non-commutative Khintchine, Pisier–Xu),
 Proposition 6.4 (Kahane–Khintchine, HNVW), which the proofs of Propositions 6.2 and 6.5 use
-(they also use Burkholder's square function inequality, Theorem 2.3 (2), which is proved,
-`burkholderSquareFunction_holds`).
+(Proposition 6.5 also uses Burkholder's square function inequality, Theorem 2.3 (2), which is
+proved, `burkholderSquareFunction_holds`). For `p = 4` the unconditional `theorem1_4_four`.
 
 Proof (the paper's, running text after Propositions 6.2 and 6.5, "the same proof as
 Theorem 1.2"): with the Schatten exponent `q = 4`, `C^{qc} (S_4^{d×d}, p) ≳ d^{3/4} / min (√(d p), d)
@@ -2553,8 +2318,7 @@ theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
 /-- **The 2 × 2 landscape** (`cs-landscape`, lines 251–254): "this result [Theorem 1.3] complements
 Šverák's to prove that the only nontrivial instance in which Morrey's problem may have a positive
 answer is `2 × 2`": for `d, m ≥ 2` with `(d, m) ≠ (2, 2)` there is a rank-one convex integrand on
-`ℝ^{d×m}` that is not quasiconvex. Unconditional (Theorem 1.3 uses Burkholder's inequality, which
-is proved).
+`ℝ^{d×m}` that is not quasiconvex. Unconditional.
 
 Proof: otherwise Morrey's problem has a positive answer in `d × m`, hence in `3 × 2` if `d ≥ 3`
 (`morreyPositive_mono`), contradicting Šverák's example (`sverak_example`), and in `2 × 3` if
@@ -2583,7 +2347,7 @@ theorem morrey_landscape {d m : ℕ} (hd : 2 ≤ d)
 Corollary 5.3, the homogeneous Morrey problem (at `p = 4`) has a negative answer in every
 nontrivial dimension except possibly `2 × 2`: for `d, m ≥ 2` with `(d, m) ≠ (2, 2)` there is a
 `4`-homogeneous rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex at `0`.
-Unconditional (Theorem 1.3 and Corollary 5.3 use Burkholder's inequality, which is proved).
+Unconditional.
 
 Proof: as for `morrey_landscape`, with `homMorreyPositive_mono`, the quartic of Corollary 5.3 in
 `3 × 2` (for `d ≥ 3`) and that of Theorem 1.3 in `2 × 3` (for `d = 2`, `m ≥ 3`); a homogeneous
