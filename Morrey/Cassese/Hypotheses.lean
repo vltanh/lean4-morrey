@@ -20,8 +20,9 @@ public import Morrey.Common.External.PisierXu.Khintchine
 The results of other works that the paper's proofs cite, stated as propositions named after their
 sources, in the paper's terms, and proved from `Morrey/Common/External`, where each is stated in its
 source's terms or as the paper quotes it (or both), and proved from the packages `BanachProbability`
-(Sections 2, 6) and `HarmonicAnalysis` (Section 7). No statement of the library or of the Challenge
-takes them as hypotheses: the proofs use them through the theorems `…_holds` below.
+(Sections 2, 6) and `HarmonicAnalysis` (Proposition 6.3 and Section 7). No statement of the library
+or of the Challenge takes them as hypotheses: the proofs use them through the theorems `…_holds`
+below.
 
 Section 2 (Theorem 2.3, Propositions 2.7, 2.8):
 

@@ -173,7 +173,7 @@ meta def externalResults : List (String × Name) :=
     ``External.KinderlehrerPedregal.dacorognaFormula_holds),
    ("Kristensen's smoothing (Cassese Cor 5.2)", ``External.Kristensen.smoothing_holds),
    -- Cassese, Sections 2, 4, 6: the cited results proved in `Morrey/Common/External` from the
-   -- package `BanachProbability`
+   -- package `BanachProbability` (Proposition 6.3 from `HarmonicAnalysis`)
    ("HNVW I Thm 4.2.7, extrapolation (Cassese Prop 2.7 (1))", ``External.HNVW.theorem4_2_7),
    ("HNVW I Thm 4.2.7, extrapolation, general exponents", ``External.HNVW.theorem4_2_7_general),
    ("Randrianantoanina Cor 4.5 (Cassese Prop 2.7 (2))", ``External.Randrianantoanina.corollary4_5),

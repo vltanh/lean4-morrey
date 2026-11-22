@@ -26,17 +26,18 @@ positive semidefinite `Σ y_i`:
 * `External.PisierXu.theorem6_1`: the form Cassese quotes, for normal `x_i`, with the one square
   function.
 
-Proof: in the package `HarmonicAnalysis` (`lean4-harmonic-analysis`), `HarmonicAnalysis.ncKhintchine`
-and `ncKhintchine_of_normal`. The Handbook chapter gives no proof (p. 1486): it refers to
-Lust-Piquard 1986 (not obtained) and to Lust-Piquard–Pisier 1991, and to Astérisque 247 for the
-order of `B'_p`. The proof is that of Lust-Piquard–Pisier 1991 and of Astérisque 247, p. 106: the
-lower bound by (I.5)–(I.7); the Paley inequality of Theorem III.1 (i) for the Paley projection, by
-the factorization of matrix-valued `H¹` functions (Sarason 1967, Theorem 4, with Helson–Lowdenslager
-1958 and 1961); Corollary III.4 with signs; and the upper bound by duality, with the Rademacher
-projection on `L^q (S_q)` bounded by a multiple of `√q` (type 2 of `S_q`, Tomczak-Jaegermann 1974, and
-K-convexity). The package's documents list where the sources behind these could not be followed:
-Bourgain 1986 and McConnell 1984, not obtained, are replaced by Hytönen–van Neerven–Veraar–Weis
-(2016), Theorem 5.7.10 (2).
+Proof: in the package `HarmonicAnalysis` (`lean4-harmonic-analysis`),
+`HarmonicAnalysis.ncKhintchine` and `ncKhintchine_of_normal`. The Handbook chapter gives no proof
+(p. 1486): it refers to Lust-Piquard 1986 (not obtained) and to Lust-Piquard–Pisier 1991, and to
+Astérisque 247 for the order of `B'_p`. The proof is that of Lust-Piquard–Pisier 1991 and of
+Astérisque 247, p. 106: the lower bound by (I.5)–(I.7); the Paley inequality of Theorem III.1 (i)
+for the Paley projection, by the factorization of matrix-valued `H¹` functions (Sarason 1967,
+Theorem 4, with Helson–Lowdenslager 1958 and 1961); Corollary III.4 with signs; and the upper
+bound by duality, with the Rademacher projection on `L^q (S_q)` bounded by a multiple of `√q`
+(type 2 of `S_q`, Tomczak-Jaegermann 1974, and K-convexity). Facts that these sources take from
+works that were not read, or state without proof, have named substitutes, listed in the README of
+this directory; the main one is (III.3), from Bourgain 1986 (not obtained), by Hytönen–van
+Neerven–Veraar–Weis (2016), Theorem 5.7.10 (2).
 
 A shorter proof of the upper bound, with the explicit constant `√(2 (q − 1))`, by the exchangeable
 pairs of Mackey, Jordan, Chen, Farrell and Tropp (2014), is
@@ -51,8 +52,8 @@ namespace External.PisierXu
 
 open BanachProbability BanachProbability.SignCube
 
-/-- **Pisier–Xu (2003), Theorem 6.1, (6.4)**: there is an absolute `C > 0` such that for `q ∈ [2, ∞)`
-and real square matrices `x_1, …, x_k`, with
+/-- **Pisier–Xu (2003), Theorem 6.1, (6.4)**: there is an absolute `C > 0` such that for
+`q ∈ [2, ∞)` and real square matrices `x_1, …, x_k`, with
 `m = max (‖Σ x_iᵀ x_i‖_{S_{q/2}}, ‖Σ x_i x_iᵀ‖_{S_{q/2}})^{1/2}`,
 `m ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≤ C √q m`. -/
 theorem theorem6_1_general : ∃ C : ℝ, 0 < C ∧

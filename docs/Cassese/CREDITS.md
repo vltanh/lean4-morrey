@@ -284,7 +284,7 @@ How it was made:
   and the revisions after it: `ec00cb2`, 15:12. The proof by exchangeable pairs stays in
   `lean4-banach-probability` (`ncKhintchine_upper`).
 - The main session moved [`Morrey/Common/External/PisierXu`](../../Morrey/Common/External/PisierXu) onto the new proof, and stated Theorem 6.1
-  for all real square matrices as one theorem, [`External.PisierXu.theorem6_1_general`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L58), in place of two
+  for all real square matrices as one theorem, [`External.PisierXu.theorem6_1_general`](../../Morrey/Common/External/PisierXu/Khintchine.lean#L59), in place of two
   (`af922cc`, 15:20).
 - Besides, an agent reviewed the literature and the formalizations of the vector-valued part (checked by
   another), and an agent with two reviewers made the eight Palomar entries of `lean4-banach-probability`
