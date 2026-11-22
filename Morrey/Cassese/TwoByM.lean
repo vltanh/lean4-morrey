@@ -487,6 +487,8 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
   have hpne : ENNReal.ofReal p ≠ 0 := by simpa using hp0
   rw [umdEllq, dite_eq_left hq.le]
   have : Fact (1 ≤ ENNReal.ofReal q) := ⟨one_le_ofReal_of_one_le hq.le⟩
+  -- the unimodular `λ` of Lemma 4.1
+  obtain ⟨lam, -, hlam⟩ := lemma4_1 n
   set μ := twoByM_μ N
   set ℱ := twoByM_filt N
   -- the martingale `conj (P_n (M_k − M_0))`, in `ℓ_q`
@@ -494,8 +496,8 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     fun k ε => twoByM_emb q hq0 fun j => conj (wirtP (mart A k ε) j) with hY
   -- the predictable unimodular multipliers `λ_k = λ (A_k)` of Lemma 4.1
   set c : ℕ → (Fin N → Bool) → ℂ :=
-    fun k ε => if h : k - 1 < N then twoByM_lam (A ⟨k - 1, h⟩ ε) else 1 with hc
-  have hcsucc : ∀ k ε, c (k + 1) ε = if h : k < N then twoByM_lam (A ⟨k, h⟩ ε) else 1 := by
+    fun k ε => if h : k - 1 < N then lam (A ⟨k - 1, h⟩ ε) else 1 with hc
+  have hcsucc : ∀ k ε, c (k + 1) ε = if h : k < N then lam (A ⟨k, h⟩ ε) else 1 := by
     intro k ε; simp [hc]
   have hradP : ∀ ε, wirtP (radMart M₀ A N ε) - wirtP M₀ = wirtP (mart A N ε) := fun ε => by
     rw [radMart, twoByM_wirtP_add, add_sub_cancel_left]
@@ -565,7 +567,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     exact twoByM_emb_zero hq0
   have hc1 : ∀ k ε, ‖c k ε‖ = 1 := fun k ε => by
     simp only [hc]; split_ifs
-    · exact twoByM_norm_lam _
+    · exact (hlam _ (hA.2 _ _)).1
     · simp
   have hcm : ∀ k, StronglyMeasurable[ℱ k] (c (k + 1)) := fun k => by
     refine twoByM_stronglyMeasurable _ fun ε ε' h => ?_
@@ -585,7 +587,7 @@ theorem proposition4_1 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) {n N : ℕ}
     rw [smul_smul, ← twoByM_emb_smul]
     congr 1
     funext j
-    simp only [Pi.smul_apply, smul_eq_mul, twoByM_wirtQ_smul, twoByM_rank_one_identity (hA.2 k ε) j]
+    simp only [Pi.smul_apply, smul_eq_mul, twoByM_wirtQ_smul, (hlam _ (hA.2 k ε)).2.1 j]
     ring
   -- the two `L^p (ℓ_q)` norms
   have hnormY : eLpNorm (Y N) (ENNReal.ofReal p) μ =
@@ -2123,11 +2125,12 @@ theorem twoByM_explicit_minorant (n : ℕ) :
     -- `h = conj P (A − B)`, `y = Q B`, and `λ = λ (A − B)` unimodular (Lemma 4.1)
     set R := A - B
     have hR : R.rank ≤ 1 := hAB.le
+    obtain ⟨lam, -, hlam⟩ := lemma4_1 n
     have hline : ∀ t : ℝ, t • A + (1 - t) • B = B + t • R := fun t => by
       simp only [R]; module
     have key : (fun t : ℝ => explicitG n (t • A + (1 - t) • B)) = fun t : ℝ =>
         -zigzagU (fun j => conj (wirtP B j) + t * conj (wirtP R j))
-          (fun j => wirtQ B j + t * twoByM_lam R * conj (wirtP R j)) := by
+          (fun j => wirtQ B j + t * lam R * conj (wirtP R j)) := by
       funext t
       rw [hline, explicitG]
       congr 2
@@ -2135,10 +2138,9 @@ theorem twoByM_explicit_minorant (n : ℕ) :
         rw [twoByM_wirtP_add, twoByM_wirtP_smul, Pi.add_apply, map_add, map_mul,
           Complex.conj_ofReal]
       · funext j
-        rw [twoByM_wirtQ_add, twoByM_wirtQ_smul, Pi.add_apply, twoByM_rank_one_identity hR j,
-          mul_assoc]
+        rw [twoByM_wirtQ_add, twoByM_wirtQ_smul, Pi.add_apply, (hlam R hR).2.1 j, mul_assoc]
     rw [key]
-    exact (twoByM_zigzag _ _ _ (twoByM_norm_lam R).le).neg.subset (Set.subset_univ _)
+    exact (twoByM_zigzag _ _ _ (hlam R hR).1.le).neg.subset (Set.subset_univ _)
       (convex_Icc 0 1)
   · -- (16)
     have := twoByM_U_majorization (fun j => conj (wirtP A j)) (wirtQ A)
@@ -2581,8 +2583,8 @@ theorem twoByM_explicitF_zero (n : ℕ) : explicitF n 0 = 0 := by
   simp [explicitF, twoByM_wirtP_zero, twoByM_wirtQ_zero,
     twoByM_lqNorm_zero (by norm_num : (0 : ℝ) < 6)]
 
-/-- The limiting argument of Section 4.3 (TeX line 1051) for `f_n`, with Lemma 4.2 at `p = 3`,
-`q = 6`: for `n` large, `f_n` is not quasiconvex at `0`. The truncations `φ_R = χ (·/R) u_n` of the
+/-- **The limiting argument of Section 4.3** (`cs-sec4.3-limit`, TeX line 1051) for `f_n`, with
+Lemma 4.2 at `p = 3`, `q = 6`: for `n` large, `f_n` is not quasiconvex at `0`. The truncations `φ_R = χ (·/R) u_n` of the
 test map `u_n` satisfy `liminf_R ∫ ‖Q_n (∇φ_R)‖_6³ ≥ ∫ ‖Q_n (∇u_n)‖_6³` (Fatou) and
 `∫ ‖P_n (∇φ_R)‖_6³ ≤ 4 ∫ ‖P_n (∇u_n)‖_6³ + O (R^{−3})`, so `∫ f_n (∇φ_R) < 0` for `R` large once
 `‖Q_n (∇u_n)‖_{L³} / ‖P_n (∇u_n)‖_{L³} > (4 · 5⁴)^{1/3}` (Lemma 4.2); rescaled into the unit cube,
@@ -2773,9 +2775,9 @@ available. So the proof uses the formula, on the paper's route (`cs-qc-minorant`
 argument would avoid it, by never forming the envelope: for each test map `φ`,
 `∫ f_n (∇φ) ≥ ∫ g_n (∇φ) ≥ g_n (0) = 0 = f_n (0)` (`g_n` is continuous and `∇φ` bounded, so the
 second integral exists), so `f_n` would be quasiconvex at `0`; it is recorded as a simplification,
-not used here, because it departs from the paper's proof. (It is used, as
-`twoByM_quasiconvexAt_of_minorant`, in `theorem1_2_elementary`, whose route departs from the paper's
-anyway.)
+not used here, because it departs from the paper's proof (it is stated, for the report, as
+`twoByM_quasiconvexAt_of_minorant`, which no proof uses; `theorem1_2_elementary` follows this
+proof too).
 
 Proof: the paper's, through `quasiconvexAt_iff_exists_minorant` (both directions; `g_n` and `f_n`
 are
@@ -2788,7 +2790,7 @@ theorem proposition4_3 :
     ∃ n₀ : ℕ, ∀ n ≥ n₀, ¬ QuasiconvexAt (explicitG n) 0 ∧ NowhereQuasiconvex (explicitG n) := by
   obtain ⟨n₀, hn₀⟩ := twoByM_not_qc_explicitF
   refine ⟨n₀, fun n hn => ?_⟩
-  obtain ⟨-, -, hle, hg0, hf0⟩ := twoByM_explicit_minorant n
+  obtain ⟨-, -, hle, hg0, hf0⟩ := proposition4_2_minorant n
   have hnot : ¬ QuasiconvexAt (explicitG n) 0 := by
     intro hqc
     -- `g_n (0) = g_n^{qc} (0)`: a quasiconvex minorant `g'` of `g_n` touching it at `0`
@@ -3551,7 +3553,8 @@ theorem twoByM_integrableOn_comp {d m : ℕ} {g : Matrix (Fin d) (Fin m) ℝ →
 /-- If a continuous `g ≤ f` touches `f` at `A` and is quasiconvex at `A`, then so is `f`:
 `f (A) = g (A) ≤ ∫ g (A + ∇φ) ≤ ∫ f (A + ∇φ)` (the integral of `g (A + ∇φ)` exists since `g` is
 continuous and `∇φ` is bounded). The direct form, without envelopes, of the step
-`g_n (0) = g_n^{qc} (0) ≤ f_n^{qc} (0)` of the proof of Proposition 4.3. -/
+`g_n (0) = g_n^{qc} (0) ≤ f_n^{qc} (0)` of the proof of Proposition 4.3: a simpler argument,
+recorded for the report and used by no proof, which follow the paper's. -/
 theorem twoByM_quasiconvexAt_of_minorant {d m : ℕ} {f g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (hg : Continuous g) (hgf : ∀ B, g B ≤ f B) {A : Matrix (Fin d) (Fin m) ℝ} (hA : g A = f A)
     (hq : QuasiconvexAt g A) : QuasiconvexAt f A := by
@@ -3809,12 +3812,9 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   (14) for `u_q`, `External.Burkholder.scalarFunctionQ_holds`; Lemma 4.1; the zig-zag concavity of
   `U`, `twoByM_zigzagq`, with the composition step `twoByM_rpow_concave`, regularized by the
   supporting-majorant device of `twoByM_sqrt_concave` instead of mollification).
-* As in Proposition 4.3, `g` is not quasiconvex at `0`: otherwise `F_{n₀,p,q,C}` would be. Here
-  directly (`twoByM_quasiconvexAt_of_minorant`: `∫ F (∇φ) ≥ ∫ g (∇φ) ≥ g (0) = F (0)`) instead of
-  through `g^{qc}` and Dacorogna's formula, which `proposition4_3` uses
-  (reason 2: when this route was written, Dacorogna's formula was a hypothesis out of reach; it is
-  now proved, `External.KinderlehrerPedregal.dacorognaFormula_holds`). Being `p`-homogeneous and
-  continuous, `g` is nowhere quasiconvex
+* As in Proposition 4.3, `g` is not quasiconvex at `0`: otherwise `F_{n₀,p,q,C}` would be, by the
+  paper's argument through quasiconvex minorants (line 559, `quasiconvexAt_iff_exists_minorant`,
+  from Dacorogna's formula). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex
   (`nowhereQuasiconvex_of_not_quasiconvexAt_zero`). No envelope is needed: `g` is already
   globally rank-one convex, so `f = g` for `m₀ = 2 n₀` (the paper takes `f = F^{rc}`).
 * For `m ≥ m₀`, `f ∘ π` with the projection `π` onto the first `m₀` columns, as in the paper; a
@@ -3838,9 +3838,14 @@ theorem theorem1_2_elementary {p : ℝ} (hp : 1 < p) :
       (hn₀.trans_le (twoByM_ratio_le_qcThreshold hp hq n₀))
   -- the explicit rank-one convex minorant `g` of Remark 4.5
   obtain ⟨hcont, hhom, hrc, hle, hg0⟩ := twoByM_explicit_minorant_q n₀ hp hpq hq2
-  have hgnq : ¬ QuasiconvexAt (twoByM_gq n₀ p q) 0 := fun h =>
-    hnq (twoByM_quasiconvexAt_of_minorant hcont hle
-      (by rw [hg0, twoByM_blockF_zero n₀ (by linarith) (by linarith)]) h)
+  -- as in Proposition 4.3: if `g` were quasiconvex at `0`, a quasiconvex minorant `g'` of `g`
+  -- touching it at `0` (line 559) would be one of `F` touching it at `0`, so `F` would be too
+  have hgnq : ¬ QuasiconvexAt (twoByM_gq n₀ p q) 0 := fun h => by
+    obtain ⟨g', hg'i, hg'q, hg'le, hg'0⟩ := (quasiconvexAt_iff_exists_minorant hcont 0).1 h
+    exact hnq ((quasiconvexAt_iff_exists_minorant
+      (twoByM_continuous_blockF n₀ (by linarith) (by linarith) C) 0).2
+      ⟨g', hg'i, hg'q, fun B => (hg'le B).trans (hle B), by
+        rw [hg'0, hg0, twoByM_blockF_zero n₀ (by linarith) (by linarith)]⟩)
   have hN := nowhereQuasiconvex_of_not_quasiconvexAt_zero hp hcont (Or.inl hhom) hgnq
   have hI : IsIntegrand (twoByM_gq n₀ p q) := twoByM_isIntegrand_of_continuous hcont
   -- lifted to `ℝ^{2×m}` by the projection onto the first `2 n₀` columns

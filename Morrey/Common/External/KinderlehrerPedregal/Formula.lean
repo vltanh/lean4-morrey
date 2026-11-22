@@ -371,8 +371,8 @@ theorem kp_ballQ_le {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
   have := kp_ball_estimate (m := m) hε0 hε1 hb hM0 hT0 (by linarith) (by linarith) hΦle
   linarith
 
-/-- **Proposition 2.2** (Dacorogna's formula, Kinderlehrer–Pedregal 1991, Proposition 8.1;
-Dacorogna 2008, Theorem 6.9). The standard proof: `qcEnvelope f ≤ inf_B` because a quasiconvex
+/-- **Proposition 2.2** (`cs-prop2.2`; Dacorogna's formula, Kinderlehrer–Pedregal 1991,
+Proposition 8.1; Dacorogna 2008, Theorem 6.9). The standard proof: `qcEnvelope f ≤ inf_B` because a quasiconvex
 minorant is below every average over the ball (`kp_le_ball_average`); `inf_B ≤ kpQ f`, the
 infimum formula on the cube, by gluing copies of the cube test maps into the ball (`kp_ballQ_le`);
 and `kpQ f ≤ qcEnvelope f` because `kpQ f` is either `≡ -∞` or a continuous quasiconvex minorant

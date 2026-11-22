@@ -369,11 +369,19 @@ theorem quarticQ_rankOneConvexOn_calL (A R : Matrix (Fin 2) (Fin 4) ℝ) (hA : A
   tbt_quarticQ_convexOn A R hR hR1.le
 
 /-- **Section 5.2** (`cs-q3-rc`, lines 1573–1574): `q₃` is globally rank-one convex on `𝓛₃`
-("since `J` preserves rank"). -/
+("since `J` preserves rank"): `J` maps `𝓛₃` into `𝓛` and rank-one matrices to rank-one matrices
+(`R` is a block of `J R`), so the claim for `q` on `𝓛` (`quarticQ_rankOneConvexOn_calL`) applies. -/
 theorem q3_rankOneConvexOn_L3 (A R : Matrix (Fin 2) (Fin 3) ℝ) (hA : A ∈ L3) (hR : R ∈ L3)
     (hR1 : R.rank = 1) :
     ConvexOn ℝ Set.univ fun t : ℝ => q3 (A + t • R) := by
-  have := tbt_quarticQ_convexOn (embedJ A) (embedJ R) hR (tbt_rank_embedJ_le R hR1.le)
+  have hJR : (embedJ R).rank = 1 := by
+    refine le_antisymm (tbt_rank_embedJ_le R hR1.le) ?_
+    have hsub : (embedJ R).submatrix id (Fin.castLE (by norm_num : 3 ≤ 4)) = R := by
+      ext i j
+      simp [embedJ, Fin.castLE, j.isLt]
+    rw [← hR1, ← hsub]
+    exact Matrix.rank_submatrix_le _ _ _
+  have := quarticQ_rankOneConvexOn_calL (embedJ A) (embedJ R) hA hR hJR
   simpa only [q3, tbt_embedJ_add_smul] using this
 
 /-- **Equation (24)** (`eq:q-simp`): on `𝓛₃`, `q₃ (A) = −det (A diag (1, 1, −1) Aᵀ)`. -/
