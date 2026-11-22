@@ -417,15 +417,17 @@ theorem schattenNorm_mono {q : ℝ≥0∞} (hq : 1 ≤ q) {A B : Matrix (Fin d) 
 /-! ### The Schatten norm is a norm
 
 The paper takes for granted that `‖·‖_{S_q}`, `q ∈ [1, ∞]`, is a norm on `ℝ^{d×m}` (Section 1.5,
-TeX lines 348–357; Bhatia, *Matrix analysis*, Chapter IV). Propositions 6.2, 6.5 and
+TeX lines 348–357, with no source; its citation of Bhatia, *Matrix analysis*, Chapter 4, TeX line
+374, is for the facts (1)–(3)). Propositions 6.2, 6.5 and
 Corollary 6.1 apply `HNVWExtrapolation` and `CoxVeraarDecoupling` (`hnvwExtrapolation_holds`,
 `coxVeraarDecoupling_holds`) to `S_q^{d×d}`, that is to `E = Fin d → Fin d → ℝ` with
 `nrm X = ‖X‖_{S_q}`, which requires the hypotheses on `nrm` of those statements: the triangle inequality, absolute homogeneity, and equivalence with the norm of `E`
 (the supremum norm of the entries). They are proved here (nonnegativity, `schattenNorm_nonneg`,
 in `Square.Schatten`), and bundled in `schattenNorm_renorms`. -/
 
-/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]` (Bhatia, Chapter IV, which was not
-accessible).
+/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]`: a standard fact, which the paper uses
+without a source (Bhatia, *Matrix analysis* (1997), Theorem IV.2.1, proves it for all symmetric gauge
+norms by majorization).
 
 Proof (`square_schattenNorm_add_le`, module `Square.Triangle`): the package `BanachProbability`'s
 `schattenNorm_add_le`, which follows the open source J.-C. Bourin and T. Zhang, *Matrix triangle
