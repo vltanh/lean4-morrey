@@ -551,10 +551,10 @@ statements, as the paper states them.
   the paper quotes them: Lemma 2.1 for every real-valued rank-one convex function (E21);
   Burkholder's inequalities without separability (Section 5), and Theorem 3.5 in the book's form, with
   `‖g_0‖ ≤ ‖f_0‖`; the extrapolation of UMD constants for all exponents, as in HNVW; Kahane–Khintchine
-  for any seminorm on a real vector space; Dacorogna's Theorem 5.20 without continuity, as in the book
+  for any seminorm on a real vector space; Lemma 2.2 for Borel, locally bounded functions, as in the
+  sources; Dacorogna's Theorem 5.20 without continuity, as in the book
   ([`External.Dacorogna.RankOneAffineMinors`](../../Morrey/Common/External/Dacorogna/Minors.lean#L61)). Others are stated
-  in the case the paper uses: Lemma 2.2 for lower semicontinuous, locally bounded integrands (the
-  sources: Borel and locally bounded); Osękowski's Theorem 8.6 for martingales started at `0`; HNVW's
+  in the case the paper uses: Osękowski's Theorem 8.6 for martingales started at `0`; HNVW's
   UMD theorems for real spaces, probability spaces and martingales started at `0`; Randrianantoanina's
   bounds and Pisier–Xu's Theorem 6.1 for real square matrices, uniformly in the size; Pisier's for the
   complex `L^p(μ)` as a real Banach space; decoupling for Paley–Walsh martingales; the quasiaffinity of
@@ -607,7 +607,7 @@ the details.
 | Cited result | Source, and how it was read | Stated and proved in | What is different, and why |
 | --- | --- | --- | --- |
 | Lemma 2.1 | Rindler 2018, Lemma 5.6: the first edition was not obtained; the second one (2026) was read, where the result is Lemma 5.9 (pp. 114–115), matched by content | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `RankOneConvex/` | the local boundedness of a rank-one convex function, part of Rindler's definition, is proved, by convexity in each entry (the paper applies the lemma to functions not known to be integrands, E21; Rindler, p. 111, refers to Kirchheim–Kristensen for it); (5.10) is used where it holds (slip); the part on functions of `p`-growth is not formalized |
-| Lemma 2.2, quasiconvex ⇒ rank-one convex | Rindler 2026, Proposition 5.6 (pp. 111–113): read; the first edition's Propositions 5.1 and 5.3 not checked | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `Quasiconvex/{Cutoff, Laminate, RankOneConvex}` | on the unit cube, with an orthogonal change of variables for the cubes of other directions (mechanics); lower semicontinuous instead of Borel integrands |
+| Lemma 2.2, quasiconvex ⇒ rank-one convex | Rindler 2026, Proposition 5.6 (pp. 111–113): read; the first edition's Propositions 5.1 and 5.3 not checked | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `Quasiconvex/{Cutoff, Laminate, RankOneConvex}` | on the unit cube, with an orthogonal change of variables for the cubes of other directions (mechanics) |
 | Lemma 2.2, the domain and the periodic test maps | Dacorogna 2008, Propositions 5.11 and 5.13 (pp. 172–174): read; also Rindler 2026, Lemma 5.2 (i) (p. 106) | the same; CV `Quasiconvex/{Domain, Periodic}` | the test maps are Lipschitz maps that vanish outside the domain, and their gradients vanish almost everywhere on the zero set, which is proved (for Dacorogna's `W^{1,∞}_0` it is immediate); the domain is nonempty, and the roles of the two domains are Dacorogna's (slips); the statements are at one matrix, as the paper's |
 | Proposition 2.1 | Dacorogna 2008, Theorem 6.10 (pp. 277–279): read; Pedregal 1993: not obtained | [`proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780) | the paper's own second route (Remark 2.1), so neither source's argument is used |
 | Proposition 2.2 | Kinderlehrer–Pedregal 1991, Proposition 8.1 (pp. 360–362) with Step 6 of Proposition 7.2: read; Dacorogna 1982, Theorem 5: read (a hypercube, and a growth condition) | [`External/KinderlehrerPedregal/Formula.lean`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean); CV `Envelope/` | the formula itself, `f^{qc} = ψ^#`, which the source does not state, and the approximation in (iv) by piecewise affine maps are supplied; the copied domains have null boundaries, a hypothesis that Proposition 8.1 leaves out (gaps) |

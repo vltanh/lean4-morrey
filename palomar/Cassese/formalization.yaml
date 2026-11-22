@@ -397,8 +397,7 @@ fidelity:
     Paley-Walsh martingales; Mackey et al.'s Remark 7.2 for 2 < q < 3, whose unproved variant of the
     mean value trace inequality is proved; HNVW I, Theorem 4.2.7, in place of the extrapolation
     theorem that Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i).
-    Stated in the case the paper uses: Lemma 2.2 for lower semicontinuous integrands (the sources:
-    Borel), decoupling for Paley-Walsh martingales, one inequality of HNVW's Corollary 5.7.6, n = 2 in
+    Stated in the case the paper uses: decoupling for Paley-Walsh martingales, one inequality of HNVW's Corollary 5.7.6, n = 2 in
     Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
 
 review:
