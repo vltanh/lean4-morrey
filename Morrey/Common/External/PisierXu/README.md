@@ -4,15 +4,12 @@
 Spaces, Vol. 2, North-Holland 2003, 1459–1517, Theorem 6.1, cited by Cassese with F. Lust-Piquard,
 *Inégalités de Khintchine dans `C_p` (`1 < p < ∞`)*, C. R. Acad. Sci. Paris Sér. I Math. 303 (1986),
 289–292, and F. Lust-Piquard, G. Pisier, *Non commutative Khintchine and Paley inequalities*, Ark.
-Mat. 29 (1991), 241–260. The Handbook chapter (read, p. 1486) states the theorem, for semifinite von
-Neumann algebras and `1 ≤ p < ∞`, and gives no proof: it refers to Lust-Piquard 1986, where the result
-was first proved for the Schatten classes and `1 < p < ∞`, and to Lust-Piquard–Pisier 1991 for the
-general statement; for `p ≥ 2` its upper constant `B'_p` depends only on `p`, and is "of order `√p` (the
-best possible)" (Remark (i)), with a reference to G. Pisier, Astérisque 247 (1998), p. 106.
-Lust-Piquard–Pisier 1991 and Astérisque 247, pp. 101–108, were read; Lust-Piquard 1986 was not
-obtained. The proof of the upper bound here does not follow them. It follows L. Mackey, M. I. Jordan,
-R. Y. Chen, B. Farrell, J. A. Tropp, *Matrix concentration inequalities via the method of exchangeable
-pairs*, Ann. Probab. 42 (2014) (arXiv:1201.6002; read).
+Mat. 29 (1991), 241–260 (LPP). The Handbook chapter (read, p. 1486) states the theorem, for semifinite
+von Neumann algebras and `1 ≤ p < ∞`, and gives no proof: it refers to Lust-Piquard 1986, where the
+result was first proved for the Schatten classes and `1 < p < ∞`, and to LPP for the general statement;
+for `p ≥ 2` its upper constant `B'_p` depends only on `p`, and is "of order `√p` (the best possible)"
+(Remark (i)), with a reference to G. Pisier, Astérisque 247 (1998), p. 106. LPP and Astérisque 247,
+pp. 101–108, were read and are followed; Lust-Piquard 1986 was not obtained.
 
 **Statement used by Cassese.** Proposition 6.3 (TeX lines 2300–2311): for `q ∈ [2, ∞)`, normal
 `d × d` matrices `x_1, …, x_n` and independent Rademacher signs `ε_i`,
@@ -23,31 +20,43 @@ noncommutative square function inequalities, is context and not formalized.)
 **Lean.** [`Khintchine.lean`](Khintchine.lean), for real square matrices, with
 `‖(Σ y_i)^{1/2}‖_{S_q}` written `‖Σ y_i‖_{S_{q/2}}^{1/2}` (`Σ y_i` positive semidefinite):
 
-- `External.PisierXu.theorem6_1_lower`: for `q ≥ 2`, both the row and the column square function
-  are at most `(E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q}`, with constant `1` and no normality;
-- `External.PisierXu.theorem6_1_upper`: for `q ≥ 2`, `(E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q}` is at most
-  `√(2 (q − 1))` times the larger of the two square functions;
-- `External.PisierXu.theorem6_1`: the form Cassese quotes, for normal `x_i`, with lower constant `1`
-  and upper constant `C √q`, `C = √2`.
+- `External.PisierXu.theorem6_1_general`: (6.4) for all real square matrices and `q ≥ 2`: the larger of
+  the row and the column square function is at most `(E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q}`, which is at most
+  `C √q` times it, `C` absolute;
+- `External.PisierXu.theorem6_1`: the form Cassese quotes, for normal `x_i`, with the one square
+  function.
 
-**Proof.** `BanachProbability.ncKhintchine_lower_row`, `ncKhintchine_lower_col`,
-`ncKhintchine_upper` and `pisierXu_khintchine` in the package `BanachProbability`
-([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)).
-The Handbook chapter has no proof; the upper bound is proved by Mackey et al.'s method of
-exchangeable pairs, §7 (Corollary 7.3, the matrix Khintchine inequality for Hermitian matrices,
-constant `√(q − 1)` for `q ≥ 3`; Remark 7.2, constant `√(2 (q − 1))` for `2 < q < 3`, whose variant
-of the mean value trace inequality the source does not prove and the package proves), and §8 (the
-Hermitian dilation for general square matrices). The lower bound is the standard convexity
-argument: `E [Sᵀ S] = Σ x_iᵀ x_i` for `S = Σ ε_i x_i`, Jensen's inequality and the convexity of
-`‖·‖_{S_{q/2}}` on positive semidefinite matrices, as in Lust-Piquard–Pisier 1991, (I.5)–(I.7). The
-package's source contains no `sorry`.
+**Proof.** `HarmonicAnalysis.ncKhintchine` and `HarmonicAnalysis.ncKhintchine_of_normal` in the
+package `HarmonicAnalysis` ([lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis)),
+by LPP and Astérisque 247, p. 106:
 
-**Constants.** Lower constant `1`, as in (6.4); upper constant `√(2 (q − 1)) ≤ √2 √q`, of the order `√q`
-that the paper states (the source: `B'_p`, "of order `√p`").
+- the lower bound with constant `1` by (I.5)–(I.7) of LPP;
+- Paley's inequality in the Schatten classes, uniformly in `1 ≤ p ≤ 2` (LPP, Theorem III.1 (i) for the
+  Paley projection): the factorization of matrix-valued `H¹` functions ((α), (β) of LPP, p. 252) is
+  Sarason's Theorem 4 (Trans. Amer. Math. Soc. 127 (1967), 179–203), with Helson–Lowdenslager (Acta Math.
+  99 (1958) and 106 (1961)); the inequality (III.3) is the Littlewood–Paley inequality of UMD spaces,
+  averaged over the signs;
+- Corollary III.4 with signs, by averaging (LPP, p. 243);
+- the upper bound by duality (LPP, pp. 254–255), with the Rademacher projection on `L^q (S_q)` bounded
+  by a multiple of `√q` (Astérisque 247, p. 106): type 2 of `S_q` by Tomczak-Jaegermann (Studia Math. 50
+  (1974), 163–182), and type 2 ⇒ K-convexity (Maurey–Pisier, Studia Math. 58 (1976), Remark 2.10, which
+  has no proof; Hytönen–van Neerven–Veraar–Weis, *Analysis in Banach Spaces II*, Proposition 7.4.22).
 
-**Departures.** The argument for the upper bound is not that of the cited works (Lust-Piquard–Pisier: a
-lacunary sequence in place of the signs, a factorization of matrix-valued `H¹` functions, and duality;
-Astérisque 247 for the order `√q`).
+**Constants.** Lower constant `1`, as in (6.4); upper constant `C √q`, `C` absolute and not made explicit
+(the source: `B'_p`, "of order `√p`").
+
+**Departures.** For the second-level sources that were not obtained, named substitutes: Bourgain 1986 and
+McConnell 1984, which LPP cite for (III.3) for every choice of signs, by Hytönen–van Neerven–Veraar–Weis,
+*Analysis in Banach Spaces I*, Theorem 5.7.10 (2), on average over the signs, which is what the proof
+uses; the book of Helson, for Sarason's Lemma 10.3, by Helson–Lowdenslager 1961; that of Hoffman, for
+Szegő's theorem, by Helson–Lowdenslager 1958, Theorem 9. LPP recall that `C_{2p}` is UMD, with Cotlar's
+trick as a known argument; here it is Randrianantoanina's theorem
+([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese cites for it.
+
+**Shorter proof.** The upper bound with the explicit constant `√(2 (q − 1)) ≤ √2 √q`, by the method of
+exchangeable pairs of Mackey, Jordan, Chen, Farrell and Tropp (Ann. Probab. 42 (2014), §§7–8), is
+`BanachProbability.ncKhintchine_upper` in
+[lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability). It is not used here.
 
 **Who uses it.** Cassese's `PisierXuKhintchine`
 ([`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean)) is derived from
@@ -55,4 +64,4 @@ Astérisque 247 for the order `√q`).
 (`Cassese.equation31`) and by its versions with tracked constants (`square_eq31_two`,
 `square_eq31_q` in `Morrey/Cassese/Square.lean`), hence by Proposition 6.2, Remark 6.3,
 Proposition 6.5, Theorem 1.4 and Corollary 6.1; none of them takes it as a hypothesis.
-`theorem6_1_lower` and `theorem6_1_upper` are used by no proof.
+`theorem6_1_general` is used by no proof.

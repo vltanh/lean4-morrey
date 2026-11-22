@@ -661,7 +661,7 @@ def KahaneKhintchineHypercontractive : Prop :=
 
 /-- **Proposition 6.3** (`cs-prop6.3`), Pisier–Xu (2003), Theorem 6.1: the non-commutative
 Khintchine inequality for normal `d × d` matrices and `q ∈ [2, ∞)`, lower constant `1`, upper
-constant `C √q`. From `External.PisierXu.theorem6_1` (`C = √2`). -/
+constant `C √q`. From `External.PisierXu.theorem6_1`. -/
 theorem pisierXuKhintchine_holds : PisierXuKhintchine := by
   obtain ⟨C, hC, h⟩ := External.PisierXu.theorem6_1
   exact ⟨C, hC, fun q hq d n x hx => h q hq (Fin d) n x hx⟩
