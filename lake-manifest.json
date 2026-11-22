@@ -6,7 +6,7 @@
    "name": "BanachProbability",
    "manifestFile": "lake-manifest.json",
    "inherited": false,
-   "dir": "../lean4-banach-probability-int",
+   "dir": "../lean4-banach-probability",
    "copy": false,
    "configFile": "lakefile.toml"},
   {"type": "path",

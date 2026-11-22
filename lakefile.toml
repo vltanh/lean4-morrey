@@ -31,7 +31,7 @@ path = "../lean4-calculus-of-variations"
 # Developed alongside the project; to be pinned by `git` and `rev` once it is published.
 [[require]]
 name = "BanachProbability"
-path = "../lean4-banach-probability-int"
+path = "../lean4-banach-probability"
 
 [[lean_lib]]
 name = "Common"
