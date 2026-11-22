@@ -26,15 +26,15 @@ unconditional.
 
 | Paper | Lean | Statement | Assumes |
 | --- | --- | --- | --- |
-| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L2149) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}`, `m ≥ m₀(p)` | — (by the paper's Remark 4.5) |
-| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2163), [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2188) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; and for `p` near `4` | — |
+| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L2029) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}`, `m ≥ m₀(p)` | — (by the paper's Remark 4.5) |
+| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2043), [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2068) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; and for `p` near `4` | — |
 | Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L197) ⭐ | its transpose on `ℝ^{3×2}` | — |
-| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2383) ⭐ | with Šverák: in every `d × m`, `d, m ≥ 2`, except `2 × 2`, rank-one convexity does not imply quasiconvexity | — |
-| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2411) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | — |
+| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2260) ⭐ | with Šverák: in every `d × m`, `d, m ≥ 2`, except `2 × 2`, rank-one convexity does not imply quasiconvexity | — |
+| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2288) ⭐ | at `p = 4`, the homogeneous problem fails in every such size except `2 × 2` | — |
 | Theorem 1.4 | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3610) ⭐ | at `p = 4`: conjugation- and transposition-invariant examples on `ℝ^{d×d}`, every `d ≥ 588` | — |
-| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2220) ⭐ | every `p > 1`, `d ≥ d₀(p)` | UMD extrapolation, Randrianantoanina, Cox–Veraar, Pisier–Xu, Kahane–Khintchine |
-| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2306) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević |
-| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2357) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a rank-two matrix | transference, Dragičević |
+| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2100) ⭐ | every `p > 1`, `d ≥ d₀(p)` | UMD extrapolation, Randrianantoanina, Cox–Veraar, Pisier–Xu, Kahane–Khintchine |
+| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2186) ⭐ | every `p ≠ 2`: an example on `ℝ^{4×2}` | transference, Dragičević |
+| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2234) ⭐ | a nonnegative 1-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a rank-two matrix | transference, Dragičević |
 
 ⭐ in [`Challenge.lean`](../../palomar/Cassese/Challenge.lean), checked by Comparator against
 [`Solution.lean`](../../palomar/Cassese/Solution.lean). The Challenge states each assumed result in
