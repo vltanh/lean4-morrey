@@ -8,8 +8,9 @@ public import Morrey.Cassese.TwoByThree.WitnessCutoff
 
 The cut-off `φ_R = χ (·/R) φ` of the potential `φ` of `Morrey/Cassese/TwoByThree/Hessian.lean`
 (`tbt6PhiR`), the decomposition `B D²φ_R = χ_R B D²φ + E_R` (`tbt6_hessB_hessian_PhiR`), the bound
-`|E_R|² ≲ R⁻²` (`tbt6_frobSq_ER_le`), the energy estimate (through `tbt4_energy`), the rescaling
-into the unit cube for Hessians (`tbt6_not_hessianQuasiconvexAt_of_witness`), and Corollary 5.4.
+`|E_R|² ≲ R⁻²` (`tbt6_frobSq_ER_le`), the cutoff argument of Theorem 1.3 applied unchanged
+(`tbt6_not_hessianQuasiconvexAt`, through `tbt4_cutoff_neg`), the rescaling into the unit cube for
+Hessians (`tbt6_not_hessianQuasiconvexAt_of_witness`), and Corollary 5.4.
 
 Helpers are prefixed `tbt6_`.
 -/
@@ -280,23 +281,6 @@ theorem tbt6_log_bound {R : ℝ} (hR : 0 < R) :
   show ∑ i, x i ^ 2 < (2 * R) ^ 2
   nlinarith
 
-/-- `I₁ = ∫_{B₁} q₃ (B D²φ) < 0`. -/
-theorem tbt6_I1_neg :
-    ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}, q3 (hessB * hessian tbt5Pot x) < 0 := by
-  set B := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}
-  have hsq : Continuous fun x : Fin 3 → ℝ => ∑ i, x i ^ 2 := (tbt4_contDiff_sumSq (n := 0)).continuous
-  have hBo : IsOpen B := isOpen_lt hsq continuous_const
-  have hpos : 0 < ∫ x in B, -q3 (hessB * hessian tbt5Pot x) := by
-    rw [integral_pos_iff_support_of_nonneg_ae
-      (Filter.Eventually.of_forall fun x => (neg_pos.mpr (tbt5_q3_V_neg x)).le)
-      tbt6_integrable_q3_V.neg.integrableOn]
-    have hs : Function.support (fun x => -q3 (hessB * hessian tbt5Pot x)) = Set.univ :=
-      Set.eq_univ_of_forall fun x => (neg_pos.mpr (tbt5_q3_V_neg x)).ne'
-    rw [hs, Measure.restrict_apply MeasurableSet.univ, Set.univ_inter]
-    exact hBo.measure_pos volume ⟨0, by simp [B]⟩
-  rw [integral_neg] at hpos
-  linarith
-
 /-- A smooth potential `f : ℝ³ → ℝ` vanishing on `|x|² > 2R²` with `∫ q (B D²f) < 0` shows that
 `A ↦ q (B A)` is not Hessian quasiconvex at `0`: rescaled as `x ↦ λ² f ((x − c)/λ)`,
 `c = (1/2, 1/2, 1/2)`, `λ = 1/(8R)`, it has compact support in the open unit cube, the same
@@ -356,86 +340,34 @@ theorem tbt6_not_hessianQuasiconvexAt_of_witness {q : Matrix (Fin 2) (Fin 3) ℝ
   nlinarith
 
 /-- **The cutoff argument for Corollary 5.4**: for every `K` there is `δ₀ ∈ (0, 1]` such that for
-`0 < δ < δ₀`, `A ↦ q_{δ,K/δ} (B A)` is not Hessian quasiconvex at `0`. -/
+`0 < δ < δ₀`, `A ↦ q_{δ,K/δ} (B A)` is not Hessian quasiconvex at `0`. As the paper says (TeX
+2186–2190), the proof of Theorem 1.3 applies unchanged, with `Λ = K/δ` and `R = δ⁻⁴`: the chain
+`tbt4_cutoff_neg` is applied with the bulk field `V = B D²φ` (`V ∈ 𝓛₃`, `tbt5_V_mem_L3`;
+`q₃ (V) ∈ L¹`, `tbt6_integrable_q3_V`; `I = ∫_{ℝ³} q₃ (V) < 0`, `tbt4_integral_neg` and
+`tbt5_q3_V_neg`; `∫_{|x|² ≤ 2R²} |V|⁴ ≲ log (2 + 2R)`, `tbt6_log_bound`) and the cut-off errors
+`E_R` (`|E_R|² ≲ R⁻²`, `tbt6_frobSq_ER_le`; `E_R = 0` off `|x|² ≤ 2R²`, `tbt6_ER_zero`), since
+`B D²φ_R = χ (·/R) V + E_R` (`tbt6_hessB_hessian_PhiR`). -/
 theorem tbt6_not_hessianQuasiconvexAt (K : ℝ) :
     ∃ δ₀ > 0, δ₀ ≤ 1 ∧ ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       ¬ HessianQuasiconvexAt
         (fun A : Matrix (Fin 3) (Fin 3) ℝ => qDeltaLambda δ (K / δ) (hessB * A)) 0 := by
-  obtain ⟨L, M, hL, hM, hpert⟩ := tbt4_q3_perturb
   obtain ⟨G, hG, hGb⟩ := tbt4_fderiv_chi_bound
   obtain ⟨H, hH, hHb⟩ := tbt6_hessian_chi_bound
-  set I₁ := ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}, q3 (hessB * hessian tbt5Pot x)
-  have hI : I₁ < 0 := tbt6_I1_neg
-  set C₂ := 24 * (8 * G / 3 + 9 * H) ^ 2
-  set A := (L + 16) * (16 * (576 * Real.pi ^ 2)) * (Real.log 4 + 8)
-  set B := 64 * C₂ ^ 2 * (L + M + 16 + 2 * K ^ 4)
-  have hl4 : 0 ≤ Real.log 4 := Real.log_nonneg (by norm_num)
-  have hA : 0 ≤ A := by positivity
-  have hB : 0 ≤ B := by positivity
-  set Ct := A + B + 1
-  have hCt : 0 < Ct := by positivity
-  refine ⟨min 1 ((I₁ / (2 * Ct)) ^ 2), lt_min one_pos (by
-    have : I₁ / (2 * Ct) ≠ 0 := div_ne_zero hI.ne (by positivity)
-    positivity), min_le_left _ _, fun δ hδ hδ₀ => ?_⟩
-  have hδ1 : δ ≤ 1 := (lt_of_lt_of_le hδ₀ (min_le_left _ _)).le
-  have hδs : √δ < -I₁ / (2 * Ct) := by
-    have h := lt_of_lt_of_le hδ₀ (min_le_right _ _)
-    have h' : √δ < √((I₁ / (2 * Ct)) ^ 2) := Real.sqrt_lt_sqrt hδ.le h
-    rwa [Real.sqrt_sq_eq_abs, abs_of_neg (div_neg_of_neg_of_pos hI (by positivity)), ← neg_div]
-      at h'
+  -- `I = ∫ q₃ (B D²φ) < 0`
+  have hI : ∫ x, q3 (hessB * hessian tbt5Pot x) < 0 :=
+    tbt4_integral_neg tbt5_q3_V_neg tbt6_integrable_q3_V
+  obtain ⟨δ₀, hδ₀, hδ₀1, hcut⟩ := tbt4_cutoff_neg (Gf := fun x => hessB * hessian tbt5Pot x)
+    (Ef := tbt6ER) (C := 16 * (576 * Real.pi ^ 2)) (C₂ := 24 * (8 * G / 3 + 9 * H) ^ 2)
+    (by positivity) tbt5_continuous_V tbt6_continuous_ER tbt5_V_mem_L3 tbt6_integrable_q3_V hI
+    (fun R hR x hx => tbt6_ER_zero (by linarith) hx)
+    (fun R hR => (tbt6_log_bound (by linarith)).trans (le_of_eq (by ring)))
+    (fun R hR x => tbt6_frobSq_ER_le hG hGb hH hHb hR x) K
+  refine ⟨δ₀, hδ₀, hδ₀1, fun δ hδ hδ₀' => ?_⟩
   set R := (δ ^ 4)⁻¹
   have hR : 0 < R := by positivity
-  have hR1 : 1 ≤ R := one_le_inv_iff₀.mpr ⟨by positivity, pow_le_one₀ hδ.le hδ1⟩
-  -- the energy of `φ_R`
-  have hE := tbt4_energy (Gf := fun x => hessB * hessian tbt5Pot x) (Ef := tbt6ER R)
-    (χf := tbt6ChiR R) (C₁ := 16 * (576 * Real.pi ^ 2 * Real.log (2 + 2 * R))) (C₂ := C₂)
-    (η := δ) (Λ := K / δ)
-    hL hM hpert hR hδ.le hδ tbt5_continuous_V (tbt6_continuous_ER R)
-    (tbt6_contDiff_chiR R).continuous tbt5_V_mem_L3
-    (fun x => (tbt5_q3_V_neg x).le) tbt6_integrable_q3_V
-    (fun x => Real.smoothTransition.nonneg _) (fun x => Real.smoothTransition.le_one _)
-    (fun x hx => tbt4_chi_one (by
-      rw [tbt4_sumSq_smul, inv_pow]
-      have : (R ^ 2)⁻¹ ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ hR1)
-      have h0 : 0 ≤ ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
-      nlinarith))
-    (fun x hx => ⟨tbt4_chiR_zero hR hx, tbt6_ER_zero hR hx⟩) (tbt6_log_bound hR)
-    (fun x => tbt6_frobSq_ER_le hG hGb hH hHb hR1 x)
-  have heq : ∫ x, qDeltaLambda δ (K / δ) (hessB * hessian (tbt6PhiR R) x) =
-      ∫ x, qDeltaLambda δ (K / δ) (tbt6ChiR R x • (hessB * hessian tbt5Pot x) + tbt6ER R x) := by
-    simp_rw [tbt6_hessB_hessian_PhiR]
-  have hT1 : (L * δ + 16 * δ) * (16 * (576 * Real.pi ^ 2 * Real.log (2 + 2 * R))) ≤ A * √δ := by
-    have := tbt4_delta_log hδ hδ1
-    calc (L * δ + 16 * δ) * (16 * (576 * Real.pi ^ 2 * Real.log (2 + 2 * R)))
-        = (L + 16) * (16 * (576 * Real.pi ^ 2)) * (δ * Real.log (2 + 2 * (δ ^ 4)⁻¹)) := by ring
-      _ ≤ (L + 16) * (16 * (576 * Real.pi ^ 2)) * ((Real.log 4 + 8) * √δ) := by gcongr
-      _ = A * √δ := by ring
-  have hT2 : (L * δ⁻¹ ^ 3 + M + 16 * δ + 2 * δ * (K / δ) ^ 4) * (64 * (C₂ / R ^ 2) ^ 2 * R ^ 3)
-      ≤ B * √δ := by
-    have e : (L * δ⁻¹ ^ 3 + M + 16 * δ + 2 * δ * (K / δ) ^ 4) * (64 * (C₂ / R ^ 2) ^ 2 * R ^ 3) =
-        64 * C₂ ^ 2 * (L * δ + M * δ ^ 4 + 16 * δ ^ 5 + 2 * K ^ 4 * δ) := by
-      simp only [R]; field_simp
-    have h4 : δ ^ 4 ≤ δ := by
-      calc δ ^ 4 = δ * δ ^ 3 := by ring
-        _ ≤ δ * 1 := by gcongr; exact pow_le_one₀ hδ.le hδ1
-        _ = δ := mul_one δ
-    have h5 : δ ^ 5 ≤ δ := by
-      calc δ ^ 5 = δ * δ ^ 4 := by ring
-        _ ≤ δ * 1 := by gcongr; exact pow_le_one₀ hδ.le hδ1
-        _ = δ := mul_one δ
-    have hsd : δ ≤ √δ := (Real.le_sqrt hδ.le hδ.le).mpr (by nlinarith)
-    rw [e]
-    calc 64 * C₂ ^ 2 * (L * δ + M * δ ^ 4 + 16 * δ ^ 5 + 2 * K ^ 4 * δ)
-        ≤ 64 * C₂ ^ 2 * (L * δ + M * δ + 16 * δ + 2 * K ^ 4 * δ) := by gcongr
-      _ = B * δ := by ring
-      _ ≤ B * √δ := by gcongr
   have hneg : ∫ x, qDeltaLambda δ (K / δ) (hessB * hessian (tbt6PhiR R) x) < 0 := by
-    rw [heq]
-    have hs0 : 0 ≤ √δ := Real.sqrt_nonneg δ
-    have h1 : (A + B) * √δ ≤ Ct * √δ := by gcongr; linarith
-    have h2 : Ct * √δ < Ct * (-I₁ / (2 * Ct)) := mul_lt_mul_of_pos_left hδs hCt
-    have h3 : Ct * (-I₁ / (2 * Ct)) = -I₁ / 2 := by field_simp
-    linarith
+    simp_rw [tbt6_hessB_hessian_PhiR]
+    exact hcut δ hδ hδ₀' R rfl
   exact tbt6_not_hessianQuasiconvexAt_of_witness (tbt4_continuous_qDeltaLambda δ (K / δ))
     (tbt4_qDeltaLambda_zero δ (K / δ)) hR (tbt6_contDiff_PhiR R)
     (fun z hz => by simp [tbt6PhiR, tbt6ChiR, tbt4_chiR_zero hR hz]) hneg
@@ -457,19 +389,22 @@ Proposition 5.2, made in the coordinates `(ζ, τ)` of that proof: `q₃ (V) ∈
 (`tbt6_integrable_q3_V`, `tbt_integrable_q3`), and the energy bound is `|V| ≲ |s|⁻¹`
 (`tbt5_frobSq_V_sq_le`) fed into the `(ζ, τ)` computation of `∫_{B_R} |s|⁻⁴`
 (`tbt5_V_log_bound`, `tbt_log_bound_of_le`, Morrey/Cassese/TwoByThree/Witness.lean). The
-potential is cut off as `φ_R = χ (·/R) φ`, so that `B D²φ_R = χ_R V + E_R` with `E_R = B (∇χ_R ⊗ ∇φ + ∇φ ⊗ ∇χ_R + φ D²χ_R)` (Leibniz, scaling),
-and `|E_R|² ≲ R⁻²` because `∇φ` is bounded and `φ` grows linearly (`tbt6_frobSq_ER_le`). The
-energy estimate of the proof of Theorem 1.3 (`tbt4_energy`, Morrey/Cassese/TwoByThree/
-WitnessCutoff.lean) gives `∫ q_{δ,Λ} (B D²φ_R) ≤ I₁ + O (√δ)` with `I₁ = ∫_{B₁} q₃ (V) < 0`
-(`tbt6_not_hessianQuasiconvexAt`); rescaled into the unit cube as `λ² φ_R ((x − c)/λ)`, which keeps
-the Hessians, the witness refutes Hessian quasiconvexity at `0`
-(`tbt6_not_hessianQuasiconvexAt_of_witness`).
+potential is cut off as `φ_R = χ (·/R) φ`, with the cut-off `χ (y) = σ (2 − |y|²)` of the proof
+of Theorem 1.3 (smooth, `0 ≤ χ ≤ 1`, equal to one on `B₁`, supported in `B₂`), so that
+`B D²φ_R = χ_R V + E_R` with `E_R = B (∇χ_R ⊗ ∇φ + ∇φ ⊗ ∇χ_R + φ D²χ_R)` (Leibniz, scaling), and
+`|E_R|² ≲ R⁻²` because `∇φ` is bounded and `φ` grows linearly (`tbt6_frobSq_ER_le`); this is the
+paper's "the same `O (R⁻¹)` fourth-power error". The proof of Theorem 1.3 then applies unchanged
+(`tbt6_not_hessianQuasiconvexAt`, through `tbt4_cutoff_neg`): with `I = ∫_{ℝ³} q₃ (V) < 0`,
+the Hölder step gives `∫ q₃ (π B D²φ_R) = ∫ χ (·/R)⁴ q₃ (V) + O (R^{−1/4} (log R)^{3/4}) =
+I + o_R (1)`, the projections satisfy `∫ |π B D²φ_R|⁴ ≲ 1 + log R` and
+`∫ |π^⊥ B D²φ_R|⁴ ≲ R⁻¹`, so `∫ q_{δ,Λ} (B D²φ_R) ≤ I + o_R (1) + C₀ δ (1 + log R + Λ⁴/R)`,
+and with `R = δ⁻⁴` the right-hand side tends to `I < 0` as `δ ↓ 0`. Rescaled into the unit cube
+as `λ² φ_R ((x − c)/λ)`, which keeps the Hessians, the witness refutes Hessian quasiconvexity at
+`0` (`tbt6_not_hessianQuasiconvexAt_of_witness`).
 
-Mechanical choices, as in `twoByThree_not_quasiconvexAt_qDeltaLambda`: the pointwise Young bound
-replaces Hölder's inequality, `I₁ = ∫_{B₁} q₃ (V)` replaces `∫_{ℝ³} q₃ (V)` (using `q₃ (V) < 0`),
-and the cut-off is `χ (y) = σ (2 − |y|²)`. The potential is the explicit
-`φ = Re (x Ψ₁ (ζ) + y Ψ₂ (ζ) + t Ψ₃ (ζ) + i ζ²)` (`tbt5Pot`), where the paper only describes `∇φ`
-and says "the integration constants can be chosen so that `B ∇φ = u`". -/
+The potential is the explicit `φ = Re (x Ψ₁ (ζ) + y Ψ₂ (ζ) + t Ψ₃ (ζ) + i ζ²)` (`tbt5Pot`), where
+the paper only describes `∇φ` and says "the integration constants can be chosen so that
+`B ∇φ = u`". -/
 theorem corollary5_4 :
     ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
       RankOneConvex (fun A : Matrix (Fin 3) (Fin 3) ℝ => qDeltaLambda δ (K / δ) (hessB * A)) ∧

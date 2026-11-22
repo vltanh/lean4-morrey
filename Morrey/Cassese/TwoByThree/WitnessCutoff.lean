@@ -9,12 +9,20 @@ public import Morrey.Cassese.TwoByThree.Extension
 /-!
 # Section 5: the cutoff of the witness of Proposition 5.2 (proof of Theorem 1.3 (a))
 
-The proof of Theorem 1.3 (a) (TeX lines 1993–2029) cuts off the witness `u` of Proposition 5.2,
+The proof of Theorem 1.3 (a) (TeX lines 1977–2029) cuts off the witness `u` of Proposition 5.2,
 `u_R = χ (·/R) u`, and estimates `∫ q_{δ,Λ} (∇u_R)` with `Λ = K/δ`, `R = δ⁻⁴`.
 
-Reusable estimates (for Corollary 5.4 too): the quartic perturbation bound `tbt4_q3_perturb`, the
-pointwise estimate `tbt4_pointwise` and its integrated form `tbt4_energy` (abstract in the bulk
-field `G ∈ 𝓛₃` and the cut-off error `E`), and the rescaling `tbt4_not_quasiconvexAt_of_witness`.
+The intermediate claims of the paper are stated abstractly in the bulk field `G ∈ 𝓛₃` and the
+cut-off error `E_R`, so that Corollary 5.4 uses them unchanged: `∫ |E_R|⁴ ≲ R⁻¹`
+(`tbt4_integral_E4_le`); the Hölder step
+`∫ q₃ (π ∇u_R) = ∫ χ (·/R)⁴ q₃ (G) + O (R^{−1/4} (log R)^{3/4})` (`tbt4_holder`, from the
+two-sided quartic bound `tbt4_q3_perturb`); `∫ χ (·/R)⁴ q₃ (G) → I = ∫ q₃ (G)`
+(`tbt4_tendsto_integral_chi`), so `∫ q₃ (π ∇u_R) = I + o_R (1)` (`tbt4_tendsto_q3_proj`);
+`∫ |π ∇u_R|⁴ ≲ 1 + log R` and `∫ |π^⊥ ∇u_R|⁴ ≲ R⁻¹` (`tbt4_proj4_le`, `tbt4_perp4_le`); the
+penalty bound and the resulting `∫ q_{δ,Λ} (∇u_R) ≤ I + o_R (1) + C₀ δ (1 + log R + Λ⁴/R)`
+(`tbt4_energy`, `tbt4_energy_le`); the limit `δ ↓ 0` with `R = δ⁻⁴` (`tbt4_tendsto_rhs`); and the
+whole chain `tbt4_cutoff_neg`. The rescaling into the unit cube is
+`tbt4_not_quasiconvexAt_of_witness`.
 
 Helpers are prefixed `tbt4_`.
 -/
@@ -48,10 +56,10 @@ theorem tbt4_norm_le_sqrt_frobSq (V : Fin 2 → Fin 3 → ℝ) : ‖V‖ ≤ √
   simp only [frobSq, Matrix.of_apply]
   linarith
 
-/-- The perturbation bound for the quartic `q₃`:
-`q₃ (X + Y) ≤ q₃ (X) + L |X|³ |Y| + M |Y|⁴` (Frobenius norms). -/
+/-- The two-sided perturbation bound for the quartic `q₃`:
+`|q₃ (X + Y) − q₃ (X)| ≤ L |X|³ |Y| + M |Y|⁴` (Frobenius norms). -/
 theorem tbt4_q3_perturb : ∃ L M : ℝ, 0 ≤ L ∧ 0 ≤ M ∧ ∀ X Y : Matrix (Fin 2) (Fin 3) ℝ,
-    q3 (X + Y) ≤ q3 X + L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4 := by
+    |q3 (X + Y) - q3 X| ≤ L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4 := by
   set g : (Fin 2 → Fin 3 → ℝ) → ℝ := fun V => q3 (Matrix.of V)
   have hg := tbt4_contDiff_q3
   have hgd : Differentiable ℝ g := hg.differentiable (by norm_num)
@@ -88,7 +96,7 @@ theorem tbt4_q3_perturb : ∃ L M : ℝ, 0 ≤ L ∧ 0 ≤ M ∧ ∀ X Y : Matri
         _ = M₀ * ‖‖Z‖ • (‖Z‖⁻¹ • Z)‖ ^ 4 := by rw [← hZ']; ring
   -- the bound in the sup norm
   have key : ∀ V W : Fin 2 → Fin 3 → ℝ,
-      g (V + W) - g V ≤ L₀ * ‖V‖ ^ 3 * ‖W‖ + 17 * M₀ * ‖W‖ ^ 4 := by
+      |g (V + W) - g V| ≤ L₀ * ‖V‖ ^ 3 * ‖W‖ + 17 * M₀ * ‖W‖ ^ 4 := by
     intro V W
     by_cases hc : ‖W‖ ≤ ‖V‖ ∧ V ≠ 0
     · obtain ⟨hWV, hV⟩ := hc
@@ -107,7 +115,7 @@ theorem tbt4_q3_perturb : ∃ L M : ℝ, 0 ≤ L ∧ 0 ≤ M ∧ ∀ X Y : Matri
       rw [hsm, hsm, ← mul_sub, smul_add, add_sub_cancel_left, norm_smul,
         Real.norm_of_nonneg hμ.le, norm_mul, Real.norm_of_nonneg (by positivity)] at h3
       have hμ4 : μ ^ 4 * ‖V‖ ^ 4 = 1 := by rw [← mul_pow, inv_mul_cancel₀ hn.ne', one_pow]
-      have : g (V + W) - g V ≤ ‖g (V + W) - g V‖ := Real.le_norm_self _
+      have : |g (V + W) - g V| = ‖g (V + W) - g V‖ := (Real.norm_eq_abs _).symm
       have h4 : ‖g (V + W) - g V‖ = ‖V‖ ^ 4 * (μ ^ 4 * ‖g (V + W) - g V‖) := by
         rw [← mul_assoc, mul_comm (‖V‖ ^ 4), hμ4, one_mul]
       have h5 : ‖V‖ ^ 4 * (μ ^ 4 * ‖g (V + W) - g V‖) ≤ ‖V‖ ^ 4 * (L₀ * (μ * ‖W‖)) := by
@@ -131,8 +139,12 @@ theorem tbt4_q3_perturb : ∃ L M : ℝ, 0 ≤ L ∧ 0 ≤ M ∧ ∀ X Y : Matri
       have h5 : ‖V‖ ^ 4 ≤ ‖W‖ ^ 4 := by gcongr
       have : 0 ≤ L₀ * ‖V‖ ^ 3 * ‖W‖ := by positivity
       have := le_abs_self (g (V + W))
+      have := neg_abs_le (g (V + W))
+      have := le_abs_self (g V)
       have := neg_abs_le (g V)
-      nlinarith [mul_le_mul_of_nonneg_left h4 hM₀', mul_le_mul_of_nonneg_left h5 hM₀']
+      rw [abs_sub_le_iff]
+      constructor <;>
+        nlinarith [mul_le_mul_of_nonneg_left h4 hM₀', mul_le_mul_of_nonneg_left h5 hM₀']
   refine ⟨L₀, 17 * M₀, hL₀', by positivity, fun X Y => ?_⟩
   set V : Fin 2 → Fin 3 → ℝ := fun i j => X i j
   set W : Fin 2 → Fin 3 → ℝ := fun i j => Y i j
@@ -148,19 +160,6 @@ theorem tbt4_q3_perturb : ∃ L M : ℝ, 0 ≤ L ∧ 0 ≤ M ∧ ∀ X Y : Matri
   rw [e3, e4] at h
   linarith
 
-/-- Young's inequality in the form used: `a³ b ≤ η a⁴ + η⁻³ b⁴`. -/
-theorem tbt4_young {a b η : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hη : 0 < η) :
-    a ^ 3 * b ≤ η * a ^ 4 + η⁻¹ ^ 3 * b ^ 4 := by
-  have h1 : 0 ≤ η * a ^ 4 := by positivity
-  have h2 : 0 ≤ η⁻¹ ^ 3 * b ^ 4 := by positivity
-  rcases le_or_gt b (η * a) with h | h
-  · have : a ^ 3 * b ≤ a ^ 3 * (η * a) := mul_le_mul_of_nonneg_left h (by positivity)
-    nlinarith
-  · have ha' : a ≤ η⁻¹ * b := by
-      rw [← div_eq_inv_mul, le_div_iff₀ hη]; linarith
-    have : a ^ 3 * b ≤ (η⁻¹ * b) ^ 3 * b := by gcongr
-    nlinarith
-
 theorem tbt4_frobSq_add_le {d m : ℕ} (A B : Matrix (Fin d) (Fin m) ℝ) :
     frobSq (A + B) ≤ 2 * frobSq A + 2 * frobSq B := by
   simp only [frobSq, Matrix.add_apply, Finset.mul_sum, ← Finset.sum_add_distrib]
@@ -172,96 +171,58 @@ theorem tbt4_frobSq_pythagoras (E : Matrix (Fin 2) (Fin 3) ℝ) :
     frobSq E = frobSq (projL3 E) + frobSq (E - projL3 E) := by
   simp [frobSq, projL3, Fin.sum_univ_two, Fin.sum_univ_three]; ring
 
-/-- **The pointwise estimate** behind the cutoff argument of Theorem 1.3 (a): for `G ∈ 𝓛₃`,
-`χ ∈ [0, 1]` and any error `E`,
-`q_{δ,Λ} (χ G + E) ≤ χ⁴ q₃ (G) + (L η + 16 δ) |G|⁴ + (L η⁻³ + M + 16 δ + 2 δ Λ⁴) |E|⁴`
-(with `L`, `M` from `tbt4_q3_perturb`). -/
-theorem tbt4_pointwise {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
+/-- For `G ∈ 𝓛₃`: `π (χ G + E) = χ G + π E`. -/
+theorem tbt4_proj_add {G : Matrix (Fin 2) (Fin 3) ℝ} (hG : G ∈ L3) (χ : ℝ)
+    (E : Matrix (Fin 2) (Fin 3) ℝ) : projL3 (χ • G + E) = χ • G + projL3 E := by
+  rw [add_comm, tbt_projL3_add_smul, tbt3_projL3_of_mem hG, add_comm]
+
+/-- For `G ∈ 𝓛₃`: `π^⊥ (χ G + E) = π^⊥ E`. -/
+theorem tbt4_perp_add {G : Matrix (Fin 2) (Fin 3) ℝ} (hG : G ∈ L3) (χ : ℝ)
+    (E : Matrix (Fin 2) (Fin 3) ℝ) : χ • G + E - projL3 (χ • G + E) = E - projL3 E := by
+  rw [tbt4_proj_add hG]; abel
+
+theorem tbt4_continuous_projL3 : Continuous projL3 := tbt1_continuous_proj isFrobProj_projL3
+
+theorem tbt4_projL3_zero : projL3 0 = 0 := by
+  ext i j; fin_cases i <;> fin_cases j <;> simp [projL3]
+
+theorem tbt4_q3_zero : q3 0 = 0 := by simpa using tbt_q3_smul 0 0
+
+/-- The pointwise form of the paper's first display (TeX 2005–2014): for `G ∈ 𝓛₃` and
+`χ ∈ [0, 1]`, `π (χ G + E) = χ G + π E`, so the two-sided bound `tbt4_q3_perturb` at `X = χ G`,
+`Y = π E` gives `|q₃ (π (χ G + E)) − χ⁴ q₃ (G)| ≤ L |G|³ |E| + M |E|⁴`. -/
+theorem tbt4_q3_proj_sub_le {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
     (hpert : ∀ X Y : Matrix (Fin 2) (Fin 3) ℝ,
-      q3 (X + Y) ≤ q3 X + L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4)
-    {G E : Matrix (Fin 2) (Fin 3) ℝ} (hG : G ∈ L3) {χ δ η Λ : ℝ} (hχ0 : 0 ≤ χ) (hχ1 : χ ≤ 1)
-    (hδ : 0 ≤ δ) (hη : 0 < η) :
-    qDeltaLambda δ Λ (χ • G + E) ≤ χ ^ 4 * q3 G + (L * η + 16 * δ) * frobSq G ^ 2 +
-      (L * η⁻¹ ^ 3 + M + 16 * δ + 2 * δ * Λ ^ 4) * frobSq E ^ 2 := by
-  set P := projL3 E
-  have hπ : projL3 (χ • G + E) = χ • G + P := by
-    rw [add_comm, tbt_projL3_add_smul, tbt3_projL3_of_mem hG, add_comm]
-  have hperp : χ • G + E - projL3 (χ • G + E) = E - P := by rw [hπ]; abel
+      |q3 (X + Y) - q3 X| ≤ L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4)
+    {G E : Matrix (Fin 2) (Fin 3) ℝ} (hG : G ∈ L3) {χ : ℝ} (hχ0 : 0 ≤ χ) (hχ1 : χ ≤ 1) :
+    |q3 (projL3 (χ • G + E)) - χ ^ 4 * q3 G| ≤
+      L * (√(frobSq G) ^ 3 * √(frobSq E)) + M * frobSq E ^ 2 := by
   have hpy := tbt4_frobSq_pythagoras E
-  have hP0 := tbt_frobSq_nonneg P
-  have hN0 := tbt_frobSq_nonneg (E - P)
-  have hG0 := tbt_frobSq_nonneg G
-  have hE0 := tbt_frobSq_nonneg E
-  have hPE : frobSq P ≤ frobSq E := by linarith
-  have hNE : frobSq (E - P) ≤ frobSq E := by linarith
-  have hχG : frobSq (χ • G) = χ ^ 2 * frobSq G := tbt_frobSq_smul χ G
-  -- the quartic
-  set a := √(frobSq (χ • G))
-  set b := √(frobSq P)
-  have ha0 : 0 ≤ a := Real.sqrt_nonneg _
-  have hb0 : 0 ≤ b := Real.sqrt_nonneg _
-  have ha4 : a ^ 4 = (χ ^ 2 * frobSq G) ^ 2 := by
-    rw [show a ^ 4 = (a ^ 2) ^ 2 by ring, Real.sq_sqrt (tbt_frobSq_nonneg _), hχG]
-  have hb4 : b ^ 4 = frobSq P ^ 2 := by
-    rw [show b ^ 4 = (b ^ 2) ^ 2 by ring, Real.sq_sqrt hP0]
-  have hχ4 : (χ ^ 2 * frobSq G) ^ 2 ≤ frobSq G ^ 2 := by
+  have hP0 := tbt_frobSq_nonneg (projL3 E)
+  have hN0 := tbt_frobSq_nonneg (E - projL3 E)
+  have hPE : frobSq (projL3 E) ≤ frobSq E := by linarith
+  have hχG : frobSq (χ • G) ≤ frobSq G := by
+    rw [tbt_frobSq_smul]
     have : χ ^ 2 ≤ 1 := by nlinarith
-    have : χ ^ 2 * frobSq G ≤ frobSq G := by nlinarith
-    exact pow_le_pow_left₀ (by positivity) this 2
-  have hP4 : frobSq P ^ 2 ≤ frobSq E ^ 2 := pow_le_pow_left₀ hP0 hPE 2
-  have hq := hpert (χ • G) P
-  have hy := tbt4_young ha0 hb0 hη
-  have hq' : q3 (χ • G + P) ≤ χ ^ 4 * q3 G + L * η * frobSq G ^ 2 +
-      (L * η⁻¹ ^ 3 + M) * frobSq E ^ 2 := by
-    rw [tbt_q3_smul] at hq
-    have e1 : L * a ^ 3 * b ≤ L * (η * a ^ 4 + η⁻¹ ^ 3 * b ^ 4) := by
-      rw [mul_assoc]; exact mul_le_mul_of_nonneg_left hy hL
-    rw [ha4, hb4] at e1
-    have hb4' : √(frobSq P) ^ 4 = frobSq P ^ 2 := hb4
-    rw [hb4'] at hq
-    have hηi : 0 ≤ η⁻¹ ^ 3 := by positivity
-    have f1 := mul_le_mul_of_nonneg_left hχ4 (mul_nonneg hL hη.le)
-    have f2 := mul_le_mul_of_nonneg_left hP4 (mul_nonneg hL hηi)
-    have f3 := mul_le_mul_of_nonneg_left hP4 hM
-    have e2 : L * (η * (χ ^ 2 * frobSq G) ^ 2 + η⁻¹ ^ 3 * frobSq P ^ 2) =
-        L * η * (χ ^ 2 * frobSq G) ^ 2 + L * η⁻¹ ^ 3 * frobSq P ^ 2 := by ring
-    have e3 : χ ^ 4 * q3 G + L * η * frobSq G ^ 2 + (L * η⁻¹ ^ 3 + M) * frobSq E ^ 2 =
-        χ ^ 4 * q3 G + L * η * frobSq G ^ 2 + L * η⁻¹ ^ 3 * frobSq E ^ 2 + M * frobSq E ^ 2 := by
-      ring
-    have hab : L * √(frobSq (χ • G)) ^ 3 * √(frobSq P) = L * a ^ 3 * b := rfl
-    rw [e3]
-    linarith
-  -- the penalty
-  have hS : frobSq (χ • G + P) ≤ 2 * frobSq G + 2 * frobSq E := by
-    have := tbt4_frobSq_add_le (χ • G) P
-    have : χ ^ 2 * frobSq G ≤ frobSq G := by
-      have : χ ^ 2 ≤ 1 := by nlinarith
-      nlinarith
-    linarith
-  have hpen : (frobSq (χ • G + P) + Λ ^ 2 * frobSq (E - P)) ^ 2 ≤
-      16 * frobSq G ^ 2 + (16 + 2 * Λ ^ 4) * frobSq E ^ 2 := by
-    have h1 : (frobSq (χ • G + P) + Λ ^ 2 * frobSq (E - P)) ^ 2 ≤
-        2 * frobSq (χ • G + P) ^ 2 + 2 * (Λ ^ 2 * frobSq (E - P)) ^ 2 := by
-      nlinarith [sq_nonneg (frobSq (χ • G + P) - Λ ^ 2 * frobSq (E - P))]
-    have h2 : frobSq (χ • G + P) ^ 2 ≤ (2 * frobSq G + 2 * frobSq E) ^ 2 :=
-      pow_le_pow_left₀ (tbt_frobSq_nonneg _) hS 2
-    have h3 : (Λ ^ 2 * frobSq (E - P)) ^ 2 ≤ Λ ^ 4 * frobSq E ^ 2 := by
-      rw [mul_pow, show (Λ ^ 2) ^ 2 = Λ ^ 4 by ring]
-      exact mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hN0 hNE 2) (by positivity)
-    nlinarith [sq_nonneg (frobSq G - frobSq E)]
-  rw [qDeltaLambda, hperp, hπ]
-  have h := mul_le_mul_of_nonneg_left hpen hδ
-  have e : χ ^ 4 * q3 G + (L * η + 16 * δ) * frobSq G ^ 2 +
-      (L * η⁻¹ ^ 3 + M + 16 * δ + 2 * δ * Λ ^ 4) * frobSq E ^ 2 =
-      (χ ^ 4 * q3 G + L * η * frobSq G ^ 2 + (L * η⁻¹ ^ 3 + M) * frobSq E ^ 2) +
-        δ * (16 * frobSq G ^ 2 + (16 + 2 * Λ ^ 4) * frobSq E ^ 2) := by ring
-  rw [e]
+    nlinarith [tbt_frobSq_nonneg G]
+  have h1 : √(frobSq (χ • G)) ≤ √(frobSq G) := Real.sqrt_le_sqrt hχG
+  have h2 : √(frobSq (projL3 E)) ≤ √(frobSq E) := Real.sqrt_le_sqrt hPE
+  have h3 : √(frobSq (projL3 E)) ^ 4 ≤ frobSq E ^ 2 := by
+    rw [show √(frobSq (projL3 E)) ^ 4 = (√(frobSq (projL3 E)) ^ 2) ^ 2 by ring,
+      Real.sq_sqrt hP0]
+    exact pow_le_pow_left₀ hP0 hPE 2
+  have h := hpert (χ • G) (projL3 E)
+  rw [tbt_q3_smul] at h
+  rw [tbt4_proj_add hG]
+  have e1 : L * √(frobSq (χ • G)) ^ 3 * √(frobSq (projL3 E)) ≤
+      L * (√(frobSq G) ^ 3 * √(frobSq E)) := by
+    rw [mul_assoc]; gcongr
+  have e2 := mul_le_mul_of_nonneg_left h3 hM
   linarith
 
 theorem tbt4_qDeltaLambda_zero (δ Λ : ℝ) : qDeltaLambda δ Λ 0 = 0 := by
   have h0 : (0 : Matrix (Fin 2) (Fin 3) ℝ) ∈ L3 := by rw [mem_L3_iff]; simp
-  have hq : q3 0 = 0 := by simpa using tbt_q3_smul 0 0
-  rw [tbt3_qDeltaLambda_of_mem δ Λ h0, hq]
+  rw [tbt3_qDeltaLambda_of_mem δ Λ h0, tbt4_q3_zero]
   simp [frobSq]
 
 theorem tbt4_lt_sum_sq {x : Fin 3 → ℝ} {r : ℝ} (hr : 0 ≤ r) (h : r < ‖x‖) :
@@ -293,60 +254,23 @@ theorem tbt4_isCompact_sum_sq_le (ρ : ℝ) :
   have hx' : ∑ i, x i ^ 2 ≤ ρ := hx
   linarith [le_abs_self ρ]
 
-/-- **The energy estimate** of the cutoff argument (TeX 1993–2029), abstract in the bulk field
-`G` (with values in `𝓛₃`, `q₃ (G) ≤ 0`) and the cutoff error `E` (supported in `|x|² ≤ 2R²`,
-`|E|² ≤ C₂ / R²`), for a cutoff `χ ∈ [0, 1]` equal to `1` on the unit ball and `0` off
-`|x|² ≤ 2R²`:
-`∫ q_{δ,Λ} (χ G + E) ≤ ∫_{B₁} q₃ (G) + (L η + 16 δ) C₁ + (L η⁻³ + M + 16 δ + 2 δ Λ⁴) · 64 C₂² / R`
-where `C₁` bounds `∫_{|x|² ≤ 2R²} |G|⁴`. -/
-theorem tbt4_energy {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
-    (hpert : ∀ X Y : Matrix (Fin 2) (Fin 3) ℝ,
-      q3 (X + Y) ≤ q3 X + L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4)
-    {Gf Ef : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {χf : (Fin 3 → ℝ) → ℝ}
-    {R C₁ C₂ δ η Λ : ℝ} (hR : 0 < R) (hδ : 0 ≤ δ) (hη : 0 < η)
-    (hGc : Continuous Gf) (hEc : Continuous Ef) (hχc : Continuous χf)
-    (hGL : ∀ x, Gf x ∈ L3) (hGq : ∀ x, q3 (Gf x) ≤ 0) (hGi : Integrable fun x => q3 (Gf x))
-    (hχ0 : ∀ x, 0 ≤ χf x) (hχ1 : ∀ x, χf x ≤ 1) (hχB : ∀ x, ∑ i, x i ^ 2 < 1 → χf x = 1)
-    (hsupp : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → χf x = 0 ∧ Ef x = 0)
-    (hlog : ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}, frobSq (Gf x) ^ 2 ≤ C₁)
+theorem tbt4_sumSq_gt {R : ℝ} (hR : 0 < R) {x : Fin 3 → ℝ}
+    (hx : x ∉ Metric.closedBall (0 : Fin 3 → ℝ) (2 * R)) : 2 * R ^ 2 < ∑ i, x i ^ 2 := by
+  rw [Metric.mem_closedBall, dist_zero_right, not_le] at hx
+  have := tbt4_lt_sum_sq (by positivity) hx
+  nlinarith
+
+/-- A function vanishing on `|x|² > 2R²` has compact support. -/
+theorem tbt4_hasCompactSupport {β : Type*} [Zero β] {f : (Fin 3 → ℝ) → β} {R : ℝ} (hR : 0 < R)
+    (h : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → f x = 0) : HasCompactSupport f :=
+  HasCompactSupport.intro (isCompact_closedBall 0 (2 * R)) fun x hx => h x (tbt4_sumSq_gt hR hx)
+
+/-- **`∫ |E_R|⁴ ≲ R⁻¹`** (TeX 2004, "boundedness of `u` gives `∫ |E_R|⁴ ≲ R⁻¹`"): for `E`
+supported in `|x|² ≤ 2R²` with `|E|² ≤ C₂ / R²`, `∫ |E|⁴ ≤ 64 C₂² / R`. -/
+theorem tbt4_integral_E4_le {Ef : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {R C₂ : ℝ} (hR : 0 < R)
+    (hEc : Continuous Ef) (hsupp : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → Ef x = 0)
     (hE : ∀ x, frobSq (Ef x) ≤ C₂ / R ^ 2) :
-    ∫ x, qDeltaLambda δ Λ (χf x • Gf x + Ef x) ≤
-      (∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}, q3 (Gf x)) + (L * η + 16 * δ) * C₁ +
-        (L * η⁻¹ ^ 3 + M + 16 * δ + 2 * δ * Λ ^ 4) * (64 * (C₂ / R ^ 2) ^ 2 * R ^ 3) := by
-  set S := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}
-  set B1 := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}
-  set c₁ := L * η + 16 * δ
-  set c₂ := L * η⁻¹ ^ 3 + M + 16 * δ + 2 * δ * Λ ^ 4
-  have hc₁ : 0 ≤ c₁ := by positivity
-  have hc₂ : 0 ≤ c₂ := by positivity
-  have hsq : Continuous fun x : Fin 3 → ℝ => ∑ i, x i ^ 2 := by fun_prop
-  have hSm : MeasurableSet S := measurableSet_le hsq.measurable measurable_const
-  have hB1m : MeasurableSet B1 := measurableSet_lt hsq.measurable measurable_const
-  have hSc : IsCompact S := tbt4_isCompact_sum_sq_le _
-  have hout : ∀ x, x ∉ Metric.closedBall (0 : Fin 3 → ℝ) (2 * R) →
-      2 * R ^ 2 < ∑ i, x i ^ 2 := by
-    intro x hx
-    rw [Metric.mem_closedBall, dist_zero_right, not_le] at hx
-    have := tbt4_lt_sum_sq (by positivity) hx
-    nlinarith
-  -- the integrand: continuous, compactly supported
-  set f := fun x => qDeltaLambda δ Λ (χf x • Gf x + Ef x)
-  have hfc : Continuous f :=
-    (tbt4_continuous_qDeltaLambda δ Λ).comp ((hχc.smul hGc).add hEc)
-  have hfi : Integrable f := hfc.integrable_of_hasCompactSupport
-    (HasCompactSupport.intro (isCompact_closedBall 0 (2 * R)) fun x hx => by
-      obtain ⟨h1, h2⟩ := hsupp x (hout x hx)
-      simp only [f, h1, h2, zero_smul, add_zero, tbt4_qDeltaLambda_zero])
-  -- the three terms of the bound
-  have hi1 : Integrable fun x => χf x ^ 4 * q3 (Gf x) := by
-    refine hGi.norm.mono' ((hχc.pow 4).mul (tbt_continuous_q3.comp hGc)).aestronglyMeasurable
-      (Filter.Eventually.of_forall fun x => ?_)
-    rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_mul, abs_of_nonneg (pow_nonneg (hχ0 x) 4)]
-    have : χf x ^ 4 ≤ 1 := pow_le_one₀ (hχ0 x) (hχ1 x)
-    nlinarith [abs_nonneg (q3 (Gf x))]
-  have hcG : Continuous fun x => frobSq (Gf x) ^ 2 := (tbt_continuous_frobSq.comp hGc).pow 2
-  have hi2 : Integrable (S.indicator fun x => frobSq (Gf x) ^ 2) :=
-    (integrable_indicator_iff hSm).mpr (hcG.continuousOn.integrableOn_compact hSc)
+    ∫ x, frobSq (Ef x) ^ 2 ≤ 64 * C₂ ^ 2 / R := by
   have hcE : Continuous fun x => frobSq (Ef x) ^ 2 := (tbt_continuous_frobSq.comp hEc).pow 2
   have hEbd : ∀ x, frobSq (Ef x) ^ 2 ≤
       (Metric.closedBall (0 : Fin 3 → ℝ) (2 * R)).indicator (fun _ => (C₂ / R ^ 2) ^ 2) x := by
@@ -354,58 +278,262 @@ theorem tbt4_energy {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
     by_cases hx : x ∈ Metric.closedBall (0 : Fin 3 → ℝ) (2 * R)
     · rw [Set.indicator_of_mem hx]
       exact pow_le_pow_left₀ (tbt_frobSq_nonneg _) (hE x) 2
-    · rw [Set.indicator_of_notMem hx, (hsupp x (hout x hx)).2]
+    · rw [Set.indicator_of_notMem hx, hsupp x (tbt4_sumSq_gt hR hx)]
       simp [frobSq]
   have hiB : Integrable ((Metric.closedBall (0 : Fin 3 → ℝ) (2 * R)).indicator
       fun _ => (C₂ / R ^ 2) ^ 2) :=
     (integrable_indicator_iff measurableSet_closedBall).mpr
       (integrableOn_const (measure_closedBall_lt_top).ne)
-  have hi3 : Integrable fun x => frobSq (Ef x) ^ 2 :=
-    hiB.mono' hcE.aestronglyMeasurable (Filter.Eventually.of_forall fun x => by
-      rw [Real.norm_eq_abs, abs_of_nonneg (by positivity)]; exact hEbd x)
-  -- the pointwise bound
-  have hpt : ∀ x, f x ≤ χf x ^ 4 * q3 (Gf x) + c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x +
-      c₂ * frobSq (Ef x) ^ 2 := by
+  have hi : Integrable fun x => frobSq (Ef x) ^ 2 :=
+    hcE.integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR fun x hx => by
+      simp [hsupp x hx, frobSq])
+  refine (integral_mono hi hiB hEbd).trans (le_of_eq ?_)
+  rw [integral_indicator_const _ measurableSet_closedBall, Measure.real,
+    Real.volume_pi_closedBall _ (by positivity), Fintype.card_fin,
+    ENNReal.toReal_ofReal (by positivity), smul_eq_mul]
+  field_simp
+  ring
+
+/-- **The Hölder step** (TeX 2005–2014): for `G ∈ 𝓛₃` with `q₃ (G) ∈ L¹`, a cut-off `χ ∈ [0, 1]`
+and an error `E` (both vanishing off `S = {|x|² ≤ 2R²}`, `|E|² ≤ C₂ / R²`) and
+`∫_S |G|⁴ ≤ C₁`,
+`|∫ q₃ (π (χ G + E)) − ∫ χ⁴ q₃ (G)| ≤ L C₁^{3/4} (64 C₂² / R)^{1/4} + M · 64 C₂² / R`.
+The pointwise bound `tbt4_q3_proj_sub_le` leaves `L ∫ |G|³ |E| + M ∫ |E|⁴`; Hölder's inequality
+with exponents `4/3` and `4` on `S` (`integral_mul_le_Lp_mul_Lq_of_nonneg`) gives
+`∫ |G|³ |E| ≤ (∫_S |G|⁴)^{3/4} (∫ |E|⁴)^{1/4}`, and `∫ |E|⁴ ≤ 64 C₂² / R`
+(`tbt4_integral_E4_le`). -/
+theorem tbt4_holder {L M : ℝ} (hL : 0 ≤ L) (hM : 0 ≤ M)
+    (hpert : ∀ X Y : Matrix (Fin 2) (Fin 3) ℝ,
+      |q3 (X + Y) - q3 X| ≤ L * √(frobSq X) ^ 3 * √(frobSq Y) + M * √(frobSq Y) ^ 4)
+    {Gf Ef : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {χf : (Fin 3 → ℝ) → ℝ}
+    {R C₁ C₂ : ℝ} (hR : 0 < R)
+    (hGc : Continuous Gf) (hEc : Continuous Ef) (hχc : Continuous χf)
+    (hGL : ∀ x, Gf x ∈ L3) (hGi : Integrable fun x => q3 (Gf x))
+    (hχ0 : ∀ x, 0 ≤ χf x) (hχ1 : ∀ x, χf x ≤ 1)
+    (hsupp : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → χf x = 0 ∧ Ef x = 0)
+    (hlog : ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}, frobSq (Gf x) ^ 2 ≤ C₁)
+    (hE : ∀ x, frobSq (Ef x) ≤ C₂ / R ^ 2) :
+    |(∫ x, q3 (projL3 (χf x • Gf x + Ef x))) - ∫ x, χf x ^ 4 * q3 (Gf x)| ≤
+      L * (C₁ ^ (3 / 4 : ℝ) * (64 * C₂ ^ 2 / R) ^ (1 / 4 : ℝ)) + M * (64 * C₂ ^ 2 / R) := by
+  set S := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}
+  have hsq : Continuous fun x : Fin 3 → ℝ => ∑ i, x i ^ 2 := by fun_prop
+  have hSm : MeasurableSet S := measurableSet_le hsq.measurable measurable_const
+  have hSc : IsCompact S := tbt4_isCompact_sum_sq_le _
+  set f : (Fin 3 → ℝ) → ℝ := fun x => √(frobSq (Gf x)) ^ 3
+  set g : (Fin 3 → ℝ) → ℝ := fun x => √(frobSq (Ef x))
+  have hfc : Continuous f := ((tbt_continuous_frobSq.comp hGc).sqrt).pow 3
+  have hgc : Continuous g := (tbt_continuous_frobSq.comp hEc).sqrt
+  have hec : Continuous fun x => frobSq (Ef x) ^ 2 := (tbt_continuous_frobSq.comp hEc).pow 2
+  have hac : Continuous fun x => q3 (projL3 (χf x • Gf x + Ef x)) :=
+    tbt_continuous_q3.comp (tbt4_continuous_projL3.comp ((hχc.smul hGc).add hEc))
+  -- integrability
+  have ha : Integrable fun x => q3 (projL3 (χf x • Gf x + Ef x)) :=
+    hac.integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR fun x hx => by
+      obtain ⟨h1, h2⟩ := hsupp x hx
+      simp [h1, h2, tbt4_projL3_zero, tbt4_q3_zero])
+  have hb : Integrable fun x => χf x ^ 4 * q3 (Gf x) := by
+    refine hGi.norm.mono' ((hχc.pow 4).mul (tbt_continuous_q3.comp hGc)).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun x => ?_)
+    rw [Real.norm_eq_abs, Real.norm_eq_abs, abs_mul, abs_of_nonneg (pow_nonneg (hχ0 x) 4)]
+    have : χf x ^ 4 ≤ 1 := pow_le_one₀ (hχ0 x) (hχ1 x)
+    nlinarith [abs_nonneg (q3 (Gf x))]
+  have hfg : Integrable fun x => f x * g x :=
+    (hfc.mul hgc).integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR fun x hx => by
+      simp [g, (hsupp x hx).2, frobSq])
+  have he : Integrable fun x => frobSq (Ef x) ^ 2 :=
+    hec.integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR fun x hx => by
+      simp [(hsupp x hx).2, frobSq])
+  have hE4 := tbt4_integral_E4_le hR hEc (fun x hx => (hsupp x hx).2) hE
+  -- the pointwise bound, integrated
+  have h1 : |(∫ x, q3 (projL3 (χf x • Gf x + Ef x))) - ∫ x, χf x ^ 4 * q3 (Gf x)| ≤
+      L * (∫ x, f x * g x) + M * ∫ x, frobSq (Ef x) ^ 2 := by
+    rw [← integral_sub ha hb, ← integral_const_mul, ← integral_const_mul,
+      ← integral_add (hfg.const_mul L) (he.const_mul M)]
+    refine abs_integral_le_integral_abs.trans
+      (integral_mono (ha.sub hb).abs ((hfg.const_mul L).add (he.const_mul M)) fun x => ?_)
+    exact tbt4_q3_proj_sub_le hL hM hpert (hGL x) (hχ0 x) (hχ1 x)
+  -- Hölder's inequality on `S` with exponents `4/3` and `4`
+  have hS0 : ∀ x ∉ S, f x * g x = 0 := fun x hx => by
+    simp [g, (hsupp x (not_le.mp hx)).2, frobSq]
+  have h2 : ∫ x, f x * g x ≤ C₁ ^ (3 / 4 : ℝ) * (64 * C₂ ^ 2 / R) ^ (1 / 4 : ℝ) := by
+    rw [← setIntegral_eq_integral_of_forall_compl_eq_zero hS0]
+    have : IsFiniteMeasure (volume.restrict S) :=
+      isFiniteMeasure_restrict.mpr hSc.measure_lt_top.ne
+    have hpq : Real.HolderConjugate (4 / 3) 4 := ⟨by norm_num, by norm_num, by norm_num⟩
+    obtain ⟨Cf, hCf⟩ := hSc.exists_bound_of_continuousOn hfc.continuousOn
+    obtain ⟨Cg, hCg⟩ := hSc.exists_bound_of_continuousOn hgc.continuousOn
+    have hfm : MemLp f (ENNReal.ofReal (4 / 3)) (volume.restrict S) :=
+      MemLp.of_bound hfc.aestronglyMeasurable Cf ((ae_restrict_iff' hSm).mpr
+        (Filter.Eventually.of_forall hCf))
+    have hgm : MemLp g (ENNReal.ofReal 4) (volume.restrict S) :=
+      MemLp.of_bound hgc.aestronglyMeasurable Cg ((ae_restrict_iff' hSm).mpr
+        (Filter.Eventually.of_forall hCg))
+    have hH := integral_mul_le_Lp_mul_Lq_of_nonneg hpq
+      (Filter.Eventually.of_forall fun x => by positivity)
+      (Filter.Eventually.of_forall fun x => Real.sqrt_nonneg _) hfm hgm
+    have ef : ∀ x, f x ^ (4 / 3 : ℝ) = frobSq (Gf x) ^ 2 := fun x => by
+      show (√(frobSq (Gf x)) ^ 3) ^ (4 / 3 : ℝ) = _
+      rw [← Real.rpow_natCast, ← Real.rpow_mul (Real.sqrt_nonneg _),
+        show ((3 : ℕ) : ℝ) * (4 / 3) = ((4 : ℕ) : ℝ) by norm_num, Real.rpow_natCast,
+        show √(frobSq (Gf x)) ^ 4 = (√(frobSq (Gf x)) ^ 2) ^ 2 by ring,
+        Real.sq_sqrt (tbt_frobSq_nonneg _)]
+    have eg : ∀ x, √(frobSq (Ef x)) ^ (4 : ℝ) = frobSq (Ef x) ^ 2 := fun x => by
+      rw [show (4 : ℝ) = ((4 : ℕ) : ℝ) by norm_num, Real.rpow_natCast,
+        show √(frobSq (Ef x)) ^ 4 = (√(frobSq (Ef x)) ^ 2) ^ 2 by ring,
+        Real.sq_sqrt (tbt_frobSq_nonneg _)]
+    simp_rw [ef, eg] at hH
+    rw [show (1 : ℝ) / (4 / 3) = 3 / 4 by norm_num] at hH
+    have hC₁ : 0 ≤ C₁ := (setIntegral_nonneg hSm fun x _ => by positivity).trans hlog
+    refine hH.trans (mul_le_mul ?_ ?_ (by positivity) (Real.rpow_nonneg hC₁ _))
+    · exact Real.rpow_le_rpow (setIntegral_nonneg hSm fun x _ => by positivity) hlog
+        (by norm_num)
+    · refine Real.rpow_le_rpow (setIntegral_nonneg hSm fun x _ => by positivity) ?_
+        (by norm_num)
+      exact (setIntegral_le_integral he (Filter.Eventually.of_forall fun x => by positivity)).trans
+        hE4
+  refine h1.trans ?_
+  have := mul_le_mul_of_nonneg_left h2 hL
+  have := mul_le_mul_of_nonneg_left hE4 hM
+  linarith
+
+/-- The penalty in the step "consequently" (TeX 2022–2027):
+`δ (|π A|² + Λ² |π^⊥ A|²)² ≤ 2 δ |π A|⁴ + 2 δ Λ⁴ |π^⊥ A|⁴`, so
+`∫ q_{δ,Λ} (A) ≤ ∫ q₃ (π A) + 2 δ ∫ |π A|⁴ + 2 δ Λ⁴ ∫ |π^⊥ A|⁴` for continuous compactly
+supported `A`. -/
+theorem tbt4_energy {Af : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} (hAc : Continuous Af)
+    (hAs : HasCompactSupport Af) {δ Λ : ℝ} (hδ : 0 ≤ δ) :
+    ∫ x, qDeltaLambda δ Λ (Af x) ≤ (∫ x, q3 (projL3 (Af x))) +
+      2 * δ * (∫ x, frobSq (projL3 (Af x)) ^ 2) +
+        2 * δ * Λ ^ 4 * ∫ x, frobSq (Af x - projL3 (Af x)) ^ 2 := by
+  have hπc : Continuous fun x => projL3 (Af x) := tbt4_continuous_projL3.comp hAc
+  have hi0 : Integrable fun x => qDeltaLambda δ Λ (Af x) :=
+    ((tbt4_continuous_qDeltaLambda δ Λ).comp hAc).integrable_of_hasCompactSupport
+      (hAs.comp_left (tbt4_qDeltaLambda_zero δ Λ))
+  have hi1 : Integrable fun x => q3 (projL3 (Af x)) :=
+    (tbt_continuous_q3.comp hπc).integrable_of_hasCompactSupport
+      (hAs.comp_left (g := fun A => q3 (projL3 A)) (by simp [tbt4_projL3_zero, tbt4_q3_zero]))
+  have hi2 : Integrable fun x => frobSq (projL3 (Af x)) ^ 2 := by
+    have hc : Continuous fun x => frobSq (projL3 (Af x)) ^ 2 :=
+      (tbt_continuous_frobSq.comp hπc).pow 2
+    have hs : HasCompactSupport fun x => frobSq (projL3 (Af x)) ^ 2 :=
+      hAs.comp_left (g := fun A => frobSq (projL3 A) ^ 2) (by simp [tbt4_projL3_zero, frobSq])
+    exact hc.integrable_of_hasCompactSupport hs
+  have hi3 : Integrable fun x => frobSq (Af x - projL3 (Af x)) ^ 2 := by
+    have hc : Continuous fun x => frobSq (Af x - projL3 (Af x)) ^ 2 :=
+      (tbt_continuous_frobSq.comp (hAc.sub hπc)).pow 2
+    have hs : HasCompactSupport fun x => frobSq (Af x - projL3 (Af x)) ^ 2 :=
+      hAs.comp_left (g := fun A => frobSq (A - projL3 A) ^ 2)
+        (by simp [tbt4_projL3_zero, frobSq])
+    exact hc.integrable_of_hasCompactSupport hs
+  have hi12 : Integrable fun x => q3 (projL3 (Af x)) + 2 * δ * frobSq (projL3 (Af x)) ^ 2 :=
+    hi1.add (hi2.const_mul _)
+  have hi123 : Integrable fun x => q3 (projL3 (Af x)) + 2 * δ * frobSq (projL3 (Af x)) ^ 2 +
+      2 * δ * Λ ^ 4 * frobSq (Af x - projL3 (Af x)) ^ 2 :=
+    hi12.add (hi3.const_mul _)
+  have hmono := integral_mono hi0 hi123 fun x => by
+    simp only [qDeltaLambda]
+    nlinarith [mul_nonneg hδ (sq_nonneg (frobSq (projL3 (Af x)) -
+      Λ ^ 2 * frobSq (Af x - projL3 (Af x))))]
+  rw [integral_add hi12 (hi3.const_mul _), integral_add hi1 (hi2.const_mul _),
+    integral_const_mul, integral_const_mul] at hmono
+  exact hmono
+
+/-- **`∫ |π ∇u_R|⁴ ≲ 1 + log R`** (TeX 2015–2021): for `G ∈ 𝓛₃`, `χ ∈ [0, 1]`, `E` as in
+`tbt4_holder`, `R ≥ 1` and `∫_S |G|⁴ ≤ C log (2 + 2R)`,
+`∫ |π (χ G + E)|⁴ ≤ (24 C + 512 C₂²) (1 + log R)`: `π (χ G + E) = χ G + π E`,
+`|χ G + π E|⁴ ≤ 8 |G|⁴ + 8 |E|⁴` on `S`, and `∫ |E|⁴ ≤ 64 C₂² / R` (`tbt4_integral_E4_le`). -/
+theorem tbt4_proj4_le {Gf Ef : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {χf : (Fin 3 → ℝ) → ℝ}
+    {R C C₂ : ℝ} (hR : 1 ≤ R) (hC : 0 ≤ C)
+    (hGc : Continuous Gf) (hEc : Continuous Ef) (hχc : Continuous χf)
+    (hGL : ∀ x, Gf x ∈ L3) (hχ0 : ∀ x, 0 ≤ χf x) (hχ1 : ∀ x, χf x ≤ 1)
+    (hsupp : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → χf x = 0 ∧ Ef x = 0)
+    (hlog : ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}, frobSq (Gf x) ^ 2 ≤
+      C * Real.log (2 + 2 * R))
+    (hE : ∀ x, frobSq (Ef x) ≤ C₂ / R ^ 2) :
+    ∫ x, frobSq (projL3 (χf x • Gf x + Ef x)) ^ 2 ≤
+      (24 * C + 512 * C₂ ^ 2) * (1 + Real.log R) := by
+  have hR0 : 0 < R := by linarith
+  set S := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}
+  have hsq : Continuous fun x : Fin 3 → ℝ => ∑ i, x i ^ 2 := by fun_prop
+  have hSm : MeasurableSet S := measurableSet_le hsq.measurable measurable_const
+  have hSc : IsCompact S := tbt4_isCompact_sum_sq_le _
+  have hcG : Continuous fun x => frobSq (Gf x) ^ 2 := (tbt_continuous_frobSq.comp hGc).pow 2
+  have hiG : Integrable (S.indicator fun x => frobSq (Gf x) ^ 2) :=
+    (integrable_indicator_iff hSm).mpr (hcG.continuousOn.integrableOn_compact hSc)
+  have he : Integrable fun x => frobSq (Ef x) ^ 2 :=
+    ((tbt_continuous_frobSq.comp hEc).pow 2).integrable_of_hasCompactSupport
+      (tbt4_hasCompactSupport hR0 fun x hx => by simp [(hsupp x hx).2, frobSq])
+  have hπ : Continuous fun x => frobSq (projL3 (χf x • Gf x + Ef x)) ^ 2 :=
+    (tbt_continuous_frobSq.comp (tbt4_continuous_projL3.comp ((hχc.smul hGc).add hEc))).pow 2
+  have hi : Integrable fun x => frobSq (projL3 (χf x • Gf x + Ef x)) ^ 2 :=
+    hπ.integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR0 fun x hx => by
+      obtain ⟨h1, h2⟩ := hsupp x hx
+      simp [h1, h2, tbt4_projL3_zero, frobSq])
+  have hpt : ∀ x, frobSq (projL3 (χf x • Gf x + Ef x)) ^ 2 ≤
+      8 * S.indicator (fun x => frobSq (Gf x) ^ 2) x + 8 * frobSq (Ef x) ^ 2 := by
     intro x
     by_cases hx : x ∈ S
-    · rw [Set.indicator_of_mem hx]
-      exact tbt4_pointwise hL hM hpert (hGL x) (hχ0 x) (hχ1 x) hδ hη
-    · rw [Set.indicator_of_notMem hx]
-      have hx' : 2 * R ^ 2 < ∑ i, x i ^ 2 := not_le.mp hx
-      obtain ⟨h1, h2⟩ := hsupp x hx'
-      simp [f, h1, h2, tbt4_qDeltaLambda_zero, frobSq]
-  have hint12 : Integrable fun x => χf x ^ 4 * q3 (Gf x) +
-      c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x := hi1.add (hi2.const_mul c₁)
-  have hint : Integrable fun x => χf x ^ 4 * q3 (Gf x) +
-      c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x + c₂ * frobSq (Ef x) ^ 2 :=
-    hint12.add (hi3.const_mul c₂)
-  have hmono := integral_mono hfi hint hpt
-  have e1 : ∫ x, (χf x ^ 4 * q3 (Gf x) + c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x +
-      c₂ * frobSq (Ef x) ^ 2) = (∫ x, (χf x ^ 4 * q3 (Gf x) +
-        c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x)) + ∫ x, c₂ * frobSq (Ef x) ^ 2 :=
-    integral_add hint12 (hi3.const_mul c₂)
-  have e2 : ∫ x, (χf x ^ 4 * q3 (Gf x) + c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x) =
-      (∫ x, χf x ^ 4 * q3 (Gf x)) + ∫ x, c₁ * S.indicator (fun x => frobSq (Gf x) ^ 2) x :=
-    integral_add hi1 (hi2.const_mul c₁)
-  rw [e1, e2, integral_const_mul, integral_const_mul, integral_indicator hSm] at hmono
-  -- `∫ χ⁴ q₃ (G) ≤ ∫_{B₁} q₃ (G)`
-  have h1 : (∫ x, χf x ^ 4 * q3 (Gf x)) ≤ ∫ x in B1, q3 (Gf x) := by
-    rw [← integral_indicator hB1m]
-    refine integral_mono hi1 ((integrable_indicator_iff hB1m).mpr hGi.integrableOn) fun x => ?_
-    by_cases hx : x ∈ B1
-    · rw [Set.indicator_of_mem hx, hχB x hx]; simp
-    · rw [Set.indicator_of_notMem hx]
-      exact mul_nonpos_of_nonneg_of_nonpos (pow_nonneg (hχ0 x) 4) (hGq x)
-  -- `∫ |E|⁴ ≤ 64 (C₂/R²)² R³`
-  have h3 : (∫ x, frobSq (Ef x) ^ 2) ≤ 64 * (C₂ / R ^ 2) ^ 2 * R ^ 3 := by
-    refine (integral_mono hi3 hiB hEbd).trans (le_of_eq ?_)
-    rw [integral_indicator_const _ measurableSet_closedBall, Measure.real,
-      Real.volume_pi_closedBall _ (by positivity), Fintype.card_fin,
-      ENNReal.toReal_ofReal (by positivity), smul_eq_mul]
-    ring
-  have h2 := mul_le_mul_of_nonneg_left hlog hc₁
-  have h3' := mul_le_mul_of_nonneg_left h3 hc₂
+    · rw [Set.indicator_of_mem hx, tbt4_proj_add (hGL x)]
+      have hpy := tbt4_frobSq_pythagoras (Ef x)
+      have hN0 := tbt_frobSq_nonneg (Ef x - projL3 (Ef x))
+      have hP0 := tbt_frobSq_nonneg (projL3 (Ef x))
+      have hG0 := tbt_frobSq_nonneg (Gf x)
+      have hχG : frobSq (χf x • Gf x) ≤ frobSq (Gf x) := by
+        rw [tbt_frobSq_smul]
+        have : χf x ^ 2 ≤ 1 := by nlinarith [hχ0 x, hχ1 x]
+        nlinarith
+      have hS := tbt4_frobSq_add_le (χf x • Gf x) (projL3 (Ef x))
+      have hS' : frobSq (χf x • Gf x + projL3 (Ef x)) ≤
+          2 * frobSq (Gf x) + 2 * frobSq (Ef x) := by
+        linarith
+      have h2 := pow_le_pow_left₀ (tbt_frobSq_nonneg _) hS' 2
+      nlinarith [sq_nonneg (frobSq (Gf x) - frobSq (Ef x))]
+    · obtain ⟨h1, h2⟩ := hsupp x (not_le.mp hx)
+      rw [Set.indicator_of_notMem hx]
+      simp [h1, h2, tbt4_projL3_zero, frobSq]
+  have hE4 := tbt4_integral_E4_le hR0 hEc (fun x hx => (hsupp x hx).2) hE
+  have hint : Integrable fun x => 8 * S.indicator (fun x => frobSq (Gf x) ^ 2) x +
+      8 * frobSq (Ef x) ^ 2 := (hiG.const_mul 8).add (he.const_mul 8)
+  have h1 := integral_mono hi hint hpt
+  rw [integral_add (hiG.const_mul 8) (he.const_mul 8), integral_const_mul, integral_const_mul,
+    integral_indicator hSm] at h1
+  -- `log (2 + 2R) ≤ 3 (1 + log R)` and `1/R ≤ 1 ≤ 1 + log R` for `R ≥ 1`
+  have hlR : 0 ≤ Real.log R := Real.log_nonneg hR
+  have hl : Real.log (2 + 2 * R) ≤ 3 * (1 + Real.log R) := by
+    have h4 : Real.log 4 ≤ 3 := by
+      have := Real.log_le_sub_one_of_pos (show (0 : ℝ) < 4 by norm_num); linarith
+    have : Real.log (2 + 2 * R) ≤ Real.log (4 * R) := Real.log_le_log (by positivity) (by linarith)
+    rw [Real.log_mul (by norm_num) hR0.ne'] at this
+    linarith
+  have hRi : 64 * C₂ ^ 2 / R ≤ 64 * C₂ ^ 2 * (1 + Real.log R) := by
+    rw [div_le_iff₀ hR0]
+    nlinarith [sq_nonneg C₂, mul_nonneg (sq_nonneg C₂) hlR]
+  have := mul_le_mul_of_nonneg_left hl hC
   linarith
+
+/-- **`∫ |π^⊥ ∇u_R|⁴ ≲ R⁻¹`** (TeX 2015–2021): `π^⊥ (χ G + E) = π^⊥ E` for `G ∈ 𝓛₃`, so
+`∫ |π^⊥ (χ G + E)|⁴ ≤ ∫ |E|⁴ ≤ 64 C₂² / R` (`tbt4_integral_E4_le`). -/
+theorem tbt4_perp4_le {Gf Ef : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {χf : (Fin 3 → ℝ) → ℝ}
+    {R C₂ : ℝ} (hR : 0 < R) (hEc : Continuous Ef) (hGL : ∀ x, Gf x ∈ L3)
+    (hsupp : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → Ef x = 0)
+    (hE : ∀ x, frobSq (Ef x) ≤ C₂ / R ^ 2) :
+    ∫ x, frobSq (χf x • Gf x + Ef x - projL3 (χf x • Gf x + Ef x)) ^ 2 ≤ 64 * C₂ ^ 2 / R := by
+  have e : ∀ x, χf x • Gf x + Ef x - projL3 (χf x • Gf x + Ef x) = Ef x - projL3 (Ef x) :=
+    fun x => tbt4_perp_add (hGL x) _ _
+  simp_rw [e]
+  have he : Integrable fun x => frobSq (Ef x) ^ 2 :=
+    ((tbt_continuous_frobSq.comp hEc).pow 2).integrable_of_hasCompactSupport
+      (tbt4_hasCompactSupport hR fun x hx => by simp [hsupp x hx, frobSq])
+  have hc : Continuous fun x => frobSq (Ef x - projL3 (Ef x)) ^ 2 :=
+    (tbt_continuous_frobSq.comp (hEc.sub (tbt4_continuous_projL3.comp hEc))).pow 2
+  have hi : Integrable fun x => frobSq (Ef x - projL3 (Ef x)) ^ 2 :=
+    hc.integrable_of_hasCompactSupport (tbt4_hasCompactSupport hR fun x hx => by
+      simp [hsupp x hx, tbt4_projL3_zero, frobSq])
+  refine (integral_mono hi he fun x => ?_).trans (tbt4_integral_E4_le hR hEc hsupp hE)
+  have hpy := tbt4_frobSq_pythagoras (Ef x)
+  have hP0 := tbt_frobSq_nonneg (projL3 (Ef x))
+  have hN0 := tbt_frobSq_nonneg (Ef x - projL3 (Ef x))
+  exact pow_le_pow_left₀ hN0 (by linarith) 2
 
 /-! ### The cutoff of the witness -/
 
@@ -552,53 +680,223 @@ theorem tbt4_log_bound {u : (Fin 3 → ℝ) → Fin 2 → ℝ} (hu : ContDiff �
   show ∑ i, x i ^ 2 < (2 * R) ^ 2
   nlinarith
 
-/-- `I₁ = ∫_{B₁} q₃ (∇u) < 0` when `q₃ (∇u) < 0` everywhere and `q₃ (∇u)` is integrable. -/
-theorem tbt4_I1_neg {u : (Fin 3 → ℝ) → Fin 2 → ℝ} (hneg : ∀ x, q3 (jac u x) < 0)
-    (hint : Integrable fun x => q3 (jac u x)) :
-    ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}, q3 (jac u x) < 0 := by
-  set B := {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}
-  have hsq : Continuous fun x : Fin 3 → ℝ => ∑ i, x i ^ 2 := (tbt4_contDiff_sumSq (n := 0)).continuous
-  have hBo : IsOpen B := isOpen_lt hsq continuous_const
-  have hpos : 0 < ∫ x in B, -q3 (jac u x) := by
+theorem tbt4_chi_nonneg (y : Fin 3 → ℝ) : 0 ≤ tbt4Chi y := Real.smoothTransition.nonneg _
+
+theorem tbt4_chi_le_one (y : Fin 3 → ℝ) : tbt4Chi y ≤ 1 := Real.smoothTransition.le_one _
+
+theorem tbt4_continuous_chiR (R : ℝ) : Continuous fun x : Fin 3 → ℝ => tbt4Chi (R⁻¹ • x) :=
+  tbt4_contDiff_chi.continuous.comp (continuous_const_smul R⁻¹)
+
+/-- `χ (x/R) = 1` for `|x|² ≤ R²`. -/
+theorem tbt4_chiR_one {R : ℝ} (hR : 0 < R) {x : Fin 3 → ℝ} (hx : ∑ i, x i ^ 2 ≤ R ^ 2) :
+    tbt4Chi (R⁻¹ • x) = 1 := by
+  refine tbt4_chi_one ?_
+  rw [tbt4_sumSq_smul, inv_pow, inv_mul_le_iff₀ (by positivity)]
+  linarith
+
+/-- `I = ∫ f < 0` for `f < 0` integrable (TeX 1995, `I := ∫_{ℝ³} q₃ (∇u) < 0`). -/
+theorem tbt4_integral_neg {f : (Fin 3 → ℝ) → ℝ} (hneg : ∀ x, f x < 0) (hint : Integrable f) :
+    ∫ x, f x < 0 := by
+  have hpos : 0 < ∫ x, -f x := by
     rw [integral_pos_iff_support_of_nonneg_ae
-      (Filter.Eventually.of_forall fun x => (neg_pos.mpr (hneg x)).le) hint.neg.integrableOn]
-    have hs : Function.support (fun x => -q3 (jac u x)) = Set.univ :=
+      (Filter.Eventually.of_forall fun x => (neg_pos.mpr (hneg x)).le) hint.neg]
+    have hs : Function.support (fun x => -f x) = Set.univ :=
       Set.eq_univ_of_forall fun x => (neg_pos.mpr (hneg x)).ne'
-    rw [hs, Measure.restrict_apply MeasurableSet.univ, Set.univ_inter]
-    exact hBo.measure_pos volume ⟨0, by simp [B]⟩
+    rw [hs]
+    exact isOpen_univ.measure_pos volume Set.univ_nonempty
   rw [integral_neg] at hpos
   linarith
 
-/-- `δ log (2 + 2 δ⁻⁴) ≤ (log 4 + 8) √δ` for `0 < δ ≤ 1`. -/
-theorem tbt4_delta_log {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
-    δ * Real.log (2 + 2 * (δ ^ 4)⁻¹) ≤ (Real.log 4 + 8) * √δ := by
-  have hs : 0 < √δ := Real.sqrt_pos.mpr hδ
-  have hss : √δ ^ 2 = δ := Real.sq_sqrt hδ.le
-  have h1 : 1 ≤ (δ ^ 4)⁻¹ := one_le_inv_iff₀.mpr ⟨by positivity, pow_le_one₀ hδ.le hδ1⟩
-  have h2 : Real.log (2 + 2 * (δ ^ 4)⁻¹) ≤ Real.log 4 + 4 * Real.log δ⁻¹ := by
-    have e : 4 * Real.log δ⁻¹ = Real.log (δ⁻¹ ^ 4) := by rw [Real.log_pow]; norm_num
-    rw [e, ← Real.log_mul (by norm_num) (by positivity)]
-    apply Real.log_le_log (by positivity)
-    rw [inv_pow]; linarith
-  -- `log δ⁻¹ ≤ 2 / √δ`
-  have h3 : Real.log δ⁻¹ ≤ 2 * (√δ)⁻¹ := by
-    have := Real.log_le_sub_one_of_pos (inv_pos.mpr hs)
-    have e : Real.log δ⁻¹ = 2 * Real.log (√δ)⁻¹ := by
-      have : 2 * Real.log (√δ)⁻¹ = Real.log ((√δ)⁻¹ ^ 2) := by rw [Real.log_pow]; norm_num
-      rw [this, inv_pow, hss]
-    rw [e]; linarith
-  have h4 : δ * (√δ)⁻¹ = √δ := by
-    have := Real.mul_self_sqrt hδ.le
-    field_simp; linarith
-  have hl4 : 0 ≤ Real.log 4 := Real.log_nonneg (by norm_num)
-  have hδs : δ ≤ √δ := (Real.le_sqrt hδ.le hδ.le).mpr (by nlinarith)
-  calc δ * Real.log (2 + 2 * (δ ^ 4)⁻¹) ≤ δ * (Real.log 4 + 4 * Real.log δ⁻¹) :=
-        mul_le_mul_of_nonneg_left h2 hδ.le
-    _ ≤ δ * (Real.log 4 + 4 * (2 * (√δ)⁻¹)) := by gcongr
-    _ = δ * Real.log 4 + 8 * (δ * (√δ)⁻¹) := by ring
-    _ = δ * Real.log 4 + 8 * √δ := by rw [h4]
-    _ ≤ √δ * Real.log 4 + 8 * √δ := by gcongr
-    _ = (Real.log 4 + 8) * √δ := by ring
+/-- **`∫ χ (·/R)⁴ q₃ (∇u) → I`** (TeX 2010–2013): for integrable `f`,
+`∫ χ (x/R)⁴ f (x) dx → ∫ f` as `R → ∞`, by dominated convergence (`|χ (x/R)⁴ f| ≤ |f|`, and
+`χ (x/R) = 1` once `|x|² ≤ R²`). -/
+theorem tbt4_tendsto_integral_chi {f : (Fin 3 → ℝ) → ℝ} (hf : Integrable f) :
+    Filter.Tendsto (fun R : ℝ => ∫ x, tbt4Chi (R⁻¹ • x) ^ 4 * f x) Filter.atTop
+      (nhds (∫ x, f x)) := by
+  refine tendsto_integral_filter_of_dominated_convergence (fun x => |f x|)
+    (Filter.Eventually.of_forall fun R =>
+      ((tbt4_continuous_chiR R).pow 4).aestronglyMeasurable.mul hf.aestronglyMeasurable)
+    (Filter.Eventually.of_forall fun R => Filter.Eventually.of_forall fun x => ?_) hf.abs
+    (Filter.Eventually.of_forall fun x => ?_)
+  · rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg (pow_nonneg (tbt4_chi_nonneg _) 4)]
+    have : tbt4Chi (R⁻¹ • x) ^ 4 ≤ 1 := pow_le_one₀ (tbt4_chi_nonneg _) (tbt4_chi_le_one _)
+    nlinarith [abs_nonneg (f x)]
+  · refine tendsto_const_nhds.congr' ?_
+    filter_upwards [Filter.eventually_ge_atTop (∑ i, x i ^ 2 + 1)] with R hR
+    have h0 : 0 ≤ ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
+    rw [tbt4_chiR_one (by linarith) (by nlinarith), one_pow, one_mul]
+
+/-- `log (2 + 2R)ⁿ / R → 0` as `R → ∞`. -/
+theorem tbt4_tendsto_log_pow_div (n : ℕ) :
+    Filter.Tendsto (fun R : ℝ => Real.log (2 + 2 * R) ^ n / R) Filter.atTop (nhds 0) := by
+  have h2 : Filter.Tendsto (fun R : ℝ => 2 + 2 * R) Filter.atTop Filter.atTop :=
+    Filter.tendsto_atTop_add_const_left _ 2 (Filter.tendsto_id.const_mul_atTop two_pos)
+  refine ((Real.tendsto_pow_log_div_mul_add_atTop (1 / 2) (-1) n (by norm_num)).comp h2).congr
+    fun R => ?_
+  simp only [Function.comp]
+  congr 1
+  ring
+
+/-- **`∫ q₃ (π ∇u_R) = I + o_R (1)`** (TeX 2005–2014), abstract in the bulk field `G` (values in
+`𝓛₃`, `q₃ (G) ∈ L¹`) and the cut-off errors `E_R` (vanishing off `|x|² ≤ 2R²`,
+`|E_R|² ≤ C₂ / R²`), with `∫_{|x|² ≤ 2R²} |G|⁴ ≤ C log (2 + 2R)`: the Hölder step
+`tbt4_holder` gives `∫ q₃ (π ∇u_R) = ∫ χ (·/R)⁴ q₃ (G) + O (R^{−1/4} (log R)^{3/4})`, and
+`∫ χ (·/R)⁴ q₃ (G) → I = ∫ q₃ (G)` (`tbt4_tendsto_integral_chi`). -/
+theorem tbt4_tendsto_q3_proj {Gf : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ}
+    {Ef : ℝ → (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {C C₂ : ℝ} (hC : 0 ≤ C)
+    (hGc : Continuous Gf) (hEc : ∀ R, Continuous (Ef R)) (hGL : ∀ x, Gf x ∈ L3)
+    (hGi : Integrable fun x => q3 (Gf x))
+    (hsupp : ∀ R, 1 ≤ R → ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → Ef R x = 0)
+    (hlog : ∀ R, 1 ≤ R → ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2},
+      frobSq (Gf x) ^ 2 ≤ C * Real.log (2 + 2 * R))
+    (hE : ∀ R, 1 ≤ R → ∀ x, frobSq (Ef R x) ≤ C₂ / R ^ 2) :
+    Filter.Tendsto (fun R : ℝ => ∫ x, q3 (projL3 (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x)))
+      Filter.atTop (nhds (∫ x, q3 (Gf x))) := by
+  obtain ⟨L, M, hL, hM, hpert⟩ := tbt4_q3_perturb
+  set β : ℝ → ℝ := fun R => L * ((C ^ 3 * (64 * C₂ ^ 2)) * (Real.log (2 + 2 * R) ^ 3 / R))
+    ^ (1 / 4 : ℝ) + M * (64 * C₂ ^ 2 * R⁻¹)
+  -- the error term `O (R^{−1/4} (log R)^{3/4})` tends to `0`
+  have hβ : Filter.Tendsto β Filter.atTop (nhds 0) := by
+    have h1 : Filter.Tendsto (fun R : ℝ => ((C ^ 3 * (64 * C₂ ^ 2)) *
+        (Real.log (2 + 2 * R) ^ 3 / R)) ^ (1 / 4 : ℝ)) Filter.atTop (nhds 0) := by
+      have := (tbt4_tendsto_log_pow_div 3).const_mul (C ^ 3 * (64 * C₂ ^ 2))
+      rw [mul_zero] at this
+      exact this.rpow_const_nhds_zero (by norm_num)
+    have h2 : Filter.Tendsto (fun R : ℝ => 64 * C₂ ^ 2 * R⁻¹) Filter.atTop (nhds 0) := by
+      have := tendsto_inv_atTop_zero.const_mul (64 * C₂ ^ 2)
+      rw [mul_zero] at this
+      exact this
+    have := (h1.const_mul L).add (h2.const_mul M)
+    rw [mul_zero, mul_zero, add_zero] at this
+    exact this
+  -- `|∫ q₃ (π ∇u_R) − ∫ χ_R⁴ q₃ (G)| ≤ β (R)` for `R ≥ 1`
+  have hab : ∀ᶠ R in Filter.atTop, ‖(∫ x, q3 (projL3 (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x))) -
+      ∫ x, tbt4Chi (R⁻¹ • x) ^ 4 * q3 (Gf x)‖ ≤ β R := by
+    filter_upwards [Filter.eventually_ge_atTop 1] with R hR
+    have hR0 : 0 < R := by linarith
+    have hl0 : 0 ≤ Real.log (2 + 2 * R) := Real.log_nonneg (by linarith)
+    rw [Real.norm_eq_abs]
+    refine (tbt4_holder hL hM hpert hR0 hGc (hEc R) (tbt4_continuous_chiR R) hGL hGi
+      (fun _ => tbt4_chi_nonneg _) (fun _ => tbt4_chi_le_one _) (fun x hx =>
+        ⟨tbt4_chiR_zero hR0 hx, hsupp R hR x hx⟩) (hlog R hR) (hE R hR)).trans (le_of_eq ?_)
+    simp only [β]
+    have hx : 0 ≤ C * Real.log (2 + 2 * R) := mul_nonneg hC hl0
+    have hy : 0 ≤ 64 * C₂ ^ 2 / R := by positivity
+    rw [show C ^ 3 * (64 * C₂ ^ 2) * (Real.log (2 + 2 * R) ^ 3 / R) =
+        (C * Real.log (2 + 2 * R)) ^ 3 * (64 * C₂ ^ 2 / R) by ring,
+      Real.mul_rpow (pow_nonneg hx 3) hy, ← Real.rpow_natCast (C * Real.log (2 + 2 * R)) 3,
+      ← Real.rpow_mul hx,
+      div_eq_mul_inv (64 * C₂ ^ 2) R]
+    norm_num
+  have hd : Filter.Tendsto (fun R : ℝ => (∫ x, q3 (projL3 (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x))) -
+      ∫ x, tbt4Chi (R⁻¹ • x) ^ 4 * q3 (Gf x)) Filter.atTop (nhds 0) :=
+    squeeze_zero_norm' hab hβ
+  simpa using (tbt4_tendsto_integral_chi hGi).add hd
+
+/-- **The energy bound** (TeX 2022–2027, "consequently"): with `G`, `E_R` as in
+`tbt4_tendsto_q3_proj`, there is `C₀` such that for `R ≥ 1`, `δ ≥ 0` and all `Λ`,
+`∫ q_{δ,Λ} (∇u_R) ≤ ∫ q₃ (π ∇u_R) + C₀ δ (1 + log R + Λ⁴ / R)`; together with
+`∫ q₃ (π ∇u_R) = I + o_R (1)` this is the paper's `∫ q_{δ,Λ} (∇u_R) ≤ I + o_R (1) +
+C₀ δ (1 + log R + Λ⁴/R)`. It combines the penalty bound `tbt4_energy` with
+`∫ |π ∇u_R|⁴ ≲ 1 + log R` (`tbt4_proj4_le`) and `∫ |π^⊥ ∇u_R|⁴ ≲ R⁻¹` (`tbt4_perp4_le`). -/
+theorem tbt4_energy_le {Gf : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ}
+    {Ef : ℝ → (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {C C₂ : ℝ} (hC : 0 ≤ C)
+    (hGc : Continuous Gf) (hEc : ∀ R, Continuous (Ef R)) (hGL : ∀ x, Gf x ∈ L3)
+    (hsupp : ∀ R, 1 ≤ R → ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → Ef R x = 0)
+    (hlog : ∀ R, 1 ≤ R → ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2},
+      frobSq (Gf x) ^ 2 ≤ C * Real.log (2 + 2 * R))
+    (hE : ∀ R, 1 ≤ R → ∀ x, frobSq (Ef R x) ≤ C₂ / R ^ 2) :
+    ∃ C₀ : ℝ, 0 ≤ C₀ ∧ ∀ R : ℝ, 1 ≤ R → ∀ δ Λ : ℝ, 0 ≤ δ →
+      ∫ x, qDeltaLambda δ Λ (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x) ≤
+        (∫ x, q3 (projL3 (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x))) +
+          C₀ * δ * (1 + Real.log R + Λ ^ 4 / R) := by
+  set A := 24 * C + 512 * C₂ ^ 2
+  have hA : 0 ≤ A := by positivity
+  refine ⟨2 * A + 128 * C₂ ^ 2, by positivity, fun R hR δ Λ hδ => ?_⟩
+  have hR0 : 0 < R := by linarith
+  have hsupp' : ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → tbt4Chi (R⁻¹ • x) = 0 ∧ Ef R x = 0 :=
+    fun x hx => ⟨tbt4_chiR_zero hR0 hx, hsupp R hR x hx⟩
+  have hAc : Continuous fun x => tbt4Chi (R⁻¹ • x) • Gf x + Ef R x :=
+    ((tbt4_continuous_chiR R).smul hGc).add (hEc R)
+  have hAs : HasCompactSupport fun x => tbt4Chi (R⁻¹ • x) • Gf x + Ef R x :=
+    tbt4_hasCompactSupport hR0 fun x hx => by simp [hsupp' x hx]
+  have h1 := tbt4_energy hAc hAs (Λ := Λ) hδ
+  have h2 := tbt4_proj4_le hR hC hGc (hEc R) (tbt4_continuous_chiR R) hGL
+    (fun _ => tbt4_chi_nonneg _) (fun _ => tbt4_chi_le_one _) hsupp' (hlog R hR) (hE R hR)
+  have h3 := tbt4_perp4_le (χf := fun x => tbt4Chi (R⁻¹ • x)) hR0 (hEc R) hGL (hsupp R hR)
+    (hE R hR)
+  have hlR : 0 ≤ Real.log R := Real.log_nonneg hR
+  have hw : 0 ≤ Λ ^ 4 / R := by positivity
+  have e2 := mul_le_mul_of_nonneg_left h2 (by positivity : (0 : ℝ) ≤ 2 * δ)
+  have e3 := mul_le_mul_of_nonneg_left h3 (by positivity : (0 : ℝ) ≤ 2 * δ * Λ ^ 4)
+  have e3' : 2 * δ * Λ ^ 4 * (64 * C₂ ^ 2 / R) = 128 * C₂ ^ 2 * δ * (Λ ^ 4 / R) := by ring
+  have hc1 : 0 ≤ 2 * A * δ * (Λ ^ 4 / R) := by positivity
+  have hc2 : 0 ≤ 128 * C₂ ^ 2 * δ * (1 + Real.log R) := by positivity
+  nlinarith
+
+/-- **`R = δ⁻⁴`** (TeX 2028–2029, "taking `R = δ⁻⁴` makes the right-hand side tend to `I`"): if
+`a (R) → I` as `R → ∞` (here `a (R) = ∫ q₃ (π ∇u_R) = I + o_R (1)`), then with `Λ = K/δ` and
+`R = δ⁻⁴` the right-hand side `a (R) + C₀ δ (1 + log R + Λ⁴ / R)` tends to `I` as `δ ↓ 0`:
+`Λ⁴ / R = K⁴` and `δ log δ⁻⁴ = −4 δ log δ → 0`. -/
+theorem tbt4_tendsto_rhs {a : ℝ → ℝ} {I : ℝ} (ha : Filter.Tendsto a Filter.atTop (nhds I))
+    (C₀ K : ℝ) :
+    Filter.Tendsto (fun δ : ℝ => a (δ ^ 4)⁻¹ +
+      C₀ * δ * (1 + Real.log (δ ^ 4)⁻¹ + (K / δ) ^ 4 / (δ ^ 4)⁻¹)) (nhdsWithin 0 (Set.Ioi 0))
+      (nhds I) := by
+  have hR : Filter.Tendsto (fun δ : ℝ => (δ ^ 4)⁻¹) (nhdsWithin 0 (Set.Ioi 0)) Filter.atTop := by
+    refine ((Filter.tendsto_pow_atTop (by norm_num : (4 : ℕ) ≠ 0)).comp
+      tendsto_inv_nhdsGT_zero).congr fun δ => ?_
+    simp [inv_pow]
+  have h0 : Filter.Tendsto (fun δ : ℝ => δ) (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) :=
+    tendsto_nhdsWithin_of_tendsto_nhds Filter.tendsto_id
+  -- `δ log δ⁻¹ = log δ⁻¹ / δ⁻¹ → 0`
+  have hl : Filter.Tendsto (fun δ : ℝ => Real.log δ⁻¹ ^ 1 / (1 * δ⁻¹ + 0))
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) :=
+    (Real.tendsto_pow_log_div_mul_add_atTop 1 0 1 one_ne_zero).comp tendsto_inv_nhdsGT_zero
+  have hc : Filter.Tendsto (fun δ : ℝ => C₀ * ((1 + K ^ 4) * δ +
+      4 * (Real.log δ⁻¹ ^ 1 / (1 * δ⁻¹ + 0)))) (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    have := ((h0.const_mul (1 + K ^ 4)).add (hl.const_mul 4)).const_mul C₀
+    rw [mul_zero, mul_zero, add_zero, mul_zero] at this
+    exact this
+  have h2 : Filter.Tendsto (fun δ : ℝ => C₀ * δ * (1 + Real.log (δ ^ 4)⁻¹ + (K / δ) ^ 4 /
+      (δ ^ 4)⁻¹)) (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    refine hc.congr' ?_
+    filter_upwards [self_mem_nhdsWithin] with δ (hδ : 0 < δ)
+    rw [← inv_pow, Real.log_pow]
+    field_simp
+    ring
+  have := (ha.comp hR).add h2
+  rw [add_zero] at this
+  exact this
+
+/-- **The cutoff argument** of the proof of Theorem 1.3 (TeX 1993–2029), abstract in the bulk
+field `G` (values in `𝓛₃`, `q₃ (G) ∈ L¹`, `I = ∫ q₃ (G) < 0`,
+`∫_{|x|² ≤ 2R²} |G|⁴ ≤ C log (2 + 2R)`) and the cut-off errors `E_R` (vanishing off
+`|x|² ≤ 2R²`, `|E_R|² ≤ C₂ / R²`), so that Corollary 5.4 uses it unchanged: there is
+`δ₀ ∈ (0, 1]` such that for `0 < δ < δ₀`, `Λ = K/δ` and `R = δ⁻⁴`,
+`∫ q_{δ,Λ} (χ (·/R) G + E_R) < 0`. The right-hand side of `tbt4_energy_le` tends to `I < 0`
+as `δ ↓ 0` (`tbt4_tendsto_q3_proj`, `tbt4_tendsto_rhs`), so it is negative for small `δ`. -/
+theorem tbt4_cutoff_neg {Gf : (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ}
+    {Ef : ℝ → (Fin 3 → ℝ) → Matrix (Fin 2) (Fin 3) ℝ} {C C₂ : ℝ} (hC : 0 ≤ C)
+    (hGc : Continuous Gf) (hEc : ∀ R, Continuous (Ef R)) (hGL : ∀ x, Gf x ∈ L3)
+    (hGi : Integrable fun x => q3 (Gf x)) (hI : ∫ x, q3 (Gf x) < 0)
+    (hsupp : ∀ R, 1 ≤ R → ∀ x, 2 * R ^ 2 < ∑ i, x i ^ 2 → Ef R x = 0)
+    (hlog : ∀ R, 1 ≤ R → ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2},
+      frobSq (Gf x) ^ 2 ≤ C * Real.log (2 + 2 * R))
+    (hE : ∀ R, 1 ≤ R → ∀ x, frobSq (Ef R x) ≤ C₂ / R ^ 2) (K : ℝ) :
+    ∃ δ₀ > 0, δ₀ ≤ 1 ∧ ∀ δ : ℝ, 0 < δ → δ < δ₀ → ∀ R : ℝ, R = (δ ^ 4)⁻¹ →
+      ∫ x, qDeltaLambda δ (K / δ) (tbt4Chi (R⁻¹ • x) • Gf x + Ef R x) < 0 := by
+  obtain ⟨C₀, -, hen⟩ := tbt4_energy_le hC hGc hEc hGL hsupp hlog hE
+  have hT := tbt4_tendsto_rhs (tbt4_tendsto_q3_proj hC hGc hEc hGL hGi hsupp hlog hE) C₀ K
+  obtain ⟨δ₁, hδ₁, hsub⟩ := mem_nhdsGT_iff_exists_Ioo_subset.mp (hT.eventually (gt_mem_nhds hI))
+  refine ⟨min δ₁ 1, lt_min hδ₁ one_pos, min_le_right _ _, fun δ hδ hδ' R hR => ?_⟩
+  have hδ1 : δ ≤ 1 := (hδ'.trans_le (min_le_right _ _)).le
+  have hR1 : 1 ≤ R := hR ▸ one_le_inv_iff₀.mpr ⟨by positivity, pow_le_one₀ hδ.le hδ1⟩
+  have h1 := hen R hR1 δ (K / δ) hδ.le
+  have h2 := hsub ⟨hδ, hδ'.trans_le (min_le_left _ _)⟩
+  simp only [Set.mem_ofPred_eq] at h2
+  subst hR
+  linarith
 
 /-! ### Rescaling into the unit cube -/
 
@@ -701,118 +999,59 @@ theorem tbt4_not_quasiconvexAt_of_witness {q : Matrix (Fin 2) (Fin 3) ℝ → �
     Module.finrank_fin_fun, smul_eq_mul]
   exact mul_neg_of_pos_of_neg (abs_pos.mpr (by positivity)) hneg
 
-/-- **Proof of Theorem 1.3 (a)** (`cs-thm1.3a-witness`, TeX lines 1993–2029): for every `K` there
-is `δ₀ > 0` such that for `0 < δ < δ₀`, `q_{δ, K/δ}` is not quasiconvex at `0`. The witness is the
-cutoff `u_R = χ (·/R) u` of Proposition 5.2's `u` with `R = δ⁻⁴`, rescaled into the unit cube:
-`∫ q_{δ,Λ} (∇u_R) ≤ I + o_R (1) + C₀ δ (1 + log R + Λ⁴ / R)`.
+/-- **Proof of Theorem 1.3 (a)** (`cs-thm1.3a-witness`, TeX lines 1977–2029): for every `K` there
+is `δ₀ > 0` such that for `0 < δ < δ₀`, `q_{δ, K/δ}` is not quasiconvex at `0`.
 
-Proof, as in the paper ("let `u` be given by Proposition 5.2": `u` is obtained from the statement
-of `proposition5_2`). `∇u_R = χ_R ∇u + E_R` with `E_R = u ⊗ ∇[χ (·/R)]` (`tbt4_jac_uR`),
-`|E_R|² ≤ 6 M² G² / R²` (`|u| ≤ M`) and `E_R = 0` off `|x|² ≤ 2R²` (`tbt4_frobSq_ER_le`,
-`tbt4_supp`). Since
-`∇u ∈ 𝓛₃`, `π ∇u_R = χ_R ∇u + π E_R` and `π^⊥ ∇u_R = π^⊥ E_R`; the quartic perturbation bound
-`q₃ (X + Y) ≤ q₃ (X) + L |X|³ |Y| + M |Y|⁴` (`tbt4_q3_perturb`) and the penalty give the pointwise
-estimate `tbt4_pointwise`, which integrates to `tbt4_energy`:
-`∫ q_{δ,Λ} (∇u_R) ≤ ∫_{B₁} q₃ (∇u) + (L η + 16 δ) ∫_{|x|² ≤ 2R²} |∇u|⁴ +
-(L η⁻³ + M + 16 δ + 2 δ Λ⁴) · 64 C₂² / R`, with `∫_{|x|² ≤ 2R²} |∇u|⁴ ≤ C log (2 + 2R)`
-(`tbt4_log_bound`, from the logarithmic bound of Proposition 5.2) and `∫ |E_R|⁴ ≲ R⁻¹`. With
-`R = δ⁻⁴`, `Λ = K/δ`, `η = δ` this is `I₁ + O(√δ)` (`tbt4_delta_log`), negative for small `δ`; rescaled into the unit cube
-(`tbt4_not_quasiconvexAt_of_witness`) the witness refutes quasiconvexity at `0`.
-
-Mechanical choices (not departures of argument): Hölder's inequality in the paper's
-`∫ q₃ (π ∇u_R) = ∫ χ_R⁴ q₃ (∇u) + O (R^{−1/4} (log R)^{3/4})` is replaced by the pointwise Young
-bound `|X|³ |Y| ≤ η |X|⁴ + η⁻³ |Y|⁴` with `η = R^{−1/4} = δ`; the paper's `I = ∫_{ℝ³} q₃ (∇u)` is
-replaced by `I₁ = ∫_{B₁} q₃ (∇u) < 0`, using `q₃ (∇u) < 0` and `χ_R = 1` on `B₁`, so that
-`∫ χ_R⁴ q₃ (∇u) ≤ I₁` (inventory E20: the integrability of `q₃ (∇u)` is not needed for this
-step); the cut-off is `χ (y) = σ (2 − |y|²)` with `σ = Real.smoothTransition`. -/
+Proof, as in the paper. Let `u` be given by Proposition 5.2 (`proposition5_2`: `u` smooth and
+bounded, `∇u ∈ 𝓛₃`, `q₃ (∇u) < 0`, `q₃ (∇u) ∈ L¹`, `∫_{B_R} |∇u|⁴ ≤ C log (2 + R)`), and
+`I = ∫_{ℝ³} q₃ (∇u) < 0` (`tbt4_integral_neg`, TeX 1995). Put `u_R = χ (·/R) u`
+(`tbt4uR`), where the cut-off `χ (y) = σ (2 − |y|²)` (`tbt4Chi`, `σ = Real.smoothTransition`)
+is smooth, `0 ≤ χ ≤ 1`, equal to one on `B₁` and supported in `|y|² ≤ 2`. Then
+`∇u_R = χ (·/R) ∇u + E_R` with `E_R = u ⊗ ∇[χ (·/R)]` (`tbt4_jac_uR`), and
+`|E_R|² ≤ 6 M² G² / R²`, `E_R = 0` off `|x|² ≤ 2R²` (`|u| ≤ M`, `|∇χ| ≤ G`;
+`tbt4_frobSq_ER_le`, `tbt4_supp`). The chain of the paper is `tbt4_cutoff_neg`, applied with
+`G = ∇u` and the logarithmic bound on `|x|² ≤ 2R²` (`tbt4_log_bound`):
+* `∫ |E_R|⁴ ≤ 64 C₂² / R` (`tbt4_integral_E4_le`, TeX 2004);
+* the Hölder step: `|∫ q₃ (π ∇u_R) − ∫ χ (·/R)⁴ q₃ (∇u)| ≤ L (C log (2 + 2R))^{3/4}
+  (64 C₂² / R)^{1/4} + M · 64 C₂² / R` (`tbt4_holder`, from the two-sided quartic bound
+  `tbt4_q3_perturb`, `π ∇u_R = χ_R ∇u + π E_R` and Hölder's inequality with exponents `4/3`, `4`),
+  and `∫ χ (·/R)⁴ q₃ (∇u) → I` by dominated convergence (`tbt4_tendsto_integral_chi`), so
+  `∫ q₃ (π ∇u_R) = I + o_R (1)` (`tbt4_tendsto_q3_proj`, TeX 2005–2014);
+* `∫ |π ∇u_R|⁴ ≤ (24 C + 512 C₂²) (1 + log R)` and, by `π^⊥ ∇u_R = π^⊥ E_R`,
+  `∫ |π^⊥ ∇u_R|⁴ ≤ 64 C₂² / R` (`tbt4_proj4_le`, `tbt4_perp4_le`, TeX 2015–2021);
+* consequently, with the penalty bound `tbt4_energy`,
+  `∫ q_{δ,Λ} (∇u_R) ≤ ∫ q₃ (π ∇u_R) + C₀ δ (1 + log R + Λ⁴ / R)`, that is
+  `≤ I + o_R (1) + C₀ δ (1 + log R + Λ⁴ / R)` (`tbt4_energy_le`, TeX 2022–2027);
+* with `R = δ⁻⁴` and `Λ = K/δ` the right-hand side tends to `I < 0` as `δ ↓ 0`
+  (`tbt4_tendsto_rhs`, TeX 2028–2029), so it is negative for `0 < δ < δ₀`.
+Rescaled into the unit cube (`tbt4_not_quasiconvexAt_of_witness`), `u_R` refutes
+quasiconvexity at `0`. -/
 
 theorem twoByThree_not_quasiconvexAt_qDeltaLambda (K : ℝ) :
     ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ → ¬ QuasiconvexAt (qDeltaLambda δ (K / δ)) 0 := by
   -- "Let `u` be given by Proposition 5.2"
   obtain ⟨u, hsm, ⟨Mu, hMu⟩, hL3, hneg, hint, ⟨C, hC⟩⟩ := proposition5_2
-  obtain ⟨L, M, hL, hM, hpert⟩ := tbt4_q3_perturb
   obtain ⟨G, hG, hGb⟩ := tbt4_fderiv_chi_bound
   set Mu' := max Mu 0
   have hMu' : ∀ x, ‖u x‖ ≤ Mu' := fun x => (hMu x).trans (le_max_left _ _)
-  set C' := max C 0
-  have hC'0 : 0 ≤ C' := le_max_right _ _
-  set I₁ := ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 < 1}, q3 (jac u x)
-  have hI : I₁ < 0 := tbt4_I1_neg hneg hint
-  set C₂ := 6 * Mu' ^ 2 * G ^ 2
-  set A := (L + 16) * C' * (Real.log 4 + 8)
-  set B := 64 * C₂ ^ 2 * (L + M + 16 + 2 * K ^ 4)
-  have hl4 : 0 ≤ Real.log 4 := Real.log_nonneg (by norm_num)
-  have hA : 0 ≤ A := by positivity
-  have hB : 0 ≤ B := by positivity
-  set Ct := A + B + 1
-  have hCt : 0 < Ct := by positivity
-  refine ⟨min 1 ((I₁ / (2 * Ct)) ^ 2), lt_min one_pos (by
-    have : I₁ / (2 * Ct) ≠ 0 := div_ne_zero hI.ne (by positivity)
-    positivity), fun δ hδ hδ₀ => ?_⟩
-  have hδ1 : δ ≤ 1 := (lt_of_lt_of_le hδ₀ (min_le_left _ _)).le
-  have hδs : √δ < -I₁ / (2 * Ct) := by
-    have h := lt_of_lt_of_le hδ₀ (min_le_right _ _)
-    have h' : √δ < √((I₁ / (2 * Ct)) ^ 2) := Real.sqrt_lt_sqrt hδ.le h
-    rwa [Real.sqrt_sq_eq_abs, abs_of_neg (div_neg_of_neg_of_pos hI (by positivity)), ← neg_div]
-      at h'
+  -- `I = ∫ q₃ (∇u) < 0`
+  have hI : ∫ x, q3 (jac u x) < 0 := tbt4_integral_neg hneg hint
+  -- the logarithmic bound of Proposition 5.2 on `|x|² ≤ 2R²`
+  have hlog : ∀ R : ℝ, 1 ≤ R → ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2},
+      frobSq (jac u x) ^ 2 ≤ max C 0 * Real.log (2 + 2 * R) := fun R hR => by
+    refine (tbt4_log_bound hsm hC (by linarith)).trans ?_
+    exact mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.log_nonneg (by linarith))
+  obtain ⟨δ₀, hδ₀, -, hcut⟩ := tbt4_cutoff_neg (Gf := jac u) (Ef := tbt4ER u)
+    (C₂ := 6 * Mu' ^ 2 * G ^ 2) (le_max_right _ _) (tbt_continuous_jac hsm)
+    (fun R => tbt4_continuous_ER hsm.continuous R) hL3 hint hI
+    (fun R hR x hx => (tbt4_supp u (by linarith) hx).2) hlog
+    (fun R hR x => tbt4_frobSq_ER_le hMu' hG hGb (by linarith) x) K
+  refine ⟨δ₀, hδ₀, fun δ hδ hδ₀' => ?_⟩
   set R := (δ ^ 4)⁻¹
   have hR : 0 < R := by positivity
-  have hR1 : 1 ≤ R := one_le_inv_iff₀.mpr ⟨by positivity, pow_le_one₀ hδ.le hδ1⟩
-  -- the logarithmic bound of Proposition 5.2 on `|x|² ≤ 2R²`
-  have hlog : ∫ x in {x : Fin 3 → ℝ | ∑ i, x i ^ 2 ≤ 2 * R ^ 2}, frobSq (jac u x) ^ 2 ≤
-      C' * Real.log (2 + 2 * R) := by
-    refine (tbt4_log_bound hsm hC hR).trans ?_
-    have : 0 ≤ Real.log (2 + 2 * R) := Real.log_nonneg (by linarith)
-    exact mul_le_mul_of_nonneg_right (le_max_left _ _) this
-  -- the energy of `u_R`
-  have hE := tbt4_energy (Gf := jac u) (Ef := tbt4ER u R) (χf := fun x => tbt4Chi (R⁻¹ • x))
-    (C₁ := C' * Real.log (2 + 2 * R)) (C₂ := C₂) (η := δ) (Λ := K / δ)
-    hL hM hpert hR hδ.le hδ (tbt_continuous_jac hsm) (tbt4_continuous_ER hsm.continuous R)
-    ((tbt4_contDiff_chi.continuous).comp (continuous_const_smul R⁻¹)) hL3
-    (fun x => (hneg x).le) hint
-    (fun x => Real.smoothTransition.nonneg _) (fun x => Real.smoothTransition.le_one _)
-    (fun x hx => tbt4_chi_one (by
-      rw [tbt4_sumSq_smul, inv_pow]
-      have : (R ^ 2)⁻¹ ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ hR1)
-      have h0 : 0 ≤ ∑ i, x i ^ 2 := Finset.sum_nonneg fun _ _ => sq_nonneg _
-      nlinarith))
-    (fun x hx => tbt4_supp u hR hx) hlog (fun x => tbt4_frobSq_ER_le hMu' hG hGb hR x)
-  have heq : ∫ x, qDeltaLambda δ (K / δ) (jac (tbt4uR u R) x) =
-      ∫ x, qDeltaLambda δ (K / δ) (tbt4Chi (R⁻¹ • x) • jac u x + tbt4ER u R x) := by
-    simp_rw [tbt4_jac_uR hsm]
-  -- the bound tends to `I₁ < 0`
-  have hT1 : (L * δ + 16 * δ) * (C' * Real.log (2 + 2 * R)) ≤ A * √δ := by
-    have := tbt4_delta_log hδ hδ1
-    calc (L * δ + 16 * δ) * (C' * Real.log (2 + 2 * R))
-        = (L + 16) * C' * (δ * Real.log (2 + 2 * (δ ^ 4)⁻¹)) := by ring
-      _ ≤ (L + 16) * C' * ((Real.log 4 + 8) * √δ) := by gcongr
-      _ = A * √δ := by ring
-  have hT2 : (L * δ⁻¹ ^ 3 + M + 16 * δ + 2 * δ * (K / δ) ^ 4) * (64 * (C₂ / R ^ 2) ^ 2 * R ^ 3)
-      ≤ B * √δ := by
-    have e : (L * δ⁻¹ ^ 3 + M + 16 * δ + 2 * δ * (K / δ) ^ 4) * (64 * (C₂ / R ^ 2) ^ 2 * R ^ 3) =
-        64 * C₂ ^ 2 * (L * δ + M * δ ^ 4 + 16 * δ ^ 5 + 2 * K ^ 4 * δ) := by
-      simp only [R]; field_simp
-    have h4 : δ ^ 4 ≤ δ := by
-      calc δ ^ 4 = δ * δ ^ 3 := by ring
-        _ ≤ δ * 1 := by gcongr; exact pow_le_one₀ hδ.le hδ1
-        _ = δ := mul_one δ
-    have h5 : δ ^ 5 ≤ δ := by
-      calc δ ^ 5 = δ * δ ^ 4 := by ring
-        _ ≤ δ * 1 := by gcongr; exact pow_le_one₀ hδ.le hδ1
-        _ = δ := mul_one δ
-    have hsd : δ ≤ √δ := (Real.le_sqrt hδ.le hδ.le).mpr (by nlinarith)
-    rw [e]
-    calc 64 * C₂ ^ 2 * (L * δ + M * δ ^ 4 + 16 * δ ^ 5 + 2 * K ^ 4 * δ)
-        ≤ 64 * C₂ ^ 2 * (L * δ + M * δ + 16 * δ + 2 * K ^ 4 * δ) := by gcongr
-      _ = B * δ := by ring
-      _ ≤ B * √δ := by gcongr
   have hneg' : ∫ x, qDeltaLambda δ (K / δ) (jac (tbt4uR u R) x) < 0 := by
-    rw [heq]
-    have hs0 : 0 ≤ √δ := Real.sqrt_nonneg δ
-    have h1 : (A + B) * √δ ≤ Ct * √δ := by gcongr; linarith
-    have h2 : Ct * √δ < Ct * (-I₁ / (2 * Ct)) := mul_lt_mul_of_pos_left hδs hCt
-    have h3 : Ct * (-I₁ / (2 * Ct)) = -I₁ / 2 := by field_simp
-    linarith
+    simp_rw [tbt4_jac_uR hsm]
+    exact hcut δ hδ hδ₀' R rfl
   exact tbt4_not_quasiconvexAt_of_witness (tbt4_continuous_qDeltaLambda δ (K / δ))
     (tbt4_qDeltaLambda_zero δ (K / δ)) hR (tbt4_contDiff_uR hsm R) (fun z hz => tbt4_uR_zero u hR hz)
     hneg'
