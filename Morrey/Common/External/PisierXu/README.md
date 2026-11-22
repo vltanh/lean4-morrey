@@ -47,16 +47,17 @@ by LPP and Astérisque 247, p. 106:
 (the source: `B'_p`, "of order `√p`").
 
 **Departures.** None from the argument of LPP. For (III.3) LPP give two references, Bourgain 1986 (not
-obtained) and McConnell 1984, Theorem 1.3; McConnell's proof is followed, for `n = 1`. Facts that these
-sources take from works that were not read, or only recall, or state without proof, have named
-substitutes: Sarason's Lemma 10.3, from Helson's book (not read), by
-Helson–Lowdenslager 1961, §§9–10; Szegő's theorem and the quotient by an outer function, from Hoffman's
-book (pp. 53, 75; not read), by Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end
-of Sarason's proof; the Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by HNVW
-I, Appendix D, and by Sutter, Berta and Tomamichel (Comm. Math. Phys. 352 (2017)); Maurey–Pisier, Remark
-2.10 (read, no proof), by Hytönen–van Neerven–Veraar–Weis (HNVW) II, Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick
-as a known argument; here it is Randrianantoanina's theorem
-([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese cites for it.
+obtained) and McConnell 1984, Theorem 1.3; McConnell's proof is followed, for `n = 1`. Facts that
+these sources take from works that were not read, or only recall, or state without proof, have named
+substitutes: Sarason's Lemma 10.3, from Helson's book (not read), by Helson–Lowdenslager 1961, §§9–10;
+Szegő's theorem and the quotient by an outer function, from Hoffman's book (pp. 53, 75; not read), by
+Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end of Sarason's proof; the
+Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by Hytönen–van
+Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Appendix D, and by Sutter, Berta and
+Tomamichel (Comm. Math. Phys. 352 (2017)); Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II,
+Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it
+is Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese
+cites for it.
 
 **Shorter proof.** The upper bound with the explicit constant `√(2 (q − 1)) ≤ √2 √q`, by the method of
 exchangeable pairs of Mackey, Jordan, Chen, Farrell and Tropp (Ann. Probab. 42 (2014), §§7–8), is
