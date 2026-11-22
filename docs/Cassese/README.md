@@ -91,7 +91,7 @@ lake env lake comparator --config=palomar/Cassese/comparator.json
 
 | Path | Content |
 | --- | --- |
-| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library: `Defs` (the definitions the Challenge copies, and most named hypotheses; [`DragicevicL4Bound`](../../Morrey/Cassese/Hypotheses.lean#L146) is in `Hypotheses`, two unused ones in `Toolkit`), `Introduction` (§1), `Toolkit` (§2), `TwoByM` (§4), `TwoByThree/` (§5), `NonLocality` (Cor 5.2), `Square/` (§6), `FourByTwo` (§7), `Bridges` (to Šverák's and the textbook definitions), `Sverak` (Šverák's example in Cassese's terms), `Hypotheses`, `Lifting`, `Rademacher` |
+| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library: `Defs` (the definitions the Challenge copies, and most named hypotheses; [`DragicevicL4Bound`](../../Morrey/Cassese/Hypotheses.lean#L145) is in `Hypotheses`, two unused ones in `Toolkit`), `Introduction` (§1), `Toolkit` (§2), `TwoByM` (§4), `TwoByThree/` (§5), `NonLocality` (Cor 5.2), `Square/` (§6), `FourByTwo` (§7), `Bridges` (to Šverák's and the textbook definitions), `Sverak` (Šverák's example in Cassese's terms), `Hypotheses`, `Lifting`, `Rademacher` |
 | [`Morrey/Common/External/`](../../Morrey/Common/External) | the cited results: Burkholder, Rindler, Dacorogna, Kinderlehrer–Pedregal, Kristensen (statements of Kirchheim–Kristensen and Osękowski for context) |
 | [`Morrey/Common/Basic/`](../../Morrey/Common/Basic) | general mathematics: the calculus-of-variations definitions of the cited results, Fourier series of Lipschitz periodic maps, separately convex functions |
 | [`palomar/Cassese/`](../../palomar/Cassese) | the Palomar submission |
