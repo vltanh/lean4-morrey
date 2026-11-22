@@ -39,11 +39,11 @@ case of Morrey's problem, and Theorem 1.1 (1) implies it. Nothing is assumed.
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
-| Cor 7.2 | [`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L230) ⭐ | Corollary 7.2 as stated is false |
+| Cor 7.2 | [`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L234) ⭐ | Corollary 7.2 as stated is false |
 | Cor 7.2 | [`exists_T_eq_empty`](../../palomar/Pedregal/Challenge.lean#L272) ⭐ | for `l = 1`, a tri-dyadic mold, `u, v ∈ ℙ_1` and `t ∈ Θ_1` with `𝐓(t) = ∅` |
-| Prop 7.1 | [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L237) | Proposition 7.1 as stated is false |
-| Step 2, Claim 7.5 | [`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L246) | the summary of Step 2 is false |
-| Thm 1.1 (1) | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24) ⭐ | if `𝐓(t) ≠ ∅` for every `t ∈ Θ_l`, then `ν` is a laminate (the paper's argument) |
+| Prop 7.1 | [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L244) | Proposition 7.1 as stated is false |
+| Step 2, Claim 7.5 | [`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L256) | the summary of Step 2 is false |
+| Thm 1.1 (1) | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28) ⭐ | if `𝐓(t) ≠ ∅` for every `t ∈ Θ_l`, then `ν` is a laminate (the paper's argument) |
 | Thm 1.1 (1), `l = 1` | [`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156) ⭐ | for `u, v ∈ ℙ_1`, `ν` is a laminate |
 | Prop 6.1 | [`proposition6_1`](../../Morrey/Pedregal/Map.lean#L365) | a fixed point of `𝐓` makes `ν` a laminate |
 | Prop 6.3 | [`proposition6_3`](../../Morrey/Pedregal/Map.lean#L285) | the values of `𝐓` are convex (and the directions are linear on `Θ_l`) |

@@ -19,7 +19,7 @@ repository; the [overview](../../README.md) describes the problem and how the pa
 | Part of the paper | Status |
 | --- | --- |
 | §1: Theorems 1.2–1.5, Corollary 1.6, the consequences drawn after Theorem 1.3 (only `2 × 2` remains) | proved |
-| §2: Lemmas 2.1, 2.2, Propositions 2.1–2.5, 2.7, 2.8, Theorem 2.3 | proved; the cited ones, except Proposition 2.1, in `Morrey/Common/External/` |
+| §2: Lemmas 2.1, 2.2, Propositions 2.1–2.5, 2.7, 2.8, Theorem 2.3 | proved; the cited ones, except Proposition 2.1, in [`Morrey/Common/External/`](../../Morrey/Common/External) |
 | §4 (`2 × m`): Lemmas 4.1, 4.2, Propositions 4.1–4.3, (10); the route of Remark 4.5 | proved |
 | §5 (`2 × 3`): Propositions 5.1, 5.2, Lemma 5.1, Corollaries 5.2–5.4 | proved |
 | §6 (`d × d`): Propositions 6.1–6.6, Remark 6.3, Corollaries 6.1, 6.3, 6.4, Theorem 6.2 | proved |
@@ -32,20 +32,20 @@ repository; the [overview](../../README.md) describes the problem and how the pa
 
 | Paper | Lean | Statement |
 | --- | --- | --- |
-| Theorem 1.2 | `theorem1_2` ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}` for every `m ≥ m₀(p)` (the paper's proof, through UMD constants) |
-| Theorem 1.2, by Remark 4.5 | `theorem1_2_elementary` | the same statement, by the paper's elementary route (Burkholder's scalar function `u_q`) |
-| Theorem 1.3 | `theorem1_3_a` ⭐, `theorem1_3_b` ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; a `p`-homogeneous one for every `p` near `4` |
-| Corollary 5.3 | `corollary5_3` ⭐ | its transpose, on `ℝ^{3×2}` |
-| lines 251–254 | `morrey_landscape` ⭐ | with Šverák's theorem: for `d, m ≥ 2` other than `2 × 2`, some rank-one convex integrand on `ℝ^{d×m}` is not quasiconvex |
-| lines 254–256 | `homMorrey_landscape` ⭐ | at `p = 4` the homogeneous problem has a negative answer in every such size |
-| Theorem 1.4 | `theorem1_4` ⭐ | every `p > 1`: a conjugation- and transposition-invariant example on `ℝ^{d×d}` for every `d ≥ d₀(p)` |
-| Theorem 1.4 at `p = 4` | `theorem1_4_four` ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
-| Theorem 1.5 | `theorem1_5` ⭐ | every `p > 1` other than `2`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{4×2}` |
-| Corollary 1.6 | `corollary1_6` ⭐ | a nonnegative `1`-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two |
-| Corollary 5.2 | `corollary5_2` | a smooth, uniformly Legendre–Hadamard integrand of quadratic growth on `ℝ^{2×m}`, `m ≥ 3`, not quasiconvex at `0` |
+| Theorem 1.2 | [`theorem1_2`](../../Morrey/Cassese/Introduction.lean#L1988) ⭐ | every `p > 1`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{2×m}` for every `m ≥ m₀(p)` (the paper's proof, through UMD constants) |
+| Theorem 1.2, by Remark 4.5 | [`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480) | the same statement, by the paper's elementary route (Burkholder's scalar function `u_q`) |
+| Theorem 1.3 | [`theorem1_3_a`](../../Morrey/Cassese/Introduction.lean#L2026) ⭐, [`theorem1_3_b`](../../Morrey/Cassese/Introduction.lean#L2051) ⭐ | a quartic polynomial on `ℝ^{2×3}`, rank-one convex and nowhere quasiconvex; a `p`-homogeneous one for every `p` near `4` |
+| Corollary 5.3 | [`corollary5_3`](../../Morrey/Cassese/TwoByThree/Transpose.lean#L197) ⭐ | its transpose, on `ℝ^{3×2}` |
+| lines 251–254 | [`morrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2240) ⭐ | with Šverák's theorem: for `d, m ≥ 2` other than `2 × 2`, some rank-one convex integrand on `ℝ^{d×m}` is not quasiconvex |
+| lines 254–256 | [`homMorrey_landscape`](../../Morrey/Cassese/Introduction.lean#L2268) ⭐ | at `p = 4` the homogeneous problem has a negative answer in every such size |
+| Theorem 1.4 | [`theorem1_4`](../../Morrey/Cassese/Introduction.lean#L2083) ⭐ | every `p > 1`: a conjugation- and transposition-invariant example on `ℝ^{d×d}` for every `d ≥ d₀(p)` |
+| Theorem 1.4 at `p = 4` | [`theorem1_4_four`](../../Morrey/Cassese/Square.lean#L3588) ⭐ | the same at `p = 4`, for every `d ≥ 588` (Section 6.3) |
+| Theorem 1.5 | [`theorem1_5`](../../Morrey/Cassese/Introduction.lean#L2166) ⭐ | every `p > 1` other than `2`: a `p`-homogeneous, rank-one convex, nowhere quasiconvex integrand on `ℝ^{4×2}` |
+| Corollary 1.6 | [`corollary1_6`](../../Morrey/Cassese/Introduction.lean#L2214) ⭐ | a nonnegative `1`-homogeneous rank-one convex integrand on `ℝ^{4×4}`, not quasiconvex at a matrix of rank two |
+| Corollary 5.2 | [`corollary5_2`](../../Morrey/Cassese/NonLocality.lean#L32) | a smooth, uniformly Legendre–Hadamard integrand of quadratic growth on `ℝ^{2×m}`, `m ≥ 3`, not quasiconvex at `0` |
 
 ⭐ in [`Challenge.lean`](../../palomar/Cassese/Challenge.lean), which Comparator checks against
-[`Solution.lean`](../../palomar/Cassese/Solution.lean), with `projL3_mem`, a check of the
+[`Solution.lean`](../../palomar/Cassese/Solution.lean), with [`projL3_mem`](../../Morrey/Cassese/TwoByThree/Basic.lean#L57), a check of the
 definitions of Section 5. The Challenge's theorems have no hypotheses beyond the paper's.
 
 ## What the audit found
@@ -65,7 +65,7 @@ No statement of the paper is false. The main findings
 34 findings in all (E2–E35), most of them steps left to the reader, sketched proofs and misprints.
 Every proof follows the paper's argument except three, which repair a gap or a false step (E4,
 E9, E10); the cited results follow their sources, or a named argument from an open source where a
-source was not accessible
+source was not obtained
 ([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
@@ -73,7 +73,7 @@ source was not accessible
 - `lake build` passes, with no `sorry` outside the Challenges and no `axiom`; each of the three
   packages below has its own audit of the same kind.
 - The repository's audit, [`scripts/Audit.lean`](../../scripts/Audit.lean), checks that every
-  declaration of the library uses only `propext`, `Classical.choice` and `Quot.sound`, and lists
+  declaration of the library uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and lists
   the results of other works that each result uses
   ([REPORT.md, Section 8](REPORT.md#8-what-each-result-depends-on)).
 - The route check, with [`paper_routes.tsv`](paper_routes.tsv) and
@@ -97,7 +97,7 @@ published: [`lakefile.toml`](../../lakefile.toml) requires them by path, as sibl
 | [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality and function; UMD theory (decoupling, complex constants, Maurey's theorem, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes; the non-commutative Khintchine inequality; Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
 | [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | quasiconvexity and laminates, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
 
-`Morrey/Common/External/` states each cited result in its source's terms and proves it from these
+[`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms and proves it from these
 packages; [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) restates it in
 the paper's terms.
 

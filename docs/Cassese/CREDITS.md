@@ -32,7 +32,8 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   Conti–Dolzmann–Kirchheim–Müller's (two reviews), and every recorded departure under version
   4.2.0 of the procedure (an audit). Then an independent agent checked the rewritten documents of
   the three papers (README, report, credits, metadata) against the code, the audit output, the TeX
-  source and the cited works.
+  source and the cited works. Last, two independent reviewers checked the package's redone proofs
+  of Borell's and Burkholder's results against Borell (1979) and Burkholder (1988).
 
 ## Second round (21 November 2026)
 
@@ -124,12 +125,21 @@ How it was made:
   one step of Šverák's Lemma 1; an independent reviewer found no departure left.
 - The main session merged the work, built, and ran the audit, the route check and Comparator (the
   last with copies of the packages, which its sandbox needs until they are pinned by git). An agent
-  wrote the READMEs of `Morrey/Common/External/`, and a final pass cleaned up the project and the
+  wrote the READMEs of [`Morrey/Common/External/`](../../Morrey/Common/External), and a final pass cleaned up the project and the
   packages. Then an agent rewrote this paper's README, report, credits and metadata.
 - Afterwards, `lean4-banach-probability` re-proved the triangle inequality for Schatten norms by
   the argument of an open source (Bourin and Zhang, arXiv:2610.30538, Proposition 3.13), and the
-  project's `schattenNorm_add_le` became the package's theorem (commit `452cccc`). The documents
+  project's [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L439) became the package's theorem (commit `452cccc`). The documents
   were then checked independently (see Review) and corrected.
+- A check of the sources followed. Borell (Séminaire de Probabilités XIII, 1979) and Burkholder
+  (Astérisque 157–158, 1988) were obtained from Numdam, and the package's proofs of
+  hypercontractivity and of Burkholder's inequality and function were redone by their arguments
+  (the square function inequality already followed Burkholder's), with the statements unchanged
+  (`lean4-banach-probability` commits `e8ecfc0`, `db668a4`, `44382e8`; the project's
+  [`Morrey/Common/External/`](../../Morrey/Common/External) READMEs and docstrings in commit `3a9f2dd`). Burkholder's
+  Annals of Probability papers (1973, 1981, 1984), open access on Project Euclid, could not be
+  obtained (the site refused automated download). Two independent reviewers checked the redone
+  proofs against these sources and found no departure.
 
 Figures, from 2026-11-21 22:36 (UTC−6), the user's request, to commit `6ae4899`
 (2026-11-22 05:26 UTC−6), the last commit of the proofs before the documents were rewritten:
@@ -145,6 +155,6 @@ Figures, from 2026-11-21 22:36 (UTC−6), the user's request, to commit `6ae4899
 These are the figures of the whole session in that window. Besides this paper, they include the
 follow-up notes (`NEXT.md`) of this paper and of Šverák's with their checkers, the redone step of
 Šverák's Lemma 1, and the revision of the procedure with its evaluation runs. They leave out the
-rewriting and the check of the documents and the re-proof of the Schatten triangle inequality,
-which came after. From `scripts/session_stats.py` on the session transcript, with `--since` and
-`--until` at the two times above.
+rewriting and the check of the documents, the re-proof of the Schatten triangle inequality and
+the check of the sources, which came after. From `scripts/session_stats.py` on the session
+transcript, with `--since` and `--until` at the two times above.

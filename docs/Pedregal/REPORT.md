@@ -13,15 +13,15 @@ Status of the formalization:
   (every gradient measure of a pair of `ℙ_l` maps is a laminate of finite order) implies it (E16)
   and is open too. They are stated as propositions
   ([`Theorem1_1_part1`](../../Morrey/Pedregal/Introduction.lean#L54), [`Theorem1_1_part2`](../../Morrey/Pedregal/Introduction.lean#L60), [`Theorem1_2`](../../Morrey/Pedregal/Introduction.lean#L65)), not as theorems.
-- **Corollary 7.2 and Proposition 7.1 are false** ([`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L230),
-  [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L237)), and so is the summary of Step 2 of the proof of Proposition 7.1, with
-  Claim 7.5 ([`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L246)). The proof of Theorem 1.1 applies Kakutani's theorem to the map
+- **Corollary 7.2 and Proposition 7.1 are false** ([`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L234),
+  [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L244)), and so is the summary of Step 2 of the proof of Proposition 7.1, with
+  Claim 7.5 ([`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L256)). The proof of Theorem 1.1 applies Kakutani's theorem to the map
   `𝐓` of Definition 6.1, and needs every value `𝐓(t)` to be nonempty, which is Corollary 7.2. So
   the paper does not prove Theorem 1.1 (E13).
 - Every other numbered result of Sections 3–7 except Claim 7.3 is correct and proved:
   Proposition 3.3, the assertions of Definition 5.1 and eqs. (5.10)–(5.15) ((5.10) in the corrected
   form of E6), Proposition 6.1, Subsection 6.1, Proposition 6.3, Claim 7.4, and the reduction
-  [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
+  [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
 - Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156)), by an explicit
   lamination: the paper's argument fails there too.
 - The cited result, Kakutani's fixed-point theorem (Theorem 6.2), is proved in [`External/`](../../Morrey/Common/External) from
@@ -184,7 +184,7 @@ With the weights `t` the mass points of `u` are `(1, 0)` and `(−1, 0)`, so the
 is `(2, 0)`. For every weights `r`, the mass points of `v` have second coordinates `2` and `−2`,
 so the direction of `v` is `(∗, 4)`, and `det((2, 0), (∗, 4)) = 8 ≠ 0`. No `r` satisfies the
 condition of Definition 6.1 at this mixture: `𝐓(t) = ∅`. The same mixture refutes Proposition 7.1
-(with `w = v`). Lean: [`T_cex_eq_empty`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L224), [`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L230), [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L237). The
+(with `w = v`). Lean: [`T_cex_eq_empty`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L224), [`corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L234), [`proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L244). The
 argument does not use the constraints of `Θ_1`. It works for every `t ∈ Θ_1` except those that put
 all the weight of the two interfaces on the two triangles where `∇u = 0`, and it survives small
 perturbations of `(u, v, t)`: non-emptiness is a closed condition (the conditions are polynomial
@@ -227,7 +227,7 @@ top-to-bottom procedure started from the barycenter `𝕌_j` of `u` (7.6); Claim
 the positivity part. As the paper states it ([`Step2ClaimPaper`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L75)), it fails for a trivial reason:
 for `w = 0` the barycenter of `w` is `0`, not `𝕌_j ≠ 0`. Without the start from `𝕌_j`
 ([`Step2Claim`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L65), weaker), it is still false: the mixture of E13 lies in one sub-mold
-([`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L246), [`step2ClaimPaper_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L253)). (For uniform `t` the barycenters `𝕌_j`
+([`step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L256), [`step2ClaimPaper_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L266)). (For uniform `t` the barycenters `𝕌_j`
 vanish, so this trivial failure needs a non-uniform `t`.) Numerically the failure is typical but
 not generic: one sub-mold has `2^{2l+1}` relative weights and `2^{2l+1} − 1` parallelism
 conditions, so the solutions form a line, which for most random instances misses
@@ -349,7 +349,7 @@ formalization states them for arbitrary functions `u, v`.
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 for the non-emptiness of the values | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24): the same argument, with "every `𝐓(t)` is nonempty" as a hypothesis | Corollary 7.2 is false, and nothing along the paper's lines supplies the non-emptiness (reason 1: the paper's step is wrong) | E13 |
+| Theorem 1.1 (1) | a fixed point of `𝐓` by Kakutani's theorem, using Corollary 7.2 for the non-emptiness of the values | [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28): the same argument, with "every `𝐓(t)` is nonempty" as a hypothesis | Corollary 7.2 is false, and nothing along the paper's lines supplies the non-emptiness (reason 1: the paper's step is wrong) | E13 |
 | Theorem 1.1 (1) at `l = 1` | the same fixed-point argument | [`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156): an explicit lamination by three rank-one splittings, a special case proved by another argument | the paper's step fails already at `l = 1` ([`T_cex_eq_empty`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L224); reason 1) | E13 |
 | Proposition 7.1, Corollary 7.2, the summary of Step 2 with Claim 7.5 | proofs | refutations by an explicit counterexample | the statements are false (reason 1) | E13, E14 |
 
@@ -382,18 +382,18 @@ only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.
 | Prop 6.3 (1) | [`Pedregal.proposition6_3_point`](../../Morrey/Pedregal/Map.lean#L263) | – |
 | Prop 6.3 (1) | [`Pedregal.proposition6_3_dir`](../../Morrey/Pedregal/Map.lean#L276) | – |
 | Prop 6.3 (2) | [`Pedregal.proposition6_3`](../../Morrey/Pedregal/Map.lean#L285) | – |
-| Prop 7.1 (false) | [`Pedregal.proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L237) | – |
-| Cor 7.2 (false) | [`Pedregal.corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L230) | – |
+| Prop 7.1 (false) | [`Pedregal.proposition7_1_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L244) | – |
+| Cor 7.2 (false) | [`Pedregal.corollary7_2_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L234) | – |
 | Cor 7.2 from Prop 7.1 | [`Pedregal.corollary7_2_of_proposition7_1`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L49) | – |
-| Step 2 summary (false) | [`Pedregal.step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L246) | – |
+| Step 2 summary (false) | [`Pedregal.step2Claim_false`](../../Morrey/Pedregal/NonEmptiness/Counterexample.lean#L256) | – |
 | Claim 7.4 | [`Pedregal.claim7_4`](../../Morrey/Pedregal/NonEmptiness/Statements.lean#L107) | – |
-| Thm 1.1 (1), up to Cor 7.2 | [`Pedregal.theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24) | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38) |
+| Thm 1.1 (1), up to Cor 7.2 | [`Pedregal.theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28) | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38) |
 | Thm 1.1 (1), l = 1 | [`Pedregal.theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156) | – |
 
 The route check ([`scripts/route_check.py`](../../scripts/route_check.py)) compares the results that each formal proof uses with
 those that the paper's proof cites ([`paper_routes.tsv`](paper_routes.tsv)). Every difference is recorded with its
 reason in [`route_differences.tsv`](route_differences.tsv): the refutations do not use the steps of the refuted proofs,
-[`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L24) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
+[`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
 Subsection 6.1 uses the linearity of Proposition 6.3 (the continuity that the paper invokes), and
 the assertions of Definition 5.1 are used without citation throughout.
 

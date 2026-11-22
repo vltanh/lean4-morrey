@@ -63,18 +63,37 @@ sources:
     relationship: "background"
     note: >-
       Cited for Burkholder's inequality and square function inequality (Theorems 3.5, 8.6),
-      proved in Morrey/Common/External/Burkholder from lean4-banach-probability by Burkholder's
-      method (the book was not accessible); Theorem 3.24 (the paper's Proposition 2.6) is stated
-      for context, not proved, and used by no proof.
-  - title: "Burkholder's martingale papers (Ann. Probab. 1 (1973), 9 (1981), 12 (1984); Astérisque 157-158 (1988))"
+      proved in Morrey/Common/External/Burkholder from lean4-banach-probability by the proofs of
+      Burkholder's Theorems 1.1 and 3.1 (Astérisque 157-158, 1988); the book was not obtained.
+      Theorem 3.24 (the paper's Proposition 2.6) is stated for context, not proved, and used by no
+      proof.
+  - title: "Sharp inequalities for martingales and stochastic integrals"
     authors:
       - "Donald L. Burkholder"
+    id: "Astérisque 157-158 (1988), 75-94"
+    type: "article"
+    location: "https://www.numdam.org/item/AST_1988__157-158__75_0/"
+    relationship: "background"
+    note: >-
+      Read (Numdam) and followed. Theorems 1.1 and 3.1 (the paper's Theorem 2.3 (1), (2)), in the
+      form that the paper quotes (martingales started at 0, a fixed time n), and Burkholder's
+      function with (1.10) and Remark 1.2 (the paper's (13), (14)), proved in
+      lean4-banach-probability by Burkholder's proofs (Morrey/Common/External/Burkholder).
+      Remark 1.2, stated without proof, is completed from (1.12)-(1.14) and the shift of the proof
+      of (1.8) (see fidelity). The equality cases and the sharpness are not formalized.
+  - title: "Burkholder's Annals of Probability papers (1 (1973), 9 (1981), 12 (1984))"
+    authors:
+      - "Donald L. Burkholder"
+    id: "Ann. Probab. 1 (1973); 9 (1981); 12 (1984)"
     type: "article"
     relationship: "background"
     note: >-
-      Burkholder's inequality and function, his good-lambda method and the zig-zag
-      characterization, proved in lean4-banach-probability by his method in its standard form;
-      the articles were not accessible.
+      Open access on Project Euclid, but not obtained (the site refused automated download). The
+      good-lambda method (1973, 1981) and the zig-zag characterization (1981, 1984) are proved in
+      lean4-banach-probability by the standard arguments (Pisier's lecture notes; the Bellman
+      function); Burkholder's inequality (Theorem 2.3) by Burkholder 1988; the sharpness of p* - 1
+      (1984, and Bull. London Math. Soc. 17 (1985), not open access) by the standard extremal
+      examples, in Cassese's library.
   - title: "Analysis in Banach Spaces, Volumes I and II"
     authors:
       - "Tuomas Hytönen"
@@ -88,7 +107,8 @@ sources:
       Cited for Theorems 4.2.5, 4.2.7, 4.5.6, Proposition 4.2.3, Corollary 5.7.6 (I) and
       Theorem 6.2.4 (II); proved in Morrey/Common/External/HNVW from the packages by named
       arguments (Maurey's argument and Burkholder's good-lambda method as in Pisier's lecture
-      notes, de Leeuw's transference, hypercontractivity), since the books were not accessible.
+      notes, de Leeuw's transference, hypercontractivity by Borell's proof), since the books were
+      not accessible.
   - title: "Non-commutative martingale transforms"
     authors:
       - "Narcisse Randrianantoanina"
@@ -130,13 +150,34 @@ sources:
       Theorem 6.1 (the non-commutative Khintchine inequality, the paper's Proposition 6.3), proved
       in lean4-banach-probability by the method of Mackey, Jordan, Chen, Farrell and Tropp, Ann.
       Probab. 42 (2014), since the chapter and Lust-Piquard (1986) were not accessible.
+  - title: "On the integrability of Banach space valued Walsh polynomials"
+    authors:
+      - "Christer Borell"
+    id: "Séminaire de Probabilités XIII, Lecture Notes in Math. 721 (1979), 1-3"
+    type: "article"
+    location: "https://www.numdam.org/item/SPS_1979__13__1_0/"
+    relationship: "background"
+    note: >-
+      Read (Numdam) and followed. Theorem 1.1 for Walsh polynomials of degree at most 1 and the
+      largest lambda = sqrt((p - 1)/(q - 1)), which is what the paper uses: the hypercontractive
+      Kahane-Khintchine constants that Remark 6.3 and Proposition 6.5 at q = infinity need, for
+      which the paper names no source, and the Kahane-Khintchine inequality (Proposition 6.4,
+      HNVW II, Theorem 6.2.4). Proved in lean4-banach-probability by Borell's proof (Section 2:
+      the scalar two-point inequality, the Segal lemma, the positivity of his operator K-bar, and
+      its eigenvalues lambda^|alpha|), the two results he cites being proved by O'Donnell's
+      arguments (Morrey/Common/External/Borell).
   - title: "Analysis of Boolean Functions"
     authors:
       - "Ryan O'Donnell"
-    id: "Cambridge University Press (2014)"
+    id: "Cambridge University Press (2014); arXiv:2105.10386"
     type: "book"
+    location: "https://arxiv.org/abs/2105.10386"
     relationship: "background"
-    note: "Section 10.1, the argument used for Borell's hypercontractive bound and the Kahane-Khintchine inequality (Morrey/Common/External/Borell, HNVW)."
+    note: >-
+      Section 10.1 (after Janson) with Exercise 9.7, and Exercise 10.3 with Exercise 10.1: the
+      arguments used for the two results that Borell (1979) cites without proof, the scalar
+      two-point inequality (from Gross and Beckner) and the Segal lemma (from Beckner)
+      (Morrey/Common/External/Borell).
   - title: "Matrix triangle inequalities: past, present, and future"
     authors:
       - "Jean-Christophe Bourin"
@@ -310,18 +351,22 @@ fidelity:
     run on martingales (E10); Proposition 5.1's skipped step supplied (E9). Every other proof
     follows the paper's; the gaps it fills along the paper's own lines are findings of the audit
     (docs/Cassese/REPORT.md, Section 3), among them the passage from smooth to Lipschitz periodic
-    test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results: each by its source's argument, or,
-    where the source was not accessible, by a named argument from an open source (HNVW I and II,
-    Dacorogna 2008, Rindler 2018, Bhatia, Lust-Piquard, the Pisier-Xu chapter, Burkholder
-    1973-1988, de Leeuw 1965, Dragičević 2011, Kinderlehrer-Pedregal 1991, Dacorogna 1982;
-    docs/Cassese/REPORT.md, Section 7). Differences from sources that were read: Kristensen's
-    cut-offs as functions of |X|^2 (his xi_s exists only for s < 3, a slip of the source) and an
-    added constant; Randrianantoanina's projections read in the reduced algebra, his interpolation
-    step done in three ranges of exponents, his Lemma 3.2 in a counting form; Mackey et al.'s
+    test maps by mollification in Proposition 7.2 and Corollary 1.6 (E28, E35). Cited results:
+    each by its source's argument, or, where the source was not obtained, by a named argument
+    from an open source (HNVW I and II, Dacorogna 2008, Rindler 2018, Bhatia, Lust-Piquard, the
+    Pisier-Xu chapter, Osękowski 2012, Burkholder 1973, 1981, 1984 (open access on Project
+    Euclid, which refused automated download) and 1985 (not open access), de Leeuw 1965,
+    Dragičević 2011, Kinderlehrer-Pedregal 1991, Dacorogna 1982; docs/Cassese/REPORT.md,
+    Section 7). Differences from sources that were read: Kristensen's cut-offs as functions of
+    |X|^2 (his xi_s exists only for s < 3, a slip of the source) and an added constant;
+    Randrianantoanina's projections read in the reduced algebra, his interpolation step done in
+    three ranges of exponents, his Lemma 3.2 in a counting form; Mackey et al.'s
     Remark 7.2 for 2 < q < 3, whose unproved variant of the mean value trace inequality is
     proved; Dragičević's test functions approximated by Schwartz functions; Bourin-Zhang's
     Proposition 3.13 (the Schatten triangle inequality, in place of Bhatia), stated for complex
-    square matrices, proved for real m x n ones by the same argument.
+    square matrices, proved for real m x n ones by the same argument; Burkholder 1988: Remark 1.2,
+    stated without proof, completed from his (1.12)-(1.14) and the shift of his proof of (1.8),
+    as a pointwise limit of concave functions (a gap of the source).
 
 review:
   status: "agent-reviewed"
@@ -333,7 +378,9 @@ review:
     checked the first version of the report against the sources; in the round that proved the
     cited results, they reviewed the packages' statements, the changed statements against the TeX
     source, the redone proofs, and every recorded departure, and then checked the rewritten
-    documents against the code, the audit output, the TeX source and the cited works.
+    documents against the code, the audit output, the TeX source and the cited works. Last, two
+    independent reviewers checked the package's redone proofs of Borell's and Burkholder's
+    results against Borell (1979) and Burkholder (1988) and found no departure.
 
 alignment:
   namespace: "CasseseChallenge"
@@ -396,6 +443,6 @@ alignment:
 
 acknowledgements: >-
   Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
-  (the scanned copy of Kristensen 1999); the open lecture notes and preprints whose arguments the
-  cited results follow (Müller 1998, Pisier 2011, Dragičević 2013, Mackey et al., O'Donnell,
-  Randrianantoanina, Conti-Dolzmann-Kirchheim-Müller, Morrey 1952, Bourin-Zhang).
+  (Kristensen 1999, Borell 1979, Burkholder 1988); the open lecture notes and preprints whose
+  arguments the cited results follow (Müller 1998, Pisier 2011, Dragičević 2013, Mackey et al.,
+  O'Donnell, Randrianantoanina, Conti-Dolzmann-Kirchheim-Müller, Morrey 1952, Bourin-Zhang).
