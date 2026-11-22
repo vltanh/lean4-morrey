@@ -1,0 +1,199 @@
+# label	environment	proved	cited statements
+# Cassese, arXiv:2608.03488v3. Extracted from Morrey.tex with route_check.py extract (raw output in
+# notes/cassese/routes_raw.tsv), corrected as in notes/cassese/inventory.md, Section 7. Labels of
+# unlabelled statements, of claims made in running text, and of the statements that the extractor
+# mislabelled are ours, prefixed cs-; each is named in the docstring of its Lean result. Rows marked
+# "hand" below were added or changed by hand, for the reason given.
+# 
+# Section 1.
+# hand: Theorem 1.1 is quoted, for context only.
+thm:KK	theorem	0	
+# hand: the proof of Theorem 1.2 (Section 4.4) chooses C between C^rc and C^qc "by (10) and (12)"
+# (eq:rank1bound, lem:order), with UMD_{C,p}(l_q) finite by Proposition 2.7 (lines 991-992,
+# cs-ellq-umd); Proposition 2.3 and its consequences give the envelope (prop:envelope,
+# cs-envelope-cons); Proposition 2.5 gives the meaning of C^rc; Lemma 2.1 (continuity of the envelope)
+# and Lemma 2.2 (lifting the witness from m_0 to m variables) are implicit. So is the limiting argument
+# of Section 4.3 (cs-sec4.3-limit): (12) is a limit of ratios for the test maps u_n, which bound C^qc
+# from below only through it.
+thm:morrey	theorem	1	eq:rank1bound,cs-ellq-umd,lem:order,cs-sec4.3-limit,prop:envelope,cs-envelope-cons,prop:rankonerademacher,cs-lem2.1,cs-lem2.2
+# hand: the proof of Theorem 1.3 (after Remark 5.2) makes three claims, each a row of Section 5: the
+# rank-one convexity of q_{delta,K/delta} (cs-qdl-rc), the cutoff witness that q_{delta,K/delta} is
+# not quasiconvex at 0 (cs-thm1.3a-witness, for (a)), and the integrand rank-one convex but not
+# quasiconvex at 0 for p near 4 (cs-thm1.3b-witness, for (b)); then the envelope (Proposition 2.3) for
+# (b), and homogeneity ("nowhere", cs-envelope-cons) for both.
+thm:2x4	theorem	1	cs-qdl-rc,cs-thm1.3a-witness,cs-thm1.3b-witness,prop:envelope,cs-envelope-cons
+# hand: Theorem 1.4 is proved in running text ("Theorem 1.4, for p=2, now follows with the same proof
+# as Theorem 1.2", line 2422; "This concludes the proof of Theorem 1.4", line 2481).
+thm:main	theorem	1	prop:qcboundsquare,prop:qgenp2,cs-prop6.5,prop:envelope,cs-envelope-cons,cs-lem2.1,cs-lem2.2
+# hand: Theorem 1.5 is proved in running text (lines 2881-2882): Theorem 7.1 and the envelope.
+thm:lowdim	theorem	1	cs-thm7.1,prop:envelope,cs-envelope-cons,cs-lem2.1
+# hand: the proof of Corollary 1.6 is at the end of Section 7 (lines 2913-2955).
+cor:1-hom	corollary	1	thm:lowdim,cs-lem2.1,cs-lem2.2
+# hand: claims of the introduction, asserted without proof: monotonicity of Morrey's problem in the
+# dimensions (lines 105-107), and of the homogeneous problem (lines 209-210); both notions reduce to
+# convexity when min{d,m} = 1 (lines 108-109); Section 1.1, Šverák's example (lines 127-133; proved
+# here from the formalization of Šverák 1992).
+cs-monotone	claim	0	
+cs-hom-monotone	claim	0	
+cs-min-one	claim	0	
+cs-sverak	claim	0	
+# hand: lines 251-254, "this result complements Šverák's to prove that the only nontrivial instance in
+# which Morrey's problem may have a positive answer is 2x2"; lines 254-256 and 2137-2142 for the
+# homogeneous problem, with Corollary 5.3.
+cs-landscape	claim	1	thm:2x4,cs-sverak,cs-monotone
+cs-hom-landscape	claim	1	thm:2x4,cor:transp,cs-hom-monotone
+# 
+# Section 2.
+# hand: Lemmas 2.1 and 2.2 and Proposition 2.2 are quoted (Rindler; Dacorogna; Kinderlehrer-Pedregal).
+cs-lem2.1	lemma	0	
+cs-lem2.2	lemma	0	
+# hand: Proposition 2.1 is quoted (Pedregal 1993; Dacorogna 2008); Remark 2.1 derives it from
+# Proposition 2.4.
+prop:rk1envelope	proposition	0	prop:rk1rad
+cs-prop2.2	proposition	0	
+# hand: line 559, "It follows that quasiconvexity at A of a continuous integrand f is equivalent to the
+# existence of a quasiconvex minorant g <= f with g(A) = f(A)".
+cs-qc-minorant	claim	1	cs-prop2.2
+# hand: Proposition 2.3 has no proof ("follows directly from the dual envelope formulas above"):
+# (a), (b) follow from Propositions 2.1 and 2.2 (prop:rk1envelope, cs-prop2.2); (c) uses line 559, a
+# quasiconvex minorant, which is rank-one convex by Lemma 2.2 (cs-lem2.2), and the largest rank-one
+# convex minorant, an integrand by Lemma 2.1 (cs-lem2.1).
+prop:envelope	proposition	0	prop:rk1envelope,cs-prop2.2,cs-lem2.2,cs-lem2.1
+# hand: lines 573-578 ("Consequently ..."), and lines 206-209: f^rc(0), f^qc(0) in {0, -infinity};
+# rank-one convexity or quasiconvexity at a point implies it at 0.
+cs-envelope-cons	claim	1	prop:envelope,cs-qc-minorant
+prop:rk1rad	proposition	1	
+prop:rankonerademacher	proposition	1	prop:rk1rad
+# hand: Theorem 2.3 is unlabelled; the extractor named it after its first equation label (eq:burk).
+cs-thm2.3	theorem	0	
+# hand: Proposition 2.6 is quoted, for context only.
+cs-prop2.6	proposition	0	
+prop:umd	proposition	0	
+# hand: Proposition 2.8 is unlabelled; the extractor named it after its equation label (eq:coup).
+cs-prop2.8	proposition	0	
+# 
+# Section 4.
+lem:rankonecomplex	lemma	1	
+# hand: the proof of Proposition 4.1 applies (5), Proposition 2.7 (5) (line 1015).
+prop:laminate	proposition	1	lem:rankonecomplex,prop:umd
+# hand: equation (10) ("In other words", lines 1018-1024), used by the proof of Theorem 1.2.
+eq:rank1bound	equation	1	prop:laminate,prop:rankonerademacher
+# hand: lines 991-992, UMD_{C,p}(l_q) is finite "by Proposition 2.7 and the isometric embedding".
+cs-ellq-umd	claim	1	prop:umd
+# hand: Section 4.3 (lines 1047-1053): "by a straightforward limiting argument", C^qc, the supremum of
+# the ratio over C_c^infty test maps, is the supremum over Schwartz maps; the proofs of Theorem 1.2 and
+# Proposition 4.3 use it for the test maps u_n. Stated without proof. Label ours.
+cs-sec4.3-limit	claim	0	
+lem:order	lemma	1	
+# hand: equations (13), (14) are quoted (Burkholder 1988; Vasyunin-Volberg).
+eq:scalar-properties	equation	0	
+# hand: the proof of Proposition 4.2 uses (13), (14).
+prop:explicit	proposition	1	lem:rankonecomplex,eq:scalar-properties
+# hand: the proof of Proposition 4.3 uses Proposition 4.2 (g_n <= f_n), f_n not quasiconvex at 0
+# (Lemma 4.2 with p = 3, q = 6, and the limiting argument of Section 4.3, both implicit), line 559
+# (g^qc = g at 0) and the consequences of Proposition 2.3 ("hence it is not quasiconvex anywhere").
+prop:elem	proposition	1	prop:explicit,lem:order,cs-sec4.3-limit,cs-qc-minorant,cs-envelope-cons
+# hand: Remark 4.5 (lines 1367-1375) says that the argument of Propositions 4.2 and 4.3 extends to
+# 1 < p < infinity, p + 2 < q < infinity, "where such a U can also be constructed", and gives "an
+# entirely elementary ... proof of Theorem 1.2"; it is a sketch, without proof. The row is the route
+# that the sketch describes: the proofs of Propositions 4.2 (Lemma 4.1, with Burkholder's u_q in place
+# of (13), (14)) and 4.3 (Lemma 4.2, the limiting argument, line 559, the consequences of
+# Proposition 2.3), g itself as the integrand ("g_n is itself nowhere quasiconvex"), and the lifting of
+# the proof of Theorem 1.2 (Lemma 2.2). Label ours (Lean: theorem1_2_elementary, which proves the
+# unconditional Theorem 1.2).
+# hand: the u_q analogues of (13), (14) that the route uses (External.Burkholder.scalarFunctionQ_holds)
+# carry no label of the paper: the paper states (13), (14) for u_6 only (eq:scalar-properties, which
+# the prop:explicit row lists), and Remark 4.5 only says that such a U "can also be constructed"; the
+# general-q version is cited as Burkholder's (Burkholder 1988, proof of Theorem 1.1), so the row lists
+# no label for it.
+cs-thm1.2-elementary	theorem	1	lem:rankonecomplex,lem:order,cs-sec4.3-limit,cs-qc-minorant,cs-envelope-cons,cs-lem2.2
+# 
+# Section 5.
+# hand: Proposition 5.1 is unlabelled (extractor warning: proof not attributed).
+cs-prop5.1	proposition	1	prop:rk1envelope
+# hand: Section 5.1 (lines 1550-1555): q is globally rank-one convex on the subspace L, from (19),
+# which is Lemma 4.1; Section 5.2 (lines 1573-1574): so is q_3 on L_3.
+cs-q-rc	claim	1	lem:rankonecomplex
+cs-q3-rc	claim	1	cs-q-rc
+# hand: equation (24), a running-text display, used by the proof of Proposition 5.2.
+eq:q-simp	equation	1	
+# hand: the proof of Proposition 5.2 uses (24).
+prop:qc-witness	proposition	1	eq:q-simp
+# hand: the proof of Lemma 5.1 uses Theorem 2.3 for (27), and Propositions 2.4, 2.5.
+lem:extension-from-subspace	lemma	1	cs-thm2.3,prop:rankonerademacher,prop:rk1rad
+# hand: two claims of the proof of Theorem 1.3: L_3 satisfies (25) with kappa = 2 (line 1978, no
+# proof); q_{delta,K/delta} is a globally rank-one convex quartic (lines 1980-1991), by Lemma 5.1 (2).
+cs-kappa	claim	0	
+cs-qdl-rc	claim	1	cs-q3-rc,cs-kappa,lem:extension-from-subspace
+# hand: two more claims of the proof of Theorem 1.3. (a) (lines 1993-2029): for every K and small
+# delta, q_{delta,K/delta} is not quasiconvex at 0, by the cutoff u_R of the witness of Proposition 5.2
+# and its logarithmic estimate. (b) (lines 2031-2044): for p near 4, an integrand on R^{2x3} rank-one
+# convex at 0 but not quasiconvex at 0: f_{r,delta,C} with C = r*-1 is rank-one convex at 0 on L_3
+# (Burkholder, Theorem 2.3, through Proposition 2.5), extended by Lemma 5.1 (1) (L_3 has kappa = 2),
+# and not quasiconvex at 0 by "continuity of the ... quasiconvexity estimates", those of (a) at p = 4.
+# Labels ours.
+cs-thm1.3a-witness	claim	1	prop:qc-witness
+cs-thm1.3b-witness	claim	1	lem:extension-from-subspace,cs-kappa,cs-thm2.3,prop:rankonerademacher,cs-thm1.3a-witness
+# hand: Corollary 5.2 is unlabelled and has no proof beyond the citation of Kristensen 1999 and
+# Heinz 2008; it applies the smoothing argument to the polynomial of Theorem 1.3.
+cs-cor5.2	corollary	0	thm:2x4
+# hand: the proof sketch of Corollary 5.3 takes the rank-one convexity of q_{delta,Lambda} from the
+# proof of Theorem 1.3 (cs-qdl-rc), and homogeneity gives "nowhere".
+cor:transp	corollary	1	cs-qdl-rc,cs-envelope-cons
+# hand: the proof of Corollary 5.4 cites Proposition 5.2 and "the proof of Theorem 1.3", that is
+# cs-qdl-rc (the extractor read the reference to Theorem 1.3 as a citation of its statement).
+cor:hessian-quartic	corollary	1	prop:qc-witness,cs-qdl-rc
+# 
+# Section 6.
+# hand: C^qc is expressed through periodic test maps (Lemma 2.2).
+prop:qcboundsquare	proposition	1	cs-lem2.2
+# hand: the proof of Proposition 6.2 uses UMD_2(S_q) <~ q (Proposition 2.7 (2)), decoupling
+# (Proposition 2.8), (31), and Proposition 2.5 for the meaning of C^rc.
+prop:qgenp2	proposition	1	prop:umd,cs-prop2.8,eq:KKgen,prop:rankonerademacher
+# hand: Propositions 6.3 and 6.4 are unlabelled and quoted.
+cs-prop6.3	proposition	0	
+cs-prop6.4	proposition	0	
+# hand: equation (31) combines Propositions 6.3 and 6.4; the proof of Proposition 6.2 applies it.
+eq:KKgen	equation	1	cs-prop6.3,cs-prop6.4
+# hand: Remark 6.3 tracks the constants of the proof of Proposition 6.2; Proposition 6.5 cites it.
+rmk:interpolation	remark	0	prop:qgenp2
+# hand: Proposition 6.5 is unlabelled (extractor warning: proof not attributed); its proof modifies
+# that of Proposition 6.2 with Hölder, decoupling, (31), the Hilbert square function inequality and
+# Remark 6.3.
+cs-prop6.5	proposition	1	prop:qgenp2,rmk:interpolation,cs-thm2.3,cs-prop2.8,eq:KKgen,prop:umd
+# hand: the proof of Corollary 6.1 uses the bounds of Propositions 6.2, 6.5 and the envelope, and
+# tests Hessian quasiconvexity with a periodic map on the torus (lines 2499-2519), which needs the
+# passage from periodic to compactly supported test maps (cs-hess-periodic, implicit in the paper).
+cor:symm	corollary	1	prop:qcboundsquare,prop:qgenp2,cs-prop6.5,prop:envelope,cs-hess-periodic
+# hand: periodic test maps suffice for Hessian quasiconvexity (the second-order analogue of Lemma
+# 2.2); used without statement or proof in the proof of Corollary 6.1. Label ours.
+cs-hess-periodic	claim	0	
+# hand: Proposition 6.6 has no proof (inventory E6).
+prop:qcexact4	proposition	0	
+thm:sharp2sided	theorem	1	
+# hand: the separation part of Corollary 6.3 uses Proposition 6.6; its bounds on C^rc are proved
+# with rank-one Rademacher martingales ("it suffices to construct a family of rank-one Rademacher
+# martingales that witness it", lines 2623-2625), that is, through Proposition 2.5.
+cor:uncond	corollary	1	thm:sharp2sided,prop:rankonerademacher,prop:qcexact4
+# hand: the conclusion of the proof of Corollary 6.4 ("h_{4,4,98^{1/4}} fails to be quasiconvex at 0 in
+# sufficiently high dimension", lines 2688-2689) is Proposition 6.6's lower bound on C^qc; it names no
+# other result.
+cor:polsquare	corollary	1	prop:qcexact4
+# hand: Theorem 1.4 at p = q = 4, by "a more elementary and straightforward proof" (Section 6.4, lines
+# 2550-2554), with d_0 = 588 (Corollary 6.3): the quartic g of Corollary 6.4 is rank-one convex and,
+# by Proposition 6.6, not quasiconvex at 0 for d >= 588; homogeneity makes it nowhere quasiconvex. The
+# paper states no separate result. Label ours (Lean: theorem1_4_four).
+cs-thm1.4-p4	theorem	1	prop:qcexact4,cor:polsquare,cs-envelope-cons
+# 
+# Section 7.
+# hand: the proof of Proposition 7.1 uses "the results of [Cassese 2025]", that is Burkholder's
+# inequality, and Proposition 2.5 for the meaning of C^rc.
+prop:rcbound	proposition	1	cs-thm2.3,prop:rankonerademacher
+# hand: C^qc is expressed through periodic test maps (Lemma 2.2).
+prop:qcbound	proposition	1	cs-lem2.2
+# hand: Theorem 7.1 and Corollary 7.2 are unlabelled (extractor warnings: proofs not attributed).
+cs-thm7.1	theorem	1	prop:rcbound,prop:qcbound
+cs-cor7.2	corollary	1	prop:qcbound
+# 
+# Section 8.
+cs-conj1	conjecture	0	

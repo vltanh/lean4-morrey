@@ -39,4 +39,4 @@ globs = ["Morrey.Cassese.+"]
 [[lean_lib]]
 name = "Palomar"
 srcDir = "palomar"
-globs = ["Pedregal.+", "Sverak.+"]
+globs = ["Pedregal.+", "Sverak.+", "Cassese.+"]

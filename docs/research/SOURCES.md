@@ -18,18 +18,21 @@ the detailed sources for the Pedregal and Šverák audits.
 | Dacorogna–Haeberly, [1998 paper](https://www.numdam.org/item/M2AN_1998__32_2_153_0.pdf), Example 3 | The eigenvalue criteria used for the degree-one energies in E03; exact parameter checks are saved with the experiments. |
 | Aubert, [1988 paper](https://www.numdam.org/item/M2AN_1988__22_1_5_0.pdf), §3 | Comparison against an earlier nonpolyconvex example. The construction there is different from the displayed `Pβ`; this comparison is not a general novelty proof. |
 | Bandeira–Pedregal, [2009 paper](https://www.numdam.org/item/10.1016/j.anihpc.2008.08.002.pdf), §3 | The homogeneous-quartic Hessian/generalized-eigenvalue method is prior work. Its displayed examples do not give the exact `Pβ` expression or the `β=2` threshold; broader equivalence/priority remains open. |
-| Marcellini, [*Quasiconvex quadratic forms in two dimensions* (1984)](https://people.dimai.unifi.it/marcellini/lavori/reprints/1984_Marcellini_Appl_Math_Optim_Quasiconvex_quadratic_forms_in_two_dimensions.pdf) | Background for quadratic positivity, null-Lagrangian correction and polyconvexity in the planar setting. The larger bivector pullback argument still needs an independent audit of its equality-S-lemma step. |
+| Marcellini, [*Quasiconvex quadratic forms in two dimensions* (1984)](https://people.dimai.unifi.it/marcellini/lavori/reprints/1984_Marcellini_Appl_Math_Optim_Quasiconvex_quadratic_forms_in_two_dimensions.pdf) | Background for quadratic positivity, null-Lagrangian correction and polyconvexity in the planar setting. The larger bivector pullback argument uses the Finsler–Thorpe input pinned below; its scope is rechecked in A06. |
 | Bruno–Pasqualotto, [arXiv:2608.06367v1](https://arxiv.org/abs/2608.06367v1) | Quasiconvexity for the Dacorogna–Marcellini energy and the bivariantly rotationally invariant homogeneous quartic class. Used as an **external analytic input** in H16/H18; does not settle arbitrary anisotropic quartics. |
-| Cassese, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3), 16 September 2026 | Explicit homogeneous quartic counterexample in `2 × 3` and broader higher-dimensional results. E04 tests planar pullbacks; the source result is not a `2 × 2` counterexample. Public Lean source was inspected in the search work, not rebuilt or copied into this package. |
+| Cassese, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3), 16 September 2026 | Explicit homogeneous quartic counterexample in `2 × 3` and broader higher-dimensional results. E04 tests planar pullbacks; the source result is not a `2 × 2` counterexample. Main now includes the unconditional quartic construction and other results with explicitly distinguished hypotheses; see [FORMAL_STATUS.md](FORMAL_STATUS.md). This audit did not rebuild Lean locally. |
 | Agazzi–Bruno–Guerra–Pasqualotto, [arXiv:2608.12298](https://arxiv.org/abs/2608.12298) | Higher-dimensional `2 × 4` construction and Grabovsky-derived methods that motivated the pullback investigations. The no-go argument H25 concerns a specified quadratic-bivector-norm planar class, not this entire paper. |
 | Agazzi et al., [arXiv:2609.28311v2](https://arxiv.org/abs/2609.28311v2), 8 October 2026 | Reports the sharp Beurling–Ahlfors norm. A result for that special problem is not a proof of all planar rank-one-convex Jensen inequalities. Older historical discussion of Iwaniec's conjecture must be read with this later preprint in mind. |
 | Conti–Dolzmann–Dondl, [arXiv:2610.31886](https://arxiv.org/abs/2610.31886) | Frame-indifferent `3 × 3` example and related [Lean repository](https://github.com/sergioconti/so3-r1c-and-not-qc). Its mention of Pedregal as a proposed proof is not validation of the disputed argument. |
+| Powers, [*Rational Certificates of Positivity on Compact Semialgebraic Sets*](https://www.math.emory.edu/~vicki/pub/rationalreps.pdf), author manuscript, Theorem 6 | Rational Putinar input for A03. The sphere constraints include an explicit redundant ball generator. Homogenization and gap-preserving strictification are proved in [GLOBAL_CERTIFICATES.md](GLOBAL_CERTIFICATES.md). This is an application of established positivity, not a novelty claim. |
+| Magron, [*Convergence rates for polynomial optimization on set products*, arXiv:2505.18580v4](https://arxiv.org/abs/2505.18580v4), 3 June 2026 | Prior work on SOS hierarchies on products of spheres. Its rates are not needed for A03 and do not bound the unknown Morrey witness degree or mesh. |
+| Bettiol–Krishnan, [*Ricci flow does not preserve positive sectional curvature in dimension four*](https://link.springer.com/article/10.1007/s00526-022-02335-z), Calc. Var. 62, 13 (2023), §2.2, Proposition 2.2 | Precise non-strict Finsler–Thorpe statement used in H25. The [structural audit](STRUCTURAL_AUDIT.md) explains the Bianchi-component bridge from an arbitrary quadratic form on bivectors. |
 | [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | Source dependency behind the repository's Kakutani formalization. It does not fix the failed nonemptiness hypothesis. |
 
 The versioned abstracts for Bruno–Pasqualotto, Cassese, Guerra–Teixeira da Costa and Agazzi et al.
 were rechecked during this consolidation. Other entries preserve the primary-source comparisons
-recorded in the existing reports and recovered research. This is not a new systematic literature
-review of every lemma.
+recorded in the existing reports and recovered research. The completion audit additionally checked the Powers, Magron and Bettiol–Krishnan primary
+sources above. This is not a new systematic literature review of every lemma.
 
 ## What the prior-work search establishes
 
@@ -50,7 +53,7 @@ These searches did not establish priority. In particular:
 - H16/H18 depend on an external analytic theorem. Exact polynomial identities and rational
   stability constants do not independently verify that theorem.
 - H22 uses Hilbert's ternary-quartic theorem; H25 uses a Finsler–Thorpe/equality-S-lemma result.
-  Before publication, pin the precise reference and hypotheses used in each hand proof.
+  A06 pins the latter reference and its hypotheses. Hilbert's theorem and all external inputs still need precise citations in any publication or Lean translation.
 - The original report's “no earlier formalization found” is a dated search result, not a claim
   that no such work exists. This research ledger does not repeat it as a novelty guarantee.
 

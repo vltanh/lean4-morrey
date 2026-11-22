@@ -1,0 +1,561 @@
+module
+
+public import Mathlib.Analysis.Calculus.FDeriv.Basic
+public import Mathlib.LinearAlgebra.Matrix.Rank
+public import Mathlib.Analysis.Convex.Function
+public import Mathlib.MeasureTheory.Integral.Bochner.Basic
+public import Mathlib.MeasureTheory.Integral.IntegrableOn
+public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
+public import Mathlib.Topology.EMetricSpace.Lipschitz
+public import Mathlib.RingTheory.MvPolynomial.Homogeneous
+public import Mathlib.Topology.Semicontinuity.Defs
+public import Mathlib.Topology.Instances.Matrix
+public import Mathlib.LinearAlgebra.UnitaryGroup
+public import Mathlib.Analysis.Complex.Basic
+public import Mathlib.Probability.Martingale.Basic
+public import Mathlib.MeasureTheory.Function.LpSpace.Complete
+public import Mathlib.Analysis.InnerProductSpace.Basic
+public import Mathlib.Analysis.Matrix.Spectrum
+public import Mathlib.Analysis.SpecialFunctions.Pow.Real
+public import Mathlib.Analysis.Fourier.FourierTransform
+public import Mathlib.Analysis.Distribution.SchwartzSpace.Basic
+public import Mathlib.Analysis.Fourier.AddCircleMulti
+
+/-!
+# Challenge: Cassese, a solution to Morrey's problem in `ℝ^{2×m}`
+
+G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, arXiv:2608.03488v3 (16 September 2026).
+Morrey's problem asks whether rank-one convexity implies quasiconvexity for integrands
+`f : ℝ^{d×m} → ℝ`; the homogeneous Morrey problem (Kirchheim–Kristensen) asks whether every
+`p`-homogeneous rank-one convex integrand is quasiconvex at `0`. The paper answers the homogeneous
+problem negatively in `2 × m` for `m` large (Theorem 1.2), in `2 × 3` (Theorem 1.3), in `3 × 2`
+(Corollary 5.3), in `d × d` with symmetries (Theorem 1.4) and in `4 × 2` for `p ≠ 2` (Theorem 1.5),
+and shows that Kirchheim–Kristensen's theorem on `1`-homogeneous integrands does not extend to
+rank-two matrices (Corollary 1.6). With Šverák's example (1992), Theorem 1.3 leaves `2 × 2` as the
+only nontrivial dimension in which Morrey's problem may have a positive answer (the paper's
+remark after Theorem 1.3, `morrey_landscape`); with Corollary 5.3, the same holds for the
+homogeneous problem at `p = 4` (`homMorrey_landscape`).
+
+## The theorems
+
+* `theorem1_2`, `theorem1_3_a`, `theorem1_3_b`, `corollary5_3`, `morrey_landscape`,
+  `homMorrey_landscape`: unconditional. `theorem1_2` is proved by the route that the paper's
+  Remark 4.5 describes ("an entirely elementary … proof of Theorem 1.2"): Burkholder's scalar
+  function `u_q` in place of the UMD constants of the paper's own proof (Section 4.4), whose UMD
+  estimates are out of reach (below). The paper's proof is formalized in the library as well,
+  conditional on Proposition 2.7 (1), (3), (5).
+* `theorem1_4`: Theorem 1.4 for every `p ∈ (1, ∞)`, conditional on five results on UMD spaces and
+  non-commutative probability (below); `theorem1_4_four`: Theorem 1.4 at `p = 4`, with the
+  dimension `d₀ (4) = 588` of the paper's Corollary 6.3, unconditional (the paper's "simple,
+  somewhat quantitative proof" for `p = 4`, Section 6.4).
+* `theorem1_5`, `corollary1_6`: conditional on transference and on Dragičević's lower bound
+  (below).
+* `projL3_mem`: a check of the definitions of Section 5.2 (`projL3` maps into `𝓛₃`).
+
+## Conventions
+
+* `d × m` matrices are `Matrix (Fin d) (Fin m) ℝ`, `ℝ^m` is `Fin m → ℝ`, and the gradient of
+  `φ : ℝ^m → ℝ^d` at `x` is `jac φ x` (rows are the components; for a Lipschitz `φ` it is the
+  gradient almost everywhere, and `0` where `φ` is not differentiable).
+* `IsIntegrand f`: `f` is lower semicontinuous and locally bounded (the paper's "integrand",
+  Section 1.5).
+* `QuasiconvexAt f A` (Definition 2.1): `f (A) ≤ ∫_{(0,1)^m} f (A + ∇φ)` for every Lipschitz `φ`
+  vanishing outside the open unit cube (`W^{1,∞}_0`), whenever the integral exists;
+  `NowhereQuasiconvex f`: quasiconvex at no matrix; `Quasiconvex f`: quasiconvex at every matrix.
+* `RankOneConvex f` (Definition 2.2): `t ↦ f (t A + (1 − t) B)` is convex on `[0, 1]` whenever
+  `rank (A − B) = 1`.
+* `IsPHomogeneous p f`: `f (t A) = |t|^p f (A)` for every real `t`; `IsHomogeneousPolynomial n f`:
+  a homogeneous polynomial of degree `n` in the entries.
+* `IsConjugationInvariant f`: `f (U A Uᵀ) = f (A)` for orthogonal `U`;
+  `IsTranspositionInvariant f`: `f (Aᵀ) = f (A)`.
+* Corollary 5.3 names a quartic built in Section 5: `ℝ²` and the columns of `A ∈ ℝ^{2×4}` are
+  read as complex numbers, each `2 × 2` block `(a b; c d)` acts as `z ↦ α z + β z̄` with
+  `α = (a + d + i (c − b)) / 2`, `β = (a − d + i (c + b)) / 2` (`wirtAlpha`, `wirtBeta`);
+  `Z = (conj α₂, conj α₁, β₁)` (`zCoord`), `q = 4 |z₀ z₂ − z₁²|² − (|z₀|² + |z₂|² − 2 |z₁|²)²`
+  (`quarticQ`), `J A = (A | 0)` (`embedJ`), `q₃ = q ∘ J` (`q3`), `𝓛₃ = J⁻¹ {β₂ = conj α₁}` (`L3`),
+  `π` the Frobenius-orthogonal projection onto `𝓛₃` (`projL3`, explicit),
+  `q_{δ,Λ} (A) = q₃ (π A) + δ (|π A|² + Λ² |A − π A|²)²` (`qDeltaLambda`, with `|·|` the Frobenius
+  norm, `frobSq`) and `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` (`qHat`).
+* The hypotheses below use: `pStar p = p* = max (p, p / (p − 1))`; `N` independent Rademacher
+  signs on the canonical space `Fin N → Bool` with the uniform probability (`coin`, the sign `±1`;
+  `avg`, the expectation; `IsPredictable ξ`, `ξ k` depends on the first `k` signs only;
+  `mart ξ n = Σ_{k<n} ε_k ξ_k`; `lpNormWith nrm p X = (E nrm (X)^p)^{1/p}`); the constant
+  `UMD_p` of a Banach space (Definition 2.5, `umdConstWith E nrm p`, the best `β` in
+  `‖Σ_k σ_{k+1} dY_{k+1}‖_{L^p} ≤ β ‖Y_n‖_{L^p}` over all martingales `Y` and predictable signs
+  `σ`, `∞` if there is none, for the complete normed space `E` renormed by the equivalent norm
+  `nrm`); the singular values `sval` and the Schatten norms `schattenNorm q`
+  (`‖A‖_{S_q} = (Σ s_i^q)^{1/q}`, `‖A‖_{S_∞} = max s_i`); and the norms of the powers of the
+  Beurling–Ahlfors transform `𝓑` (symbol `ξ̄ / ξ`, `beurlingSymbol`) on `L^p (ℝ²)`
+  (`beurlingPowNorm k p`, a supremum over Schwartz functions) and on the mean-zero `L^p_0 (𝕋²)`
+  (`torusBeurlingPowNorm k p`, a supremum over mean-zero trigonometric polynomials).
+
+## The hypotheses
+
+The conditional theorems take, as hypotheses named after their sources, results of other works
+that the paper cites and that this formalization does not prove, because each needs a theory that
+no Lean library has and that is a project of its own:
+
+* `HNVWExtrapolation` (Proposition 2.7 (1); Hytönen–van Neerven–Veraar–Weis, *Analysis in Banach
+  spaces I*, 2016, Theorem 4.2.7): a Banach space that is `UMD_{p₀}` for one `p₀ ∈ (1, ∞)` is
+  `UMD_p` for every `p`, with `UMD₂ / 200 ≤ UMD_p ≤ 100 p* UMD₂`. It needs the extrapolation
+  theory of Banach-space-valued martingale transforms (good-λ inequalities, Davis decomposition).
+* `RandrianantoaninaSchattenUMD` (Proposition 2.7 (2); Randrianantoanina, J. Funct. Anal. 194
+  (2002), Corollary 4.5): `UMD₂ (S_q^{d×d}) ≤ C (q* − 1)` with `C` absolute, uniformly in `d`. It
+  needs non-commutative martingale theory (martingale transforms in non-commutative `L^p`).
+* `CoxVeraarDecoupling` (Proposition 2.8; Cox–Veraar, Electron. Commun. Probab. 12 (2007); HNVW I,
+  Proposition 4.2.3): a Rademacher martingale `Σ ε_k ξ_k` with predictable `ξ` and its decoupled
+  version `Σ ε̃_k ξ_k` (an independent copy `ε̃` of the signs) have comparable `L^p` norms, up to
+  `UMD_p`. It needs the decoupling theory of UMD-valued martingales.
+* `PisierXuKhintchine` (Proposition 6.3; Pisier–Xu, *Non-commutative `L^p`-spaces*, 2003,
+  Theorem 6.1): the non-commutative Khintchine inequality
+  `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≤ ‖Σ ε_i x_i‖_{L^q (S_q)} ≤ C √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}` for
+  normal matrices `x_i` and `q ∈ [2, ∞)`. It needs non-commutative `L^p` theory.
+* `KahaneKhintchine` (Proposition 6.4; HNVW, *Analysis in Banach spaces II*, 2017, Theorem 6.2.4):
+  the `L^p` and `L^q` norms of a Rademacher sum `Σ ε_i x_i` in a normed space are comparable, with
+  constants `k_{p,q}`: the paper's statement, with no bound on the constants. It needs the theory
+  of Banach-valued Rademacher sums, which Lean does not have. (The library's Remark 6.3 and the
+  case `q = ∞` of its Proposition 6.5, which no statement here uses, also assume the
+  hypercontractive bound `k_{q,p} ≤ √((q − 1) / (p − 1))`, `KahaneKhintchineHypercontractive`.)
+* `HNVWTransference` (HNVW I, Corollary 5.7.6, in the proof of Proposition 7.2):
+  `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`, `p ∈ (1, ∞)`. It needs the transference of
+  `L^p` Fourier multipliers from the torus to the plane.
+* `DragicevicLowerBound` (Dragičević, Arch. Math. 96 (2011), Theorem 1.1, in the proof of
+  Theorem 7.1): `‖𝓑²‖_{L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞) ∖ {2}`. It needs the `L^p` theory of
+  the Beurling–Ahlfors transform (Calderón–Zygmund operators on `L^p (ℝ²)`).
+
+The paper also cites Burkholder's inequalities for Hilbert-space-valued martingales (Theorem 2.3),
+Burkholder's scalar functions (13), (14), Dacorogna's formula for the quasiconvex envelope
+(Proposition 2.2), Dacorogna's theorems on rank-one affine functions and quadratic forms, Rindler's
+lemmas (Lemmas 2.1, 2.2) and Kristensen's smoothing argument: these are proved in the library, and
+no statement here assumes them.
+
+The definitions are copied word for word from `Morrey/Cassese/Defs.lean` (kept in sync by
+`scripts/sync_challenge_defs.py`); the theorems are proved in `palomar/Cassese/Solution.lean`.
+-/
+
+@[expose] public section
+
+namespace Cassese
+
+-- BEGIN SHARED DEFINITIONS
+
+open scoped Matrix ENNReal
+
+/-- The derivative matrix of `φ : ℝ^m → ℝ^d` at `x`: the `d × m` matrix with entries
+`∂_k φ_i (x)` (rows are the components). For a Lipschitz `φ` it is the gradient almost
+everywhere (Rademacher's theorem); elsewhere `fderiv` is `0`. -/
+noncomputable def jac {d m : ℕ} (φ : (Fin m → ℝ) → Fin d → ℝ) (x : Fin m → ℝ) :
+    Matrix (Fin d) (Fin m) ℝ :=
+  Matrix.of fun i k => fderiv ℝ (fun y => φ y i) x (Pi.single k 1)
+
+/-- The open unit cube `(0, 1)^m`. -/
+def unitCube (m : ℕ) : Set (Fin m → ℝ) :=
+  Set.pi Set.univ fun _ => Set.Ioo 0 1
+
+/-- An integrand (Section 1.5): a locally bounded lower semicontinuous function
+`f : ℝ^{d×m} → ℝ`. -/
+def IsIntegrand {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  LowerSemicontinuous f ∧ ∀ A, ∃ U ∈ nhds A, ∃ C : ℝ, ∀ B ∈ U, |f B| ≤ C
+
+/-- Quasiconvexity at a matrix `A` (Definition 2.1): for every Lipschitz `φ : [0, 1]^m → ℝ^d`
+vanishing on the boundary (extended by `0` outside the cube),
+`f (A) ≤ ∫_{[0,1]^m} f (A + ∇φ)`. The integral is required to exist: test maps for which
+`f (A + ∇φ)` is not integrable do not count, so that a failure of quasiconvexity is witnessed by a
+genuine integral. -/
+def QuasiconvexAt {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) (A : Matrix (Fin d) (Fin m) ℝ) :
+    Prop :=
+  ∀ (φ : (Fin m → ℝ) → Fin d → ℝ) (K : NNReal), LipschitzWith K φ →
+    (∀ x ∉ unitCube m, φ x = 0) →
+      MeasureTheory.IntegrableOn (fun x => f (A + jac φ x)) (unitCube m) →
+        f A ≤ ∫ x in unitCube m, f (A + jac φ x)
+
+/-- Quasiconvexity (Definition 2.1): quasiconvexity at every matrix. -/
+def Quasiconvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  ∀ A, QuasiconvexAt f A
+
+/-- `f` is quasiconvex at no matrix. -/
+def NowhereQuasiconvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  ∀ A, ¬ QuasiconvexAt f A
+
+/-- Rank-one convexity (Definition 2.2): for any two matrices `A`, `B` with `rank (A − B) = 1`,
+`t ↦ f (t A + (1 − t) B)` is convex on `[0, 1]`. -/
+def RankOneConvex {d m : ℕ} (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  ∀ A B : Matrix (Fin d) (Fin m) ℝ, (A - B).rank = 1 →
+    ConvexOn ℝ (Set.Icc 0 1) fun t : ℝ => f (t • A + (1 - t) • B)
+
+/-- `p`-homogeneity (Section 1.3): `f (t A) = |t|^p f (A)` for every real `t`. -/
+def IsPHomogeneous {d m : ℕ} (p : ℝ) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  ∀ (t : ℝ) (A : Matrix (Fin d) (Fin m) ℝ), f (t • A) = |t| ^ p * f A
+
+/-- `f` is a homogeneous polynomial of degree `n` in the entries of the matrix. -/
+def IsHomogeneousPolynomial {d m : ℕ} (n : ℕ) (f : Matrix (Fin d) (Fin m) ℝ → ℝ) : Prop :=
+  ∃ P : MvPolynomial (Fin d × Fin m) ℝ, P.IsHomogeneous n ∧
+    ∀ A, f A = MvPolynomial.eval (fun ij => A ij.1 ij.2) P
+
+/-- Conjugation invariance (Section 1.3): `f (U A Uᵀ) = f (A)` for every `A ∈ ℝ^{d×d}` and every
+orthogonal `U ∈ O(d)`. -/
+def IsConjugationInvariant {d : ℕ} (f : Matrix (Fin d) (Fin d) ℝ → ℝ) : Prop :=
+  ∀ U ∈ Matrix.orthogonalGroup (Fin d) ℝ, ∀ A : Matrix (Fin d) (Fin d) ℝ, f (U * A * Uᵀ) = f A
+
+/-- Transposition invariance (Theorem 1.4): `f (Aᵀ) = f (A)`. -/
+def IsTranspositionInvariant {d : ℕ} (f : Matrix (Fin d) (Fin d) ℝ → ℝ) : Prop :=
+  ∀ A : Matrix (Fin d) (Fin d) ℝ, f Aᵀ = f A
+
+/-- The squared Frobenius norm `|A|² = ∑ A_{ij}²`. -/
+def frobSq {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
+  ∑ i, ∑ j, A i j ^ 2
+
+/-- The conformal coefficient `α` of the `2 × 2` block of `A ∈ ℝ^{2×m}` in the columns `k`, `l`
+(Section 4.1): identifying both copies of `ℝ²` with `ℂ` (`(x, y) ↦ x + i y`), the block
+`(a b; c d)` acts as `z ↦ α z + β z̄`, with `α = (a + d + i (c − b)) / 2`. -/
+noncomputable def wirtAlpha {m : ℕ} (A : Matrix (Fin 2) (Fin m) ℝ) (k l : Fin m) : ℂ :=
+  (((A 0 k + A 1 l) / 2 : ℝ) : ℂ) + (((A 1 k - A 0 l) / 2 : ℝ) : ℂ) * Complex.I
+
+/-- The anticonformal coefficient `β = (a − d + i (c + b)) / 2` of the same block
+(Section 4.1). -/
+noncomputable def wirtBeta {m : ℕ} (A : Matrix (Fin 2) (Fin m) ℝ) (k l : Fin m) : ℂ :=
+  (((A 0 k - A 1 l) / 2 : ℝ) : ℂ) + (((A 1 k + A 0 l) / 2 : ℝ) : ℂ) * Complex.I
+
+/-- The coordinates `Z = (Z⁰, Z¹, Z²) = (X², X¹, Y¹)` of `A ∈ ℝ^{2×4}` (Section 5.1), where
+`X = conj P₂ (A) = (conj α₁, conj α₂)` and `Y = Q₂ (A) = (β₁, β₂)`; the first block is formed by
+the columns `0, 1` and the second by the columns `2, 3`. -/
+noncomputable def zCoord (A : Matrix (Fin 2) (Fin 4) ℝ) : Fin 3 → ℂ :=
+  ![starRingEnd ℂ (wirtAlpha A 2 3), starRingEnd ℂ (wirtAlpha A 0 1), wirtBeta A 0 1]
+
+/-- The quartic (23) on `ℝ^{2×4}`:
+`q = 4 |z₀ z₂ − z₁²|² − (|z₀|² + |z₂|² − 2 |z₁|²)²` at `z = Z (A)`. -/
+noncomputable def quarticQ (A : Matrix (Fin 2) (Fin 4) ℝ) : ℝ :=
+  4 * ‖zCoord A 0 * zCoord A 2 - zCoord A 1 ^ 2‖ ^ 2 -
+    (‖zCoord A 0‖ ^ 2 + ‖zCoord A 2‖ ^ 2 - 2 * ‖zCoord A 1‖ ^ 2) ^ 2
+
+/-- The subspace `𝓛 = {A ∈ ℝ^{2×4} : Y² (A) = X¹ (A)}` of (20), that is `β₂ = conj α₁`. -/
+def calL : Set (Matrix (Fin 2) (Fin 4) ℝ) :=
+  {A | wirtBeta A 2 3 = starRingEnd ℂ (wirtAlpha A 0 1)}
+
+/-- The embedding `J : ℝ^{2×3} → ℝ^{2×4}`, `J A = (A | 0)` (Section 5.2). -/
+def embedJ (A : Matrix (Fin 2) (Fin 3) ℝ) : Matrix (Fin 2) (Fin 4) ℝ :=
+  Matrix.of fun i j => if h : j.val < 3 then A i ⟨j.val, h⟩ else 0
+
+/-- The subspace `𝓛₃ = J⁻¹ 𝓛 ⊆ ℝ^{2×3}` (Section 5.2). -/
+def L3 : Set (Matrix (Fin 2) (Fin 3) ℝ) :=
+  {A | embedJ A ∈ calL}
+
+/-- The quartic `q₃ = q ∘ J` on `ℝ^{2×3}` (Section 5.2). -/
+noncomputable def q3 (A : Matrix (Fin 2) (Fin 3) ℝ) : ℝ :=
+  quarticQ (embedJ A)
+
+/-- The orthogonal projection `π` of `ℝ^{2×3}` (Frobenius inner product) onto `𝓛₃`. For
+`A = (a b e; c d f)`, `𝓛₃ = {e = a + d, f = b − c}`, whose normal space is spanned by the
+orthogonal matrices `N₁ = (−1 0 1; 0 −1 0)` and `N₂ = (0 −1 0; 1 0 1)`, both of squared norm `3`;
+so `π A = A − s N₁ − t N₂` with `s = ⟨A, N₁⟩ / 3 = (e − a − d) / 3` and
+`t = ⟨A, N₂⟩ / 3 = (f − b + c) / 3`. -/
+noncomputable def projL3 (A : Matrix (Fin 2) (Fin 3) ℝ) : Matrix (Fin 2) (Fin 3) ℝ :=
+  let s := (A 0 2 - A 0 0 - A 1 1) / 3
+  let t := (A 1 2 - A 0 1 + A 1 0) / 3
+  !![A 0 0 + s, A 0 1 + t, A 0 2 - s; A 1 0 - t, A 1 1 + s, A 1 2 - t]
+
+/-- The quartic of the proof of Theorem 1.3,
+`q_{δ,Λ} (A) = q₃ (π A) + δ (|π A|² + Λ² |π^⊥ A|²)²` on `ℝ^{2×3}`, with `|·|` the Frobenius norm
+and `π^⊥ A = A − π A`. -/
+noncomputable def qDeltaLambda (δ Λ : ℝ) (A : Matrix (Fin 2) (Fin 3) ℝ) : ℝ :=
+  q3 (projL3 A) + δ * (frobSq (projL3 A) + Λ ^ 2 * frobSq (A - projL3 A)) ^ 2
+
+/-- The transposed quartic of Corollary 5.3, `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` on `ℝ^{3×2}`. -/
+noncomputable def qHat (δ Λ : ℝ) (A : Matrix (Fin 3) (Fin 2) ℝ) : ℝ :=
+  qDeltaLambda δ Λ Aᵀ
+
+/-! ### Tools for the conditional statements
+
+The main theorems are conditional on results of other works that are out of reach of this
+formalization. Each such result is a proposition below, named after its source; the definitions
+it needs come first. -/
+
+/-- Burkholder's exponent `p* = max (p, p / (p − 1))`. -/
+noncomputable def pStar (p : ℝ) : ℝ := max p (p / (p - 1))
+
+/-- The sign `±1` of a coin. `N` independent Rademacher signs are realised on the canonical space
+`Fin N → Bool` with the uniform probability. -/
+def coin (b : Bool) : ℝ := if b then 1 else -1
+
+/-- The expectation over `N` independent fair signs: `avg g = 2^{-N} Σ_{ε ∈ {±1}^N} g ε`. -/
+noncomputable def avg {N : ℕ} (g : (Fin N → Bool) → ℝ) : ℝ :=
+  (∑ ε, g ε) / 2 ^ N
+
+/-- A family `ξ k` of functions of the signs is predictable: `ξ k` depends only on the signs
+`ε j` with `j < k`. -/
+def IsPredictable {N : ℕ} {E : Type*} (ξ : Fin N → (Fin N → Bool) → E) : Prop :=
+  ∀ (k : Fin N) (ε ε' : Fin N → Bool), (∀ j, j < k → ε j = ε' j) → ξ k ε = ξ k ε'
+
+/-- The `L^p` norm `(E N (X)^p)^{1/p}` of a random variable `X` on the signs, measured with the
+function `N` (a norm). -/
+noncomputable def lpNormWith {N : ℕ} {E : Type*} (nrm : E → ℝ) (p : ℝ)
+    (X : (Fin N → Bool) → E) : ℝ :=
+  avg (fun ε => nrm (X ε) ^ p) ^ (1 / p)
+
+/-- The Rademacher (Paley–Walsh) martingale `n ↦ Σ_{k < n} ε_k ξ_k` of predictable `ξ`, started
+at `0`, at time `n`. -/
+noncomputable def mart {N : ℕ} {E : Type*} [AddCommGroup E] [Module ℝ E]
+    (ξ : Fin N → (Fin N → Bool) → E) (n : ℕ) (ε : Fin N → Bool) : E :=
+  ∑ k ∈ Finset.univ.filter (fun k : Fin N => k.val < n), coin (ε k) • ξ k ε
+
+/-- `β` is a `UMD_p` constant (Definition 2.5) of the complete normed space `E` renormed by
+`nrm`: for every probability space and filtration, every `E`-valued martingale `Y` with `Y₀ = 0`
+and every sequence of predictable signs `σ_k ∈ {±1}` (`σ_{k+1}` is `ℱ_k`-measurable),
+`‖Σ_{k<n} σ_{k+1} (Y_{k+1} − Y_k)‖_{L^p} ≤ β ‖Y_n‖_{L^p}`, the norms of the values taken with
+`nrm`. The probability spaces range over `Type`. -/
+def IsUMDBoundWith (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E]
+    (nrm : E → ℝ) (p : ℝ) (β : ℝ≥0∞) : Prop :=
+  ∀ (Ω : Type) (mΩ : MeasurableSpace Ω) (μ : MeasureTheory.Measure Ω)
+    [MeasureTheory.IsProbabilityMeasure μ] (ℱ : MeasureTheory.Filtration ℕ mΩ) (Y : ℕ → Ω → E)
+    (σ : ℕ → Ω → ℝ),
+    MeasureTheory.Martingale Y ℱ μ → (∀ ω, Y 0 ω = 0) → (∀ n ω, σ n ω = 1 ∨ σ n ω = -1) →
+      (∀ k, @MeasureTheory.StronglyMeasurable _ _ _ (ℱ k) (σ (k + 1))) →
+      ∀ n, MeasureTheory.eLpNorm
+          (fun ω => nrm (∑ k ∈ Finset.range n, σ (k + 1) ω • (Y (k + 1) ω - Y k ω)))
+          (ENNReal.ofReal p) μ ≤
+        β * MeasureTheory.eLpNorm (fun ω => nrm (Y n ω)) (ENNReal.ofReal p) μ
+
+/-- `UMD_p` of `E` renormed by `nrm`: the best constant (`∞` if there is none). -/
+noncomputable def umdConstWith (E : Type*) [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E] (nrm : E → ℝ) (p : ℝ) : ℝ≥0∞ :=
+  sInf {β | IsUMDBoundWith E nrm p β}
+
+/-- The singular values of `A ∈ ℝ^{d×m}`, indexed by the columns: `s_i = √λ_i (Aᵀ A)` (when
+`m > d` the extra ones are `0`, which changes no Schatten norm). -/
+noncomputable def sval {d m : ℕ} (A : Matrix (Fin d) (Fin m) ℝ) (i : Fin m) : ℝ :=
+  √((Matrix.isHermitian_conjTranspose_mul_self A).eigenvalues i)
+
+/-- The Schatten `q`-norm (Section 1.5): `‖A‖_{S_q} = (Σ s_i^q)^{1/q}` for `q < ∞`,
+`‖A‖_{S_∞} = max s_i`. -/
+noncomputable def schattenNorm {d m : ℕ} (q : ℝ≥0∞) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
+  if q = ⊤ then ⨆ i, sval A i else (∑ i, sval A i ^ q.toReal) ^ (1 / q.toReal)
+
+/-- The symbol `m (ξ) = ξ̄ / ξ` of the Beurling–Ahlfors transform `𝓑` (`m (0) = 0`), with `ℝ² ≅ ℂ`
+by `(x, y) ↦ x + i y`. With `𝓕 f (w) = ∫ e^{−2πi ⟨v, w⟩} f (v) dv`, `𝓑 (∂̄ f) = ∂ f`. -/
+noncomputable def beurlingSymbol (ξ : ℂ) : ℂ := starRingEnd ℂ ξ / ξ
+
+/-- `𝓑^k f = 𝓕⁻¹ (m^k 𝓕 f)` on `ℝ² ≅ ℂ`. -/
+noncomputable def beurlingPow (k : ℕ) (f : ℂ → ℂ) : ℂ → ℂ :=
+  FourierTransformInv.fourierInv
+    (fun ξ : ℂ => beurlingSymbol ξ ^ k • FourierTransform.fourier f ξ)
+
+/-- `‖𝓑^k‖_{L^p (ℝ²) → L^p (ℝ²)}`: the supremum of `‖𝓑^k f‖_p / ‖f‖_p` over the (dense) Schwartz
+functions `f`. -/
+noncomputable def beurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ f : SchwartzMap ℂ ℂ, MeasureTheory.eLpNorm (beurlingPow k f) (ENNReal.ofReal p)
+      MeasureTheory.volume /
+    MeasureTheory.eLpNorm (f : ℂ → ℂ) (ENNReal.ofReal p) MeasureTheory.volume
+
+/-- The trigonometric polynomial `x ↦ Σ_n c_n e^{2πi ⟨n, x⟩}` on the torus `𝕋² = ℝ² / ℤ²`. -/
+noncomputable def trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) : ℂ :=
+  c.sum fun n a => a * UnitAddTorus.mFourier n x
+
+/-- `𝓑^k` on `𝕋²` (the multiplier `m` at the frequency `n₀ + i n₁`) applied to the trigonometric
+polynomial with coefficients `c`. -/
+noncomputable def torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) (x : UnitAddTorus (Fin 2)) :
+    ℂ :=
+  c.sum fun n a => beurlingSymbol ((n 0 : ℂ) + (n 1 : ℂ) * Complex.I) ^ k * a *
+    UnitAddTorus.mFourier n x
+
+/-- `‖𝓑^k‖_{L^p_0 (𝕋²) → L^p_0 (𝕋²)}`: the supremum over the (dense) mean-zero trigonometric
+polynomials (`c₀ = 0`). -/
+noncomputable def torusBeurlingPowNorm (k : ℕ) (p : ℝ) : ℝ≥0∞ :=
+  ⨆ (c : (Fin 2 → ℤ) →₀ ℂ) (_ : c 0 = 0),
+    MeasureTheory.eLpNorm (torusBeurlingPow k c) (ENNReal.ofReal p) MeasureTheory.volume /
+      MeasureTheory.eLpNorm (trigPoly c) (ENNReal.ofReal p) MeasureTheory.volume
+
+/-- **Proposition 2.7 (1)** (`prop:umd`), citing Hytönen–van Neerven–Veraar–Weis, *Analysis in
+Banach spaces I* (2016), Theorem 4.2.7: a Banach space that is `UMD_{p₀}` for some
+`p₀ ∈ (1, ∞)` is `UMD_p` for every `p ∈ (1, ∞)`; and
+`UMD₂ (X) / 200 ≤ UMD_p (X) ≤ 100 p* UMD₂ (X)` for every `p ∈ (1, ∞)`. The Banach spaces are
+the complete normed spaces `E` renormed by an equivalent norm `nrm` (every Banach space is one,
+with `nrm = ‖·‖`). -/
+def HNVWExtrapolation : Prop :=
+  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E] (nrm : E → ℝ),
+    (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
+    (∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ x, a * ‖x‖ ≤ nrm x ∧ nrm x ≤ b * ‖x‖) →
+    ((∃ p₀ : ℝ, 1 < p₀ ∧ umdConstWith E nrm p₀ < ⊤) →
+        ∀ p : ℝ, 1 < p → umdConstWith E nrm p < ⊤) ∧
+      ∀ p : ℝ, 1 < p → umdConstWith E nrm 2 ≤ 200 * umdConstWith E nrm p ∧
+        umdConstWith E nrm p ≤ ENNReal.ofReal (100 * pStar p) * umdConstWith E nrm 2
+
+/-- **Proposition 2.7 (2)** (`prop:umd`), citing Randrianantoanina, *Non-commutative martingale
+transforms*, J. Funct. Anal. 194 (2002), Corollary 4.5, for the subspaces `S_q^{d×d}` of
+`S_q (ℓ₂ (ℕ))`: there is an absolute `C` with `UMD₂ (S_q^{d×d}) ≤ C (q* − 1)` for every
+`q ∈ (1, ∞)` and every `d`. (`S_q^{d×d}` is `Fin d → Fin d → ℝ` renormed by `‖·‖_{S_q}`.) -/
+def RandrianantoaninaSchattenUMD : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 1 < q → ∀ d : ℕ,
+    umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
+      ENNReal.ofReal (C * (pStar q - 1))
+
+/-- **Proposition 2.8** (`cs-prop2.8`), decoupling, citing Cox–Veraar, Electron. Commun. Probab.
+12 (2007), and HNVW I, Proposition 4.2.3: for a Banach space `(E, nrm)`, `p ∈ (1, ∞)` and a
+Rademacher martingale `dY_n = ε_n ξ_n` with predictable `ξ_n`, and `Ỹ_n = Σ_{k<n} ε̃_k ξ_k` with an
+independent copy `ε̃` of the signs,
+`UMD_p⁻¹ ‖Ỹ_n‖_{L^p} ≤ ‖Y_n‖_{L^p} ≤ UMD_p ‖Ỹ_n‖_{L^p}`. On the canonical space
+`{±1}^N × {±1}^N`. -/
+def CoxVeraarDecoupling : Prop :=
+  ∀ (E : Type) [NormedAddCommGroup E] [NormedSpace ℝ E] [CompleteSpace E] (nrm : E → ℝ),
+    (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
+    (∃ a b : ℝ, 0 < a ∧ 0 < b ∧ ∀ x, a * ‖x‖ ≤ nrm x ∧ nrm x ≤ b * ‖x‖) →
+    ∀ p : ℝ, 1 < p → ∀ (N : ℕ) (ξ : Fin N → (Fin N → Bool) → E), IsPredictable ξ → ∀ n : ℕ,
+      ENNReal.ofReal (avg (fun ε => avg fun ε' => nrm (mart (fun k _ => ξ k ε) n ε') ^ p) ^ (1 / p))
+          ≤ umdConstWith E nrm p * ENNReal.ofReal (lpNormWith nrm p (mart ξ n)) ∧
+        ENNReal.ofReal (lpNormWith nrm p (mart ξ n)) ≤ umdConstWith E nrm p *
+          ENNReal.ofReal
+            (avg (fun ε => avg fun ε' => nrm (mart (fun k _ => ξ k ε) n ε') ^ p) ^ (1 / p))
+
+/-- **Proposition 6.3** (`cs-prop6.3`), non-commutative Khintchine, citing Pisier–Xu,
+*Non-commutative `L^p`-spaces* (2003), Theorem 6.1: for `q ∈ [2, ∞)`, normal `d × d` matrices
+`x_i` and independent Rademacher `ε_i`,
+`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≤ (E ‖Σ ε_i x_i‖_{S_q}^q)^{1/q} ≲ √q ‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`,
+with an absolute constant. Stated with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of the paper's
+`‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`: the two are equal, since `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for
+`B = Σ x_i x_iᵀ ⪰ 0` and `q ≥ 2` (`schattenNorm_sqrt_sq` in `Morrey/Cassese/Square.lean`: fact (1),
+`‖A²‖_{S_{q/2}} = ‖A‖_{S_q}²`, applied to the positive semidefinite square root `A = B^{1/2}`). -/
+def PisierXuKhintchine : Prop :=
+  ∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
+    (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
+      √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) ≤
+          lpNormWith (schattenNorm (ENNReal.ofReal q)) q
+            (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ∧
+        lpNormWith (schattenNorm (ENNReal.ofReal q)) q
+            (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
+          C * √q * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
+
+/-- **Proposition 6.4** (`cs-prop6.4`), Kahane–Khintchine, citing HNVW, *Analysis in Banach
+spaces II* (2017), Theorem 6.2.4 (TeX lines 2312–2321): for `p, q ∈ (1, ∞)` there are constants
+`k_{p,q}` such that for every Banach space `X`, every `x₁, …, x_n ∈ X` and independent Rademacher
+`ε_i`, `k_{q,p}⁻¹ ‖Σ ε_i x_i‖_{L^q} ≤ ‖Σ ε_i x_i‖_{L^p} ≤ k_{p,q} ‖Σ ε_i x_i‖_{L^q}`. The paper's
+statement, with no bound on the constants: the hypercontractive bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
+that Remark 6.3 and the case `q = ∞` of Proposition 6.5 need is the separate hypothesis
+`KahaneKhintchineHypercontractive`, taken only by the statements whose proofs use it.
+
+Generality. It is stated for any seminorm `nrm` on a real vector space `E` (the hypotheses on
+`nrm` are the triangle inequality and absolute homogeneity, which give `nrm ≥ 0`), not only for
+Banach spaces. This follows from the Banach case: the `x_i` span a finite-dimensional subspace,
+whose quotient by the kernel of `nrm` is a finite-dimensional, hence complete, normed space in
+which the finite sums `Σ ε_i x_i` have the same norms. -/
+def KahaneKhintchine : Prop :=
+  ∃ κ : ℝ → ℝ → ℝ, (∀ p q, 0 < κ p q) ∧
+    ∀ p q : ℝ, 1 < p → 1 < q →
+    ∀ (E : Type) [AddCommGroup E] [Module ℝ E] (nrm : E → ℝ),
+      (∀ x y, nrm (x + y) ≤ nrm x + nrm y) → (∀ (c : ℝ) x, nrm (c • x) = |c| * nrm x) →
+      ∀ (n : ℕ) (x : Fin n → E),
+        (κ q p)⁻¹ * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
+            lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ∧
+          lpNormWith nrm p (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
+            κ p q * lpNormWith nrm q (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
+
+/-- Transference for the powers of the Beurling–Ahlfors transform, citing HNVW I,
+Corollary 5.7.6 ("the standard transference identity for homogeneous multipliers", proof of
+Proposition 7.2), in the direction used: `‖𝓑^k‖_{L^p (ℝ²)} ≤ ‖𝓑^k‖_{L^p_0 (𝕋²)}` for `k ≥ 1`,
+`p ∈ (1, ∞)`. -/
+def HNVWTransference : Prop :=
+  ∀ (k : ℕ) (p : ℝ), 1 ≤ k → 1 < p → beurlingPowNorm k p ≤ torusBeurlingPowNorm k p
+
+/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
+operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Theorem 7.1:
+`‖𝓑²‖_{L^p (ℝ²) → L^p (ℝ²)} > p* − 1` for `p ∈ (1, ∞)`, `p ≠ 2`. -/
+def DragicevicLowerBound : Prop :=
+  ∀ p : ℝ, 1 < p → p ≠ 2 → ENNReal.ofReal (pStar p - 1) < beurlingPowNorm 2 p
+
+-- END SHARED DEFINITIONS
+
+end Cassese
+
+namespace CasseseChallenge
+
+open Cassese
+
+/-- **Theorem 1.2.** For `p ∈ (1, ∞)` there is `m₀ (p)` such that for every `m ≥ m₀ (p)` there is a
+`p`-homogeneous, rank-one convex and nowhere quasiconvex integrand `f : ℝ^{2×m} → ℝ`.
+Unconditional: proved by the elementary route of the paper's Remark 4.5. -/
+theorem theorem1_2 {p : ℝ} (hp : 1 < p) :
+    ∃ m₀ : ℕ, ∀ m ≥ m₀, ∃ f : Matrix (Fin 2) (Fin m) ℝ → ℝ,
+      IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
+  sorry
+
+/-- **Theorem 1.3**, first assertion. There is a homogeneous quartic polynomial
+`P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. -/
+theorem theorem1_3_a :
+    ∃ P : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
+      IsHomogeneousPolynomial 4 P ∧ RankOneConvex P ∧ NowhereQuasiconvex P := by
+  sorry
+
+/-- **Theorem 1.3**, second assertion. For `p` sufficiently close to `4` there is a
+`p`-homogeneous integrand `P : ℝ^{2×3} → ℝ` which is rank-one convex but nowhere quasiconvex. -/
+theorem theorem1_3_b :
+    ∃ ε > 0, ∀ p : ℝ, |p - 4| < ε → ∃ f : Matrix (Fin 2) (Fin 3) ℝ → ℝ,
+      IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
+  sorry
+
+/-- **Theorem 1.4.** For `p ∈ (1, ∞)` there is `d₀ (p)` such that for every `d ≥ d₀ (p)` there is
+a conjugation- and transposition-invariant `p`-homogeneous integrand `f : ℝ^{d×d} → ℝ` which is
+rank-one convex but nowhere quasiconvex. Conditional on Proposition 2.7 (1), (2), Proposition 2.8
+and Propositions 6.3, 6.4. -/
+theorem theorem1_4 (hH : HNVWExtrapolation)
+    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
+    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
+    {p : ℝ} (hp : 1 < p) :
+    ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
+      IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
+        IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
+  sorry
+
+/-- **Theorem 1.4 at `p = 4`** (Section 6.4, with Corollary 6.3's `d₀ = 588`). For every
+`d ≥ 588` there is a conjugation- and transposition-invariant `4`-homogeneous integrand
+`f : ℝ^{d×d} → ℝ` which is rank-one convex but nowhere quasiconvex. Unconditional. -/
+theorem theorem1_4_four : ∀ d ≥ 588, ∃ f : Matrix (Fin d) (Fin d) ℝ → ℝ,
+    IsIntegrand f ∧ IsConjugationInvariant f ∧ IsTranspositionInvariant f ∧
+      IsPHomogeneous 4 f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
+  sorry
+
+/-- **Theorem 1.5.** For every `p ∈ (1, ∞) ∖ {2}` there is a `p`-homogeneous integrand
+`f : ℝ^{4×2} → ℝ` which is rank-one convex but nowhere quasiconvex. Conditional on transference
+and Dragičević's lower bound. -/
+theorem theorem1_5 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
+    (hp : 1 < p) (hp2 : p ≠ 2) :
+    ∃ f : Matrix (Fin 4) (Fin 2) ℝ → ℝ,
+      IsIntegrand f ∧ IsPHomogeneous p f ∧ RankOneConvex f ∧ NowhereQuasiconvex f := by
+  sorry
+
+/-- **Corollary 1.6.** There is a `1`-homogeneous rank-one convex integrand
+`f : ℝ^{4×4} → [0, ∞)` which is not quasiconvex at a matrix of rank `2`. Conditional as
+Theorem 1.5. -/
+theorem corollary1_6 (hT : HNVWTransference) (hD : DragicevicLowerBound) :
+    ∃ f : Matrix (Fin 4) (Fin 4) ℝ → ℝ, IsIntegrand f ∧ (∀ A, 0 ≤ f A) ∧ IsPHomogeneous 1 f ∧
+      RankOneConvex f ∧ ∃ A : Matrix (Fin 4) (Fin 4) ℝ, A.rank = 2 ∧ ¬ QuasiconvexAt f A := by
+  sorry
+
+/-- **Corollary 5.3.** For `K` sufficiently large and `δ > 0` sufficiently small, with
+`Λ = K/δ`, `q̂_{δ,Λ} (A) = q_{δ,Λ} (Aᵀ)` on `ℝ^{3×2}` is a homogeneous quartic polynomial which is
+globally rank-one convex and nowhere quasiconvex. -/
+theorem corollary5_3 :
+    ∃ K₀ : ℝ, ∀ K ≥ K₀, ∃ δ₀ > 0, ∀ δ : ℝ, 0 < δ → δ < δ₀ →
+      IsHomogeneousPolynomial 4 (qHat δ (K / δ)) ∧ RankOneConvex (qHat δ (K / δ)) ∧
+        NowhereQuasiconvex (qHat δ (K / δ)) := by
+  sorry
+
+/-- **The 2 × 2 landscape** (the remark after Theorem 1.3). For `d, m ≥ 2` with
+`(d, m) ≠ (2, 2)` there is a rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex. -/
+theorem morrey_landscape {d m : ℕ} (hd : 2 ≤ d)
+    (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
+    ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ, IsIntegrand f ∧ RankOneConvex f ∧ ¬ Quasiconvex f := by
+  sorry
+
+/-- **The homogeneous landscape** (after Theorem 1.3, and after Corollary 5.3). For `d, m ≥ 2`
+with `(d, m) ≠ (2, 2)` there is a `4`-homogeneous rank-one convex integrand on `ℝ^{d×m}` that is
+not quasiconvex at `0`: the homogeneous Morrey problem has a negative answer in every nontrivial
+dimension except possibly `2 × 2`. -/
+theorem homMorrey_landscape {d m : ℕ}
+    (hd : 2 ≤ d) (hm : 2 ≤ m) (h22 : ¬ (d = 2 ∧ m = 2)) :
+    ∃ f : Matrix (Fin d) (Fin m) ℝ → ℝ,
+      IsIntegrand f ∧ IsPHomogeneous 4 f ∧ RankOneConvex f ∧ ¬ QuasiconvexAt f 0 := by
+  sorry
+
+/-- A check of the definitions of Section 5.2: `projL3` maps into `𝓛₃`. -/
+theorem projL3_mem (A : Matrix (Fin 2) (Fin 3) ℝ) : projL3 A ∈ L3 := by
+  sorry
+
+end CasseseChallenge

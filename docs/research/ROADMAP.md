@@ -15,36 +15,50 @@ The all-level **finite-order** laminate statement is sufficient for the positive
 stronger than the Jensen property actually needed. Abandoning that stronger statement is allowed.
 Showing that a prescribed finite tree fails is not evidence that its gradient law violates Jensen.
 
-## 2. Immediate priorities
+## 2. Immediate priorities after the audit
 
-The most recent working direction is the counterexample search. The next session should begin
-with [EXPERIMENTS.md](EXPERIMENTS.md), its invalid-candidate exclusions, and the exact controls,
-not repeat the initial mold experiments.
+Start with [COMPLETION_AUDIT.md](COMPLETION_AUDIT.md), the new exact interfaces in
+[research/audit](../../research/audit/README.md), and the current [formal baseline](FORMAL_STATUS.md).
+The source inventory and exact controls have been checked; repeat them after relevant changes,
+not as a substitute for advancing the unresolved construction.
 
 | Priority | Deliverable | Acceptance / stop rule |
 | --- | --- | --- |
-| 1 | Replay the archived exact and floating-output checks; preserve the ledger's status distinctions. | All supported checks pass, inputs match their hashes, and failures are investigated before interpreting a new result. This checks the pipeline, not Morrey. |
-| 2 | Design one changed search hypothesis outside the already tested degeneracies. | State what mathematical freedom is new, how global rank-one convexity will be certified, the genuine gradient parameterization and a finite run budget. Do not rerun a rejected family solely with more starts. |
-| 3 | Escalate any strict negative candidate immediately to independent exact or interval verification. | Both global convexity and the negative integral survive validation; otherwise archive a rejection with its witness. |
-| 4 | Develop reusable analytic/Lean bridges independently of search outcomes. | Prove a clearly stated conditional implication without introducing an unproved global feasibility hypothesis as a theorem. |
-| 5 | Seek independent mathematical review of the structural hand proofs and any promising global construction. | Audit assumptions, limits, boundary cases and dimensional conventions before claiming a new result. Novelty review is separate. |
+| 1 | Integrate range-sensitive base recovery and boundary Gram handling into a new discovery driver. | Use the exact quadratic diagnostic on reconstructed rational candidates. Monitor discarded linear components during floating exploration; do not silently discard tiny positive curvature. Permit singular certificates or a justified vanishing-margin schedule. |
+| 2 | Add weighted-Gram discovery and rational certificate extraction, using the existing norm-basis builder and verifier. | Produce a coefficient identity with exact nonnegative square weights/PSD proof. Test the same actual-gradient inputs at orders zero and one with a recorded finite budget; do not interpret a null result as class exclusion. |
+| 3 | If weighted discovery is impractical, try strict local-ball LH discovery with the explicit global radial tail. | Certify the ball, a buffer around every witness gradient, the tail bound and a surviving negative gap. Merely local RC is insufficient. |
+| 4 | Independently evaluate and formalize any strict negative candidate immediately. | Same rational integrand, exact global LH certificate, actual planar test map and a strict negative integral. Reuse the existing periodic Lipschitz/domain equivalences. |
+| 5 | On the positive route, prove universal exact Hessian-certificate feasibility or an equivalent all-gradient inequality. | All degrees and all admissible fields are covered. The radial-moment lemma supplies the subsequent compactness; isolated certificates are insufficient. |
 
-There is no justified completion date or finite degree/grid cutoff. A bounded search can end;
-the unrestricted mathematical question remains open if it finds nothing.
+The current package implements **verification**, basis enumeration and exact base diagnostics.
+It does not implement a weighted-Gram solver, automatic rational extraction or an exhaustive
+search. Those are concrete next engineering tasks, not completed capabilities.
+
+There is no justified completion date or finite degree/grid/order cutoff. A bounded search can
+end; the unrestricted mathematical question remains open if it finds nothing. The P₂ all-field
+inequality in [STRUCTURAL_AUDIT.md](STRUCTURAL_AUDIT.md) is a useful subordinate benchmark with
+a meaningful analytic endpoint. It must not displace the unrestricted goal.
 
 ## 3. Negative route: candidate to theorem
 
 ### N1 — Search in a class with a global certificate route
 
-The polynomial reduction in [H07](LEDGER.md#global-reductions) supplies a hand-proof route to
-rational polynomial and rational dyadic witnesses if a counterexample exists. It gives no
-uniform degree or mesh bound. A Gram/SOS Legendre–Hadamard ansatz is sufficient but incomplete;
-failure inside it is not failure of the unrestricted polynomial search.
+The polynomial/dyadic reduction H07 and the new [norm-multiplier proof](GLOBAL_CERTIFICATES.md)
+give a complete negative-witness certificate hierarchy after a strict radial perturbation.
+Enumerating polynomial degree, mesh, rational heights and multiplier order can detect a
+counterexample if one exists. No finite bound or positive termination is supplied. A fixed
+unweighted SOS class or a fixed positive Gram floor is still restrictive.
 
-Useful changes of hypothesis include a polynomial class outside the current SOS representation,
-a different anisotropic family with a rigorous global curvature argument, or a structured
-gradient geometry not present in the current Fourier/FE trials. Each proposal must explain why
-it avoids the [closed routes](#6-routes-that-require-a-new-hypothesis-before-reopening).
+For degree at most `2m`, the exact format is
+`(Nx Na Nb)^k [F_P − δ Nx^(m−1)NaNb] = Σ q_j²`, with rational `δ>0` and the homogenized LH
+form `F_P`. The [verifier](../../research/audit/sphere_certificate.py) already checks this
+identity and actual rational periodic PL witnesses. A strict local-on-ball certificate plus
+the explicit radial extension is another valid discovery route.
+
+Each finite campaign must state which certificate freedom changes, its actual-gradient
+parameterization, artificial margins/penalties and budget. Remove permanent covariance
+exclusions and let artificial margins decrease in any completeness claim. Alternating
+optimization remains local even when every SDP subproblem is solved correctly.
 
 **Exit:** save explicit integrand coefficients, base matrix, domain, actual nodal/Fourier map,
 normalization and a strict negative candidate gap. A raw measure with the correct mean and
@@ -74,11 +88,13 @@ are necessary checks, not a substitute for constructing the map.
 zero, after every approximation and rounding error is included. Save a second evaluator that
 does not reuse the discovery code's derivative assembly.
 
-The source already contains [Sverak.lemma1_witness](../../Morrey/Sverak/Lemma1.lean), which converts
-a smooth periodic strict violation for a continuous integrand into a smooth compactly supported
-witness, in general dimensions. Reuse it for a smooth planar candidate. For a periodic FE
-witness, prove the required smoothing with an error smaller than the gap, or supply a direct
-Lipschitz/cutoff bridge. The existing smooth result does not discharge that step automatically.
+The source now contains the general **periodic Lipschitz** equivalence
+[External.Rindler.quasiconvexAtOn_iff_periodic](../../Morrey/Common/External/Rindler/Lemmas.lean),
+and the bounded-open-domain equivalence in the same file. For a polynomial FE candidate,
+instantiate lower semicontinuity/local boundedness, the actual periodic Lipschitz map and its
+integral; a new general smoothing/cutoff proof is unnecessary. The older smooth witness lemma
+[Sverak.lemma1_witness](../../Morrey/Sverak/Lemma1.lean) remains an alternative when an explicit
+smooth compactly supported witness is wanted.
 
 ### N4 — Formalize and independently review the final statement
 
@@ -96,13 +112,20 @@ claim as `def ... : Prop` is not completion.
 ### P1 — Select a sufficient global target
 
 Choose an all-gradient Jensen inequality, a suitably controlled limiting laminate construction,
-or the all-level finite-order statement. A positive Hessian-measure representation is another
-possible target. State the quantifiers over base matrices, integrands, maps and scales explicitly.
-If taking limits, specify support bounds, tightness and the convergence that passes the energy.
+or the stronger all-level finite-order statement. Another sufficient target is: for every
+compact actual planar gradient law and every degree `d`, construct an exact positive
+rank-one-Hessian representation of its Jensen functional on polynomials of degree at most `d`.
+State the quantifiers over bases, integrands, maps and degrees explicitly.
 
-**Exit:** a precise theorem and a written implication to the planar Morrey statement. The
-conic-duality reductions [H10–H12](LEDGER.md#global-reductions) reorganize this target; they do not
-produce the positive representing measure.
+The [radial-moment theorem](GLOBAL_CERTIFICATES.md#4-correct-compactness-theorem-for-positive-certificates)
+shows that these finite-degree positive measures need **no additional inter-degree consistency
+or common support assumption**. Fixed mass and radial moments supply tightness, tail control
+and a limit supported in the convex hull of the law. For arbitrary approximate certificates,
+quantitative error and moment control would still be needed.
+
+**Exit:** a precise universal feasibility theorem and its implication to the planar Morrey
+statement. The conic-duality reductions H10–H11 and compactness theorem A04 do not construct
+the positive measures; existence remains P2.
 
 ### P2 — Prove the central global existence or inequality
 
@@ -119,10 +142,11 @@ certificates does not close this gate.
 ### P3 — Complete the analytic reduction in the appropriate definitions
 
 For a laminate approach, prove Jensen for the project's `IsLaminate`, translation by a base
-matrix, the needed regularity of finite-valued RC functions, periodic Lipschitz approximation
-by dyadic piecewise affine maps with controlled gradients, and convergence of energies. A
-weak-limit approach needs its own limiting Jensen theorem. Reuse the existing smooth periodic
-cutoff result for the direction it proves.
+matrix, controlled dyadic interpolation of periodic maps and energy convergence. Reuse the
+already available finite-valued RC local Lipschitz theorem and periodic Lipschitz/domain
+bridges (F13–F14). A weak-limit/Hessian-measure approach instead assembles its limiting Jensen
+theorem and the regularization/definition bridges it needs. The remaining work is integration
+with the chosen universal hypothesis, not a new proof of every general analytic lemma.
 
 **Exit:** a formal implication from the selected universal hypothesis to
 `Pedregal.Theorem1_1_part2`. This work can proceed independently; it must continue to display
@@ -142,7 +166,7 @@ in an auxiliary file or imported axiom may stand in for the central theorem.
 | Universal level-one mold | Port the exact 48 leaf tags to `Pedregal.TriMold 1` and check all constraints in Lean. | Corrects the false B/B₁ conjectures; remains level one. |
 | Uniform-weight obstruction at higher levels | Formalize the finite determinant/translation reduction and the refinement step. | Excludes uniform weights for certain data; does not exclude nonuniform fixed points. |
 | Structural quartic lemmas | Independently audit and formalize the flat-line, rank-one-null, orbit and cone arguments, preserving hypotheses. | Gives subclasses or obstructions, without classifying all RC integrands. |
-| Cassese formalization | Complete the independent `2 × 3` paper audit on its own branch and connect its definitions. | Higher-dimensional counterexamples do not restrict to planar counterexamples automatically. |
+| Reuse Cassese infrastructure | Instantiate the current main-branch regularity, periodic/domain, polynomial and minor tools in the final planar construction. Preserve the named hypotheses of conditional nonplanar results. | Cassese's quartic is now formalized in `2 × 3`; it does not restrict automatically to a planar counterexample. |
 
 ## 6. Routes that require a new hypothesis before reopening
 
@@ -156,6 +180,7 @@ in an auxiliary file or imported axiom may stand in for the central theorem.
 | Nonpolyconvexity plus compatible minors produces a gradient witness | False; explicit moment witnesses show the gap. | A realization theorem or an actual compatible map. |
 | Quadratic bivector-norm affine planar pullbacks | Hand argument makes this class polyconvex. | A construction outside the stated form, or a flaw found in that argument. |
 | Pure curvature sampling as a certificate | Earlier negative candidates failed exact LH tests. | A global exact/interval certificate. |
+| Fixed positive Gram margin as an exhaustive SOS search | P₂ has exact LH-SOS but zero curvature at a nonzero feature vector. | Boundary-capable certificates or a justified margin schedule; no fixed-margin completeness claim. |
 | More unstructured starts in the same quartic wells | Latest trials found flat/determinant-square/zero-integrand degeneracies. | Changed variables, geometry, objective or certificate class, with an explicit budget. |
 
 The authoritative result and evidence for each disposition are in [LEDGER.md](LEDGER.md).

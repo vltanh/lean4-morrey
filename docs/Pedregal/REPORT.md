@@ -278,6 +278,14 @@ on `ℝ^{2×4}` (A. Agazzi, G. Bruno, A. Guerra, F. Pasqualotto,
 gradients of maps `ℝ^m → ℝ²`. If they are correct, the claim of v1–v2 is false in dimension
 `N ≥ 3`, and the question that v5 leaves open there is settled negatively.
 
+Cassese's paper is now formalized in this repository ([`docs/Cassese/`](../Cassese/README.md)),
+and its `2 × 3` example is proved there without assumptions: a quartic polynomial on `ℝ^{2×3}` that
+is rank-one convex and nowhere quasiconvex ([`CasseseChallenge.theorem1_3_a`](../../palomar/Cassese/Challenge.lean#L481)), and, with the
+monotonicity in the dimensions, a rank-one convex integrand that is not quasiconvex on every
+`ℝ^{2×m}` with `m ≥ 3` ([`CasseseChallenge.morrey_landscape`](../../palomar/Cassese/Challenge.lean#L542)). So the claim of v1–v2 for `N ≥ 3` is
+false, in Cassese's definitions (Lipschitz test maps on the unit cube). The claim of v1–v2 itself is
+not stated in Lean here; the `2 × 2` claim of v5 is untouched.
+
 ### E18. Misprints
 
 "counter-examble" (line 150), "Brower" (lines 176, 775), "subleties" (line 197), "full collection

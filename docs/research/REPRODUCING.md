@@ -165,3 +165,23 @@ The curated Markdown tables and local links, Python syntax, source inventory and
 Challenge-definition synchronization were checked. Lean compilation, axiom/route audits and
 Comparator were not run locally for this documentation-and-research import; no Lean file changes
 are part of it.
+
+## 6. Completion-audit checks
+
+The new exact controls are separate from the 139 immutable historical payloads. Run:
+
+```sh
+python3 research/verify_audit.py --out /tmp/morrey-audit-check
+```
+
+The wrapper copies the audit package to a temporary directory, runs six exact commands,
+checks that regenerated outputs match their saved bytes, and records logs and input hashes.
+It requires SymPy for the P₂ SOS and Schur-expansion identities; the certificate and base
+checks use only the standard library. No optimization is run.
+
+The [audit package](../../research/audit/README.md) documents both certificate formats and the
+quadratic regression controls. [Recorded verification](../../research/verification/completion_audit/results.json)
+contains six passing commands, including both positive certificate formats and six malformed
+certificate rejections. These checks do not prove the unresolved all-field inequality, discover
+a counterexample, or run Lean. Upstream Lean CI status is pinned in
+[FORMAL_STATUS.md](FORMAL_STATUS.md).

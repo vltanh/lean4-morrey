@@ -1,0 +1,48 @@
+{
+  "integrand": "(a*d - 2*b*c)**2 + 2*(b**2 + c**2 + d**2)**2",
+  "squares": [
+    [
+      2,
+      "alpha*d - 2*b*gamma - 2*beta*c"
+    ],
+    [
+      2,
+      "a*delta - 2*b*gamma - 2*beta*c"
+    ],
+    [
+      6,
+      "b*delta + beta*d"
+    ],
+    [
+      2,
+      "-b*delta + beta*d"
+    ],
+    [
+      6,
+      "c*delta + d*gamma"
+    ],
+    [
+      2,
+      "-c*delta + d*gamma"
+    ],
+    [
+      12,
+      "b*beta + c*gamma + d*delta"
+    ],
+    [
+      12,
+      "d*delta"
+    ],
+    [
+      12,
+      "c*gamma"
+    ],
+    [
+      12,
+      "b*beta"
+    ]
+  ],
+  "identity_remainder": "8*(a*d - b*c)*(alpha*delta - beta*gamma)",
+  "rank_one_substitution_identity": true,
+  "scope": "Global rank-one convexity at beta=2; no quasiconvexity assertion; not Lean"
+}

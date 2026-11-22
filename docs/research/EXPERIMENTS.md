@@ -1,5 +1,12 @@
 # Counterexample searches: experiments and verdicts
 
+**Completion-audit update:** the archived runs remain unchanged. The
+[pipeline audit](PIPELINE_AUDIT.md) identifies cutoff-based base minimization and fixed Gram
+margins as search restrictions; it does not establish a missed saved counterexample.
+New exact checks and a complete certificate hierarchy are indexed in
+[COMPLETION_AUDIT.md](COMPLETION_AUDIT.md).
+
+
 Snapshot: 21 November 2026. **No validated counterexample in `2 × 2` was found.**
 This page consolidates the latest search round; the [research ledger](LEDGER.md)
 records the earlier routes and their corrections. All scripts, fields, solver
@@ -45,9 +52,10 @@ integral calculation is exact. It requires only Python's standard library.
 
 ## 2. The sharp `Pβ` family: 190 starts
 
-All runs use `β = 2`. The base matrix `F` is minimized analytically over all four
-entries: for a fixed mean-zero gradient field the quartic gap is quadratic in
-`F`. A pseudoinverse is used near singular base systems. The field normalization
+All runs use `β = 2`. For a fixed mean-zero gradient field the quartic gap is quadratic in
+all four entries of the base matrix `F`. The implementation eliminates them with a cutoff
+pseudoinverse; [A01](LEDGER.md#completion-audit) explains why discarded directions can matter.
+The selected high-precision checks below validate those saved fields, not every discarded direction. The field normalization
 is `mean(b²+c²+d²) = 1`, which prevents collapse onto the flat `E11` direction.
 
 | Search | Starts | Lowest recorded gap |

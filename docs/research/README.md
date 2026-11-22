@@ -8,6 +8,11 @@ Start with these documents:
 
 | Document | Purpose |
 | --- | --- |
+| [Completion audit](COMPLETION_AUDIT.md) | New findings, numerical blind spots and the strongest remaining global routes. |
+| [Global certificates](GLOBAL_CERTIFICATES.md) | Complete negative-witness hierarchy, local-to-global stabilization and positive-certificate compactness. |
+| [Structural audit](STRUCTURAL_AUDIT.md) | Rechecked exclusions and the explicit all-field P₂ benchmark. |
+| [Pipeline audit](PIPELINE_AUDIT.md) | Affected optimizer functions, certificate restrictions and unfinished implementation. |
+| [Audit checkers](../../research/audit/README.md) | New exact rational certificate interfaces and regression controls. |
 | [Ledger](LEDGER.md) | Current verdict for each result, conjecture, obstruction and search; stable research IDs and evidence links. |
 | [Roadmap](ROADMAP.md) | The missing global theorem or counterexample, acceptance gates, priorities and stopping rules. |
 | [Formal status](FORMAL_STATUS.md) | What is actually in the inspected Lean source, including reusable boundary-conversion infrastructure. |
@@ -49,7 +54,7 @@ automatically a counterexample to quasiconvexity. Neither a higher-dimensional c
 nor the failure of a particular mold settles the planar question.
 
 This consolidation uses the repository at commit
-`d0471a6f174c8d5851398ec8069cd5bb2defbb54` and the recovered research artifacts. It adds documentation,
+`cde348ba320b65d902c9f0f782f392e932ba507c` after the Cassese merge and the recovered research artifacts. It adds documentation,
 research code, data and checkers; it makes no changes to Lean theorem statements or proof bodies.
 The earlier [Pedregal report](../Pedregal/REPORT.md) remains the detailed audit of that paper.
 

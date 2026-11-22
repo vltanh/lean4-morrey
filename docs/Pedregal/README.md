@@ -4,7 +4,7 @@ One of the papers on Morrey's problem formalized in this repository; the
 [overview](../../README.md) describes the problem, the state of each case and how the papers relate.
 
 Morrey's problem asks whether every rank-one convex function `ψ : ℝ^{m×N} → ℝ` is quasiconvex.
-It is false for `m ≥ 3` (Šverák 1992, [formalized here](../../Morrey/Sverak)) and open for `2 × 2`
+It is false for `m ≥ 3` (Šverák 1992, [formalized here](../Sverak/README.md)) and open for `2 × 2`
 matrices. P. Pedregal,
 [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026), claims a proof for
 `2 × 2`: every gradient measure of a periodic piecewise affine map `ℝ² → ℝ²` is a laminate,
@@ -71,7 +71,7 @@ for random instances and, for a generic instance at `l = 1`, for every mold
 | E14 | the summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5, is false |
 | E15 | the gaps in the proof of Proposition 7.1: the dimension count, the positivity, the starting barycenter, the averaging over translates |
 | E16 | Theorem 1.1 (2) from (1), "a standard density argument", is not given |
-| E17 | later work: counterexamples claimed in 2026 preprints on `ℝ^{2×3}` and `ℝ^{2×4}` would, if correct, contradict the claim of v1–v2 for two-component maps in dimension `N ≥ 3` |
+| E17 | later work: the claim of v1–v2 for two-component maps in dimension `N ≥ 3` is false; Cassese's `2 × 3` counterexample (2026) is proved in this repository |
 | E4 | Theorem 1.2's "arbitrary function" needs to be measurable |
 
 18 findings in all, with the misprints: see [REPORT.md](REPORT.md). Every proof of a correct

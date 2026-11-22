@@ -38,7 +38,10 @@ DOCS = ['README.md',
         'docs/Pedregal/CREDITS.md',
         'docs/Sverak/README.md',
         'docs/Sverak/REPORT.md',
-        'docs/Sverak/CREDITS.md']
+        'docs/Sverak/CREDITS.md',
+        'docs/Cassese/README.md',
+        'docs/Cassese/REPORT.md',
+        'docs/Cassese/CREDITS.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['External.Kakutani', 'Matrix']
 # With several papers in one repository (references/multi-paper.md): the namespaces of the documents
@@ -53,7 +56,7 @@ MODULE_ROOTS = ('Morrey', 'Pedregal', 'Sverak', 'Cassese')
 # The module whose declarations win when a name is declared in several modules. With several
 # papers, a tuple of modules, one per paper (each Challenge repeats its own paper's definitions):
 # ('PaperA.Challenge', 'PaperB.Challenge').
-PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge')
+PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge', 'Cassese.Challenge')
 # The source directory of each module root whose `lean_lib` has a `srcDir` other than the
 # repository root.
 SOURCE_DIRS = {'Pedregal': 'palomar', 'Sverak': 'palomar', 'Cassese': 'palomar'}
