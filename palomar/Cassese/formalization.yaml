@@ -1,0 +1,227 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Cassese 2026: Morrey's problem in R^{2 x m}, in Lean"
+  description: >-
+    Partly conditional. A Lean 4 formalization of G. Cassese, "A solution to Morrey's problem in
+    R^{2 x m}" (arXiv:2608.03488v3, 2026): rank-one convex integrands on 2 x m matrices, m >= 3,
+    that are nowhere quasiconvex, so that with Šverák's theorem only 2 x 2 remains open; and
+    p-homogeneous examples answering Kirchheim and Kristensen's homogeneous problem.
+
+
+    Every result of the paper is proved. Theorem 1.2 (every p, 2 x m), Theorem 1.3 (a quartic on
+    2 x 3, and p near 4), Corollary 5.3 (its transpose on 3 x 2), the landscape theorems and
+    Theorem 1.4 at p = 4 (d >= 588) are unconditional. Theorem 1.4 for general p is conditional on
+    UMD extrapolation, Randrianantoanina's Schatten-class UMD bound, Cox-Veraar decoupling, the
+    Pisier-Xu and Kahane-Khintchine inequalities; Theorem 1.5 and Corollary 1.6 on transference
+    and Dragičević's lower bound for powers of the Beurling-Ahlfors transform: results out of
+    reach of Lean today, each a named hypothesis. Burkholder's inequality, Burkholder's functions,
+    Dacorogna's formula for the quasiconvex envelope, Kristensen's smoothing and the textbook facts
+    the paper cites are proved. The paper is one of three on Morrey's problem formalized in this
+    repository, each its own submission.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.AP", "math.FA", "math.PR"]
+  msc2020: ["49J45", "26B25", "60G42", "46B09", "68V15"]
+
+sources:
+  - title: "A solution to Morrey's problem in R^{2 x m}"
+    authors:
+      - "Gabriele Cassese"
+    id: "arXiv:2608.03488v3"
+    type: "preprint"
+    location: "https://arxiv.org/abs/2608.03488v3"
+    relationship: "formalizes"
+    note: >-
+      Formalized against the TeX source of v3 (16 September 2026). Every numbered result is
+      proved; Theorem 1.2 by the route of the paper's Remark 4.5 (its UMD route is formalized too,
+      conditionally); Theorem 1.4 for general p, Theorem 1.5 and Corollary 1.6 conditional on named
+      hypotheses (see status.scope).
+    author_endorsement: "not-contacted"
+  - title: "Rank-one convexity does not imply quasiconvexity"
+    authors:
+      - "Vladimír Šverák"
+    id: "Proc. Roy. Soc. Edinburgh Sect. A 120 (1992), 185-189"
+    type: "article"
+    relationship: "background"
+    note: "Used by the landscape theorems; formalized in this repository (palomar/Sverak) and imported."
+  - title: "Sharp martingale and semimartingale inequalities (Burkholder's inequality, Thms 3.5, 8.6)"
+    authors:
+      - "Adam Osękowski"
+    id: "Monografie Matematyczne 72, Birkhäuser (2012)"
+    type: "book"
+    relationship: "background"
+    note: "Burkholder's inequality and square function inequality, proved in Morrey/Common/External/Burkholder."
+  - title: "Direct Methods in the Calculus of Variations (Thms 5.20, 5.25, 6.9; Props 5.11, 5.13)"
+    authors:
+      - "Bernard Dacorogna"
+    id: "Applied Mathematical Sciences 78, Springer, 2nd ed. (2008)"
+    type: "book"
+    relationship: "background"
+    note: "Cited results proved in Morrey/Common/External (Dacorogna, KinderlehrerPedregal, Rindler); the book was not consulted."
+  - title: "On the non-locality of quasiconvexity"
+    authors:
+      - "Jan Kristensen"
+    id: "Ann. Inst. H. Poincaré Anal. Non Linéaire 16 (1999), 1-13"
+    type: "article"
+    location: "https://www.numdam.org/item/AIHPC_1999__16_1_1_0/"
+    relationship: "background"
+    note: "Proposition 2's smoothing, used by Corollary 5.2; proved in Morrey/Common/External/Kristensen."
+
+related_formalizations:
+  - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
+    relationship: "independent"
+    note: >-
+      The author's own Lean formalization of Theorem 1.2 and of Theorem 1.3 at p = 4, made with an
+      AI system and released without a license. Not consulted: this formalization was written
+      independently, and covers the whole paper (Theorems 1.4, 1.5, Corollaries 1.6, 5.2-5.4,
+      Sections 6 and 7) and the cited results its proofs use.
+  - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
+    relationship: "independent"
+    note: "Conti, Dolzmann and Dondl's Lean formalization of a 3 x 3 example; not consulted; not a formalization of this paper."
+  - id: "palomar/Sverak in this repository"
+    relationship: "other"
+    note: "The formalization of Šverák (1992), imported by this library (Šverák's example, the landscape theorems)."
+  - id: "palomar/Pedregal in this repository"
+    relationship: "other"
+    note: "The audit of Pedregal's claimed proof for 2 x 2, in the same repository."
+
+status:
+  scope: >-
+    Partly conditional. Proved without assumptions: Theorems 1.2 and 1.3, Corollaries 5.2-5.4,
+    the landscape theorems (only 2 x 2 is left; at p = 4 the homogeneous problem fails in every
+    size above 2 x 2), Theorem 1.4 at p = 4 for d >= 588, and every result of Sections 2, 4, 5 and
+    of Sections 6-7 that does not use the hypotheses below. Conditional, on named hypotheses
+    stated in Morrey/Cassese/Defs.lean: Theorem 1.4 for general p and Propositions 6.2, 6.5,
+    eq. (31), Remark 6.3 (HNVW extrapolation, Randrianantoanina, Cox-Veraar, Pisier-Xu,
+    Kahane-Khintchine, and for Remark 6.3 and Prop 6.5 at q = infinity the hypercontractive
+    bound); Theorem 1.5, Corollary 1.6, Theorem 7.1, Corollary 7.2 and the lower bound of
+    Proposition 7.2 (HNVW transference, Dragičević); Theorem 1.2 by the paper's own UMD route
+    (Pisier, Yaroslavtsev, HNVW extrapolation). Not formalized: remarks and claims the paper
+    asserts without proof (the p > 2 variant of Corollary 1.6, Remark 6.1, lines 2521-2549).
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-5-5", "claude-haiku-5-5"]
+      framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
+      tool_setup: >-
+        The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
+        020f253, with its multi-paper reference written during this round, commits d385092 and
+        b04ce21); the main session and 28 sub-agents on this paper (an inventory, a statement
+        writer, 2 statement reviewers and a fixer, 8 provers and 4 second-wave provers, an
+        integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
+        checker), two of which forked helpers; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+      cost:
+        wall_time: "8.3 h elapsed for the whole second round (this paper, Šverák's and the reorganization, in parallel); about 21 h of sub-agent working time on this paper, plus forked helpers"
+        spend_usd: "not tracked"
+        hardware: "local machine (20 cores, 62 GB RAM) and API"
+      prompting_notes: >-
+        The user asked for the paper to be formalized in the repository that held the audit of
+        Pedregal's paper, independently of the author's Lean code, and chose to build every cited
+        result that is large but feasible ("All").
+  spend_usd: "not tracked"
+  notes: >-
+    The AI system wrote the code and the documents at the request of the author. No person has
+    reviewed the proofs. Independent AI agents checked the statements against the TeX source
+    twice, compared the formal proofs with the paper's (three reviewers, one per group of
+    sections), and checked the report. See docs/Cassese/CREDITS.md.
+
+fidelity:
+  divergences: >-
+    Statements: no statement of the paper was changed. Readings: Definition 2.1 with Lipschitz
+    test maps vanishing outside the open cube and the requirement that the integral exist
+    (automatic for integrands); "integrand" = lower semicontinuous and locally bounded;
+    prelaminates with repeated atoms (E10); Rademacher martingales on the canonical sign space;
+    thresholds in [0, infinity]; Banach spaces as complete normed spaces with an equivalent norm;
+    Hessian quasiconvexity (undefined in the paper) with smooth compactly supported test maps;
+    Theorem 1.3 (b) as "there is eps > 0 with |p - 4| < eps"; Corollaries 5.3, 5.4 with Lambda = K/delta;
+    Proposition 6.5 at q = infinity with one alpha for every p; Theorem 1.4 with q = 4. Departures
+    from the paper's proofs: Theorem 1.2 by the route of Remark 4.5 (approved; the UMD route is
+    formalized conditionally); Theorem 1.3 (b) with explicit constants uniform in p (gap E4);
+    Proposition 2.5 "<=" by Proposition 2.4's argument (E10); Proposition 5.1's skipped step
+    supplied (E9); Proposition 7.2 for trigonometric test maps and Fejér means (representation,
+    E28); Corollary 1.6's rank-one convexity by second differences (no distributional second
+    derivatives in Mathlib). Cited results are proved by their sources' standard arguments, with
+    the differences listed in docs/Cassese/REPORT.md, Section 7.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "none"
+  notes: >-
+    No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
+    TeX source (two reviewers), compared the formal proofs with the paper's (three reviewers), and
+    checked the report against the sources.
+
+alignment:
+  namespace: "CasseseChallenge"
+  statements:
+    - source: "Theorem 1.2"
+      lean: "CasseseChallenge.theorem1_2"
+      module: "Cassese.Challenge"
+      status: "proved (by the route of Remark 4.5)"
+      note: "Every p > 1: a p-homogeneous, rank-one convex, nowhere quasiconvex integrand on R^{2 x m} for m >= m0(p)."
+    - source: "Theorem 1.3, first assertion"
+      lean: "CasseseChallenge.theorem1_3_a"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "A homogeneous quartic polynomial on R^{2 x 3}, rank-one convex and nowhere quasiconvex."
+    - source: "Theorem 1.3, second assertion"
+      lean: "CasseseChallenge.theorem1_3_b"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "For p near 4, a p-homogeneous example on R^{2 x 3}."
+    - source: "Theorem 1.4"
+      lean: "CasseseChallenge.theorem1_4"
+      module: "Cassese.Challenge"
+      status: "proved (conditional on named hypotheses)"
+      note: "Every p > 1: conjugation- and transposition-invariant examples on R^{d x d}, d >= d0(p); assumes HNVW extrapolation, Randrianantoanina, Cox-Veraar, Pisier-Xu, Kahane-Khintchine."
+    - source: "Theorem 1.4 at p = 4 (Section 6.4)"
+      lean: "CasseseChallenge.theorem1_4_four"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "At p = 4, for every d >= 588, unconditionally."
+    - source: "Theorem 1.5"
+      lean: "CasseseChallenge.theorem1_5"
+      module: "Cassese.Challenge"
+      status: "proved (conditional on named hypotheses)"
+      note: "Every p != 2: an example on R^{4 x 2}; assumes HNVW transference and Dragičević's lower bound."
+    - source: "Corollary 1.6"
+      lean: "CasseseChallenge.corollary1_6"
+      module: "Cassese.Challenge"
+      status: "proved (conditional on named hypotheses)"
+      note: "A nonnegative 1-homogeneous rank-one convex integrand on R^{4 x 4}, not quasiconvex at a matrix of rank two; same hypotheses as Theorem 1.5."
+    - source: "Corollary 5.3"
+      lean: "CasseseChallenge.corollary5_3"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "The transposed quartic on R^{3 x 2}: rank-one convex and nowhere quasiconvex."
+    - source: "Section 1, lines 251-254"
+      lean: "CasseseChallenge.morrey_landscape"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "With Šverák's theorem: in every d x m with d, m >= 2 except 2 x 2, some rank-one convex integrand is not quasiconvex."
+    - source: "Section 1, lines 254-256"
+      lean: "CasseseChallenge.homMorrey_landscape"
+      module: "Cassese.Challenge"
+      status: "proved"
+      note: "At p = 4 the homogeneous problem fails in every size above 2 x 2."
+    - source: "Section 5 (the projection onto L3)"
+      lean: "CasseseChallenge.projL3_mem"
+      module: "Cassese.Challenge"
+      status: "proved (check of the definitions)"
+      note: "The explicit projection maps into L3."
+
+acknowledgements: >-
+  Mathlib; Lean's Comparator, NanoDa and con-ron kernels; Palomar's validation scripts; Numdam
+  (the scanned copy of Kristensen 1999).

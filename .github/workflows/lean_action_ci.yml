@@ -49,4 +49,4 @@ jobs:
           python3 scripts/check_md_tables.py README.md
           docs/Pedregal/README.md docs/Pedregal/REPORT.md docs/Pedregal/CREDITS.md
           docs/Sverak/README.md docs/Sverak/REPORT.md docs/Sverak/CREDITS.md
-          docs/Cassese/README.md
+          docs/Cassese/README.md docs/Cassese/REPORT.md docs/Cassese/CREDITS.md

@@ -39,7 +39,9 @@ DOCS = ['README.md',
         'docs/Sverak/README.md',
         'docs/Sverak/REPORT.md',
         'docs/Sverak/CREDITS.md',
-        'docs/Cassese/README.md']
+        'docs/Cassese/README.md',
+        'docs/Cassese/REPORT.md',
+        'docs/Cassese/CREDITS.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['External.Kakutani', 'Matrix']
 # With several papers in one repository (references/multi-paper.md): the namespaces of the documents
