@@ -290,6 +290,48 @@ general p>2 polyconvexity
 or Morrey theorem. No novelty claim.
 
 
+**I16 — exact all-quartic shear and curvature bounds (23 Nov 2026).**
+For every invariant quartic polynomial
+\(F=a s^2+b sd+c d^2\), global RC
+implies \(a\ge0\), \(|b|\le4a\),
+and if a>0,
+\(c\ge3b^2/(8a)-2a\).
+These follow by shears at I,D and
+global convexity of the diagonal slice;
+the [exact proof](IWANIEC_MORREY_QUARTIC_SHEAR_BOUND.md)
+records all equality/boundary cases.
+Together with the previously recorded
+positive quartic decomposition,
+ALL globally nonnegative RC quartics
+with \(|b|\ge2a\) are **globally PC**;
+raising to powers yields a class
+for EVERY p≥4. This is a
+global infinite-parameter subclass,
+not every quartic or p>2 F.
+Symbolic coefficient identities
+are reproducible in
+[the checker](../../research/audit/iwaniec_quartic_shear_bound_exact.py).
+No Lean/build/priority claim.
+
+**I17 — global quadratic possible Jensen deficit (23 Nov 2026).**
+For every nonnegative isotropic globally
+RC p-homogeneous F with p≥2 that
+is matrix-C² near conformal orientations,
+[the analytic estimate](IWANIEC_MORREY_GLOBAL_QUADRATIC_DEFICIT.md)
+gives
+\(0\le F-QF\le K\sigma_1^{p-2}
+(\sigma_1-\sigma_2)^2\)
+for ALL matrices. It improves
+earlier first-order near-conformal
+control, conditional only on the
+**published** Guerra–Kristensen
+global determinant-power minorant,
+not Iwaniec's new preprint.
+It gives NO all-matrix QC/PC result:
+positive deficit remains possible.
+Hand proof; Lean/external review pending.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

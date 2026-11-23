@@ -317,6 +317,63 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### All-p quantitative global control, not yet an all-p proof
+
+The [quadratic deficit theorem](IWANIEC_MORREY_GLOBAL_QUADRATIC_DEFICIT.md)
+applies to EVERY finite nonnegative isotropic
+rank-one-convex, positively p-homogeneous
+\(F\) for **every real p≥2**, provided it
+is C² near both nonzero conformal orientations.
+Guerra–Kristensen's published determinant-power
+polyconvex lower minorant, plus exact equality
+of first derivatives at conformals, yields
+\[
+0\le F(A)-QF(A)\le
+K_F\sigma_1(A)^{p-2}
+(\sigma_1(A)-\sigma_2(A))^2
+\quad\text{for all matrices }A.
+\]
+This is uniform over **all gradient laws,
+oscillation frequencies and amplitudes**,
+not a fixed-mesh bound. The rate improves
+the earlier linear estimate but
+**does not show zero deficit**;
+the universal Jensen / full p>2 PC
+question remains OPEN. It is a
+straightforward quantitative consequence
+of published conformal support,
+not a new solution.
+
+### Necessary quartic coefficient bounds and an entire closed sector
+
+The [shear-bound theorem](IWANIEC_MORREY_QUARTIC_SHEAR_BOUND.md)
+uses rank-one shear lines at I,D to prove
+\(a\ge0,\ |b|\le4a\) for ALL invariant
+quartic polynomials
+\(F=a\,s^2+b\,s\,d+c\,d^2\),
+and the diagonal Hessian gives the
+universal necessary parabolic cutoff
+\(c\ge3b^2/(8a)-2a\) for a>0.
+Combining the sharp shear bound with
+the previously proved positive-cone
+decomposition closes **ALL** nonnegative
+rank-one-convex quartics with
+\(2a\le |b|\le4a\):
+every one is globally PC.
+Positive powers extend each to all
+real p≥4.
+
+The remaining low-coupling quartic
+coefficients and all nonpolynomial
+p>2 profiles are NOT classified by
+these arguments; do not mistake
+a coefficient-sector closure for
+the unrestricted Guerra–Kristensen
+question. The global QC/PC theorem
+and, separately, Morrey itself
+remain OPEN.
+
+
 ### CLASS-WIDE stop rule: positive Dacorogna–Marcellini stabilizations
 
 An [exact quartic cone theorem](IWANIEC_MORREY_QUARTIC_STABILIZATION.md)
