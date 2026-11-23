@@ -139,3 +139,38 @@ and allows unbounded degree/subdivision depth and rational
 denominators. A failure to find such a certificate cannot prove
 the positive p≥4 polyconvexity conjecture. A certificate of
 nonpolyconvexity is **not** a planar gradient witness to non-QC.
+
+
+## 6. Unrestricted four-wave parity and odd-resonance controls
+
+The [all-N parity and correlated four-wave hand theorem](../../docs/research/IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
+covers arbitrary **finite rank-one-convex**
+integrands without symmetry, homogeneity
+or sign assumptions, but only one
+genuinely resonant four-wave family
+(and wider structural no-resonance
+and pure-parity classes).
+It relies on the **published
+Sebestyén–Székelyhidi 2017**
+three-wave laminate theorem.
+
+Run from repository root:
+
+~~~sh
+python3 research/audit/iwaniec_four_wave_parity_exact.py
+~~~
+
+Standard library only; checks integer
+odd-resonance classification for
+specified tuples, 10 nonparallel
+lacunary waves, the exact rho=1/3
+four-wave correlation via **nine
+rational polygons**, all 16 rational
+parity weights and a sample
+matrix/determinant moment control.
+The global all-phase Fourier bound
+and universal laminate induction
+are hand arguments, **not**
+established by the finite checker.
+No negative gradient Jensen
+witness or full Morrey proof is claimed.

@@ -1,5 +1,20 @@
 # Research ledger and completion roadmap
 
+**Unrestricted wave-level advance (23 November 2026):**
+[Correlated four-wave planar Jensen theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
+proves that every finite rank-one-convex integrand satisfies
+Jensen for **all** amplitudes and phases of the 4-wave
+family (u,v,u+2v,2u+v), for any independent integer u,v.
+It also derives pure-parity laminate laws for **every
+number N≥3 of rank-one waves** when |correlation|≤1/2
+and an odd-resonance exclusion for **arbitrary N**.
+The key three-wave laminate theorem is **published
+Sebestyén–Székelyhidi (2017)**; the remaining
+Fourier/conditioning proof is hand-level, exact rational
+controls passed, novelty not established. This is
+a genuinely correlated N=4 case, **not** all
+four waves, a bounded N reduction, or Morrey completion.
+
 **Research update: 23 November 2026. The unrestricted planar Morrey problem remains OPEN.** A new AI-produced [hand proof](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md) claims global rank-one-convex⇒polyconvex for every **nonnegative, SO(2)×SO(2)-isotropic, positively p-homogeneous** integrand with p≥2. An [independent AI logic audit](IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md) found no fatal gap, but neither Lean certification nor independent mathematical referee review has occurred. Removing homogeneity or isotropy while retaining **polyconvexity is false**, as the [exact obstruction](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md) and the earlier [anisotropic example](IWANIEC_MORREY_P2_SIGNED.md) show. For unrestricted Morrey the target must be **quasiconvexity**, not polyconvexity.
 No verified rank-one-convex, non-quasiconvex integrand on `ℝ²ˣ²` has been produced.
 Pedregal's nonemptiness lemma is refuted, but that does not refute Morrey's implication.

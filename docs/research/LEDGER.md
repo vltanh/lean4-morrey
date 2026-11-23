@@ -1,5 +1,33 @@
 # Research ledger
 
+**U01 — unrestricted all-F wave reduction (23 Nov 2026).**
+The [four-wave parity theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
+proves rank-one Jensen for arbitrary
+finite RC F and every phase/amplitude
+of the genuinely correlated 4-wave
+family \(u,v,u+2v,2u+v\), independent
+integer u,v, with exact all-phase
+Fourier bound \(|\rho|\le1/2\).
+General N≥3 pure-parity cube laws
+with \(|\rho|\le1/2\) are laminates by
+conditional induction starting
+from the *published* planar 2017
+three-wave theorem. An arbitrary-N
+odd-frequency-resonance criterion
+guarantees independent signs and
+finite-order lamination, including
+nonparallel lacunary \((1,2^j)\)
+wavevectors for any N.
+Rational area controls prove the
+4-wave zero-phase correlation=1/3
+and 16 nonuniform weights 1/12
+and 1/24. Exact checker passed
+locally; **no Lean/human review or
+novelty clearance**, general N=4
+and unrestricted Morrey **OPEN**.
+
+
+
 **Research snapshot: 21–22 November 2026. No proof or counterexample to the unrestricted planar Morrey problem has been obtained.**
 
 This is the current interpretation of all recovered research, including failed routes and later

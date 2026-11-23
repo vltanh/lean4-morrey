@@ -1,5 +1,58 @@
 # Roadmap to completion
 
+## New unrestricted four-wave gate — one genuine correlated family CLOSED
+
+The [correlated four-wave theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
+is a **global every-integrand, all-amplitude,
+all-phase** rank-one Jensen theorem for the
+frequency family \(u,v,u+2v,2u+v\),
+with u,v independent integer vectors.
+It does not assume isotropy, homogeneity,
+p-growth, positivity, polynomiality
+or strict ellipticity.
+The gradient sign law has a nonzero
+four-way parity correlation (rho=1/3
+at zero phase), yet the all-phase
+Fourier/Cauchy–Schwarz estimate
+\(|\rho|\le1/2\) places it in a planar
+laminate family. The critical
+input is Sebestyén–Székelyhidi's
+**already published N=3 theorem**.
+The [exact checker](../../research/audit/iwaniec_four_wave_parity_exact.py)
+passed rational polygon/probability
+and integer odd-resonance controls.
+
+Two **unbounded-N** structural results:
+(a) absent any subset odd-frequency
+resonance, all signs are independent
+for EVERY choice of phases, so the
+resulting gradient law is a finite
+laminate of arbitrary order;
+(b) every N≥3 pure-parity law
+\(2^{-N}(1+\rho\prod_i\epsilon_i)\)
+on rank-one cube directions is a
+laminate whenever \(|\rho|\le1/2\),
+by the published N=3 case followed
+by repeated rank-one conditional splits.
+
+**Remaining open positive gate:** for
+an arbitrary 4-wave tuple, the
+sign law may have **several nonzero
+triple and fourth-order Walsh
+coefficients**. A universal rank-one
+Jensen argument for those genuinely
+coupled measures is not supplied.
+Even a complete N=4 theorem would
+not alone imply the ALL-N
+characterization required for
+Morrey. Avoid rediscovering
+N≤3 prior art or treating
+minor-compatible laws as
+gradient laws; this work operates
+on **actual** periodic gradients.
+
+
+
 ## Unrestricted sign/regularity gate — closed by reduction
 
 [Positive smooth coercive strongly RC reduction](IWANIEC_MORREY_POSITIVITY_REDUCTION.md): any strict Morrey counterexample can be mollified, exponentiated and quadratically strictified while preserving a negative compatible-gradient Jensen gap. The unrestricted theorem is equivalent to its restriction to this positive smooth coercive class. The reduction also preserves isotropy but not homogeneity. The universal QC step remains open.
