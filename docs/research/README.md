@@ -45,6 +45,7 @@ Start with these documents:
 | [Exact homogeneous heat-flow method no-go](IWANIEC_MORREY_P4_HEATFLOW_NOGO.md) | Actual three-wave compatible periodic heat trajectory for \(F=(\det A)^2\) has exact energy derivative **+920**; continuity extends the method obstruction to an open interval around p=4 of polyconvex determinant powers. |
 | [Global p≥4 rational counterexample hierarchy](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md) | Complete negative semidecision **within C² isotropic homogeneous profiles**: strict rational p/polynomial global acoustic certificates and ≤4 rational diagonal atoms, with algebraic Jensen sign checks. Does not settle QC/Morrey. |
 | [All-p≥4 Fenchel support and finite-amplitude reduction](IWANIEC_MORREY_PGE4_CONJUGATE.md) | Eliminates the signed-ratio variable from the universal pointwise poly-affine support test, gives an explicit global tail cutoff for positive profiles, and reduces the universal conjecture to strictly positive profiles. The central inequality remains open. |
+| [Complete rational-polynomial input decision](IWANIEC_MORREY_PGE4_INSTANCE_QE.md) | All-degree rational p≥4 input-wise QE encoding of **nonnegativity, global rank-one convexity and global polyconvexity**. No CAD solver or universal p≥4 theorem; not a general quasiconvexity decision. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

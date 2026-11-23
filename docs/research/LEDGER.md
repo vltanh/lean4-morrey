@@ -419,6 +419,30 @@ novelty claim or Lean formalization
 is asserted.
 
 
+**I22 — complete fixed rational p≥4 polynomial decision (23 November 2026).**
+For every specified rational exponent p>=4
+and rational-polynomial signed singular
+profile h, the [exact QF_NRA encoding](IWANIEC_MORREY_PGE4_INSTANCE_QE.md)
+creates a semialgebraic existential failure
+test for global nonnegativity, the
+**defining global rank-one convexity
+inequality** across all matrices, and
+the Dacorogna–Koshigoe four-atom
+criterion for global polyconvexity.
+Every test is decidable in principle by
+real-closed-field quantifier elimination,
+including degenerate and singular cases.
+The [stdlib generator](../../research/audit/iwaniec_pge4_complete_instance_QE.py)
+was tested on a p=9/2 input for balanced
+finite SMT-LIB formulas. **No complete
+QE solver or SAT/UNSAT certificate
+was obtained; no new priority claim.**
+This is a substantial validation
+interface but it does NOT decide
+unrestricted QC or prove the
+universal \(\forall p\ge4,\forall F\) theorem.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

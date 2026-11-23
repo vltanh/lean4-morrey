@@ -317,6 +317,40 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Exact decision for EACH rational-polynomial input (not for the whole class)
+
+[The complete input-wise QE reduction](IWANIEC_MORREY_PGE4_INSTANCE_QE.md)
+encodes the full global p-homogeneous isotropic integrand
+for **any specified rational p≥4 and rational
+polynomial profile h of unrestricted degree**.
+Three exact existential QF_NRA formulas
+are SAT precisely when F fails
+nonnegativity, rank-one convexity or
+polyconvexity, respectively. The global
+RC query uses the **defining rank-one
+segment inequality**, not the smoother
+acoustic shortcut; PC uses the published
+1993 four-diagonal-atom equivalence.
+Tarski–Seidenberg gives **complete
+instance-wise decidability** with a
+sound full QE/CAD engine.
+
+**Stop rule:** No such engine was
+run or is bundled. A generated
+formula is NOT a certificate of
+satisfiability or unsatisfiability.
+This has no uniform degree or
+rational-denominator cutoff and
+does not decide irrational p,
+arbitrary continuous h, or
+nonpolyconvex quasiconvexity.
+The global mathematical
+\(\forall p\ge4,\forall F\) question
+is still OPEN. Use this as a
+candidate *validation interface*,
+not as an alleged full proof.
+
+
 ### All-p≥4 positive-proof reduction: one amplitude and explicit tail
 
 The [Fenchel-conjugate support criterion](IWANIEC_MORREY_PGE4_CONJUGATE.md)
