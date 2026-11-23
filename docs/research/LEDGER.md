@@ -368,6 +368,31 @@ quasiconvexity, in the p>2 class.
 No Lean/CI and no novelty claim.
 
 
+**I20 — all-p≥4 rational negative-witness semidecision (23 Nov 2026).**
+The [global certificate hierarchy](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md)
+proves that, **within C² signed-singular
+profiles**, a violation of the stronger
+global polyconvexity conjecture at ANY
+real p≥4 can be strictified and
+rationalized to a rational p, rational
+polynomial h, and ≤4 rational signed-
+diagonal atoms. Exact rational acoustic
+Bernstein inequalities certify **global
+rank-one convexity**, and rational
+algebraic root intervals certify strict
+failure of minors-Jensen; a
+[standard-library checker](../../research/audit/iwaniec_all_p_rational_cert.py)
+implements both tests. Five positive
+controls p=4,9/2,5,6,10 passed with
+two Bernstein leaves; an affine Dirac
+law gives no negative certificate.
+**Status:** negative semidecision with
+no degree cutoff. No complete positive
+classification, no nonsmooth density
+theorem, no gradient-law/QC witness,
+and no Lean proof is asserted.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

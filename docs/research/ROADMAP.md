@@ -317,6 +317,39 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### A rigorous all-p≥4 negative-certificate hierarchy (C² profiles)
+
+The [global p≥4 semidecision theorem](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md)
+shows: **if** a nonnegative isotropic p≥4-homogeneous
+rank-one-convex integrand with a C² signed-singular
+profile fails global polyconvexity, **then**
+a rational p≥4, a rational polynomial profile h,
+and a minors-preserving rational diagonal law
+on ≤4 atoms give a strict failure.
+The rank-one-convexity certificate is a
+**global** univariate rational Bernstein proof
+over all signed ratios and all rank-one
+directions. The [exact checker](../../research/audit/iwaniec_all_p_rational_cert.py)
+handles rational exponents and rational-algebraic
+Jensen powers. It passed strict positive
+controls at p=4,9/2,5,6,10.
+
+This hierarchy is **complete as a negative
+semidecision only for the stated C² class**,
+with unbounded degree, denominators, and
+atom coordinates. It does NOT give a finite
+positive decision procedure or a uniform
+degree cutoff, and does NOT cover every
+continuous/nonsmooth homogeneous RC
+integrand. A negative *polyconvex* Jensen
+law is not a gradient-law Morrey witness.
+The old four-atom and isotropic diagonal
+equivalences are Dacorogna–Koshigoe (1993)
+prior art; the contribution here is a
+strict regularization/rationalization
+pipeline and exact checker for all p≥4.
+
+
 ### Global method stop rules: fractional powers and universal heatflow
 
 The [exact fractional-power witness](IWANIEC_MORREY_FRACTIONAL_POWER_NOGO.md)
