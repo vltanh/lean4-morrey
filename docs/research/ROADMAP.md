@@ -164,6 +164,18 @@ one-dimensional functional gate, **not**
 a finite-mesh/fixed-degree search.
 
 
+### Critical novelty and exponent correction
+
+See [the exponent audit](IWANIEC_MORREY_EXPONENT_AUDIT.md).
+The 0<p<1 case is trivial **in all matrix dimensions**:
+every finite-valued globally RC p-homogeneous function vanishes.
+At p=1, isotropic RC⇒convex on 2×2 is **Dacorogna (1989)**,
+not a new result. Reserve novelty claims for an
+independently validated all-base result at 1<p<2
+or the signed p=2 conclusion. Main unclosed extensions:
+signed 1<p<2, p>2 (the old hybrid-completeness
+gate was refuted), or removing isotropy/homogeneity.
+
 ## 0. Iwaniec-dependent route (22 November 2026)
 
 The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes

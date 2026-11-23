@@ -135,6 +135,20 @@ new checker, a changed mathematical search class, and a solved universal theorem
 | A05 | Exact rational verifier for sphere-ideal and norm-multiplier LH certificates, with actual periodic PL witness construction and exact gap evaluation. | [Implementation and controls](../../research/audit/README.md). Both formats pass a nonconvex RC control; malformed identities are rejected. Control gap is positive; no candidate discovery or Lean proof is claimed. |
 | A06 | H19–H25 survive the hand audit within their hypotheses. The entire `Pβ`, `β≥2`, family reduces to the all-field inequality `αC₂≥h²`, with the `α=0` boundary proved safe. | [Structural audit and formulas](STRUCTURAL_AUDIT.md), [exact expansion check](../../research/audit/pbeta_schur_reduction_check.py). The remaining inequality is open and would settle this family, not arbitrary integrands. |
 
+## Exponent-range qualification (22 November 2026)
+
+[Complete novelty and exponent audit](IWANIEC_MORREY_EXPONENT_AUDIT.md):
+**0<p<1 gives only the zero integrand** for any finite-valued
+globally RC p-homogeneous F in every finite matrix dimension
+(elementary proof using sublinear growth of convex rank-one lines);
+**p=1 isotropic RC⇒convex is already Dacorogna (1989)**.
+Potential new mathematical content is confined to
+**1<p<2**, where the proposed *all-matrix* nonnegative
+isotropic RC⇒QC generator representation uses the
+2026 global Burkholder theorem, and to the
+independently derived but unreviewed signed p=2 polyconvex result.
+Do not label the full range (0,2] a new breakthrough.
+
 ## Iwaniec–Morrey program, 22 November 2026 (I01–I09)
 
 The global planar RC⇒QC problem is still open. The
