@@ -69,8 +69,7 @@ sources:
       3.5, with Remark 3.8 and p. 138), which the paper's Corollary 6.3 uses: proved in
       lean4-banach-probability by the book's proofs (integration method; second approach and
       duality), with their slips repaired (Morrey/Common/External/Osekowski). Theorem 3.24 (the
-      paper's Proposition 2.6) is stated for context, not proved, and used by no proof. Theorem 8.6 also
-      stands for the square function inequality for real martingales that Burkholder (1983) uses as known.
+      paper's Proposition 2.6) is stated for context, not proved, and used by no proof.
   - title: "Sharp inequalities for martingales and stochastic integrals"
     authors:
       - "Donald L. Burkholder"
@@ -199,11 +198,25 @@ sources:
       (decoupling, p. 277), in lean4-banach-probability, with a UMD_p constant beta in place of zeta-convexity
       and the constants beta^2 (conjugate polynomials), 2 beta^2 (conjugate Poisson integrals) and
       2 beta^2 + 1 (truncations on the circle and on the line); two slips are repaired. Lemma 4, the
-      passage to the line, for which the article refers to M. Riesz and Zygmund (not read), is written out
-      by periodization and dilation; the limit of the truncations, the multiplier -i sgn, is by HNVW I,
-      Lemma 5.2.1 and Proposition 5.2.2 (Theorem 2, stated without proof, is not formalized); the square
-      function inequality for real martingales, which the article uses as known, by Osękowski 2012,
-      Theorem 8.6.
+      passage to the line, for which the article refers to M. Riesz and Zygmund, follows M. Riesz (1928),
+      section 18, applied to the truncations; the limit of the truncations, the multiplier -i sgn, is by
+      HNVW I, Lemma 5.2.1 and Proposition 5.2.2 (Theorem 2, stated without proof, is not formalized). The
+      square function inequality for real martingales, which p. 275 asserts to follow from Theorem 1 for
+      the reals and Khintchine's inequality, is proved by the argument of Lemma 1 (pp. 277-278) for the
+      reals and Khintchine's inequality; Theorem 1 for the reals is Burkholder's inequality with the
+      constant p* - 1 (its proof, in Burkholder 1981, is not followed).
+  - title: "Sur les fonctions conjuguées"
+    authors:
+      - "Marcel Riesz"
+    id: "Math. Z. 27 (1928), 218-244"
+    type: "article"
+    location: "https://doi.org/10.1007/BF01171098"
+    relationship: "background"
+    note: >-
+      Read. Section 18 (pp. 234-235), the passage from the circle to the line to which Burkholder (1983)
+      refers for his Lemma 4, is followed in lean4-harmonic-analysis for the truncated Hilbert
+      transforms; the limit that it leaves out ("on démontre très facilement") is written out, and
+      Fatou's lemma is used where it lets m tend to infinity without a reason.
   - title: "Non-commutative vector valued L_p-spaces and completely p-summing maps"
     authors:
       - "Gilles Pisier"
@@ -423,7 +436,9 @@ automation:
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
         the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth, and to
-        4.3.2 (commit 8e884d5) in the fifth and sixth; 4.3.3 (commit 80b7f6f) in the seventh. Second
+        4.3.2 (commit 8e884d5) in the fifth and sixth; 4.3.3 (commit 80b7f6f) in the seventh; 4.6.0
+        (commit 8fa262e) in the eighth, agreed with the user, replacing 4.4.0 and 4.5.0 (commits
+        51542c1, aebd6b2), which the agent had released without discussion. Second
         round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
@@ -441,7 +456,10 @@ automation:
         revisions), besides the agents for this repository's documents. Seventh round, a step of
         McConnell's theorem by Burkholder's lemmas (1983): the same lead agent with 6 sub-agents (4
         provers, a checker of statements, a reviewer), besides the agents for this repository's
-        documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        documents. Eighth round, the package's imports trimmed and two steps of Burkholder's article
+        redone after their sources (his Lemma 1 for the reals, and M. Riesz 1928): 4 sub-agents (one
+        for the imports, a prover, a reviewer, a read-only scoping agent); this repository's documents
+        were updated and checked by the main session. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
@@ -454,7 +472,8 @@ automation:
           (the first 50 minutes within the fourth round's), 13.8 h of sub-agent working time. Sixth
           round: 1.7 h elapsed to the last commit of the proofs, 3.9 h of sub-agent working time on it.
           Seventh round: 1.1 h elapsed to the last commit of the package, 1.7 h of sub-agent working time
-          on it.
+          on it. Eighth round: 2.3 h elapsed to the last commit of the package, 2.0 h of sub-agent
+          working time on it.
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -465,8 +484,10 @@ automation:
         agent decide without asking; then obtained the cited books and articles that the agent could
         not (most of them), so that the cited results could follow them; then asked for the sources'
         proof of the non-commutative Khintchine inequality, with its general theory made reusable; then
-        supplied McConnell (1984), which a step of that proof cites, and Burkholder (1983), which
-        McConnell cites.
+        supplied McConnell (1984), which a step of that proof cites, Burkholder (1983), which
+        McConnell cites, and M. Riesz (1928), which Burkholder cites. In the eighth round the user
+        decided that the project needs only the statements of the cited results while the packages,
+        as libraries, follow their sources' arguments, and deferred Burkholder's Theorem 1.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
@@ -507,12 +528,14 @@ fidelity:
     Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed), Bourgain 1986 (the
     first of two references for (III.3) of Lust-Piquard and Pisier; the second, McConnell 1984, is
     followed). Named substitutes for steps that the sources of Proposition 6.3 take from works that were
-    not read, recall as known, or state without proof: for the passage from the circle to the line in
-    Burkholder 1983, Lemma 4 (M. Riesz 1928 and Zygmund's book, not read), periodization and dilation,
-    written out; for the multiplier -i sgn as the limit of the truncated Hilbert transforms (Burkholder's
+    not read, recall as known, or state without proof: for the multiplier -i sgn as the limit of the
+    truncated Hilbert transforms (Burkholder's
     Theorem 2, stated without proof; the symbol is recalled by McConnell), HNVW I, Lemma 5.2.1 and
-    Proposition 5.2.2; for the square function inequality for real martingales that Burkholder 1983 uses
-    as known, Osękowski 2012, Theorem 8.6 (the paper's Theorem 2.3 (2)); Randrianantoanina's theorem for
+    Proposition 5.2.2; for Theorem 1 of Burkholder 1983 for the reals (its proof is in Burkholder 1981,
+    read, not followed), Burkholder's inequality with the constant p* - 1 (the paper's Theorem 2.3 (1));
+    for the square function inequality for real martingales, which Burkholder 1983 asserts on p. 275
+    to follow from it and Khintchine's inequality, the argument of his Lemma 1 (pp. 277-278);
+    Randrianantoanina's theorem for
     the UMD property of C_2p (recalled from Rubio de Francia 1986);
     Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
     Hölder's inequality and the duality of the Schatten classes (Simon 1979) and for Horn's inequality,
@@ -564,6 +587,9 @@ review:
     documents. In the round that redid the non-commutative Khintchine inequality, and in the two that
     redid steps of it by McConnell's theorem and by Burkholder's lemmas (1983), independent reviewers
     checked the packages' new statements, their proofs against the sources, and the updated documents.
+    In the eighth round an independent reviewer checked the two redone steps of Burkholder's article
+    and the package's documents against Burkholder (1983) and M. Riesz (1928), then the corrections;
+    this repository's updated documents were checked by the main session in a separate pass.
 
 alignment:
   namespace: "CasseseChallenge"

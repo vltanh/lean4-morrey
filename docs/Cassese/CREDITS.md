@@ -9,9 +9,11 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   every cited result that was large but feasible; asked, in the third round, for every result to be
   proved unconditionally; obtained, for the fourth, most of the cited books and articles that the
   session could not, for the fifth, Sarason (1967) and Helson–Lowdenslager (1961), for the sixth,
-  McConnell (1984), and, for the seventh, Burkholder (1983), so that the cited results could follow them;
-  and asked, for the fifth, for the sources' proof of the non-commutative Khintchine inequality, with its
-  general theory made reusable.
+  McConnell (1984), for the seventh, Burkholder (1983), and, for the eighth, M. Riesz (1928), so that the
+  cited results could follow them; asked, for the fifth, for the sources' proof of the non-commutative
+  Khintchine inequality, with its general theory made reusable; and decided, in the eighth, that the
+  project needs only the statements of the cited results while the packages, as libraries, follow the
+  arguments of their sources, and deferred Burkholder's Theorem 1 (ζ-convexity) to later work.
 - Formalization: Claude Opus 5.5 (`claude-opus-5-5`, Anthropic), in Claude Code 2.1.330 (the VS Code
   extension, Claude Agent SDK), in one session: the main session, its sub-agents, and the
   sub-agents that lead agents launched. Web pages were read by sub-agents. The same system wrote
@@ -25,7 +27,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   round, which it wrote: the mathematics that Lean lacks is built, and is no reason to depart
   from a proof; versions 4.2.1 to 4.3.1 (commits `8d291b1` to
   `f9198d5`) in the fourth; versions 4.3.1 and 4.3.2 (commit `8e884d5`) in the fifth; version 4.3.2 in the
-  sixth; version 4.3.3 (commit `80b7f6f`), written after it, in the seventh.
+  sixth; version 4.3.3 (commit `80b7f6f`), written after it, in the seventh; version 4.6.0 (commit
+  `8fa262e`), agreed with the user, in the eighth, which also saw versions 4.4.0 and 4.5.0 (commits
+  `51542c1`, `aebd6b2`), released by the session without discussion and replaced by 4.6.0.
 - Other Lean code: the proofs were written without consulting the author's Lean formalization
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
   Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
@@ -54,7 +58,7 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   each of the two: 702 of those tokens are in such a run with MorreyTwoComponentsLean, in 11 files,
   the longest run 33 tokens (two lines), and 123 with so3-r1c-and-not-qc, in 3 files, the longest
   22. (For parts of Mathlib of the same size: 0 to 227.) The downloaded copies were then deleted. That
-  comparison (11:41) is older than the code of the fifth, sixth and seventh rounds in
+  comparison (11:41) is older than the code of the fifth to eighth rounds in
   `lean4-harmonic-analysis` and `lean4-banach-probability`; by the transcripts, no sub-agent that worked
   on the proofs of these rounds opened either repository, and the literature searches of the fifth
   excluded both.
@@ -74,7 +78,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   restated Proposition 2.7 (6) and the updated documents. In the fifth: independent reviewers checked
   the new statements of the packages, and their proofs against the sources; another checked the updated
   documents. In the sixth: the same, for McConnell's theorems. In the seventh: the same, for Burkholder's
-  lemmas.
+  lemmas. In the eighth: an independent reviewer checked the redone proofs of Burkholder's (9) and
+  Lemma 4, and the package's documents, against Burkholder (1983) and M. Riesz (1928), then checked the
+  corrections.
 
 ## Second round (21 November 2026)
 
@@ -265,8 +271,9 @@ user, as Pisier–Xu and the two volumes of HNVW had been; Astérisque 247 (1998
 (1974), Maurey–Pisier (1976) and Helson–Lowdenslager (1958) were found by the session in open archives.
 Lust-Piquard (1986) and Bourgain (1986), for which the user looked, were not found. Section 7 of the
 report lists the other works behind the sources that were not read (among them Simon, Gohberg–Krein, Rubio
-de Francia, the books of Helson and Hoffman and, since the seventh round, M. Riesz (1928) and Zygmund's
-book; no attempt to obtain them is recorded), with what stands for them. McConnell (1984) was one of them
+de Francia, the books of Helson and Hoffman and, since the seventh round, Zygmund's book; no attempt to
+obtain them is recorded), with what stands for them. M. Riesz (1928), listed there in the seventh round,
+was supplied by the user for the eighth. McConnell (1984) was one of them
 until the user supplied it, for the sixth round, and Burkholder (1983), behind McConnell, until the user
 supplied it, for the seventh.
 
@@ -389,6 +396,55 @@ Figures, from 18:28:48 (UTC−6), when the user supplied the article, to `198ef2
   tool calls; tokens: 0.52 M output, 3.32 M input, 46 M cache reads; 217 model calls, all `claude-opus-5-5`;
 - main session: 19 tool calls; tokens: 0.01 M output, 0.05 M input, 13 M cache reads; 14 model calls, all
   `claude-opus-5-5`.
+
+From `scripts/session_stats.py` on the session transcript, with `--since` and `--until` at the two times
+above. The figures leave out the update of the documents and its check.
+
+## Eighth round: the import graph, and Burkholder's last two steps (22 November 2026)
+
+After the seventh round, the module of Proposition 6.3 in `lean4-harmonic-analysis` still imported the
+dyadic shifts of HNVW that Burkholder's lemmas had replaced. Asked whether to delete them or keep them,
+the session proposed to keep them, for HNVW's Littlewood–Paley inequalities, and to cut them from the
+import graph; the user agreed ("Do it!"). An agent listed the constants that the proof uses, moved 27
+lemmas, unchanged, between files so that the proof no longer imports six of them (3,424 lines), and
+checked that no statement changed (`11e9e12`, 20:59): the modules of the package that the proof imports went from 37 (22,040
+lines) to 32 (18,813).
+
+The user then asked whether any of the named substitutes of the report's Section 7 should be replaced.
+Two were. Burkholder's Lemma 4, the passage from the circle to the line, refers to M. Riesz (1928), which
+the user supplied; Riesz's §18 is now followed. The square function inequality for real martingales,
+which Burkholder asserts on p. 275 to follow from his Theorem 1 for `ℝ` and Khintchine's inequality, now
+has the proof of his Lemma 1 (pp. 277–278) for `ℝ`; the session first described p. 275 as an argument,
+and the reviewer found that it is only an assertion. In the same discussion the user changed the
+procedure: the project needs the statements of the cited results, by any sound proof, and the packages,
+being libraries, follow the arguments of the sources they cite, level by level. No proof of this
+repository changed. The next level, Burkholder's Theorem 1 (Burkholder 1981, Theorems 2.1 and 3.1), was
+estimated at 6,000 to 9,000 lines and deferred by the user: the package keeps a `UMD_p` constant in place
+of ζ-convexity, and takes Theorem 1 for `ℝ` from Burkholder's inequality with the constant `p* − 1`.
+
+How it was made:
+
+- An agent trimmed the imports (above).
+- A prover agent redid the two proofs in a worktree of `lean4-harmonic-analysis`, with no public statement
+  changed; the public form of Burkholder's (20) keeps its constant `2(p* − 1)`, for `p < 2` from the case
+  `p = 2`, as its docstring says.
+- An independent reviewer compared the proofs and the documents with the page images of both articles.
+  The prover applied its findings; the reviewer checked them and found one new error (which theorems of
+  Burkholder 1981 make up his Theorem 1), which the prover corrected. The main session updated two line
+  counts in the same commit (`90f1e01`, written 22:20, committed 22:25).
+- A read-only agent scoped Burkholder (1981) for the user's decision.
+- The main session moved this repository onto `90f1e01` and updated the documents. An agent launched to
+  check them stopped at the account's usage limit; the main session checked them in a separate pass,
+  against the package's documents, the page images and the commits.
+
+Figures, from 20:06:10 (UTC−6), when the user asked whether to trim, to `90f1e01` (22:25:02):
+
+- elapsed time: 2.3 h, between the two times;
+- the four agents above: at most 2 running at once, 2.0 h of working time; 527 tool calls; tokens:
+  0.59 M output, 3.96 M input, 149 M cache reads; 498 model calls, all `claude-opus-5-5`;
+- main session: 116 tool calls; tokens: 0.15 M output, 0.33 M input, 26 M cache reads; 119 model calls,
+  all `claude-opus-5-5`. These include the discussion of the procedure. An agent that reviewed the
+  skill's text for it is not counted.
 
 From `scripts/session_stats.py` on the session transcript, with `--since` and `--until` at the two times
 above. The figures leave out the update of the documents and its check.
