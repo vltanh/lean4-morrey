@@ -1,5 +1,46 @@
 # Roadmap to completion
 
+## Global two-line frequency-tail theorem (all gradient fields, 23 Nov 2026)
+
+The **unconditional** [two-direction Fourier-tail bound](IWANIEC_MORREY_TWO_LINE_SPECTRAL.md)
+applies to every globally RC finite-valued
+2×2 F, including signed, anisotropic,
+nonhomogeneous and nonsmooth energies,
+at EVERY base and for EVERY periodic
+W¹∞ planar gradient. Fourier projection
+onto any two primitive frequency lines
+is a genuine compatible two-ridge field,
+and the standard two-ridge rank-one Jensen
+inequality applies. Hence
+\[
+ F(A)-\fint F(A+D\varphi)
+ \le L_R
+ \sqrt{\|D\varphi\|_2^2-
+        e_{(1)}-e_{(2)}},
+\]
+where \(e_{(1)},e_{(2)}\) are the
+two largest Fourier gradient energies
+grouped by primitive line. A true
+Morrey counterexample with gap δ>0
+would need at least \(\delta^2/L_R^2\)
+of energy outside its two strongest
+Fourier directions. The [exact
+spectral regression](../../research/audit/iwaniec_two_line_spectral_exact.py)
+passed.
+
+**Scope:** No finite reduction for
+general gradients is obtained. The
+published two-wave Jensen result is
+the essential input. A proposed
+three-direction replacement was
+invalidated by an inequality-direction
+error (see [retraction](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md)).
+The unrestricted positive Morrey
+gate remains control of arbitrary
+three-and-higher correlated gradients
+with no strict LH margin.
+
+
 ## UNRESTRICTED progress and explicit failed extension (23 November 2026)
 
 **New valid exact all-N positivity theorem.** The
