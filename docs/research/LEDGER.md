@@ -766,6 +766,52 @@ three-line variant was explicitly
 invalidated in I27.
 
 
+**I30 — conditional global anisotropic/nonhomogeneous QC stability for every strict isotropic core (23 Nov 2026).**
+Under the USER-ASSUMED isotropic
+nonnegative p-homogeneous RC⇒PC
+theorem for p≥2, the
+[global quantitative proof](IWANIEC_MORREY_ANISOTROPIC_QUANT_STABILITY.md)
+establishes an infinite-dimensional
+weighted-C² QC neighborhood around
+EVERY smooth isotropic F0 with
+\(F_0(A)\ge\alpha|A|^p>0\) away
+from zero and global strict
+rank-one Hessian margin
+\(\mu|A|^{p-2}|H|²\).
+Take
+\(c=\frac12\min(\alpha,\mu/[p(p-1)])\).
+Then the isotropic B=F0−c|A|^p
+remains positive/RC and hence PC
+by the assumed theorem.
+An explicit all-p uniform convexity
+constant \(c_p=p/[(p-1)4^{p-1}3^{p-2}]\)
+provides a global QC margin.
+ANY anisotropic/nonhomogeneous C²
+G with
+\(\|D²G(A)\|_{\rm op}\le
+ c c_p |A|^{p-2}\)
+may be added while preserving
+global RC and QC, with the
+explicit weighted periodic Jensen
+margin \(c c_p/2\) for
+**arbitrary amplitudes and waveforms**.
+The perturbation itself need NOT
+be rank-one convex. An
+[exact nonconvex quartic regression](../../research/audit/iwaniec_anisotropic_stability_exact.py)
+verifies α=1/100, μ=1/25,
+c=1/600, c4=1/432 and
+radius η=1/259200, plus a negative
+full Hessian determinant −1977/400.
+This closes the quantitative G1
+bridge for **the stated entire class**
+but NOT arbitrary anisotropic or
+nonhomogeneous RC integrands;
+unrestricted planar Morrey remains
+OPEN. Conditional on the isotropic
+theorem and hand-level (not Lean
+or independently human reviewed).
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
