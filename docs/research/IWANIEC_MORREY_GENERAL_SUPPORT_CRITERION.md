@@ -159,6 +159,76 @@ The 2026 diagonal characterization gives
 an independent framework in which to
 audit this equivalence.
 
+## 2A. A genuine two-test-point reduction for the negative route
+
+For a globally rank-one-convex h, the scalar acoustic criterion
+gives \(C(t)=ph(t)-2th'(t)\ge0\). Thus the
+orientation interval \(I_t=[L(t),U(t)]\)
+in (2) is **always nonempty**, with the exact width
+
+\[
+ \boxed{U(t)-L(t)=\frac{2[ph(t)-2th'(t)]}{1-t^2}\ge0.}
+ \tag{6}
+\]
+
+This is a useful distinction: for a rank-one-convex
+integrand, lack of a global poly-affine support at
+a nonconformal base is not a local orientation failure.
+It must be caused by a **global test matrix**.
+
+**Finite dual-certificate theorem.**
+For a given differentiable isotropic
+rank-one-convex p-homogeneous F and \(|t|<1\),
+if no determinant multiplier c yields
+a global poly-affine support at E_t, then
+**one or two** pairs
+\((a_j,s_j)\in[0,\infty)\times[-1,1]\)
+suffice to certify the incompatibility:
+the orientation bounds (2), combined with
+the one or two inequalities (3) at these
+test points, have **no** real solution c.
+
+**Proof.** The orientation interval \(I_t\)
+is nonempty and compact. Each scalar
+inequality (3) cuts out a closed interval
+or half-line of possible c values,
+or all/none of \(\mathbb R\) when its
+coefficient is zero. Rank-one convexity
+ensures the coefficient-zero cases are
+nonnegative, as explained after (4).
+If the intersection of \(I_t\) with the
+entire family is empty, compactness
+implies a finite subfamily has empty
+intersection. Intervals in \(\mathbb R\)
+have Helly number two: among those
+finite interval constraints and \(I_t\),
+two already have empty intersection.
+Thus at most two scalar test pairs
+are needed, with the orientation
+interval included as known background.
+QED.
+
+This provides a **uniformly finite type of
+witness** for disproving poly-affine
+support (hence a finite-valued global
+polyconvex representative at that base),
+independent of the exponent p, profile
+degree, or number of rank-one directions.
+The test pairs themselves are not
+bounded to any fixed rational denominator,
+degree or amplitude; no finite exhaustive
+algorithm or positive cutoff is claimed.
+A missing poly-affine support is not
+by itself a failure of quasiconvexity.
+
+**Algebra control:** The independent
+[symbolic verifier](../../research/audit/iwaniec_scalar_support_identity.py)
+checks the exact scalar identity, equality
+at E_t, the orientation bounds, and
+interval width. The compactness/Helly
+reasoning is a hand argument, not a Lean
+theorem.
+
 ## 3. Substantial open-family improvement of the exact p=4 candidate
 
 Let h₀ be the exact Chebyshev polynomial
