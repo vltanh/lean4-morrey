@@ -56,9 +56,13 @@ the class does not depend on the domain).
 | E5 | the Corollary: `T` can map a rank-one line to a point; Lemma 1 is used without being named |
 
 Every proof follows the paper's argument: there is no departure
-([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)). Details, how the
-formalization reads the paper, its place in the literature and what comes next:
-[REPORT.md](REPORT.md).
+([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
+[REPORT.md](REPORT.md) gives:
+
+- details;
+- how the formalization reads the paper;
+- its place in the literature;
+- what comes next.
 
 ## Trust
 
@@ -70,9 +74,12 @@ formalization reads the paper, its place in the literature and what comes next:
   results that the paper's proof cites.
 - Comparator accepts [`Solution.lean`](../../palomar/Sverak/Solution.lean) against [`Challenge.lean`](../../palomar/Sverak/Challenge.lean)
   ([`comparator.json`](../../palomar/Sverak/comparator.json)).
-- Independent AI agents checked the statements against the paper, the formal proofs against the
-  paper's, every recorded departure from the paper, and the documents. No person has reviewed the
-  proofs.
+- Independent AI agents checked:
+  - the statements against the paper;
+  - the formal proofs against the paper's;
+  - every recorded departure from the paper;
+  - the documents.
+- No person has reviewed the proofs.
 
 ## Building and Palomar
 
@@ -82,11 +89,14 @@ The library uses only Mathlib, and one module shared with the other papers,
 formalization needs, but Lake fetches them whichever part of the repository is built: see the
 [overview's building instructions](../../README.md#building). Lean and Mathlib `v4.36.0-rc2`.
 
-This paper is its own Palomar submission: [`Challenge.lean`](../../palomar/Sverak/Challenge.lean),
-[`Solution.lean`](../../palomar/Sverak/Solution.lean), [`comparator.json`](../../palomar/Sverak/comparator.json) and
-[`formalization.yaml`](../../palomar/Sverak/formalization.yaml), named by the workflow
-[`palomar_preflight_sverak.yml`](../../.github/workflows/palomar_preflight_sverak.yml). From the
-repository root:
+This paper is its own Palomar submission:
+
+- [`Challenge.lean`](../../palomar/Sverak/Challenge.lean);
+- [`Solution.lean`](../../palomar/Sverak/Solution.lean);
+- [`comparator.json`](../../palomar/Sverak/comparator.json) and [`formalization.yaml`](../../palomar/Sverak/formalization.yaml), named by the workflow
+  [`palomar_preflight_sverak.yml`](../../.github/workflows/palomar_preflight_sverak.yml).
+
+From the repository root:
 
 ```sh
 lake exe cache get && lake build

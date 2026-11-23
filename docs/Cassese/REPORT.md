@@ -13,11 +13,16 @@ consult (Section 10, "Formalizations").
 
 Status of the formalization:
 
-- **Every result of the paper is proved**: Theorems 1.2–1.5, Corollary 1.6, the consequences
-  drawn after Theorem 1.3 (only `2 × 2` remains, for Morrey's problem and, at `p = 4`, for the
-  homogeneous problem), every numbered lemma, proposition and corollary (Proposition 2.6, quoted
-  from Osękowski as context, aside), and the claims of the running text that the proofs use. Theorem 1.2 is proved by the paper's own route (Section 4.4,
-  through UMD constants); the elementary route of Remark 4.5 is formalized as a second theorem,
+- **Every result of the paper is proved**:
+  - Theorems 1.2–1.5;
+  - Corollary 1.6;
+  - the consequences drawn after Theorem 1.3 (only `2 × 2` remains, for Morrey's problem and, at
+    `p = 4`, for the homogeneous problem);
+  - every numbered lemma, proposition and corollary (Proposition 2.6, quoted from Osękowski as
+    context, aside);
+  - the claims of the running text that the proofs use.
+- Theorem 1.2 is proved by the paper's own route (Section 4.4, through UMD constants); the
+  elementary route of Remark 4.5 is formalized as a second theorem,
   [`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480).
 - **The results of other works that the proofs use are proved too.** Each is stated, in its
   source's terms or as the paper quotes it, in `Morrey/Common/External/<Source>/`, and in the paper's
@@ -68,14 +73,19 @@ The paper constructs rank-one convex integrands on `ℝ^{2×m}`, `m ≥ 3`, that
 quasiconvex. With Šverák's theorem, this leaves `2 × 2` as the only size in which Morrey's problem
 can have a positive answer. It also answers Kirchheim and Kristensen's homogeneous problem
 negatively in many sizes: there are `p`-homogeneous, rank-one convex, nowhere quasiconvex
-integrands. Its proofs rest on Burkholder's martingale inequalities, UMD theory for `L^p` and the
-Schatten classes, the non-commutative Khintchine inequality, transference and Dragičević's lower
-bound for the Beurling–Ahlfors transform, and the standard facts of the calculus of variations;
-all are proved here.
+integrands. Its proofs rest on the following, all proved here:
 
-The audit found no false statement. The findings are steps that the paper leaves to the reader or
-only sketches, one intermediate claim that is false under the reading that the proof around it
-needs, and misprints:
+- Burkholder's martingale inequalities;
+- UMD theory for `L^p` and the Schatten classes;
+- the non-commutative Khintchine inequality;
+- transference and Dragičević's lower bound for the Beurling–Ahlfors transform;
+- the standard facts of the calculus of variations.
+
+The audit found no false statement. The findings, by kind in the table below, are:
+
+- steps that the paper leaves to the reader or only sketches;
+- one intermediate claim that is false under the reading that the proof around it needs;
+- misprints.
 
 | Kind | Findings |
 | --- | --- |
@@ -89,7 +99,29 @@ needs, and misprints:
 | Misprints and wording | E11, E12, E13, E15, E40–E42 |
 | Missing hypotheses | none (Section 4) |
 | Redundant hypotheses | eight, among them the evenness in Lemma 5.1 (2), which Remark 5.2 needs to drop, and `ρ > 0` in Proposition 7.2 (Section 5) |
-| Use of cited results | correct, with reservations (Section 2). Applied loosely but correctly: Randrianantoanina's Corollary 4.5, Kristensen's growth bound, Dragičević's theorem for `p < 2` (E39), the theorems on UMD constants, which are for deterministic signs (E38), and the theorem behind Proposition 7.1, stated for complementary orthogonal projections (E42). Quoted inexactly: Dacorogna's Theorem 6.10 (E36), Osękowski's Theorem 3.24 (E37), Pisier–Xu's Theorem 6.1 (E40), and the theorem behind Proposition 6.4, whose bound on the constants the paper leaves out, and which Remark 6.3 and Proposition 6.5 at `q = ∞` use (E27). Used in part: the transference identity (E41). Source only hinted at: the sharpness of `p* − 1` (E30). Silent steps: Lemma 2.1 for the minorant `G` (E21), the nonempty domain of Lemma 2.2, Proposition 2.2 from the ball to the cube (E22), `UMD_p` for `UMD_{ℂ,p}` in Remark 4.2 (E11) |
+| Use of cited results | correct, with reservations (Section 2; below) |
+
+Use of cited results, the reservations:
+
+- Applied loosely but correctly:
+  - Randrianantoanina's Corollary 4.5;
+  - Kristensen's growth bound;
+  - Dragičević's theorem for `p < 2` (E39);
+  - the theorems on UMD constants, which are for deterministic signs (E38);
+  - the theorem behind Proposition 7.1, stated for complementary orthogonal projections (E42).
+- Quoted inexactly:
+  - Dacorogna's Theorem 6.10 (E36);
+  - Osękowski's Theorem 3.24 (E37);
+  - Pisier–Xu's Theorem 6.1 (E40);
+  - the theorem behind Proposition 6.4, whose bound on the constants the paper leaves out, and which
+    Remark 6.3 and Proposition 6.5 at `q = ∞` use (E27).
+- Used in part: the transference identity (E41).
+- Source only hinted at: the sharpness of `p* − 1` (E30).
+- Silent steps:
+  - Lemma 2.1 for the minorant `G` (E21);
+  - the nonempty domain of Lemma 2.2;
+  - Proposition 2.2 from the ball to the cube (E22);
+  - `UMD_p` for `UMD_{ℂ,p}` in Remark 4.2 (E11).
 
 ## 2. Results from prior work and how the paper uses them
 
@@ -140,7 +172,7 @@ Nothing.
 
 | Fact | Where | In the formalization |
 | --- | --- | --- |
-| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and, with no source, the triangle inequality | Section 6 | proved: [`schattenNorm_mul_self`](../../Morrey/Cassese/Square.lean#L196) (fact (1), for every `q ≥ 1`: E2; Bhatia's (IV.49)), fact (2) from the definition, Weyl's monotonicity for fact (3) as in Bhatia's second proof of his Corollary III.2.3 ([`Morrey/Cassese/Square/Weyl.lean`](../../Morrey/Cassese/Square/Weyl.lean)), [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L441) (BP's, after Bourin–Zhang, arXiv:2610.30538, Proposition 3.13; Section 7) |
+| the Schatten-norm facts (1)–(3) of Section 1.5, "immediate consequences of the definitions (see also [Bhatia, Chapter 4])", and, with no source, the triangle inequality | Section 6 | proved (below) |
 | the Bernstein–Doetsch theorem: a midpoint convex function, locally bounded above, is convex | lines 643–646 (Proposition 2.4) | proved, in `tk_midpoint_principle` |
 | the uniform convexity of `\|·\|^p` | (29) | proved, [`tbt2_gain`](../../Morrey/Cassese/TwoByThree/ExtensionAux.lean#L526) (E3) |
 | the strong law of large numbers with infinite mean, Fatou's lemma, Jensen's inequality | Lemma 4.2 | Mathlib, in [`lemma4_2`](../../Morrey/Cassese/TwoByM.lean#L1585) |
@@ -151,42 +183,94 @@ Nothing.
 | Fourier series of smooth periodic functions; `∂̄` is invertible on smooth mean-zero functions; `𝓑(∂̄w) = ∂w` | Proposition 7.2 | HA (`UnitAddTorus.exists_dzbarPi_eq`, `periodicMultiplier_beurlingSymbol_dzbarPi`) |
 | distributional second derivatives on `ℝ`: the Leibniz rule, and convexity from a nonnegative second derivative | Corollary 1.6 | CV (`CalculusOfVariations.convexOn_of_distribNonneg`) |
 
+The Schatten-norm facts and the triangle inequality, in the formalization:
+
+- [`schattenNorm_mul_self`](../../Morrey/Cassese/Square.lean#L196) (fact (1), for every `q ≥ 1`: E2;
+  Bhatia's (IV.49));
+- fact (2) from the definition;
+- Weyl's monotonicity for fact (3) as in Bhatia's second proof of his Corollary III.2.3
+  ([`Morrey/Cassese/Square/Weyl.lean`](../../Morrey/Cassese/Square/Weyl.lean));
+- [`schattenNorm_add_le`](../../Morrey/Cassese/Square.lean#L441) (BP's, after Bourin–Zhang,
+  arXiv:2610.30538, Proposition 3.13; Section 7).
+
 ### Does the paper use each cited result correctly?
 
 | Cited result | Where | Verdict |
 | --- | --- | --- |
 | Theorem 2.3 (Burkholder) | Sections 5–7 | correct. The paper asks for a separable Hilbert space; the proofs do not use separability (Section 5) |
 | (13), (14) (Burkholder's `u`) | Proposition 4.2 | correct |
-| Lemma 2.1 (Rindler) | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | correct. The paper uses the minorant `G` of Propositions 2.4 and 2.5 as a competitor without showing that it is an integrand; Lemma 2.1 for every real-valued rank-one convex function, proved here, supplies this (E21); Rindler's definition of rank-one convexity includes local boundedness and Borel measurability |
+| Lemma 2.1 (Rindler) | implicit uses (the paper never cites it): Propositions 2.3–2.5, Corollary 1.6 | correct (below) |
 | Lemma 2.2 (Rindler, Dacorogna) | Sections 2, 4, 6, 7 | correct; the domain must be nonempty, which the paper does not say |
 | Proposition 2.1 (Pedregal, Dacorogna) | Propositions 2.3, 5.1 | correct; Remark 2.1 says that the sources assume `f` bounded below, where Dacorogna's Theorem 6.10 asks only for a rank-one convex minorant (E36) |
 | Proposition 2.6 (Osękowski, Theorem 3.24) | no proof | quoted with more than the source proves: the bound on the Banach–Mazur distance is not in it (E37) |
 | Proposition 2.2 (Kinderlehrer–Pedregal) | line 559 | correct; the passage from the ball of the formula to the cube of Definition 2.1 is silent (E22) |
 | Dacorogna, Theorems 5.20 and 5.25 (i) | Proposition 5.1 | correct |
 | Kristensen, Proposition 2 | Corollary 5.2 | applied loosely but correctly: the paper's form asks `c ‖A‖² ≤ h(A)` for every `A`, which Kristensen's function need not satisfy, since the cut-off polynomial can be negative; adding a constant repairs it and changes neither the second derivatives nor quasiconvexity at `0` |
-| Proposition 2.7 (1), (3)–(6) | Section 4.2 (for Theorem 1.2); (4), (6) in no proof | applied loosely but correctly: the sources' constants are for deterministic signs or multipliers, the paper's for predictable ones, and HNVW I, Theorem 4.2.25, which shows that they agree, is not cited (E38). Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11) |
-| Proposition 2.7 (2) (Randrianantoanina) | Propositions 6.2, 6.5 | applied loosely but correctly: Corollary 4.5 bounds `UMD_q(S_q)` by `C q²/(q − 1)`; the bound at the exponent `2`, linear in `q*`, is the source's Remark 4.6 (1), through extrapolation; the source's constants are for deterministic signs (E38) |
+| Proposition 2.7 (1), (3)–(6) | Section 4.2 (for Theorem 1.2); (4), (6) in no proof | applied loosely but correctly (below) |
+| Proposition 2.7 (2) (Randrianantoanina) | Propositions 6.2, 6.5 | applied loosely but correctly (below) |
 | Proposition 2.8 (Cox–Veraar, HNVW) | Propositions 6.2, 6.5 | correct; the case used is the Paley–Walsh case of Cox–Veraar's statement |
-| Propositions 6.3, 6.4 | (31) | correct; the order `√q` in Proposition 6.3 is not in Pisier–Xu's Theorem 6.1 but in the remark after it (E40); Proposition 6.4 leaves out the constants of the theorem it cites, which Remark 6.3 and Proposition 6.5 at `q = ∞` use (E27) |
+| Propositions 6.3, 6.4 | (31) | correct (below) |
 | the sharpness of `p* − 1` | Corollary 6.3 | correct, with only "see also [Cassese 2025]" as a source (E30) |
 | Cassese 2025 | Proposition 7.1 | applied loosely but correctly: its Theorem 2.1 is stated for the orthogonal projections onto a subspace and its complement, which `P_ρ` and `Q` are not; the proof carries over (E42) |
 | transference (HNVW I, Corollary 5.7.6) | Proposition 7.2 | correct: the corollary states that the three norms are equal, and the proof uses one inequality, from `L^p_0(𝕋²)` to `L^p(ℝ²)` (E41) |
-| Dragičević, Theorem 1.1 | Theorem 7.1, Corollary 7.2 | applied loosely but correctly: the theorem is stated for `p > 2` (the article's standing assumption, p. 464); for `p < 2` it follows from the duality `‖𝓑^n‖_p = ‖𝓑^n‖_{p'}` of Carbonaro–Dragičević–Kovač, §1.3.1, the paper's "see also [Dragicevic1]"; and `κ₂(p*) − (p* − 1) = (p* − 1)(p* − 2)/(p* + 1) > 0` for `p* > 2` (E39) |
+| Dragičević, Theorem 1.1 | Theorem 7.1, Corollary 7.2 | applied loosely but correctly (below) |
 
-The other citations give context and are used in no proof: the history of Morrey's problem and of
-Burkholder's method in the calculus of variations (Sections 1, 2 and 8, Remarks 2.3 and 3.1),
-Grabovsky's examples, Gennaioli–Rindler, Guerra–Kristensen, and the literature on Iwaniec's
-conjecture.
+Lemma 2.1 (Rindler), correct:
+
+- The paper uses the minorant `G` of Propositions 2.4 and 2.5 as a competitor without showing that
+  it is an integrand; Lemma 2.1 for every real-valued rank-one convex function, proved here,
+  supplies this (E21).
+- Rindler's definition of rank-one convexity includes local boundedness and Borel measurability.
+
+Proposition 2.7 (1), (3)–(6), applied loosely but correctly:
+
+- The sources' constants are for deterministic signs or multipliers, the paper's for predictable
+  ones, and HNVW I, Theorem 4.2.25, which shows that they agree, is not cited (E38).
+- Remark 4.2 writes `UMD_p` where the argument gives `UMD_{ℂ,p}`, harmless under `≲` (E11).
+
+Proposition 2.7 (2) (Randrianantoanina), applied loosely but correctly:
+
+- Corollary 4.5 bounds `UMD_q(S_q)` by `C q²/(q − 1)`.
+- The bound at the exponent `2`, linear in `q*`, is the source's Remark 4.6 (1), through
+  extrapolation.
+- The source's constants are for deterministic signs (E38).
+
+Propositions 6.3, 6.4, correct:
+
+- The order `√q` in Proposition 6.3 is not in Pisier–Xu's Theorem 6.1 but in the remark after it
+  (E40).
+- Proposition 6.4 leaves out the constants of the theorem it cites, which Remark 6.3 and
+  Proposition 6.5 at `q = ∞` use (E27).
+
+Dragičević, Theorem 1.1, applied loosely but correctly (E39):
+
+- The theorem is stated for `p > 2` (the article's standing assumption, p. 464); for `p < 2` it
+  follows from the duality `‖𝓑^n‖_p = ‖𝓑^n‖_{p'}` of Carbonaro–Dragičević–Kovač, §1.3.1, the paper's
+  "see also [Dragicevic1]".
+- `κ₂(p*) − (p* − 1) = (p* − 1)(p* − 2)/(p* + 1) > 0` for `p* > 2`.
+
+The other citations give context and are used in no proof:
+
+- the history of Morrey's problem and of Burkholder's method in the calculus of variations
+  (Sections 1, 2 and 8, Remarks 2.3 and 3.1);
+- Grabovsky's examples;
+- Gennaioli–Rindler;
+- Guerra–Kristensen;
+- the literature on Iwaniec's conjecture.
 
 ## 3. Errors and gaps in the paper
 
-No statement was found false. The items below are gaps (steps that need an argument the paper does not
-give, or only sketches), one intermediate claim that is false under a natural reading (E10),
-citations that say more or less than their sources, and misprints, collected at the end. The numbers
-are those of the inventory of the paper, which the docstrings of the code cite; E1 of the inventory is
-the remark on numbering in the preamble, not a finding, and E35–E42 are not in the inventory. In every
-case but two the result holds and the formalization supplies the missing argument; E18 and E37
-(claims that no proof uses) are not proved here.
+No statement was found false. The items below are:
+
+- gaps (steps that need an argument the paper does not give, or only sketches);
+- one intermediate claim that is false under a natural reading (E10);
+- citations that say more or less than their sources;
+- misprints, collected at the end.
+
+The numbers are those of the inventory of the paper, which the docstrings of the code cite; E1 of
+the inventory is the remark on numbering in the preamble, not a finding, and E35–E42 are not in the
+inventory. In every case but two the result holds and the formalization supplies the missing
+argument; E18 and E37 (claims that no proof uses) are not proved here.
 
 ### E2. Lines 375–377, 2350–2378: Schatten fact (1)
 
@@ -239,12 +323,17 @@ The bound `⟨W, Z⟩ ≤ (1/3)(2ae + 2bc) + (2/3)(2aρ)` does not follow "by th
 
 ### E8. Lines 562–578: Proposition 2.3
 
-Proposition 2.3 has no proof ("follows directly"). The formalization splits it into (a), the
-dichotomy `≡ −∞` or finite and the homogeneity of the envelopes; (b), the invariances; (c), the
-equivalence at `0` (the paper's statement has no item labels). The conjugation invariance of
-`f^{qc}` in (b) needs Dacorogna's formula (Proposition 2.2), and the direction "`f` quasiconvex at
-`0` ⇒ `f^{rc}` quasiconvex at `0`" of (c) needs line 559 and Lemma 2.2; what the main theorems use
-is elementary. Proved: (a) and (b) from the dual formulas of the envelopes, (c) through line 559
+Proposition 2.3 has no proof ("follows directly"). The formalization splits it into the following
+(the paper's statement has no item labels):
+
+- (a), the dichotomy `≡ −∞` or finite and the homogeneity of the envelopes;
+- (b), the invariances;
+- (c), the equivalence at `0`.
+
+The conjugation invariance of `f^{qc}` in (b) needs Dacorogna's formula (Proposition 2.2), and the
+direction "`f` quasiconvex at `0` ⇒ `f^{rc}` quasiconvex at `0`" of (c) needs line 559 and
+Lemma 2.2; what the main theorems use is elementary. Proved: (a) and (b) from the dual formulas of
+the envelopes, (c) through line 559
 ([`proposition2_3_a`](../../Morrey/Cassese/Toolkit.lean#L1286), [`proposition2_3_b`](../../Morrey/Cassese/Toolkit.lean#L1458), [`proposition2_3_c`](../../Morrey/Cassese/Toolkit.lean#L1565)).
 
 ### E9. Lines 1406–1411: Proposition 5.1
@@ -539,36 +628,49 @@ statements, as the paper states them.
   mean-zero periodic tuples ([`chainOpNorm`](../../Morrey/Cassese/FourByTwo.lean#L112)), as in the paper's proof.
 - **Hessian quasiconvexity** (Corollaries 5.4, 6.1), undefined in the paper, is
   `∫_{(0,1)^n} F(A + D²φ) ≥ F(A)` for smooth compactly supported `φ`.
-- **Quantifiers.** Theorem 1.3 (b): `∃ ε > 0, ∀ p, |p − 4| < ε → …`. Corollaries 5.3, 5.4:
-  `∃ K₀ ∀ K ≥ K₀ ∃ δ₀ > 0 ∀ δ ∈ (0, δ₀)`, with `Λ = K/δ`. Proposition 6.5 at `q = ∞`: one exponent
-  `α` for every `p` (the proof gives `α = 3`), which covers both readings of the paper.
-  Corollary 6.1: the paper's `d(p)`, with `d = 2n`; the formalization takes `n = m⁸` and proves
-  every larger `d` as an extra lemma ([`corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2274)).
+- **Quantifiers.**
+  - Theorem 1.3 (b): `∃ ε > 0, ∀ p, |p − 4| < ε → …`.
+  - Corollaries 5.3, 5.4: `∃ K₀ ∀ K ≥ K₀ ∃ δ₀ > 0 ∀ δ ∈ (0, δ₀)`, with `Λ = K/δ`.
+  - Proposition 6.5 at `q = ∞`: one exponent `α` for every `p` (the proof gives `α = 3`), which
+    covers both readings of the paper.
+  - Corollary 6.1: the paper's `d(p)`, with `d = 2n`; the formalization takes `n = m⁸` and proves
+    every larger `d` as an extra lemma
+    ([`corollary6_1_ge`](../../Morrey/Cassese/Square.lean#L2274)).
 - **Theorem 1.4** for general `p` fixes the Schatten exponent `q = 4` among the paper's
   `q ∈ (2, ∞)`.
 - **The cited results** are stated, in their sources' terms or as the paper quotes them, in [`Morrey/Common/External/`](../../Morrey/Common/External), and in the
   paper's terms in [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) ([`burkholderInequality_holds`](../../Morrey/Cassese/Hypotheses.lean#L116),
-  [`hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L508), …, [`dragicevicLowerBound_holds`](../../Morrey/Cassese/Hypotheses.lean#L179)). Some are stated more generally than
-  the paper quotes them: Lemma 2.1 for every real-valued rank-one convex function (E21);
-  Burkholder's inequalities without separability (Section 5), and Theorem 3.5 in the book's form, with
-  `‖g_0‖ ≤ ‖f_0‖`; the extrapolation of UMD constants for all exponents, as in HNVW; Kahane–Khintchine
-  for any seminorm on a real vector space; Lemma 2.2 for Borel, locally bounded functions, as in the
-  sources; Dacorogna's Theorem 5.20 without continuity, as in the book
-  ([`External.Dacorogna.RankOneAffineMinors`](../../Morrey/Common/External/Dacorogna/Minors.lean#L61)). Others are stated
-  in the case the paper uses: Osękowski's Theorem 8.6 for martingales started at `0`; HNVW's
-  UMD theorems for real spaces, probability spaces and martingales started at `0`; Randrianantoanina's
-  bounds, and Pisier–Xu's Theorem 6.1 for `q ≥ 2` ((6.4)), for real square matrices, uniformly in the
-  size; Pisier's for the
-  complex `L^p(μ)` as a real Banach space; decoupling for Paley–Walsh martingales; the quasiaffinity of
-  minors for `3 × 3` minors on the cube; Kristensen's smoothing in the form of Corollary 5.2 (quartics on
-  `ℝ^{2×m}`, `m ≥ 3`; the package has it for every smooth rank-one convex integrand on `ℝ^{d×m}` that is
-  not quasiconvex at `0`); transference in the direction from `𝕋²` to `ℝ²`, for symbols homogeneous of
-  degree `0`; Dragičević's theorem for `𝓑²`.
-- **Proposition 2.7 (6)** ([`HNVWZigZag`](../../Morrey/Cassese/Hypotheses.lean#L477)). For a real `X`, the equivalence and the bound `β ≥ UMD_p(X)`,
-  with functions concave along `z ↦ (x + z, y + εz)` for `ε ∈ [−1, 1]`; for a complex `X`, with `ε` in the
-  closed unit disc (the paper's footnote), the equivalence with the finiteness of `UMD_p(X)`, the
-  constant of `X` as a real space, and the bounds `β ≥ UMD_p(X)` and `β ≥ UMD_{ℂ,p}(X)`. The spaces are
-  in `Type`, as in the other statements on UMD constants.
+  [`hnvwExtrapolation_holds`](../../Morrey/Cassese/Hypotheses.lean#L508), …,
+  [`dragicevicLowerBound_holds`](../../Morrey/Cassese/Hypotheses.lean#L179)).
+  - Some are stated more generally than the paper quotes them:
+    - Lemma 2.1 for every real-valued rank-one convex function (E21);
+    - Burkholder's inequalities without separability (Section 5), and Theorem 3.5 in the book's
+      form, with `‖g_0‖ ≤ ‖f_0‖`;
+    - the extrapolation of UMD constants for all exponents, as in HNVW;
+    - Kahane–Khintchine for any seminorm on a real vector space;
+    - Lemma 2.2 for Borel, locally bounded functions, as in the sources;
+    - Dacorogna's Theorem 5.20 without continuity, as in the book
+      ([`External.Dacorogna.RankOneAffineMinors`](../../Morrey/Common/External/Dacorogna/Minors.lean#L61)).
+  - Others are stated in the case the paper uses:
+    - Osękowski's Theorem 8.6 for martingales started at `0`;
+    - HNVW's UMD theorems for real spaces, probability spaces and martingales started at `0`;
+    - Randrianantoanina's bounds, and Pisier–Xu's Theorem 6.1 for `q ≥ 2` ((6.4)), for real square
+      matrices, uniformly in the size;
+    - Pisier's for the complex `L^p(μ)` as a real Banach space;
+    - decoupling for Paley–Walsh martingales;
+    - the quasiaffinity of minors for `3 × 3` minors on the cube;
+    - Kristensen's smoothing in the form of Corollary 5.2 (quartics on `ℝ^{2×m}`, `m ≥ 3`; the
+      package has it for every smooth rank-one convex integrand on `ℝ^{d×m}` that is not quasiconvex
+      at `0`);
+    - transference in the direction from `𝕋²` to `ℝ²`, for symbols homogeneous of degree `0`;
+    - Dragičević's theorem for `𝓑²`.
+- **Proposition 2.7 (6)** ([`HNVWZigZag`](../../Morrey/Cassese/Hypotheses.lean#L477)).
+  - For a real `X`, the equivalence and the bound `β ≥ UMD_p(X)`, with functions concave along
+    `z ↦ (x + z, y + εz)` for `ε ∈ [−1, 1]`.
+  - For a complex `X`, with `ε` in the closed unit disc (the paper's footnote), the equivalence with
+    the finiteness of `UMD_p(X)`, the constant of `X` as a real space, and the bounds `β ≥ UMD_p(X)`
+    and `β ≥ UMD_{ℂ,p}(X)`.
+  - The spaces are in `Type`, as in the other statements on UMD constants.
 
 No statement of the paper had to be corrected.
 
@@ -582,41 +684,59 @@ changes the results a proof uses (E10) is also in [`route_differences.tsv`](rout
 
 | Result | The paper's argument | The formalization's | Why it is necessary | E-item |
 | --- | --- | --- | --- | --- |
-| Theorem 1.3 (b) ([`twoByThree_theorem1_3_b_witness`](../../Morrey/Cassese/TwoByThree/NearFour.lean#L860)) | "continuity of the rank-one convexity and quasiconvexity estimates for `f`", in `p` | the same continuity, made explicit: Lemma 5.1 (1) with explicit constants ([`lemma5_1_part1_quant`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L324)), so that `Λ₀(p, δ)` is continuous in `p`; `K`, `δ` and the cut-off fixed before `p` varies; dominated convergence in `p` | the continuity needs constants uniform in `p`, which Lemma 5.1 (1), stated for a fixed `p`, does not give (a gap) | E4 |
+| Theorem 1.3 (b) ([`twoByThree_theorem1_3_b_witness`](../../Morrey/Cassese/TwoByThree/NearFour.lean#L860)) | "continuity of the rank-one convexity and quasiconvexity estimates for `f`", in `p` | the same continuity, made explicit (below) | the continuity needs constants uniform in `p`, which Lemma 5.1 (1), stated for a fixed `p`, does not give (a gap) | E4 |
 | Proposition 2.5, "⇐" ([`proposition2_5`](../../Morrey/Cassese/Toolkit.lean#L1935)) | Proposition 2.4 and the claim of lines 661–663 that every dyadic prelaminate is the law of a rank-one Rademacher martingale | Proposition 2.4's gluing argument, run on the infimum `G(A) = inf E f(M_N)` over rank-one Rademacher martingales started at `A` | the claim is false under the reading of prelaminates that Proposition 2.4 needs, and the gluing of Proposition 2.4 fails under the other reading | E10 |
 | Proposition 5.1 ([`proposition5_1`](../../Morrey/Cassese/TwoByThree/Folklore.lean#L260)) | "`Q` is rank-one affine at `0`. It follows that `Q` is rank-one affine"; "Since `P''(0) = (P − Q)''(0)`, the quadratic polynomial `P − Q` is rank-one convex" | a prelaminate centred at `0` with an atom at an arbitrary `A`, split once more along `±hR`; the Legendre–Hadamard condition for the quadratic part by the same device | both steps are skipped (a gap) | E9 |
 
-Not departures: Theorem 1.2 is proved by the paper's route, and the route of Remark 4.5 is a
-second theorem, [`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480), which takes `f = g` (its `g` is already globally rank-one
-convex, so no envelope is needed); the gaps that the formalization fills along the paper's own
-lines, recorded as findings in Section 3, among them the density steps from smooth to Lipschitz
-periodic test maps in Proposition 7.2 (E28) and Corollary 1.6 (E35), by mollification and
-dominated convergence; the explicit constants and cut-offs that complete the sketched proofs (Corollary 5.3's `c = 75/8`, `C = 4·10⁶`, E17; Remark 4.5's `U`, `K`, `q`, E26;
-Corollaries 6.4 and 7.2, E31, E32); and the route differences where the paper cites the proof of a
-result rather than its statement (Corollaries 5.4 and 6.1, Remark 6.3, Proposition 6.5), recorded
-in [`route_differences.tsv`](route_differences.tsv).
+Theorem 1.3 (b), the formalization's argument:
+
+- Lemma 5.1 (1) with explicit constants
+  ([`lemma5_1_part1_quant`](../../Morrey/Cassese/TwoByThree/ExtensionOne.lean#L324)), so that
+  `Λ₀(p, δ)` is continuous in `p`;
+- `K`, `δ` and the cut-off fixed before `p` varies;
+- dominated convergence in `p`.
+
+Not departures:
+
+- Theorem 1.2 is proved by the paper's route, and the route of Remark 4.5 is a second theorem,
+  [`theorem1_2_elementary`](../../Morrey/Cassese/TwoByM.lean#L3480), which takes `f = g` (its `g` is
+  already globally rank-one convex, so no envelope is needed).
+- The gaps that the formalization fills along the paper's own lines, recorded as findings in
+  Section 3, among them the density steps from smooth to Lipschitz periodic test maps in
+  Proposition 7.2 (E28) and Corollary 1.6 (E35), by mollification and dominated convergence.
+- The explicit constants and cut-offs that complete the sketched proofs (Corollary 5.3's `c = 75/8`,
+  `C = 4·10⁶`, E17; Remark 4.5's `U`, `K`, `q`, E26; Corollaries 6.4 and 7.2, E31, E32).
+- The route differences where the paper cites the proof of a result rather than its statement
+  (Corollaries 5.4 and 6.1, Remark 6.3, Proposition 6.5), recorded in
+  [`route_differences.tsv`](route_differences.tsv).
 
 ### The cited results
 
 Each cited result that the proofs use is proved by the cited source's argument; Proposition 2.1 is
 proved by the paper's second route, and Proposition 2.7 (4) by the second proof that its source gives.
-The table says how each source was read, which module states the result and where in the packages the
-proof is (HA, BP, CV as in Section 2), and what is different, and why. A "(gap)" or a "(slip)" is the
-source's, repaired along the source's lines (the list "Errors and gaps found in the sources", below, has
-the references). The READMEs of [`Morrey/Common/External/`](../../Morrey/Common/External) and the packages' module docstrings give
+The table says:
+
+- how each source was read;
+- which module states the result and where in the packages the proof is (HA, BP, CV as in
+  Section 2);
+- what is different, and why.
+
+A "(gap)" or a "(slip)" is the source's, repaired along the source's lines (the list "Errors and
+gaps found in the sources", below, has the references). The READMEs of
+[`Morrey/Common/External/`](../../Morrey/Common/External) and the packages' module docstrings give
 the details.
 
 | Cited result | Source, and how it was read | Stated and proved in | What is different, and why |
 | --- | --- | --- | --- |
-| Lemma 2.1 | Rindler 2018, Lemma 5.6: the first edition was not obtained; the second one (2026) was read, where the result is Lemma 5.9 (pp. 114–115), matched by content | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `RankOneConvex/` | the local boundedness of a rank-one convex function, part of Rindler's definition, is proved, by convexity in each entry (the paper applies the lemma to functions not known to be integrands, E21; Rindler, p. 111, refers to Kirchheim–Kristensen for it); (5.10) is used where it holds (slip); the part on functions of `p`-growth is not formalized |
+| Lemma 2.1 | Rindler 2018, Lemma 5.6: the first edition was not obtained; the second one (2026) was read, where the result is Lemma 5.9 (pp. 114–115), matched by content | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `RankOneConvex/` | local boundedness proved; one slip; the `p`-growth part not formalized (below) |
 | Lemma 2.2, quasiconvex ⇒ rank-one convex | Rindler 2026, Proposition 5.6 (pp. 111–113): read; the first edition's Propositions 5.1 and 5.3 not checked | [`External/Rindler/Lemmas.lean`](../../Morrey/Common/External/Rindler/Lemmas.lean); CV `Quasiconvex/{Cutoff, Laminate, RankOneConvex}` | on the unit cube, with an orthogonal change of variables for the cubes of other directions (mechanics) |
-| Lemma 2.2, the domain and the periodic test maps | Dacorogna 2008, Propositions 5.11 and 5.13 (pp. 172–174): read; also Rindler 2026, Lemma 5.2 (i) (p. 106) | the same; CV `Quasiconvex/{Domain, Periodic}` | the test maps are Lipschitz maps that vanish outside the domain, and their gradients vanish almost everywhere on the zero set, which is proved (for Dacorogna's `W^{1,∞}_0` it is immediate); the domain is nonempty, and the roles of the two domains are Dacorogna's (slips); the statements are at one matrix, as the paper's |
+| Lemma 2.2, the domain and the periodic test maps | Dacorogna 2008, Propositions 5.11 and 5.13 (pp. 172–174): read; also Rindler 2026, Lemma 5.2 (i) (p. 106) | the same; CV `Quasiconvex/{Domain, Periodic}` | Lipschitz test maps; slips; statements at one matrix (below) |
 | Proposition 2.1 | Dacorogna 2008, Theorem 6.10 (pp. 277–279): read; Pedregal 1993: not obtained | [`proposition2_1`](../../Morrey/Cassese/Toolkit.lean#L780) | the paper's own second route (Remark 2.1), so neither source's argument is used |
 | Proposition 2.2 | Kinderlehrer–Pedregal 1991, Proposition 8.1 (pp. 360–362) with Step 6 of Proposition 7.2: read; Dacorogna 1982, Theorem 5: read (a hypercube, and a growth condition) | [`External/KinderlehrerPedregal/Formula.lean`](../../Morrey/Common/External/KinderlehrerPedregal/Formula.lean); CV `Envelope/` | the formula itself, `f^{qc} = ψ^#`, which the source does not state, and the approximation in (iv) by piecewise affine maps are supplied; the copied domains have null boundaries, a hypothesis that Proposition 8.1 leaves out (gaps) |
-| Theorem 2.3 | Osękowski 2012, Theorems 3.5 (pp. 53–54, 58) and 8.6 (pp. 413–415): read | [`External/Osekowski/Inequality.lean`](../../Morrey/Common/External/Osekowski/Inequality.lean); BP `Martingale/Osekowski/{Method, SimpleFunctions, Integral, Moment}`, `Martingale/Burkholder/{Function, Inequality}` | a fixed time instead of `sup_n`, equivalent; no separability; Theorem 8.6 for martingales started at `0`; the two integral formulas for Burkholder's function, stated there without proof, are proved; the majorization `U_p ≥ V_p` also uses Burkholder 1988, (1.11), where the book's argument has a gap; slips |
+| Theorem 2.3 | Osękowski 2012, Theorems 3.5 (pp. 53–54, 58) and 8.6 (pp. 413–415): read | [`External/Osekowski/Inequality.lean`](../../Morrey/Common/External/Osekowski/Inequality.lean); BP `Martingale/Osekowski/{Method, SimpleFunctions, Integral, Moment}`, `Martingale/Burkholder/{Function, Inequality}` | a fixed time, no separability, two formulas proved, a gap; slips (below) |
 | Proposition 2.6 | Osękowski 2012, Theorem 3.24 (pp. 120–121): read | [`External/Osekowski/HilbertCharacterization.lean`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean) | stated, not proved (context; E37) |
-| Proposition 2.7 (1) | HNVW I, Theorem 4.2.7 (pp. 283–285) with pp. 229–234: read | [`External/HNVW/Extrapolation.lean`](../../Morrey/Common/External/HNVW/Extrapolation.lean); BP `UMD/{CubeTransform, GoodLambda, Extrapolation}` | predictable signs, probability spaces, martingales started at `0`, real spaces (the paper's Definition 2.5 and the case used); Lemma 3.5.14 at the first index (gap); an elementary inequality left to the reader |
-| Proposition 2.7 (2) | Randrianantoanina 2002 (arXiv:math/0111264), §§2–4: read | [`External/Randrianantoanina/SchattenUMD.lean`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean); BP `Noncommutative/` | Cuculescu's projections `q_{k+1} = 1_{[0,λ]}(q_k x_k q_k)` are read in the reduced algebra `q_k N q_k`, as the proof requires (read literally, they would not decrease); "by interpolation" (Theorem 4.3) is carried out in three ranges of exponents, so that the constant stays uniform near `2`; Lemma 3.2 in a counting form for matrices (constant `26` in (3.2)); HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that the source quotes from Pisier |
+| Proposition 2.7 (1) | HNVW I, Theorem 4.2.7 (pp. 283–285) with pp. 229–234: read | [`External/HNVW/Extrapolation.lean`](../../Morrey/Common/External/HNVW/Extrapolation.lean); BP `UMD/{CubeTransform, GoodLambda, Extrapolation}` | the paper's setting; a gap; an inequality left to the reader (below) |
+| Proposition 2.7 (2) | Randrianantoanina 2002 (arXiv:math/0111264), §§2–4: read | [`External/Randrianantoanina/SchattenUMD.lean`](../../Morrey/Common/External/Randrianantoanina/SchattenUMD.lean); BP `Noncommutative/` | Cuculescu's projections, the interpolation, Lemma 3.2, the extrapolation (below) |
 | Proposition 2.7 (3) | Pisier 2016, Corollary 5.22, read in the 2011 lecture notes (Corollary 8.19): the book was not obtained | [`External/Pisier/LpUMD.lean`](../../Morrey/Common/External/Pisier/LpUMD.lean); BP `UMD/Lp` | Fubini's theorem is applied to Paley–Walsh martingales, and HNVW I, Theorem 4.2.5, passes to general filtrations: no σ-finiteness and no joint measurability needed |
 | Proposition 2.7 (4) | HNVW I, Theorem 4.2.5 (p. 282): read | [`External/HNVW/DyadicUMD.lean`](../../Morrey/Common/External/HNVW/DyadicUMD.lean); BP `UMD/Maurey/`, `ZigZag/` | by the alternative proof that the book points out on p. 334 (Burkholder 1986), Theorem 4.5.6, (2)⇒(3)⇒(1); the proof printed at Theorem 4.2.5 (pp. 284–285, after Maurey) is not the one followed |
 | Proposition 2.7 (5) | Yaroslavtsev 2018 (arXiv:1710.04958), Lemma 3.2: read, no proof there ("proven in" HNVW I, Proposition 4.2.10); HNVW I, p. 286, with Theorem 4.2.25 (pp. 300–301): read | [`External/Yaroslavtsev/ComplexUMD.lean`](../../Morrey/Common/External/Yaroslavtsev/ComplexUMD.lean); BP `UMD/{ConvexHull, Incremental, Complex}` | none in the argument; Lemma 3.6.18 (iii) (slip) |
@@ -625,51 +745,190 @@ the details.
 | (13), (14) | Burkholder 1988 (Numdam), proof of Theorem 1.1 and Remark 1.2: read; Vasyunin–Volberg 2010, cited as an alternative: not obtained | [`External/Burkholder/ScalarFunction.lean`](../../Morrey/Common/External/Burkholder/ScalarFunction.lean); BP `Martingale/Burkholder/Function` | Remark 1.2, concavity along every line, has no proof in the source: it is completed from (1.14) and the shift of the proof of (1.8) (gap) |
 | Dacorogna, Theorem 5.20 (Proposition 5.1) | Dacorogna 2008, pp. 179–191, with Theorem 8.35 (pp. 409–411): read | [`External/Dacorogna/Minors.lean`](../../Morrey/Common/External/Dacorogna/Minors.lean); CV `Minors/` | Lemma 5.24, Part 2, repaired, and (ii) ⇒ (ii′) avoided (gaps, slips); that the minors are quasiaffine by the proof of Theorem 8.35 (ii), for `3 × 3` minors on the cube, which the paper needs |
 | Dacorogna, Theorem 5.25 (i) (Proposition 5.1) | Dacorogna 2008, pp. 191–194: read | [`External/Dacorogna/Minors.lean`](../../Morrey/Common/External/Dacorogna/Minors.lean); CV `QuadraticForm/` | Plancherel's formula for smooth maps, then mollification, where the book applies it to the Lipschitz map (mechanics) |
-| Kristensen's smoothing (Corollary 5.2) | Kristensen 1999, proof of Proposition 2 (pp. 6–7): read (scan, Numdam); Heinz 2008: not obtained | [`External/Kristensen/Smoothing.lean`](../../Morrey/Common/External/Kristensen/Smoothing.lean); CV `Smoothing/` | the cut-offs are functions of `\|X\|²` instead of `\|X\|` (slip); a constant is added, since the paper's form asks `c ‖A‖² ≤ h(A)`; `ε` is chosen before the radius (the order of independent steps); his "it is not hard to see", the rank-one convexity of the cut-off function, is supplied along his lines |
-| Proposition 6.3 | Pisier–Xu 2003, Theorem 6.1 (p. 1486): read, no proof there; Lust-Piquard 1986: not obtained; Lust-Piquard–Pisier 1991 (pp. 242–255), and, for the order `√q`, Pisier, Astérisque 247 (1998), pp. 101–108: read. Behind them: McConnell 1984, Theorems 1.1 (pp. 746–751) and 1.3 (pp. 754–756); Burkholder 1983, Lemmas 1–4 (pp. 277–283; pp. 403–409 of the reprint in his *Selected Works*, read as page images), and pp. 271–276; M. Riesz 1928, §18 (pp. 234–235), to which Lemma 4 refers: read; Sarason 1967, §10 (Theorem 4); Helson–Lowdenslager 1958 and 1961; HNVW I, Lemma 5.2.1 and Proposition 5.2.2 (pp. 388–389), Proposition 5.7.1 with the dilation of the proof of Theorem 5.7.10 (pp. 465–466), and Appendix D, and HNVW II, Proposition 7.4.22; Tomczak-Jaegermann 1974: read; Maurey–Pisier 1976, Remark 2.10: read, no proof there | [`External/PisierXu/Khintchine.lean`](../../Morrey/Common/External/PisierXu/Khintchine.lean); HA `NoncommutativeKhintchine`, `Paley/`, `Hardy/`, `VectorValued/`; BP `Schatten/`, `RandomSums/`, `TypeTwo/`, `KConvexity/`, `Noncommutative/`, `UMD/Decoupling`, `Martingale/Burkholder/Inequality` | real matrices of every size, taken as complex ones; Theorem III.1 (i) of Lust-Piquard–Pisier for the Paley projection and `C_p`, `1 ≤ p ≤ 2`, only; its (III.3), for every choice of signs, by McConnell's Theorem 1.3, the second of the two references given for it (the first, Bourgain 1986, Theorem 4, was not obtained), for `n = 1` and from UMD spaces, carried over to the circle by HNVW I, Proposition 5.7.1, with the dilation above, and to the values `ε_ℓ + ε_{ℓ+1}` at `2^ℓ` by a combination of multipliers (steps left to the reader); in McConnell's proofs, the places where a Brownian motion hits the heights are represented by their finite-dimensional distributions, which are all that his Section 3 uses (chains with independent Cauchy increments, so that his Lemma 2.3, proved there with a Bessel process and a time reversal, becomes a definition), and Poisson integrals by their Fourier transforms, with (2.7) and (3.4) proved on the Fourier side; `f = 𝓕⁻G` with `G ∈ L¹` in place of his test functions, `m` complex and of class `C²` off `0`, without mollification; (2.1) for deterministic coefficients, complex ones by real and imaginary parts; Lemma 3.1 without its two cases, (3.6) after the integration in `s`, finite parts of the sums `m_i` and `M`; the boundedness of the Hilbert transform on UMD spaces by the proof of Burkholder 1983, which he cites for it, and not by the one that his Remark 3.1 (pp. 753–754) indicates; in Burkholder's proof, a `UMD_p` constant `β` in place of ζ-convexity, and explicit constants, `β²` for conjugate harmonic polynomials (Lemma 2), `2β²` for conjugate Poisson integrals (Lemma 3), `2β² + 1` for the truncations on the circle (33) and on the line (Lemma 4), with Minkowski's inequality where he integrates `p`-th powers over the rotations; Lemma 4 by M. Riesz's argument applied to the truncations, with the limit that Riesz leaves out (p. 234) written out, and Fatou's lemma where he lets `m → ∞` without a reason; his signs as coordinates of a cube, then of an infinite product; his Taylor estimate by induction on the degree, his two equidistributed sequences of signs (pp. 281–282) by one change of the signs, and his `K_r` (p. 283, "there is a nonnegative function") given explicitly; the limit `ε → 0` only for the functions `𝓕⁻G ∈ L^p`, `G ∈ L¹`, where he states Theorem 2 without proof; the case `β = ∞` apart; the type 2 constant of `S_q` for every `q ≥ 2`, by Tomczak-Jaegermann's interpolation (Astérisque 247 quotes it "at least when `p` is an even integer"); the upper constant is `C √q`, `C` absolute and not explicit; named substitutes (below); gaps and slips |
+| Kristensen's smoothing (Corollary 5.2) | Kristensen 1999, proof of Proposition 2 (pp. 6–7): read (scan, Numdam); Heinz 2008: not obtained | [`External/Kristensen/Smoothing.lean`](../../Morrey/Common/External/Kristensen/Smoothing.lean); CV `Smoothing/` | the cut-offs, an added constant, the order of two steps, a step supplied (below) |
+| Proposition 6.3 | Pisier–Xu, Lust-Piquard, Lust-Piquard–Pisier, Astérisque 247, and the works behind them (below) | [`External/PisierXu/Khintchine.lean`](../../Morrey/Common/External/PisierXu/Khintchine.lean); HA `NoncommutativeKhintchine`, `Paley/`, `Hardy/`, `VectorValued/`; BP `Schatten/`, `RandomSums/`, `TypeTwo/`, `KConvexity/`, `Noncommutative/`, `UMD/Decoupling`, `Martingale/Burkholder/Inequality` | real matrices; (III.3) by McConnell; the Hilbert transform by Burkholder 1983; named substitutes; gaps and slips (below) |
 | Proposition 6.4; the constants of E27 | HNVW II, Theorem 6.2.4 (pp. 21–22), with Theorem 6.2.2 and Lemma 6.2.3 (pp. 18–21): read | [`External/HNVW/KahaneKhintchine.lean`](../../Morrey/Common/External/HNVW/KahaneKhintchine.lean); BP `Hypercontractivity/`, `KahaneKhintchine/Basic` | values in any seminormed space; a constant in Lemma 6.2.3 and the case `q = 1` of Theorem 6.2.4 (slips) |
-| the sharpness of `p* − 1` (Corollary 6.3) | Cassese 2025 (arXiv:2512.02784), Theorems 2.2 and 2.3 (pp. 8–10): read; Burkholder 1984 (Theorems 1.1, 14.1), quoted there: read, not followed; Osękowski 2012, Theorem 3.5 (pp. 56–57, 59), with Theorem 3.34, Remark 3.8 and pp. 137–138: read | [`External/Osekowski/Sharpness.lean`](../../Morrey/Common/External/Osekowski/Sharpness.lean); BP `Martingale/Osekowski/Sharpness` | the second approach is run on the dyadic function `W⁰` of the proof of Theorem 3.34, instead of on `U⁰` and then that theorem (which is not formalized); a predictable sign on the sign cube is a sign for each Haar function, as in (3.214); slips |
+| the sharpness of `p* − 1` (Corollary 6.3) | Cassese 2025, Burkholder 1984, Osękowski 2012 (below) | [`External/Osekowski/Sharpness.lean`](../../Morrey/Common/External/Osekowski/Sharpness.lean); BP `Martingale/Osekowski/Sharpness` | the second approach on `W⁰`; signs for Haar functions; slips (below) |
 | the bound of Proposition 7.1 | Cassese 2025, Theorem 2.1 (pp. 7, 9–10): read | [`proposition7_1`](../../Morrey/Cassese/FourByTwo.lean#L344) | for `P_ρ` and `Q` instead of complementary orthogonal projections (E42); on rank-one Rademacher martingales, as the paper's Propositions 2.4 and 2.5 allow |
 | transference (Proposition 7.2) | HNVW I, Corollary 5.7.6 (pp. 462–463), with Proposition 5.7.4, Lemma 5.7.5 and Proposition 2.4.23: read | [`External/HNVW/Transference.lean`](../../Morrey/Common/External/HNVW/Transference.lean); HA `Transference/`, `FourierMultiplier/{Density, Norming}`, `Torus/Poisson` | scalar symbols on `ℝ² ≅ ℂ`, and the inequality used, from `L^p_0(𝕋²)` to `L^p(ℝ²)`; the closing density and duality, left to the reader, are written out (gap); slips |
-| Dragičević's lower bound (Theorem 7.1, Corollary 7.2) | Dragičević 2011 (pp. 463–467): read; Carbonaro–Dragičević–Kovač 2023 (arXiv:2109.08369), §1.3.1: read | [`External/Dragicevic/LowerBound.lean`](../../Morrey/Common/External/Dragicevic/LowerBound.lean); HA `BeurlingAhlfors/`, `FourierMultiplier/Duality` | `n = 2`; the sentence "`f` belongs to `W^{n,p}`, which ensures that `T^n(∂̄^n f) = ∂^n f`" (p. 465, no proof) is replaced by what is used of it, `‖∂²f‖_p ≤ ‖𝓑²‖_p ‖∂̄²f‖_p`, proved by approximating `f_{2,α}` by Schwartz functions; the duality on the Fourier side |
+| Dragičević's lower bound (Theorem 7.1, Corollary 7.2) | Dragičević 2011 (pp. 463–467): read; Carbonaro–Dragičević–Kovač 2023 (arXiv:2109.08369), §1.3.1: read | [`External/Dragicevic/LowerBound.lean`](../../Morrey/Common/External/Dragicevic/LowerBound.lean); HA `BeurlingAhlfors/`, `FourierMultiplier/Duality` | `n = 2`; a sentence without proof replaced; the duality on the Fourier side (below) |
 | Theorem 1.1 (Kirchheim–Kristensen) | Kirchheim–Kristensen 2016: not compared | [`External/KirchheimKristensen/Theorem.lean`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean) | stated, not proved (context) |
 | the Schatten facts (1)–(3) of Section 1.5 | Bhatia 1997, Chapters III and IV: read in part | [`Morrey/Cassese/Square.lean`](../../Morrey/Cassese/Square.lean), [`Morrey/Cassese/Square/`](../../Morrey/Cassese/Square) | none in the argument; Bhatia writes out no proof of (2) |
 
+Lemma 2.1, what is different:
+
+- The local boundedness of a rank-one convex function, part of Rindler's definition, is proved, by
+  convexity in each entry (the paper applies the lemma to functions not known to be integrands, E21;
+  Rindler, p. 111, refers to Kirchheim–Kristensen for it).
+- (5.10) is used where it holds (slip).
+- The part on functions of `p`-growth is not formalized.
+
+Lemma 2.2, the domain and the periodic test maps, what is different:
+
+- The test maps are Lipschitz maps that vanish outside the domain, and their gradients vanish almost
+  everywhere on the zero set, which is proved (for Dacorogna's `W^{1,∞}_0` it is immediate).
+- The domain is nonempty, and the roles of the two domains are Dacorogna's (slips).
+- The statements are at one matrix, as the paper's.
+
+Theorem 2.3, what is different:
+
+- A fixed time instead of `sup_n`, equivalent.
+- No separability.
+- Theorem 8.6 for martingales started at `0`.
+- The two integral formulas for Burkholder's function, which Osękowski states without proof, are
+  proved.
+- The majorization `U_p ≥ V_p` also uses Burkholder 1988, (1.11), where Osękowski's argument has a
+  gap.
+- Slips.
+
+Proposition 2.7 (1), what is different:
+
+- predictable signs, probability spaces, martingales started at `0`, real spaces (the paper's
+  Definition 2.5 and the case used);
+- Lemma 3.5.14 at the first index (gap);
+- an elementary inequality left to the reader.
+
+Proposition 2.7 (2), what is different:
+
+- Cuculescu's projections `q_{k+1} = 1_{[0,λ]}(q_k x_k q_k)` are read in the reduced algebra
+  `q_k N q_k`, as the proof requires (read literally, they would not decrease).
+- "by interpolation" (Theorem 4.3) is carried out in three ranges of exponents, so that the constant
+  stays uniform near `2`.
+- Lemma 3.2 in a counting form for matrices (constant `26` in (3.2)).
+- HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that the source quotes from Pisier.
+
+Kristensen's smoothing (Corollary 5.2), what is different:
+
+- The cut-offs are functions of `|X|²` instead of `|X|` (slip).
+- A constant is added, since the paper's form asks `c ‖A‖² ≤ h(A)`.
+- `ε` is chosen before the radius (the order of independent steps).
+- His "it is not hard to see", the rank-one convexity of the cut-off function, is supplied along his
+  lines.
+
+Proposition 6.3, the sources and how they were read:
+
+- Pisier–Xu 2003, Theorem 6.1 (p. 1486): read, no proof there;
+- Lust-Piquard 1986: not obtained;
+- Lust-Piquard–Pisier 1991 (pp. 242–255), and, for the order `√q`, Pisier, Astérisque 247 (1998),
+  pp. 101–108: read;
+- behind them, read:
+  - McConnell 1984, Theorems 1.1 (pp. 746–751) and 1.3 (pp. 754–756);
+  - Burkholder 1983, Lemmas 1–4 (pp. 277–283; pp. 403–409 of the reprint in his *Selected Works*,
+    read as page images), and pp. 271–276;
+  - M. Riesz 1928, §18 (pp. 234–235), one of the two references of Lemma 4 (the other, Zygmund's
+    *Trigonometric Series*, was not read; Burkholder's "or" allows either);
+  - Sarason 1967, §10 (Theorem 4);
+  - Helson–Lowdenslager 1958 and 1961;
+  - HNVW I, Lemma 5.2.1 and Proposition 5.2.2 (pp. 388–389), Proposition 5.7.1 with the dilation of
+    the proof of Theorem 5.7.10 (pp. 465–466), and Appendix D;
+  - HNVW II, Proposition 7.4.22;
+  - Tomczak-Jaegermann 1974;
+  - Maurey–Pisier 1976, Remark 2.10 (no proof there).
+
+Proposition 6.3, what is different:
+
+- Real matrices of every size, taken as complex ones.
+- Theorem III.1 (i) of Lust-Piquard–Pisier for the Paley projection and `C_p`, `1 ≤ p ≤ 2`, only;
+  its (III.3), for every choice of signs, by McConnell's Theorem 1.3, the second of the two
+  references given for it (the first, Bourgain 1986, Theorem 4, was not obtained), for `n = 1` and
+  from UMD spaces, carried over to the circle by HNVW I, Proposition 5.7.1, with the dilation above,
+  and to the values `ε_ℓ + ε_{ℓ+1}` at `2^ℓ` by a combination of multipliers (steps left to the
+  reader).
+- In McConnell's proofs:
+  - The places where a Brownian motion hits the heights are represented by their finite-dimensional
+    distributions, which are all that his Section 3 uses (chains with independent Cauchy increments,
+    so that his Lemma 2.3, proved there with a Bessel process and a time reversal, becomes a
+    definition), and Poisson integrals by their Fourier transforms, with (2.7) and (3.4) proved on
+    the Fourier side.
+  - `f = 𝓕⁻G` with `G ∈ L¹` in place of his test functions, `m` complex and of class `C²` off `0`,
+    without mollification.
+  - (2.1) for deterministic coefficients, complex ones by real and imaginary parts.
+  - Lemma 3.1 without its two cases, (3.6) after the integration in `s`, finite parts of the sums
+    `m_i` and `M`.
+  - The boundedness of the Hilbert transform on UMD spaces by the proof of Burkholder 1983, which he
+    cites for it, and not by the one that his Remark 3.1 (pp. 753–754) indicates.
+- In Burkholder's proof:
+  - A `UMD_p` constant `β` in place of ζ-convexity, and explicit constants, `β²` for conjugate
+    harmonic polynomials (Lemma 2), `2β²` for conjugate Poisson integrals (Lemma 3), `2β² + 1` for
+    the truncations on the circle (33) and on the line (Lemma 4), with Minkowski's inequality where
+    he integrates `p`-th powers over the rotations.
+  - (9) with the constants `κ_{2,p}(p* − 1)` and `κ_{p,2}(p* − 1)`; his (20) keeps the constant
+    `2(p* − 1)`, derived for `p < 2` from the case `p = 2`.
+  - Lemma 4 by M. Riesz's argument applied to the truncations, with the limit that Riesz leaves out
+    (p. 234) written out, and Fatou's lemma where Riesz lets `m → ∞` without a reason.
+  - Burkholder's signs as coordinates of a cube, then of an infinite product.
+  - His Taylor estimate by induction on the degree, his two equidistributed sequences of signs
+    (pp. 281–282) by one change of the signs, and his `K_r` (p. 283, "there is a nonnegative
+    function") given explicitly.
+  - The limit `ε → 0` only for the functions `𝓕⁻G ∈ L^p`, `G ∈ L¹`, where he states Theorem 2
+    without proof.
+  - The case `β = ∞` apart.
+- The type 2 constant of `S_q` for every `q ≥ 2`, by Tomczak-Jaegermann's interpolation
+  (Astérisque 247 quotes it "at least when `p` is an even integer").
+- The upper constant is `C √q`, `C` absolute and not explicit.
+- Named substitutes (below).
+- Gaps and slips.
+
+The sharpness of `p* − 1` (Corollary 6.3), the sources and how they were read:
+
+- Cassese 2025 (arXiv:2512.02784), Theorems 2.2 and 2.3 (pp. 8–10): read;
+- Burkholder 1984 (Theorems 1.1, 14.1), quoted there: read, not followed;
+- Osękowski 2012, Theorem 3.5 (pp. 56–57, 59), with Theorem 3.34, Remark 3.8 and pp. 137–138: read.
+
+The sharpness of `p* − 1`, what is different:
+
+- The second approach is run on the dyadic function `W⁰` of the proof of Theorem 3.34, instead of on
+  `U⁰` and then that theorem (which is not formalized).
+- A predictable sign on the sign cube is a sign for each Haar function, as in (3.214).
+- Slips.
+
+Dragičević's lower bound (Theorem 7.1, Corollary 7.2), what is different:
+
+- `n = 2`.
+- The sentence "`f` belongs to `W^{n,p}`, which ensures that `T^n(∂̄^n f) = ∂^n f`" (p. 465, no
+  proof) is replaced by what is used of it, `‖∂²f‖_p ≤ ‖𝓑²‖_p ‖∂̄²f‖_p`, proved by approximating
+  `f_{2,α}` by Schwartz functions.
+- The duality on the Fourier side.
+
 **Proposition 6.3**, after Lust-Piquard and Pisier (whose numbers and pages these are, where no other
 source is named). The lower bound, with constant `1`, is their convexity argument ((I.5)–(I.7),
-pp. 246–247). The upper bound has four steps.
+pp. 246–247). The upper bound has four steps:
 
-1. Paley's inequality in the Schatten classes `C_p` (Theorem III.1 (i), pp. 249–253), here with a constant
-   independent of `p ∈ [1, 2]` and of the size. An analytic `f` is `g h` with
-   `‖f‖_{L¹(C_p)} = ‖g‖_{L²(C_{2p})} ‖h‖_{L²(C_{2p})}` ((α), (β), p. 252): Sarason's Theorem 4, which rests
-   on Helson and Lowdenslager's outer functions, Szegő's theorem and range functions. The coefficients
-   `f̂(2^k)` split into two sums, bounded by Jensen's and Hölder's inequalities, (I.7), and (III.3): for
-   every choice of the signs `ε_k`, `‖Σ ε_k H_{2^k}‖ ≤ C ‖h‖` in `L²(𝕋; C_{2p})`, where `H_{2^k}` is the part
-   of `h` with the frequencies in `[2^{k−1}, 2^k]`. As `C_{2p}` is a UMD space, this follows from McConnell's
-   Theorem 1.3 (the Littlewood–Paley inequalities for every choice of signs), transferred to the circle;
-   that theorem rests on his Theorem 1.1 (Mihlin multipliers) and on the boundedness of the Hilbert
-   transform on UMD spaces, a theorem of Burkholder (1983). Burkholder bounds the conjugates of
-   trigonometric polynomials by a random walk stopped when it leaves the disc (Lemmas 1 and 2: decoupling,
-   Taylor's theorem, the square function inequality for real martingales, which he asserts on p. 275 to
-   follow from his Theorem 1 for `ℝ` and Khintchine's inequality, proved here by the argument of his
-   Lemma 1), and passes to conjugate functions on the circle (Lemma 3) and to the line (Lemma 4, by
-   M. Riesz's argument, 1928, §18).
+1. Paley's inequality in the Schatten classes `C_p` (Theorem III.1 (i), pp. 249–253), here with a
+   constant independent of `p ∈ [1, 2]` and of the size. An analytic `f` is `g h` with
+   `‖f‖_{L¹(C_p)} = ‖g‖_{L²(C_{2p})} ‖h‖_{L²(C_{2p})}` ((α), (β), p. 252): Sarason's Theorem 4,
+   which rests on Helson and Lowdenslager's outer functions, Szegő's theorem and range functions.
+   The coefficients `f̂(2^k)` split into two sums, bounded by Jensen's and Hölder's inequalities,
+   (I.7), and (III.3): for every choice of the signs `ε_k`, `‖Σ ε_k H_{2^k}‖ ≤ C ‖h‖` in
+   `L²(𝕋; C_{2p})`, where `H_{2^k}` is the part of `h` with the frequencies in `[2^{k−1}, 2^k]`. As
+   `C_{2p}` is a UMD space, this follows from McConnell's Theorem 1.3 (the Littlewood–Paley
+   inequalities for every choice of signs), transferred to the circle; that theorem rests on his
+   Theorem 1.1 (Mihlin multipliers) and on the boundedness of the Hilbert transform on UMD spaces, a
+   theorem of Burkholder (1983). Burkholder bounds the conjugates of trigonometric polynomials by a
+   random walk stopped when it leaves the disc (Lemmas 1 and 2), and passes to conjugate functions
+   on the circle (Lemma 3) and to the line (Lemma 4, by M. Riesz's argument, 1928, §18). Lemmas 1
+   and 2 rest on:
+   - decoupling;
+   - Taylor's theorem;
+   - the square function inequality for real martingales, which he asserts on p. 275 to follow from
+     his Theorem 1 for `ℝ` and Khintchine's inequality, proved here by the argument of his Lemma 1
+     for `ℝ`, with Khintchine's inequality.
 2. Corollary III.4, with signs in place of `e^{i2^k t}`, by averaging (p. 243).
 3. The Rademacher projection on `L^{q'}(S_{q'})`, `1/q + 1/q' = 1`, is bounded by a multiple of `√q`
    (Astérisque 247, p. 106): `S_q` has type 2 with constant at most `√(q + 1)` (Tomczak-Jaegermann), and
    type 2 implies K-convexity (Maurey and Pisier; HNVW II).
 4. Duality (pp. 246–248 and 254–255; Astérisque 247, p. 106).
 
-Apart from the differences named in the table, no argument replaces a source's, with one kind of
-exception: a step that a source of Proposition 6.3 takes from a work that was not read, recalls as known,
-or states without proof. The argument is then that of a named substitute. No attempt to obtain the works
-that the table marks as not read is recorded. (Bourgain 1986, the other reference for (III.3), was looked
-for and not found; it is not needed.)
+Apart from the differences named in the table and the lists after it, no argument replaces a
+source's, with one kind of exception: a step that a source of Proposition 6.3 takes from a work that
+was not read, recalls as known, or states without proof. The argument is then that of a named
+substitute. No attempt to obtain the works that the table marks as not read is recorded.
+(Bourgain 1986, the other reference for (III.3), was looked for and not found; it is not needed.)
 
 | Step | In the source | Substitute |
 | --- | --- | --- |
 | from the truncations to the multiplier `−i sgn` (McConnell, (3.20), p. 755) | the symbol is recalled (McConnell, Remark 3.1, p. 753, `i sign λ` in his normalization); the limit `ε → 0` is in Burkholder 1983, Theorem 2 (p. 284), stated without proof | HNVW I, Lemma 5.2.1 and Proposition 5.2.2, and Fatou's lemma |
-| the inequality (8) for `ℝ`, from which the square function inequality (9) for real martingales follows with Khintchine's inequality, as Burkholder 1983 asserts without proof on p. 275 (proved here by the argument of his Lemma 1, pp. 277–278, for `ℝ`; (9) is used at the exponents `p` and `2p` in (20), (25) and the estimate of `W^j` after (26), pp. 279–281) | "By Theorem 1" (p. 275), whose proof is in Burkholder 1981 (Ann. Probab. 9): read, not followed | Burkholder's inequality with the constant `p* − 1` (the paper's Theorem 2.3 (1)) |
+| the inequality (8) for `ℝ` (below) | "By Theorem 1" (p. 275), whose proof is in Burkholder 1981 (Ann. Probab. 9): read, not followed (Theorems 2.1 and 3.1 there; following them was deferred by the user) | Burkholder's inequality with the constant `p* − 1` (the paper's Theorem 2.3 (1)) |
 | `C_{2p}` is UMD (p. 251) | recalled, with Cotlar's trick, interpolation and duality, from Rubio de Francia 1986, Proposition 3: not read | Randrianantoanina's theorem, the paper's source for `S_q` (Proposition 2.7 (2)) |
 | Hölder's inequality (I.1), and the duality of the Schatten classes (p. 245) | Simon 1979, Theorems 2.8 and 3.2: not read | HNVW I, Appendix D |
 | Sarason, Lemma 10.3: a factorable function is `BᴴB` with `B` outer | Helson's book, p. 121: not read | Helson–Lowdenslager 1961, §§9–10 |
@@ -677,6 +936,14 @@ for and not found; it is not needed.)
 | Tomczak-Jaegermann, pp. 165 and 167: Horn's inequality, and the three lines theorem for Schatten norms | Gohberg–Krein 1965: not read | HNVW I, Appendix D; Sutter–Berta–Tomamichel 2017 (arXiv:1604.03023), Theorem 3.1 |
 | Tomczak-Jaegermann, p. 177: the comparison of the multinomial coefficients with `M_{2k}` | quoted from two other works: not read | elementary, `(2β)! ≥ 2^β β!` |
 | type 2 implies K-convexity | Maurey–Pisier 1976, Remark 2.10: stated without proof | HNVW II, Proposition 7.4.22 |
+
+The inequality (8) for `ℝ`, the step in full:
+
+- From (8) for `ℝ`, the square function inequality (9) for real martingales follows with
+  Khintchine's inequality, as Burkholder 1983 asserts without proof on p. 275 (the implication is
+  proved here by the argument of his Lemma 1, pp. 277–278, for `ℝ`, with Khintchine's inequality).
+- (9) is used at the exponents `p` and `2p` in (20), (25) and the estimate of `W^j` after (26),
+  pp. 279–281.
 
 Not a cited result, hence not in the table: the triangle inequality for Schatten norms, which the
 paper uses with no source (Bhatia, Theorem IV.2.1, proves it by majorization). It is proved after
@@ -747,21 +1014,27 @@ docstrings, with the repairs.
   Theorem 1.1, stated for `m` of class `C^{n+1}` on `ℝⁿ`, is applied to `m_i` and `M`, which are not
   continuous at `0` (its proof needs `m` only off `0`); (3.19) is an inequality in both directions, by
   Theorem 1.1, not an equality. P. 756, last display: `‖T_{m₁} T_m f‖` stands for `‖T_{m₁} T_m f‖_p^p`.
-- **Burkholder 1983** (Lemma 2). P. 279: the Taylor estimate, printed with `<`, needs `≤` (it fails for
-  `u = 0`). P. 280: the `k`-th term of the martingale difference sequence of `W^j` is said to be bounded by
-  `k²δ²`; the bound is `N²δ²w_k`, as p. 281 uses it (for `u = 2xy` the first term is `±2δ²`). Without
-  proof: the function `K_r` of p. 283 ("there is a nonnegative function"), Lemma 4 (referred to M. Riesz
-  and Zygmund), Theorem 2 (p. 284).
-- **M. Riesz 1928**, §18 (p. 234): "on démontre très facilement que lim f̃_n(x) = f̃(x). Nous ne nous y
-  arrêtons pas": written out, for the truncations, by dominated convergence.
+- **Burkholder 1983** (Lemma 2). P. 279: the Taylor estimate, printed with `<`, needs `≤` (it fails
+  for `u = 0`). P. 280: the `k`-th term of the martingale difference sequence of `W^j` is said to be
+  bounded by `k²δ²`; the bound is `N²δ²w_k`, as p. 281 uses it (for `u = 2xy` the first term is
+  `±2δ²`). Without proof:
+  - that (8) implies (9) where Khintchine's inequality is valid (p. 275);
+  - the function `K_r` of p. 283 ("there is a nonnegative function");
+  - Lemma 4 (referred to M. Riesz and Zygmund);
+  - Theorem 2 (p. 284).
+- **M. Riesz 1928**, §18 (pp. 234–235). P. 234: "on démontre très facilement que lim f̃_n(x) =
+  f̃(x). Nous ne nous y arrêtons pas": written out, for the truncations, by dominated convergence.
+  P. 235: "en faisant tendre m vers l'infini", without a reason: here Fatou's lemma.
 - **Helson–Lowdenslager 1958**, p. 173 (Lemma 2, used for Lemma 5): "for each `n` there is an `m`" with
   `∫ u_n ≤ ∫ v_m` fails for the truncations `u_n = min (u, n)`, `v_m = min (v, m)` if `u` is bounded and `v`
   is not. **1961**, (131) (p. 204): two logarithms are missing; p. 207: that `B` has full rank ends with a
   step that is not proved.
 - **Tomczak-Jaegermann 1974**, pp. 166–167: the three lines theorem quoted from Gohberg–Krein, and
   Proposition 1.2, need `Ψ` bounded (`Ψ(z) = exp (exp (iπ(z − 1/2)))` has modulus `1` on both lines, and `Ψ(1/2) = e`).
-- **Burkholder 1988**, Remark 1.2, **Dragičević 2011**, p. 465 (`f ∈ W^{n,p}`), and **Maurey–Pisier
-  1976**, Remark 2.10: stated without proof.
+- Stated without proof:
+  - **Burkholder 1988**, Remark 1.2;
+  - **Dragičević 2011**, p. 465 (`f ∈ W^{n,p}`);
+  - **Maurey–Pisier 1976**, Remark 2.10.
 
 ## 8. What each result depends on
 
@@ -874,50 +1147,69 @@ third column lists the results of other works that each one uses, all proved
 The route check ([`scripts/route_check.py`](../../scripts/route_check.py) with [`paper_routes.tsv`](paper_routes.tsv)) finds 67
 results of the paper in the Lean code and checks that each proof uses the results that the paper's
 proof cites. It finds ten differences, all recorded with their reasons in
-[`route_differences.tsv`](route_differences.tsv): the departure of Proposition 2.5 (E10), three
-uses that the paper leaves implicit (Lemma 2.2 at line 559, E22; Lemma 2.1 for the minorant `G`,
-E21; Lemma 4.1 in the proof of Theorem 1.3 (b)), and six places where the paper cites a proof or a
-definition rather than a statement.
+[`route_differences.tsv`](route_differences.tsv):
+
+- the departure of Proposition 2.5 (E10);
+- three uses that the paper leaves implicit:
+  - Lemma 2.2 at line 559, E22;
+  - Lemma 2.1 for the minorant `G`, E21;
+  - Lemma 4.1 in the proof of Theorem 1.3 (b);
+- six places where the paper cites a proof or a definition rather than a statement.
 
 ## 9. Not formalized
 
-- Claims that the paper states without proof and that no argument uses: Corollary 1.6 for `p > 2`
-  (E18) and the remark that the construction adapts to Theorems 1.2 and 1.4 (lines 2956–2958);
-  Remarks 2.2, 2.4, 4.1–4.4, 5.1–5.4, 6.1, 6.2, 6.4, 6.5, 7.1 and 7.2 (5.2: a positively
-  3-homogeneous example from Šverák's; 5.3: the Cayley hyperdeterminant and extremality; 5.4:
-  examples on `2 × 3` and `3 × 2` for `p ∈ (3.6, 5.15)`); the versions for `Sym₀`, `Skew_tr` and
-  `h_{p,q,C}` (lines 2521–2549); "Considering `g(AJ)` also gives another counterexample to
-  Hessian-quasiconvexity" (lines 2691–2692); `p = 4` in the proof of Theorem 7.1 (lines 2882–2884); the failure of the
-  vector-valued estimate for `q > 4` (§8.2).
-- Interpretations that combine the paper with work not formalized here: "quasiconvexity is
-  nonlocal among smooth integrands" (lines 2061–2064, through Kristensen's theorem), the
-  concentration interpretation (lines 279–288), and the relation of Corollary 1.6 to Gennaioli and
-  Rindler's work (lines 303–312).
-- Context only: Kirchheim–Kristensen's theorem (Theorem 1.1) and its consequence at lines
-  186–188, Osękowski's Proposition 2.6, Grabovsky's examples (lines 144–156, 201–204), Iwaniec's bound
-  `C^{rc} ≤ p* − 1` (lines 763–765), and the history of Remarks 2.3 and 3.1. Theorem 1.1 and
-  Proposition 2.6 are stated ([`External.KirchheimKristensen.Theorem1_1`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean#L25),
+- Claims that the paper states without proof and that no argument uses:
+  - Corollary 1.6 for `p > 2` (E18) and the remark that the construction adapts to Theorems 1.2
+    and 1.4 (lines 2956–2958);
+  - Remarks 2.2, 2.4, 4.1–4.4, 5.1–5.4, 6.1, 6.2, 6.4, 6.5, 7.1 and 7.2 (5.2: a
+    positively 3-homogeneous example from Šverák's; 5.3: the Cayley hyperdeterminant and
+    extremality; 5.4: examples on `2 × 3` and `3 × 2` for `p ∈ (3.6, 5.15)`);
+  - the versions for `Sym₀`, `Skew_tr` and `h_{p,q,C}` (lines 2521–2549);
+  - "Considering `g(AJ)` also gives another counterexample to Hessian-quasiconvexity"
+    (lines 2691–2692);
+  - `p = 4` in the proof of Theorem 7.1 (lines 2882–2884);
+  - the failure of the vector-valued estimate for `q > 4` (§8.2).
+- Interpretations that combine the paper with work not formalized here:
+  - "quasiconvexity is nonlocal among smooth integrands" (lines 2061–2064, through Kristensen's
+    theorem);
+  - the concentration interpretation (lines 279–288);
+  - the relation of Corollary 1.6 to Gennaioli and Rindler's work (lines 303–312).
+- Context only:
+  - Kirchheim–Kristensen's theorem (Theorem 1.1) and its consequence at lines 186–188;
+  - Osękowski's Proposition 2.6;
+  - Grabovsky's examples (lines 144–156, 201–204);
+  - Iwaniec's bound `C^{rc} ≤ p* − 1` (lines 763–765);
+  - the history of Remarks 2.3 and 3.1.
+- Theorem 1.1 and Proposition 2.6 are stated
+  ([`External.KirchheimKristensen.Theorem1_1`](../../Morrey/Common/External/KirchheimKristensen/Theorem.lean#L25),
   [`External.Osekowski.HilbertCharacterization`](../../Morrey/Common/External/Osekowski/HilbertCharacterization.lean#L48)) and not proved.
 - Conjecture 1 is stated as a definition ([`Conjecture1`](../../Morrey/Cassese/Conclusion.lean#L18)), not proved.
 
 ## 10. The paper in the literature
 
-Searched on 21 November 2026: arXiv (the paper's listing and versions, and the listings that cite
-it), journal pages, zbMATH and Crossref, and GitHub for formalizations. Preprints are reported as
-claimed, not as proved.
+Searched on 21 November 2026:
+
+- arXiv (the paper's listing and versions, and the listings that cite it);
+- journal pages;
+- zbMATH and Crossref;
+- GitHub for formalizations.
+
+Preprints are reported as claimed, not as proved.
 
 ### Before the paper
 
 - Morrey (1952) introduced quasiconvexity and asked whether rank-one convexity implies it. Ball
   (1990) gave a counterexample among extended-valued integrands; Šverák (1992) gave the first
   real-valued one, on `ℝ^{3×2}`, hence for `d ≥ 3` components ([formalized here](../Sverak/README.md)).
-  For two components the question stayed open: positive results in special classes (Müller 1999,
-  diagonal matrices; Chaudhuri–Müller 2003; Harris–Kirchheim–Lin 2018), Kristensen's non-locality
-  theorem (1999), the connection with Burkholder's function and Iwaniec's conjecture (Astala,
-  Iwaniec, Prause, Saksman, J. Amer. Math. Soc. 2012), Sebestyén and Székelyhidi's theorem (2017)
-  that the gradient measures produced from periodic deformations by Šverák's procedure are
-  laminates in `2 × 2`, and numerical evidence (Guerra and Teixeira da Costa, Rev. Mat. Iberoam.
-  2022).
+  For two components the question stayed open:
+  - positive results in special classes (Müller 1999, diagonal matrices; Chaudhuri–Müller 2003;
+    Harris–Kirchheim–Lin 2018);
+  - Kristensen's non-locality theorem (1999);
+  - the connection with Burkholder's function and Iwaniec's conjecture (Astala, Iwaniec, Prause,
+    Saksman, J. Amer. Math. Soc. 2012);
+  - Sebestyén and Székelyhidi's theorem (2017) that the gradient measures produced from periodic
+    deformations by Šverák's procedure are laminates in `2 × 2`;
+  - numerical evidence (Guerra and Teixeira da Costa, Rev. Mat. Iberoam. 2022).
 - Grabovsky (Arch. Ration. Mech. Anal. 2018) gave the only other finite-valued family before 2026,
   on `ℝ^{8×2}`; its examples are nonnegative, hence quasiconvex at `0`.
 - Kirchheim and Kristensen (Arch. Ration. Mech. Anal. 221 (2016)) proved that positively
@@ -927,10 +1219,11 @@ claimed, not as proved.
   integrands, the background of Conjecture 1.
 - Pedregal's claimed proof for two-component maps
   ([arXiv:1905.06571](https://arxiv.org/abs/1905.06571), [audited here](../Pedregal/README.md)):
-  versions 1–2 (May and September 2019) claimed every `2 × N`; version 3 (August 2024) was a
-  withdrawal; versions 4–5 (May 2025, June 2026) claim only `2 × 2`. The paper does not cite it.
-  Its Theorem 1.2, and its `2 × 3` example, contradict the claim of the withdrawn versions 1–2 for
-  `N ≥ 3`.
+  - Versions 1–2 (May and September 2019) claimed every `2 × N`.
+  - Version 3 (August 2024) was a withdrawal.
+  - Versions 4–5 (May 2025, June 2026) claim only `2 × 2`.
+- The paper does not cite Pedregal's claimed proof. The paper's Theorem 1.2, and its `2 × 3`
+  example, contradict the claim of the withdrawn versions 1–2 for `N ≥ 3`.
 - The method rests on the author's correspondence between laminates and martingales (Cassese,
   *Martingales, laminates and minimal Korn inequalities*, J. Math. Pures Appl. 213 (2026),
   [arXiv:2512.02784](https://arxiv.org/abs/2512.02784)) and on Burkholder's martingale
@@ -964,12 +1257,14 @@ claimed, not as proved.
 ### Since the paper
 
 - Scalabrino ([arXiv:2610.22560](https://arxiv.org/abs/2610.22560), 15 October 2026) uses
-  Corollary 1.6; Conti, Dolzmann and Dondl ([arXiv:2610.31886](https://arxiv.org/abs/2610.31886),
-  22 October 2026) give a frame-indifferent, non-isotropic example on `ℝ^{3×3}` and cite v3;
-  Braides, Kristensen and Scalabrino ([arXiv:2610.32444](https://arxiv.org/abs/2610.32444),
-  23 October 2026) cite the paper; Gammer ([arXiv:2610.35216](https://arxiv.org/abs/2610.35216),
-  26 October 2026) uses its integrand. No correction of the paper and no counterexample to it were
-  found.
+  Corollary 1.6.
+- Conti, Dolzmann and Dondl ([arXiv:2610.31886](https://arxiv.org/abs/2610.31886),
+  22 October 2026) give a frame-indifferent, non-isotropic example on `ℝ^{3×3}` and cite v3.
+- Braides, Kristensen and Scalabrino ([arXiv:2610.32444](https://arxiv.org/abs/2610.32444),
+  23 October 2026) cite the paper.
+- Gammer ([arXiv:2610.35216](https://arxiv.org/abs/2610.35216), 26 October 2026) uses the paper's
+  integrand.
+- No correction of the paper and no counterexample to it were found.
 - Agazzi, Astala, Bañuelos, Bruno, Cassese, Faraco, Guerra, Hormozi, Kirchheim, Koski, Kovač,
   Kristensen, Pasqualotto, Prause, Saksman, Šverák, Székelyhidi, Tione, Volberg and Yang
   ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), 23 September 2026, v2 8 October 2026)
@@ -984,8 +1279,11 @@ claimed, not as proved.
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)), with an
   AI system (the paper's declaration names ChatGPT 5.6 Sol), released without a license; the
   `2 × 3` file was added after v3 and is not in its default build. This formalization covers the
-  whole paper, including what the author's does not: Theorems 1.4 and 1.5, Corollaries 1.6 and
-  5.2–5.4, Sections 6 and 7, and the cited results that the proofs use.
+  whole paper, including what the author's does not:
+  - Theorems 1.4 and 1.5;
+  - Corollaries 1.6 and 5.2–5.4;
+  - Sections 6 and 7;
+  - the cited results that the proofs use.
 - Conti, Dolzmann and Dondl's Lean code for their `3 × 3` example
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc),
   Apache-2.0, written with Claude Opus 5.5 under the authors' guidance) shares the subject, not the
@@ -1001,16 +1299,18 @@ claimed, not as proved.
   [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations).
 - Other formalizations of cited results, all in Lean, found on 22 November 2026 after the packages'
   proofs (for the non-commutative Khintchine inequality, after its first proof in each package; the
-  packages' READMEs give the searches, the overlaps and the rest): Burkholder's inequality
-  for real martingales ([SmaniaD/Burkholder](https://github.com/SmaniaD/Burkholder)); a UMD constant
-  and cases of Burkholder's inequality
-  ([elorist/UMD_Hilberttransform](https://github.com/elorist/UMD_Hilberttransform)); the
-  Kahane–Khintchine inequality and the Schatten triangle inequality
-  ([Tau Ceti](https://github.com/TauCetiProject/TauCeti)); the upper bound of the non-commutative
-  Khintchine inequality for Hermitian matrices in `S_{2p}`, `p ∈ ℕ`
-  ([NLAlib](https://github.com/tchen-research/NLAlib)); the Beurling–Ahlfors transform on `L^p`
-  (Tau Ceti; `will1491/no-wandering-domains`); null Lagrangians
-  ([PDEAtlas](https://github.com/Robertboy18/PDEAtlas)). None was used here.
+  packages' READMEs give the searches, the overlaps and the rest):
+  - Burkholder's inequality for real martingales
+    ([SmaniaD/Burkholder](https://github.com/SmaniaD/Burkholder));
+  - a UMD constant and cases of Burkholder's inequality
+    ([elorist/UMD_Hilberttransform](https://github.com/elorist/UMD_Hilberttransform));
+  - the Kahane–Khintchine inequality and the Schatten triangle inequality
+    ([Tau Ceti](https://github.com/TauCetiProject/TauCeti));
+  - the upper bound of the non-commutative Khintchine inequality for Hermitian matrices in `S_{2p}`,
+    `p ∈ ℕ` ([NLAlib](https://github.com/tchen-research/NLAlib));
+  - the Beurling–Ahlfors transform on `L^p` (Tau Ceti; `will1491/no-wandering-domains`);
+  - null Lagrangians ([PDEAtlas](https://github.com/Robertboy18/PDEAtlas)).
+- None of these other formalizations was used here.
 
 ## 11. What's next
 
@@ -1029,9 +1329,11 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
   on `2 × 3` for `p` near `4`, and on `3 × 2` at `p = 4`.
 - **Theorem 1.4.** `d₀ = 588` for `h_{4,4,C}` is not expected to be optimal (numerics suggest `260`;
   Remark 6.4), and for the integrand (30) the paper expects `d = 3`.
-- **Remark 7.2** (`ρ = √2` for every `p`); **Remark 5.3** (the extremality of `q` and `q₃`);
-  **§8.2** (the Banach-space geometry viewpoint); **Corollary 1.6** for `p > 2` (E18) and in lower
-  dimension; the claims for `Sym₀`, `Skew_tr` and `h_{p,q,C}` (lines 2521–2549).
+- **Remark 7.2** (`ρ = √2` for every `p`).
+- **Remark 5.3** (the extremality of `q` and `q₃`).
+- **§8.2** (the Banach-space geometry viewpoint).
+- **Corollary 1.6** for `p > 2` (E18) and in lower dimension.
+- The claims for `Sym₀`, `Skew_tr` and `h_{p,q,C}` (lines 2521–2549).
 - **Conjecture 1**: isotropic `p`-homogeneous rank-one convex integrands on `ℝ^{d×d}` are
   quasiconvex at `0`.
 
@@ -1039,8 +1341,13 @@ Plans for follow-up papers are kept in `NEXT.md`, which is not published.
 
 Simpler arguments found while proving. The formal proofs follow the paper and the cited sources,
 except where the last column says "the proof used"; the last column says where each simpler argument
-was checked: in Lean (in a library, in the history of this repository or of a package, or in a file
-outside the libraries that compiles against the commit named), or on paper.
+was checked:
+
+- in Lean:
+  - in a library;
+  - in the history of this repository or of a package;
+  - in a file outside the libraries that compiles against the commit named;
+- or on paper.
 
 Steps of the paper:
 
@@ -1048,10 +1355,25 @@ Steps of the paper:
 | --- | --- | --- | --- |
 | Proposition 4.3 (and the route of Remark 4.5) | if `g_n` were quasiconvex at `0`, `0 = g_n(0) = g_n^{qc}(0) ≤ f_n^{qc}(0) ≤ f_n(0) = 0`, which needs Dacorogna's formula for `g_n^{qc}(0) = g_n(0)` | for every test map, `∫ f_n(∇φ) ≥ ∫ g_n(∇φ) ≥ g_n(0) = f_n(0)`; no envelope, no Dacorogna's formula | in Lean: [`twoByM_quasiconvexAt_of_minorant`](../../Morrey/Cassese/TwoByM.lean#L3442), in the library, used by no proof |
 | Theorem 1.3 (a) (and Corollary 5.4) | `I = ∫_{ℝ³} q₃(∇u) < 0`, and Hölder's inequality for `∫ q₃(π∇u_R) = ∫ χ_R⁴ q₃(∇u) + O(R^{−1/4}(log R)^{3/4})` | since `q₃(∇u) < 0` everywhere, `∫ χ_R⁴ q₃(∇u) ≤ ∫_{B₁} q₃(∇u) < 0`, and the cross terms are bounded pointwise by Young's inequality `a³b ≤ η a⁴ + η⁻³ b⁴`, `η = R^{−1/4}`; saves `q₃(∇u) ∈ L¹` and Hölder | in Lean, in this repository's history (before `ddae9d2`) |
-| Proposition 4.2's zig-zag step (and Remark 4.5's) | mollify `r` and `b`, prove (17), (18) and `(√r_η)'' ≤ 5⁴ (√b_η)''`, and let `η → 0` | at each `t₀`, replace `r` by the smooth majorant `κ(t₀) + m(t − t₀) + 2·5⁶ b` (`κ = r − 2·5⁶ b` is concave, `m` a supergradient at `t₀`), which satisfies (17) and touches `r` at `t₀`; `b` is already smooth and satisfies (18), and `x` is perturbed where `b` vanishes; the paper's computation makes the tangent at `t₀` a supporting line. Saves the convolution calculus and Minkowski's integral inequality | in Lean, in this repository's history (before `81d2b4f`) |
+| Proposition 4.2's zig-zag step (and Remark 4.5's) | mollify `r` and `b`, prove (17), (18) and `(√r_η)'' ≤ 5⁴ (√b_η)''`, and let `η → 0` | a smooth majorant at each `t₀`; saves the convolution calculus and Minkowski's integral inequality (below) | in Lean, in this repository's history (before `81d2b4f`) |
 | Proposition 5.2, smoothness of `ζ` | `ζ` is the unique root of `w̄ ζ² + 2(t + i)ζ + w = 0` in the disc, a simple one, hence smooth by the implicit function theorem | the closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of `(1 − i t)² + \|w\|²`, which lies off the negative axis, with `Re(1 − i t + s) > 0`; smoothness by composition | in Lean, in this repository's history (before `a81ec2a`) |
 | Corollary 1.6, the witness | a smooth periodic `φ` with `∫ F(∇φ) < 0` (E35) | the Lipschitz periodic `φ` that Lemma 2.2 gives: the expansion in `ε` needs only bounded `∇φ`; saves the density step | in Lean, in this repository's history (before `40df282`) |
-| Lemma 5.1 (2) | `n`-step rank-one Rademacher martingales, Burkholder's inequality, Proposition 2.5, the estimates (27)–(29) | for `f` that is `C²` away from `0`, the second derivative along rank-one lines: with `D²f[R_L, R_L] ≥ 0` and `\|D²f(X)\| ≤ C\|X\|^{p−2}`, polarization gives `D²f(πA)[πR, πR] ≥ −C' \|πA\|^{p−2} \|π^⊥R\| (\|πR\| + \|π^⊥R\|)`, and the inequality of arithmetic and geometric means against `D²(‖·‖_Λ^p)(A)[R, R] ≥ p ‖A‖_Λ^{p−2} ‖R‖_Λ²`, `‖A‖_Λ² = \|πA\|² + Λ²\|π^⊥A\|²`, gives `Λ ≳ 1/δ`; saves the martingales and Burkholder's inequality | on paper only |
+| Lemma 5.1 (2) | `n`-step rank-one Rademacher martingales, Burkholder's inequality, Proposition 2.5, the estimates (27)–(29) | the second derivative along rank-one lines; saves the martingales and Burkholder's inequality (below) | on paper only |
+
+Proposition 4.2's zig-zag step (and Remark 4.5's), the simpler argument:
+
+- At each `t₀`, replace `r` by the smooth majorant `κ(t₀) + m(t − t₀) + 2·5⁶ b` (`κ = r − 2·5⁶ b` is
+  concave, `m` a supergradient at `t₀`), which satisfies (17) and touches `r` at `t₀`.
+- `b` is already smooth and satisfies (18), and `x` is perturbed where `b` vanishes.
+- The paper's computation makes the tangent at `t₀` a supporting line.
+
+Lemma 5.1 (2), the simpler argument, for `f` that is `C²` away from `0`, by the second derivative
+along rank-one lines:
+
+- With `D²f[R_L, R_L] ≥ 0` and `|D²f(X)| ≤ C|X|^{p−2}`, polarization gives
+  `D²f(πA)[πR, πR] ≥ −C' |πA|^{p−2} |π^⊥R| (|πR| + |π^⊥R|)`.
+- The inequality of arithmetic and geometric means against
+  `D²(‖·‖_Λ^p)(A)[R, R] ≥ p ‖A‖_Λ^{p−2} ‖R‖_Λ²`, `‖A‖_Λ² = |πA|² + Λ²|π^⊥A|²`, gives `Λ ≳ 1/δ`.
 
 Cited results. The packages hold more sketches and smaller items: `docs/SHORTER_PROOFS.md` of BP and of
 HA, and the section "Shorter proofs" of CV's README. Sizes are in lines of Lean, the simpler
@@ -1068,59 +1390,117 @@ argument against the source's.
 | Proposition 2.7 (1) (HNVW I, Lemmas 3.5.13, 3.5.14) | the localized weak-type bound, summed over `{ρ = k}` | one application of the weak-type bound, to `h`, the martingale between the times `ρ` and `ν ∧ σ`: `h* ≤ 3δλ 1_{ρ<∞}` gives `η = (K/α)^q` at once | about 100 less | on paper; a variant with a strong bound and `4δλ` in Lean, in the history of BP (commit `250cd49`) |
 | Proposition 2.7 (1) (HNVW I, Lemma 3.5.3, the adjoint) | cross terms | `T = E_0 + Σ_k M_{σ_k} D_k`, with `D_k` self-adjoint and commuting with `M_{σ_k}`: termwise | about 40 less | on paper |
 | Proposition 2.7 (4) (HNVW I, Theorem 4.2.5) | approximation by Paley–Walsh martingales, after Maurey (pp. 284–285) | the book's alternative proof (p. 334) | 2,345 against 3,222, for Theorems 4.2.5 and 4.5.6 together: the first over `ℝ` and `ℂ`, with the final clause of 4.5.6, the second (Maurey's route as in Pisier's lecture notes) over `ℝ` and one bound over `ℂ` | the proof used, in BP; Maurey's route in its history (commit `250cd49`) |
-| Proposition 2.7 (5) (HNVW I, Proposition 4.2.10 with Theorem 4.2.25) | convex hulls for deterministic multipliers, then incremental filtrations | Proposition 3.2.14 for the vector of the *values* `z_i` of the predictable multipliers: `z_i = Σ_ε c(ε) ε_i` with `Σ \|c(ε)\| ≤ π/2`, so `φ • Y = Σ_ε c(ε) (σ^ε • Y)` with the predictable signs `σ^ε_k(ω) = ε_i` where `φ_k(ω) = z_i`; no Lemma 3.6.18 and no Theorem 4.2.25 | 88 against 911 | in Lean, at BP `67f48bf` |
+| Proposition 2.7 (5) (HNVW I, Proposition 4.2.10 with Theorem 4.2.25) | convex hulls for deterministic multipliers, then incremental filtrations | Proposition 3.2.14 for the vector of the *values* `z_i` of the predictable multipliers; no Lemma 3.6.18 and no Theorem 4.2.25 (below) | 88 against 911 | in Lean, at BP `67f48bf` |
 | Proposition 2.7 (5) | the same | averaging: for `\|λ\| = 1`, `λ = e^{iθ}`, `(1/2π) ∫ sgn cos(θ − φ) e^{iφ} dφ = (2/π) λ`, with the predictable signs `sgn cos(θ_k − φ)` for each `φ`, and Riemann sums; longer than the previous one | 517 against 1,242 | in Lean, in the history of BP (commit `250cd49`) |
 | HNVW I, Theorem 4.2.25, for signs | Lemma 3.6.18 (incremental filtrations) | Theorem 4.5.6, (2)⇒(3)⇒(1), from the cube: it ends with predictable signs | 12 | in Lean, at BP `67f48bf` |
 | HNVW I, Theorem 4.2.25 | the same | for multipliers in the unit ball, from the same theorem (about 60 lines); or on any probability space, revealing `ℱ_{k+1}` on one level set `{φ_{k+1} = z_i}` at a time (150–200) | estimates, against about 500 | on paper |
 | Proposition 2.7 (6) (HNVW I, Theorem 4.5.6) | homogenization (4.31); padding and even/odd interleaving of two pairs (Step 2) | `E F(f_n, g_n) ≤ u(0, 0)` for `tf`, `tg` and `t → ∞`; the two pairs on consecutive blocks of signs; `ũ(0,0) = 0` from `ũ(0,0) = 2^p ũ(0,0)` | about 10 against 101; about 125 against 185 | on paper |
 | Proposition 6.4 (HNVW II, Lemma 6.2.3) | the two-point inequality for all real functions: the case `\|y\| > 1`, duality | after the reduction by positivity, only nonnegative functions are needed | 123 less | in Lean, in BP (kept for Borell's proof) |
 | Proposition 6.4 (HNVW II, Theorem 6.2.4) | tensorization in `L^q(D^{N−1}; X)` | Borell 1979, (2.1), at `c = 0` | about 10, given Borell's proof | in Lean, at BP `67f48bf` |
-| Proposition 6.3, the upper bound | Lust-Piquard–Pisier 1991 and Astérisque 247 (Section 7) | exchangeable pairs: Mackey–Jordan–Chen–Farrell–Tropp 2014 (arXiv:1201.6002), §7 (Corollary 7.3) for Hermitian matrices and §8 (the Hermitian dilation), with the explicit constant `√(2(q − 1))` (`√(q − 1)` for `q = 2` and `q ≥ 3`). Their Remark 7.2, for `2 < q < 3`, uses a variant of the mean value trace inequality that they do not prove and BP proves | about 560, and 409 of trace inequalities (`Holder` and `Dilation`, shared, not counted), against 19,198 in the 32 modules of HA that the proof imports (HA `90f1e01`; commit `11e9e12` removed from them six files, 3,424 lines on dyadic shifts and Littlewood–Paley theory, that the proof did not use) and about 3,900 in BP | in Lean, in BP (`ncKhintchine_upper`); it was used here before commit `af922cc` |
+| Proposition 6.3, the upper bound | Lust-Piquard–Pisier 1991 and Astérisque 247 (Section 7) | exchangeable pairs (below) | about 560 against 19,198 in HA and about 3,900 in BP (below) | in Lean, in BP (`ncKhintchine_upper`); it was used here before commit `af922cc` |
 | Proposition 6.3: the factorization of `H¹` functions (Sarason 1967, Theorem 4) | outer functions, Szegő's theorem and range functions of matrix-valued functions (Helson–Lowdenslager) | Bekjan–Xu (arXiv:0705.1947), Theorems 3.1 and 3.4, for `L^∞(𝕋; M_n)`; for analytic polynomials, and with `‖h‖²_{S_{2p}} ≤ ‖f‖_{S_p} + δ` in place of the equality, which is enough for Paley's inequality | 762 against about 5,600 | in Lean, in the history of HA (commit `3ecee00`) |
 | the same: Helson–Lowdenslager 1958, Theorems 8 and 9 | their Lemmas 4 and 5, and (68) | Jensen's inequality for the determinants of the Fejér means, then the limit | – | on paper |
 | the same: Helson–Lowdenslager 1961, Theorem 12; Sarason 1967, Theorem 4 | the functions `B`, `D̃` and `V = BD̃⁻¹`; the partial isometry of the polar decomposition | the innovation of `A ∈ H²` is already an analytic isometry with the range of `A`; `A₁ = A A₂ᴴ (A₂A₂ᴴ)⁻¹` | 12 for the first | checked by Lean, not kept in HA |
-| Proposition 6.3: (III.3) of Lust-Piquard–Pisier, on average over the signs, which is all that (III.2) uses | McConnell 1984, Theorems 1.1 and 1.3, and transference, with Burkholder 1983 for the Hilbert transform | the Littlewood–Paley inequality with random signs (HNVW I, Theorem 5.7.10 (2)) and the randomised boundedness of single frequencies, since the blocks `[2^{k−1}, 2^k]` and `(2^{k−1}, 2^k]` differ from the dyadic ones by one and two frequencies | about 280, given that theorem, against about 4,740 and, for the Hilbert transform, about 3,490 | in Lean, in the history of HA (commit `ec00cb2`); it was used here before commit `fd2c773` |
+| Proposition 6.3: (III.3) of Lust-Piquard–Pisier, on average over the signs, which is all that (III.2) uses | McConnell 1984, Theorems 1.1 and 1.3, and transference, with Burkholder 1983 for the Hilbert transform | the Littlewood–Paley inequality with random signs (HNVW I, Theorem 5.7.10 (2)) and the randomised boundedness of single frequencies, since the blocks `[2^{k−1}, 2^k]` and `(2^{k−1}, 2^k]` differ from the dyadic ones by one and two frequencies | about 280, given that theorem, against about 4,740 and, for the Hilbert transform, about 3,800 (3,489 at `c8182f9`) | in Lean, in the history of HA (commit `ec00cb2`); it was used here before commit `fd2c773` |
 | the same route: Littlewood–Paley on the circle (HNVW I, Theorem 5.7.10 (2)) | transference by duality (Proposition 5.7.1) | a cut-off with compactly supported Fourier transform, on which the multiplier acts exactly (the book's argument in Proposition 5.2.5); it applies to the sign multipliers of McConnell's Theorem 1.3 too | – | in Lean, in the history of HA (commit `d0d081b`), for the random signs; on paper for McConnell's |
 | Proposition 6.3: McConnell 1984, Theorem 1.3 | (2.1), twice, for Rademacher sums; Theorem 1.1, twice, at the end | Kahane's contraction principle, which holds in every Banach space: `C β⁶ħ²` in place of `C β⁸ħ²`, `β` the UMD constant and `ħ` the bound of the Hilbert transform (now `2β² + 1`); `T_M T_{m₁}` is itself a multiplier of Theorem 1.1: one use | – | in Lean: the first in the history of HA (commit `beab475`), the second checked, not kept |
-| Proposition 6.3: the Hilbert transform on UMD spaces (Burkholder 1983, Lemmas 2–4) | a random walk in the disc, then Poisson integrals and truncations on the circle; the line by M. Riesz's argument (1928, §18), to which Lemma 4 refers | the dyadic shifts of HNVW I, §5.1 (Theorem 5.1.13), with the constant `4β² + 11` in place of `2β² + 1`; for the multiplier `sgn` both need HNVW I, Lemma 5.2.1 and Proposition 5.2.2 | 1,836 (HA `ec00cb2`) against 3,800 (HA `90f1e01`; 3,489 at `c8182f9`) | in Lean, in HA (kept for HNVW's Littlewood–Paley inequalities); it was used here before commit `ee3b66b` |
-| the same: Burkholder 1983, Lemmas 3 and 4, for the multiplier `sgn` | truncated conjugate functions and Hilbert transforms, then HNVW I, §5.2 | no truncations: Lemma 2, in the limit, on the circle of length `2πR`, for `f` minus its mean and `r = 1 − y/R`; as `R → ∞`, `‖v(·, y)‖_p ≤ β² ‖f‖_p` for the conjugate Poisson integral `v` on the line, whose symbol is `−i sgn(ξ) e^{−2π\|ξ\|y}`; `y → 0` and Fatou's lemma give the constant `β²` in place of `2β² + 1` | – | on paper |
+| Proposition 6.3: the Hilbert transform on UMD spaces (Burkholder 1983, Lemmas 2–4) | a random walk in the disc, then Poisson integrals and truncations on the circle; the line by M. Riesz's argument (1928, §18), one of the two works to which Lemma 4 refers | the dyadic shifts of HNVW I, §5.1 (Theorem 5.1.13), with the constant `4β² + 11` in place of `2β² + 1`; for the multiplier `sgn` both need HNVW I, Lemma 5.2.1 and Proposition 5.2.2 | 1,836 (HA `ec00cb2`) against 3,800 (HA `90f1e01`; 3,489 at `c8182f9`) | in Lean, in HA (kept for HNVW's Littlewood–Paley inequalities); it was used here before commit `ee3b66b` |
+| the same: Burkholder 1983, Lemmas 3 and 4, for the multiplier `sgn` | truncated conjugate functions and Hilbert transforms, then HNVW I, §5.2 | no truncations; the constant `β²` in place of `2β² + 1` (below) | – | on paper |
+| the same: Burkholder 1983, the square function inequality (9) for real martingales | asserted on p. 275; here the argument of his Lemma 1 for `ℝ`, with Khintchine's inequality | Osękowski 2012, Theorem 8.6 (the paper's Theorem 2.3 (2)), directly, with the constant `p* − 1` on both sides | – | in Lean, in BP (`Burkholder.squareFunction_of_martingale`); it was used in HA before commit `90f1e01` |
+| the same: Burkholder 1983, Lemma 4 | M. Riesz's §18, for every `f ∈ L^p`, with the window `(−nπ, nπ)` | `f` with compact support first, then `1_{[−A,A]} f → f` by Fatou's lemma | about 400 non-blank lines against about 570 | in Lean, in the history of HA (commit `11e9e12`) |
 | Proposition 6.3: the Hilbert transform in McConnell 1984, Theorem 1.3 | Burkholder 1983 | McConnell's Theorem 1.1, proved in HA for `m` of class `C²` off `0`, applies to `m = sgn`, with `Cβ²`, `C` absolute and large (his Remark 3.1 indicates a direct proof by his method); neither Burkholder 1983 nor HNVW I, §5.2, is needed | about 20, given Theorem 1.1 | checked by Lean, not kept in HA |
 | Proposition 6.3: (III.3) of Lust-Piquard–Pisier | McConnell 1984, Theorems 1.1 and 1.3, and transference | independent unimodular variables `z_1, …, z_n` on `𝕋ⁿ` in place of `e^{i2^k t}`, with a lexicographic order on `ℤⁿ`: (III.3) becomes the UMD inequality of `C_{2p}` | – | on paper (the identity behind it also numerically) |
 | Proposition 6.3: type 2 of `S_q` (Tomczak-Jaegermann, Theorem 3.1 (ii)) | the trace expanded for even `q`, the general Horn inequality, three lines | the bound by exchangeable pairs for the Hermitian dilations, and `‖Σ D_k²‖_{S_{q/2}} ≤ Σ ‖D_k‖²_{S_q}` (Astérisque 247 goes the other way, from type 2 to Khintchine); for even `q`, iterated Hölder inequalities | about 40 against 1,095; about 190 against 399 for even `q` | on paper; for even `q` in Lean, in the history of BP (commit `8962532`) |
 | Proposition 6.3: type 2 implies K-convexity (HNVW II, Proposition 7.4.22) | Walsh functions, the contraction principle for Gaussian sums, rotation | the reflection `R = 2P − 1` preserves the Gaussian measure, so `T(Pg) = ½ (T(g) + T(Rg))` is dominated by `T(g)` in `L²` | 466 against 672 | in Lean, in the history of BP (commit `8962532`) |
-| transference (HNVW I, Corollary 5.7.6, I ≤ II) | a pairing with a second function, Hölder's inequality, duality and density | Igari 1969 (Tôhoku Math. J. 21, Theorem 2; there for `f ∈ C_c^∞(ℝ)` and the norm on `L^p(𝕋)`, here for Schwartz `f` on `ℝ²` and mean-zero functions): the torus bound extends to absolutely summable series, the series with coefficients `R⁻² m(n) f̂(n/R)`, `n ≠ 0`, at `x/R` are, up to the term `n = 0`, Riemann sums of `T_m f(x)`, and Fatou's lemma concludes | about 225 against 1,000 | in Lean, in the history of HA (commit `bf215c5`) |
+| transference (HNVW I, Corollary 5.7.6, I ≤ II) | a pairing with a second function, Hölder's inequality, duality and density | Igari 1969 (below) | about 225 against 1,000 | in Lean, in the history of HA (commit `bf215c5`) |
 | HNVW I, Proposition 5.7.4 | `g` with `ĝ` supported off `0` | any Schwartz `g`: no density step for `g` | – | on paper |
 | HNVW I, Proposition 2.4.23 (ii) | `L^p` limits by translations and `‖φ_R‖_p` | `‖h‖_p ≤ ‖h‖_1^{1/p} ‖h‖_∞^{1−1/p}` | about 40 against 200 | on paper |
 | Lemma 2.1 (Rindler) | the singular value decomposition | a rank-one convex function is convex in each entry, and a separately convex function is locally Lipschitz; no explicit constant | one line, given the latter | in Lean, at CV `e474abf` |
 | Lemma 2.1, the bound (5.9) | the same | the rows (or the columns) of `B − A` are Frobenius-orthogonal of rank at most one | about 150 less | on paper (the orthogonality in Lean, at CV `e474abf`) |
 | Lemma 2.2, quasiconvex ⇒ rank-one convex, on the cube | laminates with cut-offs (Rindler) | the periodic sawtooth is a periodic test map | 4 | in Lean, at CV `e474abf` |
 | Proposition 2.2 (Kinderlehrer–Pedregal, Proposition 8.1) | (ii) in every rank-one direction, on rotated cubes | (ii) along the `e_i ⊗ e_j`, then the local Lipschitz bound for separately convex functions | about 100 less | in Lean, at CV `e474abf` |
-| Dacorogna, Theorem 5.20 (Proposition 5.1) | induction on the rows, with Lemma 5.24 | `f` is multi-affine in the rows; its part multilinear in the rows `I` vanishes when two of them are equal (the `t²` coefficient along `(e_i + e_j) ⊗ b`), so it is an alternating form, a combination of minors with the rows `I`. The same argument shortens Lemma 5.24 | – | on paper |
+| Dacorogna, Theorem 5.20 (Proposition 5.1) | induction on the rows, with Lemma 5.24 | `f` is multi-affine in the rows, and its multilinear parts are alternating forms (below) | – | on paper |
+
+Proposition 2.7 (5) (HNVW I, Proposition 4.2.10 with Theorem 4.2.25), the simpler argument, by
+Proposition 3.2.14 for the vector of the *values* `z_i` of the predictable multipliers:
+`z_i = Σ_ε c(ε) ε_i` with `Σ |c(ε)| ≤ π/2`, so `φ • Y = Σ_ε c(ε) (σ^ε • Y)` with the predictable
+signs `σ^ε_k(ω) = ε_i` where `φ_k(ω) = z_i`.
+
+Proposition 6.3, the upper bound, the simpler argument, by exchangeable pairs:
+Mackey–Jordan–Chen–Farrell–Tropp 2014 (arXiv:1201.6002), §7 (Corollary 7.3) for Hermitian matrices
+and §8 (the Hermitian dilation), with the explicit constant `√(2(q − 1))` (`√(q − 1)` for `q = 2`
+and `q ≥ 3`). Their Remark 7.2, for `2 < q < 3`, uses a variant of the mean value trace inequality
+that they do not prove and BP proves.
+
+Proposition 6.3, the upper bound, the sizes:
+
+- the simpler argument: about 560, and 409 of trace inequalities (`Holder` and `Dilation`, shared,
+  not counted);
+- the source's: 19,198 in the 32 modules of HA that the proof imports (HA `90f1e01`; commit
+  `11e9e12` moved out the declarations that the proof used and dropped from the imports six files on
+  dyadic shifts and Littlewood–Paley theory, 3,424 lines before the move) and about 3,900 in BP.
+
+Burkholder 1983, Lemmas 3 and 4, for the multiplier `sgn`, the simpler argument, with no
+truncations:
+
+- Lemma 2, in the limit, on the circle of length `2πR`, for `f` minus its mean and `r = 1 − y/R`.
+- As `R → ∞`, `‖v(·, y)‖_p ≤ β² ‖f‖_p` for the conjugate Poisson integral `v` on the line, whose
+  symbol is `−i sgn(ξ) e^{−2π|ξ|y}`.
+- `y → 0` and Fatou's lemma give the constant `β²` in place of `2β² + 1`.
+
+Transference (HNVW I, Corollary 5.7.6, I ≤ II), the simpler argument, Igari 1969 (Tôhoku Math.
+J. 21, Theorem 2; there for `f ∈ C_c^∞(ℝ)` and the norm on `L^p(𝕋)`, here for Schwartz `f` on `ℝ²`
+and mean-zero functions):
+
+- The torus bound extends to absolutely summable series.
+- The series with coefficients `R⁻² m(n) f̂(n/R)`, `n ≠ 0`, at `x/R` are, up to the term `n = 0`,
+  Riemann sums of `T_m f(x)`.
+- Fatou's lemma concludes.
+
+Dacorogna, Theorem 5.20 (Proposition 5.1), the simpler argument: `f` is multi-affine in the rows;
+its part multilinear in the rows `I` vanishes when two of them are equal (the `t²` coefficient along
+`(e_i + e_j) ⊗ b`), so it is an alternating form, a combination of minors with the rows `I`. The
+same argument shortens Lemma 5.24.
 
 ### The formalization
 
-- Nothing is assumed. What is not proved: the two theorems quoted only as context (Theorem 1.1,
-  Proposition 2.6), Conjecture 1, and the claims of Section 9.
-- The packages state their planned extensions: Dragičević's bound for every power `𝓑^n`, the reverse
-  direction of transference, general dimension, and more of the sources of Proposition 6.3 (general
-  `H¹–ℓ²` multipliers, infinite dimension, complex and rectangular matrices, the left-hand
-  Littlewood–Paley inequalities with random signs, Burkholder's singular integrals (1983, Theorem 2),
-  McConnell's theorems in higher dimension; `lean4-harmonic-analysis`);
-  Randrianantoanina's Theorem 3.1 for general semifinite von Neumann algebras and non-scalar multipliers,
-  the non-commutative Khintchine inequality for rectangular and complex matrices, and Kahane–Khintchine on
-  a probability space (`lean4-banach-probability`);
-  Dacorogna's formula for Borel, locally bounded integrands with a quasiconvex minorant
-  (`lean4-calculus-of-variations`).
+- Nothing is assumed. What is not proved:
+  - the two theorems quoted only as context (Theorem 1.1, Proposition 2.6);
+  - Conjecture 1;
+  - the claims of Section 9.
+- The packages state their planned extensions:
+  - `lean4-harmonic-analysis`:
+    - Dragičević's bound for every power `𝓑^n`;
+    - the reverse direction of transference;
+    - general dimension;
+    - more of the sources of Proposition 6.3 (general `H¹–ℓ²` multipliers, infinite dimension,
+      complex and rectangular matrices, the left-hand Littlewood–Paley inequalities with random
+      signs, Burkholder's singular integrals (1983, Theorem 2), McConnell's theorems in higher
+      dimension);
+    - ζ-convexity: Burkholder's Theorem 1 (1983) by the proofs of his 1981 paper (Theorems 2.1 and
+      3.1), in place of the `UMD_p` constant that the package assumes (deferred by the user);
+  - `lean4-banach-probability`:
+    - Randrianantoanina's Theorem 3.1 for general semifinite von Neumann algebras and non-scalar
+      multipliers;
+    - the non-commutative Khintchine inequality for rectangular and complex matrices;
+    - Kahane–Khintchine on a probability space;
+  - `lean4-calculus-of-variations`: Dacorogna's formula for Borel, locally bounded integrands with a
+    quasiconvex minorant.
 - [`Morrey/Common/Basic/`](../../Morrey/Common/Basic) holds two Mathlib candidates: `Basic.LinearAlgebra.Matrix.RankTwo` (for
   `Mathlib/LinearAlgebra/Matrix/Rank.lean`) and `Basic.Analysis.Calculus.BumpFunction.Mollify`
   (for `Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean`). The latter overlaps with the
   mollification of Lipschitz maps in `lean4-calculus-of-variations` (`Lipschitz/Mollify.lean`);
   the two should be merged before either is contributed. The packages themselves hold general
-  theory that Mathlib lacks: `L^p` bounds of Fourier multipliers and transference, Fourier series of
-  smooth periodic functions, the Hilbert transform, Mihlin multipliers and Littlewood–Paley inequalities in
-  UMD spaces, matrix-valued Hardy functions and their factorization, martingale inequalities in Banach
-  spaces, UMD spaces, type 2 and K-convexity, Schatten classes, quasiconvexity, and convexity through second
-  distributional derivatives on `ℝ`.
+  theory that Mathlib lacks:
+  - `L^p` bounds of Fourier multipliers and transference;
+  - Fourier series of smooth periodic functions;
+  - the Hilbert transform, Mihlin multipliers and Littlewood–Paley inequalities in UMD spaces;
+  - matrix-valued Hardy functions and their factorization;
+  - martingale inequalities in Banach spaces;
+  - UMD spaces, type 2 and K-convexity;
+  - Schatten classes;
+  - quasiconvexity;
+  - convexity through second distributional derivatives on `ℝ`.
 - [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms, under its source's
   name (Osękowski, Burkholder, HNVW, Pisier, Randrianantoanina, Cox–Veraar, Yaroslavtsev, Pisier–Xu,
   Dragičević, Rindler, Dacorogna, Kinderlehrer–Pedregal, Kristensen), for reuse by other

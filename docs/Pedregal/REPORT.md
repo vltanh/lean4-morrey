@@ -19,9 +19,14 @@ Status of the formalization:
   `𝐓` of Definition 6.1, and needs every value `𝐓(t)` to be nonempty, which is Corollary 7.2. So
   the paper does not prove Theorem 1.1 (E13).
 - Every other numbered result of Sections 3–7 except Claim 7.3 is correct and proved:
-  Proposition 3.3, the assertions of Definition 5.1 and eqs. (5.10)–(5.15) ((5.10) in the corrected
-  form of E6), Proposition 6.1, Subsection 6.1, Proposition 6.3, Claim 7.4, and the reduction
-  [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28): if every `𝐓(t)` is nonempty, then `ν` is a laminate.
+  - Proposition 3.3;
+  - the assertions of Definition 5.1 and eqs. (5.10)–(5.15) ((5.10) in the corrected form of E6);
+  - Proposition 6.1;
+  - Subsection 6.1;
+  - Proposition 6.3;
+  - Claim 7.4;
+  - the reduction [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28): if every `𝐓(t)` is nonempty, then `ν` is a
+    laminate.
 - Theorem 1.1 (1) is proved at the level `l = 1` ([`theorem1_1_part1_levelOne`](../../Morrey/Pedregal/LevelOne.lean#L156)), by an explicit
   lamination: the paper's argument fails there too.
 - The cited result, Kakutani's fixed-point theorem (Theorem 6.2), is proved in [`External/`](../../Morrey/Common/External) from
@@ -39,14 +44,34 @@ Status of the formalization:
 
 | Kind | Findings |
 | --- | --- |
-| Errors | E13: Proposition 7.1 and Corollary 7.2 are false, so the proof of Theorem 1.1 fails; E14: the summary of Step 2 (with Claim 7.5) is false |
-| Gaps | E15: the proof of Proposition 7.1 (dimension count, positivity, the starting barycenter, the averaging over translates); E16: Theorem 1.1 (2) from (1), "a standard density argument", is not given |
+| Errors | E13, E14 (below) |
+| Gaps | E15, E16 (below) |
 | Missing hypotheses | E4: Theorem 1.2 takes "an arbitrary function", but its integral needs a measurable `ψ` |
 | Redundant hypotheses | none in the paper's results |
 | Use of cited results | Kakutani's theorem: stated correctly, but its non-emptiness hypothesis fails (E13) |
-| Later work | E17: the claim of v1–v2 (2019) for two-component maps in dimension `N ≥ 3` is false, by Cassese's `2 × 3` example (2026), proved in this repository (the claim itself is not stated in Lean); a second 2026 preprint claims an example on `ℝ^{2×4}` |
+| Later work | E17 (below) |
 | Readings and wording | E7: Proposition 3.3's permutation is unique for ordered molds, as the paper's notation is |
 | Misprints and slips | E1–E3, E5, E6, E8–E12, E18 |
+
+Errors:
+
+- E13: Proposition 7.1 and Corollary 7.2 are false, so the proof of Theorem 1.1 fails;
+- E14: the summary of Step 2 (with Claim 7.5) is false.
+
+Gaps:
+
+- E15: the proof of Proposition 7.1:
+  - dimension count;
+  - positivity;
+  - the starting barycenter;
+  - the averaging over translates;
+- E16: Theorem 1.1 (2) from (1), "a standard density argument", is not given.
+
+Later work, E17:
+
+- the claim of v1–v2 (2019) for two-component maps in dimension `N ≥ 3` is false, by Cassese's
+  `2 × 3` example (2026), proved in this repository (the claim itself is not stated in Lean);
+- a second 2026 preprint claims an example on `ℝ^{2×4}`.
 
 ## 2. Results from prior work and how the paper uses them
 
@@ -54,7 +79,12 @@ Status of the formalization:
 
 | Result | Where the paper uses it | Source | Theorem in `External/` |
 | --- | --- | --- | --- |
-| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38), from `Kakutani.exists_fixedPoint` of [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), which follows Kakutani's proof (barycentric subdivisions, Brouwer's theorem, a limit); upper semicontinuity gives the closed graph that it assumes |
+| Kakutani's fixed-point theorem (Theorem 6.2) | Section 8: a fixed point of `𝐓` | Kakutani 1941, cited from Smirnov 2002 | [`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38) (below) |
+
+[`External.Kakutani.exists_fixedPoint`](../../Morrey/Common/External/Kakutani/Theorem.lean#L38) comes from `Kakutani.exists_fixedPoint` of
+[lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point), which follows Kakutani's proof
+(barycentric subdivisions, Brouwer's theorem, a limit); upper semicontinuity gives the closed graph
+that `Kakutani.exists_fixedPoint` assumes.
 
 ### Standard facts used without citation
 
@@ -141,9 +171,13 @@ there (it repeats the notation of (3.7)). Harmless.
 
 ### E10. Definition 6.1 (line 757): "for all `0 ≤ p ≤ m − 2`, `1 ≤ k ≤ 2^p`"
 
-The tri-dyadic mold is not dyadic: level `0` has one mixture, level `1` one mixture and a pair
-that passes through, and level `p ≥ 2` has `3 · 2^{p−2}` mixtures (`2^{p−2}` per sub-mold). So
-`1 ≤ k ≤ 2^p` is wrong at every level `p ≥ 1` (lines 723, 744 and 850 have the same slip). The
+The tri-dyadic mold is not dyadic:
+
+- level `0` has one mixture;
+- level `1` has one mixture and a pair that passes through;
+- level `p ≥ 2` has `3 · 2^{p−2}` mixtures (`2^{p−2}` per sub-mold).
+
+So `1 ≤ k ≤ 2^p` is wrong at every level `p ≥ 1` (lines 723, 744 and 850 have the same slip). The
 intended condition is "at every mixture above the first level", which the formalization states ([`Pedregal.T`](../../palomar/Pedregal/Challenge.lean#L224)).
 
 ### E11. Eq. (7.12) and line 998
@@ -166,14 +200,18 @@ of `u` for `t` and some weights `r ∈ Θ_l`. Corollary 7.2 (line 874): `𝐓(t)
 `u, v ∈ ℙ_l`, `t ∈ Θ_l`. Theorem 1.1 is deduced from Kakutani's theorem, whose hypotheses include
 the non-emptiness of the values (Section 8).
 
-**Counterexample.** `l = 1`, the mold `TriMold.canonical 1` (interfaces numbered kind by kind,
-cell by cell), `t` the uniform weights `1/48`, and
-`u = τ(x₀) − τ(x₁) − τ(x₀ + x₁)`, `v(x₀, x₁) = u(x₁, x₀)`, where `τ(x)` is the distance from `x` to
-the nearest integer. Both lie in `ℙ_1`. The first mixture above the first level of the sub-mold
-`j = 1` (normals `(1, 0)`, `(0, 1)`) joins the vertical interfaces of the cells `(0, 0)` and
-`(0, 1)`. The tangential derivative `∂₂` is continuous across a vertical interface; so the mass
-points of the two first-level mixtures, whatever the weights, have second coordinates `∂₂u`
-there, and `∂₂v` for `v`:
+**Counterexample.**
+
+- `l = 1`;
+- the mold `TriMold.canonical 1` (interfaces numbered kind by kind, cell by cell);
+- `t` the uniform weights `1/48`;
+- `u = τ(x₀) − τ(x₁) − τ(x₀ + x₁)`, `v(x₀, x₁) = u(x₁, x₀)`, where `τ(x)` is the distance from `x`
+  to the nearest integer.
+
+`u` and `v` both lie in `ℙ_1`. The first mixture above the first level of the sub-mold `j = 1`
+(normals `(1, 0)`, `(0, 1)`) joins the vertical interfaces of the cells `(0, 0)` and `(0, 1)`. The
+tangential derivative `∂₂` is continuous across a vertical interface; so the mass points of the two
+first-level mixtures, whatever the weights, have second coordinates `∂₂u` there, and `∂₂v` for `v`:
 
 | Interface | Triangles | `∇u` | `∇v` |
 | --- | --- | --- | --- |
@@ -213,11 +251,14 @@ the conclusion of Theorem 1.1 (1) holds ([`theorem1_1_part1_levelOne`](../../Mor
 eight matrices `±C₁ ± C₂ ± C₃` with rank-one `C_i`, which three rank-one splittings reach. So the
 failure of Corollary 7.2 is a failure of the method, not evidence against the theorem. For the
 counterexample pair itself, `𝐓` even has a fixed point, which Kakutani's theorem cannot provide
-here: the weights whose relative weights `λ` (the share of the second leaf, `2i + 1` in Lean,
-the paper's `2i`) on the first-level mixtures, in the order of `TriMold.canonical 1`, are
-`1, 0, 0, 1, 0, 1, 1, 0` in the sub-mold `j = 1`, `1, 0, 0, 1, ½, ½, ½, ½` in `j = 2` and
-`0, 1, 1, 0, ½, ½, ½, ½` in `j = 3` lie in `Θ_1` and in their own image (found numerically,
-checked in exact rational arithmetic, [`numerics/fixedpoint_exact.py`](numerics/fixedpoint_exact.py); not in Lean).
+here: the weights with the relative weights listed below lie in `Θ_1` and in their own image
+(found numerically, checked in exact rational arithmetic, [`numerics/fixedpoint_exact.py`](numerics/fixedpoint_exact.py); not in
+Lean). These relative weights `λ` (the share of the second leaf, `2i + 1` in Lean, the paper's
+`2i`) on the first-level mixtures, in the order of `TriMold.canonical 1`, are:
+
+- `1, 0, 0, 1, 0, 1, 1, 0` in the sub-mold `j = 1`;
+- `1, 0, 0, 1, ½, ½, ½, ½` in `j = 2`;
+- `0, 1, 1, 0, ½, ½, ½, ½` in `j = 3`.
 
 ### E14. The summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5, is false
 
@@ -260,12 +301,15 @@ E13 shows that the statement is false; these are the places where the argument f
 ### E16. Theorem 1.1 (2) from Theorem 1.1 (1)
 
 The paper gets (2) from (1) "by a standard density argument about approximation by continuous,
-piece-wise affine mappings" (line 163) and Section 8. The argument is not given; it needs
-Jensen's inequality for laminates and rank-one convex functions, the continuity of rank-one
-convex functions, the approximation of periodic Lipschitz maps by `ℙ_l` maps with convergence of
-the gradient measures, and the equivalence of the periodic and the `W^{1,∞}_0` definitions of
-quasiconvexity. All of it is standard, and all of it is moot while (1) is unproved. Not
-formalized.
+piece-wise affine mappings" (line 163) and Section 8. The argument is not given; it needs:
+
+- Jensen's inequality for laminates and rank-one convex functions;
+- the continuity of rank-one convex functions;
+- the approximation of periodic Lipschitz maps by `ℙ_l` maps with convergence of the gradient
+  measures;
+- the equivalence of the periodic and the `W^{1,∞}_0` definitions of quasiconvexity.
+
+All of it is standard, and all of it is moot while (1) is unproved. Not formalized.
 
 ### E17. Later work: the claim of v1–v2 in higher dimension
 
@@ -292,9 +336,15 @@ not stated in Lean here; the `2 × 2` claim of v5 is untouched.
 
 ### E18. Misprints
 
-"counter-examble" (line 150), "Brower" (lines 176, 775), "subleties" (line 197), "full collection
-of triangle" (line 543), "important for." (line 488), "interfase" (line 620), "point or our
-concern" (line 762), "alway" (line 990), and "(in press)" for a 2011 paper (line 1067).
+- "counter-examble" (line 150);
+- "Brower" (lines 176, 775);
+- "subleties" (line 197);
+- "full collection of triangle" (line 543);
+- "important for." (line 488);
+- "interfase" (line 620);
+- "point or our concern" (line 762);
+- "alway" (line 990);
+- "(in press)" for a 2011 paper (line 1067).
 
 ## 4. Missing hypotheses
 
@@ -323,10 +373,12 @@ formalization states them for arbitrary functions `u, v`.
   (3.3)–(3.6) is [`Mold.weight`](../../palomar/Pedregal/Challenge.lean#L125), [`Mold.point`](../../palomar/Pedregal/Challenge.lean#L135) (with the convention `λ = 1/2` for weight `0`), and the
   direction of `[L, R]` is `L.point − R.point`. The top-to-bottom description is the same object
   read from the root ([`Mold.isLaminate_add_leafMeasure`](../../Morrey/Pedregal/Hn/Laminate.lean#L70)).
-- **Tri-dyadic molds for `τ_l`** (Definition 4.1) are `TriMold l`: a numbering of the interfaces
-  of each sub-mold, which side gets the first leaf, and the order of the last two mixtures. The
-  conditions of Section 4 are proved ([`TriMold.card_C`](../../Morrey/Pedregal/MoldTau.lean#L355), [`TriMold.card_C_filter`](../../Morrey/Pedregal/MoldTau.lean#L361),
-  [`TriMold.leafTri_pair`](../../Morrey/Pedregal/MoldTau.lean#L274), [`TriMold.tree_isTriDyadic`](../../Morrey/Pedregal/MoldTau.lean#L243)).
+- **Tri-dyadic molds for `τ_l`** (Definition 4.1) are `TriMold l`, and the conditions of Section 4
+  are proved ([`TriMold.card_C`](../../Morrey/Pedregal/MoldTau.lean#L355), [`TriMold.card_C_filter`](../../Morrey/Pedregal/MoldTau.lean#L361), [`TriMold.leafTri_pair`](../../Morrey/Pedregal/MoldTau.lean#L274),
+  [`TriMold.tree_isTriDyadic`](../../Morrey/Pedregal/MoldTau.lean#L243)). A `TriMold l` consists of:
+  - a numbering of the interfaces of each sub-mold;
+  - which side gets the first leaf;
+  - the order of the last two mixtures.
 - **Indices.** Leaves are `(j, k)`, both from `0`: the paper's leaf `j · 2^{2l+2} + k + 1`; the
   first-level mixture `i` (from `0`) joins the leaves `2i, 2i + 1`, the paper's `2i + 1, 2i + 2` of
   its interface `i + 1`.
@@ -354,11 +406,12 @@ formalization states them for arbitrary functions `u, v`.
 | Proposition 7.1, Corollary 7.2, the summary of Step 2 with Claim 7.5 | proofs | refutations by an explicit counterexample | the statements are false (reason 1) | E13, E14 |
 
 Every other proof follows the paper's argument. Two steps that the paper leaves implicit are
-spelled out, not changed: the closed graph of Subsection 6.1 rests on "the dependence of elements
-in (5.12) on `t` is continuous" (the notation of (3.7), E9), which on `Θ_l` is the linearity of
-Proposition 6.3 (1); and the
-upper semicontinuity that Kakutani's theorem asks for is derived from the closed graph and the
-compactness of `Θ_l` ([`section6_1_usc`](../../Morrey/Pedregal/Map.lean#L346)).
+spelled out, not changed:
+
+- the closed graph of Subsection 6.1 rests on "the dependence of elements in (5.12) on `t` is
+  continuous" (the notation of (3.7), E9), which on `Θ_l` is the linearity of Proposition 6.3 (1);
+- the upper semicontinuity that Kakutani's theorem asks for is derived from the closed graph and
+  the compactness of `Θ_l` ([`section6_1_usc`](../../Morrey/Pedregal/Map.lean#L346)).
 
 ## 8. What each result depends on
 
@@ -392,10 +445,13 @@ only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.
 
 The route check ([`scripts/route_check.py`](../../scripts/route_check.py)) compares the results that each formal proof uses with
 those that the paper's proof cites ([`paper_routes.tsv`](paper_routes.tsv)). Every difference is recorded with its
-reason in [`route_differences.tsv`](route_differences.tsv): the refutations do not use the steps of the refuted proofs,
-[`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28) takes the conclusion of Corollary 7.2 as a hypothesis, the closed graph of
-Subsection 6.1 uses the linearity of Proposition 6.3 (the continuity that the paper invokes), and
-the assertions of Definition 5.1 are used without citation throughout.
+reason in [`route_differences.tsv`](route_differences.tsv):
+
+- the refutations do not use the steps of the refuted proofs;
+- [`theorem1_1_of_nonempty`](../../Morrey/Pedregal/Reduction.lean#L28) takes the conclusion of Corollary 7.2 as a hypothesis;
+- the closed graph of Subsection 6.1 uses the linearity of Proposition 6.3 (the continuity that the
+  paper invokes);
+- the assertions of Definition 5.1 are used without citation throughout.
 
 ## 9. Not formalized
 
@@ -411,9 +467,14 @@ the assertions of Definition 5.1 are used without citation throughout.
 
 ## 10. The paper in the literature
 
-Searched on 21 November 2026: arXiv listings and abstracts, the papers that the paper cites, web
-search for responses to the paper, and GitHub for formalizations. Preprints are reported as
-claimed, not as proved.
+Searched on 21 November 2026:
+
+- arXiv listings and abstracts;
+- the papers that the paper cites;
+- web search for responses to the paper;
+- GitHub for formalizations.
+
+Preprints are reported as claimed, not as proved.
 
 ### Before the paper
 
@@ -425,12 +486,15 @@ claimed, not as proved.
   implication fails for `m ≥ 3` components; attempts to extend it to two components failed
   (Pedregal 1996; Pedregal–Šverák 1998; Bandeira–Ornelas 2011). Y. Grabovsky (2018) gave other
   examples for `m > 2`, on `ℝ^{8×2}`.
-- For two components, partial results: rank-one convexity implies quasiconvexity on diagonal
-  matrices (S. Müller 1999) and on some hypersurfaces (Chaudhuri–Müller 2003), and in special
-  isotropic and incompressible classes (Martin–Ghiba–Neff 2017; Ghiba–Martin–Neff 2018); Faraco
-  and Székelyhidi (2008) localized the quasiconvex hull in `ℝ^{2×2}`. Astala, Iwaniec, Prause and
-  Saksman (2012) connected the `2 × 2` problem with Burkholder's functional and the Iwaniec
-  conjecture on the Beurling–Ahlfors transform.
+- For two components, partial results:
+  - rank-one convexity implies quasiconvexity:
+    - on diagonal matrices (S. Müller 1999);
+    - on some hypersurfaces (Chaudhuri–Müller 2003);
+    - in special isotropic and incompressible classes (Martin–Ghiba–Neff 2017;
+      Ghiba–Martin–Neff 2018);
+  - Faraco and Székelyhidi (2008) localized the quasiconvex hull in `ℝ^{2×2}`.
+- Astala, Iwaniec, Prause and Saksman (2012) connected the `2 × 2` problem with Burkholder's
+  functional and the Iwaniec conjecture on the Beurling–Ahlfors transform.
 - P. Pedregal, *Some evidence in favor of Morrey's conjecture*
   ([arXiv:1406.7199](https://arxiv.org/abs/1406.7199), 2014, since withdrawn), argued in the
   opposite direction: an explicit family of two-component maps whose gradient measures, it
@@ -464,22 +528,28 @@ claims a solution of the `2 × 2` case.
 
 ### Since the paper
 
-- Numerical studies have found no counterexample in `2 × 2`: A. Guerra and R. Teixeira da Costa
-  ([arXiv:2006.09063](https://arxiv.org/abs/2006.09063), Rev. Mat. Iberoam. 2022) give numerical
-  evidence towards a positive answer, through `N`-wave quasiconvexity (Jensen's inequality for
-  sums of `N` sawtooth waves), which they show is quasiconvexity when `N` is arbitrary; `N = 3` in
-  `2 × 2` is Sebestyén–Székelyhidi's theorem, and `N ≥ 4` is open; Voss, Martin,
-  Sander, Kumar, Kochmann and Neff (J. Nonlinear Sci. 2022) could not show that their candidate
-  fails to be quasiconvex; X. Dong and K. Enakoutsa
-  ([arXiv:2211.11194](https://arxiv.org/abs/2211.11194)) discuss simulations towards a
-  counterexample. R. Awi and V. Šverák (2023) propose a convex-optimization formulation for the
-  open case. The paper calls these studies inconclusive (line 154).
-- Counterexamples for two-component maps in higher dimension (preprints, after v5): G. Cassese,
-  [arXiv:2608.03488](https://arxiv.org/abs/2608.03488) (August–September 2026), rank-one convex
-  integrands on `ℝ^{2×m}` that are nowhere quasiconvex for `m` large, and examples on
-  `ℝ^{2×3}`; A. Agazzi, G. Bruno, A. Guerra and F. Pasqualotto,
-  [arXiv:2608.12298](https://arxiv.org/abs/2608.12298) (August 2026), an explicit example on
-  `ℝ^{2×4}`. Both say that the `2 × 2` case remains open. Cassese's `2 × 3` example, proved in this
+- Numerical studies have found no counterexample in `2 × 2`:
+  - A. Guerra and R. Teixeira da Costa ([arXiv:2006.09063](https://arxiv.org/abs/2006.09063), Rev.
+    Mat. Iberoam. 2022) give numerical evidence towards a positive answer, through `N`-wave
+    quasiconvexity (Jensen's inequality for sums of `N` sawtooth waves), which they show is
+    quasiconvexity when `N` is arbitrary; `N = 3` in `2 × 2` is Sebestyén–Székelyhidi's theorem,
+    and `N ≥ 4` is open;
+  - Voss, Martin, Sander, Kumar, Kochmann and Neff (J. Nonlinear Sci. 2022) could not show that
+    their candidate fails to be quasiconvex;
+  - X. Dong and K. Enakoutsa ([arXiv:2211.11194](https://arxiv.org/abs/2211.11194)) discuss
+    simulations towards a counterexample.
+
+  R. Awi and V. Šverák (2023) propose a convex-optimization formulation for the open case. The
+  paper calls these studies inconclusive (line 154).
+- Counterexamples for two-component maps in higher dimension (preprints, after v5):
+  - G. Cassese, [arXiv:2608.03488](https://arxiv.org/abs/2608.03488) (August–September 2026),
+    rank-one convex integrands on `ℝ^{2×m}` that are nowhere quasiconvex for `m` large, and
+    examples on `ℝ^{2×3}`;
+  - A. Agazzi, G. Bruno, A. Guerra and F. Pasqualotto,
+    [arXiv:2608.12298](https://arxiv.org/abs/2608.12298) (August 2026), an explicit example on
+    `ℝ^{2×4}`.
+
+  Both say that the `2 × 2` case remains open. Cassese's `2 × 3` example, proved in this
   repository, makes the claim of v1–v2 in dimension `N ≥ 3` false (E17).
 - S. Conti, G. Dolzmann and P. Dondl, [arXiv:2610.31886](https://arxiv.org/abs/2610.31886)
   (October 2026): a frame-indifferent rank-one convex function on `ℝ^{3×3}` that is not
@@ -544,8 +614,12 @@ zero.
 - The density argument of E16 (Jensen's inequality for laminates, the continuity of rank-one
   convex functions, the approximation of periodic Lipschitz maps by maps of `ℙ_l`) would turn a
   future proof of Theorem 1.1 (1) into Morrey's `2 × 2` case. Some of its ingredients are in the
-  package lean4-calculus-of-variations: the local Lipschitz continuity of rank-one convex functions
-  (`CalculusOfVariations.RankOneConvex.locallyLipschitz`), quasiconvexity tested with periodic
-  Lipschitz maps (`CalculusOfVariations.quasiconvexAtOn_iff_periodic`), and piecewise affine
-  interpolation on Kuhn–Freudenthal triangulations (`CalculusOfVariations.kuhnInterpolation`).
+  package lean4-calculus-of-variations:
+  - the local Lipschitz continuity of rank-one convex functions
+    (`CalculusOfVariations.RankOneConvex.locallyLipschitz`);
+  - quasiconvexity tested with periodic Lipschitz maps
+    (`CalculusOfVariations.quasiconvexAtOn_iff_periodic`);
+  - piecewise affine interpolation on Kuhn–Freudenthal triangulations
+    (`CalculusOfVariations.kuhnInterpolation`).
+
   Jensen's inequality for laminates and the convergence of the gradient measures are not.

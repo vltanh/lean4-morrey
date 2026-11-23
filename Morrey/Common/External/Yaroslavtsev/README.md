@@ -37,16 +37,19 @@ general filtrations):
 
 **Proofs.** In the package `BanachProbability`
 ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)). Lemma 3.2,
-`BanachProbability.umdConst_le_complexUMDConst_le`, by the proof of HNVW I, Proposition 4.2.10: real
-signs are unimodular; complex numbers `α_1, …, α_n` of modulus at most one are
-`(π / 2) Σ_j λ^{(j)} ε^{(j)}` with `ε^{(j)} ∈ {±1}^n` and `Σ_j |λ^{(j)}| ≤ 1` (Proposition 3.2.14 with
-Lemma 3.2.15 and (3.21), (3.22)), and the triangle inequality concludes for deterministic multipliers;
-Theorem 4.2.25 (incremental filtrations, Lemma 3.6.18) for predictable ones. Proposition 3.7,
-`BanachProbability.complexUMDConst_le_of_isComplexZigZagConcave` and
-`complexUMDConst_lt_top_iff_exists_isComplexZigZagConcave`: Yaroslavtsev's proof "repeats the one given
-in" HNVW I, Theorem 4.5.6, with multipliers in `A` (only the finiteness of `U` is argued anew, for a
-general `A`), and the package's is HNVW's, over `ℝ` and `ℂ` at once, with multipliers in the closed
-unit ball (see [`../HNVW`](../HNVW)). The package's source contains no `sorry`.
+`BanachProbability.umdConst_le_complexUMDConst_le`, by the proof of HNVW I, Proposition 4.2.10:
+
+- real signs are unimodular;
+- complex numbers `α_1, …, α_n` of modulus at most one are `(π / 2) Σ_j λ^{(j)} ε^{(j)}` with
+  `ε^{(j)} ∈ {±1}^n` and `Σ_j |λ^{(j)}| ≤ 1` (Proposition 3.2.14 with Lemma 3.2.15 and (3.21),
+  (3.22)), and the triangle inequality concludes for deterministic multipliers;
+- Theorem 4.2.25 (incremental filtrations, Lemma 3.6.18) concludes for predictable multipliers.
+
+Proposition 3.7, `BanachProbability.complexUMDConst_le_of_isComplexZigZagConcave` and
+`complexUMDConst_lt_top_iff_exists_isComplexZigZagConcave`: Yaroslavtsev's proof "repeats the one
+given in" HNVW I, Theorem 4.5.6, with multipliers in `A` (only the finiteness of `U` is argued anew,
+for a general `A`), and the package's is HNVW's, over `ℝ` and `ℂ` at once, with multipliers in the
+closed unit ball (see [`../HNVW`](../HNVW)). The package's source contains no `sorry`.
 
 **Departures.** None in the arguments. As everywhere in the package, the spaces are probability spaces
 and the martingales start at `0`, so the term `v_0 f_0` of HNVW's transforms vanishes. In Lemma 3.6.18

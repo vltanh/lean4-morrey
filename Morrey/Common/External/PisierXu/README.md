@@ -32,14 +32,16 @@ by LPP and Astérisque 247, p. 106:
 
 - the lower bound with constant `1` by (I.5)–(I.7) of LPP;
 - Paley's inequality in the Schatten classes, uniformly in `1 ≤ p ≤ 2` (LPP, Theorem III.1 (i) for the
-  Paley projection): the factorization of matrix-valued `H¹` functions ((α), (β) of LPP, p. 252) is
-  Sarason's Theorem 4 (Trans. Amer. Math. Soc. 127 (1967), 179–203), with Helson–Lowdenslager (Acta Math.
-  99 (1958) and 106 (1961)); (III.3), for every choice of signs, is McConnell's Littlewood–Paley inequality
-  for UMD spaces (Trans. Amer. Math. Soc. 285 (1984), 739–757, Theorem 1.3, from his multiplier
-  theorem, Theorem 1.1, `n = 1`, and from the boundedness of the Hilbert transform on UMD spaces, by
-  Burkholder 1983, Lemmas 1–4, pp. 277–283, with M. Riesz (1928), §18, to which his Lemma 4 refers),
-  transferred to the circle by HNVW I, Proposition 5.7.1,
-  with the dilation of the proof of its Theorem 5.7.10;
+  Paley projection):
+  - the factorization of matrix-valued `H¹` functions ((α), (β) of LPP, p. 252) is Sarason's
+    Theorem 4 (Trans. Amer. Math. Soc. 127 (1967), 179–203), with Helson–Lowdenslager (Acta Math.
+    99 (1958) and 106 (1961));
+  - (III.3), for every choice of signs, is McConnell's Littlewood–Paley inequality for UMD spaces
+    (Trans. Amer. Math. Soc. 285 (1984), 739–757, Theorem 1.3, from his multiplier theorem,
+    Theorem 1.1, `n = 1`, and from the boundedness of the Hilbert transform on UMD spaces, by
+    Burkholder 1983, Lemmas 1–4, pp. 277–283, with M. Riesz (1928), §18, to which his Lemma 4
+    refers), transferred to the circle by HNVW I, Proposition 5.7.1, with the dilation of the proof
+    of its Theorem 5.7.10;
 - Corollary III.4 with signs, by averaging (LPP, p. 243);
 - the upper bound by duality (LPP, pp. 254–255), with the Rademacher projection on `L^q (S_q)` bounded
   by a multiple of `√q` (Astérisque 247, p. 106): type 2 of `S_q` by Tomczak-Jaegermann (Studia Math. 50
@@ -52,22 +54,29 @@ by LPP and Astérisque 247, p. 106:
 **Departures.** None from the argument of LPP. For (III.3) LPP give two references, Bourgain 1986 (not
 obtained) and McConnell 1984, Theorem 1.3; McConnell's proof is followed, for `n = 1`. Facts that
 these sources take from works that were not read, or only recall, or state without proof, have named
-substitutes: Sarason's Lemma 10.3, from Helson's book (not read), by Helson–Lowdenslager 1961, §§9–10;
-Szegő's theorem and the quotient by an outer function, from Hoffman's book (pp. 53, 75; not read), by
-Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end of Sarason's proof; the
-Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by Hytönen–van
-Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Appendix D, and by Sutter, Berta and
-Tomamichel (Comm. Math. Phys. 352 (2017)); the multiplier `−i sgn` as the limit of the truncated
-Hilbert transforms (Burkholder 1983, Theorem 2, stated without proof), by HNVW I, Lemma 5.2.1 and
-Proposition 5.2.2; Theorem 1 of Burkholder 1983 for `ℝ` (its proof is in Burkholder 1981, read and not
-followed), by Burkholder's inequality with the constant `p* − 1` (Cassese's Theorem 2.3 (1)): Burkholder
-asserts on p. 275, without proof, that with Khintchine's inequality it gives the square-function
-inequality for real martingales, which is proved here by the argument of his Lemma 1 (pp. 277–278); a
-comparison of multinomial coefficients that Tomczak-Jaegermann quotes
-(p. 177), by an elementary inequality; Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II,
-Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it
-is Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese
-cites for it.
+substitutes:
+
+- Sarason's Lemma 10.3, from Helson's book (not read), by Helson–Lowdenslager 1961, §§9–10;
+- Szegő's theorem and the quotient by an outer function, from Hoffman's book (pp. 53, 75; not
+  read), by Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end of Sarason's
+  proof;
+- the Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by Hytönen–van
+  Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Appendix D, and by Sutter, Berta and
+  Tomamichel (Comm. Math. Phys. 352 (2017));
+- the multiplier `−i sgn` as the limit of the truncated Hilbert transforms (Burkholder 1983,
+  Theorem 2, stated without proof), by HNVW I, Lemma 5.2.1 and Proposition 5.2.2;
+- Theorem 1 of Burkholder 1983 for `ℝ` (its proof is in Burkholder 1981, read and not followed), by
+  Burkholder's inequality with the constant `p* − 1` (Cassese's Theorem 2.3 (1)): Burkholder asserts
+  on p. 275, without proof, that with Khintchine's inequality it gives the square-function
+  inequality for real martingales, which is proved here by the argument of his Lemma 1
+  (pp. 277–278) for `ℝ`, with Khintchine's inequality;
+- a comparison of multinomial coefficients that Tomczak-Jaegermann quotes (p. 177), by an
+  elementary inequality;
+- Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II, Proposition 7.4.22.
+
+LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it is
+Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese cites
+for it.
 
 **Shorter proof.** The upper bound with the explicit constant `√(2 (q − 1)) ≤ √2 √q`, by the method of
 exchangeable pairs of Mackey, Jordan, Chen, Farrell and Tropp (Ann. Probab. 42 (2014), §§7–8), is

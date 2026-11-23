@@ -14,23 +14,32 @@ How this formalization was made, from the run log and the session transcripts.
   commit `020f253`.
 - Kakutani's theorem comes from [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point)
   (commit `5f650f0`), an earlier project made with the same procedure.
-- Review: no person has reviewed the proofs. Independent AI agents checked the statements and the
-  counterexample against the TeX source, the formal proofs against the paper's, the report's
-  findings and literature section, and, in a later round, every recorded departure and the
-  documents of the three papers.
+- Review: no person has reviewed the proofs. Independent AI agents checked:
+  - the statements and the counterexample against the TeX source;
+  - the formal proofs against the paper's;
+  - the report's findings and literature section;
+  - in a later round, every recorded departure and the documents of the three papers.
 
 ## First formalization (21 November 2026)
 
 How it was made:
 
-- The main session read the TeX source, made the inventory, found the counterexample to
-  Corollary 7.2 numerically and then a transparent one (exact rational arithmetic), set up the
-  project, and wrote every definition and statement, the Challenge and the Solution.
+- The main session:
+  - read the TeX source;
+  - made the inventory;
+  - found the counterexample to Corollary 7.2 numerically and then a transparent one (exact
+    rational arithmetic);
+  - set up the project;
+  - wrote every definition and statement, the Challenge and the Solution.
 - An independent agent checked every statement against the TeX and recomputed the counterexample
   by hand.
-- Six agents proved the statements in parallel, each owning whole files: the general lemmas and
-  Kakutani's theorem with Section 3; the triangulation; Sections 4 and 5; Section 6, the reduction
-  and Section 7's correct claims; the counterexample; the case `l = 1` of Theorem 1.1 (1).
+- Six agents proved the statements in parallel, each owning whole files:
+  - the general lemmas and Kakutani's theorem with Section 3;
+  - the triangulation;
+  - Sections 4 and 5;
+  - Section 6, the reduction and Section 7's correct claims;
+  - the counterexample;
+  - the case `l = 1` of Theorem 1.1 (1).
 - The main session integrated their work, cleaned up, and ran the audit, the route check and
   Comparator. An independent agent compared the formal proofs with the paper's.
 - Web-reading agents gathered the paper's versions and the literature; the main session wrote the

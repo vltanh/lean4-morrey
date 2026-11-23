@@ -13,9 +13,14 @@ from it (line 559) that a continuous `f` is quasiconvex at `A` exactly when it h
 minorant `g ≤ f` with `g (A) = f (A)`.
 
 **The source's statement.** For a continuous `ψ` (not assumed bounded below) and
-`ψ^# (A) = inf_ζ ⨍_Ω ψ (A + ∇ζ)`: (i) `ψ^#` does not depend on `Ω`; (ii) it is rank-one convex; (iii) if
-`ψ^# (A₀) > −∞` for some `A₀`, it is continuous; (iv) if it is continuous, it is quasiconvex. It does
-not state `f^{qc} = f^#`, which follows.
+`ψ^# (A) = inf_ζ ⨍_Ω ψ (A + ∇ζ)`:
+
+- (i) `ψ^#` does not depend on `Ω`;
+- (ii) it is rank-one convex;
+- (iii) if `ψ^# (A₀) > −∞` for some `A₀`, it is continuous;
+- (iv) if it is continuous, it is quasiconvex.
+
+It does not state `f^{qc} = f^#`, which follows.
 
 **Lean.** [`Formula.lean`](Formula.lean): the proposition
 `External.KinderlehrerPedregal.DacorognaFormula`, with Lipschitz test maps vanishing outside the
@@ -23,21 +28,30 @@ unit ball and values in `EReal`, proved by `dacorognaFormula_holds` from
 `CalculusOfVariations.qcEnvelope_eq_iInf_unitBall` of the package `CalculusOfVariations`
 ([lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations), `Envelope/`).
 
-**Proof.** The source's (i)–(iv): (i) Vitali's covering theorem with copies of the domain, and gluing;
-(ii) laminates on a cube with a face orthogonal to the rank-one direction, cut off near its boundary,
-with independent test maps on the slabs; (iii) a rank-one convex function that is finite is locally
-Lipschitz ("easy to check" in the source; Lemma 2.1), and `−∞` at one matrix spreads along rank-one
-paths; (iv) Step 6 of Proposition 7.2: gluing of near-minimisers on the pieces of a piecewise affine map,
-and density. Then `f^{qc} ≤ f^#` because a quasiconvex minorant is quasiconvex on the ball, and
+**Proof.** The source's (i)–(iv):
+
+- (i) Vitali's covering theorem with copies of the domain, and gluing;
+- (ii) laminates on a cube with a face orthogonal to the rank-one direction, cut off near its
+  boundary, with independent test maps on the slabs;
+- (iii) a rank-one convex function that is finite is locally Lipschitz ("easy to check" in the
+  source; Lemma 2.1), and `−∞` at one matrix spreads along rank-one paths;
+- (iv) Step 6 of Proposition 7.2: gluing of near-minimisers on the pieces of a piecewise affine
+  map, and density.
+
+Then `f^{qc} ≤ f^#` because a quasiconvex minorant is quasiconvex on the ball, and
 `f^# ≤ f^{qc}` by (i)–(iv).
 
 **Departures.** None in the argument; the last step, `f^{qc} = f^#`, and the approximation in (iv) are
 supplied (gap fills). (i) needs `|∂D| = 0` for the domain `D` that is copied, which Proposition 8.1 does
 not state; it holds for the cube and the ball.
 
-**Who uses it.** In [`Morrey/Cassese/Toolkit.lean`](../../../Cassese/Toolkit.lean): line 559 of the paper
-(`Cassese.quasiconvexAt_iff_exists_minorant`, with Lemma 2.2 for the unit cube), and Proposition 2.3 (a),
-(b) directly, and through them Proposition 2.3 (c) and the consequences of Proposition 2.3
-(`quasiconvexAt_zero_of_quasiconvexAt`, `nowhereQuasiconvex_of_not_quasiconvexAt_zero`), which give the
-conclusions "nowhere quasiconvex"; so also Theorems 1.2–1.5, Corollaries 1.6, 5.2, 5.3 and 6.1,
-Proposition 4.3 and the elementary route to Theorem 1.2.
+**Who uses it.** In [`Morrey/Cassese/Toolkit.lean`](../../../Cassese/Toolkit.lean):
+
+- line 559 of the paper (`Cassese.quasiconvexAt_iff_exists_minorant`, with Lemma 2.2 for the unit
+  cube), and Proposition 2.3 (a), (b) directly;
+- through them, Proposition 2.3 (c) and the consequences of Proposition 2.3
+  (`quasiconvexAt_zero_of_quasiconvexAt`, `nowhereQuasiconvex_of_not_quasiconvexAt_zero`), which
+  give the conclusions "nowhere quasiconvex".
+
+So also Theorems 1.2–1.5, Corollaries 1.6, 5.2, 5.3 and 6.1, Proposition 4.3 and the elementary
+route to Theorem 1.2.

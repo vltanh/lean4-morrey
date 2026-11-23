@@ -1,12 +1,15 @@
 # Randrianantoanina: Schatten classes are UMD, uniformly in the dimension
 
 **Source.** N. Randrianantoanina, *Non-commutative martingale transforms*, J. Funct. Anal. 194
-(2002), 181–212 (arXiv:math/0111264), read for §§2–4: Theorem 3.1 (weak type `(1, 1)` of
-non-commutative martingale transforms, with an absolute constant), Theorem 4.3
-(`c_p ≤ C p² / (p − 1)` for transforms by signs; the case `p < 2` "by interpolation" from
-Theorem 3.1 and `L²`, the case `p > 2` by duality), Corollary 4.5
-(`C_p (L^p (M, τ)) ≤ C p² / (p − 1)`) and Remark 4.6 (1) (`C_p (S^p)` and `C₂ (S^p)` are `O (p)` as
-`p → ∞`; for `C₂` with the source's Theorem 4.2, the extrapolation theorem it quotes from Pisier).
+(2002), 181–212 (arXiv:math/0111264), read for §§2–4:
+
+- Theorem 3.1 (weak type `(1, 1)` of non-commutative martingale transforms, with an absolute
+  constant);
+- Theorem 4.3 (`c_p ≤ C p² / (p − 1)` for transforms by signs; the case `p < 2` "by interpolation"
+  from Theorem 3.1 and `L²`, the case `p > 2` by duality);
+- Corollary 4.5 (`C_p (L^p (M, τ)) ≤ C p² / (p − 1)`);
+- Remark 4.6 (1) (`C_p (S^p)` and `C₂ (S^p)` are `O (p)` as `p → ∞`; for `C₂` with the source's
+  Theorem 4.2, the extrapolation theorem it quotes from Pisier).
 
 **Statement used by Cassese.** Proposition 2.7 (2) (TeX lines 832–834), citing Corollary 4.5: for
 `q ∈ (1, ∞)`, `UMD₂ (S_q (ℓ₂ (ℕ))) ≤ C (q* − 1)` with an absolute constant `C` (a footnote says that
@@ -25,14 +28,21 @@ Proposition 6.2 recalls it as `UMD₂ (S_q^{d×d}) ≲ q` for `q ≥ 2` (TeX lin
 and `BanachProbability.umdConst_two_schattenSpace_le` in the package `BanachProbability`
 ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)), by the source's
 argument on the algebra `L^∞ (Ω) ⊗ M_n (ℝ)` of a filtered probability space, with scalar predictable
-signs: Cuculescu's projections and the weak type `(1, 1)` (Theorem 3.1, with a rank count in place of the
-generalized singular values of Lemma 3.2, which gives the constant `26` in (3.2), for positive `x`, and
-`52` in general; the source's value for (3.2) is `inf {24 α⁻¹ β⁻² + 2 (1 − α)⁻¹ : α, β ∈ (0, 1)}`,
-printed as `14√3/3 + 28`, a slip for `26 + 8√3`); Marcinkiewicz interpolation and duality (Theorem 4.3,
-whose interpolation step, not detailed in the source, is carried out in three ranges of exponents so that
-the constant stays uniform near `q = 2`); the Hermitian dilation for non-symmetric matrices; and
-extrapolation to the exponent `2` (HNVW I, Theorem 4.2.7, in place of the theorem of Pisier that the
-source quotes as its Theorem 4.2). The package's source contains no `sorry`.
+signs:
+
+- Cuculescu's projections and the weak type `(1, 1)` (Theorem 3.1, with a rank count in place of
+  the generalized singular values of Lemma 3.2, which gives the constant `26` in (3.2), for positive
+  `x`, and `52` in general; the source's value for (3.2) is
+  `inf {24 α⁻¹ β⁻² + 2 (1 − α)⁻¹ : α, β ∈ (0, 1)}`, printed as `14√3/3 + 28`, a slip for
+  `26 + 8√3`);
+- Marcinkiewicz interpolation and duality (Theorem 4.3, whose interpolation step, not detailed in
+  the source, is carried out in three ranges of exponents so that the constant stays uniform near
+  `q = 2`);
+- the Hermitian dilation for non-symmetric matrices;
+- extrapolation to the exponent `2` (HNVW I, Theorem 4.2.7, in place of the theorem of Pisier that
+  the source quotes as its Theorem 4.2).
+
+The package's source contains no `sorry`.
 
 **Constants.** Absolute, as in the source; not the values of the paper's footnote (`C = 140`), which the
 paper does not use.

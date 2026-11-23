@@ -1,10 +1,16 @@
 # HNVW: Hytönen, van Neerven, Veraar, Weis, *Analysis in Banach Spaces*
 
-**Sources.** T. Hytönen, J. van Neerven, M. Veraar, L. Weis, *Analysis in Banach Spaces. Volume I:
-Martingales and Littlewood–Paley Theory*, Springer 2016 (HNVW I; read): Proposition 4.2.3 (p. 282),
-Theorem 4.2.5 (p. 282), Theorem 4.2.7 (p. 283), Theorem 4.5.6 (p. 332), Corollary 5.7.6 (pp. 462–463),
-with what their proofs use; *Volume II: Probabilistic Methods and Operator Theory*, Springer 2017 (HNVW
-II; read): Theorem 6.2.4 (pp. 21–22), with Theorem 6.2.2 and Lemma 6.2.3.
+**Sources.** T. Hytönen, J. van Neerven, M. Veraar, L. Weis:
+
+- *Analysis in Banach Spaces. Volume I: Martingales and Littlewood–Paley Theory*, Springer 2016
+  (HNVW I; read): the following, with what their proofs use:
+  - Proposition 4.2.3 (p. 282);
+  - Theorem 4.2.5 (p. 282);
+  - Theorem 4.2.7 (p. 283);
+  - Theorem 4.5.6 (p. 332);
+  - Corollary 5.7.6 (pp. 462–463);
+- *Volume II: Probabilistic Methods and Operator Theory*, Springer 2017 (HNVW II; read):
+  Theorem 6.2.4 (pp. 21–22), with Theorem 6.2.2 and Lemma 6.2.3.
 
 **Statements used by Cassese** (`p* = max (p, p / (p − 1))`, `UMD_p` as in his Definition 2.5), and the
 book's.
@@ -54,8 +60,15 @@ probability space, martingales started at `0`), Paley–Walsh martingales on the
   `1 < p < ∞`, for `m : ℂ → ℂ` continuous off `0` and homogeneous of degree `0`) and
   `transference_beurlingPow`, `m (ξ) = (ξ̄ / ξ)^k`.
 
-**Constants.** The book's: `100 (p/q + p'/q')`, `200`; the equality of the constants; `β`;
-`√((q − 1) / (p − 1))`; `1`. (For Theorem 4.2.7 the proof gives `80 (p/q + p'/q')`, as in the book.)
+**Constants.** The book's:
+
+- Theorem 4.2.7: `100 (p/q + p'/q')`, `200`;
+- Theorem 4.2.5: the equality of the constants;
+- Theorem 4.5.6: `β`;
+- HNVW II, Theorem 6.2.4: `√((q − 1) / (p − 1))`;
+- Corollary 5.7.6: `1`.
+
+(For Theorem 4.2.7 the proof gives `80 (p/q + p'/q')`, as in the book.)
 
 **Proofs.** The book's, in the packages. From `BanachProbability`
 ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)):
@@ -86,19 +99,29 @@ complex scalars; the arguments are the same, except that the reductions (4.32), 
 not needed. Cassese's form of Theorem 4.2.7 is weaker than the book's, and his form of Theorem 4.5.6
 neither implies nor is implied by the book's: his functions are concave for all `|ε| ≤ 1`, for which the
 multipliers of the proof of (2)⇒(3) are constants in `[−1, 1]` instead of signs. Slips of the book are
-repaired along its lines, and noted in the docstrings of the packages: the order of two steps in the
-proof of Theorem 4.5.6 (Lemma 4.5.2 is applied before the function is known to be finite), the first
-index in Lemma 3.5.14, a constant in Lemma 6.2.3 and the case `q = 1` in Theorem 6.2.4 of Volume II, the
-centred cell and the range of `p` in Lemma 5.7.5, and, in Proposition 5.7.4, the missing hypotheses, the
-interchanged `ε^{d/p}`, `ε^{d/p'}`, and the norming of `T_m f` (the book leaves the closing density and
-duality to the reader; here the limit in `f` is taken in the pairing, before duality).
+repaired along its lines, and noted in the docstrings of the packages:
 
-**Who uses it.** In [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean),
-`Cassese.hnvwExtrapolation_holds` is used by `Cassese.umdEllq_lt_top` (the paper's proof of Theorem
-1.2, `Cassese.theorem1_2`) and Proposition 6.5; `Cassese.kahaneKhintchine_holds` by (31), so by
-Propositions 6.2, 6.5, Theorem 1.4, Corollary 6.1; `Cassese.kahaneKhintchineHypercontractive_holds`
-(from `theorem6_2_4_hypercontractive`) by Remark 6.3 and Proposition 6.5 (through `square_eq31_two` and
-`square_eq31_q` in `Morrey/Cassese/Square.lean`; Theorem 1.4 uses Proposition 6.5 only at `q = 4` and
-does not need it); `Cassese.hnvwTransference_holds` by Proposition 7.2, Theorem 7.1, Corollary 7.2,
-Theorem 1.5, Corollary 1.6. No proof uses `hnvwDyadicUMD_holds` or `hnvwZigZag_holds`; Proposition 2.8
-is from [`../CoxVeraar`](../CoxVeraar). None is a hypothesis of any statement.
+- the order of two steps in the proof of Theorem 4.5.6 (Lemma 4.5.2 is applied before the function
+  is known to be finite);
+- the first index in Lemma 3.5.14;
+- a constant in Lemma 6.2.3 and the case `q = 1` in Theorem 6.2.4 of Volume II;
+- the centred cell and the range of `p` in Lemma 5.7.5;
+- in Proposition 5.7.4, the missing hypotheses, the interchanged `ε^{d/p}`, `ε^{d/p'}`, and the
+  norming of `T_m f` (the book leaves the closing density and duality to the reader; here the limit
+  in `f` is taken in the pairing, before duality).
+
+**Who uses it.** In [`Morrey/Cassese/Hypotheses.lean`](../../../Cassese/Hypotheses.lean):
+
+- `Cassese.hnvwExtrapolation_holds` is used by `Cassese.umdEllq_lt_top` (the paper's proof of
+  Theorem 1.2, `Cassese.theorem1_2`) and Proposition 6.5;
+- `Cassese.kahaneKhintchine_holds` is used by (31), so by Propositions 6.2, 6.5, Theorem 1.4,
+  Corollary 6.1;
+- `Cassese.kahaneKhintchineHypercontractive_holds` (from `theorem6_2_4_hypercontractive`) is used
+  by Remark 6.3 and Proposition 6.5 (through `square_eq31_two` and `square_eq31_q` in
+  `Morrey/Cassese/Square.lean`; Theorem 1.4 uses Proposition 6.5 only at `q = 4` and does not need
+  it);
+- `Cassese.hnvwTransference_holds` is used by Proposition 7.2, Theorem 7.1, Corollary 7.2,
+  Theorem 1.5, Corollary 1.6.
+
+No proof uses `hnvwDyadicUMD_holds` or `hnvwZigZag_holds`; Proposition 2.8 is from
+[`../CoxVeraar`](../CoxVeraar). None is a hypothesis of any statement.

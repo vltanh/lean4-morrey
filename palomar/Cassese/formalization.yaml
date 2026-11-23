@@ -105,7 +105,8 @@ sources:
       Read and followed. Volume I: Theorems 4.2.5 (by the book's alternative proof, p. 334), 4.2.7 and
       4.5.6, Proposition 4.2.3 (with Cox-Veraar), Proposition 4.2.10 and Theorem 4.2.25 (for
       Yaroslavtsev's Lemma 3.2, and for the UMD inequality (2.1) of McConnell 1984 with deterministic
-      coefficients) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants. Proved in
+      coefficients) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants (it also gives
+      Khintchine's inequality in Burkholder's (9), in the proof of Proposition 6.3). Proved in
       lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
       probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
@@ -195,7 +196,7 @@ sources:
       Read (as page images of the reprint in "Selected Works of Donald L. Burkholder", 2011) and
       followed for the boundedness of the Hilbert transform on UMD spaces, on which McConnell's Theorem
       1.3 rests: Lemmas 2 to 4 and (33) (pp. 278-283), proved in lean4-harmonic-analysis, and Lemma 1
-      (decoupling, p. 277), in lean4-banach-probability, with a UMD_p constant beta in place of zeta-convexity
+      (decoupling, pp. 277-278), in lean4-banach-probability, with a UMD_p constant beta in place of zeta-convexity
       and the constants beta^2 (conjugate polynomials), 2 beta^2 (conjugate Poisson integrals) and
       2 beta^2 + 1 (truncations on the circle and on the line); two slips are repaired. Lemma 4, the
       passage to the line, for which the article refers to M. Riesz and Zygmund, follows M. Riesz (1928),
@@ -458,8 +459,9 @@ automation:
         provers, a checker of statements, a reviewer), besides the agents for this repository's
         documents. Eighth round, the package's imports trimmed and two steps of Burkholder's article
         redone after their sources (his Lemma 1 for the reals, and M. Riesz 1928): 4 sub-agents (one
-        for the imports, a prover, a reviewer, a read-only scoping agent); this repository's documents
-        were updated and checked by the main session. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        for the imports, a prover, a reviewer, a read-only scoping agent), besides an agent that
+        reviewed the skill's text and one that checked this repository's documents, which the main
+        session updated. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
@@ -534,7 +536,8 @@ fidelity:
     Proposition 5.2.2; for Theorem 1 of Burkholder 1983 for the reals (its proof is in Burkholder 1981,
     read, not followed), Burkholder's inequality with the constant p* - 1 (the paper's Theorem 2.3 (1));
     for the square function inequality for real martingales, which Burkholder 1983 asserts on p. 275
-    to follow from it and Khintchine's inequality, the argument of his Lemma 1 (pp. 277-278);
+    to follow from it and Khintchine's inequality, the argument of his Lemma 1 (pp. 277-278) for the
+    reals, with Khintchine's inequality;
     Randrianantoanina's theorem for
     the UMD property of C_2p (recalled from Rubio de Francia 1986);
     Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
@@ -562,7 +565,11 @@ fidelity:
     constant independent of p; McConnell's Theorems 1.1 and 1.3 for n = 1, and the transference of the
     multipliers of the second to the circle by HNVW I, Proposition 5.7.1, with the dilation of the proof
     of Theorem 5.7.10; Burkholder's lemmas (1983) with a UMD_p constant in place of zeta-convexity and
-    explicit constants, and his function K_r (p. 283), which he only asserts to exist, given explicitly; and
+    explicit constants, and his function K_r (p. 283), which he only asserts to exist, given explicitly;
+    the square function inequality (9) with the constants kappa_{2,p}(p* - 1) and kappa_{p,2}(p* - 1),
+    and his (20), stated with 2(p* - 1), for p < 2 from the case p = 2; M. Riesz's limit, which he
+    leaves out (p. 234), written out, and Fatou's lemma where he lets m tend to infinity without a
+    reason (p. 235); and
     the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's interpolation. A change of
     language: in McConnell's proofs, the hitting places of a Brownian motion are represented by chains with
     independent Cauchy increments, and Poisson integrals by their Fourier transforms.
@@ -588,8 +595,10 @@ review:
     redid steps of it by McConnell's theorem and by Burkholder's lemmas (1983), independent reviewers
     checked the packages' new statements, their proofs against the sources, and the updated documents.
     In the eighth round an independent reviewer checked the two redone steps of Burkholder's article
-    and the package's documents against Burkholder (1983) and M. Riesz (1928), then the corrections;
-    this repository's updated documents were checked by the main session in a separate pass.
+    and the package's documents against Burkholder (1983) and M. Riesz (1928), then the corrections
+    (the fix of its last finding, and two line counts, were not reviewed again); this repository's
+    updated documents were checked by the main session in a separate pass, then by an independent
+    agent, whose findings were applied.
 
 alignment:
   namespace: "CasseseChallenge"

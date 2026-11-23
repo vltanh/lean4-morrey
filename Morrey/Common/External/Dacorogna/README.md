@@ -8,20 +8,28 @@ formalized: the proposition is proved by the remark's second route, from Proposi
 
 **Statements used by Cassese** (proof of Proposition 5.1 only, TeX lines 1409–1413).
 
-- Theorem 5.20: for `f : ℝ^{N×n} → ℝ` the following are equivalent: (i) `f` is quasiaffine; (ii) `f` is
-  rank-one affine; (ii′) `f ∈ C¹` and `f (ξ + a ⊗ b) = f (ξ) + ⟨∇f (ξ); a ⊗ b⟩`; (iii) `f` is polyaffine;
-  (iii′) `f (ξ) = f (0) + ⟨β; T (ξ)⟩`, `T (ξ)` the vector of the minors. No continuity is assumed. The
-  paper uses (ii) ⇒ (iii′) ("`Q` is rank-one affine and hence … a linear combination of minors") and,
-  without saying so, that the minors are quasiaffine.
+- Theorem 5.20: for `f : ℝ^{N×n} → ℝ` the following are equivalent:
+  - (i) `f` is quasiaffine;
+  - (ii) `f` is rank-one affine;
+  - (ii′) `f ∈ C¹` and `f (ξ + a ⊗ b) = f (ξ) + ⟨∇f (ξ); a ⊗ b⟩`;
+  - (iii) `f` is polyaffine;
+  - (iii′) `f (ξ) = f (0) + ⟨β; T (ξ)⟩`, `T (ξ)` the vector of the minors.
+
+  No continuity is assumed. The paper uses (ii) ⇒ (iii′) ("`Q` is rank-one affine and hence … a
+  linear combination of minors") and, without saying so, that the minors are quasiaffine.
 - Theorem 5.25 (i): a quadratic form is rank-one convex if and only if it is quasiconvex. The paper uses
   "rank-one convex ⇒ quasiconvex".
 
-**Lean.** [`Minors.lean`](Minors.lean): the proposition `External.Dacorogna.RankOneAffineMinors`
-(Theorem 5.20, (ii) ⇒ (iii′), with no continuity, as in the book), proved by
-`rankOneAffineMinors_holds`; `External.Dacorogna.minor3_quasiaffine` (Theorem 5.20, the `3 × 3` minors
-are quasiaffine, on the unit cube, for Lipschitz test maps); and
-`External.Dacorogna.quadraticForm_quasiconvex` (Theorem 5.25 (i), for a bilinear form `Q` and
-`A ↦ Q (A, A)`). All three are proved from the package `CalculusOfVariations`
+**Lean.** [`Minors.lean`](Minors.lean):
+
+- the proposition `External.Dacorogna.RankOneAffineMinors` (Theorem 5.20, (ii) ⇒ (iii′), with no
+  continuity, as in the book), proved by `rankOneAffineMinors_holds`;
+- `External.Dacorogna.minor3_quasiaffine` (Theorem 5.20, the `3 × 3` minors are quasiaffine, on the
+  unit cube, for Lipschitz test maps);
+- `External.Dacorogna.quadraticForm_quasiconvex` (Theorem 5.25 (i), for a bilinear form `Q` and
+  `A ↦ Q (A, A)`).
+
+All three are proved from the package `CalculusOfVariations`
 ([lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations):
 `Minors/RankOneAffine.lean`, `Minors/Quasiaffine.lean`, `QuadraticForm/Quasiconvex.lean`).
 

@@ -28,13 +28,20 @@ space `ℂ`, `u_q = burkholderFun q` for `q ≥ 2`, `uq_eq_burkholderFun`): (13)
 **Proofs.** In the package `BanachProbability`
 ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability),
 `Martingale/Burkholder/Function.lean`), step by step as Burkholder 1988. (13) is (1.10), `v ≤ u`:
-(1.11), `(p − 1)^{p−1} / p^{p−2}` is `≤ 1` on `(1, 2]` and `≥ 1` on `[2, ∞)`, by the convexity of its
-logarithm on `[1, 2]`, its concavity on `[2, ∞)` and its growth; then, by homogeneity, the concave and
-convex pieces of Burkholder's function `F` on `[0, 1]`. (14) is Remark 1.2, (1.17), which Burkholder
-states without proof (a gap of the source); it is completed from his own steps: the concavity
-of `G (t) = u (x + t h, y + t k)` in the proof of (1.12), by the sign of the second derivative (1.14),
-on the lines along which neither coordinate vanishes, and, for the other lines, the shift by a vector
-orthogonal to `H` in `H ⊕ ℝ` of the proof of (1.8), with the shift tending to `0`. No other departure.
+
+- (1.11), `(p − 1)^{p−1} / p^{p−2}` is `≤ 1` on `(1, 2]` and `≥ 1` on `[2, ∞)`, by the convexity of
+  its logarithm on `[1, 2]`, its concavity on `[2, ∞)` and its growth;
+- then, by homogeneity, the concave and convex pieces of Burkholder's function `F` on `[0, 1]`.
+
+(14) is Remark 1.2, (1.17), which Burkholder states without proof (a gap of the source); it is
+completed from his own steps:
+
+- the concavity of `G (t) = u (x + t h, y + t k)` in the proof of (1.12), by the sign of the second
+  derivative (1.14), on the lines along which neither coordinate vanishes;
+- for the other lines, the shift by a vector orthogonal to `H` in `H ⊕ ℝ` of the proof of (1.8),
+  with the shift tending to `0`.
+
+No other departure.
 
 **Who uses them.** (13), (14) for `u` are used by Propositions 4.2 and 4.3. `u_q` is used by
 `Cassese.theorem1_2_elementary`, a second proof of Theorem 1.2 by the route of Remark 4.5 (with

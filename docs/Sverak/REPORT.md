@@ -68,9 +68,12 @@ None. The paper's proofs use no result from the literature.
   it silently when it proves Lemma 1 and the Theorem on the unit cube. The formalization states
   quasiconvexity on a given domain and proves the Theorem and the Corollary on the unit cube, so it
   does not need the cited fact (Section 6).
-- The introduction's results ((iii) ⇒ (ii) ⇒ (i), quadratic forms, `2 × 2` quadratic forms,
-  Morrey's semicontinuity theorem, Ball's extended-valued counterexample) are context; no proof uses
-  them.
+- The introduction's results are context, and no proof uses them:
+  - (iii) ⇒ (ii) ⇒ (i);
+  - quadratic forms;
+  - `2 × 2` quadratic forms;
+  - Morrey's semicontinuity theorem;
+  - Ball's extended-valued counterexample.
 
 ### Standard facts used without citation
 
@@ -138,9 +141,11 @@ The proof writes `f(0) ≤ ∫ f(Du_ε)`, the case `A = 0`. The general case fol
 ### E5. The Corollary: "`T` maps rank-one lines to rank-one lines"
 
 Or to points: when `m ≥ 4` or `n ≥ 3`, a rank-one `B` can have `TB = 0` (`B = e₄e₁ᵀ`), and then
-`F̃` is constant on the line. The proof of rank-one convexity covers this case. The proof also uses
-Lemma 1 without naming it, the continuity of `F̃`, and Fubini, to integrate a function of
-`(x₁, x₂)` over `(0,1)^n`.
+`F̃` is constant on the line. The proof of rank-one convexity covers this case. The proof also uses:
+
+- Lemma 1, without naming it;
+- the continuity of `F̃`;
+- Fubini, to integrate a function of `(x₁, x₂)` over `(0,1)^n`.
 
 ### E6. Numbering
 

@@ -8,14 +8,17 @@ condition under which `∫ f(∇u)` is weakly-∗ lower semicontinuous, and that
 convexity; he asked whether the converse holds. This is *Morrey's problem*. Here `d` is the number
 of components of `u` and `m` the number of variables.
 
-This repository formalizes, in Lean 4 with Mathlib, three papers on the problem: a theorem that
-settles it for three or more components (Šverák 1992), a claimed proof for `2 × 2` matrices
-(Pedregal), and a recent preprint on the two-component case in higher dimension and on the
-homogeneous problem (Cassese 2026). **Every result that Šverák's and Cassese's papers prove is
-proved here, and nothing is assumed.** Pedregal's proof fails at a corollary, refuted here; his
-main theorems, the open `2 × 2` case, are stated and not proved. Each paper is audited on its own, with its own
-Challenge, report and Palomar submission; the papers share general lemmas, the cited results and
-the checks.
+This repository formalizes, in Lean 4 with Mathlib, three papers on the problem:
+
+- a theorem that settles it for three or more components (Šverák 1992);
+- a claimed proof for `2 × 2` matrices (Pedregal);
+- a recent preprint on the two-component case in higher dimension and on the homogeneous problem
+  (Cassese 2026).
+
+**Every result that Šverák's and Cassese's papers prove is proved here, and nothing is assumed.**
+Pedregal's proof fails at a corollary, refuted here; his main theorems, the open `2 × 2` case, are
+stated and not proved. Each paper is audited on its own, with its own Challenge, report and Palomar
+submission; the papers share general lemmas, the cited results and the checks.
 
 ## The state of the problem
 
@@ -55,12 +58,39 @@ claims of Cassese's preprint, and all are proved here.
 | Paper | Claim | Formalization | Main finding | Documents |
 | --- | --- | --- | --- | --- |
 | V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A (1992) | a quartic polynomial on `ℝ^{3×2}`, rank-one convex and not quasiconvex; hence no for `d ≥ 3`, `m ≥ 2` | **proved**, every step by the paper's argument | no false statement; the steps left to the reader are supplied, chief among them the limit in Lemma 1, "easily seen" | [README](docs/Sverak/README.md), [REPORT](docs/Sverak/REPORT.md), [Challenge](palomar/Sverak/Challenge.lean) |
-| P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**; the rest of Sections 3–7, except Claim 7.3, is proved; Theorems 1.1 (2) and 1.2 are stated, not proved | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open | [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md), [Challenge](palomar/Pedregal/Challenge.lean) |
-| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved**, with nothing assumed: Theorem 1.2 by the paper's UMD route; the UMD, Khintchine and Beurling–Ahlfors results behind Theorems 1.2, 1.4, 1.5 and Corollary 1.6 proved in packages | no false statement; the paper leaves gaps (the uniformity in `p` behind Theorem 1.3 (b), the constant `κ` of Section 5, a step of Proposition 2.5 false under the reading of prelaminates the paper needs, Proposition 6.6 and Corollary 5.2 without proof), all filled | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
+| P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | three statements **false**; the main theorems stated, not proved; most of Sections 3–7 proved (below) | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open | [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md), [Challenge](palomar/Pedregal/Challenge.lean) |
+| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved**, with nothing assumed (below) | no false statement; gaps, all filled (below) | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
 
-Each paper's report (`docs/<Paper>/REPORT.md`) gives its findings, how the formalization reads it,
-its departures from the paper's proofs, what each result depends on, its place in the literature
-and what comes next; its credits (`CREDITS.md`) say how it was made.
+The formalization of Pedregal's paper:
+
+- Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**;
+- the rest of Sections 3–7, except Claim 7.3, is proved;
+- Theorems 1.1 (2) and 1.2 are stated, not proved.
+
+In the formalization of Cassese's paper, every result that the paper proves is **proved**, with
+nothing assumed:
+
+- Theorem 1.2 by the paper's UMD route;
+- the UMD, Khintchine and Beurling–Ahlfors results behind Theorems 1.2, 1.4, 1.5 and Corollary 1.6
+  proved in packages.
+
+Cassese's paper has no false statement; it leaves gaps, all filled:
+
+- the uniformity in `p` behind Theorem 1.3 (b);
+- the constant `κ` of Section 5;
+- a step of Proposition 2.5 false under the reading of prelaminates the paper needs;
+- Proposition 6.6 and Corollary 5.2 without proof.
+
+Each paper's report (`docs/<Paper>/REPORT.md`) gives:
+
+- its findings;
+- how the formalization reads it;
+- its departures from the paper's proofs;
+- what each result depends on;
+- its place in the literature;
+- what comes next.
+
+Each paper's credits (`CREDITS.md`) say how it was made.
 
 ## How the papers connect
 
@@ -101,10 +131,12 @@ infinite values), and Müller (2000) showed that Šverák's own example, for sma
 becomes quasiconvex after transposition. In `2 × 2`, its mechanism cannot detect a failure of quasiconvexity at all
 (Sebestyén–Székelyhidi, below). The two-component case drew a long line of work:
 
-- positive results in special classes: diagonal matrices (Müller 1999), some hypersurfaces
-  (Chaudhuri–Müller 2003), upper triangular matrices (Harris, Kirchheim and Lin 2018), and
-  isotropic planar energies that are isochoric or incompressible, for which rank-one convexity even
-  implies polyconvexity (Martin, Ghiba and Neff, 2017–2018);
+- positive results in special classes:
+  - diagonal matrices (Müller 1999);
+  - some hypersurfaces (Chaudhuri–Müller 2003);
+  - upper triangular matrices (Harris, Kirchheim and Lin 2018);
+  - isotropic planar energies that are isochoric or incompressible, for which rank-one convexity
+    even implies polyconvexity (Martin, Ghiba and Neff, 2017–2018);
 - the quasiconvex hull of compact sets of `2 × 2` matrices, localized by Faraco and Székelyhidi
   (2008);
 - Kristensen (1999): quasiconvexity is equivalent to a local condition among smooth integrands only
@@ -137,36 +169,53 @@ withdrawn in 2018) argued in the opposite direction, and its withdrawal cites Se
 Székelyhidi's theorem. From 2019 the paper formalized here claims a proof: for maps in `ℙ_l`
 (1-periodic, affine on the triangles of a dyadic triangulation) the gradient measure is a laminate
 of finite order, obtained as a fixed point, by Kakutani's theorem, of a set-valued map between the
-weights of the two components' `(H_n)`-conditions. Versions 1–2 claimed this for two-component maps
-in every dimension; version 3 was withdrawn; versions 4–5 restrict the claim to `2 × 2`.
+weights of the two components' `(H_n)`-conditions. The paper's versions:
 
-The audit ([`docs/Pedregal/REPORT.md`](docs/Pedregal/REPORT.md)) proves the paper's reduction (a fixed point
-gives a laminate), the properties of the map and Kakutani's theorem, but finds that Corollary 7.2,
-which says that the map has nonempty values, is false: an explicit counterexample at the coarsest
-level, checked in Lean, and empty values in every random instance tested numerically. The claim is
-neither proved nor refuted. At the coarsest level the gradient measure is uniform on the vertices of
-a cube of rank-one directions, a laminate by three symmetric splittings, and the formalization
-proves the paper's Theorem 1.1 (1) there directly; Sebestyén and Székelyhidi's theorem covers the
-same cube measures with unequal weights.
+- versions 1–2 claimed this for two-component maps in every dimension;
+- version 3 was withdrawn;
+- versions 4–5 restrict the claim to `2 × 2`.
+
+The audit ([`docs/Pedregal/REPORT.md`](docs/Pedregal/REPORT.md)) proves:
+
+- the paper's reduction (a fixed point gives a laminate);
+- the properties of the map;
+- Kakutani's theorem.
+
+However, the audit finds that Corollary 7.2, which says that the map has nonempty values, is false: an
+explicit counterexample at the coarsest level, checked in Lean, and empty values in every random
+instance tested numerically. The claim is neither proved nor refuted. At the coarsest level the
+gradient measure is uniform on the vertices of a cube of rank-one directions, a laminate by three
+symmetric splittings, and the formalization proves the paper's Theorem 1.1 (1) there directly;
+Sebestyén and Székelyhidi's theorem covers the same cube measures with unequal weights.
 
 ### Cassese (2026): two components in higher dimension, and the homogeneous problem
 
 Cassese claims to settle the two-component case outside `2 × 2`. With Šverák's theorem and the
 monotonicity in the dimensions, `2 × 2` would then be the only size left open (lines 251–254 of the
-TeX source). The preprint grew in three versions: v1 (4 August 2026) gave `2 × m` for large `m`;
-Agazzi, Bruno, Guerra and Pasqualotto's `2 × 4` example followed (12 August); v2 (28 August) added
-`2 × 4`, and v3 (16 September) `2 × 3`.
+TeX source). The preprint grew in three versions:
 
-Most of the paper uses a method of its own. The integrands are real functions
-`C^p ‖P(A)‖^p − ‖Q(A)‖^p`, with `P` and `Q` taking values in a Banach space, or their rank-one convex
-envelopes; their rank-one convexity is controlled through the correspondence between laminates and
-martingales (UMD estimates, Burkholder's functions), and their failure of quasiconvexity is
-witnessed by explicit vector fields. All four theorems, 1.2–1.5, follow this scheme. Symmetry can
-force quasiconvexity: Guerra and Kristensen (2022) proved it for homogeneous isotropic integrands,
-and Bruno and Pasqualotto (2026, a preprint) show that the planar Dacorogna–Marcellini energy is
-quasiconvex exactly when it is rank-one convex (`|γ| ≤ 2/√3`), and that quasiconvexity is
-equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant under left and right
-rotations. Cassese conjectures that isotropic homogeneous rank-one convex integrands are
+- v1 (4 August 2026) gave `2 × m` for large `m`;
+- v2 (28 August) added `2 × 4`, after Agazzi, Bruno, Guerra and Pasqualotto's `2 × 4` example
+  (12 August);
+- v3 (16 September) added `2 × 3`.
+
+Most of the paper uses a method of its own:
+
+- the integrands are real functions `C^p ‖P(A)‖^p − ‖Q(A)‖^p`, with `P` and `Q` taking values in a
+  Banach space, or their rank-one convex envelopes;
+- their rank-one convexity is controlled through the correspondence between laminates and
+  martingales (UMD estimates, Burkholder's functions);
+- their failure of quasiconvexity is witnessed by explicit vector fields.
+
+All four theorems, 1.2–1.5, follow this scheme. Symmetry can force quasiconvexity:
+
+- Guerra and Kristensen (2022) proved it for homogeneous isotropic integrands;
+- Bruno and Pasqualotto (2026, a preprint) show that the planar Dacorogna–Marcellini energy is
+  quasiconvex exactly when it is rank-one convex (`|γ| ≤ 2/√3`), and that quasiconvexity is
+  equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant under left and
+  right rotations.
+
+Cassese conjectures that isotropic homogeneous rank-one convex integrands are
 quasiconvex at `0` (Conjecture 1); Theorem 1.4's examples have only the weaker conjugation and
 transposition invariance. The paper also answers
 Kirchheim and Kristensen's homogeneous problem negatively, which Šverák's example cannot do: its
@@ -185,9 +234,10 @@ How Cassese relates to the other two papers:
   polynomial of degree at most three that is rank-one convex at `0` is quasiconvex (Proposition 5.1,
   "folklore"). Cassese's Section 1.1 restates Šverák's example as failing quasiconvexity *at `0`*,
   in Cassese's definitions (Lipschitz test maps on the unit cube, rank-one convexity on segments);
-  Šverák uses smooth test maps on a domain and convexity along lines. The repository proves the two
-  forms of rank-one convexity equivalent, Cassese's quasiconvexity stronger than Šverák's on the
-  cube, and Šverák's example in Cassese's form ([`Morrey/Cassese/Sverak.lean`](Morrey/Cassese/Sverak.lean)).
+  Šverák uses smooth test maps on a domain and convexity along lines. The repository proves:
+  - the two forms of rank-one convexity equivalent;
+  - Cassese's quasiconvexity stronger than Šverák's on the cube;
+  - Šverák's example in Cassese's form ([`Morrey/Cassese/Sverak.lean`](Morrey/Cassese/Sverak.lean)).
 - **Pedregal.** Cassese does not cite Pedregal's claimed proof (arXiv:1905.06571). Cassese's
   `2 × 3` example, proved here, refutes the claim of Pedregal's versions 1–2 for two-component maps in dimension `3` and more (an inference of
   this repository: Pedregal report, E17); the current version's `2 × 2` claim is untouched. Both papers rest on the same
@@ -223,9 +273,11 @@ How Cassese relates to the other two papers:
 - Conti, Dolzmann and Dondl formalized their `3 × 3` example in Lean 4
   ([sergioconti/so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc),
   Apache-2.0), with its own definitions of rank-one convexity and quasiconvexity; by its README,
-  the code was written by Claude Opus 5.5 under the authors' guidance. It includes adaptations of
-  Šverák's test map (`φ(x) = (sin x₁, sin x₂, −sin(x₁ + x₂))` on `ℝ³`), of its gradients in `L` and
-  of the integral (4), and the "only if" half of his Lemma 1; not Lemma 2 or the Theorem.
+  the code was written by Claude Opus 5.5 under the authors' guidance. It includes the following,
+  but not Lemma 2 or the Theorem:
+  - adaptations of Šverák's test map (`φ(x) = (sin x₁, sin x₂, −sin(x₁ + x₂))` on `ℝ³`), of its
+    gradients in `L` and of the integral (4);
+  - the "only if" half of his Lemma 1.
 - Cassese formalized his Theorem 1.2 and Theorem 1.3 at `p = 4` in Lean, with an AI system (the
   paper names ChatGPT 5.6 Sol), and released the code without a license.
 - This repository does not use either: its proofs were written without consulting them. Parts of both
@@ -243,17 +295,26 @@ How Cassese relates to the other two papers:
 - The landscape as theorems: with Šverák's example and Cassese's, rank-one convexity does not imply
   quasiconvexity in any size `d × m` with `d, m ≥ 2` except `2 × 2`, and at `p = 4` the homogeneous
   problem fails in all those sizes ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296), `homMorrey_landscape`).
-- Every cited result that the papers' proofs use, proved: Kakutani's theorem; Burkholder's
-  inequality, square-function inequality and functions `u_q`, and the sharpness of his constant;
-  the properties of UMD spaces that Cassese uses (extrapolation, `L^p`, Schatten classes, dyadic
-  and complex constants, zig-zag concavity) and decoupling; the non-commutative and the
-  Kahane–Khintchine inequalities, with hypercontractive constants; transference for homogeneous
-  multipliers and Dragičević's lower bound for the Beurling–Ahlfors transform; Dacorogna's formula
-  for the quasiconvex envelope and his theorems on minors and quadratic forms; Rindler's lemmas;
-  and Kristensen's smoothing. The general theories are in four packages (below);
+- Every cited result that the papers' proofs use, proved:
+  - Kakutani's theorem;
+  - Burkholder's inequality, square-function inequality and functions `u_q`, and the sharpness of
+    his constant;
+  - the properties of UMD spaces that Cassese uses (extrapolation, `L^p`, Schatten classes, dyadic
+    and complex constants, zig-zag concavity) and decoupling;
+  - the non-commutative and the Kahane–Khintchine inequalities, with hypercontractive constants;
+  - transference for homogeneous multipliers and Dragičević's lower bound for the Beurling–Ahlfors
+    transform;
+  - Dacorogna's formula for the quasiconvex envelope and his theorems on minors and quadratic
+    forms;
+  - Rindler's lemmas;
+  - Kristensen's smoothing.
+- The general theories are in four packages (below);
   [`Morrey/Common/External/`](Morrey/Common/External) states each result in its source's terms and proves it from them, by the
-  source's own argument: Cassese's report lists the sources, the differences, and the named substitutes
-  for steps that a source takes from a work that was not read, only recalls, or states without proof.
+  source's own argument. Cassese's report lists:
+  - the sources;
+  - the differences;
+  - the named substitutes for steps that a source takes from a work that was not read, only
+    recalls, or states without proof.
 
 ## Trust
 
@@ -266,27 +327,70 @@ How Cassese relates to the other two papers:
   the results that the paper's proof cites, except the differences recorded with their reasons in
   each paper's `docs/<Paper>/route_differences.tsv`.
 - Every proof follows its paper's argument, except the departures that each report lists in its
-  Section 7, each with the reason that forces it: none for Šverák; three for Pedregal, all forced by
-  errors of the paper; Cassese's in [its report](docs/Cassese/REPORT.md).
+  Section 7, each with the reason that forces it:
+  - none for Šverák;
+  - three for Pedregal, all forced by errors of the paper;
+  - Cassese's in [its report](docs/Cassese/REPORT.md).
 - Comparator accepts each paper's Solution against its Challenge.
-- Independent AI agents checked the statements against the papers, the formal proofs against the
-  papers' proofs and, for the cited results, against the sources', every recorded departure, and the
-  documents. No person has reviewed the proofs.
+- Independent AI agents checked:
+  - the statements against the papers;
+  - the formal proofs against the papers' proofs and, for the cited results, against the sources';
+  - every recorded departure;
+  - the documents.
+- No person has reviewed the proofs.
 
 ## Shared code and dependencies
 
-[`Morrey/Common/`](Morrey/Common) holds what the papers share: [`Basic/`](Morrey/Common/Basic), general lemmas in
-Mathlib's namespaces (the rank of `2 × 2` matrices, for Pedregal; mollification by bump functions,
-for Šverák's cut-off and Cassese), and `External/<Source>/`, one directory per cited source, with
-its statements in the source's terms, their proofs from a package, and a README. Besides Mathlib,
-the proofs use four packages:
+[`Morrey/Common/`](Morrey/Common) holds what the papers share:
+
+- [`Basic/`](Morrey/Common/Basic), general lemmas in Mathlib's namespaces (the rank of `2 × 2` matrices, for
+  Pedregal; mollification by bump functions, for Šverák's cut-off and Cassese);
+- `External/<Source>/`, one directory per cited source, with its statements in the source's terms,
+  their proofs from a package, and a README.
+
+Besides Mathlib, the proofs use four packages:
 
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
 | [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity and quasiconvexity (independence of the domain, periodic test maps, laminates), Dacorogna's formula for the quasiconvex envelope, minors, null Lagrangians and quadratic forms, Kristensen's smoothing, distributions on `ℝ`, mollification, piecewise affine maps | Cassese |
-| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar: Fourier multipliers on `ℝ²` and `𝕋²`, transference from `𝕋²` to `ℝ²`, the Beurling–Ahlfors transform and Dragičević's lower bound, smooth periodic functions; vector-valued: the Hilbert transform, Mihlin multipliers and Littlewood–Paley inequalities in UMD spaces, transference from `ℝ` to `𝕋`, matrix-valued Hardy functions, Szegő's theorem and Sarason's factorization of `H¹`, Paley's inequality in the Schatten classes, the non-commutative Khintchine inequality | Cassese |
-| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | Rademacher sums and the Kahane–Khintchine inequality, martingales and Burkholder's inequalities with their sharpness, UMD spaces, Schatten classes (real and complex) and Randrianantoanina's martingale transforms, type 2 and K-convexity; also the non-commutative Khintchine inequality by exchangeable pairs, which is not used here | Cassese |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity, quasiconvexity and more (below) | Cassese |
+| [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar and vector-valued harmonic analysis (below) | Cassese |
+| [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | martingales, UMD spaces and more (below) | Cassese |
+
+`CalculusOfVariations` provides:
+
+- rank-one convexity and quasiconvexity (independence of the domain, periodic test maps,
+  laminates);
+- Dacorogna's formula for the quasiconvex envelope;
+- minors, null Lagrangians and quadratic forms;
+- Kristensen's smoothing;
+- distributions on `ℝ`;
+- mollification;
+- piecewise affine maps.
+
+`HarmonicAnalysis` provides:
+
+- scalar:
+  - Fourier multipliers on `ℝ²` and `𝕋²`;
+  - transference from `𝕋²` to `ℝ²`;
+  - the Beurling–Ahlfors transform and Dragičević's lower bound;
+  - smooth periodic functions;
+- vector-valued:
+  - the Hilbert transform, Mihlin multipliers and Littlewood–Paley inequalities in UMD spaces;
+  - transference from `ℝ` to `𝕋`;
+  - matrix-valued Hardy functions;
+  - Szegő's theorem and Sarason's factorization of `H¹`;
+  - Paley's inequality in the Schatten classes;
+  - the non-commutative Khintchine inequality.
+
+`BanachProbability` provides:
+
+- Rademacher sums and the Kahane–Khintchine inequality;
+- martingales and Burkholder's inequalities with their sharpness;
+- UMD spaces;
+- Schatten classes (real and complex) and Randrianantoanina's martingale transforms;
+- type 2 and K-convexity;
+- also the non-commutative Khintchine inequality by exchangeable pairs, which is not used here.
 
 Šverák's library uses only Mathlib and `Common/Basic`. The dependencies run one way: no package
 imports this repository. Among the packages, the vector-valued part of `HarmonicAnalysis` imports

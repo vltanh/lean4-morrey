@@ -11,10 +11,12 @@ How the formalization of Šverák (1992) was made, from the run log and the sess
   the second round of the session, after the audit of Pedregal's paper; there was no earlier draft.
 - Procedure: the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) skill,
   commit `020f253` for the second round, version 4.2.0 (commit `f5e7420`) for the third.
-- Review: no person has reviewed the proofs. Independent AI agents checked the statements against
-  the paper, the formal proofs against the paper's, the repository's README against the sources,
-  and, in the third round, every recorded departure, the rebuilt cut-off and the documents of the
-  three papers.
+- Review: no person has reviewed the proofs. Independent AI agents checked:
+  - the statements against the paper;
+  - the formal proofs against the paper's;
+  - the repository's README against the sources;
+  - in the third round, every recorded departure, the rebuilt cut-off and the documents of the
+    three papers.
 
 ## Second round (21 November 2026)
 
@@ -26,8 +28,11 @@ How it was made:
 - An independent agent checked every statement against the paper. Its main finding: without an
   integrability premise, a failure of quasiconvexity could be witnessed by a non-integrable test
   map, whose Lean integral is `0`. The definitions now require the integral to exist.
-- Four agents proved the statements in parallel, each owning whole files: the cube facts, the
-  construction and (4); Lemma 1; Lemma 2; the Theorem, the Remark and the Corollary.
+- Four agents proved the statements in parallel, each owning whole files:
+  - the cube facts, the construction and (4);
+  - Lemma 1;
+  - Lemma 2;
+  - the Theorem, the Remark and the Corollary.
 - The main session moved the repository to one directory per paper, and integrated, built and
   audited the proofs.
 - An independent agent compared the formal proofs with the paper's. It found the statements and the
@@ -81,5 +86,7 @@ Figures, from the session transcript (`scripts/session_stats.py` on each sub-age
   output tokens, 0.15 M input, 4 M cache reads, 39 model calls;
 - the mollification module: one prover, 0.10 h, 32 tool calls, 0.04 M output, 0.09 M input, 2 M
   cache reads; the module also serves Cassese's proofs;
-- shared with Cassese's paper, not separated: the departure audit (0.33 h, for the three papers),
-  the lead of the run (1.16 h) and its reviewer (0.13 h), and the main session.
+- shared with Cassese's paper, not separated:
+  - the departure audit (0.33 h, for the three papers);
+  - the lead of the run (1.16 h) and its reviewer (0.13 h);
+  - the main session.

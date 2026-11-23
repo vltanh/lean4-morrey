@@ -1,9 +1,12 @@
 # Cox–Veraar: decoupling with the UMD constant
 
-**Sources.** S. Cox, M. Veraar, *Some remarks on tangent martingale difference sequences in
-`L¹`-spaces*, Electron. Commun. Probab. 12 (2007), 421–433 (arXiv:0801.0695; introduction read); T.
-Hytönen, J. van Neerven, M. Veraar, L. Weis, *Analysis in Banach Spaces. Volume I*, Springer 2016 (HNVW
-I; read), Proposition 4.2.3 (p. 282), a corollary of Proposition 4.1.16 (proof pp. 279–280).
+**Sources.**
+
+- S. Cox, M. Veraar, *Some remarks on tangent martingale difference sequences in `L¹`-spaces*,
+  Electron. Commun. Probab. 12 (2007), 421–433 (arXiv:0801.0695; introduction read);
+- T. Hytönen, J. van Neerven, M. Veraar, L. Weis, *Analysis in Banach Spaces. Volume I*, Springer
+  2016 (HNVW I; read), Proposition 4.2.3 (p. 282), a corollary of Proposition 4.1.16 (proof
+  pp. 279–280).
 
 Cox–Veraar recall, without proof, that in a UMD space `X` a martingale difference sequence and a
 decoupled tangent sequence of it (one satisfying the (CI) condition) have comparable `L^p` norms,
@@ -36,13 +39,18 @@ Cox–Veraar's statement (by their Example 1, `ε̃_n ξ_n` is tangent to `ε_n 
 
 **Proof.** `BanachProbability.decoupling` in the package `BanachProbability`
 ([lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability)), by the argument of
-HNVW I (Proposition 4.1.16, (1)⇒(2)): for fixed values of the signs `r_k`, `Σ r_k ε_k ξ_k` is the
-transform of `Σ ε_k ξ_k` by constant signs, and `Σ ε_k ξ_k` that of `Σ r_k ε_k ξ_k` by the same signs, so
-each is at most the dyadic constant times the other; raise to the power `p` and average over the signs;
-then replace `r_k ε_k` by `ε̃_k` for each `ε`. The dyadic constant is at most `UMD_p (X)`. The package
-also has the randomised UMD property itself (real scalars), with the converse (2)⇒(1)
-(`IsUMDBound.isUpperRandomisedUMDBound`, `IsUMDBound.isLowerRandomisedUMDBound`,
-`isUMDBound_of_randomised`). The package's source contains no `sorry`.
+HNVW I (Proposition 4.1.16, (1)⇒(2)):
+
+- for fixed values of the signs `r_k`, `Σ r_k ε_k ξ_k` is the transform of `Σ ε_k ξ_k` by constant
+  signs, and `Σ ε_k ξ_k` that of `Σ r_k ε_k ξ_k` by the same signs, so each is at most the dyadic
+  constant times the other;
+- raise to the power `p` and average over the signs;
+- then replace `r_k ε_k` by `ε̃_k` for each `ε`.
+
+The dyadic constant is at most `UMD_p (X)`. The package also has the randomised UMD property itself
+(real scalars), with the converse (2)⇒(1) (`IsUMDBound.isUpperRandomisedUMDBound`,
+`IsUMDBound.isLowerRandomisedUMDBound`, `isUMDBound_of_randomised`). The package's source contains
+no `sorry`.
 
 **Departures.** None in the argument.
 

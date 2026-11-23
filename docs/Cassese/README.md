@@ -63,12 +63,18 @@ No statement of the paper is false. The main findings
 | E6, E19 | Proposition 6.6 and Corollary 5.2 have no proof in the paper |
 | E28, E29 | Proposition 7.2 and Corollary 6.1 pass from smooth to Lipschitz or compactly supported test maps without saying how |
 
-41 findings in all (E2–E42), most of them steps left to the reader, sketched proofs, misprints and
-citations that say more or less than their sources. Every proof follows the paper's argument except
-three, which repair a gap or a false step (E4, E9, E10). The cited results follow their sources'
-proofs, with the gaps and slips of the sources repaired; some steps that the sources of the
-non-commutative Khintchine inequality take from works that were not read, only recall, or state without
-proof, follow named substitutes. The report lists each source, how it was read, and what is different
+41 findings in all (E2–E42), most of them:
+
+- steps left to the reader;
+- sketched proofs;
+- misprints;
+- citations that say more or less than their sources.
+
+Every proof follows the paper's argument except three, which repair a gap or a false step (E4, E9,
+E10). The cited results follow their sources' proofs, with the gaps and slips of the sources
+repaired; some steps that the sources of the non-commutative Khintchine inequality take from works
+that were not read, only recall, or state without proof, follow named substitutes. The report lists
+each source, how it was read, and what is different
 ([REPORT.md, Section 7](REPORT.md#7-departures-from-the-papers-proofs)).
 
 ## Trust
@@ -84,9 +90,13 @@ proof, follow named substitutes. The report lists each source, how it was read, 
   the paper's proof cites; every difference is recorded with its reason.
 - Comparator checks that the Solution proves exactly the Challenge's statements with those axioms
   ([`comparator.json`](../../palomar/Cassese/comparator.json)).
-- Independent AI agents checked the statements against the TeX source, the formal proofs against
-  the paper's and the packages' proofs against the cited sources, the departures from the paper, and
-  the documents. No person has reviewed the proofs.
+- Independent AI agents checked:
+  - the statements against the TeX source;
+  - the formal proofs against the paper's;
+  - the packages' proofs against the cited sources;
+  - the departures from the paper;
+  - the documents.
+- No person has reviewed the proofs.
 
 ## Dependencies
 
@@ -96,14 +106,52 @@ Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization, p
 
 | Package | What this paper uses from it |
 | --- | --- |
-| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7); the non-commutative Khintchine inequality, with the Hilbert transform, multipliers and Littlewood–Paley theory in UMD spaces, matrix-valued Hardy functions and Paley's inequality in the Schatten classes (Proposition 6.3, used by Section 6) |
-| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality, its sharpness and Burkholder's function; UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes, real and complex; type 2 of the Schatten classes and K-convexity (for Proposition 6.3); Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
-| [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | rank-one convexity and quasiconvexity, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
+| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | harmonic analysis, for Section 7 and for Proposition 6.3 (below) |
+| [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | martingales, UMD theory and Schatten classes, for Sections 2, 4–7 (below) |
+| [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | the calculus of variations, for Section 2 (used throughout), Section 5, Corollary 1.6 and Proposition 7.2 (below) |
+
+What this paper uses from `lean4-harmonic-analysis`, for Section 7:
+
+- Fourier multipliers and duality;
+- transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6);
+- Poisson summation;
+- Dragičević's lower bound for `𝓑²`;
+- Fourier series of smooth periodic functions.
+
+What this paper uses from `lean4-harmonic-analysis`, for Proposition 6.3 (used by Section 6), is the
+non-commutative Khintchine inequality, with:
+
+- the Hilbert transform, multipliers and Littlewood–Paley theory in UMD spaces;
+- matrix-valued Hardy functions;
+- Paley's inequality in the Schatten classes.
+
+What this paper uses from `lean4-banach-probability`, for Sections 2, 4–7:
+
+- Burkholder's inequality, its sharpness and Burkholder's function;
+- UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag
+  concavity);
+- Kahane–Khintchine and hypercontractivity;
+- Schatten classes, real and complex;
+- type 2 of the Schatten classes and K-convexity (for Proposition 6.3);
+- Randrianantoanina's non-commutative martingale transforms.
+
+What this paper uses from `lean4-calculus-of-variations`, for Lemmas 2.1, 2.2 and Proposition 2.2
+(used throughout), Section 5, Corollary 1.6 and Proposition 7.2:
+
+- rank-one convexity and quasiconvexity;
+- Dacorogna's formula for the quasiconvex envelope;
+- minors and null Lagrangians;
+- quadratic forms;
+- Kristensen's smoothing;
+- distributional second derivatives on `ℝ`.
 
 The vector-valued part of `lean4-harmonic-analysis` uses `lean4-banach-probability`; otherwise the
 packages depend only on Mathlib. At the pinned commits they have Palomar entries of their own, not
-submitted: eight in `lean4-banach-probability`, four in `lean4-harmonic-analysis` (one for its scalar
-part, three for its vector-valued part) and three in `lean4-calculus-of-variations`.
+submitted:
+
+- eight in `lean4-banach-probability`;
+- four in `lean4-harmonic-analysis` (one for its scalar part, three for its vector-valued part);
+- three in `lean4-calculus-of-variations`.
 
 [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms and proves it from these
 packages; [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) restates it in
@@ -126,20 +174,37 @@ lake env lake comparator --config=palomar/Cassese/comparator.json
 
 | Path | Content |
 | --- | --- |
-| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library: `Defs` (the definitions that the Challenge copies), `Introduction` (§1), `Toolkit` (§2), `Hypotheses` (the cited results in the paper's terms, and the bridges to the packages), `TwoByM` (§4), `TwoByThree/` (§5), `NonLocality` (Corollary 5.2), `Square/` (§6), `FourByTwo` (§7), `Conclusion` (Conjecture 1), `Bridges`, `Lifting`, `Rademacher`, `Sverak` (Šverák's example in Cassese's terms) |
+| [`Morrey/Cassese/`](../../Morrey/Cassese) | the library, by module (below) |
 | [`Morrey/Common/External/`](../../Morrey/Common/External) | the cited results, one directory per source, each with a README naming the argument used |
 | [`Morrey/Common/Basic/`](../../Morrey/Common/Basic) | general lemmas: `2 × 2` matrices of rank one, mollification |
 | [`palomar/Cassese/`](../../palomar/Cassese) | the Palomar submission |
 | this directory | the report, the credits, the routes |
 
+The library:
+
+- `Defs` (the definitions that the Challenge copies);
+- `Introduction` (§1);
+- `Toolkit` (§2);
+- `Hypotheses` (the cited results in the paper's terms, and the bridges to the packages);
+- `TwoByM` (§4);
+- `TwoByThree/` (§5);
+- `NonLocality` (Corollary 5.2);
+- `Square/` (§6);
+- `FourByTwo` (§7);
+- `Conclusion` (Conjecture 1);
+- `Bridges`;
+- `Lifting`;
+- `Rademacher`;
+- `Sverak` (Šverák's example in Cassese's terms).
+
 ## Related work and credits
 
-- The paper's place among the work on Morrey's problem, the concurrent and later papers (among
-  them a claimed proof of Iwaniec's conjecture), and other formalizations, including the author's
-  own Lean code for Theorems 1.2 and 1.3, which the proofs did not consult (parts of it were displayed
-  by searches for earlier formalizations and for the literature, and by checks of the documents:
-  [CREDITS.md](CREDITS.md#who)):
-  [REPORT.md, Section 10](REPORT.md#10-the-paper-in-the-literature).
+- Related work, in [REPORT.md, Section 10](REPORT.md#10-the-paper-in-the-literature):
+  - the paper's place among the work on Morrey's problem;
+  - the concurrent and later papers (among them a claimed proof of Iwaniec's conjecture);
+  - other formalizations, including the author's own Lean code for Theorems 1.2 and 1.3, which the
+    proofs did not consult (parts of it were displayed by searches for earlier formalizations and
+    for the literature, and by checks of the documents: [CREDITS.md](CREDITS.md#who)).
 - Formalized by Claude (Anthropic), with Claude Code, at the request of The-Anh Vu-Le, following
   the [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure, in
   November 2026. No person has reviewed the proofs. See [CREDITS.md](CREDITS.md).
