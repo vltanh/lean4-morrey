@@ -317,6 +317,28 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Global exponent-descent obstruction: p=4 cannot simply represent p>4
+
+The [exact all-exponent no-go](IWANIEC_MORREY_EXPONENT_DEMOTION_NOGO.md)
+starts from the **globally polyconvex** isotropic
+\(F_p(A)=(\det A)_+^{p/2}\) for arbitrary real p>4.
+Replacing its p-homogeneity by any lower
+degree q<p **without changing the signed-singular
+profile** produces a function that fails rank-one
+convexity along diag(1,t): the derivative
+has an exact downward jump of q-p at t=1.
+In particular the entire p>4 class cannot
+be reduced to p=4 by multiplying by
+\(\|A\|_{\rm op}^{4-p}\).
+
+This is a *method obstruction*, NOT a
+counterexample to the p>=4 polyconvexity
+conjecture. A valid exponent-transfer
+principle must change more than the
+homogeneity prefactor, or use a
+global argument independent of p.
+
+
 ### Exact five-variable support-obstruction query (all rational p≥4)
 
 The [two-test interval/Helly encoding](IWANIEC_MORREY_PGE4_TWO_TEST_QE.md)

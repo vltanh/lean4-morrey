@@ -467,6 +467,25 @@ No positive universal p>=4
 theorem or Lean certification.
 
 
+**I24 — exponent-preserving-profile descent no-go (23 Nov 2026).**
+For every real p>q>0, the
+[all-exponent analytic witness](IWANIEC_MORREY_EXPONENT_DEMOTION_NOGO.md)
+starts from the globally polyconvex
+\(F_p=(\det A)_+^{p/2}\), but
+\(G_q(A)=\|A\|_{\rm op}^{q-p}F_p(A)\)
+is **not rank-one convex**.
+On diag(1,t), its left and right
+derivatives at t=1 are p/2 and
+q-p/2, giving exact downward jump
+q-p<0. Thus a universal p>4→p=4
+reduction preserving signed-singular
+profiles is false, despite the
+original F_p being PC.
+No claim of Morrey counterexample;
+an exact rational control script
+checks the exponent algebra.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
