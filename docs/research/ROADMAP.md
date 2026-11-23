@@ -1,5 +1,68 @@
 # Roadmap to completion
 
+## G1 achieved conditionally: global anisotropic and nonhomogeneous QC neighborhoods of EVERY strict isotropic core
+
+**Assume** the p≥2 nonnegative isotropic
+p-homogeneous RC⇒PC hand theorem has
+been independently verified, as
+requested by the user. The new
+[quantitative all-p stability theorem](IWANIEC_MORREY_ANISOTROPIC_QUANT_STABILITY.md)
+then proves a **direct all-gradient bridge**
+for each smooth isotropic p-homogeneous
+core F0 obeying
+\(F_0(A)\ge\alpha|A|^p\) and
+\(D²F_0(A)[H,H]\ge\mu|A|^{p-2}|H|²\)
+on every rank-one H, with α,μ>0.
+
+An explicit p-power subtraction
+\(B=F_0-c|A|^p\),
+\(c=\tfrac12\min(\alpha,\mu/[p(p-1)])\),
+remains nonnegative isotropic p-hom
+and globally RC, hence **PC by the
+assumed theorem**. The p-power's
+explicit uniform convexity constant
+\(c_p=p/[(p-1)4^{p-1}3^{p-2}]\)
+gives a **quantitative QC margin**.
+Any arbitrary, including anisotropic
+and nonhomogeneous, C² perturbation G
+satisfying
+\[
+\|D²G(A)\|_{\rm op}
+ \le c\,c_p\,|A|^{p-2}
+\]
+then yields F0+G globally **RC and QC**,
+with positive weighted Jensen margin
+\(c\,c_p/2\) for EVERY periodic
+gradient with arbitrary amplitude
+and wavelength.
+
+A nonconvex explicit isotropic
+quartic core
+\(F_0=s(s-2\det A)+s²/100\)
+admits the exact perturbation
+Hessian radius \(1/259200\);
+[exact coefficient checker](../../research/audit/iwaniec_anisotropic_stability_exact.py)
+passed.
+
+**CLOSED G1 only in this quantitative
+strict ellipticity regime**:
+this is an infinite-dimensional
+neighborhood around EVERY such
+core, not just a finite sample.
+**G2–G4 remain OPEN**:
+the proof does not control arbitrary
+large anisotropic/nonhomogeneous
+departures, degenerate rank-one
+ellipticity, or all compatible
+gradient Young measures.
+An unrestricted result must
+control these without a small
+weighted C² assumption.
+The assumed isotropic theorem and
+this new deduction remain
+hand-level, not Lean-certified.
+
+
 ## Global two-line frequency-tail theorem (all gradient fields, 23 Nov 2026)
 
 The **unconditional** [two-direction Fourier-tail bound](IWANIEC_MORREY_TWO_LINE_SPECTRAL.md)
