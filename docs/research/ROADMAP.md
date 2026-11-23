@@ -83,6 +83,31 @@ global pointwise minorants; otherwise
 prioritize an all-gradient Jensen proof
 or an actual negative planar witness.
 
+### Exact univariate acoustic reduction of the whole smooth isotropic class
+
+The [acoustic criterion](IWANIEC_MORREY_ACOUSTIC.md)
+gives necessary-and-sufficient **rank-one convexity**
+tests for every real-valued C² signed-singular profile
+and every p>1, using **one scalar r∈(-1,1)**
+and two endpoint conditions. Its exact algebra
+is [symbolically checkable](../../research/audit/iwaniec_acoustic_exact.py).
+No claim of priority over classical
+Knowles–Sternberg-type conditions is made;
+the global endpoint argument is still
+hand-level, not Lean-checked.
+
+**Main positive gate:** At p>2, prove that
+every such admissible profile has a globally
+touching minorant from the hybrid
+Burkholder–polyconvex generator cone,
+or produce an exact separating profile
+showing the cone is incomplete. A separating
+profile is only a method no-go, not a
+Morrey counterexample. This is a universal
+one-dimensional functional gate, **not**
+a finite-mesh/fixed-degree search.
+
+
 ## 0. Iwaniec-dependent route (22 November 2026)
 
 The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes
