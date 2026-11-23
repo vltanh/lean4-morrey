@@ -267,6 +267,29 @@ No equivalence to gradient
 realizability or Morrey is claimed.
 
 
+**I15 — exact positive quartic stabilization cone (23 Nov 2026).**
+For all 1≤|γ|≤2, every **nonnegative**
+\(P_{\gamma,c}(A)=\|A\|_F^4-
+2\gamma\|A\|_F^2\det A+c(\det A)^2\)
+is **globally polyconvex**, with sharp
+nonnegativity cutoff
+\(c\ge4(|\gamma|-1)\). The [exact
+positive generator decomposition](IWANIEC_MORREY_QUARTIC_STABILIZATION.md)
+also covers a wider |γ|<1 sufficient
+cone; positive powers extend all
+members to every p≥4. The
+[rational algebra checker](../../research/audit/iwaniec_dm_positive_stabilization_exact.py)
+passed locally. Classical
+polyconvexity of the DM endpoint
+is an explicit external input;
+the decomposition and composition
+proofs are hand-level and unformalized.
+**Status:** global infinite-parameter
+subclass exclusion, **not** a
+general p>2 polyconvexity
+or Morrey theorem. No novelty claim.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

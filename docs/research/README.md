@@ -38,6 +38,7 @@ Start with these documents:
 | [Global isotropic all-p sublevel theorem](IWANIEC_MORREY_LEVELSETS.md) | Every nonnegative isotropic homogeneous rank-one-convex integrand has polyconvex sublevel sets (even without coercivity), giving universal (L^\infty) quasiconvexity; **not** ordinary integral quasiconvexity. Deduction from Conti et al. (2003). |
 | [Four-diagonal-atom global p>2 reduction](IWANIEC_MORREY_FOUR_ATOM.md) | Global polyconvexity in the nonnegative isotropic p>2 class reduces to **three- and four-atom signed-diagonal minor-preserving Jensen inequalities**, with no degree, exponent or amplitude cutoff; exact rational cost-monotone sparsifier. |
 | [1993 four-atom priority correction](IWANIEC_MORREY_PRIOR_ART_1993.md) | Original Dacorogna–Koshigoe Theorem 2.1 already gave the exact four-atom diagonal criterion and global poly-affine supports; separates established results from the remaining p>2 inequality. |
+| [Global nonnegative DM-quartic stabilization cone](IWANIEC_MORREY_QUARTIC_STABILIZATION.md) | Exact all-parameter polyconvexity of nonnegative determinant-square stabilizations for 1≤|γ|≤2, and a wider sufficient cone for |γ|<1; positive powers extend it to all p≥4. A global counterexample-search exclusion, not a Morrey solution. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

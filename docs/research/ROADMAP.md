@@ -317,6 +317,36 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### CLASS-WIDE stop rule: positive Dacorogna–Marcellini stabilizations
+
+An [exact quartic cone theorem](IWANIEC_MORREY_QUARTIC_STABILIZATION.md)
+proves global **polyconvexity** for
+\(P_{\gamma,c}(A)=s^2-2\gamma sd+c d^2\)
+whenever 1≤|γ|≤2 and \(P_{\gamma,c}\ge0\)
+everywhere. The nonnegativity threshold
+is precisely \(c\ge4(|\gamma|-1)\),
+and an explicit positive decomposition
+into classical PC/convex generators
+proves the conclusion. A wider
+sufficient PC cone covers |γ|<1;
+positive powers yield **all p≥4**.
+[Exact coefficient checker](../../research/audit/iwaniec_dm_positive_stabilization_exact.py).
+
+**Stop rule:** Never search for a
+nonnegative isotropic RC/non-QC
+counterexample in this **entire**
+determinant-square-stabilized DM
+quartic family, or its positive
+powers at p≥4: every such member
+is already PC. The universal
+p>2 theorem, unrestricted
+profiles and nonlinear forms
+remain open. This is an analytic
+infinite-parameter exclusion,
+not a closure of the 1993
+four-atom Jensen inequalities.
+
+
 ### PRIOR-ART CORRECTION: four atoms and supporting planes were known in 1993
 
 [Dacorogna–Koshigoe (1993), Theorem 2.1](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/), Theorem 2.1, already proves
