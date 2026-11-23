@@ -46,9 +46,9 @@ No strict negative gradient Jensen gap has been
 found for the p=4 candidate.
 
 **Run**:
-\`\`\`bash
+```bash
 python research/experiments/2026-11-22/iwaniec_hybrid_pl_search.py
-\`\`\`
+```
 
 Dependencies: Python 3, NumPy, SciPy, PyTorch (CPU).
 The research code does not establish Lean theorems or

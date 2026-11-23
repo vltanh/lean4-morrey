@@ -29,6 +29,7 @@ Start with these documents:
 | [Exact one-variable acoustic criterion](IWANIEC_MORREY_ACOUSTIC.md) | Hand rank-one convexity characterization for smooth isotropic p-homogeneous 2×2 integrands via a scalar acoustic inequality and endpoint conditions, reducing all rank-one directions; exact symbolic verifier. |
 | [Exact p=4 hybrid-envelope no-go](IWANIEC_MORREY_HYBRID_NOGO.md) | Fully rational polynomial and Bernstein certificate disprove universal completeness of the p>2 Burkholder–polyconvex hybrid envelope; exact two-point gap. **Not** a Morrey counterexample. |
 | [Open-family global no-go](IWANIEC_MORREY_HYBRID_OPEN.md) | Exact p=4 obstruction extends by strict compactness to an open (C^2) class of profiles and an interval of exponents; refutes the hybrid method, not Morrey. |
+| [Actual periodic-gradient stress test](../../research/experiments/2026-11-22/README.md) | Reproducible compatible-gradient PL search for the exact p=4 profile, five bases, 147 local runs, and no negative energy gap observed; nonexhaustive numerical evidence only. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
