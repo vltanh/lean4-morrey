@@ -315,7 +315,7 @@ quasiconvexity must not be conflated here.
 
 | Direction | Exact gate | What this note proves |
 | --- | --- | --- |
-| All p>2, isotropic p-homogeneous | Universal identity \(\mathcal E_ph=h\) | Explicit QC minorant, scalar profile bound; identity OPEN |
+| All p>2, isotropic p-homogeneous | Universal identity \(\mathcal E_ph=h\) | **REFUTED:** exact global p=4 profile and an [open family](IWANIEC_MORREY_HYBRID_OPEN.md); the restricted envelope remains a valid but incomplete QC lower bound. |
 | Nonisotropic and nonhomogeneous | Density of the GL-translated/positive-generator cone in all global 2×2 rank-one-convex functions **with correct supporting values** | Global positive examples; density OPEN and not suggested by simple symmetrization |
 | Counterexample route | A continuous globally rank-one-convex f and actual planar gradient with strict negative Jensen gap | None; generator failure is not a counterexample |
 | Lean | Formalize source Burkholder QC, signed SVD, profile-envelope construction, preserving QC under sup and coordinate change, and exact univariate polynomial certificates | All documented, not formalized |

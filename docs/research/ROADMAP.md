@@ -149,15 +149,7 @@ gate for **every p>2**, plus GL-transformed anisotropic and
 nonhomogeneous positive closures. Neither route settles arbitrary
 2×2 integrands.
 
-**New gate I8:** prove \(\mathcal E_ph=h\) universally for all
-nonnegative isotropic rank-one-convex p-homogeneous h and every p>2,
-or find a rigorously certified profile separating this specific
-support cone from the rank-one-convex cone (a *method obstruction*,
-not a Morrey counterexample). A strictly stronger unrestricted gate
-would additionally require a compatible envelope representation
-for **every** anisotropic, nonhomogeneous rank-one-convex integrand.
-Do not replace that gate with finitely many special exponents or
-with mere symmetrization.
+**Gate I8 CLOSED (negative):** The universal identity `E_p h=h` is **false**, by the [exact p=4 no-go](IWANIEC_MORREY_HYBRID_NOGO.md), and its failure persists on an [open family of profiles/exponents](IWANIEC_MORREY_HYBRID_OPEN.md). Do not try to establish this invalid positive completeness target. The unrestricted Morrey gate requires a genuinely stronger certificate family, an all-gradient inequality, or an actual planar negative witness.
 
 The new research contains no Lean translation or independent
 validation of Iwaniec's full proof. This Iwaniec-dependent route

@@ -28,6 +28,7 @@ Start with these documents:
 | [Smooth coercive quasiconvex nonpolyconvex examples](IWANIEC_MORREY_SMOOTH_QC.md) | Explicit (W_ε=1+L+ε\|A\|_F^2), exact four-atom rational minor-Jensen gap -1/17, smoothing and strong rank-one convexity; QC conditional on Iwaniec 2026. |
 | [Exact one-variable acoustic criterion](IWANIEC_MORREY_ACOUSTIC.md) | Hand rank-one convexity characterization for smooth isotropic p-homogeneous 2×2 integrands via a scalar acoustic inequality and endpoint conditions, reducing all rank-one directions; exact symbolic verifier. |
 | [Exact p=4 hybrid-envelope no-go](IWANIEC_MORREY_HYBRID_NOGO.md) | Fully rational polynomial and Bernstein certificate disprove universal completeness of the p>2 Burkholder–polyconvex hybrid envelope; exact two-point gap. **Not** a Morrey counterexample. |
+| [Open-family global no-go](IWANIEC_MORREY_HYBRID_OPEN.md) | Exact p=4 obstruction extends by strict compactness to an open (C^2) class of profiles and an interval of exponents; refutes the hybrid method, not Morrey. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
