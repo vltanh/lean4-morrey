@@ -21,7 +21,7 @@ rev = "5f650f00b1db63837a452696331a98ca886b94a8"
 [[require]]
 name = "HarmonicAnalysis"
 git = "https://github.com/vltanh/lean4-harmonic-analysis"
-rev = "8af827931187172d79d4df21786e903a4ed1d999"
+rev = "198ef26b057597009ce786d765fec054141a7f27"
 
 [[require]]
 name = "CalculusOfVariations"
