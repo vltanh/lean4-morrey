@@ -332,6 +332,42 @@ positive deficit remains possible.
 Hand proof; Lean/external review pending.
 
 
+**I18 — p>2 fractional-power method obstruction (23 Nov 2026).**
+The [exact p-interval calculus note](IWANIEC_MORREY_FRACTIONAL_POWER_NOGO.md)
+shows the globally nonnegative
+polyconvex quartic \(Q=s(s-2d)\)
+has \(Q^{p/4}\) **not even rank-one
+convex** along diag(1,t) for
+**every 2<p<11/4**. At t=1/2
+the rank-one second derivative
+has sign \(p/4-11/16\).
+An [exact rational checker](../../research/audit/iwaniec_fractional_power_no_go_exact.py)
+replays the derivative. This is
+a general-method no-go only,
+not an RC/non-QC example.
+
+**I19 — compatible three-wave heatflow counterexample (23 Nov 2026).**
+The [exact full Fourier proof](IWANIEC_MORREY_P4_HEATFLOW_NOGO.md)
+constructs an affine+periodic smooth
+planar heat trajectory with
+\(F(A)=(\det A)^2\) (globally
+polyconvex, nonnegative, isotropic,
+4-homogeneous), initial energy
+31332 and derivative **+920**.
+The [standard-library exact checker](../../research/audit/iwaniec_p4_heatflow_three_wave_exact.py)
+reproduces the six Fourier modes.
+Continuity extends the sign
+to determinant powers
+\(F_p=|\det A|^{p/2}\) for an
+**open interval of p around4**.
+This is an explicit homogeneous
+instance of earlier H24 and
+rules out universal componentwise
+heatflow monotonicity, NOT
+quasiconvexity, in the p>2 class.
+No Lean/CI and no novelty claim.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

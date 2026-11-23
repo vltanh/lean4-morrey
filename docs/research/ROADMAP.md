@@ -317,6 +317,42 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Global method stop rules: fractional powers and universal heatflow
+
+The [exact fractional-power witness](IWANIEC_MORREY_FRACTIONAL_POWER_NOGO.md)
+shows that raising the classical nonnegative
+polyconvex quartic \(Q=s(s-2\det)\) to
+\(p/4<1\) **destroys rank-one convexity**
+for **every real 2<p<11/4**.
+Thus downward power interpolation
+from the p≥4 polyconvex quartic theorem
+is NOT a general proof of all p>2.
+
+The [exact three-wave Fourier theorem](IWANIEC_MORREY_P4_HEATFLOW_NOGO.md)
+exhibits an **actual compatible smooth
+periodic gradient**, with affine base, for
+which the **globally polyconvex**
+\(F=(\det A)^2\) has positive componentwise
+heat-flow energy derivative **+920**.
+The sign persists for \(F_p=|\det A|^{p/2}\)
+on an open p-interval containing 4.
+This supplies a short exact homogeneous
+instance of the earlier H24 obstruction:
+**universal heat-flow monotonicity is false
+even inside the target positive isotropic
+p>2 class**. It does NOT exclude specialized
+flows, and is not a QC/Morrey counterexample.
+
+**Decision:** The global G–K Question 1.7
+still requires a new simultaneous
+cross-level Jensen inequality or a
+certified nonpolyconvex counterexample.
+Do not repeat generic concave-power
+interpolation or universal componentwise
+heatflow as claimed positive completion
+routes without a changed hypothesis.
+
+
 ### All-p quantitative global control, not yet an all-p proof
 
 The [quadratic deficit theorem](IWANIEC_MORREY_GLOBAL_QUADRATIC_DEFICIT.md)
