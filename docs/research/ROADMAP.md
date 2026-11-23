@@ -317,6 +317,39 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Essential separation: three-atom PC tests versus actual gradient laws
+
+[Three-atom rigidity audit](IWANIEC_MORREY_THREE_ATOM_RIGIDITY.md):
+every homogeneous W¹∞ planar gradient
+Young measure on ≤3 atoms is a
+laminate. If one pair has rank-one
+difference, determinant moment
+compatibility gives a two-step
+finite laminate; otherwise Šverák's
+published three-gradient rigidity
+forces the measure to be Dirac.
+An exact rational example shows
+three pairwise unconnected diagonal
+atoms can satisfy *all minors moments*
+yet fail gradient realizability.
+
+**For the p≥4 polyconvexity target:**
+Dacorogna–Koshigoe's universal test
+STILL includes 3-atom laws; they may
+refute PC without refuting QC.
+**For Morrey:** any genuine nontrivial
+finitely supported gradient law
+needs ≥4 atoms. Four-atom T4
+microstructures may be compatible
+yet still laminates in the Jensen
+sense—do not infer non-QC from
+rank-two pairwise separation alone.
+This prior-art theorem is a
+research-route correction, not a
+new proof of the universal
+p≥4 or Morrey conjecture.
+
+
 ### Global exponent-descent obstruction: p=4 cannot simply represent p>4
 
 The [exact all-exponent no-go](IWANIEC_MORREY_EXPONENT_DEMOTION_NOGO.md)

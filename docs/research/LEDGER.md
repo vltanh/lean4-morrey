@@ -486,6 +486,30 @@ an exact rational control script
 checks the exponent algebra.
 
 
+**I25 — ≤3-atom gradient Young measures are laminates (23 November 2026).**
+The [source-backed global rigidity audit](IWANIEC_MORREY_THREE_ATOM_RIGIDITY.md)
+combines the elementary rank-one
+pair-merging/minors identity with
+**Šverák's three-gradient theorem**
+(see Müller 1998, Thm. 2.5(ii);
+Bhattacharya–Firoozye–James–Kohn
+1994, Result 1.9). Every planar
+homogeneous W¹∞ *gradient* Young
+measure with ≤3 atoms is
+rank-one-convex Jensen-positive.
+An [exact rational T3 control](../../research/audit/iwaniec_three_atom_gradient_rigidity_control.py)
+has correct first/determinant moments
+yet pairwise rank-two differences,
+so it cannot be a nontrivial gradient
+Young measure. **Priority:** all
+rigidity content is established
+1993–94 work, not a new theorem.
+It does not remove 3-atom
+tests from the stronger p≥4
+polyconvexity conjecture, nor
+solve Morrey.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
