@@ -69,7 +69,8 @@ sources:
       3.5, with Remark 3.8 and p. 138), which the paper's Corollary 6.3 uses: proved in
       lean4-banach-probability by the book's proofs (integration method; second approach and
       duality), with their slips repaired (Morrey/Common/External/Osekowski). Theorem 3.24 (the
-      paper's Proposition 2.6) is stated for context, not proved, and used by no proof.
+      paper's Proposition 2.6) is stated for context, not proved, and used by no proof. Theorem 8.6 also
+      stands for the square function inequality for real martingales that Burkholder (1983) uses as known.
   - title: "Sharp inequalities for martingales and stochastic integrals"
     authors:
       - "Donald L. Burkholder"
@@ -108,10 +109,10 @@ sources:
       lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
       probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
-      non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Sections 5.1 and 5.2
-      (the Hilbert transform), Proposition 5.7.1 with the dilation of the proof of Theorem 5.7.10
-      (transference to the circle) and Appendix D; Volume II, Proposition 7.4.22 (type 2 implies
-      K-convexity).
+      non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Lemma 5.2.1 and
+      Proposition 5.2.2 (the symbol of the truncated Hilbert transforms and their limit), Proposition
+      5.7.1 with the dilation of the proof of Theorem 5.7.10 (transference to the circle) and Appendix
+      D; Volume II, Proposition 7.4.22 (type 2 implies K-convexity).
   - title: "Non-commutative martingale transforms"
     authors:
       - "Narcisse Randrianantoanina"
@@ -181,8 +182,27 @@ sources:
       spaces), for n = 1, proved in lean4-harmonic-analysis by the article's proofs. The places where a
       Brownian motion hits the heights are represented by their finite-dimensional distributions
       (chains with independent Cauchy increments), which are all that the proofs of the two theorems use;
-      slips of the article are repaired. The boundedness of the Hilbert transform, which it recalls
-      (Burkholder 1983, not read), is HNVW I, Theorem 5.1.13 and Lemma 5.2.1.
+      slips of the article are repaired. The boundedness of the Hilbert transform, which it recalls from
+      Burkholder (1983), is proved after that article (next entry).
+  - title: "A geometric condition that implies the existence of certain singular integrals of Banach-space-valued functions"
+    authors:
+      - "Donald L. Burkholder"
+    id: "Conference on harmonic analysis in honor of Antoni Zygmund (Chicago, 1981), Wadsworth (1983), 270-286"
+    type: "article"
+    location: "https://doi.org/10.1007/978-1-4419-7245-3_26"
+    relationship: "background"
+    note: >-
+      Read (as page images of the reprint in "Selected Works of Donald L. Burkholder", 2011) and
+      followed for the boundedness of the Hilbert transform on UMD spaces, on which McConnell's Theorem
+      1.3 rests: Lemmas 2 to 4 and (33) (pp. 278-283), proved in lean4-harmonic-analysis, and Lemma 1
+      (decoupling, p. 277), in lean4-banach-probability, with a UMD_p constant beta in place of zeta-convexity
+      and the constants beta^2 (conjugate polynomials), 2 beta^2 (conjugate Poisson integrals) and
+      2 beta^2 + 1 (truncations on the circle and on the line); two slips are repaired. Lemma 4, the
+      passage to the line, for which the article refers to M. Riesz and Zygmund (not read), is written out
+      by periodization and dilation; the limit of the truncations, the multiplier -i sgn, is by HNVW I,
+      Lemma 5.2.1 and Proposition 5.2.2 (Theorem 2, stated without proof, is not formalized); the square
+      function inequality for real martingales, which the article uses as known, by Osękowski 2012,
+      Theorem 8.6.
   - title: "Non-commutative vector valued L_p-spaces and completely p-summing maps"
     authors:
       - "Gilles Pisier"
@@ -402,7 +422,7 @@ automation:
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
         the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth, and to
-        4.3.2 (commit 8e884d5) in the fifth and sixth, after which 4.3.3 (commit 80b7f6f) was written. Second
+        4.3.2 (commit 8e884d5) in the fifth and sixth; 4.3.3 (commit 80b7f6f) in the seventh. Second
         round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
@@ -417,8 +437,10 @@ automation:
         reviewers, 10 for revisions, one for the documents), besides the agents that updated and
         checked this repository's documents. Sixth round, a step of that proof by McConnell's theorem: the
         same lead agent with 11 sub-agents (5 provers, a checker of statements, 3 reviewers, 2 for
-        revisions), besides the agents for this repository's documents. Lean v4.36.0-rc2, Mathlib
-        v4.36.0-rc2.
+        revisions), besides the agents for this repository's documents. Seventh round, a step of
+        McConnell's theorem by Burkholder's lemmas (1983): the same lead agent with 6 sub-agents (4
+        provers, a checker of statements, a reviewer), besides the agents for this repository's
+        documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
@@ -430,6 +452,8 @@ automation:
           session in that window). Fifth round: 5.1 h elapsed between its first and its last commit
           (the first 50 minutes within the fourth round's), 13.8 h of sub-agent working time. Sixth
           round: 1.7 h elapsed to the last commit of the proofs, 3.9 h of sub-agent working time on it.
+          Seventh round: 1.1 h elapsed to the last commit of the package, 1.7 h of sub-agent working time
+          on it.
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -440,7 +464,8 @@ automation:
         agent decide without asking; then obtained the cited books and articles that the agent could
         not (most of them), so that the cited results could follow them; then asked for the sources'
         proof of the non-commutative Khintchine inequality, with its general theory made reusable; then
-        supplied McConnell (1984), which a step of that proof cites.
+        supplied McConnell (1984), which a step of that proof cites, and Burkholder (1983), which
+        McConnell cites.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
@@ -481,9 +506,13 @@ fidelity:
     Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed), Bourgain 1986 (the
     first of two references for (III.3) of Lust-Piquard and Pisier; the second, McConnell 1984, is
     followed). Named substitutes for steps that the sources of Proposition 6.3 take from works that were
-    not read, recall as known, or state without proof: HNVW I, Theorem 5.1.13 and Lemma 5.2.1, for the
-    boundedness of the Hilbert transform that McConnell recalls (Burkholder 1983); Randrianantoanina's
-    theorem for the UMD property of C_2p (recalled from Rubio de Francia 1986);
+    not read, recall as known, or state without proof: for the passage from the circle to the line in
+    Burkholder 1983, Lemma 4 (M. Riesz 1928 and Zygmund's book, not read), periodization and dilation,
+    written out; for the multiplier -i sgn as the limit of the truncated Hilbert transforms (Burkholder's
+    Theorem 2, stated without proof; the symbol is recalled by McConnell), HNVW I, Lemma 5.2.1 and
+    Proposition 5.2.2; for the square function inequality for real martingales that Burkholder 1983 uses
+    as known, Osękowski 2012, Theorem 8.6 (the paper's Theorem 2.3 (2)); Randrianantoanina's theorem for
+    the UMD property of C_2p (recalled from Rubio de Francia 1986);
     Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
     Hölder's inequality and the duality of the Schatten classes (Simon 1979) and for Horn's inequality,
     and Sutter-Berta-Tomamichel 2017 for the three lines theorem (Gohberg-Krein 1965); HNVW II, Proposition
@@ -508,10 +537,11 @@ fidelity:
     Lust-Piquard and Pisier's Theorem III.1 (i) for the Paley projection and C_p, 1 <= p <= 2, with a
     constant independent of p; McConnell's Theorems 1.1 and 1.3 for n = 1, and the transference of the
     multipliers of the second to the circle by HNVW I, Proposition 5.7.1, with the dilation of the proof
-    of Theorem 5.7.10; and the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's
-    interpolation. A change of language: in McConnell's proofs, the hitting places of a Brownian motion are
-    represented by chains with independent Cauchy increments, and Poisson integrals by their Fourier
-    transforms.
+    of Theorem 5.7.10; Burkholder's lemmas (1983) with a UMD_p constant in place of zeta-convexity and
+    explicit constants, and his function K_r (p. 283), which he only asserts to exist, given explicitly; and
+    the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's interpolation. A change of
+    language: in McConnell's proofs, the hitting places of a Brownian motion are represented by chains with
+    independent Cauchy increments, and Poisson integrals by their Fourier transforms.
     Stated in the case the paper uses: decoupling for Paley-Walsh martingales, Pisier-Xu's Theorem 6.1
     for real square matrices and q >= 2, with a constant C sqrt(q), C not explicit, one inequality of
     HNVW's Corollary 5.7.6, n = 2 in Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
@@ -530,9 +560,9 @@ review:
     that redid the cited results by their sources' proofs, agents compared these results with the
     sources, independent reviewers checked the redone proofs of the packages against the sources, the
     statements of Morrey/Common/External, the restated Proposition 2.7 (6) and the updated
-    documents. In the round that redid the non-commutative Khintchine inequality, and in the one that
-    redid a step of it by McConnell's theorem, independent reviewers checked the packages' new statements,
-    their proofs against the sources, and the updated documents.
+    documents. In the round that redid the non-commutative Khintchine inequality, and in the two that
+    redid steps of it by McConnell's theorem and by Burkholder's lemmas (1983), independent reviewers
+    checked the packages' new statements, their proofs against the sources, and the updated documents.
 
 alignment:
   namespace: "CasseseChallenge"
