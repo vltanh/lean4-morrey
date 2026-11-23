@@ -1,5 +1,54 @@
 # Roadmap to completion
 
+## UNRESTRICTED progress and explicit failed extension (23 November 2026)
+
+**New valid exact all-N positivity theorem.** The
+[strict-curvature high-resonance theorem](IWANIEC_MORREY_STRICT_RESONANCE.md)
+shows that for **every** \(C^2\) isotropic OR anisotropic,
+positive OR signed, homogeneous OR nonhomogeneous
+integrand having a uniform rank-one Hessian
+margin \(\mu>0\) and full Hessian bound M on
+the relevant matrix cube, arbitrary finite N
+compatible sinusoidal waves satisfy **exact Jensen**
+whenever a suitable n obeys
+\(4n<\ell\) and \(4MR^2/n\le\mu\sum_j\|H_j\|_F^2/4\).
+This follows from an exact independent-phase
+strong Jensen margin plus the established
+Bernstein/Fourier resonance approximation bound;
+the proof has **no fixed wave-count restriction**.
+[Exact signed/anisotropic/nonhomogeneous rational regression](../../research/audit/iwaniec_strict_resonance_exact.py)
+passed locally, with minimal resonance length
+1026 and a positive margin above the
+Bernstein correlation-error bound.
+
+**MANDATORY correction:** An attempted derivation of
+Jensen for *all arbitrary three-ridge waveforms*
+from the 2017 Sebestyén–Székelyhidi
+three-**sawtooth** theorem was **INVALID**:
+randomizing vector-valued ridge derivatives
+into sawtooths and invoking rank-one convexity
+gives \(F(\mathbb EZ)\le \mathbb EF(Z)\),
+while the published Jensen lower bound
+controls only the randomized average.
+Those two inequalities give **no lower
+bound for the original ridge field**.
+See the [explicit retraction/audit](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md).
+The proposed all-gradient spectral
+distance-to-three-lines estimate is
+therefore **NOT PROVED** and must
+NOT be used in any further gate.
+
+**Next global gate:** Control the
+short-resonance correlations without
+requiring a positive uniform rank-one
+Hessian margin. No existing argument
+handles all gradient fields; unrestricted
+Morrey remains OPEN. Do not claim a
+positive all-three-ridge result until
+a fundamentally different lower-bound
+argument is supplied.
+
+
 ## Global Morrey route: arbitrary-F rank-one Fourier resonance sieve (23 November 2026)
 
 **New exact result:** the [all-N resonance theorem](IWANIEC_MORREY_RESONANCE_SIEVE.md)
