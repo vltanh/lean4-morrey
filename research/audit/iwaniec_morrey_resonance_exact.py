@@ -30,6 +30,13 @@ def test():
                 assert spatial(exps,ks)==independent(exps),exps
                 n+=1
     assert n==35
+    # No integer relation with total coefficient norm <= 6; witness at 7.
+    for n1 in range(-6,7):
+        for n2 in range(-6,7):
+            for n3 in range(-6,7):
+                if 0 < abs(n1)+abs(n2)+abs(n3) <= 6:
+                    assert (n1+5*n3,n2+n3)!=(0,0)
+    assert (-5+5*1,-1+1)==(0,0)
     assert spatial((1,1,1),((1,0),(0,1),(1,1)))==Q(1,4)
     assert independent((1,1,1))==Q(0)
     assert Q(4,16)==Q(1,4)
