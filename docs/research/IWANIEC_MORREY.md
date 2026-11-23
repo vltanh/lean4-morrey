@@ -170,6 +170,110 @@ This is an infinite family of positive examples and a reusable proof template; *
 
 Additional safe closure: positive sums of these quasiconvex functions, convex integrands, affine functions, determinants, translated versions, and invertible linear changes of input variables remain quasiconvex under the usual domain-change assumptions. Such cones provide *exclusions* for a counterexample search, never counterexamples.
 
+## 4A. Conformal Morrey for EVERY nonnegative isotropic homogeneous integrand
+
+A substantially stronger consequence than the special convex-body constructions above comes
+from **Guerra–Kristensen**, *Automatic quasiconvexity of homogeneous isotropic rank-one convex
+integrands*, [arXiv:2112.10563](https://arxiv.org/abs/2112.10563), published in
+*Archive for Rational Mechanics and Analysis* **245** (2022), 479–500.
+Its Theorem 1.2 was *conditional* on the Burkholder quasiconvexity conjecture
+when 1<p<2. Corollary 2 of [arXiv:2609.28311v2](https://arxiv.org/abs/2609.28311v2)
+supplies precisely that missing hypothesis.
+
+**Corollary (derived from those two papers).** Let p>1 and let
+F:ℝ²ˣ²→[0,∞) be any globally rank-one-convex integrand satisfying
+F(QAR)=F(A) for Q,R∈SO(2) and F(tA)=t^pF(A) for all t>0.
+Then F is quasiconvex at **every** conformal/anticonformal matrix
+A=tQ with t≥0 and Q∈O(2), including A=0. The class quantifier
+is universal; no degree bound, number of terms, or mesh cutoff is assumed.
+It is *not* a statement about arbitrary nonconformal base matrices.
+
+For p≥2 this was already unconditional in Guerra–Kristensen
+Theorem 1.3 (in fact polyconvex at conformal matrices). For 1<p<2,
+their Theorem 1.2 applies once the 2026 paper's Burkholder
+quasiconvexity claim is accepted.
+
+### Exact normalization and an explicit global minorant
+
+The 2022 Burkholder convention for 1<p<2 is
+\[
+ b_p(A)=\big[(2/p-1)\|A\|_{\rm op}^2+\det A\big]\|A\|_{\rm op}^{p-2},
+ \qquad b_p(0)=0.
+\]
+The 2026 convention, writing Az=a_+z+a_-\bar z, satisfies the
+**positive-scalar identity**
+\[
+ B_p^{2026}(A)
+ =\big[(p-1)^{-1}|a_+|-|a_-|\big](|a_+|+|a_-|)^{p-1}
+ =\frac{p}{2(p-1)}b_p(A).
+\]
+This identification matters: the p>2 conventions in the two papers
+differ in orientation, but the older p≥2 theorem does not need Iwaniec.
+
+Set D=diag(1,-1), c_+=(p/2)F(I) and c_-=(p/2)F(D).
+For 1<p<2 define
+\[
+\boxed{H_{p,F}(A)=\max\{0,c_+b_p(A),c_-b_p(DA)\}.}
+\]
+Then (i) H is quasiconvex on **all** ℝ²ˣ², (ii) H≤F pointwise
+on **all** ℝ²ˣ², and (iii) H(A)=F(A) whenever A is conformal or
+anticonformal. Consequently, at arbitrary matrices A,
+\[
+ \int_Q F(A+D\varphi)\,dx\ \ge H_{p,F}(A),
+\]
+and at conformal A this lower bound equals F(A).
+
+**Proof and hypotheses.** Both c_±≥0 by F≥0.
+Guerra–Kristensen Theorem 4.2 states that every isotropic 2×2
+rank-one-convex positively p-homogeneous integrand with F(I)>0,
+normalized by c_+=F(I)/b_p(I), satisfies F≥c_+b_p globally;
+indeed b_p(I)=2/p. If F(I)=0 the same inequality is trivial from
+F≥0. Apply the same argument to the reflected integrand A↦F(DA):
+reflection preserves rank-one convexity, p-homogeneity, and
+SO(2)×SO(2)-isotropy, and yields F≥c_-b_p(D·).
+The 2026 result makes b_p quasiconvex; output reflection
+preserves quasiconvexity. A pointwise maximum of finitely many
+quasiconvex integrands is quasiconvex, hence so is H.
+For Q∈SO(2), \(\|Q\|_{\rm op}=1\), \(\det Q=1\) and
+\(b_p(Q)=2/p\), whereas \(b_p(DQ)=2/p-2<0\).
+Thus at A=tQ the first branch gives c_+b_p(A)=t^pF(I)=F(A);
+the negative-orientation branch is analogous. At zero all terms
+vanish by p-homogeneity. This proves all three properties.
+
+For p≥2 an already-known **global polyconvex minorant**, again
+touching at every conformal matrix, is
+\[
+ H_{p,F}(A)=F(I)(\det A)_+^{p/2}
+           +F(D)(-\det A)_+^{p/2}\le F(A).
+\]
+This follows from Guerra–Kristensen's monotonicity argument
+(Theorem 1.3 and its proof); p/2≥1 makes H convex as a function
+of det, hence polyconvex. Its touching property uses isotropy
+and p-homogeneity.
+
+The two formulae give an **explicit global quasiconvex support for
+every F in the indicated class**, even at nonconformal matrices,
+but do not show F itself quasiconvex there. This is the strongest
+direct all-F statement identified from the two papers. It has
+a universal integrand quantifier but still imposes isotropy,
+homogeneity, nonnegativity and a conformal base for equality.
+No claim of novelty beyond combining the known theorems is made.
+
+### Lean research gate
+
+Formalize (1) the scalar identity between Burkholder conventions;
+(2) the all-F extremality inequality of Guerra–Kristensen
+Theorem 4.2; (3) quasiconvexity preservation under reflection,
+nonnegative scaling and finite pointwise maxima; and (4)
+pointwise minorant and exact touching on CO(2). Instantiate the
+quasiconvex Burkholder premise only when the new 2026 theorem
+has been independently formalized. A conditional Lean theorem
+with the two source results as explicit hypotheses is a legitimate
+near-term output; it is **not** an unconditional formal proof.
+The unresolved unrestricted gate is the same as in the
+[roadmap](ROADMAP.md): an all-rank-one-convex Jensen theorem or
+a globally certified planar counterexample.
+
 ## 5. Why this does not repair Pedregal or close the Morrey roadmap
 
 Pedregal tries to represent **every** planar gradient law as a laminate via a fixed-point construction; this repository proves the required general nonemptiness claim false. The Iwaniec proof instead assigns a *spatially varying calibrating gradient* to an integrand with a special support envelope. It does not require a finite splitting tree and does not assert that every gradient law is a laminate.
