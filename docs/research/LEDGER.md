@@ -655,6 +655,79 @@ not universal Morrey.
 No Lean/CI/novelty claimed.
 
 
+**I26 — unrestricted-integrand Fourier resonance sieve (23 November 2026).**
+The [all-N exact theorem](IWANIEC_MORREY_RESONANCE_SIEVE.md)
+proves that for ANY globally rank-one convex finite-valued F
+on real 2×2 (no isotropy, homogeneity, sign or polynomial
+degree assumptions), compatible finite sinusoidal gradient
+fields with shortest integer frequency relation order
+\(\ell>d\) satisfy exact Jensen if F is polynomial of
+degree d. For general F, a tensor Bernstein argument
+bounds its possible deficit by \(4L_RR/\sqrt n\)
+(or \(4M_RR²/n\) for C² F) whenever \(4n<\ell\).
+A prescribed strict negative gap forces an explicitly
+bounded-length frequency relation.
+The [exact integer/Fraction checker](../../research/audit/iwaniec_morrey_resonance_exact.py)
+passed 35 quartic monomial moments, length-7 shortest
+relation, and 1/4 cubic-triad correlation.
+These are finite regression controls, not the proof
+of the general theorem.
+**Prior art:** planar three-sawtooth QC is due to
+Sebestyén–Székelyhidi (2017), reported by
+Guerra–Teixeira da Costa (2021), Theorem 3.3(d).
+No originality or all-gradient Morrey completion claimed.
+
+**I27 — INVALID random-square-wave three-ridge extension (23 Nov 2026).**
+[The corrected failed-approach note](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md)
+documents a fatal **Jensen-direction inversion**.
+An exact Fourier kernel allows an arbitrary vector
+ridge derivative to be represented pointwise as the
+mean of randomized sawtooth derivatives, but
+rank-one Jensen gives
+\(F(\mathbb EZ)\le\mathbb EF(Z)\).
+The 2017 three-sawtooth theorem bounds
+the latter from **below** by F(A),
+which gives NO lower bound for the
+former. Thus a proposed universal
+three-ridge Jensen theorem and resulting
+spectral distance-to-three-lines
+deficit estimate were **NOT PROVED**.
+Historical incorrect commit a18f1e5
+is explicitly retracted at a9c7058.
+Do not reuse this bridge. The
+separate I26 Fourier resonance theorem
+is independent and unaffected.
+
+**I28 — all-N exact high-resonance Jensen from strict rank-one ellipticity (23 Nov 2026).**
+The [quantitative global theorem](IWANIEC_MORREY_STRICT_RESONANCE.md)
+covers EVERY C² integrand F with
+rank-one Hessian margin \(\mu>0\)
+and full Hessian bound M on the
+relevant compact matrix cube,
+without any isotropy, sign,
+homogeneity or polynomial degree
+restriction. For ANY finite number
+N of actual compatible sinusoidal
+gradient modes, exact Jensen holds
+if there exists an integer n≥1 with
+\(4n<\ell\) and
+\(4MR²/n\le\mu \sum_j\|H_j\|²/4\).
+Proof: independent-phase Jensen
+has positive gap
+\(\mu \sum_j\|H_j\|²/4\),
+which dominates the Bernstein
+correlation error \(4MR²/n\).
+[Exact rational control](../../research/audit/iwaniec_strict_resonance_exact.py)
+uses nonconvex signed anisotropic
+nonhomogeneous \(F=\|A\|_F²+5\det A+A_{11}\)
+and frequencies with \(\ell=1026\):
+margin \(3145729/2097152>252/169\).
+This is a global infinite-wave-count
+**frequency-restricted** theorem,
+NOT a universal Morrey proof; no Lean
+or human referee validation claimed.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
