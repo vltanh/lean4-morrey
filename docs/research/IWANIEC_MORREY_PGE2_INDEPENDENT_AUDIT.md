@@ -73,7 +73,7 @@ For Case III, the \(\lambda\)-derivative above and \(c_0\ge\kappa|m|\) imply tha
 
 ## Independent reproducibility
 
-[Standalone checker](../../research/audit/iwaniec_pge2_independent_logic_audit.py) uses SymPy for the **16** core identities, symbolic Burkholder derivative, a deterministic rational sweep of 76,915 admissible first-order triples in all three cases, and a signed-ratio grid on several known nonnegative globally polyconvex profiles. It passed locally. Numerical controls are **not** a universal proof; the positive verdict above rests on the displayed hand derivation, one-variable calculus and rank-one convexity.
+[Standalone checker](../../research/audit/iwaniec_pge2_independent_logic_audit.py) uses SymPy for the **16** core identities, symbolic Burkholder derivative, a deterministic rational sweep of 76,915 admissible first-order triples in all three cases, and exact case classification on all three branches. A **separate local** signed-ratio grid on known nonnegative polyconvex profiles was also run, but is not included in this checker. Both passed locally. Numerical controls are **not** a universal proof; the positive verdict above rests on the displayed hand derivation, one-variable calculus and rank-one convexity.
 
 A pointwise support \(P_t\) is valid at every base only under the proof's actual **nonnegative, SO(2)×SO(2)-isotropic, positively homogeneous, globally rank-one-convex** hypotheses. Nothing here establishes rank-one convexity ⇒ **quasiconvexity** for arbitrary anisotropic/nonhomogeneous 2×2 energies.
 

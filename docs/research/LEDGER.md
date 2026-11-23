@@ -199,6 +199,55 @@ gradient law by simple normalization.
 The [verifier](../../research/audit/iwaniec_separator_nonrealizable_exact.py)
 is elementary exact rational arithmetic.
 
+**I25 — proposed global positive isotropic p≥2 proof and independent audit (23 Nov 2026).**
+[New full hand proof](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md)
+constructs an explicit clamped determinant
+multiplier c* at every nonconformal base
+for nonnegative SO(2)×SO(2)-isotropic
+positively p-homogeneous globally RC
+2×2 integrands, p≥2.
+[Independent AI logic audit](IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md)
+checked its rank-one geometry, all
+three cases and scaling argument, and
+found **no fatal logical gap**.
+A [replayable SymPy/Fraction checker](../../research/audit/iwaniec_pge2_independent_logic_audit.py)
+checks 16 algebraic identities,
+the envelope derivative, and
+76,915 exact rational first-order
+tuples. **Status: provisional hand
+theorem; not verified in Lean or by
+an external human referee, and no
+publication novelty asserted.**
+It does **not** prove unrestricted
+Morrey or cover arbitrary anisotropic
+or nonhomogeneous integrands.
+Historically I12 below was OPEN;
+its missing inequality is provisionally
+supplied by the new hand proof.
+
+**I26 — exact no-go for removing homogeneity while demanding PC (23 Nov 2026).**
+[Explicit strictly positive isotropic
+rank-one convex but nonpolyconvex
+W(A)=exp(q(A))](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md),
+\(q=\|A\|_F^4-(9/4)\|A\|_F^2\det A\).
+Global rank-one convexity follows
+from a four-square Hessian SOS;
+a four-atom matrix/determinant
+law with barycenter 0 has energy
+mean <19705/19728<1=W(0).
+[Exact symbolic/rational checker](../../research/audit/iwaniec_nonhomogeneous_positive_nonpc.py).
+The original quartic moment law
+was already in ledger H26;
+the explicit exponential bound
+is an independent replay.
+This is **non-PC**, not non-QC.
+Combined with anisotropic p-homogeneous
+non-PC example I04, it blocks any
+unrestricted Morrey proof that insists
+on global polyconvexity after simply
+removing isotropy/homogeneity.
+
+
 **I12 — universal all-p scalar support gate.**
 The [single determinant multiplier criterion](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md)
 is an iff for a global poly-affine

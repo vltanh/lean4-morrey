@@ -1,5 +1,72 @@
 # Roadmap to completion
 
+## Research update — provisional isotropic completion, unrestricted remains open (23 Nov 2026)
+
+The new [all-p≥2 isotropic p-homogeneous theorem](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md)
+claims a **global poly-affine minorant at every matrix** for
+every nonnegative isotropic p-homogeneous RC integrand, p≥2.
+An [independent logical audit](IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md)
+verified the major algebra and the formerly missing Case I
+rank-one-line/scaling step and found no fatal gap. This is a
+**provisional AI hand proof**, not a Lean theorem, external
+referee report, or settled priority claim. All previous
+I12 "still open" text below is historical and is
+**superseded provisionally** by this audit; the
+generalized result must be independently verified
+before being treated as accepted.
+
+**Unrestricted Morrey remains OPEN.** Do NOT attempt to
+remove homogeneity or isotropy while demanding
+polyconvexity: both are provably impossible.
+
+- Remove isotropy: nonnegative anisotropic positively
+  p-homogeneous RC energies are nonpolyconvex for
+  **every p≥2**. The [corrected exact
+  three-atom witness](IWANIEC_MORREY_P2_SIGNED.md)
+  repairs a determinant arithmetic error in
+  Guerra–Kristensen (2022), Proposition 3.7.
+- Remove homogeneity: the [fully explicit
+  strictly positive isotropic example](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md)
+  W(A)=exp(||A||_F^4−(9/4)||A||_F² det A)
+  is RC but nonpolyconvex, certified by
+  a rank-one Hessian SOS and four exact atoms.
+
+Neither witness shows **nonquasiconvexity**.
+The new unrestricted gate is an actual-gradient
+Jensen theorem for arbitrary anisotropic and
+nonhomogeneous RC functions (or a fully verified
+counterexample). The proposed isotropic proof's
+critical equality F(A_tau)=F(A/lambda), when two
+matrices share signed singular magnitudes,
+breaks **without isotropy**. Its stationary
+rescaling breaks **without homogeneity**.
+These are exact barriers to this proof route.
+
+### An all-anisotropic averaged positive consequence (conditional on the new theorem)
+
+For any **nonnegative positively p-homogeneous,
+p≥2, rank-one-convex** F, even if anisotropic,
+the bi-SO(2) average
+\(\bar F(A)=\int_{SO(2)^2}F(RAS)\,dR\,dS\)
+is nonnegative, p-homogeneous, isotropic and RC,
+so the new theorem, if independently validated,
+implies \(\bar F\) is polyconvex.
+Thus for **every** minor-compatible law ν with barycenter A,
+\[
+\int\!\!\int F(RBS)\,dR\,dS\,d\nu(B)
+\ge\int F(RAS)\,dR\,dS .
+\]
+This is a globally quantified
+**rotation-averaged Jensen inequality**, not a
+pointwise inequality for F. The anisotropic
+three-atom non-PC example shows deaveraging
+cannot hold for arbitrary minors laws.
+The full QC/Morrey implication remains
+the main unresolved obstacle.
+
+
+
+
 **Status: open.** The positive and negative routes below are alternatives. Neither is completed
 by the present ledger. The main task is a statement about every planar gradient and every
 rank-one-convex integrand, or one globally certified planar counterexample.
