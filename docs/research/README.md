@@ -46,6 +46,7 @@ Start with these documents:
 | [Global p≥4 rational counterexample hierarchy](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md) | Complete negative semidecision **within C² isotropic homogeneous profiles**: strict rational p/polynomial global acoustic certificates and ≤4 rational diagonal atoms, with algebraic Jensen sign checks. Does not settle QC/Morrey. |
 | [All-p≥4 Fenchel support and finite-amplitude reduction](IWANIEC_MORREY_PGE4_CONJUGATE.md) | Eliminates the signed-ratio variable from the universal pointwise poly-affine support test, gives an explicit global tail cutoff for positive profiles, and reduces the universal conjecture to strictly positive profiles. The central inequality remains open. |
 | [Complete rational-polynomial input decision](IWANIEC_MORREY_PGE4_INSTANCE_QE.md) | All-degree rational p≥4 input-wise QE encoding of **nonnegativity, global rank-one convexity and global polyconvexity**. No CAD solver or universal p≥4 theorem; not a general quasiconvexity decision. |
+| [Reduced five/seven-variable polyconvexity test](IWANIEC_MORREY_PGE4_TWO_TEST_QE.md) | Exact two-support-test Helly/interval encoding for **any fixed rational p≥4 and polynomial h**; local solver produced UNSAT/SAT/SAT controls, while a noninteger test timed out. Universal p≥4 remains open. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

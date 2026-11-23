@@ -443,6 +443,30 @@ unrestricted QC or prove the
 universal \(\forall p\ge4,\forall F\) theorem.
 
 
+**I23 — five/seven-real-variable polyconvexity obstruction (23 Nov 2026).**
+The [two-test QF_NRA solver reduction](IWANIEC_MORREY_PGE4_TWO_TEST_QE.md)
+instantiates the global one-multiplier
+support theorem using at most two
+incompatible amplitude/ratio constraints.
+For a specified rational p>=4,
+rational polynomial h, and **verified
+nonnegative globally RC integrand**,
+its five-real-variable (integer p)
+or seven-real-variable (noninteger
+rational p) SAT query is equivalent
+to failure of global polyconvexity,
+using the published conformal theorem.
+The [generator](../../research/audit/iwaniec_pge4_two_test_QE.py)
+passed local formula-generation
+tests. Z3 via the system library
+returned UNSAT for p=4,h=1,
+and SAT for two known nonadmissible
+p=4 controls. The p=9/2
+control **timed out**, not UNSAT.
+No positive universal p>=4
+theorem or Lean certification.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

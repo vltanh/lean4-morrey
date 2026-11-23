@@ -317,6 +317,36 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Exact five-variable support-obstruction query (all rational p≥4)
+
+The [two-test interval/Helly encoding](IWANIEC_MORREY_PGE4_TWO_TEST_QE.md)
+compresses failure of the Dacorogna–Koshigoe
+poly-affine support at any nonconformal
+base to a quantifier-free existential
+real polynomial formula with just
+**five real variables when p is integer,
+seven when p is nonintegral rational**.
+It works for polynomial profiles of
+arbitrary finite degree. A local exact
+nonlinear-real solver reported
+UNSAT/SAT/SAT on three elementary
+p=4 controls; the p=9/2 positive
+control timed out. Both outcomes are
+explicitly documented; no global
+positive result is inferred.
+
+**Critical premises:** To interpret an
+UNSAT result as global polyconvexity
+for p≥4, first verify that the input
+is nonnegative and globally RC.
+Conformal bases then use the published
+Guerra–Kristensen theorem. For all
+inputs without these premises, use
+the direct four-atom QF_NRA query.
+A PC failure is not an ordinary
+Morrey quasiconvexity violation.
+
+
 ### Exact decision for EACH rational-polynomial input (not for the whole class)
 
 [The complete input-wise QE reduction](IWANIEC_MORREY_PGE4_INSTANCE_QE.md)
