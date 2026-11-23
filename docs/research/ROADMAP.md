@@ -1,5 +1,10 @@
 # Roadmap to completion
 
+## Unrestricted sign/regularity gate — closed by reduction
+
+[Positive smooth coercive strongly RC reduction](IWANIEC_MORREY_POSITIVITY_REDUCTION.md): any strict Morrey counterexample can be mollified, exponentiated and quadratically strictified while preserving a negative compatible-gradient Jensen gap. The unrestricted theorem is equivalent to its restriction to this positive smooth coercive class. The reduction also preserves isotropy but not homogeneity. The universal QC step remains open.
+
+
 ## Unrestricted exact finite-symmetry reduction
 
 [New elementary reduction](IWANIEC_MORREY_FINITE_SYMMETRY_REDUCTION.md): any unrestricted strict counterexample can be translated, localized by a finite maximum of affine-biased orbit copies, and clipped to become nonnegative and invariant under any prescribed finite rank-one-preserving orthogonal group. Thus proving QC for all such nonnegative finite-symmetry RC energies at all bases is equivalent to unrestricted Morrey. No homogeneous or continuous-isotropy reduction follows. Hand proof, no novelty or Lean claim.
