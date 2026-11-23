@@ -1,6 +1,6 @@
 # Research ledger
 
-**Snapshot: 21 November 2026. No proof or counterexample to the unrestricted planar Morrey problem has been obtained.**
+**Research snapshot: 21–22 November 2026. No proof or counterexample to the unrestricted planar Morrey problem has been obtained.**
 
 This is the current interpretation of all recovered research, including failed routes and later
 corrections. Entries F01–F15 describe the existing formal source, H01–H29 the earlier investigations,
@@ -134,6 +134,37 @@ new checker, a changed mathematical search class, and a solved universal theorem
 | A04 | Exact positive Hessian quadratures at every degree automatically admit a common compactly supported limit. | [Radial-moment compactness theorem](GLOBAL_CERTIFICATES.md#4-correct-compactness-theorem-for-positive-certificates). Corrects H12. Universal certificate feasibility is still the missing positive theorem. |
 | A05 | Exact rational verifier for sphere-ideal and norm-multiplier LH certificates, with actual periodic PL witness construction and exact gap evaluation. | [Implementation and controls](../../research/audit/README.md). Both formats pass a nonconvex RC control; malformed identities are rejected. Control gap is positive; no candidate discovery or Lean proof is claimed. |
 | A06 | H19–H25 survive the hand audit within their hypotheses. The entire `Pβ`, `β≥2`, family reduces to the all-field inequality `αC₂≥h²`, with the `α=0` boundary proved safe. | [Structural audit and formulas](STRUCTURAL_AUDIT.md), [exact expansion check](../../research/audit/pbeta_schur_reduction_check.py). The remaining inequality is open and would settle this family, not arbitrary integrands. |
+
+## Iwaniec–Morrey program, 22 November 2026 (I01–I09)
+
+The global planar RC⇒QC problem is still open. The
+[2026 Iwaniec/Burkholder preprint](https://arxiv.org/abs/2609.28311v2)
+is used as an **external, not independently formalized**
+quasiconvexity theorem, not as a proof of Morrey.
+This section distinguishes proved algebra,
+conditional analytic inputs, and refuted
+certificate-completeness conjectures.
+
+| ID | Statement/evidence | Current verdict and scope |
+| --- | --- | --- |
+| **I01** | [Source audit and exact moving calibration](IWANIEC_MORREY.md): The 2026 preprint claims QC of L and every Burkholder Bₚ; L admits the pointwise selecting-gradient decomposition from its projection lemma. | **Conditional source result**, not independently Lean-checked. Does not imply all 2×2 RC integrands are QC. |
+| **I02** | [Universal p∈(1,2) isotropic theorem](IWANIEC_MORREY_UNIVERSAL.md): every nonnegative, isotropic, positively p-homogeneous RC F has global touching minorants given by nonnegative sums of the two Burkholder orientations at **every** matrix. Full 1-D supporting-line hand proof recorded. | **Conditional hand proof** on Burkholder QC; far stronger than conformal-only prior statement but unreviewed and not Lean-certified. No anisotropic/nonhomogeneous conclusion. |
+| **I03** | [Signed isotropic p=2](IWANIEC_MORREY_P2_SIGNED.md): global polyconvexity for all real-valued isotropic 2-homogeneous RC F; an elementary rank-one midpoint proof gives nonnegative intercepts of all signed-singular profile supports. | **Hand proof, independent of Iwaniec**, awaiting external review/Lean. Removes nonnegativity for this class. |
+| **I04** | [Guerra–Kristensen 2022 Proposition 3.7 correction](IWANIEC_MORREY_P2_SIGNED.md): the printed determinant mean is −15, not 1. A corrected three-atom probability law matches matrix/determinant moments at I, has energy zero, and is checked by [rational script](../../research/audit/gk_prop37_exact.py). | **Exact arithmetic control**, repairing the *nonpolyconvexity* witness only. Its atoms are **not an actual gradient law**; nothing about non-QC follows. |
+| **I05** | [p>2 hybrid QC lower envelope](IWANIEC_MORREY_GENERAL.md): two Burkholder orientations plus positive powers of affine minor/convex norms give a sound global QC lower bound, provided Burkholder QC is true. [Exact p=6 control](../../research/audit/iwaniec_hybrid_p6_exact.py) refutes completeness of the two *individual* tests. | **Valid sufficient family only, incomplete**. Does not itself classify all p>2 isotropic RC profiles. |
+| **I06** | [Exact p=4 no-go](IWANIEC_MORREY_HYBRID_NOGO.md): positive isotropic p-homogeneous globally RC profile with integer Chebyshev coefficients; strict all-r scalar RC certificate uses [standard-library rational Bernstein checker](../../research/audit/iwaniec_hybrid_no_go_exact.py) (12 intervals, depth 6). Positive two-point functional separates **every** hybrid generator and its suprema, gap **356912972869/17832200896512**. | **CLOSED NEGATIVELY:** former conjecture Gₚ that the hybrid envelope touches every isotropic RC profile is **false**, *not* an open gate. The two-point functional has total mass 8/5, so is **not a gradient Jensen violation**. Analytic acoustic-to-global bridge remains a hand argument pending Lean. |
+| **I07** | [Open-family upgrade](IWANIEC_MORREY_HYBRID_OPEN.md): strict acoustic and separator margins persist in an open C² neighborhood of the exact profile and an interval of p around 4. | **Hand compactness deduction** from I06; infinite-dimensional class-wide obstruction to *the method*. Not an open family of Morrey counterexamples. |
+| **I08** | [Smooth coercive robust L examples](IWANIEC_MORREY_SMOOTH_QC.md): exact four-atom lifted-minor Jensen gap −1/17 for W=1+L+||A||²/8, sustained after smoothing; sharp ε=1/4 global determinant-affine support threshold at zero. | **Exact arithmetic and hand proof**, conditional on the preprint for QC; nonpolyconvexity is NOT non-QC. |
+| **I09** | [Global L-cone no-go](IWANIEC_MORREY_CONE_NOGO.md): all positive sums of matrix-transformed/translates of L with polyconvex energies have a strict support-envelope gap on a known anisotropic rank-one-flat RC energy; [acoustic criterion](IWANIEC_MORREY_ACOUSTIC.md) further reduces smooth isotropic RC to scalar inequalities. | **Hand proofs and exact algebra checks**, pending outside review. Another stop rule for positive-support generation, not a Morrey counterexample. |
+
+**Decision gate after I06:** Do **not** attempt to prove the
+refuted hybrid completeness identity; nor infer
+non-quasiconvexity from positive-cone separation,
+nonpolyconvexity, or a minors-preserving law.
+The unrestricted problem still requires a certified
+planar gradient gap for a globally rank-one-convex
+integrand, or a universal all-gradient Jensen theorem.
+See [the main roadmap](ROADMAP.md).
 
 ## Corrections and interpretation rules
 
