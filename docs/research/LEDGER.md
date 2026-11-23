@@ -217,6 +217,21 @@ Wiedemann–Peter 2026 give the
 earlier, broader diagonal
 characterization of isotropic PC.
 
+**I13 — all-p polyconvex sublevel sets.** By the
+[global isotropic level-set note](IWANIEC_MORREY_LEVELSETS.md),
+for every nonnegative isotropic p-homogeneous
+rank-one-convex F with p>0, **every** sublevel
+\(K_c=\{F\le c\}\) is polyconvex. This follows
+from the published compact-connected isotropic
+set theorem of Conti–De Lellis–Müller–Romeo (2003),
+applied to bounded star-shaped truncations.
+Consequently F satisfies a **global L∞
+quasiconvexity inequality** for all periodic
+Lipschitz gradients, but this does NOT imply
+ordinary average-energy Jensen. Prior-art
+corollary, not new publication-level priority.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

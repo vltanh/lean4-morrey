@@ -249,6 +249,32 @@ or the signed p=2 conclusion. Main unclosed extensions:
 signed 1<p<2, p>2 (the old hybrid-completeness
 gate was refuted), or removing isotropy/homogeneity.
 
+### Global all-exponent level-set result — closed, but weaker than Jensen
+
+A [newly recorded all-\(p\) deduction](IWANIEC_MORREY_LEVELSETS.md)
+from Conti–De Lellis–Müller–Romeo (2003) proves:
+for every finite, nonnegative, SO(2)×SO(2)-isotropic,
+positively homogeneous rank-one-convex integrand,
+**every sublevel set is polyconvex**, without
+a coercivity restriction. It yields the global
+\(L^\infty\) supremal quasiconvexity inequality
+at every matrix and for every bounded periodic
+gradient, with arbitrary amplitude and scale.
+
+**Critical scope warning:** The theorem concerns
+the supremum of energy over a gradient field,
+not the integral average. It does NOT establish
+rank-one convexity⇒ordinary quasiconvexity for p>2,
+and this is a direct corollary of published
+set-hull theory, not a new solution.
+The missing theorem is **cross-level compatibility**
+of polyconvex supports or the global
+one-multiplier feasibility in the signed-singular
+profile representation. Do not treat
+polyconvexity of all sets as polyconvexity
+of the energy.
+
+
 ## 0. Iwaniec-dependent route (22 November 2026)
 
 The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes
