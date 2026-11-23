@@ -317,6 +317,47 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### All-p≥4 positive-proof reduction: one amplitude and explicit tail
+
+The [Fenchel-conjugate support criterion](IWANIEC_MORREY_PGE4_CONJUGATE.md)
+eliminates the second scalar variable
+from the Dacorogna–Koshigoe
+poly-affine support gate.
+For each signed base ratio t,
+a candidate determinant multiplier c
+must satisfy **one scalar conjugate
+inequality at every amplitude a>0**,
+plus an explicit a=0 condition.
+For any strictly positive profile
+\(h_*=\min h>0\), **all amplitudes
+a≥R are automatically safe** for
+every c in the orientation interval,
+with an explicit integer R determined
+by h*,p,h(t),h'(t).
+
+It also proves (without C² assumptions)
+that **global PC for all strictly
+positive nonnegative isotropic
+p-homogeneous RC profiles, at each
+fixed p≥4, implies the full
+nonnegative-class theorem**:
+add δ||A||_F^p and send δ→0 in the
+minor-Jensen inequalities.
+
+**Remaining gate:** Prove that the
+resulting **compact continuum** of
+conjugate inequalities has a common
+c for every admissible profile.
+This is NOT a finite list, no
+uniform radius R exists across
+all h by this argument, and the
+proof of feasibility is OPEN.
+A failed interval has a
+two-amplitude dual obstruction
+to **polyconvexity**, not directly
+to quasiconvexity/Morrey.
+
+
 ### A rigorous all-p≥4 negative-certificate hierarchy (C² profiles)
 
 The [global p≥4 semidecision theorem](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md)

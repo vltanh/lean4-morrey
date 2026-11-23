@@ -393,6 +393,32 @@ theorem, no gradient-law/QC witness,
 and no Lean proof is asserted.
 
 
+**I21 — all-p≥4 convex-conjugate and amplitude reduction (23 Nov 2026).**
+The [exact analytic note](IWANIEC_MORREY_PGE4_CONJUGATE.md)
+restates the global supporting-minor
+criterion via the one-variable Fenchel
+conjugate \(h^*\), removing the
+signed-ratio test variable. For
+any **strictly positive** profile
+h, an explicit integer radius R
+makes all amplitudes a≥R
+automatically feasible for every
+c in the orientation interval.
+A separate all-class limit
+argument proves it suffices to
+establish global PC for h>0
+at each fixed p≥4; no C²
+assumption is needed for this
+positive reduction. The
+[symbolic and exact rational control](../../research/audit/iwaniec_pge4_conjugate_identity.py)
+checks the algebra and cutoff.
+The remaining compact continuum
+support inequalities are
+**not proved**, and no uniform R,
+novelty claim or Lean formalization
+is asserted.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

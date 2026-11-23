@@ -44,6 +44,7 @@ Start with these documents:
 | [Fractional-power interpolation no-go](IWANIEC_MORREY_FRACTIONAL_POWER_NOGO.md) | Exact rank-one-line calculation shows \([\|A\|_F^2(\|A\|_F^2-2\det A)]^{p/4}\) is **not rank-one convex** for all \(2<p<11/4\). Power interpolation cannot establish the whole p>2 class. |
 | [Exact homogeneous heat-flow method no-go](IWANIEC_MORREY_P4_HEATFLOW_NOGO.md) | Actual three-wave compatible periodic heat trajectory for \(F=(\det A)^2\) has exact energy derivative **+920**; continuity extends the method obstruction to an open interval around p=4 of polyconvex determinant powers. |
 | [Global p≥4 rational counterexample hierarchy](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md) | Complete negative semidecision **within C² isotropic homogeneous profiles**: strict rational p/polynomial global acoustic certificates and ≤4 rational diagonal atoms, with algebraic Jensen sign checks. Does not settle QC/Morrey. |
+| [All-p≥4 Fenchel support and finite-amplitude reduction](IWANIEC_MORREY_PGE4_CONJUGATE.md) | Eliminates the signed-ratio variable from the universal pointwise poly-affine support test, gives an explicit global tail cutoff for positive profiles, and reduces the universal conjecture to strictly positive profiles. The central inequality remains open. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
