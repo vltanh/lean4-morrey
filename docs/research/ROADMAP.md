@@ -83,6 +83,35 @@ global pointwise minorants; otherwise
 prioritize an all-gradient Jensen proof
 or an actual negative planar witness.
 
+### CLOSED: The proposed p>2 hybrid envelope is not complete
+
+[Exact p=4 no-go theorem](IWANIEC_MORREY_HYBRID_NOGO.md)
+gives an **entire globally rank-one-convex**, nonnegative isotropic
+4-homogeneous F with a rational Bernstein
+proof and strict rational two-point separator.
+The hybrid envelope is strictly below F
+at a rank-one base, with exact gap
+\(356912972869/17832200896512>0\).
+A standard-library rational [checker](../../research/audit/iwaniec_hybrid_no_go_exact.py)
+verifies the scalar acoustic sign conditions and
+the separating constants without floating point.
+
+**Status:** the old G_p "completeness for all p>2"
+gate is **refuted** already at p=4; it must not
+remain an open positive target. This is NOT
+a negative planar-gradient Jensen witness,
+and therefore NOT a counterexample to
+quasiconvexity or Morrey. The obstruction
+applies to the stated generator class only,
+not arbitrary quasiconvex functions.
+
+**Reorientation:** either enlarge the
+generator class in a provably useful way
+or test the new exact F with actual periodic
+gradient laws. Do not spend additional
+effort on the false positive G_p statement.
+
+
 ### Exact univariate acoustic reduction of the whole smooth isotropic class
 
 The [acoustic criterion](IWANIEC_MORREY_ACOUSTIC.md)

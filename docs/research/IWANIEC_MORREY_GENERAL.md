@@ -128,6 +128,8 @@ and F is continuous and finite, \(\widehat F\)
 is locally bounded and measurable. Therefore the argument
 applies and proves (6)–(8). QED.
 
+**Update (22 November 2026): THIS COMPLETENESS GATE IS FALSE.** The [exact p=4 global no-go](IWANIEC_MORREY_HYBRID_NOGO.md) constructs a nonnegative isotropic globally rank-one-convex profile h for which the envelope at r=0 lies a strictly positive exact rational amount below h(0). The certificate is checked by rational Bernstein positivity. The scalar envelope remains a sound lower bound, but **not a complete certificate hierarchy**. The following paragraph records the original target for historical clarity.
+
 The **single scalar completeness gate** for this method is
 
 \[
@@ -135,10 +137,7 @@ The **single scalar completeness gate** for this method is
  RC p-hom F},\qquad \mathcal E_ph=h.                   \tag{G_p}
 \]
 
-Proving this gate would yield the entire p>2 isotropic
-homogeneous Morrey theorem at once, without degree/mesh
-casework. It is **open**; \(\mathcal E_ph<h\) for some
-h would only refute *this certificate family*, not Morrey.
+Had this gate been true, it would have settled the whole p>2 isotropic class. It is now **REFUTED** for the specified generator family by the exact p=4 no-go; this does not refute Morrey.
 
 ## 4. Two closed-form pointwise acceptance tests
 
