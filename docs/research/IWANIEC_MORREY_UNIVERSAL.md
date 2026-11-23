@@ -3,7 +3,7 @@
 Research date: 22 November 2026. **Status: candidate complete hand proof, not independently reviewed
 or formalized in Lean.** The p∈(1,2) conclusion assumes the global Burkholder quasiconvexity
 asserted in Agazzi et al., [arXiv:2609.28311v2](https://arxiv.org/pdf/2609.28311),
-Corollary 2. The key extremality bound is Theorem 4.2 of Guerra–Kristensen,
+Corollary 2. The independent endpoint cross-check is Theorem 4.2 of Guerra–Kristensen,
 [arXiv:2112.10563](https://arxiv.org/pdf/2112.10563). Neither originality nor
 published status of the new consequence is claimed. These stronger statements require
 independent review, especially because Guerra–Kristensen's published headline
@@ -96,9 +96,34 @@ Consequently, the convex one-sided slopes obey
 \]
 
 They are finite: convex secant slopes are bounded from one side by the
-affine barriers and from the other by interior secants. The same
-endpoint bounds can alternatively be derived by rank-one convexity of
-F between diag(1+t,1) and diag(1-t,1) as t↓0 and by reflection.
+affine barriers and from the other by interior secants. In fact (6) admits a **direct, self-contained proof** that does not require
+the 2022 extremality theorem. Since diag(1+t,1) and
+diag(1-t,1) lie on a rank-one line with midpoint I,
+for 0<t<1 rank-one convexity gives
+
+\[
+ 2h(1)=2F(I)\le
+ F(\operatorname{diag}(1+t,1))
+ +F(\operatorname{diag}(1-t,1)).
+\]
+
+By positive p-homogeneity and isotropy (which allows switching
+the two diagonal entries by SO(2) rotations), the right-hand side is
+
+\[
+ (1+t)^p h((1+t)^{-1})+h(1-t).
+\]
+
+Subtract 2h(1), divide by t>0, and let t↓0. Convexity and
+finiteness of h ensure existence of the endpoint one-sided slope.
+If that slope were +∞, the resulting inequality would contradict
+rank-one convexity, so it is finite. The limit gives
+\(0\le p h(1)-2h'_-(1)\), proving the first bound.
+Apply the same argument to \(X\mapsto F(DX)\), whose diagonal
+slice is \(r\mapsto h(-r)\), to obtain the second bound.
+Thus (6) and the entire 1-D cone proof have **no need for (4)**
+or any other substantive 2022 extremality theorem; (4) remains
+a valuable independent cross-check.
 
 ## 3. Exact supporting-line cone lemma
 
@@ -209,7 +234,7 @@ of coefficients is bounded because h is convex with finite endpoint
 slopes, so this extension is finite everywhere. Its restriction to
 d=det X equals F(X), proving global polyconvexity.
 
-This p=2 deduction does not use the 2026 preprint. It needs a
+This p=2 deduction uses neither the 2026 preprint nor the 2022 extremality theorem, because (6) has the self-contained rank-one secant proof above. It needs a
 separate independent audit before being treated as publication-level.
 
 ## 6. The precise p>2 obstruction
@@ -263,7 +288,7 @@ the new all-matrix closure.
 | --- | --- | --- |
 | U1 | Formalize 1-D convex supporting-cone lemma, endpoints and kink slopes | Hand proof above; not Lean |
 | U2 | Signed SVD plus SO(2)×SO(2) invariance and p-hom factorization | Classical; Lean integration missing |
-| U3 | Endpoint slope estimate: G-K extremality or direct rank-one secant | Source-backed; not Lean here |
+| U3 | Endpoint slope estimate from rank-one midpoint/one-sided derivative | Self-contained proof above; not Lean |
 | U4 | Global Burkholder quasiconvexity (2026 Corollary 2), including orientation and convention bridge | External preprint claim; not audited end-to-end |
 | U5 | Build α,β and touching minorants, then use existing periodic/domain QC bridges | Explicit hand proof above |
 | U6 | Separately check p=2 global polyconvex envelope | Hand proof above; independently review |
