@@ -32,6 +32,9 @@ Start with these documents:
 | [Open-family global no-go](IWANIEC_MORREY_HYBRID_OPEN.md) | Exact p=4 obstruction extends by strict compactness to an open (C^2) class of profiles and an interval of exponents; refutes the hybrid method, not Morrey. |
 | [Actual periodic-gradient stress test](../../research/experiments/2026-11-22/README.md) | Reproducible compatible-gradient PL search for the exact p=4 profile, five bases, 147 local runs, and no negative energy gap observed; nonexhaustive numerical evidence only. |
 | [Exact uniform local-gradient stability](IWANIEC_MORREY_LOCAL_STABILITY.md) | Explicit 1/6 strict Legendre–Hadamard margin at the p=4 candidate base and a frequency-independent Jensen lower bound for all small periodic gradients; exact rational checker and compact-base extension. |
+| [Exact all-amplitude support at rank-one bases](IWANIEC_MORREY_RANKONE_SUPPORT.md) | For the exact p=4 test integrand, a global rational Bernstein certificate proves polyconvexity at **every rank-one matrix**, even though the old homogeneous hybrid support cone misses it. |
+| [Nonrealizability of old two-point separator](IWANIEC_MORREY_SEPARATOR_NONREALIZABLE.md) | Exact SOS inequalities force operator-norm barycenter at most 59/60 despite the required value 1; not even a minor-compatible matrix probability law. |
+| [Universal nonconformal scalar support criterion](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md) | Global poly-affine supporting at arbitrary signed ratio reduces to one determinant multiplier, a one-dimensional feasible interval, and **at most two test points** to certify failure; includes an open p>2 full-rank positive family. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

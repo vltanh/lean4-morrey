@@ -83,6 +83,79 @@ global pointwise minorants; otherwise
 prioritize an all-gradient Jensen proof
 or an actual negative planar witness.
 
+### A global p>2 support at ALL rank-one bases of the exact candidate
+
+The exact p=4 candidate in
+[the hybrid no-go](IWANIEC_MORREY_HYBRID_NOGO.md)
+is **polyconvex at every rank-one base**, not merely
+locally quasiconvex. The [global support theorem](IWANIEC_MORREY_RANKONE_SUPPORT.md)
+provides an explicit determinant-affine minorant touching
+at \(\operatorname{diag}(1,0)\), with a
+**178+6-cell exact Bernstein/Hessian proof**
+covering every real 2×2 matrix, and extends
+through SO(2)×SO(2) isotropy and homogeneity.
+The homogeneous-cone no-go remains valid,
+but it no longer suggests this candidate
+could violate QC at rank-one bases.
+Do not spend further search effort on
+**any amplitude** periodic gradient witnesses
+at these bases.
+
+The [separator nonrealizability theorem](IWANIEC_MORREY_SEPARATOR_NONREALIZABLE.md)
+independently proves the old two-ratio
+profile separator cannot meet the matrix
+barycenter and determinant moments, even
+before requiring gradient compatibility.
+Its two exact SOS identities yield
+\(\mathbb E\|A\|_{\rm op}\le59/60<1\).
+
+### A sharper all-p nonconformal completion gate
+
+For any differentiable isotropic positively
+p-homogeneous integrand, the [one-multiplier
+support criterion](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md)
+gives a **necessary and sufficient** condition
+for a global poly-affine minorant touching
+at \(E_t=\operatorname{diag}(1,t)\), \(|t|<1\):
+find \(c\) in the explicit orientation interval
+satisfying one scalar inequality for
+**every** amplitude a≥0 and signed
+ratio s∈[-1,1]. For globally RC F the interval
+has nonnegative width
+\(2(ph(t)-2th'(t))/(1-t^2)\).
+If there is no feasible c, **at most two
+scalar amplitude/ratio tests** witness
+failure (1D interval Helly theorem).
+This is a finite *negative witness type*,
+not a finite positive decision procedure.
+
+**Main p>2 gate:** Prove a feasible c exists
+for **every** nonnegative isotropic
+rank-one-convex p-homogeneous integrand,
+every exponent p>2, and every base t,
+or construct an exact counterexample
+to this *polyconvexity* claim.
+The overall Morrey QC problem is still
+weaker and remains open regardless
+of a failed poly-affine support.
+
+The exact p=4 support persists for an
+**open C² neighborhood of profiles and
+exponents near 4**, and for an
+**open interval of nonconformal full-rank
+base matrices**, by the strict exact
+certificate and Hessian compactness.
+This goes beyond the rank-one base
+without inventing a finite cutoff.
+
+**Prior-art qualification:** Wiedemann–Peter
+(2026), [Theorem 1.4 and Corollary 1.5](https://doi.org/10.1007/s00526-025-03222-z),
+already reduce global isotropic polyconvexity
+to diagonal signed-singular variables.
+The one-multiplier criterion specializes
+that context; do not claim the general
+diagonal reduction is new.
+
 ### Uniform local-gradient stability excludes every small perturbation
 
 The exact p=4 candidate of the

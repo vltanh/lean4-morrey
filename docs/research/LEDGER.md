@@ -175,6 +175,48 @@ certificate-completeness conjectures.
 
 **Numerical candidate check for I06.** The strict separating measure is not a compatible gradient distribution. The [periodic piecewise-affine search](../../research/experiments/2026-11-22/README.md) parametrizes actual periodic two-component maps on grids 3×3, 4×4 and 6×6, checks both mean gradient and determinant moments, and locally optimizes the energy for five signed-diagonal bases. **No negative Jensen gap was found in the recorded 147 runs.** This is a bounded local experiment, **not proof of quasiconvexity, not an exhaustive search, and not a certified separation**. The [source code](../../research/experiments/2026-11-22/iwaniec_hybrid_pl_search.py) is committed; it requires NumPy, SciPy and PyTorch and does not run under skipped CI.
 
+**I10 — all-amplitude p=4 rank-one closure.**
+The former hybrid-cone separating candidate
+is now [proved polyconvex at EVERY rank-one base](IWANIEC_MORREY_RANKONE_SUPPORT.md)
+by a global determinant-affine minorant,
+with an [exact rational Bernstein verifier](../../research/audit/iwaniec_p4_rank_one_polyconvex_exact.py).
+This **supersedes** earlier suggestions of
+searching for large-amplitude gradient
+violations at E=diag(1,0): all actual gradient
+energies satisfy Jensen there.
+No Iwaniec assumption is used.
+Status: hand proof+exact computation, not Lean/refereed.
+
+**I11 — separator unrealizability.**
+[Two exact SOS identities](IWANIEC_MORREY_SEPARATOR_NONREALIZABLE.md)
+force a matrix probability with the exact
+old two signed ratios and fourth-order
+weights to obey \(\mathbb E\|A\|_{\rm op}
+\le59/60\), contradicting its required
+barycenter norm 1. Thus the cone
+separator cannot be turned into a
+gradient law by simple normalization.
+The [verifier](../../research/audit/iwaniec_separator_nonrealizable_exact.py)
+is elementary exact rational arithmetic.
+
+**I12 — universal all-p scalar support gate.**
+The [single determinant multiplier criterion](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md)
+is an iff for a global poly-affine
+minorant at every differentiable
+nonconformal base. The feasibility
+constraints form a compact interval;
+failure has a **two-test-point** dual
+certificate. It also gives an open
+family of p>2 nonconformal base ratios
+for which the explicit p4 candidate
+and neighboring profiles have global
+poly-affine supports. The universal
+existence of the multiplier for EVERY
+rank-one-convex profile remains **OPEN**.
+Wiedemann–Peter 2026 give the
+earlier, broader diagonal
+characterization of isotropic PC.
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
