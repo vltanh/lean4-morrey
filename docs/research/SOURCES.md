@@ -5,6 +5,18 @@ limits of the prior-work search. It does not certify novelty, community acceptan
 preprint, or an external Lean build. The repository's existing paper-specific reports remain
 the detailed sources for the Pedregal and Šverák audits.
 
+## Fourier-wave and all-gradient audit — 23 November 2026
+
+- **Prior art**: G. Sebestyén and L. Székelyhidi, *Laminates Supported on Cubes*, J. Convex Anal. 24 (2017), 1217–1237, [DOI](https://doi.org/10.68381/jca24070), proves the special three-sawtooth-wave planar laminate theorem. **Do not extend this to arbitrary vector-valued three-ridge profiles by taking means of randomly shifted square waves**: rank-one Jensen has the [wrong inequality direction](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md).
+- **Prior art**: A. Guerra and R. Teixeira da Costa, *Numerical evidence towards a positive answer to Morrey's problem*, Rev. Mat. Iberoam. 38 (2022), 601–614, [DOI](https://doi.org/10.4171/RMI/1286), Theorem 3.3(b),(d), records the standard 2-wave and special 3-sawtooth theorems; Proposition 3.2 characterizes QC via all wave counts.
+- [New hand deductions, no novelty claim](IWANIEC_MORREY_RESONANCE_SIEVE.md): for any finite RC F and arbitrarily many compatible plane-wave cosines, a quantitative short-integer-resonance criterion bounds possible Jensen deficit, proved by independent-phase Jensen and tensor Bernstein approximation. [Exact test](../../research/audit/iwaniec_morrey_resonance_exact.py).
+- [Strict high-order resonance positivity](IWANIEC_MORREY_STRICT_RESONANCE.md): an all-N **exact** Jensen theorem for arbitrary C² uniformly strict RC integrands, whenever the independent-phase rank-one curvature margin dominates the Bernstein correlation error. [Exact test](../../research/audit/iwaniec_strict_resonance_exact.py).
+- [Two-line Fourier tail for arbitrary periodic gradients](IWANIEC_MORREY_TWO_LINE_SPECTRAL.md): a quantitative all-integrand/all-gradient Jensen-deficit bound using the **known** two-ridge theorem and orthogonal Fourier projection. [Exact test](../../research/audit/iwaniec_two_line_spectral_exact.py).
+- **Invalidated attempt:** the [three-ridge randomized-square-wave proof](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md) was explicitly **RETRACTED**; neither arbitrary-three-ridge Jensen nor its proposed three-line spectral bound follows. This is an unresolved direction, not a theorem.
+
+These developments DO NOT establish or refute unrestricted planar Morrey. The assumed p≥2 isotropic proof itself remains an unrefereed hand result (and is accepted *as a premise only* for this research strategy). No Lean kernel proof of these Fourier deductions is claimed.
+
+
 ## Primary literature and the role it plays
 
 | Source | Relevance and scope in this research |
