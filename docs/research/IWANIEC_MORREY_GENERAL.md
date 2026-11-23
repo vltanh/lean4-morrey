@@ -301,9 +301,9 @@ uniform limits of these functions are also
 quasiconvex. Consequently, the generated class
 contains functions which are **anisotropic,
 nonhomogeneous and not parametrized by any fixed p**,
-while retaining unrestricted numbers of agents,
-terms, matrices, Fourier modes or triangulation
-cells (there is no finite-size restriction).
+with arbitrary numbers of terms, arbitrary base
+matrices, and no fixed test-grid or polynomial
+mesh restriction in the stated certificate class.
 
 This does **not** say that every rank-one-convex
 2×2 integrand is in the generated class or its
