@@ -45,6 +45,29 @@ This is an **existential formula in only five real variables**, \(t,a_1,s_1,a_2,
 
 **Theorem (conditional only on the stated F premises and the published 1993/2022 results).** If the generated formula is **UNSAT** by a sound, complete exact real-algebraic decision procedure, F is globally polyconvex: nonconformal bases have global poly-affine supports; the zero base is trivial by nonnegativity; and conformal/anticonformal bases are covered by Guerra–Kristensen's 2022 theorem for p≥2. Conversely, **SAT** yields a mathematically exact failure of global polyconvexity at some nonconformal base. It is **not** automatically failure of quasiconvexity or Morrey.
 
+## 2A. Why no separate zero-amplitude query is needed
+
+The [all-p>2 zero-amplitude theorem](IWANIEC_MORREY_PGE4_CONJUGATE.md#2a-new-zero-amplitude-is-automatically-safe-with-a-uniform-gap)
+shows that for any verified nonnegative
+rank-one-convex input, **every**
+orientation-admissible c satisfies
+\[
+(p-1)h(t)-ct\ge(p-2)h(t)/2\ge0.
+\]
+Thus the support query need not include
+a separate test at a=0. If h(t)>0,
+all amplitudes below an explicit
+positive cutoff are safe, and if
+\(\min h>0\), all amplitudes above
+the existing large cutoff are safe.
+The five/seven-variable generator
+already includes a=0 in its general
+test domain; this theorem confirms
+that no special zero-amplitude
+failure case is missing under the
+stated RC/nonnegative premises.
+
+
 ## 3. Practical comparison and local solver controls
 
 The [exact generator](../../research/audit/iwaniec_pge4_two_test_QE.py) writes the reduced formula. Run:

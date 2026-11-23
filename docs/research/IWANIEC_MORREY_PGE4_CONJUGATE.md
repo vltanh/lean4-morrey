@@ -139,6 +139,77 @@ the endpoint coefficients may be large,
 and no universal bounds for h derivatives
 have been supplied.
 
+## 2A. NEW: zero amplitude is automatically safe, with a uniform gap
+
+The separate zero-amplitude condition (2) is **redundant**
+for every nonnegative globally rank-one-convex profile
+and every p>2. More strongly:
+
+**Theorem (all exponents p>2, all nonconformal bases).**
+Let \(H=h(t)\ge0\), \(m=h'(t)\),
+\(C= pH-2tm\ge0\), and
+\(c\in[L_t,U_t]\) be any orientation-admissible
+determinant multiplier. Then
+\[
+\boxed{(p-1)H-ct\ \ge\ \frac{p-2}{2}H.}\tag{5}
+\]
+If H>0, the support inequality therefore holds
+**strictly at zero amplitude for every admissible c**.
+
+**Exact proof.** If \(0\le t<1\), the worst c is
+the upper endpoint U_t, and
+\[
+ (p-1)H-tU_t-\frac{p-2}{2}H
+ =\frac{1-t}{2(1+t)}(pH-2tm)\ge0.
+\]
+If \(-1<t\le0\), the worst c is the
+lower endpoint L_t, and
+\[
+ (p-1)H-tL_t-\frac{p-2}{2}H
+ =\frac{1+t}{2(1-t)}(pH-2tm)\ge0.
+\]
+Both are exact algebraic identities, and
+\(C\ge0\) is a necessary rank-one-convexity
+condition from the acoustic tensor (or
+the standard isotropic Baker–Ericksen inequality).
+No appeal to the 2026 Iwaniec theorem is used.
+
+**Explicit small-amplitude cutoff.** Suppose H>0.
+Set \(C_0=\max(|L_t|,|U_t|)\) and
+\(M_0=pH+2|m|+2C_0\).
+For all \(c\in[L_t,U_t]\), all \(s\in[-1,1]\)
+and \(0\le a\le1\), nonnegativity of h gives
+\[
+ P_{t,c}(a,s)\ge\frac{p-2}{2}H-aM_0.
+\]
+Therefore every amplitude
+\[
+ \boxed{0\le a\le
+ \rho_t:=\min\left\{1,\frac{(p-2)H}{4M_0}\right\}}
+ \tag{6}
+\]
+is automatically safe for **every** orientation-admissible c,
+with \(P_{t,c}\ge(p-2)H/4>0\).
+Here \(M_0>0\) when p>2,H>0.
+
+Together with the earlier explicit large-amplitude
+cutoff R (when \(\min h>0\)), this reduces
+the support problem for each strictly positive
+profile and base to a **compact annulus**
+\[
+ \boxed{\rho_t\le a\le R_t,\quad -1\le s\le1.}
+\]
+The same scalar multiplier c must work throughout
+that annulus. This is not a finite list of
+test points, and the universal existence
+of c is **still unproved**. Both cutoffs
+depend on the profile and base; no
+uniform all-integrand cutoff is claimed.
+
+The [exact symbolic control](../../research/audit/iwaniec_pge4_zero_amplitude_exact.py)
+checks the endpoint identities and the elementary
+small-amplitude bound algebra.
+
 ## 3. Reduction of the GLOBAL positive conjecture to h>0
 
 This part **does not need C² smoothness**.

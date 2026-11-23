@@ -472,6 +472,41 @@ candidate *validation interface*,
 not as an alleged full proof.
 
 
+### Uniform zero-amplitude support gap for ALL p>2
+
+The [exact zero-amplitude theorem](IWANIEC_MORREY_PGE4_CONJUGATE.md#2a-new-zero-amplitude-is-automatically-safe-with-a-uniform-gap)
+proves for **every** nonnegative
+isotropic globally RC p-homogeneous
+integrand with p>2, at each
+nonconformal base E_t and every
+orientation-admissible determinant
+multiplier c,
+\[
+(p-1)h(t)-ct\ge (p-2)h(t)/2.
+\]
+Hence the a=0 support condition is
+**automatic**. If h(t)>0,
+every c is safe for all amplitudes
+\(a\le\rho_t\) with an explicit
+positive cutoff. Combined with
+the previous large-amplitude cutoff
+for strictly positive h, the
+global scalar support problem
+reduces to a compact **annulus**
+\(\rho_t\le a\le R_t\),
+uniformly over c in the
+orientation interval.
+
+This is a structural global
+reduction (all p>2, all profiles),
+not a proof that a common
+support multiplier exists on
+the remaining compact continuum.
+No uniform all-integrand cutoff
+or finite exhaustive
+classification follows.
+
+
 ### All-p≥4 positive-proof reduction: one amplitude and explicit tail
 
 The [Fenchel-conjugate support criterion](IWANIEC_MORREY_PGE4_CONJUGATE.md)

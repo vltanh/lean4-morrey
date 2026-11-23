@@ -535,6 +535,29 @@ Jensen, not a solution of p≥4 PC
 or Morrey, not Lean-certified.
 
 
+**I24 — automatic zero-amplitude support and compact annulus (23 Nov 2026).**
+For every nonnegative isotropic
+globally rank-one-convex p-homogeneous
+integrand, **all p>2**, every
+nonconformal base t, and every
+orientation-admissible c,
+\((p-1)h(t)-ct\ge(p-2)h(t)/2\).
+Exact algebra uses only the
+necessary acoustic inequality
+\(ph(t)-2th'(t)\ge0\).
+For h(t)>0 this supplies a
+uniform positive small-amplitude
+cutoff \(\rho_t\); with strictly
+positive profile h, the previous
+large-amplitude bound R gives a
+**compact annular support gate**.
+[Proof and exact checker](IWANIEC_MORREY_PGE4_CONJUGATE.md#2a-new-zero-amplitude-is-automatically-safe-with-a-uniform-gap).
+The common c on that annulus
+is still **unproved**.
+No new Morrey theorem or
+Lean formalization is claimed.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
