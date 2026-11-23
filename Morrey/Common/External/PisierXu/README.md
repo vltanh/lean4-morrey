@@ -58,11 +58,13 @@ Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by H
 Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Appendix D, and by Sutter, Berta and
 Tomamichel (Comm. Math. Phys. 352 (2017)); the passage from the circle to the line in Burkholder 1983,
 Lemma 4 ("see [14] or [18]" there: M. Riesz and Zygmund, not read), written out by periodization and
-dilation, and its Fourier side by HNVW I, Lemma 5.2.1; a comparison of multinomial coefficients that
-Tomczak-Jaegermann quotes (p. 177), by an elementary inequality; Maurey–Pisier, Remark 2.10 (read, no
-proof), by HNVW II, Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a
-known argument; here it is Randrianantoanina's theorem
-([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese cites for it.
+dilation, and its Fourier side by HNVW I, Lemma 5.2.1 and Proposition 5.2.2; the square-function
+inequality for real martingales that Burkholder uses as known (p. 275), by Osękowski 2012, Theorem 8.6
+(Cassese's Theorem 2.3 (2)); a comparison of multinomial coefficients that Tomczak-Jaegermann quotes
+(p. 177), by an elementary inequality; Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II,
+Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it
+is Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese
+cites for it.
 
 **Shorter proof.** The upper bound with the explicit constant `√(2 (q − 1)) ≤ √2 √q`, by the method of
 exchangeable pairs of Mackey, Jordan, Chen, Farrell and Tropp (Ann. Probab. 42 (2014), §§7–8), is

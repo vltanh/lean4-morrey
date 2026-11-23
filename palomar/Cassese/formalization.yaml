@@ -105,7 +105,8 @@ sources:
     note: >-
       Read and followed. Volume I: Theorems 4.2.5 (by the book's alternative proof, p. 334), 4.2.7 and
       4.5.6, Proposition 4.2.3 (with Cox-Veraar), Proposition 4.2.10 and Theorem 4.2.25 (for
-      Yaroslavtsev's Lemma 3.2) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants. Proved in
+      Yaroslavtsev's Lemma 3.2, and for the UMD inequality (2.1) of McConnell 1984 with deterministic
+      coefficients) and Corollary 5.7.6; Volume II: Theorem 6.2.4, with its constants. Proved in
       lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
       probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
