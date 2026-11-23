@@ -20,6 +20,7 @@ Start with these documents:
 | [Experiments](EXPERIMENTS.md) | Candidate families, budgets, attained values, exclusions and numerical limitations. |
 | [Reproducing](REPRODUCING.md) | Commands for exact checks and numerical audits without rerunning every optimization. |
 | [Sources and priority](SOURCES.md) | Primary literature, scope of external results and unresolved novelty questions. |
+| [Iwaniec–Morrey connection](IWANIEC_MORREY.md) | New 2026 Iwaniec/Burkholder quasiconvexity result, an exact calibration decomposition, general convex-body consequence and the distinction from universal planar Morrey. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
