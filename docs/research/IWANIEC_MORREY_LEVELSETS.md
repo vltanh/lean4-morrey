@@ -48,6 +48,50 @@ Thus the lifted barycenter \((A,\det A)\) belongs to the **closed convex hull** 
 
 The same argument works for Lipschitz zero-boundary test maps on a bounded domain, using the usual determinant null-Lagrangian boundary identity.
 
+## 3A. Important published no-go for the naive cross-level inference
+
+The fact that *each sublevel is a polyconvex set*
+does **not** generally imply that the
+*function is polyconvex*. The literature
+already contains a relevant counterexample:
+Jendrik Voss, Ionel-Dumitrel Ghiba,
+Robert J. Martin and Patrizio Neff,
+[*A rank-one convex, non-polyconvex isotropic
+function on GL⁺(2) with compact connected
+sublevel sets*](https://arxiv.org/abs/2009.09690),
+*Proc. Royal Soc. Edinburgh A* 152 (2022),
+356–381.
+
+Their isotropic rank-one-convex energy
+is defined on the **orientation-preserving
+invertible matrices GL⁺(2)** and has
+compact, connected sublevel sets,
+but fails function-level polyconvexity.
+It refutes Mielke's corresponding
+function-level conjecture **in that domain**.
+
+**Scope limitation:** This published
+counterexample is **not** a counterexample
+to the present Guerra–Kristensen
+class-wide problem, which requires
+a **globally finite function on all
+real 2×2 matrices**, nonnegative and
+positively p-homogeneous for some p>2.
+We do not assert the GL⁺ example
+can be extended while retaining
+all these hypotheses.
+
+Its role in the current program is a
+**logical stop rule**: do not attempt
+to deduce ordinary integral Jensen
+from the separate polyconvexity of
+each sublevel without an additional,
+quantitative *cross-level* theorem.
+The [four-atom global reduction](IWANIEC_MORREY_FOUR_ATOM.md)
+identifies precisely the missing
+quantitative inequality in the
+homogeneous global setting.
+
 ## 4. Why the p>2 open problem is still genuinely different
 
 The desired Morrey/class-wide quasiconvexity inequality is

@@ -249,6 +249,25 @@ or the signed p=2 conclusion. Main unclosed extensions:
 signed 1<p<2, p>2 (the old hybrid-completeness
 gate was refuted), or removing isotropy/homogeneity.
 
+### Published warning: polyconvex level sets need not give polyconvex energies
+
+Voss–Ghiba–Martin–Neff (2022)
+[exhibit an isotropic RC but nonpolyconvex
+integrand on GL⁺(2)](https://arxiv.org/abs/2009.09690)
+with compact connected sublevel sets.
+This refutes a naive function-level
+inference from connected/convex
+sublevels in that restricted domain.
+It does **not** refute the globally
+finite, nonnegative, p>2 homogeneous
+Guerra–Kristensen question.
+[Scope audit](IWANIEC_MORREY_LEVELSETS.md#3a-important-published-no-go-for-the-naive-cross-level-inference).
+Use the **quantitative** four-atom
+moment-energy inequalities, not
+separate level-set inclusions, for
+the remaining global proof.
+
+
 ### GLOBAL bounded-atom reduction (all exponents, all profiles)
 
 The new [four-atom theorem](IWANIEC_MORREY_FOUR_ATOM.md)
