@@ -22,6 +22,7 @@ Start with these documents:
 | [Sources and priority](SOURCES.md) | Primary literature, scope of external results and unresolved novelty questions. |
 | [Iwaniec–Morrey connection](IWANIEC_MORREY.md) | 2026 Iwaniec result, moving calibrations, and the all-F conformal Morrey consequence of Guerra–Kristensen (2022) with an explicit global quasiconvex minorant; unrestricted Morrey remains open. |
 | [Proposed universal isotropic theorem](IWANIEC_MORREY_UNIVERSAL.md) | New candidate complete hand proof: all-matrix quasiconvexity for nonnegative isotropic p-homogeneous rank-one-convex integrands when 1<p<2, conditional on 2026 Burkholder; p=2 polyconvexity; p>2 obstruction. Independent review pending. |
+| [Hybrid Burkholder–polyconvex hierarchy](IWANIEC_MORREY_GENERAL.md) | New all-p>2 scalar quasiconvex envelope lower bound, touching support tests, an exact degree-six counterexample to naive completeness, fractional-power lifting, anisotropic closure and open unrestricted gates. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

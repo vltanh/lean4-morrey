@@ -4,6 +4,33 @@
 by the present ledger. The main task is a statement about every planar gradient and every
 rank-one-convex integrand, or one globally certified planar counterexample.
 
+## 0. Iwaniec-dependent route (22 November 2026)
+
+The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes
+an all-matrix RC→QC proof for every nonnegative isotropic p-homogeneous
+2×2 integrand with 1<p<2 (conditional on the global 2026 Burkholder
+quasiconvexity result), and an unconditional hand argument for p=2.
+The new [hybrid hierarchy](IWANIEC_MORREY_GENERAL.md) gives an explicit
+all-matrix quasiconvex minorant and a one-dimensional cone-completeness
+gate for **every p>2**, plus GL-transformed anisotropic and
+nonhomogeneous positive closures. Neither route settles arbitrary
+2×2 integrands.
+
+**New gate I8:** prove \(\mathcal E_ph=h\) universally for all
+nonnegative isotropic rank-one-convex p-homogeneous h and every p>2,
+or find a rigorously certified profile separating this specific
+support cone from the rank-one-convex cone (a *method obstruction*,
+not a Morrey counterexample). A strictly stronger unrestricted gate
+would additionally require a compatible envelope representation
+for **every** anisotropic, nonhomogeneous rank-one-convex integrand.
+Do not replace that gate with finitely many special exponents or
+with mere symmetrization.
+
+The new research contains no Lean translation or independent
+validation of Iwaniec's full proof. This Iwaniec-dependent route
+must remain separate from the unrestricted negative-witness
+search described below.
+
 ## 1. What counts as completion
 
 | Route | Required mathematical output | Final formal output |
