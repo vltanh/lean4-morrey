@@ -5,7 +5,9 @@ The [four-wave parity theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
 proves rank-one Jensen for arbitrary
 finite RC F and every phase/amplitude
 of the genuinely correlated 4-wave
-family \(u,v,u+2v,2u+v\), independent
+**four-parameter family**
+\(u,v,a u+b v,c u+d v\),
+odd a,d and nonzero even b,c; independent
 integer u,v, with exact all-phase
 Fourier bound \(|\rho|\le1/2\).
 General N≥3 pure-parity cube laws

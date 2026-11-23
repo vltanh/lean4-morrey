@@ -3,8 +3,9 @@
 **Unrestricted wave-level advance (23 November 2026):**
 [Correlated four-wave planar Jensen theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
 proves that every finite rank-one-convex integrand satisfies
-Jensen for **all** amplitudes and phases of the 4-wave
-family (u,v,u+2v,2u+v), for any independent integer u,v.
+Jensen for **all** amplitudes and phases of the four-parameter 4-wave
+family (u,v,a u+b v,c u+d v), for independent integer u,v,
+odd a,d and nonzero even b,c.
 It also derives pure-parity laminate laws for **every
 number N≥3 of rank-one waves** when |correlation|≤1/2
 and an odd-resonance exclusion for **arbitrary N**.

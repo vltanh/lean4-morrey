@@ -5,7 +5,10 @@
 The [correlated four-wave theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
 is a **global every-integrand, all-amplitude,
 all-phase** rank-one Jensen theorem for the
-frequency family \(u,v,u+2v,2u+v\),
+**four-parameter integer frequency family**
+\(u,v,a u+b v,c u+d v\),
+where a,d are arbitrary odd and
+b,c arbitrary nonzero even integers,
 with u,v independent integer vectors.
 It does not assume isotropy, homogeneity,
 p-growth, positivity, polynomiality

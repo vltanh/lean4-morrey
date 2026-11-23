@@ -101,6 +101,12 @@ def run():
     assert first_resonant_subset([(1,0),(0,1),(1,1)])==(0,1,2)
     assert first_resonant_subset([(1,0),(2,0)]) is None
     assert first_resonant_subset([(1,0),(3,0)])==(0,1)
+    # Theorem D: arbitrary odd a,d and nonzero even b,c
+    for a,b,c,d in ((3,2,2,5),(1,4,-6,7),(-3,-2,8,-1),
+                    (111,224,342,579),(-31,10,14,-33)):
+        family=[(1,0),(0,1),(a,b),(c,d)]
+        assert first_resonant_subset(family)==(0,1,2,3)
+        assert ((a+c)&1)==1 and ((b+d)&1)==1
     assert Q(8)*Q(1,4)**2-Q(4)*Q(1,4)==-Q(1,2)
     rho=four_correlation_zero_phase()
     assert rho==Q(1,3)
