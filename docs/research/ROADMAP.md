@@ -249,6 +249,44 @@ or the signed p=2 conclusion. Main unclosed extensions:
 signed 1<p<2, p>2 (the old hybrid-completeness
 gate was refuted), or removing isotropy/homogeneity.
 
+### GLOBAL bounded-atom reduction (all exponents, all profiles)
+
+The new [four-atom theorem](IWANIEC_MORREY_FOUR_ATOM.md)
+combines Wiedemann–Peter's published
+isotropic diagonal characterization
+with a four-moment extreme-point argument.
+For **EVERY** finite nonnegative isotropic
+RC p-homogeneous F and EVERY p>2,
+F is globally polyconvex **iff** the
+diagonal Jensen inequality holds for all
+minor-preserving probability laws with
+at most **four** atoms, at normalized
+base \(E_t=\operatorname{diag}(1,t)\),
+\(-1<t<1\). One- and two-atom laws
+are automatically handled by RC.
+Thus a negative counterexample to
+the stronger polyconvexity question
+is always witnessed by **three or
+four** signed-diagonal atoms; a
+nontrivial 3-atom law admits a
+one-parameter covariance-free form.
+
+**Crucial distinction:** This is
+bounded in **atom count**, NOT a
+finite degree/grid/coefficient
+search. Real positions, weights,
+exponents and profiles remain
+arbitrary. The universal
+3-/4-atom inequalities are **OPEN**.
+An exact rational [cost-nonincreasing
+reducer](../../research/audit/iwaniec_diagonal_four_atom.py)
+checks all four moments.
+A failure of the polyconvexity
+inequality is **not** by itself an
+actual planar-gradient Jensen gap
+or a Morrey counterexample.
+
+
 ### Global all-exponent level-set result — closed, but weaker than Jensen
 
 A [newly recorded all-\(p\) deduction](IWANIEC_MORREY_LEVELSETS.md)

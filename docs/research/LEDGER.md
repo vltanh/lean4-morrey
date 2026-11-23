@@ -232,6 +232,33 @@ ordinary average-energy Jensen. Prior-art
 corollary, not new publication-level priority.
 
 
+**I14 — four-diagonal-atom global p>2 reduction.**
+The [all-class finite-support theorem](IWANIEC_MORREY_FOUR_ATOM.md)
+uses Wiedemann–Peter (2026)
+plus a four-moment LP extreme-point
+argument to show that global PC
+for every nonnegative isotropic
+RC p-homogeneous F, p>2,
+is **equivalent** to universal
+three-/four-atom signed-diagonal
+Jensen under the exact moments
+(mass, first x, first y, xy).
+Every one- and two-atom case is
+automatic from RC; the 3-atom
+case has a covariance-free
+one-parameter representation.
+The [standard-library rational
+reducer](../../research/audit/iwaniec_diagonal_four_atom.py)
+verifies exact moment and cost
+preservation on 32 cases.
+**Status:** global reduction
+proved at hand level, exact code
+tested; the universal 3-/4-atom
+positivity remains **OPEN**.
+No equivalence to gradient
+realizability or Morrey is claimed.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

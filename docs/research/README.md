@@ -36,6 +36,7 @@ Start with these documents:
 | [Nonrealizability of old two-point separator](IWANIEC_MORREY_SEPARATOR_NONREALIZABLE.md) | Exact SOS inequalities force operator-norm barycenter at most 59/60 despite the required value 1; not even a minor-compatible matrix probability law. |
 | [Universal nonconformal scalar support criterion](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md) | Global poly-affine supporting at arbitrary signed ratio reduces to one determinant multiplier, a one-dimensional feasible interval, and **at most two test points** to certify failure; includes an open p>2 full-rank positive family. |
 | [Global isotropic all-p sublevel theorem](IWANIEC_MORREY_LEVELSETS.md) | Every nonnegative isotropic homogeneous rank-one-convex integrand has polyconvex sublevel sets (even without coercivity), giving universal (L^\infty) quasiconvexity; **not** ordinary integral quasiconvexity. Deduction from Conti et al. (2003). |
+| [Four-diagonal-atom global p>2 reduction](IWANIEC_MORREY_FOUR_ATOM.md) | Global polyconvexity in the nonnegative isotropic p>2 class reduces to **three- and four-atom signed-diagonal minor-preserving Jensen inequalities**, with no degree, exponent or amplitude cutoff; exact rational cost-monotone sparsifier. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
