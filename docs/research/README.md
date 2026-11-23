@@ -49,6 +49,7 @@ Start with these documents:
 | [Reduced five/seven-variable polyconvexity test](IWANIEC_MORREY_PGE4_TWO_TEST_QE.md) | Exact two-support-test Helly/interval encoding for **any fixed rational p≥4 and polynomial h**; local solver produced UNSAT/SAT/SAT controls, while a noninteger test timed out. Universal p≥4 remains open. |
 | [All-exponent p>4 demotion no-go](IWANIEC_MORREY_EXPONENT_DEMOTION_NOGO.md) | Even the polyconvex family \((\det A)_+^{p/2}\) loses rank-one convexity when its signed-singular profile is given any smaller homogeneity q<p. Proves p=4 cannot solve all p>4 by profile-preserving descent. |
 | [Three-atom gradient rigidity audit](IWANIEC_MORREY_THREE_ATOM_RIGIDITY.md) | Every homogeneous planar W¹∞ gradient Young measure on ≤3 atoms is a laminate/Dirac. Three incompatible minor-compatible atoms can still obstruct PC but cannot be an actual gradient law; classical Šverák/BFJK rigidity. |
+| [Strict global supremal Jensen principle](IWANIEC_MORREY_STRICT_SUPREMAL.md) | For every nonnegative isotropic p-homogeneous rank-one-convex integrand, a compact minors-compatible law with atom energies ≤ base energy must have all atom energies equal when the base energy is positive; any fixed violating law loses its violation under sufficiently high positive powers. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 

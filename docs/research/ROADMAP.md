@@ -317,6 +317,42 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### Strict all-exponent supremal principle and power-witness limitation
+
+The [strict global maximum principle](IWANIEC_MORREY_STRICT_SUPREMAL.md)
+strengthens the published isotropic
+polyconvex-sublevel conclusion:
+for **every** nonnegative isotropic
+positively p-homogeneous RC integrand,
+any compactly supported probability
+law preserving the matrix and determinant
+moments whose support energies never
+exceed \(F(A)>0\) must have
+**all support energies equal to F(A)**.
+The proof uses a full-dimensional
+crosspolytope in the **five-dimensional
+minors lift** at every strictly
+lower-energy atom.
+
+Consequently a strict Jensen violation
+requires positive mass with energy both
+**below and above** F(A). For every
+**fixed** violating law, taking high
+enough positive powers \(F^q\)
+eventually **restores Jensen** for
+that law, with an explicit q threshold
+dependent on the law. There is no
+uniform q across all laws: this
+does **not** solve the global p≥4
+PC or Morrey inequality. It rules out
+a naive *single-law* extrapolation
+from a putative p4 failure to all p>4.
+The theorem is a hand deduction from
+Conti–De Lellis–Müller–Romeo (2003),
+not claimed publication-priority
+or Lean-certified.
+
+
 ### Essential separation: three-atom PC tests versus actual gradient laws
 
 [Three-atom rigidity audit](IWANIEC_MORREY_THREE_ATOM_RIGIDITY.md):

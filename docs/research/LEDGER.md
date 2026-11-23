@@ -510,6 +510,31 @@ polyconvexity conjecture, nor
 solve Morrey.
 
 
+**I26 — strict all-p supremal Jensen principle (23 November 2026).**
+The [five-dimensional lifted-sublevel
+argument](IWANIEC_MORREY_STRICT_SUPREMAL.md)
+sharpens the Conti et al. 2003
+polyconvex-level-set result:
+if a compact minor-compatible law
+has \(F(B)\le F(A)=c>0\) everywhere,
+then \(F(B)=c\) almost surely.
+The key exact determinant-lift
+crosspolytope at every strict
+sublevel point is checked in
+[the standard-library rational verifier](../../research/audit/iwaniec_strict_supremal_exact.py).
+Thus any strict minor-Jensen
+violation necessarily has positive
+weight **both below and above**
+the base energy. For each fixed
+violating law, sufficiently large
+powers F^q restore Jensen,
+with no uniform q threshold.
+**Status:** source-backed hand
+deduction; NOT universal ordinary
+Jensen, not a solution of p≥4 PC
+or Morrey, not Lean-certified.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
