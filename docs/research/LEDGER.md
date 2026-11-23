@@ -728,6 +728,44 @@ NOT a universal Morrey proof; no Lean
 or human referee validation claimed.
 
 
+**I29 — all-gradient TWO-line Fourier-tail Jensen bound (23 Nov 2026).**
+The [unconditional exact theorem](IWANIEC_MORREY_TWO_LINE_SPECTRAL.md)
+uses the **established two-ridge Jensen inequality**
+for every finite-valued globally RC
+F (no isotropy, homogeneity, sign,
+smoothness or degree assumptions).
+For ANY periodic Lipschitz planar
+gradient \(\varphi\) and ANY two
+primitive Fourier frequency lines,
+orthogonally project \(\varphi\)
+onto the two lines. The projected
+gradient is an actual two-ridge
+field and satisfies Jensen.
+Local Lipschitz control and Parseval
+give the universally valid
+\[
+F(A)-\fint F(A+D\varphi)
+ \le L_R\sqrt{\|D\varphi\|_2^2-
+            e_{(1)}-e_{(2)}},
+\]
+where \(e_{(1)},e_{(2)}\) are the two
+largest primitive-line Fourier
+gradient energies. A strict negative
+gap δ requires at least
+\(\delta^2/L_R^2\) gradient energy
+outside those two frequency lines.
+[Exact Fourier-energy checker](../../research/audit/iwaniec_two_line_spectral_exact.py)
+passes: total 542, retained 492, tail 50
+(before the common \(4\pi^2\) factor).
+**Scope:** all-integrand/all-gradient
+necessary condition, NOT global
+Morrey; no originality or Lean
+proof asserted. This is valid for
+**two** lines only. The attempted
+three-line variant was explicitly
+invalidated in I27.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,
