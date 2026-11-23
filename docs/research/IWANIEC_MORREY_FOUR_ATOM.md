@@ -277,6 +277,96 @@ pairwise rank-two-separated 3-atom
 laws and unconstrained 4-atom laws
 for every admissible p and F.
 
+## 5B. Remove ALL rank-one edges from a minimal negative witness
+
+**Global pruning theorem.**
+For any finite-valued rank-one-convex integrand
+\(F:\mathbb R^{2\times2}\to\mathbb R\)
+and any minors-preserving signed-diagonal
+probability law with at most four atoms,
+a strict Jensen violation can always be
+reduced to a strict violation on **three
+or four atoms with every pairwise
+difference of full rank**. This
+does not require isotropy, homogeneity,
+nonnegativity, or a fixed exponent.
+
+**Proof.** Suppose two atoms \(A_i,A_j\)
+have rank-one difference.
+Merge them into a new atom
+\(B=(w_iA_i+w_jA_j)/(w_i+w_j)\)
+with weight \(w_i+w_j\).
+Because determinant is affine
+along a rank-one segment,
+the matrix barycenter and determinant
+moment of the entire law are unchanged.
+Rank-one convexity gives
+\[
+ (w_i+w_j)F(B)\le
+   w_iF(A_i)+w_jF(A_j).
+\]
+Thus merging the pair can only
+**decrease** mean energy while
+preserving the base and all
+minors moments. A strict negative
+gap therefore stays strictly
+negative. Repeat merging any
+rank-one-connected pair.
+Each step reduces the number of
+positive atoms by one.
+The process cannot end with fewer
+than three atoms, since one- and
+two-atom minors-preserving laws
+obey Jensen by rank-one convexity.
+The final three-/four-atom strict
+witness has **no** rank-one pair. QED.
+
+Consequently, the entire
+nonnegative isotropic p>2
+polyconvexity question reduces to
+two continuous types **T3** and
+**T4**, each pairwise rank-two
+separated and satisfying the
+three exact normalized first-moment
+and determinant constraints. This
+is a structurally sharper statement
+than merely bounding the atom count.
+
+**Residual four-atom geometry is nonempty.**
+For \(E_0=\mathrm{diag}(1,0)\),
+take equal weights \(w_i=1/4\) at
+\[
+ (x_i,y_i)=(-2,-1),(0,3),(2,-3),(4,1).
+\]
+They have mean x=1, mean y=0,
+mean xy=0, and every pair
+has distinct x and distinct y.
+The [exact rational verifier](../../research/audit/iwaniec_four_atom_geometry_exact.py)
+checks those relations. No
+energy violation is claimed;
+the example simply establishes
+that the residual T4 moment
+geometry cannot be excluded
+by the determinant identity alone.
+
+**Stop rule:** This finishes the
+*finite atom-count and rank-one-edge
+elimination reduction*; do not
+continue pruning ever-larger
+fixed-size special lists.
+To solve the universal conjecture
+one must establish the Jensen
+inequality for arbitrary
+pairwise-unconnected T3 and T4
+configurations, **simultaneously
+over all p>2 and all admissible F**,
+or exhibit a strict violation.
+A violation would refute global
+*polyconvexity*; an actual
+compatible-gradient witness
+would still be required to
+disprove quasiconvexity.
+
 ## 6. Status and exactly what remains
 
 This reduction is **global in the

@@ -268,6 +268,34 @@ separate level-set inclusions, for
 the remaining global proof.
 
 
+### Global endpoint of finite-atom reduction: only T3/T4 remain
+
+The [pair-merging theorem](IWANIEC_MORREY_FOUR_ATOM.md#5b-remove-all-rank-one-edges-from-a-minimal-negative-witness)
+proves that **every** hypothetical
+diagonal polyconvexity violation
+has a minor-preserving witness
+with **three or four atoms and
+no rank-one-connected pair**.
+Merging any rank-one-connected
+pair preserves all four moments
+and cannot increase the energy.
+An exact four-atom unconnected
+moment configuration confirms
+the T4 geometry is nonempty.
+
+This is a *completed global
+structural reduction* with
+uniform atom count independent
+of p, profile, degree and mesh.
+The remaining Jensen inequality
+for the two continuous T3/T4
+families is **unproved**.
+Avoid branching to increasingly
+large finite subclasses;
+the universal functional
+inequality is the next gate.
+
+
 ### Three-atom geometry: connected-pair class closed
 
 In the [four-atom global theorem](IWANIEC_MORREY_FOUR_ATOM.md#5a-all-three-atom-laws-with-a-rank-one-pair-are-laminates),
