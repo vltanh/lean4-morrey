@@ -1,4 +1,4 @@
-# Global p≥4 counterexample-semid ecision: a strict rational certificate hierarchy
+# Global p≥4 counterexample-semidecision: a strict rational certificate hierarchy
 
 Research: 23 November 2026. Status: **global conditional reduction with an exact
 checker**, not a proof or counterexample to Guerra–Kristensen's p≥4 polyconvexity

@@ -106,3 +106,36 @@ uses SymPy. Temporary solver dependencies, discovery-probe output and caches are
 this handoff. None of the regression controls is claimed to occur in a saved search run.
 The research notes cite rational Putinar representations as the completeness input, e.g.
 V. Powers, [Rational certificates of positivity on compact semialgebraic sets](https://www.math.emory.edu/~vicki/pub/rationalreps.pdf).
+
+## 5. All-exponent rational homogeneous certificate interface (23 Nov 2026)
+
+The [global p≥4 smooth-class negative semidecision](../../docs/research/IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md)
+uses the standalone standard-library verifier:
+
+~~~sh
+python3 research/audit/iwaniec_all_p_rational_cert.py
+python3 research/audit/iwaniec_all_p_rational_cert.py research/audit/iwaniec_pge4_positive_control.json
+~~~
+
+Both commands certify global nonnegativity and strict rank-one convexity,
+not just curvature samples. The control p=9/2 with h(r)=2+2r²+r⁴
+has two Bernstein leaves of depth 1. Both can be run without SymPy,
+an SDP solver, or any access to the network.
+
+A JSON input contains rational p≥4, a list of rational monomial
+coefficients h in increasing degree, and optionally up to four
+diagonal triples (weight,x,y). If atoms are included the verifier:
+(1) checks the **exact** matrix and determinant moments for a
+base diag(1,t), |t|<1; (2) encloses rational powers by exact dyadic
+root isolation; (3) accepts a strict negative Jensen gap only when
+the certified rational **upper** bound is below zero. A nonnegative
+or inconclusive gap is **not** accepted as a counterexample.
+
+The acoustic Bernstein test is **sufficient** rather than
+a complete rank-one-convexity decision procedure. The
+separate mathematical completeness statement is conditional on
+existence of a counterexample with **C² signed-singular profile**,
+and allows unbounded degree/subdivision depth and rational
+denominators. A failure to find such a certificate cannot prove
+the positive p≥4 polyconvexity conjecture. A certificate of
+nonpolyconvexity is **not** a planar gradient witness to non-QC.
