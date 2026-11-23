@@ -1,5 +1,41 @@
 # Roadmap to completion
 
+## Global Morrey route: arbitrary-F rank-one Fourier resonance sieve (23 November 2026)
+
+**New exact result:** the [all-N resonance theorem](IWANIEC_MORREY_RESONANCE_SIEVE.md)
+works for EVERY finite-valued globally rank-one-convex \(F:\mathbb R^{2\times2}\to\mathbb R\),
+including signed, anisotropic, nonhomogeneous functions.
+
+For an actual periodic gradient consisting of ANY FINITE number of rank-one
+sinusoidal waves with integer wavevectors \(k_j\), define \(\ell\) as the
+smallest nonzero integer-relation order \(\sum|n_j|\) with
+\(\sum n_j k_j=0\). For ANY rank-one-convex polynomial \(F\) of total
+degree \(d\), \(\ell>d\) **guarantees exact Jensen** at every base,
+arbitrary amplitude and any phases. For arbitrary (nonpolynomial) RC
+\(F\), a four-coordinate tensor Bernstein proof gives a **quantitative**
+bound on its possible Jensen deficit of \(4L_RR/\sqrt{n}\) whenever
+\(4n<\ell\) (or \(4M_RR^2/n\) for C² \(F\)). Therefore any prescribed
+strict negative gap forces a **bounded-order integer resonance**.
+The [pure rational checker](../../research/audit/iwaniec_morrey_resonance_exact.py)
+tests all 35 quartic cosine moments for a triple with minimum
+resonance length 7, and a nonzero cubic-triad correlation.
+
+**PRIOR ART:** Two-wave quasiconvexity from RC is known, and the
+three-sawtooth-wave planar theorem is **Sebestyén–Székelyhidi (2017)**,
+restated by Guerra–Teixeira da Costa (2021), Theorem 3.3(d).
+Do not duplicate these achievements or claim novelty. The
+new sieve is a global frequency-geometry reduction, **NOT**
+a proof of all-wave Jensen, and no uniform bound on the
+number or size of waves is obtained.
+
+**Decisive open gate:** Prove a phase-correlated *resonant*
+energy inequality uniformly over arbitrary wave count and
+all rank-one-convex \(F\), or exhibit an exactly certified
+compatible-gradient counterexample. Do not grind a
+growing list of fixed wave counts; the bound is intended
+to isolate the universal resonance mechanism.
+
+
 ## 23 November: global anisotropic and nonhomogeneous QC open neighborhood
 
 The [new open-family theorem](IWANIEC_MORREY_ANISOTROPIC_OPEN_QC_NONPC.md)
