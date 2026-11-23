@@ -226,6 +226,21 @@ its missing inequality is provisionally
 supplied by the new hand proof.
 
 **I26 — exact no-go for removing homogeneity while demanding PC (23 Nov 2026).**
+**Strengthened exact statement:** The same construction plus
+\(\|A\|_F^2/1000\) is real analytic,
+strictly positive, coercive and
+**uniformly strongly rank-one convex**
+with lower LH modulus \(1/500\),
+yet it violates minors-compatible Jensen:
+the exact energy average is
+\(<32025557/32058000<1=W_\varepsilon(0)\).
+This is an all-matrix, all-direction
+global counterexample to attempts to
+remove homogeneity while preserving PC,
+even under strong regularity assumptions.
+This is **not** a Morrey/non-QC witness.
+[Exact strengthened certificate](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md#2a-the-counterexample-can-be-smooth-coercive-and-uniformly-strictly-rank-one-convex).
+
 [Explicit strictly positive isotropic
 rank-one convex but nonpolyconvex
 W(A)=exp(q(A))](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md),

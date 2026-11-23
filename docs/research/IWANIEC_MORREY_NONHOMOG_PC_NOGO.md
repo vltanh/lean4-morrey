@@ -73,6 +73,45 @@ Polyconvex Jensen requires the reverse inequality for any law whose matrix mean 
 
 The [exact checker](../../research/audit/iwaniec_nonhomogeneous_positive_nonpc.py) validates the SOS polynomial identity and all rational moments/inequalities. This witness is generally **not a compatible planar gradient Young measure**, so it does not refute Morrey.
 
+## 2A. The counterexample can be smooth, COERCIVE and uniformly strictly rank-one convex
+
+Set \(\varepsilon=1/1000\) and define
+\[
+ W_\varepsilon(A)=\exp(q(A))+\varepsilon\|A\|_F^2 .
+\]
+This function is globally **real analytic**, strictly positive,
+SO(2)×SO(2)-isotropic and **coercive**:
+\(W_\varepsilon(A)\ge\varepsilon\|A\|_F^2\to\infty\).
+Moreover, for every matrix A and every rank-one H,
+\[
+ D^2W_\varepsilon(A)[H,H]
+ =D^2W(A)[H,H]+2\varepsilon\|H\|_F^2
+ \ge\frac1{500}\|H\|_F^2 .
+\]
+Thus even a **uniform global rank-one ellipticity margin**
+does not restore polyconvexity.
+
+For the **same exact four-atom** minors-compatible law,
+\[
+ \int\|A\|_F^2\,d\nu=\frac2{13},\qquad
+ W_\varepsilon(0)=1.
+\]
+The previous rational exponential upper bound gives
+\[
+ \boxed{
+ \int W_\varepsilon\,d\nu
+ <\frac{19705}{19728}+\frac1{6500}
+ =\frac{32025557}{32058000}<1 .
+ }
+\]
+Its strict rational Jensen deficit is bounded away from zero by
+\(\frac{32443}{32058000}>0\).
+This is an explicit, globally smooth/coercive/uniformly
+rank-one-convex, **positive isotropic nonpolyconvex**
+integrand once homogeneity is removed. It remains
+**only a nonpolyconvexity example**, not a planar
+quasiconvexity counterexample.
+
 ## 3. Structural consequence for the unrestricted plan
 
 Even with **nonnegativity and isotropy**, removing positive homogeneity makes the **polyconvex** conclusion false. Moreover, removing **isotropy** while retaining nonnegative p-homogeneity also makes it false: the [corrected Guerra–Kristensen (2022) three-atom witness](IWANIEC_MORREY_P2_SIGNED.md#exact-correction-guerra-kristensen-2022-proposition-37) applies to every p≥2.

@@ -42,6 +42,27 @@ breaks **without isotropy**. Its stationary
 rescaling breaks **without homogeneity**.
 These are exact barriers to this proof route.
 
+### Smooth/coercive/strongly rank-one convex does not repair the PC bridge
+
+The [positive isotropic no-go](IWANIEC_MORREY_NONHOMOG_PC_NOGO.md#2a-the-counterexample-can-be-smooth-coercive-and-uniformly-strictly-rank-one-convex)
+extends to
+\(W_\varepsilon(A)=
+ e^{\|A\|_F^4-(9/4)\|A\|_F^2\det A}
+ +\|A\|_F^2/1000\).
+It is **real analytic, coercive, strictly positive and
+globally rank-one convex with an exact uniform
+ellipticity margin 1/500**, yet fails
+four-atom polyconvex Jensen at zero with an
+explicit rational gap. Therefore none of
+smoothness, coercivity or a strong
+Legendre–Hadamard margin allows simply
+discarding the homogeneity hypothesis of
+the p≥2 isotropic polyconvexity theorem.
+An unrestricted proof **must** use
+actual gradient compatibility to
+establish **QC**, not PC.
+
+
 ### An all-anisotropic averaged positive consequence (conditional on the new theorem)
 
 For any **nonnegative positively p-homogeneous,

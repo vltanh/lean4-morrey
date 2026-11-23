@@ -39,3 +39,14 @@ assert Q(13,8)>Q(8,5) and Q(8,13)<Q(5,8)
 upper=Q(1,26)*Q(5,8)+Q(25,26)*Q(1250,1233)
 assert upper==Q(19705,19728) and upper<1
 print("PASS: exact 4-atom minors-law W-Jensen violation, upper",upper)
+
+# Adding eps*||A||_F^2 makes the example coercive and
+# uniformly strongly rank-one convex, without restoring PC.
+eps=Q(1,1000)
+avg_sq=sum(w*(x*x+y*y) for w,x,y in atoms)
+assert avg_sq==Q(2,13)
+strong_upper=upper+eps*avg_sq
+assert strong_upper==Q(32025557,32058000)
+assert 1-strong_upper==Q(32443,32058000)>0
+print("PASS: coercive uniformly strong rank-one example, Jensen upper",strong_upper)
+
