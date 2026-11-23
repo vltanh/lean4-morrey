@@ -1,5 +1,10 @@
 # Roadmap to completion
 
+## Unrestricted exact finite-symmetry reduction
+
+[New elementary reduction](IWANIEC_MORREY_FINITE_SYMMETRY_REDUCTION.md): any unrestricted strict counterexample can be translated, localized by a finite maximum of affine-biased orbit copies, and clipped to become nonnegative and invariant under any prescribed finite rank-one-preserving orthogonal group. Thus proving QC for all such nonnegative finite-symmetry RC energies at all bases is equivalent to unrestricted Morrey. No homogeneous or continuous-isotropy reduction follows. Hand proof, no novelty or Lean claim.
+
+
 ## G1 achieved conditionally: global anisotropic and nonhomogeneous QC neighborhoods of EVERY strict isotropic core
 
 **Assume** the p≥2 nonnegative isotropic
