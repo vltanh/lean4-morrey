@@ -232,6 +232,14 @@ ordinary average-energy Jensen. Prior-art
 corollary, not new publication-level priority.
 
 
+**PRIORITY correction to I14 (23 November 2026):**
+[Dacorogna–Koshigoe (1993), Theorem 2.1](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/), Theorem 2.1, already establishes
+the exact **four-atom signed-diagonal Jensen criterion**
+AND the **global diagonal supporting-plane equivalence** for
+SO(2)×SO(2)-isotropic energies. Our LP sparsification and scalar
+parameter calculations are rederivations/specializations, not new
+global theorems. [Source audit](IWANIEC_MORREY_PRIOR_ART_1993.md).
+
 **I14 — four-diagonal-atom global p>2 reduction.**
 The [all-class finite-support theorem](IWANIEC_MORREY_FOUR_ATOM.md)
 uses Wiedemann–Peter (2026)

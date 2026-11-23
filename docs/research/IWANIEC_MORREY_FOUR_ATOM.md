@@ -1,8 +1,14 @@
 # Global four-diagonal-atom reduction for isotropic p>2 polyconvexity
 
-Date: 22 November 2026. **Exact general finite-support reduction**, a direct
-consequence of Wiedemann–Peter (2026) and elementary finite-dimensional
-linear programming. **It does NOT prove the universal inequality and does
+**Priority correction (23 November 2026):** The four-diagonal-atom criterion,
+its equivalence to global polyconvexity, and global diagonal poly-affine
+supports were **already established in [Dacorogna–Koshigoe (1993), Theorem 2.1](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/), pp. 169–170.**
+The proofs below provide a hand derivation and an exact rational sparsifier
+adapted to the p>2 program; they are not new four-atom theorems.
+See [the detailed 1993 priority audit](IWANIEC_MORREY_PRIOR_ART_1993.md).
+
+Date of original note: 22 November 2026. The direct LP formulation is a
+rederivation of this established criterion. **It does NOT prove the universal inequality and does
 NOT settle Morrey.** The exact rational sparsifier accompanying this note
 checks moment preservation and nonincreasing cost. The underlying reduction
 is prior-art mathematics; no claim of novelty is made.

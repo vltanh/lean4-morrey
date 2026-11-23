@@ -317,6 +317,22 @@ pairwise-unconnected three-atom
 and arbitrary four-atom moment laws.
 
 
+### PRIOR-ART CORRECTION: four atoms and supporting planes were known in 1993
+
+[Dacorogna–Koshigoe (1993), Theorem 2.1](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/), Theorem 2.1, already proves
+both the **four-atom signed-diagonal Jensen equivalence** and the
+**global poly-affine support equivalence** for SO(2)×SO(2)-isotropic
+energies. Our rational sparsifier, one-multiplier formulas and
+rank-one-pair merging are helpful explicit reformulations, but they
+do NOT establish a new finite reduction. See the
+[priority audit](IWANIEC_MORREY_PRIOR_ART_1993.md).
+
+**No remaining finite-enumeration gate:** all unconnected three-/four-
+atom configurations still range over continuous parameters, and the
+universal Jensen inequalities remain open. Do not treat the 1993
+criterion as progress towards proving the inequalities unless new
+analytic control over all admissible integrands is obtained.
+
 ### GLOBAL bounded-atom reduction (all exponents, all profiles)
 
 The new [four-atom theorem](IWANIEC_MORREY_FOUR_ATOM.md)

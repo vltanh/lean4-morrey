@@ -3,9 +3,11 @@
 22 November 2026. **Status:** universal hand reduction, not a solution of the
 Guerra–Kristensen 2022 Question 1.7, and not a Lean theorem. The new
 [Wiedemann–Peter (2026)](https://doi.org/10.1007/s00526-025-03222-z)
-Theorem 1.4 and Corollary 1.5 already give a *general* reduction
-of finite isotropic 2D polyconvexity to diagonal signed singular
-values; the theorem below is a more specialized, explicit **pointwise
+Theorem 1.4 and Corollary 1.5 reprove/extend a general 2D
+isotropic diagonal reduction **already explicit in [Dacorogna–Koshigoe (1993), Theorem 2.1](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/),
+Theorem 2.1(ii)–(iv)**. The scalar one-multiplier formula below is
+an algebraic specialization of that older poly-affine support criterion,
+not a novel discovery of the principle; the theorem below is a more specialized, explicit **pointwise
 support and one-parameter feasibility** formulation. No priority
 claim is made.
 
