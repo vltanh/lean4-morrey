@@ -4,6 +4,27 @@
 by the present ledger. The main task is a statement about every planar gradient and every
 rank-one-convex integrand, or one globally certified planar counterexample.
 
+### Signed p=2 extension and an anisotropic no-go (22 November 2026)
+
+A [new hand proof](IWANIEC_MORREY_P2_SIGNED.md) removes
+nonnegativity entirely for **isotropic 2-homogeneous**
+rank-one-convex energies: each is *globally polyconvex*
+because its convex signed-singular profile has affine
+supports with nonnegative intercepts. This is independent
+of Iwaniec 2026 and remains unformalized in Lean.
+The same note fixes a determinant-arithmetic error
+in Guerra–Kristensen (2022), Proposition 3.7 by
+an exact 3-point minors-preserving counterexample
+to polyconvexity for a **nonisotropic** rank-one
+convex 2-homogeneous energy.
+
+**Stop rule:** No claim that GL-transformed signed
+p=2 isotropic polyconvex generators and their
+positive/supremum closures can span *all* anisotropic
+rank-one-convex p=2 integrands. The verified
+nonpolyconvex example rules out that approach.
+This does not refute quasiconvexity.
+
 ## 0. Iwaniec-dependent route (22 November 2026)
 
 The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes

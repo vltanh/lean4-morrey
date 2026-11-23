@@ -24,11 +24,10 @@ More precisely, for every A≠0 there exist α_A,β_A≥0 such that
 \]
 where D=diag(1,-1). Each G_A is quasiconvex. At A=0 take G_0=0.
 
-**Theorem B.** If p=2, the same assumptions on F imply that F is
+**Theorem B (strengthened in a later note).** If p=2, the same assumptions on F imply that F is
 **globally polyconvex**, with at every A a supporting polyconvex integrand
 \(G_A(X)=c_A\|X\|_{\rm op}^2+m_A\det X\), \(c_A\ge0\).
-This result uses only Guerra–Kristensen's extremality bound / elementary
-rank-one convexity, not Iwaniec 2026.
+In fact [the signed p=2 theorem](IWANIEC_MORREY_P2_SIGNED.md) removes the global nonnegativity hypothesis **entirely**, by a direct rank-one midpoint endpoint-slope argument. No Iwaniec input is needed.
 
 Neither conclusion solves unrestricted 2×2 Morrey: the three restrictions
 nonnegativity, isotropy and positive homogeneity remain essential to the proof.
