@@ -25,6 +25,31 @@ rank-one-convex p=2 integrands. The verified
 nonpolyconvex example rules out that approach.
 This does not refute quasiconvexity.
 
+### Global L-cone no-go (22 November 2026)
+
+The [exact no-go theorem](IWANIEC_MORREY_CONE_NOGO.md)
+shows that the positive cone of **all** matrix-translated
+and invertible GL-transformed Iwaniec calibrators L,
+augmented by **all** polyconvex functions, has a
+strict, exact support-envelope gap of **1**
+at a simple rank-one-convex anisotropic
+2-homogeneous integrand T. The proof uses its
+whole rank-one-flat line and the corrected
+Guerra–Kristensen minors witness; it does not
+claim T is not quasiconvex.
+
+**Stop rule:** Do not claim that closure of
+positive polyconvex plus L-generator cones
+can settle unrestricted Morrey, regardless of
+the number of terms, transformations or
+pointwise supremum operations. The
+no-go is global in this class. Any
+renewed calibration program must introduce
+a qualitatively new generator or abandon
+global pointwise minorants; otherwise
+prioritize an all-gradient Jensen proof
+or an actual negative planar witness.
+
 ## 0. Iwaniec-dependent route (22 November 2026)
 
 The [universal isotropic note](IWANIEC_MORREY_UNIVERSAL.md) proposes
