@@ -268,6 +268,27 @@ separate level-set inclusions, for
 the remaining global proof.
 
 
+### Three-atom geometry: connected-pair class closed
+
+In the [four-atom global theorem](IWANIEC_MORREY_FOUR_ATOM.md#5a-all-three-atom-laws-with-a-rank-one-pair-are-laminates),
+**every** minors-preserving diagonal
+three-atom law containing a rank-one
+connected pair is a two-step laminate,
+and hence obeys Jensen for every RC
+integrand. This closes an infinite
+geometric subclass, with no exponent
+or profile restriction.
+An [exact rational three-atom
+example](../../research/audit/iwaniec_three_atom_geometry_exact.py)
+shows the **remaining pairwise
+unconnected** moment class is nonempty.
+No energy inequality is solved there.
+The genuinely unresolved
+global diagonal-PC gates are
+pairwise-unconnected three-atom
+and arbitrary four-atom moment laws.
+
+
 ### GLOBAL bounded-atom reduction (all exponents, all profiles)
 
 The new [four-atom theorem](IWANIEC_MORREY_FOUR_ATOM.md)

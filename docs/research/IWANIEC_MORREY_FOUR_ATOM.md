@@ -191,6 +191,92 @@ when u is nonconstant. These are
 continuous unrestricted parameter
 families, not finite case lists.
 
+## 5A. ALL three-atom laws with a rank-one pair are laminates
+
+**Theorem (unconditional, no isotropy/homogeneity required).**
+Let a three-atom probability law supported on
+diagonal real 2×2 matrices satisfy
+\[
+ \sum_iw_iA_i=\bar A,\qquad
+ \sum_iw_i\det A_i=\det\bar A.
+\]
+If any two distinct atoms are rank-one connected,
+then the law is a **finite-order laminate**:
+a two-stage sequence of rank-one splittings
+realizes its barycenter and weights. Hence
+it satisfies Jensen for **every** rank-one
+convex F, in particular for every p>2
+integrand in this project.
+
+**Proof.** Relabel so
+\(A_1=\mathrm{diag}(x_0,y_1)\),
+\(A_2=\mathrm{diag}(x_0,y_2)\), and
+\(A_3=\mathrm{diag}(x_3,y_3)\);
+the case of two equal y coordinates is symmetric.
+Assume all weights positive (zero weights
+reduce to the two-atom case), and let
+\(w_{12}=w_1+w_2\),
+\(\bar y_{12}=(w_1y_1+w_2y_2)/w_{12}\).
+The first two atoms rank-one split their
+own barycenter
+\(B=\mathrm{diag}(x_0,\bar y_{12})\).
+The determinant identity for the whole
+law reduces to
+\[
+  w_{12}w_3(x_0-x_3)(\bar y_{12}-y_3)=0.
+\]
+If \(x_0=x_3\), the matrices B,A3
+are rank-one connected automatically;
+otherwise the displayed identity forces
+\(\bar y_{12}=y_3\), again giving a
+rank-one connection. Split the total
+barycenter into B and A3, then split B
+into A1 and A2. Two rank-one Jensen
+inequalities prove the claim. QED.
+
+Thus any three-atom obstruction to
+the **polyconvexity** conjecture must
+have pairwise full-rank differences:
+\[
+  (x_i-x_j)(y_i-y_j)\ne0
+  \quad\text{for every }i\ne j.
+\]
+These are sometimes called
+three-atom unconnected or T3-type
+moment configurations. This geometric
+necessary condition is not sufficient
+for an energy violation.
+
+**Exact example showing the residual class exists.**
+At normalized base E₀=diag(1,0), take
+equal weights \(w_i=1/3\) and diagonal
+coordinates
+\[
+ (x_i,y_i)=
+ (0,-3/2),\quad(3/4,9/4),\quad
+ (9/4,-3/4).
+\]
+One checks exactly
+\[
+ \sum w_ix_i=1,\quad
+ \sum w_iy_i=0,\quad
+ \sum w_ix_iy_i=0,
+\]
+while all three pairs have different
+x and y coordinates. This is
+**not** an actual compatible planar
+gradient law and carries no assigned
+negative energy gap. The exact rational
+control is [here](../../research/audit/iwaniec_three_atom_geometry_exact.py).
+
+This disposes of **every** connected-pair
+three-atom configuration simultaneously,
+not an arbitrary fixed-mesh family.
+The remaining global gate concerns
+pairwise rank-two-separated 3-atom
+laws and unconstrained 4-atom laws
+for every admissible p and F.
+
 ## 6. Status and exactly what remains
 
 This reduction is **global in the
