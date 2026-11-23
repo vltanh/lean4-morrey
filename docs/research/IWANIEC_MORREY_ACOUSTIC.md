@@ -144,6 +144,65 @@ general 2×2 RC integrand is isotropic/homogeneous.
 The endpoint patching argument deserves a separate
 Lean translation and independent analytic review.
 
+## Curvature-flat supporting theorem for ALL p>2
+
+The scalar criterion yields a genuinely global all-F corollary
+for *every* exponent p>2, with **no nonnegativity assumption**.
+
+**Theorem (conditional on global quasiconvexity of p-Burkholder).**
+Let F be a finite-valued SO(2)×SO(2)-isotropic, positively
+p-homogeneous, globally rank-one-convex 2×2 integrand, p>2,
+whose signed-singular profile h is C² on [-1,1].
+At any interior signed ratio r₀ satisfying **h''(r₀)=0**,
+F is quasiconvex **at every matrix A with r(A)=r₀**.
+
+Indeed, write m=h'(r₀), c=h(r₀)-r₀m,
+\(\kappa=(p-2)/p>0\). At h''=0 the acoustic
+criterion (A) reduces to
+\[
+ B\ge0,\qquad
+ |\,r_0B+(p-2)m\,|\le B,\quad
+ B=\frac{p c+(p-2)r_0m}{1-r_0^2}.
+\]
+The upper and lower signs, multiplied by
+the positive denominators, yield **exactly**
+\[
+ p c\ge(p-2)m,\qquad p c\ge-(p-2)m,
+\]
+so \(\boxed{c\ge\kappa|m|}\).
+Since rank-one convexity forces h convex, its
+tangent line \(\ell(r)=c+mr\) is a
+**global minorant** of h on [-1,1].
+Putting
+\[
+ \alpha=\tfrac12(c/\kappa+m)\ge0,\quad
+ \beta=\tfrac12(c/\kappa-m)\ge0
+\]
+gives
+\[
+  \alpha(\kappa+r)+\beta(\kappa-r)=\ell(r).
+\]
+The associated matrix integrand
+\(\alpha B_p^+(A)+\beta B_p^-(A)\)
+is a globally quasiconvex minorant of F
+(assuming the 2026 global Burkholder result)
+and touches at every A whose signed ratio is r₀.
+Therefore F obeys the quasiconvex Jensen
+inequality at all those matrices. QED.
+
+**Methodological consequence.** A C² profile
+separating the p>2 hybrid support cone from
+the rank-one-convex cone can only do so at
+ratios where \(h''(r)>0\). This is a
+*structural necessary condition* for
+failure of this QC support construction,
+not an unrestricted Morrey theorem.
+If h'' vanishes identically (affine profile),
+the entire integrand is a nonnegative
+combination of the two p-Burkholder
+orientations and is quasiconvex everywhere,
+again conditional on Iwaniec 2026.
+
 ## Controls and next gate
 
 - \(\|A\|_{\rm op}^p\): h=1, C=p, B=p/(1-r²),
