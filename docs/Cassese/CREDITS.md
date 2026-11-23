@@ -24,7 +24,7 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   round, which it wrote: the mathematics that Lean lacks is built, and is no reason to depart
   from a proof; versions 4.2.1 to 4.3.1 (commits `8d291b1` to
   `f9198d5`) in the fourth; versions 4.3.1 and 4.3.2 (commit `8e884d5`) in the fifth; version 4.3.2 in the
-  sixth.
+  sixth, after which version 4.3.3 (commit `80b7f6f`) was written.
 - Other Lean code: the proofs were written without consulting the author's Lean formalization
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
   Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
@@ -262,8 +262,9 @@ user, as Pisier–Xu and the two volumes of HNVW had been; Astérisque 247 (1998
 (1974), Maurey–Pisier (1976) and Helson–Lowdenslager (1958) were found by the session in open archives.
 Lust-Piquard (1986) and Bourgain (1986), for which the user looked, were not found. Section 7 of the
 report lists the other works behind the sources that were not read (Simon, Gohberg–Krein, Rubio de
-Francia, Burkholder (1983), the books of Helson and Hoffman; no search for them is recorded), with what
-stands for them. McConnell (1984) was one of them; it was supplied in the sixth round.
+Francia, the books of Helson and Hoffman and, since the sixth round, Burkholder (1983); no attempt to
+obtain them is recorded), with what stands for them. McConnell (1984) was one of them; it was supplied in
+the sixth round.
 
 How it was made:
 
@@ -311,12 +312,13 @@ The figures leave out the update of the documents and its check.
 ## Sixth round: (III.3) by McConnell's theorem (22 November 2026)
 
 For (III.3), the bound for every choice of signs on which their proof of Paley's inequality rests,
-Lust-Piquard and Pisier refer to Bourgain (1986), "see also" McConnell (1984). The fifth round had put
-HNVW I, Theorem 5.7.10 (2), in its place, which gives the average over the signs. When it ended, the
-session told the user that McConnell's article could be left aside, because its proof, as far as it knew,
-needs stochastic integration. It had not read the article. The user supplied it, and that was wrong: the
-Brownian motion of the proof enters only through finite chains with independent Cauchy increments. The
-step was then redone by McConnell's proof.
+Lust-Piquard and Pisier refer to Bourgain (1986), "see also" McConnell (1984). The fifth round had used
+HNVW I, Theorem 5.7.10 (2), instead, which gives (III.3) on average over the signs. When it ended, the
+session named McConnell's article to the user as optional, and did not recommend it: its proof, as far as
+the session knew, uses stochastic integration. It had not read the article. The user supplied it, and the
+session's statement proved wrong: the proofs of the theorems use only the finite-dimensional
+distributions of the hitting places of a Brownian motion, that is, chains with independent Cauchy
+increments. The step was then redone by McConnell's proof.
 
 How it was made:
 
@@ -325,7 +327,8 @@ How it was made:
 - Two reviewers compared the proofs of Theorems 1.1 and 1.3 with the article, and two agents applied their
   findings (`d63fd67`, 17:21). (III.3) for every choice of signs (`0be3345`, 17:24); two more statements in
   the Palomar entry VectorValuedLittlewoodPaley, and the documents of the package (`0d11d96`, 17:27). A last
-  reviewer compared the whole change with the sources, and its remarks were applied (`8af8279`, 17:40).
+  reviewer compared the whole change with the sources; all its remarks but one, on a commit message, were
+  applied (`8af8279`, 17:40), and these last edits were not reviewed again.
 - The averaged route stays in the history of the package (`ec00cb2`).
 - The main session moved this repository onto `8af8279` (`fd2c773`, 17:55). An agent updated the
   documents, and an independent agent checked the changed passages.
@@ -335,7 +338,7 @@ How it was made:
 
 Figures, from 15:59:00 (UTC−6), when the user supplied the article, to `8af8279` (17:40:41):
 
-- elapsed time: 1.7 h;
+- elapsed time: 1.7 h, between the two times;
 - the lead agent and its sub-agents: 12 agents (the lead, the checker of the statements, 5 provers, 3
   reviewers, 2 for revisions), at most 6 running at once, 3.9 h of working time; 674 tool calls; tokens:
   1.04 M output, 8.24 M input, 93 M cache reads; 355 model calls, all `claude-opus-5-5`;

@@ -109,8 +109,9 @@ sources:
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
       probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
       non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Sections 5.1 and 5.2
-      (the Hilbert transform), Proposition 5.7.1 (transference to the circle) and Appendix D; Volume
-      II, Proposition 7.4.22 (type 2 implies K-convexity).
+      (the Hilbert transform), Proposition 5.7.1 with the dilation of the proof of Theorem 5.7.10
+      (transference to the circle) and Appendix D; Volume II, Proposition 7.4.22 (type 2 implies
+      K-convexity).
   - title: "Non-commutative martingale transforms"
     authors:
       - "Narcisse Randrianantoanina"
@@ -179,9 +180,9 @@ sources:
       Theorem 1.3 (Littlewood-Paley inequalities for every choice of signs, the implication from UMD
       spaces), for n = 1, proved in lean4-harmonic-analysis by the article's proofs. The places where a
       Brownian motion hits the heights are represented by their finite-dimensional distributions
-      (chains with independent Cauchy increments), which are all that the proofs use; slips of the article
-      are repaired. The boundedness of the Hilbert transform, which it recalls from Burkholder (1983), not
-      read, is HNVW I, Theorem 5.1.13.
+      (chains with independent Cauchy increments), which are all that the proofs of the two theorems use;
+      slips of the article are repaired. The boundedness of the Hilbert transform, which it recalls
+      (Burkholder 1983, not read), is HNVW I, Theorem 5.1.13 and Lemma 5.2.1.
   - title: "Non-commutative vector valued L_p-spaces and completely p-summing maps"
     authors:
       - "Gilles Pisier"
@@ -401,7 +402,7 @@ automation:
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
         the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth, and to
-        4.3.2 (commit 8e884d5) in the fifth and sixth. Second
+        4.3.2 (commit 8e884d5) in the fifth and sixth, after which 4.3.3 (commit 80b7f6f) was written. Second
         round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
@@ -480,9 +481,9 @@ fidelity:
     Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed), Bourgain 1986 (the
     first of two references for (III.3) of Lust-Piquard and Pisier; the second, McConnell 1984, is
     followed). Named substitutes for steps that the sources of Proposition 6.3 take from works that were
-    not read, recall as known, or state without proof: HNVW I, Theorem 5.1.13, for the boundedness of the
-    Hilbert transform that McConnell recalls (Burkholder 1983); Randrianantoanina's theorem for the UMD
-    property of C_2p (recalled from Rubio de Francia 1986);
+    not read, recall as known, or state without proof: HNVW I, Theorem 5.1.13 and Lemma 5.2.1, for the
+    boundedness of the Hilbert transform that McConnell recalls (Burkholder 1983); Randrianantoanina's
+    theorem for the UMD property of C_2p (recalled from Rubio de Francia 1986);
     Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
     Hölder's inequality and the duality of the Schatten classes (Simon 1979) and for Horn's inequality,
     and Sutter-Berta-Tomamichel 2017 for the three lines theorem (Gohberg-Krein 1965); HNVW II, Proposition
@@ -505,10 +506,12 @@ fidelity:
     Paley-Walsh martingales; HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that
     Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i);
     Lust-Piquard and Pisier's Theorem III.1 (i) for the Paley projection and C_p, 1 <= p <= 2, with a
-    constant independent of p; McConnell's Theorems 1.1 and 1.3 for n = 1, with chains with independent
-    Cauchy increments in place of the hitting places of a Brownian motion, and their transference to the
-    circle by HNVW I, Proposition 5.7.1; and the type 2 constant of S_q for every q >= 2 by
-    Tomczak-Jaegermann's interpolation.
+    constant independent of p; McConnell's Theorems 1.1 and 1.3 for n = 1, and the transference of the
+    multipliers of the second to the circle by HNVW I, Proposition 5.7.1, with the dilation of the proof
+    of Theorem 5.7.10; and the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's
+    interpolation. A change of language: in McConnell's proofs, the hitting places of a Brownian motion are
+    represented by chains with independent Cauchy increments, and Poisson integrals by their Fourier
+    transforms.
     Stated in the case the paper uses: decoupling for Paley-Walsh martingales, Pisier-Xu's Theorem 6.1
     for real square matrices and q >= 2, with a constant C sqrt(q), C not explicit, one inequality of
     HNVW's Corollary 5.7.6, n = 2 in Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
