@@ -83,6 +83,33 @@ global pointwise minorants; otherwise
 prioritize an all-gradient Jensen proof
 or an actual negative planar witness.
 
+### Uniform local-gradient stability excludes every small perturbation
+
+The exact p=4 candidate of the
+[hybrid no-go](IWANIEC_MORREY_HYBRID_NOGO.md)
+has an explicit 1/6 strict rank-one Hessian
+margin at \(A_0=\operatorname{diag}(1,0)\).
+A [global-frequency, local-amplitude proof](IWANIEC_MORREY_LOCAL_STABILITY.md)
+gives \(J_F(A_0,\varphi)\ge
+\frac1{24}\fint\|D\varphi\|_F^2\)
+for **all** periodic fields whose gradients
+are sufficiently small in L∞,
+independent of wavelength or grid.
+The same argument works uniformly on any
+compact set of nonconformal nonzero bases,
+using the strict acoustic positivity
+from the exact rational certificate.
+
+**Search gate:** No further small-amplitude
+local test near such bases can give a
+Morrey counterexample. A negative
+gradient witness, if any, must be
+large-amplitude/nonlinear. This is only
+a stability result and does **not**
+establish quasiconvexity for arbitrary
+test gradients or settle Morrey.
+
+
 ### CLOSED: The proposed p>2 hybrid envelope is not complete
 
 [Exact p=4 no-go theorem](IWANIEC_MORREY_HYBRID_NOGO.md)
