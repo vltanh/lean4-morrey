@@ -108,6 +108,71 @@ planar gradient law or finite laminate. Their
 failure of polyconvex Jensen does **not**
 refute quasiconvexity or the Morrey implication.
 
+## 2A. The exact quadratic support threshold at the zero matrix
+
+The upper bound \(\varepsilon<1/4\) in the witness is
+**sharp** for pointwise *poly-affine supporting at zero*.
+This yields a clean dichotomy **independent of the
+2026 quasiconvexity theorem**:
+
+\[
+ \boxed{\begin{array}{ll}
+ 0\le\varepsilon<1/4:
+  &W_\varepsilon\text{ is NOT polyconvex at zero
+    (strict lifted Jensen violation);}\\[1pt]
+ \varepsilon\ge1/4:
+  & W_\varepsilon(A)\ge
+       W_\varepsilon(0)+\tfrac12\det A
+       \quad\text{for every }A.
+ \end{array}}                                           \tag{10}
+\]
+
+In the second line the displayed determinant-affine
+minorant is **globally valid** and touches W at zero.
+It implies polyconvex Jensen at zero for every
+probability measure matching matrix/determinant moments,
+and quasiconvexity *at zero* by the determinant
+null-Lagrangian identity. It does **not** show
+global polyconvexity of W at ε≥1/4.
+
+**Proof of the second line.** It suffices
+to prove, for every real 2×2 matrix,
+\[
+       L(A)+\frac14\|A\|_F^2-\frac12\det A\ge0.            \tag{11}
+\]
+If \(\|A\|_{\rm op}\le1\), then L=det, and for
+\(A=\left(\begin{smallmatrix}a&b\\c&d\end{smallmatrix}\right)\)
+the left side is exactly
+\[
+ \frac14(\|A\|_F^2+2\det A)
+ =\frac14[(a+d)^2+(b-c)^2]\ge0.                          \tag{12}
+\]
+If \(\|A\|_{\rm op}>1\), set
+\(s=|a_+(A)|\ge0\), \(t=|a_-(A)|\ge0\),
+so \(s+t>1\), \(\|A\|_F^2=2(s^2+t^2)\),
+\(\det A=s^2-t^2\). The left side becomes
+\[
+                    2s-1+t^2.                           \tag{13}
+\]
+When \(s\ge1/2\) this is nonnegative.
+When \(s<1/2\), \(t>1-s\), giving
+\(2s-1+t^2>2s-1+(1-s)^2=s^2\ge0\).
+This proves (11), hence the \(\varepsilon=1/4\)
+support inequality. Larger ε only add
+\((\varepsilon-1/4)\|A\|_F^2\ge0\).
+The first line follows from (6) by choosing
+\(t>1/(1-2\sqrt\varepsilon)\);
+at ε=0 the choice t>1 is enough. QED.
+
+**Precise scope:** The threshold is sharp for
+*polyconvex Jensen at zero* and for this
+determinant-affine support mechanism.
+At ε≥1/4 nothing here asserts W is
+polyconvex at every base matrix. The
+statement is an elementary exact theorem
+about one explicit family, not a global
+Morrey theorem.
+
 ## 3. Smooth coercive strongly rank-one-convex examples
 
 Choose a nonnegative even compactly supported

@@ -47,6 +47,17 @@ every rank-one-convex integrand. The
 still rules out the simple positive-cone approach.
 
 
+The same construction has a **sharp scalar threshold**:
+\(W_\varepsilon=1+L+\varepsilon\|A\|_F^2\)
+violates lifted-minor Jensen at zero whenever
+\(\varepsilon<1/4\), but for every
+\(\varepsilon\ge1/4\) it satisfies
+\(W_\varepsilon(A)\ge
+W_\varepsilon(0)+\det A/2\) globally.
+This closes its *at-zero poly-affine support*
+question only; global polyconvexity is not
+claimed for large ε.
+
 ### Global L-cone no-go (22 November 2026)
 
 The [exact no-go theorem](IWANIEC_MORREY_CONE_NOGO.md)
