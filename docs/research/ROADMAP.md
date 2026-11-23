@@ -25,6 +25,28 @@ rank-one-convex p=2 integrands. The verified
 nonpolyconvex example rules out that approach.
 This does not refute quasiconvexity.
 
+### Smooth coercive nonpolyconvex QC generators (22 November 2026)
+
+The new [Iwaniec stabilization note](IWANIEC_MORREY_SMOOTH_QC.md)
+gives a **four-atom exact rational minors-preserving
+Jensen witness** of strict nonpolyconvexity,
+gap -1/17, for the coercive, strongly rank-one-convex
+\(W_{1/8}=1+L+\|A\|_F^2/8\). This survives
+smooth convolution and invertible affine transformations;
+quasiconvexity remains conditional on the 2026
+global L theorem. This closes the **regularity/
+coercivity robustness issue for this generator**,
+but the four atoms are not a planar gradient law.
+
+**Stop rule:** Smoothness, coercivity,
+strict rank-one convexity, anisotropy and
+nonhomogeneity of particular QC generators
+do not imply a universal representation of
+every rank-one-convex integrand. The
+[L-cone no-go](IWANIEC_MORREY_CONE_NOGO.md)
+still rules out the simple positive-cone approach.
+
+
 ### Global L-cone no-go (22 November 2026)
 
 The [exact no-go theorem](IWANIEC_MORREY_CONE_NOGO.md)

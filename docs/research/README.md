@@ -25,6 +25,7 @@ Start with these documents:
 | [Hybrid Burkholder–polyconvex hierarchy](IWANIEC_MORREY_GENERAL.md) | New all-p>2 scalar quasiconvex envelope lower bound, touching support tests, an exact degree-six counterexample to naive completeness, fractional-power lifting, anisotropic closure and open unrestricted gates. |
 | [Signed isotropic p=2 theorem and source repair](IWANIEC_MORREY_P2_SIGNED.md) | Proposed global polyconvexity theorem for **all real-valued**, isotropic 2-homogeneous rank-one-convex energies; exact correction to Guerra–Kristensen Proposition 3.7 and a rigorous anisotropic no-go. |
 | [Global no-go for Iwaniec-L support cone](IWANIEC_MORREY_CONE_NOGO.md) | Proves L is QC but nonpolyconvex (conditional on the 2026 paper), yet the full positive cone of GL/translates of L plus all polyconvex functions has exact envelope gap **1** on a known anisotropic rank-one-convex 2-homogeneous energy. |
+| [Smooth coercive quasiconvex nonpolyconvex examples](IWANIEC_MORREY_SMOOTH_QC.md) | Explicit (W_ε=1+L+ε\|A\|_F^2), exact four-atom rational minor-Jensen gap -1/17, smoothing and strong rank-one convexity; QC conditional on Iwaniec 2026. |
 | [Archive guide](../../research/archive/README.md) | Original earlier notes and code, including superseded claims. |
 | [Source manifest](../../research/source_manifest.json) | Checksums and coverage of all 36 recovered source artifacts, deduplicated into 139 payloads. |
 
