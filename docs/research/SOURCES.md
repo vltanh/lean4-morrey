@@ -5,6 +5,39 @@ limits of the prior-work search. It does not certify novelty, community acceptan
 preprint, or an external Lean build. The repository's existing paper-specific reports remain
 the detailed sources for the Pedregal and Šverák audits.
 
+## Direct isotropic-to-unrestricted quantitative stability (23 November 2026)
+
+[The all-p≥2 anisotropic/nonhomogeneous stability theorem](IWANIEC_MORREY_ANISOTROPIC_QUANT_STABILITY.md)
+is a direct *conditional* consequence of the proposed
+nonnegative isotropic p-homogeneous rank-one-convex⇒polyconvex
+theorem in [the same PR](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md).
+Assuming that theorem is verified, subtract
+a small \(c\|A\|_F^p\) from any smooth
+strictly positive and uniformly rank-one-elliptic
+isotropic p-homogeneous core; the remainder
+stays nonnegative/isotropic/p-hom/RC,
+and is therefore polyconvex by the assumed result.
+An explicit uniform convexity bound
+\(c_p=p/[(p-1)4^{p-1}3^{p-2}]\)
+then absorbs **any** anisotropic,
+nonhomogeneous C² perturbation with
+a sufficiently small global weighted
+Hessian bound, proving QC for **all**
+periodic gradients and amplitudes.
+The [exact nonconvex quartic baseline control](../../research/audit/iwaniec_anisotropic_stability_exact.py)
+passed.
+
+This is a hand derivation based on standard
+p-power uniform convexity and the **assumed**
+isotropic result. No novelty priority,
+Lean kernel certification, or general
+unrestricted Morrey conclusion is claimed.
+It proves a quantitative neighborhood
+extension (G1), NOT that every arbitrary
+anisotropic or nonhomogeneous globally
+RC integrand is quasiconvex.
+
+
 ## Fourier-wave and all-gradient audit — 23 November 2026
 
 - **Prior art**: G. Sebestyén and L. Székelyhidi, *Laminates Supported on Cubes*, J. Convex Anal. 24 (2017), 1217–1237, [DOI](https://doi.org/10.68381/jca24070), proves the special three-sawtooth-wave planar laminate theorem. **Do not extend this to arbitrary vector-valued three-ridge profiles by taking means of randomly shifted square waves**: rank-one Jensen has the [wrong inequality direction](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md).
