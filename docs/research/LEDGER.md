@@ -622,6 +622,39 @@ No new Morrey theorem or
 Lean formalization is claimed.
 
 
+**I25 — independent p≥2 logic audit and global anisotropic QC/non-PC ball (23 Nov 2026).**
+A [fresh algebra and quantifier audit](IWANIEC_MORREY_PGE2_BRIDGE_LOGIC_AUDIT.md)
+found no fatal gap in the
+**provisional** p≥2 isotropic
+RC⇒PC supporting-plane proof.
+Seven decisive Case I identities
+and the nonhomogeneous rank-one
+SOS/strict minor-witness
+were rechecked exactly; human
+refereeing and Lean are pending.
+
+Using **Bruno–Pasqualotto (2026)
+QC of the DM quartic as a
+clearly labeled external premise**,
+the [anisotropic C²-ball theorem](IWANIEC_MORREY_ANISOTROPIC_OPEN_QC_NONPC.md)
+gives globally positive, coercive,
+uniformly strongly RC and QC but
+non-PC energies
+\(1+e^q+\|A\|_F^2/1000+G(A)\),
+for **every** bounded C² G with
+\(\|G\|_\infty<10^{-4}\) and
+\(\|D²G\|_\infty<10^{-3}\).
+Exact four-atom minor-Jensen
+violation persists with rational
+gap \(>130157/160290000\).
+This is an infinite-dimensional
+fully anisotropic, nonhomogeneous
+all-amplitude QC neighborhood,
+not universal Morrey.
+[Exact checker](../../research/audit/iwaniec_anisotropic_open_qc_nonpc_exact.py).
+No Lean/CI/novelty claimed.
+
+
 **Decision gate after I06:** Do **not** attempt to prove the
 refuted hybrid completeness identity; nor infer
 non-quasiconvexity from positive-cone separation,

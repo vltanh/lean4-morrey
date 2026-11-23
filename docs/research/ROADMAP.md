@@ -1,5 +1,58 @@
 # Roadmap to completion
 
+## 23 November: global anisotropic and nonhomogeneous QC open neighborhood
+
+The [new open-family theorem](IWANIEC_MORREY_ANISOTROPIC_OPEN_QC_NONPC.md)
+produces **an infinite-dimensional open ball** of
+positive, coercive, uniformly strongly RC,
+globally QC but nonpolyconvex 2×2 integrands.
+They are permitted to be **both anisotropic and
+nonhomogeneous simultaneously**.
+The exact four-atom nonpolyconvexity
+gap survives **every** bounded C²
+perturbation with
+\(\|G\|_\infty<10^{-4}\),
+\(\|D^2G\|_\infty<10^{-3}\).
+Global QC is conditional on the
+Bruno–Pasqualotto (2026)
+quasiconvexity theorem for the
+Dacorogna–Marcellini quartic;
+all other inequalities have exact
+hand proofs and a rational checker.
+This goes beyond the isotropic
+homogeneous subclass for **all
+gradient amplitudes and oscillations**,
+but the proof uses *one known QC
+core plus a convex perturbation*.
+It is not a proof of universal
+RC⇒QC. Do not confuse the
+minor-law PC counterexample
+with a compatible-gradient QC
+counterexample.
+
+The [fresh independent logic audit](IWANIEC_MORREY_PGE2_BRIDGE_LOGIC_AUDIT.md)
+checks seven central Case I identities
+and the no-homogeneity obstruction
+exactly; no fatal gap in the new
+isotropic p≥2 hand proof was
+identified. The isotropic theorem
+is NOT Lean-certified or externally
+human-reviewed.
+
+**Unrestricted next target:** a
+phase-sensitive and scale-sensitive
+gradient Jensen bound for arbitrary
+RC integrands, or a genuine
+globally certified compatible-gradient
+counterexample. Existing
+[negative certificate hierarchy](GLOBAL_CERTIFICATES.md)
+is complete with *unbounded*
+degree/mesh/SOS order, but
+supplies no universal finite cutoff.
+No theorem currently bridges
+this missing step.
+
+
 ## Research update — provisional isotropic completion, unrestricted remains open (23 Nov 2026)
 
 The new [all-p≥2 isotropic p-homogeneous theorem](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md)

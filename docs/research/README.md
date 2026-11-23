@@ -4,6 +4,8 @@
 No verified rank-one-convex, non-quasiconvex integrand on `ℝ²ˣ²` has been produced.
 Pedregal's nonemptiness lemma is refuted, but that does not refute Morrey's implication.
 
+**Latest independent logic re-audit:** [p≥2 theorem and unrestricted-bridge audit](IWANIEC_MORREY_PGE2_BRIDGE_LOGIC_AUDIT.md). Its seven symbolic identities and the global nonhomogeneous rank-one SOS/minors checks pass; the claimed isotropic theorem remains a provisional hand proof. **New beyond-isotropy consequence:** a [genuine infinite-dimensional bounded-C² neighborhood of positive, coercive, anisotropic and nonhomogeneous QC but non-PC integrands](IWANIEC_MORREY_ANISOTROPIC_OPEN_QC_NONPC.md), conditional on the external Bruno–Pasqualotto 2026 QC theorem. Neither resolves unrestricted Morrey.
+
 Start with these documents:
 
 | Document | Purpose |
