@@ -108,8 +108,8 @@ sources:
       lean4-banach-probability and lean4-harmonic-analysis by the books' proofs, with their slips
       repaired, for the paper's UMD constants (predictable signs, its Definition 2.5), real spaces and
       probability spaces (Morrey/Common/External/HNVW). Also followed in the proof of the
-      non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Sections 5.1-5.3
-      and 5.7 (Theorem 5.7.10 (2), in place of Bourgain 1986 and McConnell 1984) and Appendix D; Volume
+      non-commutative Khintchine inequality (the paper's Proposition 6.3): Volume I, Sections 5.1 and 5.2
+      (the Hilbert transform), Proposition 5.7.1 (transference to the circle) and Appendix D; Volume
       II, Proposition 7.4.22 (type 2 implies K-convexity).
   - title: "Non-commutative martingale transforms"
     authors:
@@ -165,7 +165,23 @@ sources:
       Read and followed for the non-commutative Khintchine inequality, proved in
       lean4-harmonic-analysis: the lower bound by (I.5)-(I.7); the upper bound by Paley's inequality
       in the Schatten classes (Theorem III.1 (i), for the Paley projection), Corollary III.4 with signs and
-      duality (pp. 246-248, 254-255). (III.3) on average over the signs, which is what the proof uses.
+      duality (pp. 246-248, 254-255). (III.3), for every choice of signs, by McConnell (1984), Theorem 1.3,
+      the second of the two references given for it (the first, Bourgain 1986, was not obtained).
+  - title: "On Fourier multiplier transformations of Banach-valued functions"
+    authors:
+      - "Terry R. McConnell"
+    id: "Trans. Amer. Math. Soc. 285 (1984), 739-757"
+    type: "article"
+    location: "https://doi.org/10.1090/s0002-9947-1984-0752501-x"
+    relationship: "background"
+    note: >-
+      Read and followed for (III.3) of Lust-Piquard and Pisier: Theorem 1.1 (Mihlin multipliers) and
+      Theorem 1.3 (Littlewood-Paley inequalities for every choice of signs, the implication from UMD
+      spaces), for n = 1, proved in lean4-harmonic-analysis by the article's proofs. The places where a
+      Brownian motion hits the heights are represented by their finite-dimensional distributions
+      (chains with independent Cauchy increments), which are all that the proofs use; slips of the article
+      are repaired. The boundedness of the Hilbert transform, which it recalls from Burkholder (1983), not
+      read, is HNVW I, Theorem 5.1.13.
   - title: "Non-commutative vector valued L_p-spaces and completely p-summing maps"
     authors:
       - "Gilles Pisier"
@@ -316,8 +332,8 @@ related_formalizations:
       Written for this project by the same AI system: Fourier multipliers and duality, transference
       from the torus to the plane, Poisson summation, Dragičević's lower bound for the square of the
       Beurling-Ahlfors transform, smooth periodic Fourier series; in its vector-valued part, which uses
-      lean4-banach-probability, the Hilbert transform and Littlewood-Paley inequalities in UMD spaces,
-      matrix-valued Hardy functions, Paley's inequality in the Schatten classes and the non-commutative
+      lean4-banach-probability, the Hilbert transform, Mihlin multipliers and Littlewood-Paley
+      inequalities in UMD spaces, matrix-valued Hardy functions, Paley's inequality in the Schatten classes and the non-commutative
       Khintchine inequality. Published; lakefile.toml requires it from GitHub at a pinned commit.
   - id: "https://github.com/vltanh/lean4-banach-probability"
     relationship: "builds-on"
@@ -385,7 +401,7 @@ automation:
         020f253 in the second round of the session, with its multi-paper reference written during
         that round (commits d385092 and b04ce21); version 4.2.0 (commit f5e7420), written during
         the third round; versions 4.2.1 to 4.3.1 (commits 8d291b1 to f9198d5) in the fourth, and to
-        4.3.2 (commit 8e884d5) in the fifth. Second
+        4.3.2 (commit 8e884d5) in the fifth and sixth. Second
         round: the main session and 28 sub-agents on this paper (an
         inventory, a statement writer, 2 statement reviewers and a fixer, 12 provers, an
         integrator, a cleanup agent, 3 proof reviewers and 4 fixers, a web reader, a report
@@ -398,7 +414,10 @@ automation:
         updated and checked the documents. Fifth round, the non-commutative Khintchine inequality by
         its sources' proof: a lead agent with 45 sub-agents (20 provers, 3 checkers of statements, 11
         reviewers, 10 for revisions, one for the documents), besides the agents that updated and
-        checked this repository's documents. Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        checked this repository's documents. Sixth round, a step of that proof by McConnell's theorem: the
+        same lead agent with 11 sub-agents (5 provers, a checker of statements, 3 reviewers, 2 for
+        revisions), besides the agents for this repository's documents. Lean v4.36.0-rc2, Mathlib
+        v4.36.0-rc2.
       cost:
         wall_time: >-
           Second round: 8.3 h elapsed (this paper, Šverák's and the reorganization of the
@@ -408,7 +427,8 @@ automation:
           Šverák's Lemma 1 and the revision of the procedure). Fourth round: 2.95 h elapsed to the
           last commit of the proofs, 8.7 h of sub-agent working time on it (17.4 h for the whole
           session in that window). Fifth round: 5.1 h elapsed between its first and its last commit
-          (the first 50 minutes within the fourth round's), 13.8 h of sub-agent working time.
+          (the first 50 minutes within the fourth round's), 13.8 h of sub-agent working time. Sixth
+          round: 1.7 h elapsed to the last commit of the proofs, 3.9 h of sub-agent working time on it.
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -418,7 +438,8 @@ automation:
         unconditionally ("I think you need to formalize all of them unconditionally"), and let the
         agent decide without asking; then obtained the cited books and articles that the agent could
         not (most of them), so that the cited results could follow them; then asked for the sources'
-        proof of the non-commutative Khintchine inequality, with its general theory made reusable.
+        proof of the non-commutative Khintchine inequality, with its general theory made reusable; then
+        supplied McConnell (1984), which a step of that proof cites.
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code, the three packages and the documents at the request of the
@@ -456,10 +477,11 @@ fidelity:
     its sources'. Read in another edition: Rindler 2018 (the second edition), Pisier 2016 (the 2011
     lecture notes). Not obtained, and not needed: Heinz 2008, Pedregal 1993, Vasyunin-Volberg 2010,
     Lust-Piquard 1986 (Pisier-Xu 2003, the source cited first for Proposition 6.3, gives no proof;
-    Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed). Named
-    substitutes for steps that the sources of Proposition 6.3 take from works that were not read,
-    recall as known, or state without proof: HNVW I, Theorem 5.7.10 (2), on average over the signs, for
-    Bourgain 1986 (looked for, not found) and McConnell 1984; Randrianantoanina's theorem for the UMD
+    Lust-Piquard and Pisier 1991 and, for the order sqrt(q), Pisier 1998 are followed), Bourgain 1986 (the
+    first of two references for (III.3) of Lust-Piquard and Pisier; the second, McConnell 1984, is
+    followed). Named substitutes for steps that the sources of Proposition 6.3 take from works that were
+    not read, recall as known, or state without proof: HNVW I, Theorem 5.1.13, for the boundedness of the
+    Hilbert transform that McConnell recalls (Burkholder 1983); Randrianantoanina's theorem for the UMD
     property of C_2p (recalled from Rubio de Francia 1986);
     Helson-Lowdenslager 1961 for Helson's book and 1958, Theorem 9, for Hoffman's; HNVW I, Appendix D, for
     Hölder's inequality and the duality of the Schatten classes (Simon 1979) and for Horn's inequality,
@@ -483,8 +505,10 @@ fidelity:
     Paley-Walsh martingales; HNVW I, Theorem 4.2.7, in place of the extrapolation theorem that
     Randrianantoanina quotes; |dD| = 0 in Kinderlehrer-Pedregal's Proposition 8.1 (i);
     Lust-Piquard and Pisier's Theorem III.1 (i) for the Paley projection and C_p, 1 <= p <= 2, with a
-    constant independent of p, and the type 2 constant of S_q for every q >= 2 by Tomczak-Jaegermann's
-    interpolation.
+    constant independent of p; McConnell's Theorems 1.1 and 1.3 for n = 1, with chains with independent
+    Cauchy increments in place of the hitting places of a Brownian motion, and their transference to the
+    circle by HNVW I, Proposition 5.7.1; and the type 2 constant of S_q for every q >= 2 by
+    Tomczak-Jaegermann's interpolation.
     Stated in the case the paper uses: decoupling for Paley-Walsh martingales, Pisier-Xu's Theorem 6.1
     for real square matrices and q >= 2, with a constant C sqrt(q), C not explicit, one inequality of
     HNVW's Corollary 5.7.6, n = 2 in Dragičević's theorem, quasiaffinity for 3 x 3 minors. See docs/Cassese/REPORT.md, Section 7.
@@ -503,8 +527,9 @@ review:
     that redid the cited results by their sources' proofs, agents compared these results with the
     sources, independent reviewers checked the redone proofs of the packages against the sources, the
     statements of Morrey/Common/External, the restated Proposition 2.7 (6) and the updated
-    documents. In the round that redid the non-commutative Khintchine inequality, independent reviewers
-    checked the packages' new statements, their proofs against the sources, and the updated documents.
+    documents. In the round that redid the non-commutative Khintchine inequality, and in the one that
+    redid a step of it by McConnell's theorem, independent reviewers checked the packages' new statements,
+    their proofs against the sources, and the updated documents.
 
 alignment:
   namespace: "CasseseChallenge"

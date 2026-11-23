@@ -8,9 +8,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   repository, independently of the author's own Lean code; chose, in the second round, to build
   every cited result that was large but feasible; asked, in the third round, for every result to be
   proved unconditionally; obtained, for the fourth, most of the cited books and articles that the
-  session could not, and, for the fifth, Sarason (1967) and Helson–Lowdenslager (1961), so that the cited
-  results could follow them; and asked, for the fifth, for the sources' proof of the non-commutative
-  Khintchine inequality, with its general theory made reusable.
+  session could not, for the fifth, Sarason (1967) and Helson–Lowdenslager (1961), and, for the sixth,
+  McConnell (1984), so that the cited results could follow them; and asked, for the fifth, for the sources'
+  proof of the non-commutative Khintchine inequality, with its general theory made reusable.
 - Formalization: Claude Opus 5.5 (`claude-opus-5-5`, Anthropic), in Claude Code 2.1.330 (the VS Code
   extension, Claude Agent SDK), in one session: the main session, its sub-agents, and the
   sub-agents that lead agents launched. Web pages were read by sub-agents. The same system wrote
@@ -23,7 +23,8 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   that the round wrote (commits `d385092`, `b04ce21`); version 4.2.0 (commit `f5e7420`) in the third
   round, which it wrote: the mathematics that Lean lacks is built, and is no reason to depart
   from a proof; versions 4.2.1 to 4.3.1 (commits `8d291b1` to
-  `f9198d5`) in the fourth; versions 4.3.1 and 4.3.2 (commit `8e884d5`) in the fifth.
+  `f9198d5`) in the fourth; versions 4.3.1 and 4.3.2 (commit `8e884d5`) in the fifth; version 4.3.2 in the
+  sixth.
 - Other Lean code: the proofs were written without consulting the author's Lean formalization
   ([MorreyTwoComponentsLean](https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean)) or Conti,
   Dolzmann and Dondl's ([so3-r1c-and-not-qc](https://github.com/sergioconti/so3-r1c-and-not-qc)), and
@@ -52,9 +53,9 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   each of the two: 702 of those tokens are in such a run with MorreyTwoComponentsLean, in 11 files,
   the longest run 33 tokens (two lines), and 123 with so3-r1c-and-not-qc, in 3 files, the longest
   22. (For parts of Mathlib of the same size: 0 to 227.) The downloaded copies were then deleted. That
-  comparison (11:41) is older than the fifth round's code in `lean4-harmonic-analysis` and
-  `lean4-banach-probability`; by the transcripts, no sub-agent that worked on that round's proofs opened
-  either repository, and its literature searches excluded both.
+  comparison (11:41) is older than the code of the fifth and sixth rounds in `lean4-harmonic-analysis` and
+  `lean4-banach-probability`; by the transcripts, no sub-agent that worked on the proofs of these rounds
+  opened either repository, and the literature searches of the fifth excluded both.
 - Review: no person has reviewed the proofs. Independent AI agents checked the statements against
   the TeX source (twice), the formal proofs against the paper's (three reviewers) and the report,
   in the second round. In the third: the statements of each package (and the bridges between
@@ -70,7 +71,7 @@ How the formalization of Cassese (2026) was made, from the run log and the sessi
   packages' redone proofs against the sources, the statements of [`Morrey/Common/External/`](../../Morrey/Common/External), the
   restated Proposition 2.7 (6) and the updated documents. In the fifth: independent reviewers checked
   the new statements of the packages, and their proofs against the sources; another checked the updated
-  documents.
+  documents. In the sixth: the same, for McConnell's theorems.
 
 ## Second round (21 November 2026)
 
@@ -260,9 +261,9 @@ Sources: Lust-Piquard–Pisier (1991), Sarason (1967) and Helson–Lowdenslager 
 user, as Pisier–Xu and the two volumes of HNVW had been; Astérisque 247 (1998), Tomczak-Jaegermann
 (1974), Maurey–Pisier (1976) and Helson–Lowdenslager (1958) were found by the session in open archives.
 Lust-Piquard (1986) and Bourgain (1986), for which the user looked, were not found. Section 7 of the
-report lists the other works behind the sources that were not read (McConnell, Simon, Gohberg–Krein,
-Rubio de Francia, the books of Helson and Hoffman; no search for them is recorded), with what stands for
-them.
+report lists the other works behind the sources that were not read (Simon, Gohberg–Krein, Rubio de
+Francia, Burkholder (1983), the books of Helson and Hoffman; no search for them is recorded), with what
+stands for them. McConnell (1984) was one of them; it was supplied in the sixth round.
 
 How it was made:
 
@@ -306,3 +307,42 @@ commit:
   the Palomar entries of the other two packages.
 
 The figures leave out the update of the documents and its check.
+
+## Sixth round: (III.3) by McConnell's theorem (22 November 2026)
+
+For (III.3), the bound for every choice of signs on which their proof of Paley's inequality rests,
+Lust-Piquard and Pisier refer to Bourgain (1986), "see also" McConnell (1984). The fifth round had put
+HNVW I, Theorem 5.7.10 (2), in its place, which gives the average over the signs. When it ended, the
+session told the user that McConnell's article could be left aside, because its proof, as far as it knew,
+needs stochastic integration. It had not read the article. The user supplied it, and that was wrong: the
+Brownian motion of the proof enters only through finite chains with independent Cauchy increments. The
+step was then redone by McConnell's proof.
+
+How it was made:
+
+- The lead agent of the fifth round, resumed, read the article and wrote the statements; an agent checked
+  them, and five provers proved them in a worktree of `lean4-harmonic-analysis` (commit `beab475`, 16:40).
+- Two reviewers compared the proofs of Theorems 1.1 and 1.3 with the article, and two agents applied their
+  findings (`d63fd67`, 17:21). (III.3) for every choice of signs (`0be3345`, 17:24); two more statements in
+  the Palomar entry VectorValuedLittlewoodPaley, and the documents of the package (`0d11d96`, 17:27). A last
+  reviewer compared the whole change with the sources, and its remarks were applied (`8af8279`, 17:40).
+- The averaged route stays in the history of the package (`ec00cb2`).
+- The main session moved this repository onto `8af8279` (`fd2c773`, 17:55). An agent updated the
+  documents, and an independent agent checked the changed passages.
+- Besides, from 15:17 to 16:22, an agent with a reviewer made three Palomar entries of
+  `lean4-harmonic-analysis` for its vector-valued part (`bf0b7eb`, `0c13109`, `bebc047`; not submitted), one
+  of them VectorValuedLittlewoodPaley.
+
+Figures, from 15:59:00 (UTC−6), when the user supplied the article, to `8af8279` (17:40:41):
+
+- elapsed time: 1.7 h;
+- the lead agent and its sub-agents: 12 agents (the lead, the checker of the statements, 5 provers, 3
+  reviewers, 2 for revisions), at most 6 running at once, 3.9 h of working time; 674 tool calls; tokens:
+  1.04 M output, 8.24 M input, 93 M cache reads; 355 model calls, all `claude-opus-5-5`;
+- the whole session in that window, with the end of the work on the three entries: 14 sub-agents, 4.3 h
+  of working time, 753 tool calls; tokens: 1.14 M output, 9.93 M input, 121 M cache reads; main session: 6
+  tool calls; 7 and 402 model calls (main session and sub-agents), all `claude-opus-5-5`.
+
+From `scripts/session_stats.py` on the session transcript, with `--since` and `--until` at the two times
+above, and from the sub-agents' transcripts. The figures leave out the update of the documents and its
+check.

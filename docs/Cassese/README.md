@@ -96,14 +96,14 @@ Mathlib `v4.36.0-rc2`, and three Lake packages written for this formalization, p
 
 | Package | What this paper uses from it |
 | --- | --- |
-| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7); the non-commutative Khintchine inequality, with Littlewood–Paley theory in UMD spaces, matrix-valued Hardy functions and Paley's inequality in the Schatten classes (Proposition 6.3, used by Section 6) |
+| [`lean4-harmonic-analysis`](https://github.com/vltanh/lean4-harmonic-analysis) | Fourier multipliers and duality, transference from `𝕋²` to `ℝ²` (HNVW I, Corollary 5.7.6), Poisson summation, Dragičević's lower bound for `𝓑²`, Fourier series of smooth periodic functions (Section 7); the non-commutative Khintchine inequality, with multipliers and Littlewood–Paley theory in UMD spaces, matrix-valued Hardy functions and Paley's inequality in the Schatten classes (Proposition 6.3, used by Section 6) |
 | [`lean4-banach-probability`](https://github.com/vltanh/lean4-banach-probability) | Burkholder's inequality, its sharpness and Burkholder's function; UMD theory (the dyadic and the complex constants, decoupling, extrapolation, `L^p`, zig-zag concavity); Kahane–Khintchine and hypercontractivity; Schatten classes, real and complex; type 2 of the Schatten classes and K-convexity (for Proposition 6.3); Randrianantoanina's non-commutative martingale transforms (Sections 2, 4–7) |
 | [`lean4-calculus-of-variations`](https://github.com/vltanh/lean4-calculus-of-variations) | rank-one convexity and quasiconvexity, Dacorogna's formula for the quasiconvex envelope, minors and null Lagrangians, quadratic forms, Kristensen's smoothing, distributional second derivatives on `ℝ` (Lemmas 2.1, 2.2 and Proposition 2.2, used throughout; Section 5; Corollary 1.6; Proposition 7.2) |
 
 The vector-valued part of `lean4-harmonic-analysis` uses `lean4-banach-probability`; otherwise the
 packages depend only on Mathlib. At the pinned commits they have Palomar entries of their own, not
-submitted: eight in `lean4-banach-probability`, three in `lean4-calculus-of-variations`, and one in
-`lean4-harmonic-analysis`, for its scalar part.
+submitted: eight in `lean4-banach-probability`, four in `lean4-harmonic-analysis` (one for its scalar
+part, three for its vector-valued part) and three in `lean4-calculus-of-variations`.
 
 [`Morrey/Common/External/`](../../Morrey/Common/External) states each cited result in its source's terms and proves it from these
 packages; [`Morrey/Cassese/Hypotheses.lean`](../../Morrey/Cassese/Hypotheses.lean) restates it in
