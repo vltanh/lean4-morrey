@@ -728,7 +728,8 @@ docstrings, with the repairs.
   Theorem 3.1 (ii).
 - **McConnell 1984.** Pp. 741–742: with the dyadic intervals of p. 741, the series `T_{(ε)} f` of p. 742
   makes no sense; Theorem 1.3 means the intervals `±[2^j, 2^{j+1})` (p. 755). P. 746, (3.1): `|λ|^{|α|}`,
-  not `|λ|^α`. Pp. 747–748: the limit of `g_N` is `2 (n + 1)! (−4)^{−(n+2)} T_m^A f`; the factor is
+  not `|λ|^α`; with the normalization (1.1), `T_m f = (2π)^{−n} M ∗ f`, so (3.3) and (3.4) lack this factor
+  (immaterial). Pp. 747–748: the limit of `g_N` is `2 (n + 1)! (−4)^{−(n+2)} T_m^A f`; the factor is
   misprinted on p. 747 and, differently, on p. 748. P. 747: the second mean value theorem for integrals
   fails for vector-valued `u`, and can fail for scalar `u` if `u_y` changes sign; `u_y(s − x, y_i + 2y)`
   stands for `u_y(x − s, y_i + 2y)`, and a bracket is missing. Pp. 749–750 and 755–756: (2.1), stated for

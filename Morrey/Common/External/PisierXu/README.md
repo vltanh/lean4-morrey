@@ -36,7 +36,8 @@ by LPP and Astérisque 247, p. 106:
   Sarason's Theorem 4 (Trans. Amer. Math. Soc. 127 (1967), 179–203), with Helson–Lowdenslager (Acta Math.
   99 (1958) and 106 (1961)); (III.3), for every choice of signs, is McConnell's Littlewood–Paley inequality
   for UMD spaces (Trans. Amer. Math. Soc. 285 (1984), 739–757, Theorem 1.3, from his multiplier
-  theorem, Theorem 1.1, `n = 1`), transferred to the circle;
+  theorem, Theorem 1.1, `n = 1`), transferred to the circle by HNVW I, Proposition 5.7.1, with the
+  dilation of the proof of its Theorem 5.7.10;
 - Corollary III.4 with signs, by averaging (LPP, p. 243);
 - the upper bound by duality (LPP, pp. 254–255), with the Rademacher projection on `L^q (S_q)` bounded
   by a multiple of `√q` (Astérisque 247, p. 106): type 2 of `S_q` by Tomczak-Jaegermann (Studia Math. 50
@@ -54,9 +55,12 @@ Szegő's theorem and the quotient by an outer function, from Hoffman's book (pp.
 Helson–Lowdenslager 1958, Theorem 9, and the density argument at the end of Sarason's proof; the
 Schatten inequalities of Simon's and of Gohberg–Krein's books (not read), by Hytönen–van
 Neerven–Veraar–Weis (HNVW), *Analysis in Banach Spaces I*, Appendix D, and by Sutter, Berta and
-Tomamichel (Comm. Math. Phys. 352 (2017)); Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II,
-Proposition 7.4.22. LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it
-is Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese
+Tomamichel (Comm. Math. Phys. 352 (2017)); the boundedness of the Hilbert transform on UMD spaces,
+which McConnell recalls (p. 741; Burkholder 1983, not read), by HNVW I, Theorem 5.1.13 and Lemma
+5.2.1; a comparison of multinomial coefficients that Tomczak-Jaegermann quotes (p. 177), by an
+elementary inequality; Maurey–Pisier, Remark 2.10 (read, no proof), by HNVW II, Proposition 7.4.22.
+LPP recall that `C_{2p}` is UMD, with Cotlar's trick as a known argument; here it is
+Randrianantoanina's theorem ([`External/Randrianantoanina`](../Randrianantoanina)), which Cassese
 cites for it.
 
 **Shorter proof.** The upper bound with the explicit constant `√(2 (q − 1)) ≤ √2 √q`, by the method of
