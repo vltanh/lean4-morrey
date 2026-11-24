@@ -1,5 +1,77 @@
 # Roadmap to completion
 
+## Angular curvature stresses — compact positive-measure equation and uniform moment optimization
+
+The [new angular-stress theorem](IWANIEC_MORREY_ANGULAR_CURVATURE_STRESS.md)
+gives an exact law-side formulation for EVERY p>1 and arbitrary
+signed homogeneous profiles, without a ray count or tree depth.
+For the signed angular p-moment difference sigma, define L_p f
+as the Hessian of the homogeneous extension evaluated at a unit
+matrix and a unit rank-one direction. Its order unit L_p 1 is
+p(1+(p-2)(u:H)^2)>=c_p=p min(1,p-1). Jensen against the
+entire homogeneous RC cone is equivalent to a nonnegative
+measure mu on S³ x unit rank-one directions with
+    int f d sigma = int L_p f d mu
+for EVERY C² angular f, and mass <=sigma(S³)/c_p.
+Proof: positive functional on the subspace L_p f/L_p 1,
+norm-preserving Hahn--Banach and Riesz representation.
+The exact homogeneous smoothing theorem removes smoothness.
+
+Equivalently there is a PSD matrix measure M on S³ with
+C:M=0 as a measure, C the linear cofactor operator. PSD
+and zero cofactor trace are exactly the rank-one covariance
+cone (factor the PSD matrix and choose a zero-diagonal
+orthonormal basis for the resulting traceless symmetric
+form). Write its radial scalar, mixed tangent vector and
+tangent tensor as a,b,K_t. The angular equation is
+    div_S² K_t-2(p-1)div_S b+p tr K_t+p(p-1)a=sigma,
+with cofactor constraint
+    (u:C u)a+2(Cu)·b+C:K_t=0.
+Trace mass is bounded by the ordinary convex p-power
+Jensen gap divided by c_p. Straight Taylor interpolation
+of ANY gradient law X=A+H gives the positive measure
+    M_0=E int_0^1 (1-t)|A+tH|^(p-2)
+                      (H tensor H) delta_direction(A+tH) dt
+solving the angular equation. Its remaining defect is
+C:M_0, a weighted signed pushforward of 2 det H.
+At p=2 gradient compatibility gives zero TOTAL mass
+of that defect, not zero as a measure. **Missing spatial
+step:** alter M_0 in the kernel of the angular equation
+to make cofactor trace zero while preserving PSD. No
+proof of universal existence of this correction yet.
+
+**Uniform finite moment optimization:** for a finite
+angular configuration D with cube directions, enforce
+the stress equations only for polynomials of degree <=n.
+This defines closed convex outer hulls C_n(A) decreasing
+to the closed angular-laminate hull C_D(A). The constant
+test bounds stress mass, and Caratheodory gives <=N+1
+stress atoms where N is the number of polynomial tests.
+Thus for rational p and algebraic data, distance d_n to
+C_n(A) is one finite semialgebraic optimization, with
+no lamination-depth variable. The whole-cone approximation
+theorem gives a priori n(p,delta), independent of the
+rays, root and law, such that for actual hull distance d,
+    d_n <= d <= (1+delta)d_n+delta(|A|^p+||w||_1).
+Key uniform bound: every useful ray-data separator with
+||f||_infinity<=1 gives a finite RC envelope bounded
+above by 2^p |X|^p via cube splitting, below by
+-15*2^p |X|^p via a coordinate product split of zero.
+So one degree bound approximates ALL possible envelope
+separators, not one previously known F. At rational
+parameters the bound is effective. This replaces the
+previous unbounded two-sided tree search by a single
+predetermined finite moment optimization at positive
+relative accuracy. No exact zero-distance cutoff.
+
+Actual symbolic identities and 85 order-unit rational
+bounds passed. The solver is specified, not implemented
+or benchmarked. No new Lean theorem, no closure of
+homogeneous anisotropic Morrey. The only spatial step
+identified above remains unproved; do not present the
+positive-measure reformulation as proving the conjecture
+or as a finite exact classification.
+
 ## Angular realization — exact law-side reduction and uniform finite-depth approximation
 
 The [new angular-laminate theorem](IWANIEC_MORREY_ANGULAR_LAMINATE_REALIZATION.md)
