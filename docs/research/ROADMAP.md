@@ -1,5 +1,49 @@
 # Roadmap to completion
 
+## Positive transport advance — compatibility across arbitrary spectral scales
+
+The [weighted spectral transport theorem](IWANIEC_MORREY_WEIGHTED_SPECTRAL_TRANSPORT.md)
+extracts an actual gradient-compatibility estimate from the formalized
+truncated determinant. Push positive and negative determinant mass
+onto log(s), s=operator norm, and add the opposite base determinant
+atom to balance the masses. For all bases and all bounded compatible
+gradient laws the unnormalized optimal log-radius transport cost is
+    W1 <= (E s²-s_A²)/2 + log(2)(E|det X|+|det A|).
+Proof: for any 1-Lipschitz g, exponentially smooth after shifting by
+log(2), obtaining h'+h''=g' and |h-g|<=log(2). The integrands
+s²/2 ± det X h(log s) satisfy the exact affine-shell QC criterion.
+Their Jensen inequalities and transport duality give the result.
+For smooth RC F at rank-deficient bases, this yields the original
+energy estimate
+    E F-F(A) >= (m/2) E|X-A|² - L_R W1,
+where L_R bounds the log derivative of f_delta(s,0)/s.
+
+The same note extends determinant pairing from zero determinant
+to EVERY base d0. Couple the measures (det-d0)_+ nu and
+(d0-det)_+ nu. For each pair independently select a common
+column radius, inflating its spectra at fixed determinant only
+if necessary, while remaining in the original operator ball.
+Rank-one average to determinant d0; apply scalar convexity on that
+fiber to the resulting mean smaller conformal modulus bar j.
+For rank-one Hessian bounds m,M the exact comparison is
+    E F-F(A) >= (m/2) E|X-A|²
+      -(M-m)/2 (I_cost+4(j_A²-bar j²)_+).
+Both intermediate variances cancel. For no inflation and
+adequate fiber modulus the original nonsmooth theorem follows.
+Optimal rank-one joins for overlapping spectra are explicit;
+the optimal bounded pair inflation radius at zero has a
+closed scalar formula, allowing an actual transport optimization
+over all scales rather than a fixed common radius.
+
+Symbolic identities and 64 exact rational controls executed.
+This is positive progress for unmodified integral Jensen, not
+closure: finite logarithmic cost does not imply zero spectral
+inflation or an adequate fiber modulus at nonzero bases.
+The remaining universal step requires stronger control of
+the energy-dependent transport cost from gradient compatibility.
+No new Lean theorem or novelty claim. The determinant-square
+normal-form gate and full isotropic Morrey remain open.
+
 ## Positive unamplified Jensen — spectral shells and determinant transport
 
 The [spectral-gap theorem](IWANIEC_MORREY_SPECTRAL_GAP_JENSEN.md)
