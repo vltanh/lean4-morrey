@@ -1,5 +1,69 @@
 # Roadmap to completion
 
+## CURRENT DIRECTION — remove isotropy first (homogeneity retained)
+
+**Verified baseline:** main at
+[17fd1c3](https://github.com/vltanh/lean4-morrey/commit/17fd1c3a83f0c96fbc25a5d916187290f6fc0098)
+contains Theorem A, the full signed homogeneous isotropic
+RC=>QC theorem for every p>0.
+[Lean CI passed](https://github.com/vltanh/lean4-morrey/actions/runs/45424739241).
+The signed homogeneous theorem is CLOSED, not a hand
+candidate awaiting audit. The nonhomogeneous isotropic
+attack below is paused at the user's request. The new
+target is arbitrary positively p-homogeneous RC=>QC
+without isotropy, at every base.
+
+The [new anisotropic note](IWANIEC_MORREY_ANISOTROPIC_ORIGIN_RECTIFIED.md)
+contains two positive theorems:
+
+**Complete p=2 origin gate, including arbitrary signs:** every
+finite positively 2-homogeneous F satisfying laminate Jensen
+at zero (even just two-step laminates with <=3 atoms) has
+a global determinant lower support F>=c det. Proof: opposite
+determinant rays can always be joined by positive rescaling
+to rank-one connected matrices. Balance their determinant
+to get a rank-deficient barycenter, and dilute that barycenter
+against its small opposite to obtain a zero-base laminate.
+Degree two cancels the rescaling in the weighted energy,
+forcing a nonempty interval of determinant multipliers.
+This proves QC at zero for ALL such integrands and gives
+an exact finite origin witness bound. It also reduces the
+entire signed degree-two all-base problem to nonnegative
+ones by subtracting c det, a null Lagrangian. The all-base
+degree-two theorem remains open. Do not confuse the weaker
+origin-only homogeneous Morrey question of Cassese with
+our all-base target.
+
+**Global all-base QC for the classical anisotropic non-PC
+obstruction and its arbitrary nonlinear shear extensions:**
+for F([[a,b],[c,d]])=a_+ d_+ + q(b,c), global RC iff QC iff
+both q and q+bc are convex. Necessity follows by rank-one
+lines with arbitrary off-diagonal directions. Sufficiency
+uses ONE scalar projection of the first row onto a>=0,
+obtained from the formalized compact constraint theorem
+by order-preserving Lipschitz contraction. The determinant
+of the mixed projected/original two-row gradient has the
+right mean. After centering, the energy gap is at least
+E[f(B,C)+P C]. Minimize f(p,y)+p y in y and use the tangent
+slope alpha(p)=f_B(p,y(p)). Convexity of f and f+BC implies
+alpha'>=0 by a two-Hessian inequality. The nonlinear
+directional scalar projection sign integrates the tangent
+term with the correct sign. Smooth approximation removes
+regularity and strictness. This proves QC at ALL bases of
+Guerra--Kristensen Proposition 3.7 and all its p>=2 powers,
+despite its exact non-PC witness. It also covers the
+minimal coupled shear q=(b-c)^2/4 and arbitrary convex
+q with q+bc convex, without fixed-degree or homogeneity
+constraints on q. Hand proofs and actual symbolic/rational
+checks; no new Lean theorem or novelty claim.
+
+**Main remaining gate:** arbitrary angular profiles on the
+normalized matrix sphere, with homogeneity retained.
+Nonzero bases and p!=2 origins have not been settled
+in general. No universal completeness of the new
+anisotropic projection generators is proved. Avoid
+another ladder of polynomial degrees or local bounds.
+
 ## Exact energy-dependent tail budget and target-composition compatibility
 
 The [new determinant-tail and spatial weighting note](IWANIEC_MORREY_TARGET_WEIGHTED_TAIL.md)
