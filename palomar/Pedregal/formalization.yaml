@@ -31,7 +31,7 @@ project:
 
 classification:
   arxiv: ["math.AP", "math.OC"]
-  msc2020: ["49J45", "26B25", "47H10", "68V15"]
+  msc2020: ["49J45", "26B25", "47H10"]
 
 sources:
   - title: "Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps"

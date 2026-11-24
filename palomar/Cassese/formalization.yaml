@@ -34,7 +34,7 @@ project:
 
 classification:
   arxiv: ["math.AP", "math.FA", "math.PR"]
-  msc2020: ["49J45", "26B25", "60G42", "46B09", "42B15", "46L53", "68V15"]
+  msc2020: ["49J45", "26B25", "60G42", "46B09", "42B15", "46L53"]
 
 sources:
   - title: "A solution to Morrey's problem in R^{2 x m}"

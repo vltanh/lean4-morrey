@@ -37,7 +37,7 @@ project:
 
 classification:
   arxiv: ["math.AP", "math.OC"]
-  msc2020: ["49J45", "26B25", "30C62", "68V15"]
+  msc2020: ["49J45", "26B25", "30C62"]
 
 sources:
   - title: "Morrey's problem for homogeneous isotropic integrands in the plane"
