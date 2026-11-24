@@ -1,5 +1,67 @@
 # Roadmap to completion
 
+## No rotational symmetry — exact null-ray recession and null-plane classification
+
+The [new rank-one-null theorem](IWANIEC_MORREY_RANKONE_NULL.md)
+replaces all rotational symmetry by a precise rank-one degeneracy.
+An elementary quotient lemma says a continuous RC function invariant
+under translations along a nonzero rank-one H is convex: for every
+direction K with cof(H):K!=0 add a scalar multiple of H to make its
+determinant zero, then use density of those directions.
+
+For arbitrary p<2, F(H)=F(-H)=0 gives F(X+tH)=O(|t|^(p-1))
+by homogeneity and local Lipschitz continuity at +/-H. Convexity
+on that rank-one line and sublinear growth at both ends force
+invariance. Thus EVERY antipodal null-line subquadratic homogeneous
+RC F is convex, without isotropy.
+
+At p=2, even ONE null rank-one ray has an exact finite recession
+R_H(X)=lim F(X+tH)/t. It is finite positively degree-one RC and
+invariant along H, hence convex by the quotient lemma. It vanishes
+on each of the two common-factor rank-one planes containing H:
+convexity and homogeneity bound F(K+tH)<=2F(K) there.
+Subadditivity gives invariance along their three-dimensional sum,
+the kernel of cof(H):X. Thus
+    R_H(X)=a_H(cof(H):X)_+ + b_H(cof(H):X)_-,
+with a_H+b_H>=0. This gives exact global bounds on the slope of F
+along H. For an antipodal zero H=E11, F is independent of entry a
+when d=0 and is uniformly C|d|-Lipschitz in a everywhere.
+If differentiable at both null rays, subtract the already proved
+origin determinant support to make F nonnegative. The two recession
+slopes then vanish, yielding ordinary convexity of the shifted F,
+hence PC of the original signed F.
+
+**Complete quadratic null-plane theorem:** if F([a,0])=0 for every
+a, the recession in a is a universal convex piecewise-linear
+function of det[u,b]. Convexity in a and the zero determinant
+recession imply exact invariance under a->a+tb. Therefore
+F([a,b])=G(b,det[a,b]). For independent b1,b2 choose a common a
+with prescribed determinant values, giving lifted Jensen along
+the rank-one second-column segment. Uniform boundedness from the
+recession estimates gives local Lipschitz extension across b=0
+and full convexity of finite G on R² x R. This proves PC at ALL
+bases, with no sign or rotation invariance. Covers any common-factor
+rank-one null plane, by coordinate changes. If all rank-one
+traces vanish, G is independent of b and F is a convex piecewise
+linear function of det.
+
+The note also proves the universal trace bound
+(2-p)F(U+V)<=F(U)+F(V) for arbitrary rank-one U,V and p>1,
+by separate convexity, rescaling, and taking a one-sided limit.
+For p>2 this controls the negative part by any rank-one
+decomposition; all-zero rank-one trace forces global nonnegativity.
+For p<2 it gives an upper bound, and applying RC at V supplies
+the complementary lower bound.
+
+These are new hand-level all-base results for degeneracies of
+completely anisotropic profiles, not a general solution. Exact
+determinant and trace algebra checked locally. Arbitrary positive
+rank-one trace and the nonsmooth single-null-ray case remain open;
+no universal decomposition into the new classes is proved.
+The attempt to extend the one-sided scaled-rotation tangent
+calibration to arbitrary p did not close that gate. No new Lean
+theorem. The verified signed bi-SO(2) result remains CLOSED.
+
 ## CLOSED at hand-proof level — one-sided SO(2) symmetry at degree two
 
 The [new one-sided rotation theorem](IWANIEC_MORREY_ONE_SIDED_ROTATION.md)
