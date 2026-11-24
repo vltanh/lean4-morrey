@@ -1,5 +1,31 @@
 # Roadmap to completion
 
+## Unrestricted wave count: conditional dyadic lamination and arithmetic peeling
+
+The [new conditional-lamination theorem](IWANIEC_MORREY_DYADIC_LAMINATION.md)
+establishes a block removal inequality for arbitrary finite-valued planar
+rank-one convex integrands, at every base and for arbitrary phases and
+amplitudes. An arbitrary block of at most three integer-frequency waves
+can be removed in the presence of ANY tail whose frequencies are
+multiples of a suitable explicit power of two. In the distinct nonzero
+mod-2 classes, a factor of 4 suffices. The key is a finite-grid triple
+parity bound **conditional on the entire tail**, including the sharp
+unit-triad case; the published N=3 theorem is the deep input.
+
+Iteration proves Jensen for arbitrarily many interacting dyadic-scale
+blocks, with no wave-count bound (explicit cross-scale correlation 1/4).
+The general lattice peeling rule also removes any wave of even or infinite
+order modulo the lattice of the others, or a whole such block in a
+common rank-one subspace. A hypothetical negative gap survives deletion.
+The [exact finite-grid checker](../../research/audit/iwaniec_dyadic_grid_exact.py)
+passed locally. These are hand proofs, not Lean-certified or independently
+refereed, and no novelty claim is made.
+
+**Remaining unrestricted gate:** control irreducible comparable-scale
+resonance clusters, which still have unbounded size. Do not enumerate
+ever larger separated chains or infer a bounded wave-count cutoff.
+No general four-wave or unrestricted Morrey proof is claimed.
+
 ## New unrestricted four-wave gate — one genuine correlated family CLOSED
 
 The [correlated four-wave theorem](IWANIEC_MORREY_FOUR_WAVE_PARITY_THEOREM.md)
