@@ -174,3 +174,7 @@ are hand arguments, **not**
 established by the finite checker.
 No negative gradient Jensen
 witness or full Morrey proof is claimed.
+
+## Post-reset compactification and flat-region controls
+
+Run `python3 research/audit/parametric_compactification_exact.py` (SymPy). The executed checks cover graph-bivector and Hodge-coordinate identities, six polynomial angular curvature Taylor identities, the spherical kernel normalization and second-moment calculation, and the shifted-kernel and flat-region algebra. See [unrestricted parametric reduction](../../docs/research/IWANIEC_MORREY_PARAMETRIC_COMPACTIFICATION.md) and [flat contact resolution](../../docs/research/IWANIEC_MORREY_FLAT_CONTACT_RESOLUTION.md). These are exact algebra controls, not an enumeration of the finite-accuracy families or a proof of the unresolved spatial stress condition.

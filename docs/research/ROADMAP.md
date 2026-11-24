@@ -17,7 +17,9 @@ Before pursuing a route, write the following:
 - a single operation with quantified progress, or a finite exhaustive reduction with a justified size bound;
 - the first falsification test from [LEDGER](LEDGER.md#negative-results-and-invalid-inferences), and why the construction is not already refuted.
 
-Two existing mathematical interfaces are available if a new idea fits:
+**New post-reset global reduction (R11):** [parametric compactification](IWANIEC_MORREY_PARAMETRIC_COMPACTIFICATION.md) removes both homogeneity and isotropy restrictions by an exact graph-bivector extension. The entire integrand cone lives on a fixed compact S²×S²; positive rotational averaging gives a uniform finite family of rational polynomial tests for any prescribed relative area error, and a compact positive curvature stress has mass exactly equal to the graph-area excess. Work on actual spatial compatibility in this geometry (slices, chart changes or another positive construction). Do not treat a finite-accuracy family as an exact finite cutoff. The [flat contact resolution](IWANIEC_MORREY_FLAT_CONTACT_RESOLUTION.md) closes E2 as a benchmark, not as another main gate; the original E exposes the chart-folding obstruction. A valid graph change requires actual global invertibility or a separately proved folding theorem.
+
+Two earlier mathematical interfaces remain available if a new idea fits:
 
 **Gradient-law recursion:** D=0 iff laminate. An input-adaptive coarse law B resolving a fixed positive fraction of variance, with arbitrarily small determinant defect and compatible-child approximation error, implies a global contraction. The terminal minor-only trap geometries are already classified and incompatible as original gradient laws. The uniform partial-resolution criterion is equivalent in the existential sense to Morrey: proving it demands genuinely new spatial preservation. The old greedy split and Delta-only versions are refuted (N09–N10). Do not treat another detector or equivalent norm as closing G1.
 
