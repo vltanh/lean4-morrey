@@ -1,0 +1,156 @@
+\section{Supports for \texorpdfstring{$p\ge2$}{p >= 2}}\label{sec:pge2}
+
+In this section $p\ge2$ and $\Phi$ is a profile of degree $p$ with $\Phi\ge0$ on the quadrant.
+We construct a support of the profile at every point $(x_t,y_t)$ with $\abs t<1$, then at the
+ends, and deduce \cref{thm:main,thm:closed,thm:iff} and \cref{cor:equiv}. The proofs are in
+\cref{app:pge2}.
+
+Fix $\abs t<1$, write $H=h(t)$, and fix $m$ as in \cref{lem:minorant}: with $c_0=H-mt$, the
+function $G_{c_0,m}$ lies below $\Phi$ and equals $\Phi$ at $(x_t,y_t)$. Let
+\[
+  C=pH-2tm\ge0
+\]
+(\cref{cor:BE}) and let $\Phi_x$, $\Phi_y$ be as in \cref{prop:tangent}. Let $\kappa=(p-2)/p$,
+and let $\ell(s)=c_0+ms$ be the supporting line of $h$ at $t$, so that
+$p\,\ell(\mp\kappa)=pc_0\mp(p-2)m$. The number $\kappa$ is where the function $h$ of the
+Burkholder function $B_p$ vanishes: $B_p$ is negative exactly where $\det A<-\kappa\abs A^2$.
+There are three cases, according to the sign of the supporting line at $\pm\kappa$:
+\begin{align*}
+  &\text{III:}\quad (p-2)\abs m\le pc_0,&&\text{that is, }\ell(\kappa)\ge0\text{ and }\ell(-\kappa)\ge0;\\
+  &\text{I:}\quad pc_0-(p-2)m<0,&&\text{that is, }\ell(-\kappa)<0;\\
+  &\text{II:}\quad pc_0+(p-2)m<0,&&\text{that is, }\ell(\kappa)<0.
+\end{align*}
+In Case III the minorant $G_{c_0,m}$ is a nonnegative combination of $B_p$, of its mirror image
+and of $\abs A^p$, and a polyaffine function lies between the two. In Cases I and II the
+support has to come from elsewhere.
+
+\subsection{Case III: an inequality of Burkholder type}\label{sec:caseIII}
+
+\begin{lemma}\label{lem:burkholder}
+Let $p\ge2$, and let $c_0,m\in\R$ satisfy $(p-2)\abs m\le pc_0$. Then for all $\sigma\ge0$ and
+$\delta$ with $\abs\delta\le\sigma$,
+\begin{equation}\label{eq:burkholder}
+  -(p-1)c_0+pc_0\sigma-(p-2)m\delta+(p-1)m\sigma\delta\le
+  \max\bigl\{0,\sigma^{p-1}(c_0\sigma+m\delta)\bigr\}.
+\end{equation}
+\end{lemma}
+
+With $\sigma=x+y$ and $\delta=x-y$ the right side is the positive part of $G_{c_0,m}$, and the
+left side is a support of the profile in the sense of \eqref{eq:profilesupport}. For
+$(c_0,m)=(\kappa,1)$ the right side is the positive part of the Burkholder function $B_p$, whose
+polyconvexity for $p\ge2$ is \cite[Proposition~1.6]{GuerraKristensen2022}. The proof of the
+lemma is elementary: two polynomial identities and Bernoulli's inequality
+$\sigma^p\ge\tfrac p2\sigma^2-(\tfrac p2-1)$.
+
+In Case III, since $\Phi\ge0$ and $\Phi\ge G_{c_0,m}$, the lemma gives, for $x,y\ge0$,
+\begin{equation}\label{eq:caseIII}
+  -(p-1)c_0+(pc_0-(p-2)m)x+(pc_0+(p-2)m)y+(p-1)m(x^2-y^2)\le\Phi(x,y).
+\end{equation}
+At $(x_t,y_t)$ the left side is $c_0+mt=H$. So \eqref{eq:caseIII} is a support of the profile at
+$(x_t,y_t)$, with the determinant coefficient $(p-1)m$. For $p=2$ we are always in Case III,
+because $c_0=\tfrac12C\ge0$, and \eqref{eq:caseIII} holds without the assumption $\Phi\ge0$:
+it reduces to $c_0(\sigma-1)^2\ge0$.
+
+\subsection{Case I: one rank-one line}\label{sec:caseI}
+
+Let $p>2$, $H>0$ and
+\begin{equation}\label{eq:caseIhyp}
+  p(H-mt)-(p-2)m<0 .
+\end{equation}
+Then $m>0$ (\cref{lem:caseI-algebra}). Define
+\[
+  c=\frac{\Phi_x}{1+t}>0,\qquad\gamma=\frac{2C}{1+t}\ge0,\qquad k=ct-(p-1)H<0 .
+\]
+
+\begin{proposition}\label{prop:caseI}
+In Case I, $k+\gamma y+c(x^2-y^2)\le\Phi(x,y)$ for all $x,y\ge0$, with equality at
+$(x_t,y_t)$.
+\end{proposition}
+
+The candidate $q(x,y)=k+\gamma y+c(x^2-y^2)$ is the function of the form
+\eqref{eq:profilesupport} with $b_1=0$ that is tangent to the minorant at $(x_t,y_t)$. Here
+\cref{lem:burkholder} does not apply, and the proof uses the homogeneity of $\Phi$ instead. For a fixed point $(x,y)$ consider
+\[
+  \psi(l)=l^p\,q(x/l,y/l)=kl^p+\gamma yl^{p-1}+c(x^2-y^2)l^{p-2},\qquad l>0 .
+\]
+By \ref{P1}, $q\le\Phi$ at $(x/l,y/l)$ means $\psi(l)\le\Phi(x,y)$, and the claim is
+$\psi(1)\le\Phi(x,y)$. Since $k<0$ and $p>2$, $\psi$ tends to $0$ at $0$ and to $-\infty$ at
+infinity. If $\psi(1)\le0$ there is nothing to prove, because $\Phi\ge0$. Otherwise $\psi$ has a
+positive maximum, and it is enough to prove $q\le\Phi$ at the point $(x/l,y/l)$ where the maximum
+is attained:
+
+\begin{lemma}\label{lem:psi}
+Let $p>2$, $a_0<0$ and $a_1,a_2\in\R$, and let $\psi(l)=a_0l^p+a_1l^{p-1}+a_2l^{p-2}$ for
+$l>0$. If $\psi(1)>0$, there is $l>0$ with $pa_0l^2+(p-1)a_1l+(p-2)a_2=0$ and
+$\psi(l)\ge\psi(1)$.
+\end{lemma}
+
+So only the points $(X,Y)$ that satisfy the stationarity relation
+\begin{equation}\label{eq:stationary}
+  pk+(p-1)\gamma Y+(p-2)c(X^2-Y^2)=0
+\end{equation}
+matter. In the coordinates $(Y,D)=(\abs w,\det A)$ this relation is linear: the stationary
+points form a line, which passes through the base point $(y_t,t)$ and has the slope
+$\mu=-(p-1)\gamma/((p-2)c)$. On the other hand, a rank-one line through the base point along
+which $w$ moves radially, $\tau\mapsto(x_t+\tau e^{i\theta},y_t+\tau)$, is also a line in these
+coordinates: along it $\abs w=y_t+\tau$ and $\det A=t+(2x_t\cos\theta-2y_t)\tau$. Its slope
+$2x_t\cos\theta-2y_t$ takes every value in $[-2,2t]$. The point of the proof is that $\mu$ lies
+in this interval (\cref{lem:mu}): the lower bound $\mu\ge-2$ is the hypothesis
+\eqref{eq:caseIhyp}, and the upper bound follows from the Baker--Ericksen inequality and $m>0$.
+The stationary line is therefore the image of a rank-one line, and on it $q\le\Phi$ is the
+first-order inequality:
+
+\begin{lemma}[The stationary line]\label{lem:line}
+In Case I, let $X,Y\ge0$ satisfy \eqref{eq:stationary}. Then
+$k+\gamma Y+c(X^2-Y^2)\le\Phi(X,Y)$.
+\end{lemma}
+
+\Cref{prop:caseI} follows: with $l$ from \cref{lem:psi} and $(X,Y)=(x/l,y/l)$,
+\[
+  \Phi(x,y)=l^p\Phi(X,Y)\ge l^p\bigl(k+\gamma Y+c(X^2-Y^2)\bigr)=\psi(l)\ge\psi(1).
+\]
+
+\subsection{Case II and the three cases together}\label{sec:clamp}
+
+Case II is the mirror image of Case I: the mirror image $\Phi^\ast$ is a nonnegative profile,
+$G_{c_0,-m}$ touches it from below at $(x_{-t},y_{-t})$, and it is in Case I. Exchanging $x$ and
+$y$ in \cref{prop:caseI} gives a support with $b_2=0$. The three supports have one description.
+
+\begin{proposition}\label{prop:clamp}
+Let $p\ge2$, $\abs t<1$ and $H>0$, and let $L$, $U$ and $c^\ast$ be as in \cref{thm:closed}.
+Then
+\[
+  b_1=\Phi_x-(1+t)c^\ast\ge0,\qquad b_2=\Phi_y+(1-t)c^\ast\ge0,
+\]
+and $c^\ast t-(p-1)H+b_1x+b_2y+c^\ast(x^2-y^2)\le\Phi(x,y)$ for all $x,y\ge0$, with equality at
+$(x_t,y_t)$.
+\end{proposition}
+
+The interval $[L,U]$ is the set of determinant coefficients $c$ for which the tangent function
+at $(x_t,y_t)$ has $b_1,b_2\ge0$; it is not empty because $U-L=2C/(1-t^2)\ge0$. Case III is
+$L\le(p-1)m\le U$, where $c^\ast=(p-1)m$. In Case I, $(p-1)m>U$ and $c^\ast=U$, so that
+$b_1=0$. In Case II, $(p-1)m<L$ and $c^\ast=L$, so that $b_2=0$.
+
+\subsection{The ends, and the proofs of the theorems}\label{sec:proofs-pge2}
+
+At the conformal point the hyperbolas of \cref{lem:basic}\,(b) give
+$\Phi(x,y)\ge h(1)(x^2-y^2)^{p/2}$ for $x\ge y$, and Bernoulli's inequality gives the support
+\begin{equation}\label{eq:end-support}
+  \Phi(x,y)\ge h(1)\Bigl(1+\frac p2(x^2-y^2-1)\Bigr)\qquad\text{for all }x,y\ge0,
+\end{equation}
+with equality at $(1,0)$; the anticonformal point is the mirror image. These two points are the
+profiles of the matrices of $\CO$, where polyconvexity is
+\cite[Theorem~1.3]{GuerraKristensen2022}.
+
+\Cref{thm:main} follows. At $(x_t,y_t)$ a support of the profile is given by \cref{prop:clamp}
+if $\abs t<1$ and $h(t)>0$, by the zero function if $h(t)=0$, and by \eqref{eq:end-support} if
+$t=\pm1$; the zero function is a support at the origin. By scaling there is a support at every
+point of the quadrant, and \cref{lem:lift,lem:supports} give the polyaffine supports and the
+polyconvexity of $F$. \Cref{thm:closed} is \cref{prop:clamp} written for the matrix
+$\diag(1,t)$.
+
+For \cref{thm:iff}\,(b), the supports of Case III and of the ends do not need the sign
+condition when $p=2$. For \cref{thm:iff}\,(a), a polyconvex, positively $p$-homogeneous $F$ with
+$p>2$ is nonnegative: a polyaffine support $P(A)=\langle K,A\rangle+c\det A$ at $0$ satisfies
+$\lambda\langle K,A\rangle+\lambda^2c\det A\le\lambda^pF(A)$ for $\lambda>0$, which forces
+$K=0$ and then $c=0$ as $\lambda\downarrow0$; so $0=P\le F$.

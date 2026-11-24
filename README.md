@@ -20,6 +20,12 @@ Pedregal's proof fails at a corollary, refuted here; his main theorems, the open
 stated and not proved. Each paper is audited on its own, with its own Challenge, report and Palomar
 submission; the papers share general lemmas, the cited results and the checks.
 
+The repository also proves a result of its own on the open `2 × 2` case
+([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, a
+nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is
+quasiconvex. For `p ≥ 2` it is even polyconvex; for `1 < p < 2` the proof assumes that the
+Burkholder function is quasiconvex.
+
 ## The state of the problem
 
 **Morrey's problem**: does rank-one convexity imply quasiconvexity for `f : ℝ^{d×m} → ℝ`? A
@@ -35,6 +41,10 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 
 That every size but `2 × 2` fails is proved here as one theorem, from Šverák's example and Cassese's
 ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296)).
+
+In `2 × 2` the answer is yes for nonnegative, isotropic, positively `p`-homogeneous integrands,
+for every `p > 0`; for `1 < p < 2` this assumes the quasiconvexity of the Burkholder function.
+This is proved here ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
 convex, `p`-homogeneous `f` (`f(tA) = |t|^p f(A)`) quasiconvex at `0`? For a continuous
@@ -91,6 +101,48 @@ Each paper's report (`docs/<Paper>/REPORT.md`) gives:
 - what comes next.
 
 Each paper's credits (`CREDITS.md`) say how it was made.
+
+## A result of this repository: nonnegative homogeneous isotropic integrands in `2 × 2`
+
+[`Morrey/HomogeneousIsotropic/`](Morrey/HomogeneousIsotropic) answers Morrey's problem for a
+class of integrands `F` on `ℝ^{2×2}`. Four hypotheses occur:
+
+- **H1**, isotropy: `F(QAR) = F(A)` for all rotations `Q`, `R`;
+- **H2**, positive `p`-homogeneity: `F(λA) = λ^p F(A)` for `λ > 0`;
+- **H3**, rank-one convexity;
+- **N**, the sign condition: `F ≥ 0`.
+
+The Burkholder function `B_p(A) = (|1 − 2/p| |A|² + det A) |A|^{p−2}` (`|A|` the operator norm)
+satisfies H1, H2 and H3. Guerra and Kristensen (2022) proved that, for `p ≥ 2`, the integrands
+with H1, H2, H3 and N are polyconvex at the multiples of orthogonal matrices, and asked whether
+they are polyconvex everywhere (their Question 1.7). They are. What each range of the exponent
+needs, and what it gives (`J = diag(1, −1)`):
+
+| Exponent | Hypotheses | Conclusion | Here |
+| --- | --- | --- | --- |
+| `0 < p < 1` | H2, H3 | `F = 0` | **proved** |
+| `p = 1` | H1, H2, H3 | `F ≥ 0`, and `F` is convex (Dacorogna 1995) | **proved** |
+| `1 < p < 2` | H1, H2, H3, N | at every matrix, a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | **proved** |
+| `1 < p < 2` | H1, H2, H3, N, and `B_p` quasiconvex | `F` is quasiconvex | **proved**, with the quasiconvexity of `B_p` as a hypothesis |
+| `p = 2` | H1, H2, H3 | `F` is polyconvex | **proved** |
+| `p > 2` | H1, H2, H3, N | `F` is polyconvex, with a polyaffine support at every matrix in closed form | **proved** |
+| `p > 2` | H1, H2, and `F < 0` somewhere | `F` is not polyconvex | **proved** |
+| every `p > 0` | H1, H2, H3, N, and `B_p` quasiconvex if `1 < p < 2` | `F` is quasiconvex | **proved**, with that hypothesis |
+
+What is not proved here:
+
+- the quasiconvexity of `B_p` for `1 < p < 2`. It is stated as Corollary 2 of the preprint
+  [arXiv:2609.28311](https://arxiv.org/abs/2609.28311), which has not been refereed;
+- the quasiconvexity of integrands with `p > 2` that take negative values;
+- anything for integrands that are not isotropic or not homogeneous.
+
+The proof uses the definition of rank-one convexity and one-variable calculus:
+
+- [the statements, the proof in outline and the files](docs/HomogeneousIsotropic/README.md);
+- the paper, [`docs/HomogeneousIsotropic/paper/main.tex`](docs/HomogeneousIsotropic/paper/main.tex)
+  ([PDF](docs/HomogeneousIsotropic/paper/main.pdf));
+- the statements of record, [`palomar/HomogeneousIsotropic/Challenge.lean`](palomar/HomogeneousIsotropic/Challenge.lean);
+- [how it was made](docs/HomogeneousIsotropic/CREDITS.md).
 
 ## How the papers connect
 
@@ -209,7 +261,9 @@ Most of the paper uses a method of its own:
 
 All four theorems, 1.2–1.5, follow this scheme. Symmetry can force quasiconvexity:
 
-- Guerra and Kristensen (2022) proved it for homogeneous isotropic integrands;
+- Guerra and Kristensen (2022) proved it for nonnegative homogeneous isotropic integrands at the
+  multiples of orthogonal matrices (at every matrix:
+  [above](#a-result-of-this-repository-nonnegative-homogeneous-isotropic-integrands-in-2--2));
 - Bruno and Pasqualotto (2026, a preprint) show that the planar Dacorogna–Marcellini energy is
   quasiconvex exactly when it is rank-one convex (`|γ| ≤ 2/√3`), and that quasiconvexity is
   equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant under left and
@@ -287,6 +341,13 @@ How Cassese relates to the other two papers:
 
 ## What the repository adds to the papers
 
+- A theorem of its own in `2 × 2`: for nonnegative, isotropic, positively `p`-homogeneous
+  integrands, rank-one convexity implies quasiconvexity for every `p > 0`
+  ([above](#a-result-of-this-repository-nonnegative-homogeneous-isotropic-integrands-in-2--2)):
+  - polyconvexity for `p ≥ 2`;
+  - quasiconvexity for `1 < p < 2`, if the Burkholder function is quasiconvex;
+  - convexity for `p = 1`;
+  - `F = 0` for `0 < p < 1`.
 - The refutation of Pedregal's Corollary 7.2, Proposition 7.1 and the summary of Step 2 of its
   proof, with an exact counterexample ([`docs/Pedregal/REPORT.md`](docs/Pedregal/REPORT.md), E13–E14).
 - Bridges between Šverák's and Cassese's definitions, which differ in their test maps and in how
@@ -319,7 +380,7 @@ How Cassese relates to the other two papers:
 ## Trust
 
 - `lake build` passes. No `sorry` outside the Challenges, no `axiom`, no `native_decide`.
-- [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the three libraries
+- [`scripts/Audit.lean`](scripts/Audit.lean) checks that every declaration of the libraries
   uses only [`propext`](https://leanprover-community.github.io/mathlib4_docs/Init/Core.html#propext), [`Classical.choice`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Classical.choice) and [`Quot.sound`](https://leanprover-community.github.io/mathlib4_docs/Init/Prelude.html#Quot.sound), and lists what each numbered result
   depends on. The check covers the packages' proofs that the libraries use; each package also has
   an audit of its own.
@@ -331,7 +392,8 @@ How Cassese relates to the other two papers:
   - none for Šverák;
   - three for Pedregal, all forced by errors of the paper;
   - Cassese's in [its report](docs/Cassese/REPORT.md).
-- Comparator accepts each paper's Solution against its Challenge.
+- Comparator accepts each paper's Solution against its Challenge, and the Solution of the
+  repository's own result against its Challenge.
 - Independent AI agents checked:
   - the statements against the papers;
   - the formal proofs against the papers' proofs and, for the cited results, against the sources';
@@ -344,7 +406,9 @@ How Cassese relates to the other two papers:
 [`Morrey/Common/`](Morrey/Common) holds what the papers share:
 
 - [`Basic/`](Morrey/Common/Basic), general lemmas in Mathlib's namespaces (the rank of `2 × 2` matrices, for
-  Pedregal; mollification by bump functions, for Šverák's cut-off and Cassese);
+  Pedregal; mollification by bump functions, for Šverák's cut-off and Cassese; supporting lines of
+  convex functions and convex functions of sublinear growth, for the homogeneous isotropic
+  integrands);
 - `External/<Source>/`, one directory per cited source, with its statements in the source's terms,
   their proofs from a package, and a README.
 
@@ -353,7 +417,7 @@ Besides Mathlib, the proofs use four packages:
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
 | [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | `FixedPoint` | Kakutani's fixed-point theorem, by Kakutani's argument | Pedregal |
-| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity, quasiconvexity and more (below) | Cassese |
+| [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity, quasiconvexity and more (below) | Cassese, HomogeneousIsotropic |
 | [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar and vector-valued harmonic analysis (below) | Cassese |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | martingales, UMD spaces and more (below) | Cassese |
 
@@ -411,6 +475,7 @@ python3 scripts/route_check.py check docs/Cassese/paper_routes.tsv --accept docs
 lake env lake comparator --config=palomar/Pedregal/comparator.json
 lake env lake comparator --config=palomar/Sverak/comparator.json
 lake env lake comparator --config=palomar/Cassese/comparator.json
+lake env lake comparator --config=palomar/HomogeneousIsotropic/comparator.json
 ```
 
 ## Layout
@@ -422,15 +487,18 @@ Morrey/                       the Lean code
   Pedregal/                   Pedregal's paper: its library, by section
   Sverak/                     Šverák's paper
   Cassese/                    Cassese's paper, with the bridges to Šverák's definitions
-palomar/<Paper>/              one Palomar submission per paper: Challenge.lean, Solution.lean,
-                              comparator.json, formalization.yaml
+  HomogeneousIsotropic/       the repository's result on homogeneous isotropic integrands
+palomar/<Paper>/              one Palomar submission per paper, and one for the repository's
+                              result: Challenge.lean, Solution.lean, comparator.json,
+                              formalization.yaml
 docs/<Paper>/                 each paper's README.md, REPORT.md, CREDITS.md, the routes of its
                               proofs; numerics/ for Pedregal
+docs/HomogeneousIsotropic/    the repository's result: README.md, CREDITS.md, paper/
 scripts/                      the audit, the route check, the documentation checks
-.github/workflows/            CI for all papers; one Palomar preflight workflow per paper
+.github/workflows/            CI for all; one Palomar preflight workflow per submission
 ```
 
-Each preflight workflow names its paper's `comparator.json` and `formalization.yaml`.
+Each preflight workflow names its submission's `comparator.json` and `formalization.yaml`.
 
 ## Credits
 
@@ -441,7 +509,10 @@ Each preflight workflow names its paper's `comparator.json` and `formalization.y
 - Cassese: formalized on 21 November 2026; every assumed result proved, and Theorem 1.2 by the
   paper's route, on 21–22 November; the cited results by their sources' proofs on 22 November:
   [`docs/Cassese/CREDITS.md`](docs/Cassese/CREDITS.md).
-- Formalized by Claude (Anthropic): Claude Opus 5.5 in Claude Code (and Claude Haiku 5.5 for
+- HomogeneousIsotropic: the research in pull request 1, with ChatGPT Chat 6 Extra High (OpenAI)
+  and Claude (Anthropic); proved in Lean and written up on 23 November 2026 by Claude Fable 5.2
+  in Claude Code: [`docs/HomogeneousIsotropic/CREDITS.md`](docs/HomogeneousIsotropic/CREDITS.md).
+- The three papers were formalized by Claude (Anthropic): Claude Opus 5.5 in Claude Code (and Claude Haiku 5.5 for
   reading web pages), at the request of The-Anh Vu-Le, following the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person has
   reviewed the proofs.

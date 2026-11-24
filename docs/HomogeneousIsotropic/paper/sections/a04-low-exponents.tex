@@ -1,0 +1,94 @@
+\section{Proofs for Section~\ref{sec:plt2}}\label{app:plt2}
+
+\subsection{The exponents \texorpdfstring{$1\le p<2$}{1 <= p < 2}}
+
+\begin{proof}[Proof of \cref{prop:low}]
+At $t=1$, \cref{lem:ends} gives $h(s)\ge c_0+ms$ with $m=\tfrac p2h(1)\ge0$ and
+$c_0=(1-\tfrac p2)h(1)$, so that $(2-p)\abs m=pc_0$; there is equality at $s=1$. The point
+$t=-1$ is the mirror image.
+
+Let $\abs t<1$, $H=h(t)\ge0$, and let $m$ be the slope of a supporting line of $\tilde h$ at
+$t$: $h(s)\ge H+m(s-t)$ on $[-1,1]$. With $c_0=H-mt$ we have to show that
+\[
+  \mathrm{(A)}\quad pH-m\rho\ge0\qquad\text{and}\qquad\mathrm{(B)}\quad pH+m\rho'\ge0,
+\]
+where $\rho=pt+2-p$ and $\rho'=2-p-pt$; note that $\rho+\rho'=2(2-p)>0$. The supporting line
+at $s=\pm1$ and \cref{lem:ends} at $s=t$ give
+\begin{align*}
+  m(1-t)&\le h(1)-H,& \rho\,h(1)&\le2H,\\
+  m(1+t)&\ge H-h(-1),& \rho'h(-1)&\le2H .
+\end{align*}
+If $\rho\ge0$, then $(1-t)(pH-m\rho)\ge pH(1-t)-\rho(h(1)-H)=2H-\rho\,h(1)\ge0$, which is
+(A). If $\rho'\ge0$, then $(1+t)(pH+m\rho')\ge pH(1+t)+\rho'(H-h(-1))=2H-\rho'h(-1)\ge0$,
+which is (B). Let $\rho<0$; then $\rho'>0$ and (B) holds. If $m\ge0$, then
+$pH-m\rho\ge pH\ge0$; if $m<0$, then $pH-m\rho=(pH+m\rho')-m(\rho+\rho')\ge0$. This is (A).
+The case $\rho'<0$ is symmetric.
+\end{proof}
+
+In terms of $a=(2-p)/p$, $\rho\ge0$ means $t\ge-a$ and $\rho'\ge0$ means $t\le a$.
+
+\begin{proof}[Proof of \cref{lem:pone}]
+By \cref{lem:ends} with $p=1$, $h(-1)=\tilde h(-1)\ge0$ and $h(1)\ge0$, and
+$h(s)\ge\tfrac12h(1)(1+s)\ge0$ on $[-1,1]$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:low}]
+By \cref{lem:profile} the profile $\Phi$ of $F$ is a nonnegative profile of degree $p$.
+The Burkholder-type functions are positively $p$-homogeneous, so
+\cref{prop:low} at $t=\det A_0/\abs{A_0}^2$ gives $c_0,m$ with
+$G_{c_0,m}(\abs z,\abs w)\le\Phi(\abs z,\abs w)=F(A)$ for all $A$, with equality at $A_0$; for
+$A_0=0$ take $c_0=m=0$. The formula for $G_{c_0,m}$ in terms of
+$B_p(A)=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ and
+$B_p(JA)=\tfrac2p(\abs w-(p-1)\abs z)(\abs z+\abs w)^{p-1}$ is an identity, and its coefficients
+are nonnegative because $(2-p)\abs m\le pc_0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:low}]
+(a) If $B_p$ is quasiconvex, so is $A\mapsto B_p(JA)$, by composing the test maps with $J$;
+both are continuous. Hence every $G_{c_0,m}$ as in \cref{thm:low} is quasiconvex, and
+for a test map $\varphi$,
+\[
+  F(A_0)=G_{c_0,m}(A_0)\le\int_{(0,1)^2}G_{c_0,m}(A_0+\nabla\varphi)\,dx
+  \le\int_{(0,1)^2}F(A_0+\nabla\varphi)\,dx .
+\]
+
+(b) By \cref{lem:pone}, $F\ge0$, so \cref{thm:low} applies with $p=1$: at every
+$A_0$ there are $c_0\ge\abs m$ such that $(c_0+m)\abs z+(c_0-m)\abs w$ lies below $F$ and equals
+$F$ at $A_0$. This function is convex. A function with a convex touching minorant at every
+point is convex.
+\end{proof}
+
+\subsection{The exponents \texorpdfstring{$0<p<1$}{0 < p < 1}}
+
+\begin{proof}[Proof of \cref{lem:sublinear}]
+Let $s<t$. For $T>t$, convexity gives
+\[
+  \frac{g(t)-g(s)}{t-s}\le\frac{g(T)-g(t)}{T-t},
+\]
+and the right side tends to $0$ as $T\to+\infty$, since $g(T)/T\to0$. For $T<s$,
+\[
+  \frac{g(s)-g(T)}{s-T}\le\frac{g(t)-g(s)}{t-s},
+\]
+and the left side tends to $0$ as $T\to-\infty$. Hence $g(s)=g(t)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:small}]
+A rank-one convex function is separately convex in the entries of the matrix, hence continuous.
+From \ref{H2} with $\lambda=2$, $F(0)=2^pF(0)$, so $F(0)=0$.
+
+Let $A\in\M$ and let $B$ have rank one, and put $g(\tau)=F(A+\tau B)$, which is convex. For
+$\tau>0$, homogeneity gives $g(\tau)/\tau=\tau^{p-1}F(B+A/\tau)$, which tends to $0$ as
+$\tau\to+\infty$ because $p<1$ and $F$ is continuous at $B$. The same with $-B$ in place of $B$
+gives $g(\tau)/\tau\to0$ as $\tau\to-\infty$. By \cref{lem:sublinear}, $g$ is constant:
+$F(A+\tau B)=F(A)$ for every $\tau$.
+
+The four matrices with one entry equal to $1$ and the others $0$ have rank one. Removing the
+entries of $A$ one at a time gives $F(A)=F(0)=0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:all}]
+For $0<p<1$, $F=0$ by \cref{prop:small}. For $p=1$, $F$ is convex by \cref{cor:low}\,(b), hence
+quasiconvex; in the terms of \cref{cor:low}\,(a), $B_1=2\abs z$ is convex. For $1<p<2$ this is
+\cref{cor:low}\,(a). For $p\ge2$, $F$ is polyconvex by \cref{thm:main}, hence quasiconvex by
+\cref{lem:supports}.
+\end{proof}

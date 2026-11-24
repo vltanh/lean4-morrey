@@ -1,0 +1,21 @@
+{
+  "challenge_module": "HomogeneousIsotropic.Challenge",
+  "solution_module": "HomogeneousIsotropic.Solution",
+  "theorem_names": [
+    "HomogeneousIsotropicChallenge.det_eq_norm_sq_sub",
+    "HomogeneousIsotropicChallenge.theorem1_1",
+    "HomogeneousIsotropicChallenge.theorem1_2",
+    "HomogeneousIsotropicChallenge.theorem1_3_a",
+    "HomogeneousIsotropicChallenge.theorem1_3_b",
+    "HomogeneousIsotropicChallenge.corollary1_4",
+    "HomogeneousIsotropicChallenge.theorem1_5",
+    "HomogeneousIsotropicChallenge.theorem1_5_identity",
+    "HomogeneousIsotropicChallenge.corollary1_6_a",
+    "HomogeneousIsotropicChallenge.corollary1_6_b",
+    "HomogeneousIsotropicChallenge.proposition1_7",
+    "HomogeneousIsotropicChallenge.corollary1_8"
+  ],
+  "definition_names": [],
+  "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
+  "enable_nanoda": true
+}

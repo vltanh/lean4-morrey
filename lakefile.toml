@@ -1,7 +1,7 @@
 name = "Morrey"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Common", "Pedregal", "Sverak", "Cassese", "Palomar"]
+defaultTargets = ["Common", "Pedregal", "Sverak", "Cassese", "HomogeneousIsotropic", "Palomar"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -49,9 +49,13 @@ globs = ["Morrey.Sverak.+"]
 name = "Cassese"
 globs = ["Morrey.Cassese.+"]
 
+[[lean_lib]]
+name = "HomogeneousIsotropic"
+globs = ["Morrey.HomogeneousIsotropic.+"]
+
 # Each paper's Challenge and Solution (the files of its Palomar submission), as the modules
 # `Pedregal.Challenge`, `Pedregal.Solution`, ... of the source directory `palomar/`.
 [[lean_lib]]
 name = "Palomar"
 srcDir = "palomar"
-globs = ["Pedregal.+", "Sverak.+", "Cassese.+"]
+globs = ["Pedregal.+", "Sverak.+", "Cassese.+", "HomogeneousIsotropic.+"]

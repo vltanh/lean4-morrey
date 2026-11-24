@@ -1,0 +1,92 @@
+\section{What rank-one convexity gives}\label{sec:roc}
+
+Throughout this section $\Phi$ is a profile of degree $p>0$. We extract from \ref{P2} the three
+facts that the constructions use. The proofs are in \cref{app:roc}.
+
+\subsection{Two special lines}
+
+\begin{lemma}\label{lem:basic}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item The function $\tilde h(s)=\Phi\bigl(\abs{1+s}/2,\abs{1-s}/2\bigr)$ is convex on $\R$;
+  it equals $h$ on $[-1,1]$.
+\item If $0\le x_0\le x_1$, $0\le y_0\le y_1$ and $x_1^2-x_0^2=y_1^2-y_0^2$, then
+  $\Phi(x_0,y_0)\le\Phi(x_1,y_1)$.
+\end{enumerate}
+\end{lemma}
+
+Part (a) is convexity along the line $s\mapsto\diag(1,s)$. Part (b) says that $\Phi$ grows along
+the hyperbolas $x^2-y^2=\mathrm{const}$, on which the determinant is constant; it is the
+Baker--Ericksen inequality in integrated form, and it comes from the line
+$\tau\mapsto(x_0+i\tau,y_0+i\tau)$, along which the profile is convex and even.
+
+\subsection{Burkholder-type minorants}
+
+\begin{definition}\label{def:minorant}
+For $c_0,m\in\R$ the \emph{Burkholder-type function} with the coefficients $(c_0,m)$ is
+\[
+  G_{c_0,m}(x,y)=(x+y)^{p-1}\bigl(c_0(x+y)+m(x-y)\bigr),\qquad x,y\ge0 .
+\]
+\end{definition}
+
+It is the profile of $A\mapsto\abs A^{p-2}(c_0\abs A^2+m\det A)$, and
+$G_{c_0,m}(x,y)=\sigma^p\ell(\delta/\sigma)$ with the affine function $\ell(s)=c_0+ms$: the
+Burkholder-type functions are the homogeneous functions that are affine on the segment
+$x+y=1$. The Burkholder function is $B_p=G_{\abs\kappa,1}$ with $\kappa=(p-2)/p$. Hence
+$G_{c_0,m}\le\Phi$ on the quadrant if and only if $\ell\le h$ on $[-1,1]$. Since $\tilde h$ is
+convex on $\R$, $h$ has a supporting line at every $t\in[-1,1]$:
+
+\begin{lemma}\label{lem:minorant}
+For every $t\in[-1,1]$ there is $m\in\R$ such that, with $H=h(t)$, the Burkholder-type function
+$G_{H-mt,m}$ lies below $\Phi$ on the quadrant and equals $\Phi$ at $(x_t,y_t)$.
+\end{lemma}
+
+\subsection{The first-order inequality}
+
+A convex function lies above its tangent lines. For a profile, which need not be differentiable,
+the minorant supplies the tangent.
+
+\begin{proposition}[The first-order inequality]\label{prop:tangent}
+Let $\abs t<1$, $H,m\in\R$, and suppose that $G_{H-mt,m}\le\Phi$ on the quadrant and
+$\Phi(x_t,y_t)=H$. Put
+\[
+  \Phi_x=pH+(1-t)m,\qquad\Phi_y=pH-(1+t)m .
+\]
+Then for all $\alpha,\beta\in\C$ with $\abs\alpha=\abs\beta$ and all $\tau\in\R$,
+\begin{equation}\label{eq:tangent}
+  \Phi\bigl(\abs{x_t+\tau\alpha},\abs{y_t+\tau\beta}\bigr)\ge
+  H+\tau\bigl(\Phi_x\re\alpha+\Phi_y\re\beta\bigr).
+\end{equation}
+\end{proposition}
+
+The numbers $\Phi_x$ and $\Phi_y$ are the partial derivatives at $(x_t,y_t)$ of the minorant
+$G_{H-mt,m}$; they are those of $\Phi$ where $\Phi$ is differentiable. The proof compares the
+convex function $\tau\mapsto\Phi(\abs{x_t+\tau\alpha},\abs{y_t+\tau\beta})$ with the same
+function of the minorant, which lies below it, agrees with it at $\tau=0$ and is differentiable
+there; a convex function lies above the tangent of such a comparison function
+(\cref{lem:convex}).
+
+The inequality \eqref{eq:tangent} holds for every $\tau$, not only near $0$. Two choices of the
+line are used. The first joins the base matrix to a rotated copy of it, where $\Phi$ has the
+same value $H$:
+
+\begin{corollary}[Baker--Ericksen]\label{cor:BE}
+In the setting of \cref{prop:tangent}, $pH-2tm\ge0$.
+\end{corollary}
+
+The second choice is the line of \cref{lem:line} below.
+
+\subsection{The supporting lines at the ends}
+
+\begin{lemma}\label{lem:ends}
+For every $s\in\R$,
+\[
+  \tilde h(s)\ge h(1)\Bigl(1+\frac p2(s-1)\Bigr)\qquad\text{and}\qquad
+  \tilde h(s)\ge h(-1)\Bigl(1-\frac p2(s+1)\Bigr).
+\]
+\end{lemma}
+
+At the conformal point the slope of $h$ is therefore at most $\tfrac p2h(1)$. For $p\le2$ the
+first inequality says that $F\ge F(I)\,B_p/B_p(I)$ when $\Phi$ is the profile of $F$: the line
+$s\mapsto1+\tfrac p2(s-1)$ is, up to the factor $B_p(I)=2/p$, the function $h$ of $B_p$. This is
+the extremality of the Burkholder function; cf.~\cite[Theorem~4.2]{GuerraKristensen2022}
+and~\cite{AIPS2015}.

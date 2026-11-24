@@ -1,0 +1,58 @@
+\section{The exponents below \texorpdfstring{$2$}{2}}\label{sec:plt2}
+
+For $p<2$ polyaffine supports are not available, and the Burkholder-type minorants themselves
+are the supports. The proofs are in \cref{app:plt2}.
+
+\subsection{The exponents \texorpdfstring{$1\le p<2$}{1 <= p < 2}}
+
+\begin{proposition}\label{prop:low}
+Let $1\le p<2$ and let $\Phi\ge0$ be a profile of degree $p$. For every $t\in[-1,1]$ there are
+$c_0,m\in\R$ with $(2-p)\abs m\le pc_0$ such that $G_{c_0,m}\le\Phi$ on the quadrant, with
+equality at $(x_t,y_t)$.
+\end{proposition}
+
+Let $a=(2-p)/p\in(0,1]$. The condition $(2-p)\abs m\le pc_0$ says that the line
+$\ell(s)=c_0+ms$ is nonnegative at $\pm a$, and then $G_{c_0,m}$ is a nonnegative combination of
+the two extreme functions $G_{a,1}=B_p$ and $G_{a,-1}$, the mirror image of $B_p$, whose lines
+vanish at $-a$ and at $a$. By \cref{lem:ends} the supporting lines of $h$ at the two ends are
+multiples of these two lines: at the conformal point $h$ is supported by
+$\tfrac p2h(1)(s+a)$, and at the anticonformal point by $\tfrac p2h(-1)(a-s)$. A supporting
+line at an interior point $t$ is compared with them. For $t\ge-a$ its slope is at most the slope
+of the chord to the conformal end, and the supporting line at that end then gives
+$\ell(-a)\ge0$; for $t\le a$ the anticonformal end gives $\ell(a)\ge0$. The two ranges overlap,
+and outside the overlap the missing inequality follows from the other one and from $h(t)\ge0$.
+
+\Cref{thm:low} is \cref{prop:low} for the profile of $F$, since the Burkholder-type functions
+are positively $p$-homogeneous. \Cref{cor:low}\,(a) follows by the principle of the touching
+minorant: if $B_p$ is quasiconvex, so are its mirror image and every $G_{c_0,m}$ of
+\cref{thm:low}.
+
+Nonnegativity enters \cref{prop:low} at the ends, through $h(\pm1)\ge0$, and at the interior
+points outside the overlap. For $p=1$ it is automatic:
+
+\begin{lemma}\label{lem:pone}
+A profile of degree $1$ is nonnegative on the quadrant.
+\end{lemma}
+
+For $p=1$ we have $a=1$, and the functions of \cref{thm:low} are
+$(c_0+m)\abs z+(c_0-m)\abs w$ with $c_0\ge\abs m$. They are convex, which gives
+\cref{cor:low}\,(b).
+
+\subsection{The exponents \texorpdfstring{$0<p<1$}{0 < p < 1}}
+
+\begin{lemma}\label{lem:sublinear}
+Let $g\colon\R\to\R$ be convex with $g(\tau)/\tau\to0$ as $\tau\to+\infty$ and as
+$\tau\to-\infty$. Then $g$ is constant.
+\end{lemma}
+
+Let $F$ be positively $p$-homogeneous and rank-one convex with $0<p<1$; then $F$ is continuous.
+For a matrix $A$ and a matrix $B$ of rank one, homogeneity gives
+$F(A+\tau B)=\tau^pF(B+A/\tau)$ for $\tau>0$, so that $F(A+\tau B)/\tau\to0$. By
+\cref{lem:sublinear}, $F$ is constant along every rank-one line. The matrices of rank one span
+$\M$, so $F$ is constant, and the constant is $F(0)=0$. This proves \cref{prop:small}.
+
+\subsection{All exponents}
+
+\Cref{cor:all} collects the cases: $F=0$ for $0<p<1$ (\cref{prop:small}), $F$ convex for $p=1$
+(\cref{cor:low}\,(b)), the conditional statement for $1<p<2$ (\cref{cor:low}\,(a)), and
+polyconvexity for $p\ge2$ (\cref{thm:main}).

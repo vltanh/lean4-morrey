@@ -1,0 +1,287 @@
+\section{Introduction}\label{sec:intro}
+
+Let $\M$ be the space of real $2\times2$ matrices. A function $F\colon\M\to\R$ is
+\begin{itemize}
+\item \emph{rank-one convex} if $\tau\mapsto F(A+\tau B)$ is convex on $\R$ for every $A$ and
+  every $B$ with $\rank B=1$;
+\item \emph{quasiconvex} if $F(A)\le\int_{(0,1)^2}F(A+\nabla\varphi)\,dx$ for every $A$ and every
+  Lipschitz $\varphi\colon\R^2\to\R^2$ that vanishes outside $(0,1)^2$, whenever the integral
+  exists;
+\item \emph{polyconvex} if $F(A)=g(A,\det A)$ for a convex $g\colon\M\times\R\to\R$.
+\end{itemize}
+Polyconvexity implies quasiconvexity, which implies rank-one convexity
+\cite{Morrey1952,Ball1977,Dacorogna2008}. Quasiconvexity is the condition under which the
+integral $\int F(\nabla u)$ is lower semicontinuous, and it is hard to verify; rank-one convexity
+is a condition on lines. \emph{Morrey's problem} asks whether rank-one convexity implies
+quasiconvexity. For maps with at least three components the answer is negative, by an example of
+\v{S}ver\'ak~\cite{Sverak1992}, and a negative answer for maps $\R^m\to\R^2$ with $m\ge3$ is
+claimed in the preprint~\cite{Cassese2026}. For maps $\R^2\to\R^2$, that is, for integrands on
+$\M$, the problem is open.
+
+This paper answers it for the nonnegative, isotropic, positively homogeneous integrands on
+$\M$, a class with as much symmetry as the problem allows. We fix an exponent $p>0$ and consider
+functions $F\colon\M\to\R$ with the following three properties, which we call the
+\emph{common hypotheses}~\Hyp.
+\begin{enumerate}[label=\textup{(H\arabic*)}]
+\item\label{H1} $F$ is \emph{isotropic}: $F(QAR)=F(A)$ for all rotations $Q,R\in\SO$.
+\item\label{H2} $F$ is \emph{positively $p$-homogeneous}: $F(\lambda A)=\lambda^pF(A)$ for all
+  $\lambda>0$.
+\item\label{H3} $F$ is rank-one convex.
+\end{enumerate}
+The best known function with these properties is the \emph{Burkholder function}, defined for
+$1<p<\infty$ and normalized as in~\cite[(1.4)]{GuerraKristensen2022}:
+\[
+  B_p(A)=\Bigl(\Bigl\lvert1-\frac2p\Bigr\rvert\abs A^2+\det A\Bigr)\abs A^{p-2},\qquad B_p(0)=0,
+\]
+where $\abs A$ is the operator norm. It comes from Burkholder's sharp inequalities for martingale
+transforms~\cite{Burkholder1984,Burkholder1988}, and its quasiconvexity is tied to Iwaniec's
+conjecture~\cite{Iwaniec1982} on the $L^p$ norm of the Beurling--Ahlfors transform
+\cite{BaernsteinMontgomerySmith1999,Iwaniec2002,AIPS2012,AIPS2015}.
+
+\subsection{What is proved, and from which hypotheses}\label{sec:intro-table}
+
+The conclusions depend on the exponent, and so do the hypotheses that are needed.
+\Cref{tab:summary} lists both. Besides \ref{H1}, \ref{H2} and \ref{H3}, a fourth hypothesis
+enters in two ranges, the \emph{sign condition}
+\begin{enumerate}[label=\textup{(N)}]
+\item\label{N} $F\ge0$ on $\M$.
+\end{enumerate}
+For $p>2$ the sign condition is necessary for the conclusion; for $p\le1$ and for $p=2$ it is not
+needed; and for $0<p<1$ isotropy is not needed either. For every $p>0$ a function with
+\ref{H1}, \ref{H2}, \ref{H3} and \ref{N} is quasiconvex, so that Morrey's problem has a
+positive answer in this class; for $1<p<2$ this uses the quasiconvexity of the Burkholder
+function, which is not proved in this paper.
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.21\textwidth}>{\raggedright\arraybackslash}p{0.36\textwidth}>{\raggedright\arraybackslash}p{0.21\textwidth}@{}}
+\toprule
+Exponent & Hypotheses on $F$ & Conclusion & Statement \\
+\midrule
+$0<p<1$ & \ref{H2}, \ref{H3} & $F=0$ & \cref{prop:small} \\[2pt]
+$p=1$ & \ref{H1}, \ref{H2}, \ref{H3} & $F\ge0$, and $F$ is convex & \cref{cor:low}\,(b),
+  Dacorogna \cite{Dacorogna1995} \\[2pt]
+$1<p<2$ & \ref{H1}, \ref{H2}, \ref{H3}, \ref{N} & at every matrix, a touching minorant
+  $\alpha B_p(A)+\beta B_p(JA)$ with $\alpha,\beta\ge0$ & \cref{thm:low} \\[2pt]
+$1<p<2$ & \ref{H1}, \ref{H2}, \ref{H3}, \ref{N}, and $B_p$ quasiconvex & $F$ is quasiconvex &
+  \cref{cor:low}\,(a); for $B_p$, \cite[Corollary~2]{SharpHI} \\[2pt]
+$p=2$ & \ref{H1}, \ref{H2}, \ref{H3} & $F$ is polyconvex & \cref{thm:iff}\,(b) \\[2pt]
+$p>2$ & \ref{H1}, \ref{H2}, \ref{H3}, \ref{N} & $F$ is polyconvex, with a polyaffine support at
+  every matrix in closed form & \cref{thm:main,thm:closed} \\[2pt]
+$p>2$ & \ref{H1}, \ref{H2}, and $F<0$ somewhere & $F$ is not polyconvex & \cref{thm:iff}\,(a) \\
+\midrule
+$p>0$ & \ref{H1}, \ref{H2}, \ref{H3}, \ref{N}, and $B_p$ quasiconvex if $1<p<2$ &
+  $F$ is quasiconvex & \cref{cor:all} \\
+\bottomrule
+\end{tabular}
+\caption{The results, with the hypotheses used in each range of the exponent: isotropy
+  \ref{H1}, positive $p$-homogeneity \ref{H2}, rank-one convexity \ref{H3} and the sign
+  condition \ref{N}. Here $J=\diag(1,-1)$. Every entry is proved in this paper; the
+  quasiconvexity of the Burkholder function $B_p$ is a hypothesis where it is listed.}
+\label{tab:summary}
+\end{table}
+
+\subsection{The exponents \texorpdfstring{$p\ge2$}{p >= 2}}\label{sec:intro-large}
+
+A \emph{polyaffine} function is $P(A)=k+\langle K,A\rangle+c\det A$. Guerra and
+Kristensen~\cite{GuerraKristensen2022} studied the nonnegative functions with~\Hyp. Let $\CO$ be
+the set of the multiples of orthogonal matrices. They proved that for $p\ge2$ such a function is
+polyconvex at the matrices of $\CO$ \cite[Theorem~1.3]{GuerraKristensen2022}, and they
+ask~\cite[Question~1.7]{GuerraKristensen2022}: ``When $n=2$, are the integrands satisfying the
+assumptions of Theorem~1.3 polyconvex everywhere?'' Our first result answers this question
+affirmatively.
+
+\begin{theorem}\label{thm:main}
+Let $p\ge2$ and let $F\colon\M\to[0,\infty)$ satisfy~\Hyp. Then for every $A_0\in\M$ there is a
+polyaffine function $P$ with $P\le F$ on $\M$ and $P(A_0)=F(A_0)$. In particular $F$ is
+polyconvex.
+\end{theorem}
+
+At the zero matrix the support is $0$. By isotropy and homogeneity it is then enough to give the
+support at the matrices $\diag(1,t)$, $-1\le t\le1$. Put $h(s)=F(\diag(1,s))$ for
+$s\in[-1,1]$. Then $h$ is convex, and $F(A)=\abs A^p\,h(\det A/\abs A^2)$ for $A\ne0$: the
+function $h$ of one variable determines $F$.
+
+\begin{theorem}\label{thm:closed}
+Let $p$ and $F$ be as in \cref{thm:main}. Let $\abs t<1$, let $H=h(t)>0$, and let $m$ be the slope
+of a supporting line of $h$ at $t$, that is, $h(s)\ge H+m(s-t)$ for $s\in[-1,1]$. Put
+\[
+  L=\frac{(1+t)m-pH}{1-t},\qquad U=\frac{pH+(1-t)m}{1+t},\qquad
+  c^\ast=\min\bigl\{U,\max\{L,(p-1)m\}\bigr\}.
+\]
+Then the polyaffine function
+\[
+  P_t(A)=c^\ast t-(p-1)H+(pH-tm-c^\ast t)\,a_{11}+(m-c^\ast)\,a_{22}+c^\ast\det A
+\]
+satisfies $P_t\le F$ on $\M$ and $P_t(\diag(1,t))=F(\diag(1,t))$.
+\end{theorem}
+
+The determinant coefficient is $(p-1)m$, the value that an inequality of Burkholder type gives
+(\cref{lem:burkholder}), clamped to the interval $[L,U]$. At $t=\pm1$ the support is
+$h(\pm1)\bigl(1+\tfrac p2(\pm\det A-1)\bigr)$, and where $h(t)=0$ it is $0$. The support depends
+only on $t$, on $h(t)$ and on the slope of one supporting line: no second derivative of $h$
+enters, and $h$ need not be differentiable.
+
+The sign condition cannot be dropped when $p>2$: the Burkholder function $B_p$ satisfies~\Hyp\
+and is not polyconvex \cite[Remark~1.4, Proposition~4.6]{GuerraKristensen2022}. In fact
+nonnegativity is exactly what is missing. For $p=2$ no sign condition is needed.
+
+\begin{theorem}\label{thm:iff}
+Let $F\colon\M\to\R$ be isotropic and positively $p$-homogeneous.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item If $p>2$, then $F$ is polyconvex if and only if it is rank-one convex and nonnegative.
+\item If $p=2$, then $F$ is polyconvex if and only if it is rank-one convex.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:equiv}
+Let $p\ge2$, and let $F\colon\M\to[0,\infty)$ be Borel, locally bounded, isotropic and
+positively $p$-homogeneous. Then $F$ is rank-one convex if and only if it is quasiconvex, if
+and only if it is polyconvex.
+\end{corollary}
+
+\subsection{The exponents \texorpdfstring{$1\le p<2$}{1 <= p < 2}}\label{sec:intro-low}
+
+For $1<p<2$ polyconvexity fails for functions with~\Hyp: the positive part of $B_p$ is not
+polyconvex \cite[Remark~1.4]{GuerraKristensen2022}. The Burkholder function takes the place of
+the polyaffine functions. In the conformal coordinates $(z,w)$ of \cref{sec:setting},
+$B_p=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ for $1\le p\le2$; in particular
+$B_1=2\abs z$. Let $J=\diag(1,-1)$; the function $A\mapsto B_p(JA)$ is the mirror image of
+$B_p$, in which $z$ and $w$ change roles.
+
+\begin{theorem}\label{thm:low}
+Let $1\le p<2$, and let $F\colon\M\to[0,\infty)$ satisfy~\Hyp. Then for every $A_0\in\M$ there
+are $c_0,m\in\R$ with $(2-p)\abs m\le pc_0$ such that the function
+\[
+  G_{c_0,m}(A)=\abs A^{p-2}\bigl(c_0\abs A^2+m\det A\bigr)\quad(A\ne0),\qquad G_{c_0,m}(0)=0,
+\]
+satisfies $G_{c_0,m}\le F$ on $\M$ and $G_{c_0,m}(A_0)=F(A_0)$. Moreover
+\[
+  G_{c_0,m}(A)=\frac{pc_0+(2-p)m}{2(2-p)}\,B_p(A)+\frac{pc_0-(2-p)m}{2(2-p)}\,B_p(JA),
+\]
+with nonnegative coefficients.
+\end{theorem}
+
+So a nonnegative $F$ with~\Hyp\ is the upper envelope of nonnegative combinations of the
+Burkholder function and its mirror image. Whatever convexity property these two functions have
+is inherited by $F$.
+
+\begin{corollary}\label{cor:low}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Let $1<p<2$. If the Burkholder function $B_p$ is quasiconvex, then every
+  $F\colon\M\to[0,\infty)$ with~\Hyp\ is quasiconvex.
+\item Every $F\colon\M\to\R$ with~\Hyp\ for $p=1$ is nonnegative and convex.
+\end{enumerate}
+\end{corollary}
+
+Part~(b) is a theorem of Dacorogna~\cite{Dacorogna1995}; see also the introduction
+of~\cite{DacorognaHaeberly1996}. For the matrices of $\CO$, \cref{thm:low} and part~(a) are due
+to Guerra and Kristensen: they proved that $F\ge B_p$ if $F(I)=B_p(I)$, after~\cite{AIPS2015},
+and that $F$ is quasiconvex at the matrices of $\CO$ if $B_p$ is quasiconvex
+\cite[Theorems~4.2 and~1.2]{GuerraKristensen2022}. Here the minorant touches at every matrix.
+
+The hypothesis of part~(a) is the one statement on which the results depend and which this
+paper does not prove. The quasiconvexity of $B_p$ for $1<p<\infty$ is stated as Corollary~2 of
+the preprint~\cite{SharpHI}, which has not been refereed. It is stated there, at every matrix,
+with smooth periodic test maps. This gives quasiconvexity in the sense used here: a Lipschitz
+map vanishing outside the unit square extends periodically, and its mollifications are smooth
+periodic maps whose gradients are bounded and converge almost everywhere.
+
+\subsection{The exponents \texorpdfstring{$0<p<1$}{0 < p < 1}, and all exponents}
+\label{sec:intro-small}
+
+Below the exponent $1$ nothing is left, and neither isotropy nor a sign condition is needed.
+
+\begin{proposition}\label{prop:small}
+Let $0<p<1$, and let $F\colon\M\to\R$ be positively $p$-homogeneous and rank-one convex. Then
+$F=0$.
+\end{proposition}
+
+Together, the results cover every exponent.
+
+\begin{corollary}\label{cor:all}
+Let $p>0$, and let $F\colon\M\to[0,\infty)$ satisfy~\Hyp. Then $F$ is quasiconvex, provided
+that, when $1<p<2$, the Burkholder function $B_p$ is quasiconvex.
+\end{corollary}
+
+\subsection{Related work}\label{sec:intro-related}
+
+Two results related to their question are recalled by Guerra and
+Kristensen~\cite{GuerraKristensen2022}. Rank-one convexity implies polyconvexity for compact
+connected isotropic subsets of $\M$
+\cite{CardaliaguetTahraoui2002a,CardaliaguetTahraoui2002b,ContiDeLellisMuellerRomeo2003}, and for
+isotropic $0$-homogeneous integrands on matrices of positive determinant
+\cite{MartinGhibaNeff2017}. The reduction of the polyconvexity of an isotropic function on $\M$
+to supports on diagonal matrices goes back to Dacorogna and
+Koshigoe~\cite[Theorem~2.1]{DacorognaKoshigoe1993}; \cref{lem:lift} is a form of it. We are not
+aware of an earlier proof of \cref{thm:main,thm:closed,thm:iff,thm:low}.
+
+The Dacorogna--Marcellini integrands
+$f_\gamma(A)=\norm A^2(\norm A^2-2\gamma\det A)$, with $\norm A$ the Euclidean norm, satisfy
+\ref{H1} and \ref{H2} with $p=4$. They are rank-one convex if and only if
+$\abs\gamma\le2/\sqrt3$ and polyconvex if and only if $\abs\gamma\le1$
+\cite{DacorognaMarcellini1988,AlibertDacorogna1992}. Since $\norm A^2\ge2\abs{\det A}$, with
+equality on $\CO$, $f_\gamma$ is nonnegative exactly when $\abs\gamma\le1$.
+\Cref{thm:iff}\,(a) explains the second threshold: for $p>2$, polyconvexity is rank-one
+convexity together with nonnegativity.
+
+For integrands with~\Hyp\ that change sign, quasiconvexity is the question. That such an
+integrand is quasiconvex at $0$ is a conjecture of
+Cassese~\cite[Conjecture~1]{Cassese2026}, stated for $f(tA)=\abs t^pf(A)$. The quasiconvexity of
+$B_p$ and of the integrands $f_\gamma$ with $1<\abs\gamma\le2/\sqrt3$ is the subject of the
+preprints~\cite{SharpHI} and~\cite{BrunoPasqualotto2026}.
+
+\subsection{The strategy}\label{sec:strategy}
+
+Identify $\R^2$ with $\C$. A matrix acts as $\zeta\mapsto z\zeta+w\bar\zeta$ for two complex
+numbers $z$, $w$, its conformal and its anticonformal part. In these coordinates
+$\det A=\abs z^2-\abs w^2$ and $\abs A=\abs z+\abs w$, a rotation on either side multiplies $z$
+and $w$ by numbers of modulus one, and a line is a rank-one line exactly when $z$ and $w$ move
+with the same speed. So an isotropic $F$ is a function $\Phi(\abs z,\abs w)$ of two nonnegative
+variables, its \emph{profile}, and rank-one convexity of $F$ becomes convexity of $\Phi$ along
+the images of those lines. The proofs use only this and the homogeneity of $\Phi$.
+
+On the segment $\abs z+\abs w=1$ the profile is the convex function $h$. A line below $h$ is the
+same as a function $\abs A^{p-2}(c_0\abs A^2+m\det A)$ below $F$: these \emph{Burkholder-type
+functions} are the ones whose restriction to the segment is affine. So every supporting line of
+$h$ gives a Burkholder-type minorant of $F$ that touches $F$ along a ray. Where such a minorant
+touches, rank-one convexity gives one inequality of first order along every rank-one line
+through the point of contact (\cref{prop:tangent}). Everything else follows from this
+inequality by algebra.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item \emph{$p\ge2$.} Let $\kappa=(p-2)/p$. If the supporting line of $h$ at $t$ is nonnegative
+  at $\pm\kappa$, the Burkholder-type minorant has a polyaffine minorant that touches at the same
+  point (\cref{lem:burkholder}); this gives the support with $c^\ast=(p-1)m$. Otherwise the
+  candidate support $q$ is negative at the origin. By homogeneity it is then enough to prove
+  $q\le\Phi$ at the points where $\lambda\mapsto\lambda^pq(\cdot/\lambda)$ is stationary. In the
+  coordinates $(\abs w,\det A)$ these points form a line, and this line turns out to be the image
+  of a rank-one line through the base point, on which $q\le\Phi$ is the first-order inequality.
+\item \emph{$1\le p<2$.} The supporting lines of $h$ at the ends $t=\pm1$ are multiples of the
+  functions $h$ of $B_p$ and of its mirror image. Every other supporting line is squeezed between
+  them, which is the condition $(2-p)\abs m\le pc_0$.
+\item \emph{$0<p<1$.} Along a rank-one line $F$ is convex and grows at most like the power $p$
+  of the distance, hence is constant.
+\end{enumerate}
+
+\subsection{Formal verification}\label{sec:intro-formal}
+
+The results of this section are formalized in the proof assistant Lean~4~\cite{Lean4}, using
+its mathematical library Mathlib~\cite{Mathlib20}. The proofs are in the
+repository~\cite{Companion}, and Lean's kernel checks every step. \Cref{thm:main,thm:closed,%
+thm:iff,thm:low}, \cref{cor:equiv,cor:low,cor:all} and \cref{prop:small} are stated in a file
+that imports only Mathlib, and their proofs use only Lean's standard axioms. In
+\cref{cor:low}\,(a) and \cref{cor:all} the quasiconvexity of the Burkholder function is a
+hypothesis of the formal statement. \Cref{app:formal} describes the formal statements, the
+points where they differ from the text, and the corresponding Lean declarations.
+
+\subsection{Organization}\label{sec:intro-organization}
+
+\Cref{sec:setting} introduces the conformal coordinates, the profile and its supports.
+\Cref{sec:roc} states what rank-one convexity gives for the profile. \Cref{sec:pge2} constructs
+the supports for $p\ge2$, and \cref{sec:plt2} treats the exponents below $2$.
+\Cref{sec:discussion} collects remarks and open questions. These sections give the statements
+and the ideas of the proofs. The appendices supply the details in the same order:
+\cref{app:setting,app:roc,app:pge2,app:plt2} prove the statements of
+\cref{sec:setting,sec:roc,sec:pge2,sec:plt2}, and \cref{app:formal} describes the formal
+verification.

@@ -56,6 +56,7 @@ import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
+import all Morrey.Common.Basic.Analysis.Convex.Tangent
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.CoxVeraar.Decoupling
@@ -78,6 +79,17 @@ import all Morrey.Common.External.PisierXu.Khintchine
 import all Morrey.Common.External.Randrianantoanina.SchattenUMD
 import all Morrey.Common.External.Rindler.Lemmas
 import all Morrey.Common.External.Yaroslavtsev.ComplexUMD
+import all HomogeneousIsotropic.Solution
+import all Morrey.HomogeneousIsotropic.Bridges
+import all Morrey.HomogeneousIsotropic.Coordinates
+import all Morrey.HomogeneousIsotropic.Defs
+import all Morrey.HomogeneousIsotropic.Example
+import all Morrey.HomogeneousIsotropic.Inequalities
+import all Morrey.HomogeneousIsotropic.LowExponent
+import all Morrey.HomogeneousIsotropic.Main
+import all Morrey.HomogeneousIsotropic.Polyaffine
+import all Morrey.HomogeneousIsotropic.Profile
+import all Morrey.HomogeneousIsotropic.Supports
 import all Morrey.Pedregal.Checks
 import all Morrey.Pedregal.Defs
 import all Morrey.Pedregal.Hn.Laminate
@@ -348,7 +360,45 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Prop 7.2 (lower bound)", ``Cassese.proposition7_2_lower),
    ("Cassese Thm 7.1", ``Cassese.theorem7_1),
    ("Cassese Cor 7.2", ``Cassese.corollary7_2),
-   ("Cassese Conjecture 1 (stated)", ``Cassese.Conjecture1)]
+   ("Cassese Conjecture 1 (stated)", ``Cassese.Conjecture1),
+   -- the nonnegative homogeneous isotropic integrands on `ℝ^{2×2}`
+   -- (`Morrey/HomogeneousIsotropic`, a result of the repository)
+   ("HomogeneousIsotropic Theorem 1.1 (a support at every matrix, p ≥ 2)",
+    ``HomogeneousIsotropic.hasPolyaffineSupportAt_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.1 (polyconvexity, p ≥ 2)",
+    ``HomogeneousIsotropic.polyconvex_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.1 (quasiconvexity, p ≥ 2)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.2 (the support in closed form)",
+    ``HomogeneousIsotropic.polyaffine_multiplier_le),
+   ("HomogeneousIsotropic Theorem 1.3 (a) (nonnegativity is necessary, p > 2)",
+    ``HomogeneousIsotropic.nonneg_of_polyconvex),
+   ("HomogeneousIsotropic Theorem 1.3 (a) (p > 2)",
+    ``HomogeneousIsotropic.polyconvex_iff_of_two_lt),
+   ("HomogeneousIsotropic Theorem 1.3 (b) (no sign condition, p = 2)",
+    ``HomogeneousIsotropic.polyconvex_of_rankOneConvex_two),
+   ("HomogeneousIsotropic Theorem 1.3 (b) (p = 2)",
+    ``HomogeneousIsotropic.polyconvex_iff_two),
+   ("HomogeneousIsotropic Corollary 1.4 (equivalence, p ≥ 2)",
+    ``HomogeneousIsotropic.tfae_of_two_le),
+   ("HomogeneousIsotropic Theorem 1.5 (Burkholder-type minorants, 1 ≤ p < 2)",
+    ``HomogeneousIsotropic.exists_burkholderType_le),
+   ("HomogeneousIsotropic Theorem 1.5 (the identity)",
+    ``HomogeneousIsotropic.burkholderType_eq),
+   ("HomogeneousIsotropic Corollary 1.6 (a) (given the Burkholder function)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_burkholder),
+   ("HomogeneousIsotropic Corollary 1.6 (b) (nonnegativity, p = 1)",
+    ``HomogeneousIsotropic.nonneg_of_rankOneConvex_one),
+   ("HomogeneousIsotropic Corollary 1.6 (b) (convexity, p = 1)",
+    ``HomogeneousIsotropic.convexOn_of_rankOneConvex_one),
+   ("HomogeneousIsotropic Corollary 1.6 (b) (quasiconvexity, p = 1)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_one),
+   ("HomogeneousIsotropic Proposition 1.7 (0 < p < 1)",
+    ``HomogeneousIsotropic.eq_zero_of_rankOneConvex_of_lt_one),
+   ("HomogeneousIsotropic Corollary 1.8 (every p > 0)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_pos),
+   ("HomogeneousIsotropic example, (det A)² with p = 4",
+    ``HomogeneousIsotropic.polyconvex_detSq)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
@@ -363,7 +413,13 @@ meta def solutionResults : List Name :=
    ``CasseseChallenge.theorem1_4_four, ``CasseseChallenge.theorem1_5,
    ``CasseseChallenge.corollary1_6, ``CasseseChallenge.corollary5_3,
    ``CasseseChallenge.morrey_landscape, ``CasseseChallenge.homMorrey_landscape,
-   ``CasseseChallenge.projL3_mem]
+   ``CasseseChallenge.projL3_mem,
+   ``HomogeneousIsotropicChallenge.det_eq_norm_sq_sub, ``HomogeneousIsotropicChallenge.theorem1_1,
+   ``HomogeneousIsotropicChallenge.theorem1_2, ``HomogeneousIsotropicChallenge.theorem1_3_a,
+   ``HomogeneousIsotropicChallenge.theorem1_3_b, ``HomogeneousIsotropicChallenge.corollary1_4,
+   ``HomogeneousIsotropicChallenge.theorem1_5, ``HomogeneousIsotropicChallenge.theorem1_5_identity,
+   ``HomogeneousIsotropicChallenge.corollary1_6_a, ``HomogeneousIsotropicChallenge.corollary1_6_b,
+   ``HomogeneousIsotropicChallenge.proposition1_7, ``HomogeneousIsotropicChallenge.corollary1_8]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
@@ -371,7 +427,7 @@ meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.so
 /-- Whether `m` is a module of the libraries: the papers', `External` or `Basic`. -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`Morrey).isPrefixOf m || (`Pedregal).isPrefixOf m || (`Sverak).isPrefixOf m ||
-    (`Cassese).isPrefixOf m
+    (`Cassese).isPrefixOf m || (`HomogeneousIsotropic).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

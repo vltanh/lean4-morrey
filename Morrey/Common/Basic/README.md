@@ -13,6 +13,7 @@ can be contributed. The general theories are in packages of their own:
 | --- | --- | --- |
 | [`Basic.LinearAlgebra.Matrix.RankTwo`](LinearAlgebra/Matrix/RankTwo.lean) | a `2 × 2` matrix over a field has rank at most one exactly when its determinant vanishes; the determinant of the matrix with rows `x`, `y` | `Mathlib/LinearAlgebra/Matrix/Rank.lean` |
 | [`Basic.Analysis.Calculus.BumpFunction.Mollify`](Analysis/Calculus/BumpFunction/Mollify.lean) | mollification by a normed bump function, `ρ ⋆ g` (below) | `Mathlib/Analysis/Calculus/BumpFunction/Convolution.lean` |
+| [`Basic.Analysis.Convex.Tangent`](Analysis/Convex/Tangent.lean) | a convex function on `ℝ` has a supporting line at every point; if it lies above a function `k` near a point where they agree and `k` is differentiable, the tangent line of `k` supports it; a convex function `g` with `g(t)/t → 0` at `±∞` is constant | `Mathlib/Analysis/Convex/Deriv.lean` |
 
 The module `Basic.Analysis.Calculus.BumpFunction.Mollify`, mollification by a normed bump function,
 `ρ ⋆ g`:

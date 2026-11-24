@@ -1,0 +1,310 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Morrey's problem for nonnegative homogeneous isotropic integrands on 2x2 matrices, in Lean"
+  description: >-
+    Conditional in one case (1 < p < 2), on the quasiconvexity of the Burkholder function. An
+    original result on Morrey's problem for integrands on real 2x2 matrices, proved in Lean 4:
+    for every p > 0, a nonnegative F that is isotropic (invariant under rotations on both
+    sides), positively p-homogeneous and rank-one convex is quasiconvex (Corollary 1.8). The
+    hypotheses that each range of p needs are as follows.
+
+
+    For p >= 2 and F >= 0, F is polyconvex, hence quasiconvex, with a polyaffine support at
+    every matrix in closed form (Theorems 1.1 and 1.2); this answers Question 1.7 of Guerra and
+    Kristensen (Arch. Ration. Mech. Anal. 245, 2022), who proved it at the multiples of
+    orthogonal matrices. For p > 2, F is polyconvex if and only if it is rank-one convex and
+    nonnegative, and for p = 2 no sign condition is needed (Theorem 1.3). For 1 <= p < 2 and
+    F >= 0, F has at every matrix a touching minorant that is a nonnegative combination of the
+    Burkholder function and its mirror image (Theorem 1.5); hence F is quasiconvex if the
+    Burkholder function is (Corollary 1.6 (a)), which is a hypothesis of the statement and is not
+    proved here: it is stated as Corollary 2 of the preprint arXiv:2609.28311. For p = 1, F is
+    convex, with no sign condition, a theorem of Dacorogna (Corollary 1.6 (b)). For 0 < p < 1,
+    F is zero, with neither isotropy nor a sign condition (Proposition 1.7).
+
+
+    The paper is docs/HomogeneousIsotropic/paper/main.tex in the repository, which also holds the
+    formalizations of three papers on Morrey's problem, each its own submission.
+  authors:
+    - "The-Anh Vu-Le"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "The-Anh Vu-Le"
+
+classification:
+  arxiv: ["math.AP", "math.OC"]
+  msc2020: ["49J45", "26B25", "30C62", "68V15"]
+
+sources:
+  - title: "Morrey's problem for nonnegative homogeneous isotropic integrands in the plane"
+    authors:
+      - "The-Anh Vu-Le"
+    id: "docs/HomogeneousIsotropic/paper/main.tex in this repository"
+    type: "original-proof"
+    location: "https://github.com/vltanh/lean4-morrey/blob/main/docs/HomogeneousIsotropic/paper/main.tex"
+    relationship: "other"
+    note: >-
+      The results are first presented here. The paper was written after the formalization and
+      follows the formal proofs. The argument for p >= 2 was first written as a research note
+      in pull request 1 of the repository (next entry).
+  - title: "Research notes of pull request 1: rank-one convexity implies polyconvexity for nonnegative isotropic p-homogeneous integrands, p >= 2; and the addendum on 1 < p < 2"
+    id: "https://github.com/vltanh/lean4-morrey/pull/1"
+    type: "research note"
+    location: "https://github.com/vltanh/lean4-morrey/blob/4bf5a73bbe3159381891833d03c7c25a4cdf1741/docs/research/IWANIEC_MORREY_PGE2_POLYCONVEXITY.md"
+    relationship: "other"
+    note: >-
+      The note (commit 45e63c3) and its addendum (commit 4bf5a73, file
+      docs/research/IWANIEC_MORREY_ISOTROPIC_EXTENSIONS.md) are the source of the argument. The
+      formal proof reorganizes it: it takes a supporting line of the profile where the note
+      differentiates and approximates, derives the Baker-Ericksen inequality from the
+      first-order inequality along a chord, and proves the Burkholder-type inequality by two
+      identities and Bernoulli's inequality.
+  - title: "Automatic quasiconvexity of homogeneous isotropic rank-one convex integrands"
+    authors:
+      - "André Guerra"
+      - "Jan Kristensen"
+    id: "Arch. Ration. Mech. Anal. 245 (2022), 479-500; arXiv:2112.10563"
+    type: "article"
+    location: "https://doi.org/10.1007/s00205-022-01792-2"
+    relationship: "background"
+    note: >-
+      Poses the question that Theorem 1.1 answers (Question 1.7 of the accepted version) and
+      proves polyconvexity and conditional quasiconvexity at the multiples of orthogonal
+      matrices (Theorems 1.2 and 1.3). Read in the arXiv version and the accepted manuscript;
+      nothing of it is used by the proofs.
+  - title: "Sharp Higher Integrability Theory, Part I: The L^p-norm of the Beurling-Ahlfors transform"
+    authors:
+      - "Andrea Agazzi"
+      - "Kari Astala"
+      - "Rodrigo Bañuelos"
+      - "Giuseppe Bruno"
+      - "Gabriele Cassese"
+      - "Daniel Faraco"
+      - "André Guerra"
+      - "Mahdi Hormozi"
+      - "Bernd Kirchheim"
+      - "Aleksis Koski"
+      - "Vjekoslav Kovač"
+      - "Jan Kristensen"
+      - "Federico Pasqualotto"
+      - "István Prause"
+      - "Eero Saksman"
+      - "Vladimír Šverák"
+      - "László Székelyhidi"
+      - "Riccardo Tione"
+      - "Alexander Volberg"
+      - "Hang Yang"
+    id: "arXiv:2609.28311v2"
+    type: "preprint"
+    location: "https://arxiv.org/abs/2609.28311v2"
+    relationship: "background"
+    note: >-
+      Assumed, not proved: its Corollary 2 (the Burkholder function is quasiconvex for
+      1 < p < infinity) is the hypothesis of Corollary 1.6 (a) and of Corollary 1.8 for
+      1 < p < 2. The preprint states it with smooth periodic test maps and for a positive
+      multiple of the function used here; the passage to the hypothesis of the Lean statement
+      is not formalized. The preprint is not refereed.
+  - title: "On rank one convex functions which are homogeneous of degree one"
+    authors:
+      - "Bernard Dacorogna"
+    id: "Calculus of variations, applications and computations (Pont-à-Mousson, 1994), Pitman Res. Notes Math. Ser. 326, Longman, 1995, 84-99"
+    type: "article"
+    relationship: "background"
+    note: >-
+      The case p = 1 (Corollary 1.6 (b)) is its theorem. It is proved here by the
+      formalization's own argument, the one of Theorem 1.5. The article was not read; its
+      statement is taken from the introduction of Dacorogna and Haeberly (Proc. Roy. Soc.
+      Edinburgh Sect. A 126, 1996).
+  - title: "On the different notions of convexity for rotationally invariant functions"
+    authors:
+      - "Bernard Dacorogna"
+      - "Hideyuki Koshigoe"
+    id: "Ann. Fac. Sci. Toulouse Math. (6) 2 (1993), 163-184"
+    type: "article"
+    location: "https://www.numdam.org/item/AFST_1993_6_2_2_163_0/"
+    relationship: "background"
+    note: >-
+      Its Theorem 2.1 reduces the polyconvexity of a rotationally invariant function to
+      polyaffine supports on diagonal matrices. The reduction used here
+      (hasPolyaffineSupportAt_of_profile) is a form of it, proved directly.
+
+related_formalizations:
+  - id: "palomar/Cassese in this repository"
+    relationship: "other"
+    note: >-
+      The formalization of Cassese, arXiv:2608.03488v3, in the same repository: rank-one convex
+      integrands on 2 x m matrices, m >= 3, that are not quasiconvex. The result here concerns
+      the case 2 x 2, which that paper leaves open. No code is shared except general lemmas.
+  - id: "palomar/Sverak and palomar/Pedregal in this repository"
+    relationship: "other"
+    note: >-
+      The formalization of Šverák 1992 and the audit of Pedregal, arXiv:1905.06571v5, in the same
+      repository, each with its own Challenge and metadata.
+  - id: "https://github.com/vltanh/lean4-calculus-of-variations"
+    relationship: "builds-on"
+    note: >-
+      Provides rank-one convexity, quasiconvexity, the null Lagrangian property of minors and
+      the local Lipschitz continuity of rank-one convex functions (commit b7a207a), used by the
+      proofs only.
+
+status:
+  scope: >-
+    Conditional in one case: for 1 < p < 2 the quasiconvexity of F (Corollaries 1.6 (a) and
+    1.8) is proved from the quasiconvexity of the Burkholder function, a hypothesis of the
+    statements (Corollary 2 of arXiv:2609.28311, not proved here). Everything else is
+    unconditional: Theorems 1.1, 1.2, 1.3 and 1.5, Corollaries 1.4 and 1.6 (b), Proposition 1.7,
+    and all the lemmas of the paper. Not formalized: the identity |A| = |z| + |w| for the
+    operator norm (the statements are in conformal coordinates), the rank-one convexity of the
+    Burkholder function and the other facts recalled in the paper's introduction, and the
+    passage from the preprint's periodic test maps to the test maps of the hypothesis.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-fable-5-2"]
+      framework: "Claude Code 2.1.327 (VS Code extension, Claude Agent SDK)"
+      tool_setup: >-
+        One session on 23 November 2026: the main session, which checked the research note by
+        hand, reorganized the argument, wrote the definitions, the one-variable inequalities,
+        the results on profiles, the theorems, the Challenge and the paper; 2 sub-agents that
+        proved the lemmas on conformal coordinates and on polyaffine supports from statements
+        given by the main session; 1 sub-agent that checked the citations and searched the
+        literature; 1 independent sub-agent that refereed the paper and the Lean statements.
+        Lean v4.36.0-rc2, Mathlib v4.36.0-rc2. The repository's conventions are those of the
+        formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper).
+      cost:
+        wall_time: "about 2.5 h elapsed; about 1.0 h of sub-agent working time"
+        spend_usd: "not tracked"
+        hardware: "local machine (20 cores, 62 GB RAM) and API"
+      prompting_notes: >-
+        The author asked for the proof of pull request 1 to be validated in Lean, incorporated
+        in the repository and written up as a paper; then for the case 0 < p < 1, so that every
+        p > 0 is covered, for a paper with the proofs in appendices and the hypotheses of each
+        range of p in a table, for a name that states the hypotheses, and for the Palomar files.
+    - method: "agent"
+      models: ["claude-fable-5-2"]
+      framework: "Claude Code (claude.ai/code)"
+      tool_setup: >-
+        The session that wrote the research note and its addendum in pull request 1 (commits
+        45e63c3 and 4bf5a73, 23 November 2026), with numerical and symbolic checks described in
+        the note.
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "not tracked"
+    - method: "agent"
+      models: ["ChatGPT Chat 6 Extra High"]
+      framework: "not recorded"
+      tool_setup: >-
+        According to the author, ChatGPT Chat 6 Extra High (OpenAI) also worked on the research
+        of pull request 1, of which the notes above are part. Which documents of the pull
+        request it wrote is not recorded in this repository.
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "not tracked"
+  spend_usd: "not tracked"
+  notes: >-
+    The AI systems found the proofs and wrote the code and the documents, at the request of the
+    author. No person has reviewed the proofs or the paper. See docs/HomogeneousIsotropic/CREDITS.md.
+
+fidelity:
+  divergences: >-
+    The paper was written after the formalization and follows the formal proofs; there is no
+    departure in the proofs. Statements: matrices are Matrix (Fin 2) (Fin 2) R and gradients have
+    the components as rows; quasiconvexity is tested with Lipschitz maps vanishing outside the
+    open unit square, with the requirement that the integral exist (automatic for the continuous
+    integrands concerned); the statements are in conformal coordinates, with |z| + |w| where the
+    paper writes the operator norm |A| (that identity is not formalized; det A = |z|^2 - |w|^2
+    is a Challenge theorem); positive homogeneity uses the real power; in Theorem 1.2 the
+    supporting line is given by its slope; in Theorem 1.5 the identity is stated with
+    burkholder p = (p/2) B_p, hence with the denominators p (2 - p) where the paper has
+    2 (2 - p); Corollary 1.4 states local boundedness as boundedness on a neighbourhood of every
+    matrix. Assumed: the quasiconvexity of the Burkholder function for 1 < p < 2 (Corollary 2 of
+    arXiv:2609.28311), as the hypothesis IsQuasiconvex (burkholder p) of Corollaries 1.6 (a) and
+    1.8. See the paper's Appendix E and docs/HomogeneousIsotropic/README.md.
+
+review:
+  status: "agent-reviewed"
+  reviewers:
+    - "none"
+  notes: >-
+    No human review. An independent AI agent (Claude Fable 5.2) restated every definition and
+    theorem of the library and looked for vacuous statements, recomputed every identity of the
+    paper symbolically, tested the supports numerically, and compared each row of the paper's
+    table with the Lean declaration; it found no error in a theorem or a proof, and its
+    corrections to remarks are applied. It reviewed the first version of the paper: the
+    version with the proofs in appendices, Proposition 1.7 and Corollary 1.8 were written after
+    its review. Another agent checked the citations against the sources
+    and searched the literature for earlier proofs (none found; Google Scholar and MathSciNet
+    were not covered).
+
+alignment:
+  namespace: "HomogeneousIsotropicChallenge"
+  statements:
+    - source: "Lemma 2.1 (a)"
+      lean: "HomogeneousIsotropicChallenge.det_eq_norm_sq_sub"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "det A = |z|^2 - |w|^2 for the conformal part z and the anticonformal part w of A; ties the coordinates to the determinant."
+    - source: "Theorem 1.1"
+      lean: "HomogeneousIsotropicChallenge.theorem1_1"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "p >= 2, F >= 0 isotropic, positively p-homogeneous, rank-one convex: a polyaffine support at every matrix, and F is polyconvex."
+    - source: "Theorem 1.2"
+      lean: "HomogeneousIsotropicChallenge.theorem1_2"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "The support at diag(1, t), |t| < 1, in closed form, with the determinant coefficient multiplier p H m t."
+    - source: "Theorem 1.3 (a)"
+      lean: "HomogeneousIsotropicChallenge.theorem1_3_a"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "p > 2: polyconvex if and only if rank-one convex and nonnegative."
+    - source: "Theorem 1.3 (b)"
+      lean: "HomogeneousIsotropicChallenge.theorem1_3_b"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "p = 2: polyconvex if and only if rank-one convex."
+    - source: "Corollary 1.4"
+      lean: "HomogeneousIsotropicChallenge.corollary1_4"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "p >= 2, F >= 0 Borel and locally bounded: rank-one convex, quasiconvex and polyconvex are equivalent."
+    - source: "Theorem 1.5"
+      lean: "HomogeneousIsotropicChallenge.theorem1_5"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "1 <= p < 2, F >= 0: a touching Burkholder-type minorant with (2 - p)|m| <= p c0 at every matrix."
+    - source: "Theorem 1.5 (the identity)"
+      lean: "HomogeneousIsotropicChallenge.theorem1_5_identity"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "The Burkholder-type function as a combination of burkholder p (A) and burkholder p (J A)."
+    - source: "Corollary 1.6 (a)"
+      lean: "HomogeneousIsotropicChallenge.corollary1_6_a"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "conditional"
+      note: "1 < p < 2, F >= 0: F is quasiconvex, under the hypothesis that burkholder p is quasiconvex."
+    - source: "Corollary 1.6 (b)"
+      lean: "HomogeneousIsotropicChallenge.corollary1_6_b"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "p = 1: F is nonnegative and convex."
+    - source: "Proposition 1.7"
+      lean: "HomogeneousIsotropicChallenge.proposition1_7"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "0 < p < 1: a positively p-homogeneous, rank-one convex F is zero."
+    - source: "Corollary 1.8"
+      lean: "HomogeneousIsotropicChallenge.corollary1_8"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "conditional"
+      note: "p > 0, F >= 0: F is quasiconvex, under the hypothesis that burkholder p is quasiconvex when 1 < p < 2."
+
+acknowledgements: >-
+  Mathlib; Lean's Comparator and NanoDa kernel; Palomar's validation scripts; arXiv, Numdam and
+  the open repositories from which the cited works were read.

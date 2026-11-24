@@ -1,0 +1,105 @@
+\section{Setting: coordinates, profiles and supports}\label{sec:setting}
+
+This section turns the problem for $F$ on $\M$ into a problem for a function of two nonnegative
+variables. The proofs are in \cref{app:setting}.
+
+\subsection{Conformal coordinates}\label{sec:coordinates}
+
+Identify $\R^2$ with $\C$. Every $A=(a_{ij})\in\M$ acts as $A\zeta=z\zeta+w\bar\zeta$ with
+\[
+  z=\tfrac12\bigl((a_{11}+a_{22})+i(a_{21}-a_{12})\bigr),\qquad
+  w=\tfrac12\bigl((a_{11}-a_{22})+i(a_{21}+a_{12})\bigr),
+\]
+and $A\mapsto(z,w)$ is an $\R$-linear isomorphism $\M\to\C^2$. We call $z$ the \emph{conformal}
+and $w$ the \emph{anticonformal part} of $A$, and $(z,w)$ its \emph{coordinates}.
+
+\begin{lemma}\label{lem:coordinates}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\det A=\abs z^2-\abs w^2$ and $\abs A=\abs z+\abs w$.
+\item A matrix $B\ne0$ with coordinates $(\alpha,\beta)$ has rank one if and only if
+  $\abs\alpha=\abs\beta$.
+\item If $R_\vartheta$ denotes the rotation by the angle $\vartheta$, the matrix
+  $R_\vartheta AR_{\vartheta'}$ has the coordinates
+  $(e^{i(\vartheta+\vartheta')}z,e^{i(\vartheta-\vartheta')}w)$.
+\item $JA$, with $J=\diag(1,-1)$, has the coordinates $(\bar w,\bar z)$.
+\end{enumerate}
+\end{lemma}
+
+By (c), the two rotations act on the phases of $z$ and $w$ independently. So $F$ is isotropic if
+and only if $F(A)=\Phi(\abs z,\abs w)$, where
+\[
+  \Phi(x,y)=F(\diag(x+y,x-y)),\qquad x,y\ge0,
+\]
+is the \emph{profile} of $F$; the matrix $\diag(x+y,x-y)$ has the coordinates $(x,y)$. In the
+quadrant of the variables $(x,y)=(\abs z,\abs w)$, the axis $y=0$ carries the conformal
+matrices, the axis $x=0$ the anticonformal ones, and the diagonal $x=y$ the matrices of rank at
+most one. The two axes together are the set $\CO$ of the Introduction.
+
+\subsection{Profiles}
+
+\begin{lemma}\label{lem:profile}
+Let $F$ satisfy~\Hyp, with profile $\Phi$. Then
+\begin{enumerate}[label=\textup{(P\arabic*)},leftmargin=3em]
+\item\label{P1} $\Phi(\lambda x,\lambda y)=\lambda^p\Phi(x,y)$ for $\lambda>0$ and $x,y\ge0$;
+\item\label{P2} for all $z_0,w_0,\alpha,\beta\in\C$ with $\abs\alpha=\abs\beta$, the function
+  $\tau\mapsto\Phi(\abs{z_0+\tau\alpha},\abs{w_0+\tau\beta})$ is convex on $\R$.
+\end{enumerate}
+\end{lemma}
+
+Property \ref{P2} is the rank-one convexity of $F$, by \cref{lem:coordinates}\,(b). From now on
+a \emph{profile of degree $p$} is a function $\Phi$ on $[0,\infty)^2$ with \ref{P1} and
+\ref{P2}; all the arguments use only these two properties. If $\Phi$ is a profile, so is its
+\emph{mirror image} $\Phi^\ast(x,y)=\Phi(y,x)$; by \cref{lem:coordinates}\,(d) it is the profile
+of $A\mapsto F(JA)$. For $p>0$, \ref{P1} gives $\Phi(0,0)=0$.
+
+By \ref{P1} a profile is determined by its values on the segment $x+y=1$, which we parametrize
+by
+\[
+  (x_t,y_t)=\Bigl(\frac{1+t}2,\frac{1-t}2\Bigr),\qquad -1\le t\le1 .
+\]
+The ends $t=1$ and $t=-1$ are the conformal and the anticonformal point, and $t=0$ is the point
+of rank one. Let
+\[
+  h(s)=\Phi(x_s,y_s),\qquad -1\le s\le1 .
+\]
+With $\sigma=x+y$ and $\delta=x-y$, \ref{P1} gives $\Phi(x,y)=\sigma^ph(\delta/\sigma)$ for
+$\sigma>0$. For the profile of $F$ this reads $h(s)=F(\diag(1,s))$ and
+$F(A)=\abs A^p\,h(\det A/\abs A^2)$, since $\sigma=\abs A$ and $\sigma\delta=\det A$.
+
+\subsection{Supports}
+
+A \emph{polyaffine support} of $F$ at $A_0$ is a polyaffine function $P$ with $P\le F$ and
+$P(A_0)=F(A_0)$.
+
+\begin{lemma}\label{lem:supports}
+Let $F\colon\M\to\R$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item If $F$ has a polyaffine support at $A_0$, then
+  $F(A_0)\le\int_{(0,1)^2}F(A_0+\nabla\varphi)\,dx$ for every Lipschitz $\varphi$ vanishing
+  outside $(0,1)^2$ for which the integral exists.
+\item $F$ is polyconvex if and only if it has a polyaffine support at every matrix.
+\end{enumerate}
+In particular polyconvex functions are quasiconvex, continuous and rank-one convex.
+\end{lemma}
+
+Part (a) holds because polyaffine functions are null Lagrangians. More generally, if $G\le F$
+with $G(A_0)=F(A_0)$ and $G$ is quasiconvex at $A_0$, then $F$ is quasiconvex at $A_0$. This is
+how every quasiconvexity statement of this paper is proved: by a minorant that touches.
+
+\begin{lemma}\label{lem:lift}
+Let $F$ be isotropic with profile $\Phi$, and let $A_0$ have the coordinates $(z_0,w_0)$.
+Suppose that $k,b_1,b_2,c\in\R$ with $b_1,b_2\ge0$ satisfy
+\begin{equation}\label{eq:profilesupport}
+  k+b_1x+b_2y+c(x^2-y^2)\le\Phi(x,y)\qquad\text{for all }x,y\ge0,
+\end{equation}
+with equality at $(\abs{z_0},\abs{w_0})$. Then $F$ has a polyaffine support at $A_0$.
+\end{lemma}
+
+We call a function as in \eqref{eq:profilesupport}, with $b_1,b_2\ge0$, a \emph{support of the
+profile}. The sign condition on $b_1$ and $b_2$ is what lets the support pass from the moduli to
+the matrix: $b_1\abs z$ dominates the linear function $b_1\re(uz)$ for every $u$ of modulus one.
+Supports scale: if \eqref{eq:profilesupport} holds with equality at $(x_0,y_0)$, then for
+$\sigma>0$ the function with the coefficients
+$(\sigma^pk,\sigma^{p-1}b_1,\sigma^{p-1}b_2,\sigma^{p-2}c)$ is a support with equality at
+$(\sigma x_0,\sigma y_0)$, by \ref{P1}. So it is enough to find supports of the profile at the
+points $(x_t,y_t)$ and at the origin.
