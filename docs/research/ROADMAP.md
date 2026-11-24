@@ -1,5 +1,58 @@
 # Roadmap to completion
 
+## CLOSED at hand-proof level — one-sided SO(2) symmetry at degree two
+
+The [new one-sided rotation theorem](IWANIEC_MORREY_ONE_SIDED_ROTATION.md)
+removes an entire rotation group, not merely a perturbation of
+an isotropic core. For every finite signed positively 2-homogeneous
+F with LEFT SO(2) invariance only, RC iff
+    F(X)=max_{(v,c) in compact T} (|Xv|²+c det X).
+In particular F is PC and QC at ALL bases, with arbitrary material
+anisotropy. At a differentiable invertible A, normalize by
+G(Y)=F(YA), and diagonalize the symmetric P=DG(I)=DF(A)A^T,
+whose eigenvalues lambda1>=lambda2 sum to 2G(I). Align Y e
+to t e by a LEFT rotation, where e is the top eigenvector,
+t=|Y e|. The rotated matrix and tI are rank-one connected,
+so homogeneity and the tangent inequality give
+    G(Y)>=(lambda1-lambda2)|Y e|²/2+lambda2 det Y.
+Equality at I. The resulting polyconvex supports at all smooth
+invertible bases have uniformly bounded vector and determinant
+coefficients by testing on rank-one matrices and I,diag(1,-1).
+Compact closure gives the exact representation everywhere,
+including singular/nonsmooth bases. No right-rotation or sign
+assumption. Also valid for right rotations only by transpose.
+The note includes an exact representation of the positive part
+of any one-sided p-homogeneous RC energy for 1<=p<=2 by
+max_T (|Xv|²+c det X)_+^(p/2), via convex power amplification.
+This does NOT prove original-energy QC when p<2.
+
+**Additional degree-one theorems:** for arbitrary anisotropic
+positively 1-homogeneous RC F, at EVERY invertible A there is
+a linear support on the entire region where XA^(-1) has real
+eigenvalues. The proof uses the classical separately convex
+degree-one perspective theorem on rank-one-generated planes.
+It gives original Jensen for arbitrary laws supported in this
+region. Together with Kirchheim--Kristensen at rank-deficient
+bases, possible failures at invertible bases require complex
+relative spectrum. Furthermore, for LEFT O(2) invariance,
+normalized derivative P is PSD by reflection and rank-one
+convexity. A rotation maximizing P:QY makes QY P symmetric,
+so QY has real spectrum (also for rank-one P). The real-spectrum
+support then gives a GLOBAL linear support. Dense differentiability
+proves convexity of EVERY finite degree-one RC F with only
+left O(2) invariance. For proper rotations alone this proof
+works at positive-semidefinite normalized derivatives, not at
+all bases.
+
+Exact symbolic checks executed successfully. Analytic hand
+proofs, no new Lean theorem or novelty claim. The entire
+signed bi-SO(2) homogeneous theorem is formally verified.
+The one-sided degree-two and left-O(2) degree-one gates are
+closed at hand-proof level. Remaining: arbitrary anisotropy,
+and other exponents with one-sided proper rotations. The main
+target remains all positively p-homogeneous RC=>QC, not a
+degree-by-degree or fixed polynomial enumeration.
+
 ## Anisotropic advance — full-matrix half-space projection and QC gluing
 
 The [new half-space projection theorem](IWANIEC_MORREY_FULL_MATRIX_HALFSPACE.md)
