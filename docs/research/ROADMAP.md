@@ -1,5 +1,40 @@
 # Roadmap to completion
 
+## Nonhomogeneous follow-up — arbitrary separated angular curvature and quantitative mixed-curvature bound
+
+The [new angular-curvature theorem](IWANIEC_MORREY_NONHOMOG_ANGULAR.md)
+proves RC=>QC for **every** finite-valued profile
+f(s,delta)=U(s)+V(s)delta+H(delta), with arbitrary nonlinear
+convex H and no homogeneity, sign, smoothness or growth
+hypothesis. RC yields U''>=s|V''| and two explicit conformal
+boundary inequalities involving H'_±. Conversely these
+conditions suffice even **locally on a bounded spectral sector**.
+At base (r,t), take a supporting slope of H, start the
+positive truncated-determinant integral at radius r, and
+use separate radial convexity to bound the starter on every
+smaller radius. This proves a global-on-the-ball touching
+minorant, including nonsmooth and conformal bases.
+
+For EVERY smooth isotropic RC profile on S_R, freeze angular
+curvature at the outer shell, and repair its radial profile
+by the explicit convex correction
+C(s)=M(Rs²/2-s³/6)+Ns^4/24, with M=sup|f_sδδ|,
+N=sup|f_ssδδ|. The localized theorem gives a direct
+all-gradient Jensen deficit estimate (9), in particular
+deficit <=(13/27)M R³+N R^4/24. The bounds are uniform in
+wave count and atom count. Symbolic and exact rational
+checks actually passed, including a nonsmooth example and
+a signed RC quartic.
+
+**Do not overstate:** these proofs use the unshifted
+affine-shell cone, whose universal completeness was already
+refuted. They give exact nonhomogeneous positive results
+and a quantitative estimate, not a proof for arbitrary f.
+The general target remains the broader projection-based
+spatial calibration or a genuinely new all-gradient
+inequality. No new Lean theorem. The signed homogeneous
+audit/formalization is separate.
+
 ## Nonhomogeneous follow-up — arbitrary-multiplicity projection-max theorem
 
 The [mixed-minor projection note](IWANIEC_MORREY_NONHOMOG_PROJECTION_MAX.md)
