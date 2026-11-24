@@ -1,5 +1,71 @@
 # Roadmap to completion
 
+## GATE 1 — explicit spatial cofactor correction; positive absorption remains open
+
+The [new spatial heat-stress exchange](IWANIEC_MORREY_HEAT_STRESS_EXCHANGE.md)
+works directly with arbitrary compatible gradients, not a finite
+configuration or an assumed integrand classification. For heat
+flow X_s=A+Dphi_s, set B_ij=partial_ij phi_s, g=Delta phi_s,
+H_j=partial_j X_s, and M_h=sum H_j tensor H_j.
+Push spatial tensors to the angular sphere with weight
+omega=|X_s|^(p-2) integrated over space and heat time, writing
+[T] for the resulting measure. M=[M_h] is PSD and satisfies
+the exact angular source equation D_p M=sigma. Its trace
+T is bounded by J_p/c_p, J_p=E|X|^p-|A|^p.
+A SECOND exact energy identity, via first variation and
+spatial integration by parts, gives the signed tensor
+    S_ai,bj=(g_a B_b,ij+g_b B_a,ij)/2.
+Its cofactor trace vanishes pointwise, and D_p[S]=sigma.
+Write P=(B11-B22)/2,R=B12 and split H_j=T_j+V_j with
+T_1=[g/2,0], T_2=[0,g/2], V_1=[P,R], V_2=[R,-P].
+For PSD G=sum T_j tensor T_j and V=sum V_j tensor V_j,
+the exact exchange is S=M_h+G-V. In particular
+    D_p[G]=D_p[V], C:[G]=0, C:[V]=C:M.
+So the explicit correction [G]-[V] satisfies BOTH linear
+requirements of G1 for every compatible field and p>1.
+It may fail PSD; no domination permitting full subtraction
+of [V] has been proved. Equality is valid at each heat time,
+not after multiplying by arbitrary angular weights.
+
+**Uniform negative-stress budget:** with n uniform on S¹,
+v(n)=4 D²phi_s[n,n]-g, the exact circle fourth moments give
+S=E_n sym((g tensor n) tensor (v(n) tensor n)).
+Split the target sym(g tensor v(n)) into its positive and
+negative spectral parts. Their pushforwards S_+,S_- are
+both PSD and cofactor-free, with D_p S_+=sigma+D_p S_-.
+Write U=int omega |g|², T=int omega |D²phi_s|².
+Their trace difference is U and the negative mass obeys
+    N=tr S_- <= (sqrt(U(4T-U))-U)/2
+              <= (sqrt(2)-1) T.
+At p=2 periodic Hessian integration gives U=T and the
+coefficient improves to (sqrt(3)-1)/2.
+This is a concrete signed spatial repair, not positivity
+of the original source. The residual source D_p S_-
+need not be a compatible gradient law, so the coefficient
+less than one does NOT justify a recursive contraction.
+
+**Positive global corollary:** weighted integration by parts
+with omega_eps=(|X_s|²+eps²)^((p-2)/2) yields U>=k_p T,
+k_p=(p-1)² for 1<p<=2, 4/(p+2) for p>=2.
+Thus N<=r_p U with r_p=(sqrt(4/k_p-1)-1)/2. For arbitrary
+smooth-off-zero homogeneous angular F with rank-one Hessian
+bounds m,L on the sphere, J_F>=m U-(L-m)N. It is QC at all
+bases when L/m<=1+1/r_p. At p=2 the threshold is 2+sqrt(3),
+and the same unweighted argument applies even to arbitrary
+NONhomogeneous C² integrands with global constant rank-one
+curvature bounds. This is not a density theorem for
+arbitrary RC functions.
+
+The exact heat-exchange, circle-moment and constant checks
+were run successfully. Hand proofs, no new Lean result or
+priority claim. **G1 remains OPEN:** the cofactor equation
+and angular-source equation now have an explicit joint
+signed solution, but positivity for arbitrary curvature
+remains unproved. Do not claim closure via an unproved
+iteration, or replace the main target by the contrast
+subclass. The formally verified homogeneous isotropic
+theorem remains closed.
+
 ## Angular curvature stresses — compact positive-measure equation and uniform moment optimization
 
 The [new angular-stress theorem](IWANIEC_MORREY_ANGULAR_CURVATURE_STRESS.md)
