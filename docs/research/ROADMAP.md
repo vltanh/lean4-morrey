@@ -1,5 +1,48 @@
 # Roadmap to completion
 
+## Positive unamplified Jensen — spectral shells and determinant transport
+
+The [spectral-gap theorem](IWANIEC_MORREY_SPECTRAL_GAP_JENSEN.md)
+gives a direct determinant-fluctuation comparison for EVERY
+isotropic RC F, without homogeneity. At radius r, H_r(d)
+=F(diag(r,d/r)) is convex in d by rank-one convexity. The
+constant-determinant shear monotonicity gives F(X)>=H_r(d)
+whenever r belongs to the singular-value interval I(X).
+Thus if a common r is outside the open base interval,
+ordinary integral Jensen follows, even for nonsmooth F.
+In particular ALL constant-operator-norm gradient laws
+obey unmodified Jensen, including determinant sign changes.
+
+For C² F with rank-one Hessian bounds 0<=m<=M, set
+Q_r=(|X|_F²-r²-d²/r²)/4. Integrating shear Hessian bounds
+compares F-H_r with 2m Q_r and 2M Q_r. Jensen of H_r
+contributes POSITIVE determinant variance m Var(d)/(2r²).
+The variance cancels exactly against the corresponding
+term in E Q_r-Q_r(A). Hence for all minor-compatible laws:
+    E F-F(A) >= (m/2) E|X-A|_F²
+      -(M-m)/2 (E[r²+d²/r²-|X|_F²]_+
+                    +[|A|_F²-r²-d_A²/r²]_+).
+The loss depends on spectral interval mismatch; with common
+Hessian bounds it can be optimized over r² by scalar convex
+optimization outside the base interval. This complements
+the determinant-only stabilization estimate.
+
+Common-column spectral compression permits a comparison radius
+inside the base interval if the mean shear budget suffices.
+A multiscale determinant-mass transport theorem at rank-deficient
+bases permits arbitrarily many distinct radii if positive
+and negative determinant masses can be coupled across
+overlapping intervals. No assertion that all gradient laws
+admit these calibrations or transport couplings is made.
+These are positive unmodified Jensen results and a quantitative
+all-law estimate, not closure of the general gate.
+972 pointwise and 48 full-moment rational controls and
+symbolic identities were executed successfully. Hand proofs,
+no Lean or novelty claim. The previous determinant-square
+normal-form gate remains open. Avoid a fixed-case ladder;
+the unresolved issue is mixing different spectral scales
+using actual gradient compatibility.
+
 ## POSITIVE general isotropic reduction — determinant-only stabilization and two convex branches
 
 The [new determinant-stabilization theorem](IWANIEC_MORREY_DETERMINANT_STABILIZATION.md)
