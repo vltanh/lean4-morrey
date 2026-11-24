@@ -1,5 +1,50 @@
 # Roadmap to completion
 
+## PRIMARY RESEARCH DIRECTION — signed isotropic homogeneous quasiconvexity
+
+The fixed-wave and abstract martingale/compatibility-penalty research
+is retained below as historical work, but suspended as the main direction.
+Return to the provisional all-p>=2 nonnegative isotropic homogeneous
+polyconvexity theorem and the conditional 1<p<2 quasiconvexity theorem.
+Remove nonnegativity first, targeting QC rather than PC, simultaneously
+for all exponents and all base matrices.
+
+The [signed scale-maximal generator theorem](IWANIEC_MORREY_SIGNED_SCALE_MAX.md)
+uses **Theorem 1** of Agazzi et al. (2026), arXiv:2609.28311v2,
+rather than only its Burkholder corollary. It proves an infinite-dimensional
+family of signed, isotropic, p-homogeneous QC integrands for every p>1
+by taking the pointwise maximum of the scaled truncated determinant L_r
+with a scaled convex competitor BEFORE integrating over radii. Explicit
+convergence and scaling arguments make the Jensen proof global.
+
+For every p>2 the new explicit family agrees with Burkholder exactly
+on a prescribed cone t<=c in (0,1) and is strictly above it outside,
+addressing the earlier signed-cone support limitation constructively.
+For every 1<p<2 another exact signed family has a negative conformal
+base where no affine Burkholder-profile support is possible, yet is
+globally QC. Both follow directly from the 2026 L theorem; no numerical
+rank-one-convexity assumption or fixed-wave hypothesis is used.
+
+**All-integrand base coverage:** for 1<p<2, the signed theorem holds
+at every nonnegative-energy base, including zero, by the endpoint
+tangent argument. For p>2, all nonpositive-energy bases are covered,
+and the remaining positive-energy bases with admissible affine tangent
+are also covered. The signed p=2 case is polyconvex; p=1 is classical
+convexity under isotropy; 0<p<1 gives identically zero.
+
+**Next main gate:** prove quasiconvexity at the genuinely missing
+signed bases for every profile. Try constructing touching global
+minorants using the new scale-maximal generators; the convex competitor
+is not fixed to a single parametric family. No completeness theorem
+for this support method is established. Do not substitute an infinite
+sequence of special exponents, model gradient fields or new equivalent
+martingale formulations for the global signed-profile problem.
+
+The [checker](../../research/audit/iwaniec_signed_scale_exact.py) passed
+in the working container. Hand proofs conditional on the cited preprint;
+no Lean or human review claim. The signed problem and unrestricted
+Morrey remain open.
+
 ## MAIN GATE correction — the proposed universal Delta-preserving split is REFUTED
 
 The [new exact no-go theorem](IWANIEC_MORREY_DELTA_NOGO.md)
