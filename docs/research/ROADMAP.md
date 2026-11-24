@@ -1,5 +1,48 @@
 # Roadmap to completion
 
+## Nonhomogeneous follow-up — arbitrary-multiplicity projection-max theorem
+
+The [mixed-minor projection note](IWANIEC_MORREY_NONHOMOG_PROJECTION_MAX.md)
+independently gives a four-matrix affine-shell separator at the
+**rank-one base diag(1,0)**, with exact all-radius tests and
+strict gap >1/420 for a rotationally averaged translated L.
+It complements the concurrent three-spectral-atom no-go
+at the anticonformal base J below. The exact four-atom law
+also has correct full matrix/minor moments. Conditional on
+the signed homogeneous candidate, it passes all homogeneous
+isotropic RC tests as well; simple positive/supremal closure
+of the homogeneous results, PC and affine-shell functions
+cannot settle arbitrary nonhomogeneous isotropic RC.
+
+An elementary alternative proof establishes directional convex
+order of the scalar projection by its order/mean preservation
+and translation equivariance; linearization gives the gradient
+sign for convex ridge potentials. The concurrent note below
+proves the stronger sign for arbitrary convex C¹ potentials.
+
+**Projection-max closure theorem (arbitrary N):** constrain
+any finite family of scalar output combinations l_i A+b_i
+to arbitrary compact convex gradient sets K_i. Take the
+maximum over the boundary-or-original auxiliary rows of an
+arbitrary polyconvex stacked (2+N)x2 calibration plus the
+nonlinear projection-sign corrections. This is globally QC:
+fix a maximizing tuple at the base and independently project
+the active scalar potentials, so the entire stack is a
+compatible gradient with all mixed minors preserved.
+This generalizes the one-row determinant calibration to
+arbitrary simultaneous constraints and nonlinear mixed-minor
+calibrations; N is not fixed. The proof works for arbitrary
+convex C¹ potentials using the concurrent sign theorem,
+or for ridge sums by the independent elementary proof.
+
+No universal support completeness claim is made. The earlier
+affine-shell continuation problem is refuted, not a pending
+ODE gate. Continue toward general isotropic RC=>QC with
+the broader spatial mechanism, not an enumeration of
+projection counts or shapes. The exact checker for the
+rank-one-base no-go was actually run; the new projection-max
+proof is hand-level. The signed homogeneous audit is separate.
+
 ## MAIN NONHOMOGENEOUS ATTACK — generalize the scalar projection, not just radial shells
 
 The [new shifted-shell and nonlinear projection note](IWANIEC_MORREY_NONHOMOG_ROW_PROJECTION.md)
