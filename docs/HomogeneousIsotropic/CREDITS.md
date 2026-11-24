@@ -92,7 +92,8 @@ How the formal proof differs from the note:
 
 ## Integrands that change sign (23–24 November 2026)
 
-The author reported a new result in pull request 1: the theorem holds with no sign condition.
+The author reported a new result in pull request 1: the theorem holds for integrands that take
+negative values.
 
 - The argument is by ChatGPT Chat 6 Extra High, recorded in pull request 1
   (`docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md`, commit b0cc8f7, with the restricted

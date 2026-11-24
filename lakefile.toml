@@ -21,12 +21,12 @@ rev = "5f650f00b1db63837a452696331a98ca886b94a8"
 [[require]]
 name = "HarmonicAnalysis"
 git = "https://github.com/vltanh/lean4-harmonic-analysis"
-rev = "90f1e01a8e8c8e14f504926a26bd57b4f0729ac4"
+rev = "495bafe368b7296a24c05dd568fae5bc281bca21"
 
 [[require]]
 name = "CalculusOfVariations"
 git = "https://github.com/vltanh/lean4-calculus-of-variations"
-rev = "b7a207a470596b2bc7721d363803ffc009f23f31"
+rev = "220f56c2e6a70679458409fac49def1f9af1c7b5"
 
 [[require]]
 name = "BanachProbability"
@@ -38,7 +38,7 @@ rev = "dc3966ce34fbc31b2936a0ca9b8a50356d690ae1"
 [[require]]
 name = "Iwaniec"
 git = "https://github.com/vltanh/lean4-iwaniec"
-rev = "65cd9a3a96106824d2ef311fd99536ae36994d59"
+rev = "54cf298b0c4da3ba12a8e58f320f04937e7df1ec"
 
 [[lean_lib]]
 name = "Common"

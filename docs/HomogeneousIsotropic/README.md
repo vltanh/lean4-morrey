@@ -32,8 +32,10 @@ and `J = diag(1, −1)`.
 | every `p > 0` | H1, H2, H3 | `F` is quasiconvex (Theorem A) | [`quasiconvex_of_rankOneConvex_of_isotropic`](../../Morrey/HomogeneousIsotropic/Signed/Main.lean#L355) | **proved** |
 
 So rank-one convexity implies quasiconvexity for isotropic, positively `p`-homogeneous
-integrands, for every `p > 0`, with no sign condition (Theorem A). The sign condition N is what
-polyconvexity needs when `p > 2`. For `p ≥ 2` the polyconvexity of the nonnegative integrands
+integrands, for every `p > 0` (Theorem A). The sign condition N is what polyconvexity needs when
+`p > 2`: a nonnegative integrand of the class is polyconvex, so the integrands whose
+quasiconvexity was in question, among them the Burkholder function and the Dacorogna–Marcellini
+energies beyond the polyconvex range, take negative values. For `p ≥ 2` the polyconvexity of the nonnegative integrands
 answers Question 1.7 of Guerra and Kristensen (2022), who proved it at the multiples of
 orthogonal matrices.
 

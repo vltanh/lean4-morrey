@@ -23,7 +23,7 @@ public import Mathlib.Topology.Instances.Matrix
 Morrey's problem asks whether rank-one convexity implies quasiconvexity. For integrands on real
 `2 × 2` matrices it is open. This file states the results of the paper of this repository,
 `docs/HomogeneousIsotropic/paper/main.tex`, which answer it for isotropic, positively
-`p`-homogeneous integrands, for every `p > 0` and with no sign condition (`theoremA`).
+`p`-homogeneous integrands, for every `p > 0` (`theoremA`).
 
 ## Conventions
 
@@ -52,7 +52,7 @@ Morrey's problem asks whether rank-one convexity implies quasiconvexity. For int
 ## The statements
 
 * `theoremA` (`p > 0`): an isotropic, positively `p`-homogeneous, rank-one convex `F` is
-  quasiconvex. No sign condition.
+  quasiconvex.
 * `proposition6_8`: if `N` is convex on `[0, ∞)`, continuous, and `N 0 ≤ 0`, then `radial e N`,
   that is `X ↦ (|X| + e δ) N (|X|) − 2 ∫₀^{|X|} N`, is quasiconvex, for `e = 1` and for `e = −1`.
 

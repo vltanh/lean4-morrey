@@ -6,8 +6,8 @@ project:
   description: >-
     An original result on Morrey's problem for integrands on real 2x2 matrices, proved in Lean 4
     with nothing assumed: for every p > 0, an F that is isotropic (invariant under rotations on
-    both sides), positively p-homogeneous and rank-one convex is quasiconvex, with no sign
-    condition (Theorem A). The proof for integrands that change sign integrates scaled
+    both sides), positively p-homogeneous and rank-one convex is quasiconvex (Theorem A). The
+    proof for integrands that change sign integrates scaled
     truncated determinants over the radius (Proposition 6.8: for every convex N with N(0) <= 0, an
     explicit radial function of N is quasiconvex). What a sign condition adds, range by range:
 
@@ -160,7 +160,7 @@ related_formalizations:
     relationship: "builds-on"
     note: >-
       Provides rank-one convexity, quasiconvexity, the null Lagrangian property of minors and
-      the local Lipschitz continuity of rank-one convex functions (commit b7a207a), used by the
+      the local Lipschitz continuity of rank-one convex functions (commit 220f56c), used by the
       proofs only.
 
 status:
@@ -325,7 +325,7 @@ alignment:
       lean: "HomogeneousIsotropicChallenge.theoremA"
       module: "HomogeneousIsotropic.Challenge"
       status: "proved"
-      note: "p > 0, F isotropic, positively p-homogeneous, rank-one convex, of any sign: F is quasiconvex."
+      note: "p > 0, F isotropic, positively p-homogeneous, rank-one convex: F is quasiconvex."
     - source: "Proposition 6.8"
       lean: "HomogeneousIsotropicChallenge.proposition6_8"
       module: "HomogeneousIsotropic.Challenge"

@@ -22,8 +22,9 @@ submission; the papers share general lemmas, the cited results and the checks.
 
 The repository also proves a result of its own on the open `2 × 2` case
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, an
-isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex,
-with no sign condition. A nonnegative one is even polyconvex if `p ≥ 2`. The proof uses one
+isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex.
+A nonnegative one is even polyconvex if `p ≥ 2`, so the integrands whose quasiconvexity was in
+question are those that take negative values. The proof uses one
 result from outside, the quasiconvexity of the truncated determinant, claimed in a 2026 preprint
 that we audited with a Lean formalization,
 [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it from there.
@@ -45,7 +46,7 @@ That every size but `2 × 2` fails is proved here as one theorem, from Šverák'
 ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296)).
 
 In `2 × 2` the answer is yes for isotropic, positively `p`-homogeneous integrands, for every
-`p > 0`, with no sign condition. This is proved here
+`p > 0`. This is proved here
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
@@ -355,7 +356,7 @@ How Cassese relates to the other two papers:
 ## What the repository adds to the papers
 
 - A theorem of its own in `2 × 2`: for isotropic, positively `p`-homogeneous integrands,
-  rank-one convexity implies quasiconvexity for every `p > 0`, with no sign condition
+  rank-one convexity implies quasiconvexity for every `p > 0`
   ([above](#a-result-of-this-repository-homogeneous-isotropic-integrands-in-2--2)):
   - polyconvexity for nonnegative integrands with `p ≥ 2`, and for all with `p = 2`;
   - convexity for `p = 1`;

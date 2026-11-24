@@ -8,7 +8,7 @@ public import Mathlib.Analysis.SpecificLimits.Basic
 # Isotropic, positively homogeneous, rank-one convex integrands on `ℝ^{2×2}` are quasiconvex
 
 * `quasiconvex_of_rankOneConvex_of_isotropic`: for every `p > 0`, an isotropic, positively
-  `p`-homogeneous, rank-one convex `F : ℝ^{2×2} → ℝ` is quasiconvex; no sign condition is needed.
+  `p`-homogeneous, rank-one convex `F : ℝ^{2×2} → ℝ` is quasiconvex.
 
 For `F ≥ 0`, for `p = 2`, for `p = 1` and for `0 < p < 1` this is in
 `Morrey/HomogeneousIsotropic/Main.lean` and `Signed/BurkholderRadial.lean`. Let `p > 1`, `p ≠ 2`,
@@ -348,10 +348,10 @@ theorem quasiconvex_of_slice_neg_one_neg (hp1 : 1 < p) (hp2 : p ≠ 2) (hiso : I
     exact h.mono_left nhdsWithin_le_nhds
   exact le_of_tendsto_of_tendsto hl1 hl2 hle
 
-/-! ### All exponents, no sign condition -/
+/-! ### All exponents -/
 
 /-- **Theorem A. Isotropic, positively homogeneous, rank-one convex integrands on `ℝ^{2×2}` are
-quasiconvex.** For every `p > 0`, with no sign condition. -/
+quasiconvex.** For every `p > 0`. -/
 theorem quasiconvex_of_rankOneConvex_of_isotropic (hp : 0 < p) (hiso : IsIsotropic F)
     (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F) : Quasiconvex F := by
   by_cases h0 : ∀ A, 0 ≤ F A
