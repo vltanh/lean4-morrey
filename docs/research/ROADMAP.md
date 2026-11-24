@@ -1,5 +1,63 @@
 # Roadmap to completion
 
+## POSITIVE nonhomogeneous theorem — uniform exponential quasiconvexification on bounded ranges
+
+The [new integral Jensen theorem](IWANIEC_MORREY_NONHOMOG_EXPONENTIAL.md)
+is an all-base, all-gradient positive result, without any
+homogeneity or separated-profile assumption on F. For every
+C² uniformly strictly rank-one-convex isotropic F and every
+finite R, there are lambda_R>0,kappa_R>0 such that for EVERY
+lambda>=lambda_R, EVERY base A in the radius-R ball and EVERY
+compatible gradient X=A+Dphi in the same ball,
+    int (exp(lambda(F(X)-F(A)))-1)/lambda
+       >= kappa_R int |X-A|_F².
+Thus a SINGLE smooth exponential reparametrization of F is
+strongly QC on the entire bounded gradient range. In particular
+the ORIGINAL energy obeys the uniform weighted Jensen inequality
+int (F(A)-F(X))_+ <= C_R int(F(X)-F(A))_+,
+with C_R=exp(lambda_R osc_{B_R}F), even with a strict quadratic
+margin. The constants are chosen before the gradient test, not
+for one fixed witness.
+
+Proof uses three published results: Conti--De Lellis--Müller--
+Romeo connected-set polyconvexity, Heinz's arbitrary isotropic
+set theorem, and the Ball--James transition-layer estimate for
+incompatible compact sets (planar incompatibility criterion).
+Subtract a small nonnegative smooth spectral penalty vanishing
+on the base orbit. The resulting enlarged low-energy sublevel
+is compact lamination convex on a larger ball. Support its
+base component in the lifted minors space. The penalty makes
+the tangent spectral Hessian of the energy minus the normalized
+support strictly positive; exponential curvature controls the
+normal direction. Adjust the determinant coefficient slightly
+to obtain positive phase-control coefficients. Critical bases
+are zero or conformal/anticonformal and admit explicit quadratic
+or polyaffine calibrations; all are covered. This gives a strict
+local quadratic Jensen margin. Isolate the base component by a
+clopen spectral band (no component-count restriction); the
+complement is incompatible. The transition-layer estimate
+bounds excursions into that complement by positive-energy
+transition mass. A sufficiently large exponent pays for those
+excursions. Strong Jensen is open in the base via C² Taylor
+estimates, so compactness gives a uniform exponent for all bases.
+
+**Literature correction:** Heinz, WIAS 1637 (2011), Theorems
+7.2--7.3, already proves the arbitrary disconnected isotropic
+set theorem, including the previous rank-deficient supremal
+conclusion. The previous truncated-determinant proof is an
+alternative proof at those bases, not a new general-set result.
+The new theorem is an integral weighted/reparametrized
+Jensen result, not simply a support theorem.
+
+Exact spectral algebra checker executed successfully. Hand
+proof using published results; no Lean verification or novelty
+claim. **Remaining target: remove the reparametrization**, or
+prove the weight can be reduced to 1 for the original F.
+No proof that lambda_R can tend to zero is supplied. General
+isotropic Morrey remains open. No new obstructions or restricted
+exponent/wave ladder is the focus of this work; the user's signed
+homogeneous audit/formalization is separate.
+
 ## Nonhomogeneous main result — spectral-component selection at all bases, rank-deficient supremal Jensen
 
 The [new spectral-component theorem](IWANIEC_MORREY_SPECTRAL_COMPONENTS.md)
