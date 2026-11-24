@@ -152,7 +152,11 @@ fidelity:
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "a Claude Opus 5.5 sub-agent: the statements against the TeX source, and the counterexample recomputed by hand"
+    - "a Claude Opus 5.5 sub-agent: the formal proofs against the paper's"
+    - "a Claude Opus 5.5 sub-agent: the report's findings and literature section"
+    - "a Claude Opus 5.5 sub-agent (a later round): every recorded departure, read-only"
+    - "a Claude Opus 5.5 sub-agent (a later round): the rewritten documents against the code and the TeX source"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
     TeX source and recomputed the counterexample by hand, compared the formal proofs with the

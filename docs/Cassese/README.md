@@ -11,8 +11,8 @@ quasiconvex. With Šverák's theorem ([formalized here](../Sverak/README.md)) th
 the only size in which Morrey's problem can have a positive answer. It also answers Kirchheim and
 Kristensen's homogeneous problem negatively: there are `p`-homogeneous, rank-one convex, nowhere
 quasiconvex integrands for every `p > 1` in suitable sizes, and at `p = 4` in every `d × m` with
-`d, m ≥ 2` other than `2 × 2`. The paper is one of three on Morrey's problem formalized in this
-repository; the [overview](../../README.md) describes the problem and how the papers relate.
+`d, m ≥ 2` other than `2 × 2`. The repository formalizes other papers on Morrey's problem too;
+the [overview](../../README.md) describes the problem and how the papers relate.
 
 ## Status
 

@@ -173,7 +173,7 @@ automation:
   methods:
     - method: "agent"
       models: ["claude-fable-5-2"]
-      framework: "Claude Code 2.1.327 (VS Code extension, Claude Agent SDK)"
+      framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
       tool_setup: >-
         One session on 23 November 2026: the main session, which checked the research note by
         hand, reorganized the argument, wrote the definitions, the one-variable inequalities,
@@ -181,10 +181,14 @@ automation:
         proved the lemmas on conformal coordinates and on polyaffine supports from statements
         given by the main session; 1 sub-agent that checked the citations and searched the
         literature; 1 independent sub-agent that refereed the paper and the Lean statements.
+        The same session on 24 November 2026 (UTC), for integrands that change sign: the main
+        session checked the argument of pull request 1 by hand and wrote a blueprint, and a lead
+        agent and its sub-agents (12 sub-agents in all) formalized it in
+        Morrey/HomogeneousIsotropic/Signed/ and five general modules of Morrey/Common/Basic/.
         Lean v4.36.0-rc2, Mathlib v4.36.0-rc2. The repository's conventions are those of the
         formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper).
       cost:
-        wall_time: "about 2.5 h elapsed; about 1.0 h of sub-agent working time"
+        wall_time: "about 2.5 h elapsed; about 1.0 h of sub-agent working time; for integrands that change sign, 9.5 h elapsed, including a pause of several hours at a usage limit, and 4.4 h of sub-agent time"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -196,6 +200,20 @@ automation:
         and proved with no hypothesis on the Burkholder function; then for the paper and the
         Lean statements to agree; and last, for the argument of pull request 1 for integrands
         that change sign to be incorporated.
+    - method: "agent"
+      models: ["claude-opus-5-5"]
+      framework: "Claude Code 2.1.330 (VS Code extension, Claude Agent SDK)"
+      tool_setup: >-
+        The same session from 13:51 UTC on 24 November 2026, after Claude Fable 5.2 reached a
+        usage limit: the main session, which updated the README, the Challenge's layout and the
+        metadata, re-pinned the packages and lean4-iwaniec, and committed the work; 1 sub-agent
+        that revised the paper for Theorem A; 1 sub-agent that proved Corollary 6.11 (the
+        Burkholder function from Proposition 6.8, Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean);
+        1 sub-agent that removed remarks about earlier versions from the documents, the paper and
+        the docstrings.
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "not tracked"
     - method: "agent"
       models: ["claude-fable-5-2"]
       framework: "Claude Code (claude.ai/code)"
@@ -237,7 +255,8 @@ fidelity:
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "a Claude Fable 5.2 sub-agent: referee of the first version of the paper and of the Lean statements"
+    - "a Claude Fable 5.2 sub-agent: the citations against the sources, and a search for earlier proofs"
   notes: >-
     No human review. An independent AI agent (Claude Fable 5.2) restated every definition and
     theorem of the library and looked for vacuous statements, recomputed every identity of the

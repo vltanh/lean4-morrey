@@ -9,8 +9,9 @@ How the result on homogeneous isotropic integrands, its formal proof and its pap
 - Research: the author with two AI systems, ChatGPT Chat 6 Extra High (OpenAI) and Claude
   (Anthropic). The argument for integrands that change sign (Theorem A without the sign
   condition) is by ChatGPT Chat 6 Extra High.
-- Formal proof, Palomar files and the paper: Claude Fable 5.2 (Anthropic); the last revision of
-  the paper by Claude Opus 5.5 (Anthropic).
+- Formal proof, Palomar files and the paper: Claude Fable 5.2 (Anthropic), and Claude Opus 5.5
+  (Anthropic) for the formal proof of Corollary 6.11, the last revision of the paper and the last
+  revisions of the documents (below).
 - Review: no person has reviewed the proofs or the paper.
 
 ## The research (before 23 November 2026)
@@ -114,10 +115,20 @@ negative values.
     needs.
 - The main session replaced Corollary 1.8 of the Challenge by Theorem A and Proposition 6.8, and checked the
   build, the axioms and Comparator.
-- Claude Opus 5.5 revised the paper (a first attempt by Claude Fable 5.2 stopped at a usage
-  limit before making changes).
+- From 13:51 UTC on 24 November, after Claude Fable 5.2 reached a usage limit, the same session ran
+  on Claude Opus 5.5 (`claude-opus-5-5`):
+  - a sub-agent revised the paper for Theorem A (a first attempt by Claude Fable 5.2 had stopped
+    at the usage limit before making changes);
+  - a sub-agent proved Corollary 6.11, the quasiconvexity of the Burkholder function from
+    Proposition 6.8, in
+    [`Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`](../../Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean);
+  - the main session updated the README, the Challenge's layout and the metadata, re-pinned the
+    packages and lean4-iwaniec, and committed the work (17fd1c3 to e0ccdbf);
+  - a sub-agent removed remarks about earlier versions from the documents, the paper and the
+    docstrings (d2e6fd8).
 
-Figures, from 04:21 UTC to 13:52 UTC on 24 November 2026, from `session_stats.py`:
+Figures for the work on Claude Fable 5.2, from 04:21 UTC to 13:52 UTC on 24 November 2026, from
+`session_stats.py` (the work on Claude Opus 5.5 is not included):
 
 - elapsed time: 9.5 h, which includes a pause of several hours at a usage limit;
 - sub-agents: 12, at most 10 running at once, 4.4 h of sub-agent time;

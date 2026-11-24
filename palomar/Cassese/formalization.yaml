@@ -24,8 +24,8 @@ project:
     of the calculus of variations, by the arguments of their sources (named substitutes stand for a few
     steps that a source takes from a work that was not read, only recalls, or states without proof: see
     fidelity). They come from three Lake packages written for this project
-    (lean4-harmonic-analysis, lean4-banach-probability, lean4-calculus-of-variations). The paper
-    is one of three on Morrey's problem formalized in this repository, each its own submission.
+    (lean4-harmonic-analysis, lean4-banach-probability, lean4-calculus-of-variations). The
+    repository formalizes other papers on Morrey's problem too, each its own submission.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -580,7 +580,11 @@ fidelity:
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "Claude Opus 5.5 sub-agents (second round): two statement reviewers against the TeX source, three proof reviewers against the paper, a checker of the report"
+    - "Claude Opus 5.5 sub-agents (third round): reviewers of the packages' statements and proofs, of the changed statements, of the redone proofs and of Dacorogna's Theorem 5.20; a departure audit; a checker of the rewritten documents; two reviewers of Borell's and Burkholder's results"
+    - "Claude Opus 5.5 sub-agents (fourth round): comparisons of the cited results with their sources; reviewers of the packages' redone proofs, of Morrey/Common/External, of Proposition 2.7 (6) and of the updated documents"
+    - "Claude Opus 5.5 sub-agents (fifth to seventh rounds): reviewers of the packages' new statements, of their proofs against the sources and of the updated documents"
+    - "Claude Opus 5.5 sub-agents (eighth round): a reviewer of Burkholder's last two steps and of the package's documents; a checker of this repository's documents"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
     TeX source (two reviewers), compared the formal proofs with the paper's (three reviewers), and

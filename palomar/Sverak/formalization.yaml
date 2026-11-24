@@ -15,8 +15,8 @@ project:
     continuous function is tested by periodic maps), the structure of the subspace L and the
     computation (4), Lemma 2 (the extension of f from L to a rank-one convex F), the Theorem, the
     Remark (F is a polynomial of degree four) and the Corollary. Nothing is assumed, and the
-    proofs use only Mathlib. The paper is one of three on Morrey's problem formalized in this
-    repository, each its own submission.
+    proofs use only Mathlib. The repository formalizes other papers on Morrey's problem too, each
+    its own submission.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -129,7 +129,12 @@ fidelity:
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "a Claude Opus 5.5 sub-agent (second round): the statements against the paper"
+    - "a Claude Opus 5.5 sub-agent (second round): the formal proofs against the paper's"
+    - "a Claude Opus 5.5 sub-agent (second round): the literature in the repository's README"
+    - "a Claude Opus 5.5 sub-agent (third round): every recorded departure, read-only"
+    - "a Claude Opus 5.5 sub-agent (third round): the rebuilt cut-off of Lemma 1 against the paper"
+    - "a Claude Opus 5.5 sub-agent (third round): the rewritten documents against the code and the paper"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
     paper, compared the formal proofs with the paper's, audited every recorded departure against
