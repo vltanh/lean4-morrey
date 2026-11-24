@@ -23,6 +23,10 @@ theorem det_eq_norm_sq_sub (A : Matrix (Fin 2) (Fin 2) ℝ) :
     A.det = ‖conformalPart A‖ ^ 2 - ‖anticonformalPart A‖ ^ 2 :=
   HomogeneousIsotropic.det_eq_norm_sq_sub A
 
+theorem opNorm_eq (A : Matrix (Fin 2) (Fin 2) ℝ) :
+    opNorm A = ‖conformalPart A‖ + ‖anticonformalPart A‖ :=
+  HomogeneousIsotropic.opNorm_eq A
+
 theorem theorem1_1 {p : ℝ} (hp : 2 ≤ p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : IsRankOneConvex F) :
     (∀ A₀, HasPolyaffineSupportAt F A₀) ∧ Polyconvex F :=
@@ -69,8 +73,8 @@ theorem theorem1_5 {p : ℝ} (hp1 : 1 ≤ p) (hp2 : p < 2) {F : Matrix (Fin 2) (
 theorem theorem1_5_identity {p : ℝ} (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
     (A : Matrix (Fin 2) (Fin 2) ℝ) :
     burkholderType p c₀ m A =
-      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholder p A +
-        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholder p (reflection * A) :=
+      (p * c₀ + (2 - p) * m) / (2 * (2 - p)) * burkholder p A +
+        (p * c₀ - (2 - p) * m) / (2 * (2 - p)) * burkholder p (reflection * A) :=
   burkholderType_eq hp0 hp2 c₀ m A
 
 theorem corollary1_6_a {p : ℝ} (hp1 : 1 < p) (hp2 : p < 2) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}

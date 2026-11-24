@@ -3,6 +3,7 @@
   "solution_module": "HomogeneousIsotropic.Solution",
   "theorem_names": [
     "HomogeneousIsotropicChallenge.det_eq_norm_sq_sub",
+    "HomogeneousIsotropicChallenge.opNorm_eq",
     "HomogeneousIsotropicChallenge.theorem1_1",
     "HomogeneousIsotropicChallenge.theorem1_2",
     "HomogeneousIsotropicChallenge.theorem1_3_a",

@@ -1,6 +1,7 @@
 \section{What rank-one convexity gives}\label{sec:roc}
 
-Throughout this section $\Phi$ is a profile of degree $p>0$. The section collects what the
+Throughout this section $\Phi$ is a profile of degree $p$, where $p$ is any real number; only
+the Burkholder-type minorants of \cref{lem:minorant} need $p>0$. The section collects what the
 constructions use from \ref{P2}. The proofs are in \cref{app:roc}.
 
 \subsection{Two special lines}
@@ -31,13 +32,14 @@ For $c_0,m\in\R$ the \emph{Burkholder-type function} with the coefficients $(c_0
 It is the profile of $A\mapsto\abs A^{p-2}(c_0\abs A^2+m\det A)$, and
 $G_{c_0,m}(x,y)=\sigma^p\ell(\delta/\sigma)$ with the affine function $\ell(s)=c_0+ms$: the
 Burkholder-type functions are the homogeneous functions that are affine on the segment
-$x+y=1$. The Burkholder function is $B_p=G_{\abs\kappa,1}$ with $\kappa=(p-2)/p$. Hence
-$G_{c_0,m}\le\Phi$ on the quadrant if and only if $\ell\le h$ on $[-1,1]$. Since $\tilde h$ is
-convex on $\R$, $h$ has a supporting line at every $t\in[-1,1]$:
+$x+y=1$. The Burkholder function is $B_p=G_{\abs\kappa,1}$ with $\kappa=(p-2)/p$. Hence, for
+$p>0$, $G_{c_0,m}\le\Phi$ on the quadrant if and only if $\ell\le h$ on $[-1,1]$. Since
+$\tilde h$ is convex on $\R$, $h$ has a supporting line at every $t\in[-1,1]$:
 
 \begin{lemma}\label{lem:minorant}
-For every $t\in[-1,1]$ there is $m\in\R$ such that, with $H=h(t)$, the Burkholder-type function
-$G_{H-mt,m}$ lies below $\Phi$ on the quadrant and equals $\Phi$ at $(x_t,y_t)$.
+Let $p>0$. For every $t\in[-1,1]$ there is $m\in\R$ such that, with $H=h(t)$, the
+Burkholder-type function $G_{H-mt,m}$ lies below $\Phi$ on the quadrant and equals $\Phi$ at
+$(x_t,y_t)$.
 \end{lemma}
 
 \subsection{The first-order inequality}

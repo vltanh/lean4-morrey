@@ -1,6 +1,7 @@
 module
 
 public import Mathlib.Analysis.Calculus.FDeriv.Basic
+public import Mathlib.Analysis.CStarAlgebra.Matrix
 public import Mathlib.Analysis.Complex.Basic
 public import Mathlib.Analysis.Convex.Function
 public import Mathlib.Analysis.Matrix.MeasurableSpace
@@ -36,15 +37,14 @@ isotropic, positively `p`-homogeneous integrands, for every `p > 0`.
   polyaffine function lies below `F` and equals `F` at `A₀`.
 * `IsIsotropic F`: `F (Q A R) = F (A)` for all `Q, R ∈ SO(2)`. `IsPosHomogeneous p F`:
   `F (c A) = c^p F (A)` for `c > 0` (a real power).
+* `opNorm A` is the operator norm `|A|` of `A` on Euclidean `ℝ²`.
 * `conformalPart A = z` and `anticonformalPart A = w` are the complex numbers with
-  `A ζ = z ζ + w ζ̄` when `ℝ²` is identified with `ℂ`. Then `det A = |z|² − |w|²`
-  (`det_eq_norm_sq_sub`), and `|z| + |w|` is the operator norm `|A|` of `A` (not stated here).
-* `burkholderType p c₀ m A = (|z| + |w|)^{p−1} (c₀ (|z| + |w|) + m (|z| − |w|))`, that is
-  `|A|^{p−2} (c₀ |A|² + m det A)`.
-* `burkholder p A = (|z| + |w|)^{p−1} (|z| − (p − 1) |w|)`, the Burkholder function for
-  `1 < p ≤ 2`: it is `p/2` times the integrand `(|1 − 2/p| |A|² + det A) |A|^{p−2}` of Guerra and
-  Kristensen (Arch. Ration. Mech. Anal. 245 (2022)), and `p − 1` times the function `B_p` of
-  arXiv:2609.28311, (2). `reflection` is `J = diag (1, −1)`.
+  `A ζ = z ζ + w ζ̄` when `ℝ²` is identified with `ℂ`. Then `det A = |z|² − |w|²` and
+  `|A| = |z| + |w|` (`det_eq_norm_sq_sub`, `opNorm_eq`).
+* `burkholderType p c₀ m A = |A|^{p−2} (c₀ |A|² + m det A)`, with the value `0` at `A = 0`.
+* `burkholder p A = (|1 − 2/p| |A|² + det A) |A|^{p−2}` is the Burkholder function `B_p`, as
+  normalized by Guerra and Kristensen (Arch. Ration. Mech. Anal. 245 (2022)).
+  `reflection` is `J = diag (1, −1)`.
 * `multiplier p H m t = min (U, max (L, (p − 1) m))` with `L = ((1 + t) m − p H)/(1 − t)` and
   `U = (p H + (1 − t) m)/(1 + t)`.
 
@@ -155,23 +155,19 @@ noncomputable def conformalPart (A : Matrix (Fin 2) (Fin 2) ℝ) : ℂ :=
 noncomputable def anticonformalPart (A : Matrix (Fin 2) (Fin 2) ℝ) : ℂ :=
   ⟨(A 0 0 - A 1 1) / 2, (A 1 0 + A 0 1) / 2⟩
 
-/-- The Burkholder-type function `(|z| + |w|)^{p−1} (c₀ (|z| + |w|) + m (|z| − |w|))`, in
-conformal coordinates. With `|A| = |z| + |w|`, the operator norm, it is
-`|A|^{p−2} (c₀ |A|² + m det A)`. -/
-noncomputable def burkholderType (p c₀ m : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
-  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
-    (c₀ * (‖conformalPart A‖ + ‖anticonformalPart A‖) +
-      m * (‖conformalPart A‖ - ‖anticonformalPart A‖))
+/-- The operator norm `|A|` of `A` on Euclidean `ℝ²`. It equals `|z| + |w|` (`opNorm_eq`). -/
+noncomputable def opNorm (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  ‖Matrix.toEuclideanCLM (n := Fin 2) (𝕜 := ℝ) A‖
 
-/-- The Burkholder function `(|z| − (p − 1) |w|) (|z| + |w|)^{p−1}` on `ℝ^{2×2}`, in the form
-that is rank-one convex for `1 < p ≤ 2`. In terms of the operator norm `|A|` it is
-`((p/2) det A + (1 − p/2) |A|²) |A|^{p−2}`. For `1 < p < 2` it is `p/2` times the Burkholder
-integrand `(|1 − 2/p| |A|² + det A) |A|^{p−2}` of Guerra and Kristensen, and `p − 1` times that
-of arXiv:2609.28311, (2). For `p > 2` this formula is not the rank-one convex Burkholder
-function; the library uses it for `1 ≤ p < 2` only. -/
+/-- The Burkholder-type function `G_{c₀,m} (A) = |A|^{p−2} (c₀ |A|² + m det A)`, with `|A|` the
+operator norm; it is `0` at `A = 0`. -/
+noncomputable def burkholderType (p c₀ m : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  opNorm A ^ (p - 2) * (c₀ * opNorm A ^ 2 + m * A.det)
+
+/-- The Burkholder function `B_p (A) = (|1 − 2/p| |A|² + det A) |A|^{p−2}`, with `|A|` the
+operator norm, in the normalization of Guerra and Kristensen; it is `0` at `A = 0`. -/
 noncomputable def burkholder (p : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
-  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
-    (‖conformalPart A‖ - (p - 1) * ‖anticonformalPart A‖)
+  (|1 - 2 / p| * opNorm A ^ 2 + A.det) * opNorm A ^ (p - 2)
 
 /-- The reflection `J = diag (1, −1)`. -/
 def reflection : Matrix (Fin 2) (Fin 2) ℝ :=
@@ -190,10 +186,15 @@ namespace HomogeneousIsotropicChallenge
 
 open HomogeneousIsotropic
 
-/-- **Conformal coordinates.** `det A = |z|² − |w|²`, with `z` the conformal and `w` the
-anticonformal part of `A`. -/
+/-- **Lemma 2.1 (a).** `det A = |z|² − |w|²`, with `z` the conformal and `w` the anticonformal
+part of `A`. -/
 theorem det_eq_norm_sq_sub (A : Matrix (Fin 2) (Fin 2) ℝ) :
     A.det = ‖conformalPart A‖ ^ 2 - ‖anticonformalPart A‖ ^ 2 := by
+  sorry
+
+/-- **Lemma 2.1 (a).** The operator norm is `|A| = |z| + |w|`. -/
+theorem opNorm_eq (A : Matrix (Fin 2) (Fin 2) ℝ) :
+    opNorm A = ‖conformalPart A‖ + ‖anticonformalPart A‖ := by
   sorry
 
 /-- **Theorem 1.1.** Let `p ≥ 2` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and
@@ -253,14 +254,14 @@ theorem theorem1_5 {p : ℝ} (hp1 : 1 ≤ p) (hp2 : p < 2) {F : Matrix (Fin 2) (
       burkholderType p c₀ m A₀ = F A₀ := by
   sorry
 
-/-- **Theorem 1.5, the identity.** A Burkholder-type function is a combination of the Burkholder
-function and its mirror image `A ↦ burkholder p (J A)`; the coefficients are nonnegative when
-`(2 − p) |m| ≤ p c₀`. -/
+/-- **Theorem 1.5, the identity.** For `0 < p < 2`, a Burkholder-type function is a combination
+of the Burkholder function and its mirror image `A ↦ B_p (J A)`; the coefficients are nonnegative
+when `(2 − p) |m| ≤ p c₀`. -/
 theorem theorem1_5_identity {p : ℝ} (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
     (A : Matrix (Fin 2) (Fin 2) ℝ) :
     burkholderType p c₀ m A =
-      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholder p A +
-        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholder p (reflection * A) := by
+      (p * c₀ + (2 - p) * m) / (2 * (2 - p)) * burkholder p A +
+        (p * c₀ - (2 - p) * m) / (2 * (2 - p)) * burkholder p (reflection * A) := by
   sorry
 
 /-- **Corollary 1.6 (a).** Let `1 < p < 2` and let `F ≥ 0` be isotropic, positively

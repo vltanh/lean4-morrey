@@ -28,20 +28,23 @@ are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
   function is polyconvex if and only if it is rank-one convex and nonnegative.
 * `polyconvex_of_rankOneConvex_two`, `polyconvex_iff_two`: for `p = 2` no sign condition is
   needed.
-* `exists_burkholderType_le` (**Theorem 1.5**): if `1 ≤ p < 2` and `F ≥ 0`, then at every matrix
-  `F` has a touching minorant `|A|^{p−2} (c₀ |A|² + m det A)` with `(2 − p) |m| ≤ p c₀`, a
-  nonnegative combination of the Burkholder function and its mirror image
-  (`burkholderType_eq`).
-* `quasiconvex_of_rankOneConvex_of_burkholder`: hence, for `1 ≤ p < 2`, `F` is quasiconvex if
-  the Burkholder function `burkholder p` is quasiconvex. For `1 < p < 2` it is: see
-  `Morrey/HomogeneousIsotropic/Burkholder.lean`, which has **Corollary 1.6 (a)**.
-* `convexOn_of_rankOneConvex_one`, `quasiconvex_of_rankOneConvex_one`: for `p = 1` the
-  Burkholder function is convex and no sign condition is needed: `F` is convex.
+* `exists_burkholderTypeCoord_le`: if `1 ≤ p < 2` and `F ≥ 0`, then at every matrix `F` has a
+  touching minorant `(|z| + |w|)^{p−1} (c₀ (|z| + |w|) + m (|z| − |w|))` with
+  `(2 − p) |m| ≤ p c₀`, a nonnegative combination of `burkholderCoord p` and its mirror image
+  (`burkholderTypeCoord_eq`). This is **Theorem 1.5** in conformal coordinates;
+  `Morrey/HomogeneousIsotropic/Burkholder.lean` states it with the operator norm and the
+  Burkholder function of the paper.
+* `quasiconvex_of_rankOneConvex_of_burkholderCoord`: hence, for `1 ≤ p < 2`, `F` is quasiconvex
+  if `burkholderCoord p` is quasiconvex.
+* `convexOn_of_rankOneConvex_one`, `quasiconvex_of_rankOneConvex_one` (**Corollary 1.6 (b)**):
+  for `p = 1`, `burkholderCoord 1` is `|z|`, which is convex, and no sign condition is needed:
+  `F` is nonnegative and convex.
 * `eq_zero_of_rankOneConvex_of_lt_one` (**Proposition 1.7**): for `0 < p < 1` a positively
   `p`-homogeneous, rank-one convex `F` is `0`; isotropy and the sign condition are not needed.
-* `quasiconvex_of_rankOneConvex_of_pos_of_burkholder`: for every `p > 0`, a nonnegative `F` of
-  the class is quasiconvex if `burkholder p` is quasiconvex when `1 < p < 2`. **Corollary 1.8**,
-  without that hypothesis, is in `Morrey/HomogeneousIsotropic/Burkholder.lean`.
+* `quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord`: for every `p > 0`, a nonnegative `F`
+  of the class is quasiconvex if `burkholderCoord p` is quasiconvex when `1 < p < 2`.
+  **Corollaries 1.6 (a)** and **1.8**, without that hypothesis, are in
+  `Morrey/HomogeneousIsotropic/Burkholder.lean`.
 -/
 
 @[expose] public section
@@ -279,26 +282,26 @@ theorem polyconvex_iff_two (hiso : IsIsotropic F) (hhom : IsPosHomogeneous 2 F) 
 
 /-! ### The exponents `1 ≤ p < 2` -/
 
-/-- **Theorem 1.5.** Let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on
-`ℝ^{2×2}`, `1 ≤ p < 2`. At every matrix `A₀` there are `c₀`, `m` with `(2 − p) |m| ≤ p c₀` such
-that the Burkholder-type function `|A|^{p−2} (c₀ |A|² + m det A)` lies below `F` and equals `F`
-at `A₀`. -/
-theorem exists_burkholderType_le (hp1 : 1 ≤ p) (hp2 : p < 2) (h0 : ∀ A, 0 ≤ F A)
+/-- **Theorem 1.5, in conformal coordinates.** Let `F ≥ 0` be isotropic, positively
+`p`-homogeneous and rank-one convex on `ℝ^{2×2}`, `1 ≤ p < 2`. At every matrix `A₀` there are
+`c₀`, `m` with `(2 − p) |m| ≤ p c₀` such that the Burkholder-type function
+`burkholderTypeCoord p c₀ m` lies below `F` and equals `F` at `A₀`. -/
+theorem exists_burkholderTypeCoord_le (hp1 : 1 ≤ p) (hp2 : p < 2) (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F)
     (A₀ : Matrix (Fin 2) (Fin 2) ℝ) :
-    ∃ c₀ m : ℝ, (2 - p) * |m| ≤ p * c₀ ∧ (∀ A, burkholderType p c₀ m A ≤ F A) ∧
-      burkholderType p c₀ m A₀ = F A₀ := by
+    ∃ c₀ m : ℝ, (2 - p) * |m| ≤ p * c₀ ∧ (∀ A, burkholderTypeCoord p c₀ m A ≤ F A) ∧
+      burkholderTypeCoord p c₀ m A₀ = F A₀ := by
   have hΦ := isProfile_profile hiso hhom hrc
   have hp0 : 0 < p := by linarith
   rcases (add_nonneg (norm_nonneg (conformalPart A₀))
     (norm_nonneg (anticonformalPart A₀))).eq_or_lt with h00 | hpos
-  · refine ⟨0, 0, by simp, fun A => by simpa [burkholderType] using h0 A, ?_⟩
+  · refine ⟨0, 0, by simp, fun A => by simpa [burkholderTypeCoord] using h0 A, ?_⟩
     have hz : ‖conformalPart A₀‖ = 0 := by
       linarith [norm_nonneg (conformalPart A₀), norm_nonneg (anticonformalPart A₀)]
     have hw : ‖anticonformalPart A₀‖ = 0 := by
       linarith [norm_nonneg (conformalPart A₀), norm_nonneg (anticonformalPart A₀)]
     rw [hiso.eq_profile A₀, hz, hw, hΦ.zero_zero hp0]
-    simp [burkholderType]
+    simp [burkholderTypeCoord]
   · obtain ⟨c₀, m, hc, hmin, heq⟩ := hΦ.exists_burkholderMinorant_of_lt_two
       (fun x y _ _ => h0 _) hp1 hp2
       (div_nonneg (norm_nonneg (conformalPart A₀)) hpos.le)
@@ -308,7 +311,7 @@ theorem exists_burkholderType_le (hp1 : 1 ≤ p) (hp2 : p < 2) (h0 : ∀ A, 0 �
     · rw [hiso.eq_profile A]
       exact hmin _ _ (norm_nonneg _) (norm_nonneg _)
     · rw [hiso.eq_profile A₀, hΦ.eq_rpow_mul (norm_nonneg _) (norm_nonneg _) hpos, ← heq,
-        burkholderType]
+        burkholderTypeCoord]
       have hpow : (‖conformalPart A₀‖ + ‖anticonformalPart A₀‖) ^ p =
           (‖conformalPart A₀‖ + ‖anticonformalPart A₀‖) ^ (p - 1) *
             (‖conformalPart A₀‖ + ‖anticonformalPart A₀‖) := by
@@ -350,77 +353,76 @@ theorem continuous_norm_anticonformalPart :
     (((e 0 0).sub (e 1 1)).div_const 2) |>.add
     ((((e 1 0).add (e 0 1)).div_const 2).mul (((e 1 0).add (e 0 1)).div_const 2)))
 
-/-- The Burkholder function is continuous for `p ≥ 1`. -/
-theorem continuous_burkholder (hp : 1 ≤ p) : Continuous (burkholder p) := by
+/-- `burkholderCoord p` is continuous for `p ≥ 1`. -/
+theorem continuous_burkholderCoord (hp : 1 ≤ p) : Continuous (burkholderCoord p) := by
   have h1 := continuous_norm_conformalPart
   have h2 := continuous_norm_anticonformalPart
   exact ((Real.continuous_rpow_const (by linarith : 0 ≤ p - 1)).comp (h1.add h2)).mul
     (h1.sub (continuous_const.mul h2))
 
-/-- The Burkholder function of `J A`, `J = diag (1, −1)`: the conformal and anticonformal
-parts change roles. -/
-theorem burkholder_reflection_mul (p : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) :
-    burkholder p (reflection * A) =
+/-- `burkholderCoord p` at `J A`, `J = diag (1, −1)`: the conformal and anticonformal parts
+change roles. -/
+theorem burkholderCoord_reflection_mul (p : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) :
+    burkholderCoord p (reflection * A) =
       (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
         (‖anticonformalPart A‖ - (p - 1) * ‖conformalPart A‖) := by
-  rw [burkholder, conformalPart_reflection_mul, anticonformalPart_reflection_mul]
+  rw [burkholderCoord, conformalPart_reflection_mul, anticonformalPart_reflection_mul]
   simp only [RCLike.norm_conj]
   rw [add_comm]
 
-/-- A Burkholder-type function is a combination of the Burkholder function and its mirror
-image; the coefficients are nonnegative exactly when `(2 − p) |m| ≤ p c₀` (for `0 < p < 2`). -/
-theorem burkholderType_eq (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
+/-- A Burkholder-type function is a combination of `burkholderCoord p` and its mirror image;
+the coefficients are nonnegative exactly when `(2 − p) |m| ≤ p c₀` (for `0 < p < 2`). -/
+theorem burkholderTypeCoord_eq (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
     (A : Matrix (Fin 2) (Fin 2) ℝ) :
-    burkholderType p c₀ m A =
-      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholder p A +
-        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholder p (reflection * A) := by
-  rw [burkholder_reflection_mul, burkholder, burkholderType]
+    burkholderTypeCoord p c₀ m A =
+      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholderCoord p A +
+        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholderCoord p (reflection * A) := by
+  rw [burkholderCoord_reflection_mul, burkholderCoord, burkholderTypeCoord]
   have h2 : (2 - p) ≠ 0 := by linarith
   field_simp
   ring
 
-/-- If the Burkholder function is quasiconvex, so is every Burkholder-type function with
+/-- If `burkholderCoord p` is quasiconvex, so is every Burkholder-type function with
 `(2 − p) |m| ≤ p c₀`, `1 ≤ p < 2`. -/
-theorem quasiconvex_burkholderType (hp1 : 1 ≤ p) (hp2 : p < 2) {c₀ m : ℝ}
-    (hc : (2 - p) * |m| ≤ p * c₀) (hB : Quasiconvex (burkholder p)) :
-    Quasiconvex (burkholderType p c₀ m) := by
+theorem quasiconvex_burkholderTypeCoord (hp1 : 1 ≤ p) (hp2 : p < 2) {c₀ m : ℝ}
+    (hc : (2 - p) * |m| ≤ p * c₀) (hB : Quasiconvex (burkholderCoord p)) :
+    Quasiconvex (burkholderTypeCoord p c₀ m) := by
   have hp0 : 0 < p := by linarith
   have hden : 0 < p * (2 - p) := mul_pos hp0 (by linarith)
   have hm1 : (2 - p) * m ≤ p * c₀ :=
     (mul_le_mul_of_nonneg_left (le_abs_self m) (by linarith)).trans hc
   have hm2 : (2 - p) * -m ≤ p * c₀ :=
     (mul_le_mul_of_nonneg_left (neg_le_abs m) (by linarith)).trans hc
-  have hcB : Continuous (burkholder p) := continuous_burkholder hp1
-  have hcB' : Continuous fun A : Matrix (Fin 2) (Fin 2) ℝ => burkholder p (reflection * A) :=
+  have hcB : Continuous (burkholderCoord p) := continuous_burkholderCoord hp1
+  have hcB' : Continuous fun A : Matrix (Fin 2) (Fin 2) ℝ => burkholderCoord p (reflection * A) :=
     hcB.comp (continuous_const.mul continuous_id)
   have h := quasiconvex_add_mul (a := (p * c₀ + (2 - p) * m) / (p * (2 - p)))
     (b := (p * c₀ - (2 - p) * m) / (p * (2 - p))) (div_nonneg (by linarith) hden.le)
     (div_nonneg (by linarith) hden.le) hB hcB (quasiconvex_comp_reflection_mul hB) hcB'
-  have he : burkholderType p c₀ m = fun A =>
-      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholder p A +
-        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholder p (reflection * A) :=
-    funext fun A => burkholderType_eq hp0 hp2 c₀ m A
+  have he : burkholderTypeCoord p c₀ m = fun A =>
+      (p * c₀ + (2 - p) * m) / (p * (2 - p)) * burkholderCoord p A +
+        (p * c₀ - (2 - p) * m) / (p * (2 - p)) * burkholderCoord p (reflection * A) :=
+    funext fun A => burkholderTypeCoord_eq hp0 hp2 c₀ m A
   rw [he]
   exact h
 
 /-- A Burkholder-type function is continuous for `p ≥ 1`. -/
-theorem continuous_burkholderType (hp : 1 ≤ p) (c₀ m : ℝ) :
-    Continuous (burkholderType p c₀ m) := by
+theorem continuous_burkholderTypeCoord (hp : 1 ≤ p) (c₀ m : ℝ) :
+    Continuous (burkholderTypeCoord p c₀ m) := by
   have h1 := continuous_norm_conformalPart
   have h2 := continuous_norm_anticonformalPart
   exact ((Real.continuous_rpow_const (by linarith : 0 ≤ p - 1)).comp (h1.add h2)).mul
     ((continuous_const.mul (h1.add h2)).add (continuous_const.mul (h1.sub h2)))
 
-/-- **Quasiconvexity for `1 ≤ p < 2`, given the Burkholder function.** Let `F ≥ 0` be
-isotropic, positively `p`-homogeneous and rank-one convex on `ℝ^{2×2}`, `1 ≤ p < 2`. If the
-Burkholder function `burkholder p` is quasiconvex, then `F` is quasiconvex. -/
-theorem quasiconvex_of_rankOneConvex_of_burkholder (hp1 : 1 ≤ p) (hp2 : p < 2)
+/-- Let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on `ℝ^{2×2}`,
+`1 ≤ p < 2`. If `burkholderCoord p` is quasiconvex, then `F` is quasiconvex. -/
+theorem quasiconvex_of_rankOneConvex_of_burkholderCoord (hp1 : 1 ≤ p) (hp2 : p < 2)
     (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : RankOneConvex F) (hB : Quasiconvex (burkholder p)) : Quasiconvex F := by
+    (hrc : RankOneConvex F) (hB : Quasiconvex (burkholderCoord p)) : Quasiconvex F := by
   intro A₀
-  obtain ⟨c₀, m, hc, hle, heq⟩ := exists_burkholderType_le hp1 hp2 h0 hiso hhom hrc A₀
-  exact quasiconvexAtOn_of_le_of_eq (quasiconvex_burkholderType hp1 hp2 hc hB A₀)
-    (continuous_burkholderType hp1 c₀ m) hle heq
+  obtain ⟨c₀, m, hc, hle, heq⟩ := exists_burkholderTypeCoord_le hp1 hp2 h0 hiso hhom hrc A₀
+  exact quasiconvexAtOn_of_le_of_eq (quasiconvex_burkholderTypeCoord hp1 hp2 hc hB A₀)
+    (continuous_burkholderTypeCoord hp1 c₀ m) hle heq
 
 /-! ### The exponent `p = 1`, with no sign condition -/
 
@@ -431,13 +433,14 @@ theorem nonneg_of_rankOneConvex_one (hiso : IsIsotropic F) (hhom : IsPosHomogene
   rw [hiso.eq_profile A]
   exact (isProfile_profile hiso hhom hrc).nonneg_of_one (norm_nonneg _) (norm_nonneg _)
 
-/-- For `p = 1` the Burkholder function is the modulus of the conformal part. -/
-theorem burkholder_one (A : Matrix (Fin 2) (Fin 2) ℝ) : burkholder 1 A = ‖conformalPart A‖ := by
-  simp [burkholder]
+/-- `burkholderCoord 1` is the modulus of the conformal part. -/
+theorem burkholderCoord_one (A : Matrix (Fin 2) (Fin 2) ℝ) :
+    burkholderCoord 1 A = ‖conformalPart A‖ := by
+  simp [burkholderCoord]
 
-/-- For `p = 1` the Burkholder function, `A ↦ |z|`, is quasiconvex: it has an affine support at
-every matrix. -/
-theorem quasiconvex_burkholder_one : Quasiconvex (burkholder 1) := by
+/-- `burkholderCoord 1`, that is `A ↦ |z|`, is quasiconvex: it has an affine support at every
+matrix. -/
+theorem quasiconvex_burkholderCoord_one : Quasiconvex (burkholderCoord 1) := by
   refine quasiconvex_of_hasPolyaffineSupportAt fun A₀ => ?_
   obtain ⟨u, hu, huz⟩ := exists_norm_eq_one_mul_eq_norm (conformalPart A₀)
   have hK : ∀ A, polyaffine 0 (ofComplex ((starRingEnd ℂ) u / 2) 0) 0 A =
@@ -452,10 +455,10 @@ theorem quasiconvex_burkholder_one : Quasiconvex (burkholder 1) := by
       Complex.zero_re]
     ring
   refine ⟨0, ofComplex ((starRingEnd ℂ) u / 2) 0, 0, fun A => ?_, ?_⟩
-  · rw [hK, burkholder_one]
+  · rw [hK, burkholderCoord_one]
     calc (u * conformalPart A).re ≤ ‖u * conformalPart A‖ := Complex.re_le_norm _
       _ = ‖conformalPart A‖ := by rw [norm_mul, hu, one_mul]
-  · rw [hK, burkholder_one, huz, Complex.ofReal_re]
+  · rw [hK, burkholderCoord_one, huz, Complex.ofReal_re]
 
 /-- An isotropic, positively `1`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is convex
 (Dacorogna): at every matrix it has a touching minorant `(c₀ + m) |z| + (c₀ − m) |w|` with
@@ -464,12 +467,12 @@ theorem convexOn_of_rankOneConvex_one (hiso : IsIsotropic F) (hhom : IsPosHomoge
     (hrc : RankOneConvex F) : ConvexOn ℝ Set.univ F := by
   have h0 := nonneg_of_rankOneConvex_one hiso hhom hrc
   refine ⟨convex_univ, fun A _ B _ a b ha hb _ => ?_⟩
-  obtain ⟨c₀, m, hc, hle, heq⟩ := exists_burkholderType_le le_rfl one_lt_two h0 hiso hhom hrc
+  obtain ⟨c₀, m, hc, hle, heq⟩ := exists_burkholderTypeCoord_le le_rfl one_lt_two h0 hiso hhom hrc
     (a • A + b • B)
-  have hG : ∀ C, burkholderType 1 c₀ m C =
+  have hG : ∀ C, burkholderTypeCoord 1 c₀ m C =
       (c₀ + m) * ‖conformalPart C‖ + (c₀ - m) * ‖anticonformalPart C‖ := by
     intro C
-    simp [burkholderType]
+    simp [burkholderTypeCoord]
     ring
   have hz : ‖conformalPart (a • A + b • B)‖ ≤ a * ‖conformalPart A‖ + b * ‖conformalPart B‖ := by
     rw [conformalPart_add, conformalPart_smul, conformalPart_smul]
@@ -485,13 +488,13 @@ theorem convexOn_of_rankOneConvex_one (hiso : IsIsotropic F) (hhom : IsPosHomoge
   have hcm1 : 0 ≤ c₀ + m := by linarith [neg_le_abs m]
   have hcm2 : 0 ≤ c₀ - m := by linarith [le_abs_self m]
   simp only [smul_eq_mul]
-  calc F (a • A + b • B) = burkholderType 1 c₀ m (a • A + b • B) := heq.symm
+  calc F (a • A + b • B) = burkholderTypeCoord 1 c₀ m (a • A + b • B) := heq.symm
     _ = (c₀ + m) * ‖conformalPart (a • A + b • B)‖ +
         (c₀ - m) * ‖anticonformalPart (a • A + b • B)‖ := hG _
     _ ≤ (c₀ + m) * (a * ‖conformalPart A‖ + b * ‖conformalPart B‖) +
         (c₀ - m) * (a * ‖anticonformalPart A‖ + b * ‖anticonformalPart B‖) :=
       add_le_add (mul_le_mul_of_nonneg_left hz hcm1) (mul_le_mul_of_nonneg_left hw hcm2)
-    _ = a * burkholderType 1 c₀ m A + b * burkholderType 1 c₀ m B := by
+    _ = a * burkholderTypeCoord 1 c₀ m A + b * burkholderTypeCoord 1 c₀ m B := by
       rw [hG, hG]
       ring
     _ ≤ a * F A + b * F B :=
@@ -501,8 +504,8 @@ theorem convexOn_of_rankOneConvex_one (hiso : IsIsotropic F) (hhom : IsPosHomoge
 quasiconvex. -/
 theorem quasiconvex_of_rankOneConvex_one (hiso : IsIsotropic F) (hhom : IsPosHomogeneous 1 F)
     (hrc : RankOneConvex F) : Quasiconvex F :=
-  quasiconvex_of_rankOneConvex_of_burkholder le_rfl one_lt_two
-    (nonneg_of_rankOneConvex_one hiso hhom hrc) hiso hhom hrc quasiconvex_burkholder_one
+  quasiconvex_of_rankOneConvex_of_burkholderCoord le_rfl one_lt_two
+    (nonneg_of_rankOneConvex_one hiso hhom hrc) hiso hhom hrc quasiconvex_burkholderCoord_one
 
 /-! ### The exponents `0 < p < 1` -/
 
@@ -575,12 +578,12 @@ theorem eq_zero_of_rankOneConvex_of_lt_one (hp0 : 0 < p) (hp1 : p < 1)
 /-! ### All exponents `p > 0` -/
 
 /-- Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on
-`ℝ^{2×2}`. Then `F` is quasiconvex, if the Burkholder function `burkholder p` is quasiconvex
-when `1 < p < 2`. For `0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is
-polyconvex. Corollary 1.8 (`quasiconvex_of_rankOneConvex_of_pos`) removes the hypothesis. -/
-theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholder (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
+`ℝ^{2×2}`. Then `F` is quasiconvex, if `burkholderCoord p` is quasiconvex when `1 < p < 2`. For
+`0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is polyconvex.
+Corollary 1.8 (`quasiconvex_of_rankOneConvex_of_pos`) removes the hypothesis. -/
+theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F)
-    (hB : 1 < p → p < 2 → Quasiconvex (burkholder p)) : Quasiconvex F := by
+    (hB : 1 < p → p < 2 → Quasiconvex (burkholderCoord p)) : Quasiconvex F := by
   rcases lt_or_ge p 1 with hp1 | hp1
   · have hz := eq_zero_of_rankOneConvex_of_lt_one hp hp1 hhom hrc
     exact quasiconvex_of_hasPolyaffineSupportAt fun A =>
@@ -589,7 +592,7 @@ theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholder (hp : 0 < p) (h0 : ∀
   · rcases hp1.eq_or_lt with h1 | h1
     · subst h1
       exact quasiconvex_of_rankOneConvex_one hiso hhom hrc
-    · exact quasiconvex_of_rankOneConvex_of_burkholder hp1 hp2 h0 hiso hhom hrc (hB h1 hp2)
+    · exact quasiconvex_of_rankOneConvex_of_burkholderCoord hp1 hp2 h0 hiso hhom hrc (hB h1 hp2)
   · exact quasiconvex_of_rankOneConvex hp2 h0 hiso hhom hrc
 
 end HomogeneousIsotropic

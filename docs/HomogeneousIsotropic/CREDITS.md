@@ -44,7 +44,11 @@ were made.
     formalization of arXiv:2609.28311 was finished
     ([lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), made in the same session by a
     lead agent and ten sub-agents on Claude Opus 5.5), required it and removed the hypothesis on
-    the Burkholder function from Corollaries 1.6 (a) and 1.8.
+    the Burkholder function from Corollaries 1.6 (a) and 1.8;
+  - made the paper and the Lean statements say the same thing, at the author's request, taking
+    the more general version where they differed: the operator norm and the paper's Burkholder
+    function as Lean definitions, the equivalences of Lemma 2.1 and of isotropy in both
+    directions, and a Lean theorem for each "with equality at" of the paper.
 - One sub-agent proved the lemmas on conformal coordinates ([`Morrey.HomogeneousIsotropic.Coordinates`](../../Morrey/HomogeneousIsotropic/Coordinates.lean)),
   and one the lemmas on polyaffine supports ([`Morrey.HomogeneousIsotropic.Polyaffine`](../../Morrey/HomogeneousIsotropic/Polyaffine.lean)), each from
   statements given by the main session.
@@ -58,7 +62,7 @@ How the formal proof differs from the note:
   is needed.
 - The note derives the Baker–Ericksen inequality from the monotonicity along hyperbolas. The
   formal proof derives it from the first-order inequality along the chord to a rotated copy of
-  the base matrix ([`IsProfile.baker_ericksen`](../../Morrey/HomogeneousIsotropic/Profile.lean#L203)).
+  the base matrix ([`IsProfile.baker_ericksen`](../../Morrey/HomogeneousIsotropic/Profile.lean#L245)).
 - The note proves the Burkholder-type inequality by studying a one-parameter family. The formal
   proof uses two identities and Bernoulli's inequality ([`burkholder_support_le`](../../Morrey/HomogeneousIsotropic/Inequalities.lean#L73)).
 - The statements for `p = 1`, for `p = 2` without sign condition, and the necessity of

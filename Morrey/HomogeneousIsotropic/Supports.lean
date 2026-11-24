@@ -601,6 +601,65 @@ theorem exists_support_two (hΦ : IsProfile 2 Φ) {x₀ y₀ : ℝ} (hx₀ : 0 �
   · exact hΦ.exists_support_of_pos
       (fun x y hx hy h => hΦ.exists_support_two_of_add_eq_one hx hy h) hx₀ hy₀ hpos
 
+/-! ### The supports touch at the base point
+
+The supports above are stated as inequalities on the quadrant. Each equals `Φ` at its base point;
+these are the equalities. -/
+
+/-- The support of Case III has the value `c₀ + m t` at `((1 + t)/2, (1 − t)/2)`: the value of
+the minorant, hence of `Φ`. -/
+theorem _root_.HomogeneousIsotropic.support_slice_eq (p c₀ m t : ℝ) :
+    -(p - 1) * c₀ + (p * c₀ - (p - 2) * m) * ((1 + t) / 2) +
+        (p * c₀ + (p - 2) * m) * ((1 - t) / 2) +
+        (p - 1) * m * (((1 + t) / 2) ^ 2 - ((1 - t) / 2) ^ 2) = c₀ + m * t := by
+  ring
+
+/-- **Proposition 4.2, the equality.** The support of Case I has the value `H` at
+`((1 + t)/2, (1 − t)/2)`. -/
+theorem _root_.HomogeneousIsotropic.support_of_neg_eq {p H m t : ℝ} (ht : -1 < t) :
+    (p * H + (1 - t) * m) / (1 + t) * t - (p - 1) * H +
+        2 * (p * H - 2 * t * m) / (1 + t) * ((1 - t) / 2) +
+        (p * H + (1 - t) * m) / (1 + t) * (((1 + t) / 2) ^ 2 - ((1 - t) / 2) ^ 2) = H := by
+  have h : (1 + t) ≠ 0 := by linarith
+  field_simp
+  ring
+
+/-- **Case II, the equality.** The support of Case II has the value `H` at
+`((1 + t)/2, (1 − t)/2)`. -/
+theorem _root_.HomogeneousIsotropic.support_of_neg_eq' {p H m t c β : ℝ} (ht : t < 1)
+    (hc : c * (1 - t) = (1 + t) * m - p * H) (hβ : β * (1 - t) = 2 * (p * H - 2 * t * m)) :
+    c * t - (p - 1) * H + β * ((1 + t) / 2) +
+        c * (((1 + t) / 2) ^ 2 - ((1 - t) / 2) ^ 2) = H := by
+  have h : (1 - t) ≠ 0 := by linarith
+  have key : (c * t - (p - 1) * H + β * ((1 + t) / 2) +
+      c * (((1 + t) / 2) ^ 2 - ((1 - t) / 2) ^ 2) - H) * (1 - t) = 0 := by
+    linear_combination (2 * t) * hc + ((1 + t) / 2) * hβ
+  have := mul_eq_zero.1 key
+  rcases this with h1 | h1
+  · linarith
+  · exact absurd h1 h
+
+/-- **Proposition 4.5, the equality.** For every determinant coefficient `c`, the function
+tangent to the minorant at `((1 + t)/2, (1 − t)/2)` has the value `H` there; in particular the
+support of `support_multiplier` does. -/
+theorem _root_.HomogeneousIsotropic.support_multiplier_eq (p H m t c : ℝ) :
+    c * t - (p - 1) * H + (p * H + (1 - t) * m - (1 + t) * c) * ((1 + t) / 2) +
+        (p * H - (1 + t) * m + (1 - t) * c) * ((1 - t) / 2) +
+        c * (((1 + t) / 2) ^ 2 - ((1 - t) / 2) ^ 2) = H := by
+  ring
+
+/-- The support at the conformal point has the value `Φ (1, 0)` there. -/
+theorem _root_.HomogeneousIsotropic.support_one_zero_eq (p a : ℝ) :
+    a * (1 - p / 2) + p / 2 * a * ((1 : ℝ) ^ 2 - (0 : ℝ) ^ 2) = a := by
+  ring
+
+/-- **The support at the anticonformal point** (the mirror image of `support_one_zero`):
+`Φ (0, 1) (1 + (p/2) (y² − x² − 1)) ≤ Φ (x, y)`; at `(0, 1)` the left side is `Φ (0, 1)`. -/
+theorem support_zero_one (hΦ : IsProfile p Φ) (hΦ0 : ∀ x y : ℝ, 0 ≤ x → 0 ≤ y → 0 ≤ Φ x y)
+    (hp : 2 ≤ p) {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    Φ 0 1 * (1 - p / 2) + p / 2 * Φ 0 1 * (y ^ 2 - x ^ 2) ≤ Φ x y :=
+  hΦ.swap.support_one_zero (fun x y hx hy => hΦ0 y x hy hx) hp hy hx
+
 end IsProfile
 
 end HomogeneousIsotropic

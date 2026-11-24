@@ -36,6 +36,26 @@ namespace HomogeneousIsotropic
 def BurkholderMinorant (p c₀ m : ℝ) (Φ : ℝ → ℝ → ℝ) : Prop :=
   ∀ x y : ℝ, 0 ≤ x → 0 ≤ y → (x + y) ^ (p - 1) * (c₀ * (x + y) + m * (x - y)) ≤ Φ x y
 
+/-- **Definition 3.2.** The Burkholder-type function of the profile variables,
+`G_{c₀,m} (x, y) = (x + y)^{p−1} (c₀ (x + y) + m (x − y))`. -/
+noncomputable def burkholderProfile (p c₀ m x y : ℝ) : ℝ :=
+  (x + y) ^ (p - 1) * (c₀ * (x + y) + m * (x - y))
+
+/-- `BurkholderMinorant p c₀ m Φ` says that `burkholderProfile p c₀ m` lies below `Φ` on the
+quadrant. -/
+theorem burkholderMinorant_iff {p c₀ m : ℝ} {Φ : ℝ → ℝ → ℝ} :
+    BurkholderMinorant p c₀ m Φ ↔
+      ∀ x y : ℝ, 0 ≤ x → 0 ≤ y → burkholderProfile p c₀ m x y ≤ Φ x y :=
+  Iff.rfl
+
+/-- On the segment `x + y = 1` a Burkholder-type function is affine: at
+`((1 + t)/2, (1 − t)/2)` the function with the coefficients `(H − m t, m)` has the value `H`. -/
+theorem burkholderProfile_slice (p H m t : ℝ) :
+    burkholderProfile p (H - m * t) m ((1 + t) / 2) ((1 - t) / 2) = H := by
+  have h1 : (1 + t) / 2 + (1 - t) / 2 = 1 := by ring
+  rw [burkholderProfile, h1, Real.one_rpow]
+  ring
+
 /-- Exchanging the variables turns a minorant with slope `m` into one with slope `−m`. -/
 theorem BurkholderMinorant.swap {p c₀ m : ℝ} {Φ : ℝ → ℝ → ℝ} (h : BurkholderMinorant p c₀ m Φ) :
     BurkholderMinorant p c₀ (-m) fun x y => Φ y x := by
@@ -135,6 +155,18 @@ theorem burkholderMinorant_of_slice (hΦ : IsProfile p Φ) (hp : 0 < p) {c₀ m 
     rw [he]
     exact mul_le_mul_of_nonneg_left hh (Real.rpow_nonneg hpos.le _)
 
+/-- A Burkholder-type function lies below a profile of positive degree if and only if its line
+`s ↦ c₀ + m s` lies below the slice of the profile on `[−1, 1]`. -/
+theorem burkholderMinorant_iff_slice (hΦ : IsProfile p Φ) (hp : 0 < p) {c₀ m : ℝ} :
+    BurkholderMinorant p c₀ m Φ ↔
+      ∀ s : ℝ, -1 ≤ s → s ≤ 1 → c₀ + m * s ≤ Φ ((1 + s) / 2) ((1 - s) / 2) := by
+  refine ⟨fun h s hs1 hs2 => ?_, hΦ.burkholderMinorant_of_slice hp⟩
+  have hh := h ((1 + s) / 2) ((1 - s) / 2) (by linarith) (by linarith)
+  have h1 : (1 + s) / 2 + (1 - s) / 2 = 1 := by ring
+  have h2 : (1 + s) / 2 - (1 - s) / 2 = s := by ring
+  rw [h1, h2, Real.one_rpow] at hh
+  linarith
+
 /-- A supporting line of the slice at `t ∈ [−1, 1]` gives a Burkholder-type minorant that
 touches `Φ` at `((1 + t)/2, (1 − t)/2)`. -/
 theorem exists_burkholderMinorant (hΦ : IsProfile p Φ) (hp : 0 < p) {t : ℝ} (ht1 : -1 ≤ t)
@@ -146,6 +178,16 @@ theorem exists_burkholderMinorant (hΦ : IsProfile p Φ) (hp : 0 < p) {t : ℝ} 
   rw [abs_of_nonneg (by linarith), abs_of_nonneg (by linarith), abs_of_nonneg (by linarith),
     abs_of_nonneg (by linarith)] at h
   linarith
+
+/-- **Lemma 3.3.** A supporting line of the slice at `t` gives a Burkholder-type function below
+`Φ` on the quadrant that equals `Φ` at `((1 + t)/2, (1 − t)/2)`. -/
+theorem exists_burkholderMinorant_eq (hΦ : IsProfile p Φ) (hp : 0 < p) {t : ℝ} (ht1 : -1 ≤ t)
+    (ht2 : t ≤ 1) :
+    ∃ m : ℝ, BurkholderMinorant p (Φ ((1 + t) / 2) ((1 - t) / 2) - m * t) m Φ ∧
+      burkholderProfile p (Φ ((1 + t) / 2) ((1 - t) / 2) - m * t) m ((1 + t) / 2)
+        ((1 - t) / 2) = Φ ((1 + t) / 2) ((1 - t) / 2) := by
+  obtain ⟨m, hm⟩ := hΦ.exists_burkholderMinorant hp ht1 ht2
+  exact ⟨m, hm, burkholderProfile_slice p _ m t⟩
 
 /-- The first-order inequality along rank-one lines. If a Burkholder-type minorant with slope `m`
 touches `Φ` at `(x₀, y₀) = ((1 + t)/2, (1 − t)/2)`, `|t| < 1`, with value `H`, then for all

@@ -2,20 +2,20 @@
 
 The formalization uses Lean~4~\cite{Lean4} and Mathlib~\cite{Mathlib20} and is in the directory
 \lean{Morrey/HomogeneousIsotropic} of the repository~\cite{Companion}. We describe its
-statements, their verification and dependencies, the points where they differ from the text, and
-the correspondence between the paper and the Lean declarations.
+statements, their verification and dependencies, and the correspondence between the paper and
+the Lean declarations.
 
 \subsection{The statements}\label{app:formal-statements}
 
 {\sloppy
 The file \lean{palomar/HomogeneousIsotropic/Challenge.lean} imports only Mathlib and states the
 results of \cref{sec:intro} as theorems of the namespace \lean{HomogeneousIsotropicChallenge}.
-They are
-\lean{theorem1_1}, \lean{theorem1_2}, \lean{theorem1_3_a}, \lean{theorem1_3_b},
+They are \lean{theorem1_1}, \lean{theorem1_2}, \lean{theorem1_3_a}, \lean{theorem1_3_b},
 \lean{corollary1_4}, \lean{theorem1_5}, \lean{theorem1_5_identity}, \lean{corollary1_6_a},
-\lean{corollary1_6_b}, \lean{proposition1_7} and \lean{corollary1_8}, together with the
-identity $\det A=\abs z^2-\abs w^2$ (\lean{det_eq_norm_sq_sub}), which ties the coordinates to
-the determinant. Its definitions are the following.\par}
+\lean{corollary1_6_b}, \lean{proposition1_7} and \lean{corollary1_8}, together with the two
+identities of \cref{lem:coordinates}\,(a), \lean{det_eq_norm_sq_sub} and \lean{opNorm_eq}. Its
+definitions are those of the text.\par}
+{\sloppy
 \begin{itemize}
 \item Matrices are \leanx{Matrix (Fin 2) (Fin 2) $\R$}, and the gradient of
   $\varphi\colon\R^2\to\R^2$ is the matrix \leanx{jac $\varphi$ x} of the derivatives of its
@@ -31,14 +31,22 @@ the determinant. Its definitions are the following.\par}
 \item \leanx{Polyconvex F}: $F(A)=g(A,\det A)$ for a convex $g$ on the product of the matrices
   and $\R$. \leanx{HasPolyaffineSupportAt F A$_0$}: a function
   $k+\sum_{i,j}K_{ij}A_{ij}+c\det A$ lies below $F$ and equals $F$ at $A_0$.
-\item \lean{conformalPart}, \lean{anticonformalPart}: the coordinates $z$, $w$.
-  \leanx{burkholderType p c$_0$ m} is $G_{c_0,m}$, written with $\abs z+\abs w$ and
-  $\abs z-\abs w$, and \leanx{burkholder p A} is
-  $(\abs z+\abs w)^{p-1}(\abs z-(p-1)\abs w)=\tfrac p2B_p(A)$ for $1\le p\le2$.
+\item \leanx{opNorm A} is the operator norm $\abs A$ of $A$ on Euclidean $\R^2$, and
+  \lean{conformalPart}, \lean{anticonformalPart} are the coordinates $z$, $w$.
+\item \leanx{burkholderType p c$_0$ m A} is $G_{c_0,m}(A)=\abs A^{p-2}(c_0\abs A^2+m\det A)$,
+  and \leanx{burkholder p A} is $B_p(A)=(\abs{1-2/p}\abs A^2+\det A)\abs A^{p-2}$. With the real
+  power of Lean, both are $0$ at $A=0$.
 \item \leanx{multiplier p H m t} is the number $c^\ast$ of \cref{thm:closed}.
-\end{itemize}
+\end{itemize}\par}
 The definitions are copied verbatim from the library, so the library's theorems have precisely
-the statements given in the Challenge file.
+the statements given in the Challenge file. Every numbered statement of the paper, and every
+formula that the proofs use, has a formal counterpart with the same hypotheses and the same
+conclusion; \cref{tab:formal-dictionary} lists them. Where the text passes to the conformal
+coordinates, the library has the corresponding identity: $\abs A=\abs z+\abs w$,
+$G_{c_0,m}(A)=(\abs z+\abs w)^{p-1}\bigl(c_0(\abs z+\abs w)+m(\abs z-\abs w)\bigr)$, and
+$B_p=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ for $0<p\le2$. The facts quoted from the
+literature in \cref{sec:intro,sec:discussion}, such as the rank-one convexity of $B_p$ and the
+thresholds for the integrands $f_\gamma$, are not results of this paper and are not formalized.
 
 \subsection{Verification and dependencies}\label{app:formal-check}
 
@@ -48,63 +56,39 @@ Lean's kernel checks the proofs. Every theorem depends only on the standard axio
 \lean{Classical.choice} and \lean{Quot.sound}, as verified by an audit of every declaration of
 the library. Lean's Comparator, with the configuration
 \lean{palomar/HomogeneousIsotropic/comparator.json}, checks that the Solution proves the
-statements of the Challenge with the same definitions, under Lean's kernel and the independent kernel nanoda. Lean
-and Mathlib are pinned at version \texttt{v4.36.0-rc2}.\par}
+statements of the Challenge with the same definitions, under Lean's kernel and the independent
+kernel nanoda. Lean and Mathlib are pinned at version \texttt{v4.36.0-rc2}.\par}
 
+\begin{sloppypar}
 The library's proofs use the rank-one convexity and the quasiconvexity of the library
 \lean{CalculusOfVariations}~\cite{CoVLean}, which are the notions above
 (\lean{Morrey/HomogeneousIsotropic/Bridges.lean}). From that library they take two facts: minors
 are null Lagrangians, which gives \cref{lem:supports}\,(a), and rank-one convex functions are
 locally Lipschitz, which gives the continuity used in \cref{prop:small}. From the
-formalization~\cite{IwaniecLean} of~\cite{SharpHI} they take one theorem,
-\lean{Agazzi.quasiconvex_burkholder}: for $1<p<2$ the function
-$(\abs z+\abs w)^{p-1}(\abs z-(p-1)\abs w)$ is quasiconvex in the sense of
-\lean{CalculusOfVariations}. It is used in \lean{Morrey/HomogeneousIsotropic/Burkholder.lean},
-for \cref{cor:low}\,(a) and \cref{cor:all}. \Cref{lem:convex,lem:sublinear}
-are in the file \lean{Morrey/Common/Basic/Analysis/Convex/Tangent.lean}. The hypotheses
-of \cref{thm:main} are checked on an integrand that is not convex, $F(A)=(\det A)^2$ with $p=4$
+formalization~\cite{IwaniecLean} of~\cite{SharpHI} they take two theorems: the identity
+$\abs A=\abs z+\abs w$ for the operator norm (\lean{Agazzi.opNorm_eq}), and the quasiconvexity
+of the Burkholder function for $1<p<2$ (\lean{Agazzi.quasiconvex_burkholder}), which that
+formalization proves for the Lipschitz test maps vanishing outside the unit square
+(\cref{sec:intro-low}). Both enter in \lean{Morrey/HomogeneousIsotropic/Burkholder.lean}.
+\Cref{lem:convex,lem:sublinear} are in the file
+\lean{Morrey/Common/Basic/Analysis/Convex/Tangent.lean}. The hypotheses of \cref{thm:main} are
+checked on an integrand that is not convex, $F(A)=(\det A)^2$ with $p=4$
 (\lean{polyconvex_detSq}, \lean{not_convexOn_detSq}).
-
-\subsection{Differences from the text}\label{app:formal-differences}
-
-\begin{itemize}
-\item The formal statements are written in conformal coordinates: they have $\abs z+\abs w$
-  where the text has $\abs A$. The identity $\det A=\abs z^2-\abs w^2$ is formalized; the
-  identity $\abs A=\abs z+\abs w$ for the operator norm is not.
-\item Of \cref{lem:coordinates}\,(b) and of the description of isotropic functions after it, the
-  library has the implications that the proofs use: a nonzero matrix with
-  $\abs\alpha=\abs\beta$ has rank one, and an isotropic $F$ is $\Phi(\abs z,\abs w)$.
-\item The formalization~\cite{IwaniecLean} proves the quasiconvexity of the Burkholder function
-  for Lipschitz periodic test maps, by the arguments of~\cite{SharpHI}, and passes to the test
-  maps used here by the equivalence of the two notions, which \lean{CalculusOfVariations}
-  proves (\cref{sec:intro-low}). The identity of \cref{thm:low} is stated with
-  \leanx{burkholder p}, hence with the denominators $p(2-p)$.
-\item In \cref{thm:closed} the supporting line is given by its slope: the hypothesis is
-  $h(s)\ge H+m(s-t)$ for $s\in[-1,1]$.
-\item The equalities at $(x_t,y_t)$ in \cref{lem:minorant}, in \cref{prop:caseI}, in Case II and
-  in \cref{prop:clamp} are not part of the declarations listed for them. They are proved where
-  they are used, in \lean{IsProfile.exists_support_of_add_eq_one} and in
-  \lean{polyaffine_multiplier_le}. The support at $t=-1$ is obtained from the one at $t=1$
-  inside the same proof.
-\item Some formal statements are more general: the identity of \cref{thm:low} is stated for
-  $0<p<2$, and \cref{prop:tangent}, \cref{cor:BE} and \cref{lem:ends} for every real $p$. The
-  library also has the implication behind \cref{cor:low}\,(a), for $1\le p<2$: if the Burkholder
-  function is quasiconvex, so is $F$ (\lean{quasiconvex_of_rankOneConvex_of_burkholder}).
-\item The facts recalled in \cref{sec:intro}, such as the rank-one convexity of $B_p$ and the
-  formula $F(A)=\abs A^p\,h(\det A/\abs A^2)$, are not formalized.
-\end{itemize}
+\end{sloppypar}
 
 \subsection{Dictionary}\label{app:formal-dictionary}
 
-\Cref{tab:formal-dictionary} lists the Lean declarations corresponding to the numbered results
-of the paper. Names are relative to the namespace \lean{HomogeneousIsotropic}; the prefix
+{\sloppy
+\Cref{tab:formal-dictionary} lists the Lean declarations of the statements of the paper. Names
+are relative to the namespace \lean{HomogeneousIsotropic}; the prefix
 \lean{HomogeneousIsotropicChallenge} marks the statements of the Challenge file, and the two
-declarations with the prefix \lean{ConvexOn} are in the root namespace. Multiple declarations in one row
-jointly establish the corresponding result.
+declarations with the prefix \lean{ConvexOn} are in the root namespace. When a row has several
+declarations, they state the parts of the result: for a support, the inequality and the equality
+at the base point.\par}
 
 {\small
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.25\textwidth}>{\raggedright\arraybackslash}p{0.71\textwidth}@{}}
-\caption{The Lean declarations behind the numbered results.}\label{tab:formal-dictionary}\\
+\caption{The Lean declarations of the statements of the paper.}\label{tab:formal-dictionary}\\
 \toprule
 Result & Lean declarations\\
 \midrule
@@ -121,33 +105,40 @@ Result & Lean declarations\\
 \Cref{thm:iff} & \lean{HomogeneousIsotropicChallenge.theorem1_3_a}, \lean{HomogeneousIsotropicChallenge.theorem1_3_b}; \lean{polyconvex_iff_of_two_lt}, \lean{nonneg_of_polyconvex}, \lean{polyconvex_iff_two}\\\addlinespace[2pt]
 \Cref{cor:equiv} & \lean{HomogeneousIsotropicChallenge.corollary1_4}; \lean{tfae_of_two_le}\\\addlinespace[2pt]
 \Cref{thm:low} & \lean{HomogeneousIsotropicChallenge.theorem1_5}, \lean{HomogeneousIsotropicChallenge.theorem1_5_identity}; \lean{exists_burkholderType_le}, \lean{burkholderType_eq}\\\addlinespace[2pt]
-\Cref{cor:low}\,(a) & \lean{HomogeneousIsotropicChallenge.corollary1_6_a}; \lean{quasiconvex_burkholder}, \lean{quasiconvex_of_rankOneConvex_of_lt_two}\\\addlinespace[2pt]
+$B_p$ in coordinates & \lean{burkholder_eq_coord}\\\addlinespace[2pt]
+\Cref{cor:low}\,(a) & \lean{HomogeneousIsotropicChallenge.corollary1_6_a}; \lean{quasiconvex_burkholder}, \lean{quasiconvex_of_rankOneConvex_of_burkholder}, \lean{quasiconvex_of_rankOneConvex_of_lt_two}\\\addlinespace[2pt]
 \Cref{cor:low}\,(b) & \lean{HomogeneousIsotropicChallenge.corollary1_6_b}; \lean{nonneg_of_rankOneConvex_one}, \lean{convexOn_of_rankOneConvex_one}\\\addlinespace[2pt]
 \Cref{prop:small} & \lean{HomogeneousIsotropicChallenge.proposition1_7}; \lean{eq_zero_of_rankOneConvex_of_lt_one}\\\addlinespace[2pt]
 \Cref{cor:all} & \lean{HomogeneousIsotropicChallenge.corollary1_8}; \lean{quasiconvex_of_rankOneConvex_of_pos}\\[4pt]
 \multicolumn{2}{@{}l}{\emph{\Cref{sec:setting,app:setting}}}\\*[2pt]
-\Cref{lem:coordinates} & \lean{HomogeneousIsotropicChallenge.det_eq_norm_sq_sub}; \lean{det_ofComplex}, \lean{rank_ofComplex_eq_one}, \lean{ofComplex_mul_mul}, \lean{conformalPart_reflection_mul}\\\addlinespace[2pt]
-\Cref{lem:profile} & \lean{IsIsotropic.eq_profile}, \lean{isProfile_profile}\\\addlinespace[2pt]
-\Cref{lem:supports} & \lean{HasPolyaffineSupportAt.quasiconvexAtOn}, \lean{polyconvex_of_hasPolyaffineSupportAt}, \lean{Polyconvex.hasPolyaffineSupportAt}, \lean{Polyconvex.quasiconvex}, \lean{Polyconvex.rankOneConvex}\\\addlinespace[2pt]
+\Cref{lem:coordinates}\,(a) & \lean{HomogeneousIsotropicChallenge.det_eq_norm_sq_sub}, \lean{HomogeneousIsotropicChallenge.opNorm_eq}; \lean{det_eq_norm_sq_sub}, \lean{opNorm_eq}\\\addlinespace[2pt]
+\Cref{lem:coordinates}\,(b) & \lean{rank_eq_one_iff_norm_eq}\\\addlinespace[2pt]
+\Cref{lem:coordinates}\,(c) & \lean{ofComplex_mem_specialOrthogonalGroup}, \lean{exists_ofComplex_eq_of_mem_specialOrthogonalGroup}, \lean{ofComplex_mul_mul}\\\addlinespace[2pt]
+\Cref{lem:coordinates}\,(d) & \lean{conformalPart_reflection_mul}, \lean{anticonformalPart_reflection_mul}\\\addlinespace[2pt]
+Isotropy and the profile & \lean{isIsotropic_iff_eq_profile}\\\addlinespace[2pt]
+\Cref{lem:profile} & \lean{isProfile_profile}\\\addlinespace[2pt]
+$F(A)=\abs A^p\,h(\det A/\abs A^2)$ & \lean{apply_eq_opNorm_rpow_mul}, \lean{IsProfile.eq_rpow_mul}\\\addlinespace[2pt]
+\Cref{lem:supports} & \lean{HasPolyaffineSupportAt.quasiconvexAtOn}, \lean{polyconvex_of_hasPolyaffineSupportAt}, \lean{Polyconvex.hasPolyaffineSupportAt}, \lean{Polyconvex.quasiconvex}, \lean{Polyconvex.continuous}, \lean{Polyconvex.rankOneConvex}, \lean{quasiconvexAtOn_of_le_of_eq}\\\addlinespace[2pt]
 \Cref{lem:lift} & \lean{hasPolyaffineSupportAt_of_profile}\\[4pt]
 \multicolumn{2}{@{}l}{\emph{\Cref{sec:roc,app:roc}}}\\*[2pt]
 \Cref{lem:basic} & \lean{IsProfile.convexOn_slice}, \lean{IsProfile.le_of_sq_sub_sq_eq}\\\addlinespace[2pt]
-\Cref{lem:minorant} & \lean{IsProfile.exists_burkholderMinorant}, \lean{IsProfile.burkholderMinorant_of_slice}\\\addlinespace[2pt]
+\Cref{def:minorant} & \lean{burkholderProfile}, \lean{burkholderType_eq_profile}, \lean{burkholder_eq_burkholderType}, \lean{IsProfile.burkholderMinorant_iff_slice}\\\addlinespace[2pt]
+\Cref{lem:minorant} & \lean{IsProfile.exists_burkholderMinorant_eq}\\\addlinespace[2pt]
 \Cref{lem:convex} & \lean{ConvexOn.add_mul_le_of_hasDerivAt_le}\\\addlinespace[2pt]
 \Cref{prop:tangent} & \lean{IsProfile.tangent}\\\addlinespace[2pt]
 \Cref{cor:BE} & \lean{IsProfile.baker_ericksen}\\\addlinespace[2pt]
 \Cref{lem:ends} & \lean{IsProfile.slice_ge_of_one}, \lean{IsProfile.slice_ge_of_neg_one}\\[4pt]
 \multicolumn{2}{@{}l}{\emph{\Cref{sec:pge2,app:pge2}}}\\*[2pt]
 \Cref{lem:burkholder} & \lean{burkholder_support_le}\\\addlinespace[2pt]
-\eqref{eq:caseIII} & \lean{BurkholderMinorant.support}, \lean{BurkholderMinorant.support_two}\\\addlinespace[2pt]
+\eqref{eq:caseIII} & \lean{BurkholderMinorant.support}, \lean{BurkholderMinorant.support_two}, \lean{support_slice_eq}\\\addlinespace[2pt]
 \Cref{lem:caseI-algebra} & \lean{caseOne_slope_pos}, \lean{caseOne_const_neg}, \lean{caseOne_relations}\\\addlinespace[2pt]
 \Cref{lem:mu} & \lean{caseOne_slope_bounds}\\\addlinespace[2pt]
 \Cref{lem:line} & \lean{IsProfile.support_of_stationary}\\\addlinespace[2pt]
 \Cref{lem:psi} & \lean{exists_stationary_ge}\\\addlinespace[2pt]
-\Cref{prop:caseI} & \lean{IsProfile.support_of_neg_aux}, \lean{IsProfile.support_of_neg}\\\addlinespace[2pt]
-Case II & \lean{IsProfile.support_of_neg_aux'}\\\addlinespace[2pt]
-\Cref{prop:clamp} & \lean{IsProfile.support_multiplier}\\\addlinespace[2pt]
-\eqref{eq:end-support} & \lean{IsProfile.support_one_zero}\\[4pt]
+\Cref{prop:caseI} & \lean{IsProfile.support_of_neg}, \lean{support_of_neg_eq}\\\addlinespace[2pt]
+Case II & \lean{IsProfile.support_of_neg_aux'}, \lean{support_of_neg_eq'}\\\addlinespace[2pt]
+\Cref{prop:clamp} & \lean{IsProfile.support_multiplier}, \lean{support_multiplier_eq}\\\addlinespace[2pt]
+\eqref{eq:end-support} & \lean{IsProfile.support_one_zero}, \lean{support_one_zero_eq}, \lean{IsProfile.support_zero_one}\\[4pt]
 \multicolumn{2}{@{}l}{\emph{\Cref{sec:plt2,app:plt2}}}\\*[2pt]
 \Cref{prop:low} & \lean{IsProfile.exists_burkholderMinorant_of_lt_two}\\\addlinespace[2pt]
 \Cref{lem:pone} & \lean{IsProfile.nonneg_of_one}\\\addlinespace[2pt]

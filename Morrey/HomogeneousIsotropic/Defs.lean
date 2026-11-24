@@ -1,6 +1,7 @@
 module
 
 public import Mathlib.Analysis.Calculus.FDeriv.Basic
+public import Mathlib.Analysis.CStarAlgebra.Matrix
 public import Mathlib.Analysis.Complex.Basic
 public import Mathlib.Analysis.Convex.Function
 public import Mathlib.Analysis.Matrix.MeasurableSpace
@@ -126,23 +127,19 @@ noncomputable def conformalPart (A : Matrix (Fin 2) (Fin 2) ℝ) : ℂ :=
 noncomputable def anticonformalPart (A : Matrix (Fin 2) (Fin 2) ℝ) : ℂ :=
   ⟨(A 0 0 - A 1 1) / 2, (A 1 0 + A 0 1) / 2⟩
 
-/-- The Burkholder-type function `(|z| + |w|)^{p−1} (c₀ (|z| + |w|) + m (|z| − |w|))`, in
-conformal coordinates. With `|A| = |z| + |w|`, the operator norm, it is
-`|A|^{p−2} (c₀ |A|² + m det A)`. -/
-noncomputable def burkholderType (p c₀ m : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
-  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
-    (c₀ * (‖conformalPart A‖ + ‖anticonformalPart A‖) +
-      m * (‖conformalPart A‖ - ‖anticonformalPart A‖))
+/-- The operator norm `|A|` of `A` on Euclidean `ℝ²`. It equals `|z| + |w|` (`opNorm_eq`). -/
+noncomputable def opNorm (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  ‖Matrix.toEuclideanCLM (n := Fin 2) (𝕜 := ℝ) A‖
 
-/-- The Burkholder function `(|z| − (p − 1) |w|) (|z| + |w|)^{p−1}` on `ℝ^{2×2}`, in the form
-that is rank-one convex for `1 < p ≤ 2`. In terms of the operator norm `|A|` it is
-`((p/2) det A + (1 − p/2) |A|²) |A|^{p−2}`. For `1 < p < 2` it is `p/2` times the Burkholder
-integrand `(|1 − 2/p| |A|² + det A) |A|^{p−2}` of Guerra and Kristensen, and `p − 1` times that
-of arXiv:2609.28311, (2). For `p > 2` this formula is not the rank-one convex Burkholder
-function; the library uses it for `1 ≤ p < 2` only. -/
+/-- The Burkholder-type function `G_{c₀,m} (A) = |A|^{p−2} (c₀ |A|² + m det A)`, with `|A|` the
+operator norm; it is `0` at `A = 0`. -/
+noncomputable def burkholderType (p c₀ m : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  opNorm A ^ (p - 2) * (c₀ * opNorm A ^ 2 + m * A.det)
+
+/-- The Burkholder function `B_p (A) = (|1 − 2/p| |A|² + det A) |A|^{p−2}`, with `|A|` the
+operator norm, in the normalization of Guerra and Kristensen; it is `0` at `A = 0`. -/
 noncomputable def burkholder (p : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
-  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
-    (‖conformalPart A‖ - (p - 1) * ‖anticonformalPart A‖)
+  (|1 - 2 / p| * opNorm A ^ 2 + A.det) * opNorm A ^ (p - 2)
 
 /-- The reflection `J = diag (1, −1)`. -/
 def reflection : Matrix (Fin 2) (Fin 2) ℝ :=
@@ -154,6 +151,21 @@ noncomputable def multiplier (p H m t : ℝ) : ℝ :=
   min ((p * H + (1 - t) * m) / (1 + t)) (max (((1 + t) * m - p * H) / (1 - t)) ((p - 1) * m))
 
 -- END SHARED DEFINITIONS
+
+/-- The Burkholder-type function in conformal coordinates,
+`(|z| + |w|)^{p−1} (c₀ (|z| + |w|) + m (|z| − |w|))`. It is `burkholderType p c₀ m`
+(`burkholderType_eq_coord`). -/
+noncomputable def burkholderTypeCoord (p c₀ m : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
+    (c₀ * (‖conformalPart A‖ + ‖anticonformalPart A‖) +
+      m * (‖conformalPart A‖ - ‖anticonformalPart A‖))
+
+/-- The function `(|z| + |w|)^{p−1} (|z| − (p − 1) |w|)` of the conformal coordinates. For
+`0 < p ≤ 2` it is `p/2` times the Burkholder function `burkholder p` (`burkholder_eq_coord`),
+and for `1 < p < 2` it is `p − 1` times the function of arXiv:2609.28311, (2). -/
+noncomputable def burkholderCoord (p : ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  (‖conformalPart A‖ + ‖anticonformalPart A‖) ^ (p - 1) *
+    (‖conformalPart A‖ - (p - 1) * ‖anticonformalPart A‖)
 
 /-- The matrix with conformal part `z` and anticonformal part `w`. -/
 noncomputable def ofComplex (z w : ℂ) : Matrix (Fin 2) (Fin 2) ℝ :=

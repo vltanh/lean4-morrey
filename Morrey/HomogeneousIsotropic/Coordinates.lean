@@ -289,4 +289,70 @@ theorem hasPolyaffineSupportAt_of_profile {F : Matrix (Fin 2) (Fin 2) ℝ → �
   · rw [hP, hiso.eq_profile A₀, hu0, hv0, Complex.ofReal_re, Complex.ofReal_re]
     exact heq
 
+/-- **Lemma 2.1 (b).** A nonzero matrix has rank one if and only if its conformal and its
+anticonformal part have the same modulus. -/
+theorem rank_eq_one_iff_norm_eq {B : Matrix (Fin 2) (Fin 2) ℝ} (hB : B ≠ 0) :
+    B.rank = 1 ↔ ‖conformalPart B‖ = ‖anticonformalPart B‖ := by
+  constructor
+  · intro h
+    have hdet : B.det = 0 := (Matrix.rank_le_one_iff_det_eq_zero_of_fin_two B).1 h.le
+    rw [det_eq_norm_sq_sub] at hdet
+    have hmul : (‖conformalPart B‖ - ‖anticonformalPart B‖) *
+        (‖conformalPart B‖ + ‖anticonformalPart B‖) = 0 := by
+      rw [← hdet]
+      ring
+    rcases mul_eq_zero.1 hmul with h1 | h1
+    · linarith
+    · linarith [norm_nonneg (conformalPart B), norm_nonneg (anticonformalPart B)]
+  · intro h
+    have hα : conformalPart B ≠ 0 := by
+      intro h0
+      apply hB
+      have hw : anticonformalPart B = 0 := norm_eq_zero.1 (by rw [← h, h0, norm_zero])
+      rw [← ofComplex_conformalPart B, h0, hw, ofComplex_zero]
+    have := rank_ofComplex_eq_one h hα
+    rwa [ofComplex_conformalPart] at this
+
+/-- A matrix of `SO(2)` is a rotation: it is `ofComplex u 0` with `|u| = 1`. -/
+theorem exists_ofComplex_eq_of_mem_specialOrthogonalGroup {Q : Matrix (Fin 2) (Fin 2) ℝ}
+    (hQ : Q ∈ Matrix.specialOrthogonalGroup (Fin 2) ℝ) :
+    ∃ u : ℂ, ‖u‖ = 1 ∧ ofComplex u 0 = Q := by
+  rw [Matrix.mem_specialOrthogonalGroup_fin_two_iff] at hQ
+  obtain ⟨h1, h2, h3⟩ := hQ
+  refine ⟨⟨Q 0 0, Q 1 0⟩, ?_, ?_⟩
+  · have hsq : ‖(⟨Q 0 0, Q 1 0⟩ : ℂ)‖ ^ 2 = 1 := by
+      rw [Complex.sq_norm, Complex.normSq_apply]
+      rw [h2] at h3
+      linarith
+    have hn := norm_nonneg (⟨Q 0 0, Q 1 0⟩ : ℂ)
+    nlinarith
+  · ext i j
+    fin_cases i <;> fin_cases j <;> simp [ofComplex] <;> linarith
+
+/-- **Lemma 2.1 (c), for the moduli.** Rotations on both sides do not change the moduli of the
+conformal and of the anticonformal part. -/
+theorem norm_conformalPart_mul_mul {Q R : Matrix (Fin 2) (Fin 2) ℝ}
+    (hQ : Q ∈ Matrix.specialOrthogonalGroup (Fin 2) ℝ)
+    (hR : R ∈ Matrix.specialOrthogonalGroup (Fin 2) ℝ) (A : Matrix (Fin 2) (Fin 2) ℝ) :
+    ‖conformalPart (Q * A * R)‖ = ‖conformalPart A‖ ∧
+      ‖anticonformalPart (Q * A * R)‖ = ‖anticonformalPart A‖ := by
+  obtain ⟨u, hu, rfl⟩ := exists_ofComplex_eq_of_mem_specialOrthogonalGroup hQ
+  obtain ⟨v, hv, rfl⟩ := exists_ofComplex_eq_of_mem_specialOrthogonalGroup hR
+  obtain ⟨z, w, rfl⟩ : ∃ z w, A = ofComplex z w := ⟨_, _, (ofComplex_conformalPart A).symm⟩
+  rw [ofComplex_mul_mul]
+  simp [conformalPart_ofComplex, anticonformalPart_ofComplex, hu, hv]
+
+/-- A function of the moduli of the conformal and of the anticonformal part is isotropic. -/
+theorem isIsotropic_of_eq {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} {Φ : ℝ → ℝ → ℝ}
+    (h : ∀ A, F A = Φ ‖conformalPart A‖ ‖anticonformalPart A‖) : IsIsotropic F := by
+  intro Q hQ R hR A
+  obtain ⟨h1, h2⟩ := norm_conformalPart_mul_mul hQ hR A
+  rw [h, h A, h1, h2]
+
+/-- `F` is isotropic if and only if `F (A) = Φ (|z|, |w|)`, where `Φ (x, y) =
+F (diag (x + y, x − y))` is the profile of `F`. -/
+theorem isIsotropic_iff_eq_profile {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} :
+    IsIsotropic F ↔ ∀ A, F A = profile F ‖conformalPart A‖ ‖anticonformalPart A‖ :=
+  ⟨fun h => h.eq_profile, isIsotropic_of_eq⟩
+
 end HomogeneousIsotropic

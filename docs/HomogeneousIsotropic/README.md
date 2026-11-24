@@ -21,13 +21,13 @@ and `J = diag(1, −1)`.
 
 | Exponent | Hypotheses | Conclusion | Lean | Status |
 | --- | --- | --- | --- | --- |
-| `0 < p < 1` | H2, H3 | `F = 0` | [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L538) | **proved** |
-| `p = 1` | H1, H2, H3 | `F ≥ 0`, and `F` is convex (Dacorogna 1995) | [`convexOn_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L463) | **proved** |
-| `1 < p < 2` | H1, H2, H3, N | `F` is quasiconvex; at every matrix it has a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | [`quasiconvex_of_rankOneConvex_of_lt_two`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L40), [`exists_burkholderType_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L286) | **proved** |
-| `p = 2` | H1, H2, H3 | `F` is polyconvex | [`polyconvex_of_rankOneConvex_two`](../../Morrey/HomogeneousIsotropic/Main.lean#L269) | **proved** |
-| `p > 2` | H1, H2, H3, N | `F` is polyconvex, with a polyaffine support at every matrix in closed form | [`polyconvex_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L69), [`polyaffine_multiplier_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L210) | **proved** |
-| `p > 2` | H1, H2, and `F < 0` somewhere | `F` is not polyconvex | [`nonneg_of_polyconvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L94) | **proved** |
-| every `p > 0` | H1, H2, H3, N | `F` is quasiconvex | [`quasiconvex_of_rankOneConvex_of_pos`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L49) | **proved** |
+| `0 < p < 1` | H2, H3 | `F = 0` | [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L541) | **proved** |
+| `p = 1` | H1, H2, H3 | `F ≥ 0`, and `F` is convex (Dacorogna 1995) | [`convexOn_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L466) | **proved** |
+| `1 < p < 2` | H1, H2, H3, N | `F` is quasiconvex; at every matrix it has a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | [`quasiconvex_of_rankOneConvex_of_lt_two`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L202), [`exists_burkholderType_le`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L146) | **proved** |
+| `p = 2` | H1, H2, H3 | `F` is polyconvex | [`polyconvex_of_rankOneConvex_two`](../../Morrey/HomogeneousIsotropic/Main.lean#L272) | **proved** |
+| `p > 2` | H1, H2, H3, N | `F` is polyconvex, with a polyaffine support at every matrix in closed form | [`polyconvex_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L72), [`polyaffine_multiplier_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L213) | **proved** |
+| `p > 2` | H1, H2, and `F < 0` somewhere | `F` is not polyconvex | [`nonneg_of_polyconvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L97) | **proved** |
+| every `p > 0` | H1, H2, H3, N | `F` is quasiconvex | [`quasiconvex_of_rankOneConvex_of_pos`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L213) | **proved** |
 
 So rank-one convexity implies quasiconvexity for nonnegative, isotropic, positively
 `p`-homogeneous integrands, for every `p > 0`. For `p ≥ 2` this answers Question 1.7 of Guerra
@@ -41,9 +41,9 @@ Burkholder function `B_p`:
   it;
 - we audited that preprint with a Lean formalization,
   [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which proves its results and which
-  this repository requires. The theorem used is `Agazzi.quasiconvex_burkholder`, restated here as
-  [`quasiconvex_burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L35): for `1 < p < 2`, `burkholder p` (that is, `p/2` times `B_p`) is
-  quasiconvex for Lipschitz test maps vanishing outside the unit square;
+  this repository requires. The theorem used is `Agazzi.quasiconvex_burkholder`, from which
+  [`quasiconvex_burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L176) follows: for `1 < p < 2`, `B_p` is quasiconvex for Lipschitz test maps
+  vanishing outside the unit square;
 - so nothing is assumed: every statement here is checked by Lean's kernel down to the standard
   axioms.
 
@@ -51,22 +51,31 @@ Burkholder function `B_p`:
 
 Here `|A|` is the operator norm, `h(s) = F(diag(1, s))`, and quasiconvexity is that of the package
 `CalculusOfVariations` (Lipschitz test maps vanishing outside the unit square). The Lean
-statements are in conformal coordinates: they have `|z| + |w|` for `|A|`; that this is the
-operator norm is not proved in Lean. The numbers are those of the paper, and the Challenge
-states each result under the name of its number.
+statements are those of the paper:
+
+- `opNorm A` is the operator norm, `burkholderType p c₀ m A` is `|A|^{p−2} (c₀ |A|² + m det A)`
+  and `burkholder p A` is `B_p(A)`, as the paper defines them;
+- the passage to conformal coordinates is proved: [`opNorm_eq`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L43) (`|A| = |z| + |w|`),
+  [`burkholderType_eq_coord`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L60), [`burkholder_eq_coord`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L87);
+- every numbered statement of the paper has a Lean theorem with the same hypotheses and the same
+  conclusion; the paper's Appendix E lists them.
+
+The numbers are those of the paper, and the Challenge states each result under the name of its
+number.
 
 | Result | Lean | Challenge | Statement |
 | --- | --- | --- | --- |
-| Theorem 1.1 | [`polyconvex_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L69), [`hasPolyaffineSupportAt_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L59) | [`theorem1_1`](../../palomar/HomogeneousIsotropic/Challenge.lean#L202) | `p ≥ 2`, H1, H2, H3, N: a polyaffine support at every matrix; `F` is polyconvex |
-| Theorem 1.2 | [`polyaffine_multiplier_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L210) | [`theorem1_2`](../../palomar/HomogeneousIsotropic/Challenge.lean#L212) | the support at `diag(1, t)` in closed form (below) |
-| Theorem 1.3 (a) | [`polyconvex_iff_of_two_lt`](../../Morrey/HomogeneousIsotropic/Main.lean#L191), [`nonneg_of_polyconvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L94) | [`theorem1_3_a`](../../palomar/HomogeneousIsotropic/Challenge.lean#L226) | `p > 2`, H1, H2: polyconvex if and only if rank-one convex and nonnegative |
-| Theorem 1.3 (b) | [`polyconvex_iff_two`](../../Morrey/HomogeneousIsotropic/Main.lean#L276) | [`theorem1_3_b`](../../palomar/HomogeneousIsotropic/Challenge.lean#L233) | `p = 2`, H1, H2: polyconvex if and only if rank-one convex |
-| Corollary 1.4 | [`tfae_of_two_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L84) | [`corollary1_4`](../../palomar/HomogeneousIsotropic/Challenge.lean#L240) | `p ≥ 2`, H1, H2, N, Borel and locally bounded: rank-one convex, quasiconvex and polyconvex are equivalent |
-| Theorem 1.5 | [`exists_burkholderType_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L286), [`burkholderType_eq`](../../Morrey/HomogeneousIsotropic/Main.lean#L372) | [`theorem1_5`](../../palomar/HomogeneousIsotropic/Challenge.lean#L249), [`theorem1_5_identity`](../../palomar/HomogeneousIsotropic/Challenge.lean#L259) | `1 ≤ p < 2`, H1, H2, H3, N: a touching Burkholder-type minorant at every matrix |
-| Corollary 1.6 (a) | [`quasiconvex_of_rankOneConvex_of_lt_two`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L40), [`quasiconvex_burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L35) | [`corollary1_6_a`](../../palomar/HomogeneousIsotropic/Challenge.lean#L268) | `1 < p < 2`, H1, H2, H3, N: `F` is quasiconvex |
-| Corollary 1.6 (b) | [`convexOn_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L463), [`nonneg_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L429) | [`corollary1_6_b`](../../palomar/HomogeneousIsotropic/Challenge.lean#L275) | `p = 1`, H1, H2, H3: `F` is nonnegative and convex |
-| Proposition 1.7 | [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L538) | [`proposition1_7`](../../palomar/HomogeneousIsotropic/Challenge.lean#L282) | `0 < p < 1`, H2, H3: `F = 0` |
-| Corollary 1.8 | [`quasiconvex_of_rankOneConvex_of_pos`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L49) | [`corollary1_8`](../../palomar/HomogeneousIsotropic/Challenge.lean#L289) | `p > 0`, H1, H2, H3, N: `F` is quasiconvex |
+| Lemma 2.1 (a) | [`det_eq_norm_sq_sub`](../../Morrey/HomogeneousIsotropic/Coordinates.lean#L103), [`opNorm_eq`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L43) | [`det_eq_norm_sq_sub`](../../Morrey/HomogeneousIsotropic/Coordinates.lean#L103), [`opNorm_eq`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L43) | `det A = \|z\|² − \|w\|²` and `\|A\| = \|z\| + \|w\|` for the conformal and anticonformal parts `z`, `w` of `A` |
+| Theorem 1.1 | [`polyconvex_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L72), [`hasPolyaffineSupportAt_of_rankOneConvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L62) | [`theorem1_1`](../../palomar/HomogeneousIsotropic/Challenge.lean#L203) | `p ≥ 2`, H1, H2, H3, N: a polyaffine support at every matrix; `F` is polyconvex |
+| Theorem 1.2 | [`polyaffine_multiplier_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L213) | [`theorem1_2`](../../palomar/HomogeneousIsotropic/Challenge.lean#L213) | the support at `diag(1, t)` in closed form (below) |
+| Theorem 1.3 (a) | [`polyconvex_iff_of_two_lt`](../../Morrey/HomogeneousIsotropic/Main.lean#L194), [`nonneg_of_polyconvex`](../../Morrey/HomogeneousIsotropic/Main.lean#L97) | [`theorem1_3_a`](../../palomar/HomogeneousIsotropic/Challenge.lean#L227) | `p > 2`, H1, H2: polyconvex if and only if rank-one convex and nonnegative |
+| Theorem 1.3 (b) | [`polyconvex_iff_two`](../../Morrey/HomogeneousIsotropic/Main.lean#L279) | [`theorem1_3_b`](../../palomar/HomogeneousIsotropic/Challenge.lean#L234) | `p = 2`, H1, H2: polyconvex if and only if rank-one convex |
+| Corollary 1.4 | [`tfae_of_two_le`](../../Morrey/HomogeneousIsotropic/Main.lean#L87) | [`corollary1_4`](../../palomar/HomogeneousIsotropic/Challenge.lean#L241) | `p ≥ 2`, H1, H2, N, Borel and locally bounded: rank-one convex, quasiconvex and polyconvex are equivalent |
+| Theorem 1.5 | [`exists_burkholderType_le`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L146), [`burkholderType_eq`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L163) | [`theorem1_5`](../../palomar/HomogeneousIsotropic/Challenge.lean#L250), [`theorem1_5_identity`](../../palomar/HomogeneousIsotropic/Challenge.lean#L260) | `1 ≤ p < 2`, H1, H2, H3, N: a touching minorant `G(A) = \|A\|^{p−2} (c₀ \|A\|² + m det A)` at every matrix; for `0 < p < 2`, `G` is a combination of `B_p(A)` and `B_p(JA)` |
+| Corollary 1.6 (a) | [`quasiconvex_of_rankOneConvex_of_lt_two`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L202), [`quasiconvex_burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L176) | [`corollary1_6_a`](../../palomar/HomogeneousIsotropic/Challenge.lean#L269) | `1 < p < 2`, H1, H2, H3, N: `F` is quasiconvex |
+| Corollary 1.6 (b) | [`convexOn_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L466), [`nonneg_of_rankOneConvex_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L431) | [`corollary1_6_b`](../../palomar/HomogeneousIsotropic/Challenge.lean#L276) | `p = 1`, H1, H2, H3: `F` is nonnegative and convex |
+| Proposition 1.7 | [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L541) | [`proposition1_7`](../../palomar/HomogeneousIsotropic/Challenge.lean#L283) | `0 < p < 1`, H2, H3: `F = 0` |
+| Corollary 1.8 | [`quasiconvex_of_rankOneConvex_of_pos`](../../Morrey/HomogeneousIsotropic/Burkholder.lean#L213) | [`corollary1_8`](../../palomar/HomogeneousIsotropic/Challenge.lean#L290) | `p > 0`, H1, H2, H3, N: `F` is quasiconvex |
 
 The support of Theorem 1.2: for `|t| < 1`, `H = h(t) > 0` and `m` the slope of a supporting line
 of `h` at `t`, let
@@ -83,7 +92,7 @@ equality at `diag(1, t)`.
 Identify `ℝ²` with `ℂ`. A matrix acts as `ζ ↦ zζ + wζ̄`; then `det A = |z|² − |w|²`,
 `|A| = |z| + |w|`, an isotropic `F` is a function `Φ` of the moduli of `z` and `w` (its
 *profile*), and a line is a rank-one line exactly when `z` and `w` move with the same speed. The
-proof uses only two properties of `Φ` ([`IsProfile`](../../Morrey/HomogeneousIsotropic/Defs.lean#L171)): homogeneity, and convexity along the images
+proof uses only two properties of `Φ` ([`IsProfile`](../../Morrey/HomogeneousIsotropic/Defs.lean#L183)): homogeneity, and convexity along the images
 of rank-one lines.
 
 | Step | Lean | Content |
@@ -92,15 +101,15 @@ of rank-one lines.
 | Supports | [`hasPolyaffineSupportAt_of_profile`](../../Morrey/HomogeneousIsotropic/Coordinates.lean#L258) | a support `k + b x + g y + c (x² − y²)` of `Φ` with `b, g ≥ 0` gives a polyaffine support of `F` |
 | | [`polyconvex_of_hasPolyaffineSupportAt`](../../Morrey/HomogeneousIsotropic/Polyaffine.lean#L139) | polyaffine supports at every matrix give polyconvexity |
 | | [`HasPolyaffineSupportAt.quasiconvexAtOn`](../../Morrey/HomogeneousIsotropic/Polyaffine.lean#L100) | a polyaffine support gives quasiconvexity at that matrix |
-| Minorants | [`IsProfile.exists_burkholderMinorant`](../../Morrey/HomogeneousIsotropic/Profile.lean#L140) | a supporting line of `h` gives a Burkholder-type function below `Φ` that touches it |
-| First order | [`IsProfile.tangent`](../../Morrey/HomogeneousIsotropic/Profile.lean#L155) | at a touching point `(x₀, y₀)` with value `H`, the value of `Φ` at the moduli of `(x₀ + τα, y₀ + τβ)` is at least `H + τ (Φ_x Re α + Φ_y Re β)`, along every rank-one line |
-| | [`IsProfile.baker_ericksen`](../../Morrey/HomogeneousIsotropic/Profile.lean#L203) | hence `p H − 2 t m ≥ 0` |
+| Minorants | [`IsProfile.exists_burkholderMinorant`](../../Morrey/HomogeneousIsotropic/Profile.lean#L172) | a supporting line of `h` gives a Burkholder-type function below `Φ` that touches it |
+| First order | [`IsProfile.tangent`](../../Morrey/HomogeneousIsotropic/Profile.lean#L197) | at a touching point `(x₀, y₀)` with value `H`, the value of `Φ` at the moduli of `(x₀ + τα, y₀ + τβ)` is at least `H + τ (Φ_x Re α + Φ_y Re β)`, along every rank-one line |
+| | [`IsProfile.baker_ericksen`](../../Morrey/HomogeneousIsotropic/Profile.lean#L245) | hence `p H − 2 t m ≥ 0` |
 | `p ≥ 2`, Case III | [`burkholder_support_le`](../../Morrey/HomogeneousIsotropic/Inequalities.lean#L73), [`BurkholderMinorant.support`](../../Morrey/HomogeneousIsotropic/Supports.lean#L39) | if the supporting line of `h` is nonnegative at `± (p − 2)/p`: the support with `c = (p − 1) m` |
 | `p ≥ 2`, Case I | [`IsProfile.support_of_stationary`](../../Morrey/HomogeneousIsotropic/Supports.lean#L150), [`exists_stationary_ge`](../../Morrey/HomogeneousIsotropic/Inequalities.lean#L148), [`IsProfile.support_of_neg`](../../Morrey/HomogeneousIsotropic/Supports.lean#L263) | otherwise: the support with `c = U`, from the first-order inequality along one rank-one line |
 | `p ≥ 2`, Case II | [`IsProfile.support_of_neg_aux'`](../../Morrey/HomogeneousIsotropic/Supports.lean#L276) | the mirror image, `c = L` |
 | `p ≥ 2`, together | [`IsProfile.support_multiplier`](../../Morrey/HomogeneousIsotropic/Supports.lean#L298), [`IsProfile.exists_support`](../../Morrey/HomogeneousIsotropic/Supports.lean#L523) | the clamped multiplier; a support at every point |
 | `1 ≤ p < 2` | [`IsProfile.slice_ge_of_one`](../../Morrey/HomogeneousIsotropic/LowExponent.lean#L32), [`IsProfile.exists_burkholderMinorant_of_lt_two`](../../Morrey/HomogeneousIsotropic/LowExponent.lean#L91) | the supporting lines at `t = ± 1`; the minorant of Theorem 1.5 |
-| `0 < p < 1` | [`ConvexOn.eq_of_tendsto_div_zero`](../../Morrey/Common/Basic/Analysis/Convex/Tangent.lean#L72), [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L538) | a convex function of sublinear growth is constant; `F` is constant along rank-one lines |
+| `0 < p < 1` | [`ConvexOn.eq_of_tendsto_div_zero`](../../Morrey/Common/Basic/Analysis/Convex/Tangent.lean#L72), [`eq_zero_of_rankOneConvex_of_lt_one`](../../Morrey/HomogeneousIsotropic/Main.lean#L541) | a convex function of sublinear growth is constant; `F` is constant along rank-one lines |
 
 In Case I the candidate support is negative at the origin, so by homogeneity it is enough to prove
 the inequality where `λ ↦ λ^p q(·/λ)` is stationary. In the coordinates of the modulus of `w` and
@@ -168,8 +177,8 @@ accepted manuscript and from Dacorogna and Haeberly's introduction):
 | [`Morrey.HomogeneousIsotropic.Profile`](../../Morrey/HomogeneousIsotropic/Profile.lean) | what rank-one convexity gives for the profile |
 | [`Morrey.HomogeneousIsotropic.LowExponent`](../../Morrey/HomogeneousIsotropic/LowExponent.lean) | the profile for `1 ≤ p < 2` |
 | [`Morrey.HomogeneousIsotropic.Supports`](../../Morrey/HomogeneousIsotropic/Supports.lean) | the supports of the profile for `p ≥ 2` |
-| [`Morrey.HomogeneousIsotropic.Main`](../../Morrey/HomogeneousIsotropic/Main.lean) | the theorems for `F`, for every `p > 0` |
-| [`Morrey.HomogeneousIsotropic.Burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean) | the quasiconvexity of the Burkholder function, from lean4-iwaniec; Corollaries 1.6 (a) and 1.8 |
+| [`Morrey.HomogeneousIsotropic.Main`](../../Morrey/HomogeneousIsotropic/Main.lean) | the theorems for `F` that need no package but `CalculusOfVariations`: `p ≥ 2`, `p = 1`, `0 < p < 1`, and `1 ≤ p < 2` in conformal coordinates |
+| [`Morrey.HomogeneousIsotropic.Burkholder`](../../Morrey/HomogeneousIsotropic/Burkholder.lean) | the operator norm and the Burkholder function of the paper; Theorem 1.5; the quasiconvexity of the Burkholder function, from lean4-iwaniec; Corollaries 1.6 (a) and 1.8 |
 | [`Morrey.HomogeneousIsotropic.Example`](../../Morrey/HomogeneousIsotropic/Example.lean) | an integrand that satisfies the hypotheses and is not convex: `(det A)²`, with `p = 4` |
 | [`Morrey.Common.Basic.Analysis.Convex.Tangent`](../../Morrey/Common/Basic/Analysis/Convex/Tangent.lean) | supporting lines of convex functions on `ℝ`; convex functions of sublinear growth |
 
@@ -180,7 +189,7 @@ The files of a Palomar submission are in [`palomar/HomogeneousIsotropic/`](../..
 - `Challenge.lean` imports only Mathlib and states the results of the table above, with their
   definitions;
 - `Solution.lean` proves them from the library;
-- `comparator.json` names the twelve statements that Comparator checks;
+- `comparator.json` names the thirteen statements that Comparator checks;
 - `formalization.yaml` is the metadata. It declares the result as first presented here, and
   the quasiconvexity of the Burkholder function as a result claimed in a preprint and taken
   from its Lean formalization, lean4-iwaniec.

@@ -33,7 +33,8 @@ $1<p<\infty$ and normalized as in~\cite[(1.4)]{GuerraKristensen2022}:
 \[
   B_p(A)=\Bigl(\Bigl\lvert1-\frac2p\Bigr\rvert\abs A^2+\det A\Bigr)\abs A^{p-2},\qquad B_p(0)=0,
 \]
-where $\abs A$ is the operator norm. It comes from Burkholder's sharp inequalities for martingale
+where $\abs A$ is the operator norm; the same formula defines $B_p$ for every $p>0$, and we
+use it also for $p=1$. It comes from Burkholder's sharp inequalities for martingale
 transforms~\cite{Burkholder1984,Burkholder1988}, and its quasiconvexity implies Iwaniec's
 conjecture~\cite{Iwaniec1982} on the $L^p$ norm of the Beurling--Ahlfors transform
 \cite{BaernsteinMontgomerySmith1999,Iwaniec2002,AIPS2012,AIPS2015}. The quasiconvexity of
@@ -145,7 +146,7 @@ and only if it is polyconvex.
 For $1<p<2$ polyconvexity fails for functions with~\Hyp: the positive part of $B_p$ is not
 polyconvex \cite[Remark~1.4]{GuerraKristensen2022}. The Burkholder function takes the place of
 the polyaffine functions. In the conformal coordinates $(z,w)$ of \cref{sec:setting},
-$B_p=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ for $1\le p\le2$; in particular
+$B_p=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ for $0<p\le2$; in particular
 $B_1=2\abs z$. Let $J=\diag(1,-1)$; the function $A\mapsto B_p(JA)$ is the mirror image of
 $B_p$, in which $z$ and $w$ change roles.
 
@@ -162,8 +163,10 @@ satisfies $G_{c_0,m}\le F$ on $\M$ and $G_{c_0,m}(A_0)=F(A_0)$. Moreover
 with nonnegative coefficients.
 \end{theorem}
 
-So a nonnegative $F$ with~\Hyp\ is the upper envelope of nonnegative combinations of the
-Burkholder function and its mirror image, each touching $F$ at one matrix. A property of these
+The identity holds for every $0<p<2$ and all $c_0,m\in\R$, and its coefficients are
+nonnegative exactly when $(2-p)\abs m\le pc_0$. So a nonnegative $F$ with~\Hyp\ is the upper
+envelope of nonnegative combinations of the Burkholder function and its mirror image, each
+touching $F$ at one matrix. A property of these
 two functions passes to $F$ if nonnegative combinations and touching minorants preserve it.
 Quasiconvexity and convexity are such properties.
 
@@ -280,9 +283,8 @@ of \cref{cor:low}\,(a) and \cref{cor:all} take the quasiconvexity of the Burkhol
 from the formalization~\cite{IwaniecLean} of~\cite{SharpHI}, so no formal statement has a
 hypothesis on the Burkholder function. The repository~\cite{Companion} also contains the
 formalizations of the two papers quoted above for the negative answers,
-\cite{Sverak1992} and~\cite{Cassese2026}.
-\Cref{app:formal} describes the formal statements, the points where they differ from the text,
-and the corresponding Lean declarations.
+\cite{Sverak1992} and~\cite{Cassese2026}. The formal statements are those of the text;
+\cref{app:formal} describes them and lists the corresponding Lean declarations.
 
 \subsection{Organization}\label{sec:intro-organization}
 
