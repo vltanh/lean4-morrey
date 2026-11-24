@@ -39,7 +39,12 @@ were made.
   - added the exponents `0 < p < 1` (Proposition 1.7) and the statement for every `p > 0`
     (Corollary 1.8), at the author's request;
   - wrote the Palomar files: the Challenge, the Solution, the Comparator configuration and the
-    metadata.
+    metadata;
+  - made the result unconditional for `1 < p < 2`, at the author's request: when the
+    formalization of arXiv:2609.28311 was finished
+    ([lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), made in the same session by a
+    lead agent and ten sub-agents on Claude Opus 5.5), required it and removed the hypothesis on
+    the Burkholder function from Corollaries 1.6 (a) and 1.8.
 - One sub-agent proved the lemmas on conformal coordinates ([`Morrey.HomogeneousIsotropic.Coordinates`](../../Morrey/HomogeneousIsotropic/Coordinates.lean)),
   and one the lemmas on polyaffine supports ([`Morrey.HomogeneousIsotropic.Polyaffine`](../../Morrey/HomogeneousIsotropic/Polyaffine.lean)), each from
   statements given by the main session.
@@ -76,4 +81,6 @@ How the formal proof differs from the note:
   - it wrote the example `(det A)²` ([`Morrey.HomogeneousIsotropic.Example`](../../Morrey/HomogeneousIsotropic/Example.lean)).
 - After the review, at the author's request, the main session rewrote the paper as a main text
   with the proofs in appendices, with a table of the hypotheses that each range of the exponent
-  needs, and added the case `0 < p < 1`. The rewritten paper has not been refereed again.
+  needs, and added the case `0 < p < 1`. It then stated the results for `1 < p < 2` with no
+  hypothesis on the Burkholder function, and revised the wording of the whole paper. The
+  rewritten paper has not been refereed again.

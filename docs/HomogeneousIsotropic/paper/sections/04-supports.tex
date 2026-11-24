@@ -21,8 +21,9 @@ There are three cases, according to the sign of the supporting line at $\pm\kapp
   &\text{II:}\quad pc_0+(p-2)m<0,&&\text{that is, }\ell(\kappa)<0.
 \end{align*}
 In Case III the minorant $G_{c_0,m}$ is a nonnegative combination of $B_p$, of its mirror image
-and of $\abs A^p$, and a polyaffine function lies between the two. In Cases I and II the
-support has to come from elsewhere.
+and of $\abs A^p$, and a polyaffine function below its positive part touches it at the same
+point (\cref{lem:burkholder}). In Cases I and II the support comes from the first-order
+inequality along one rank-one line.
 
 \subsection{Case III: an inequality of Burkholder type}\label{sec:caseIII}
 
@@ -39,7 +40,7 @@ With $\sigma=x+y$ and $\delta=x-y$ the right side is the positive part of $G_{c_
 left side is a support of the profile in the sense of \eqref{eq:profilesupport}. For
 $(c_0,m)=(\kappa,1)$ the right side is the positive part of the Burkholder function $B_p$, whose
 polyconvexity for $p\ge2$ is \cite[Proposition~1.6]{GuerraKristensen2022}. The proof of the
-lemma is elementary: two polynomial identities and Bernoulli's inequality
+lemma uses two polynomial identities and Bernoulli's inequality
 $\sigma^p\ge\tfrac p2\sigma^2-(\tfrac p2-1)$.
 
 In Case III, since $\Phi\ge0$ and $\Phi\ge G_{c_0,m}$, the lemma gives, for $x,y\ge0$,
@@ -69,7 +70,8 @@ $(x_t,y_t)$.
 
 The candidate $q(x,y)=k+\gamma y+c(x^2-y^2)$ is the function of the form
 \eqref{eq:profilesupport} with $b_1=0$ that is tangent to the minorant at $(x_t,y_t)$. Here
-\cref{lem:burkholder} does not apply, and the proof uses the homogeneity of $\Phi$ instead. For a fixed point $(x,y)$ consider
+\cref{lem:burkholder} does not apply, and the proof uses the homogeneity of $\Phi$ instead. For
+a fixed point $(x,y)$ consider
 \[
   \psi(l)=l^p\,q(x/l,y/l)=kl^p+\gamma yl^{p-1}+c(x^2-y^2)l^{p-2},\qquad l>0 .
 \]
@@ -94,11 +96,10 @@ points form a line, which passes through the base point $(y_t,t)$ and has the sl
 $\mu=-(p-1)\gamma/((p-2)c)$. On the other hand, a rank-one line through the base point along
 which $w$ moves radially, $\tau\mapsto(x_t+\tau e^{i\theta},y_t+\tau)$, is also a line in these
 coordinates: along it $\abs w=y_t+\tau$ and $\det A=t+(2x_t\cos\theta-2y_t)\tau$. Its slope
-$2x_t\cos\theta-2y_t$ takes every value in $[-2,2t]$. The point of the proof is that $\mu$ lies
-in this interval (\cref{lem:mu}): the lower bound $\mu\ge-2$ is the hypothesis
-\eqref{eq:caseIhyp}, and the upper bound follows from the Baker--Ericksen inequality and $m>0$.
-The stationary line is therefore the image of a rank-one line, and on it $q\le\Phi$ is the
-first-order inequality:
+$2x_t\cos\theta-2y_t$ takes every value in $[-2,2t]$. By \cref{lem:mu}, $\mu$ lies in this
+interval: the lower bound $\mu\ge-2$ is the hypothesis \eqref{eq:caseIhyp}, and the upper bound
+follows from the Baker--Ericksen inequality and $m>0$. The stationary line is therefore the image
+of a rank-one line, and on it $q\le\Phi$ is the first-order inequality:
 
 \begin{lemma}[The stationary line]\label{lem:line}
 In Case I, let $X,Y\ge0$ satisfy \eqref{eq:stationary}. Then
@@ -114,7 +115,7 @@ $k+\gamma Y+c(X^2-Y^2)\le\Phi(X,Y)$.
 
 Case II is the mirror image of Case I: the mirror image $\Phi^\ast$ is a nonnegative profile,
 $G_{c_0,-m}$ touches it from below at $(x_{-t},y_{-t})$, and it is in Case I. Exchanging $x$ and
-$y$ in \cref{prop:caseI} gives a support with $b_2=0$. The three supports have one description.
+$y$ in \cref{prop:caseI} gives a support with $b_2=0$. One formula gives the three supports.
 
 \begin{proposition}\label{prop:clamp}
 Let $p\ge2$, $\abs t<1$ and $H>0$, and let $L$, $U$ and $c^\ast$ be as in \cref{thm:closed}.

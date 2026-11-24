@@ -1,6 +1,6 @@
 module
 
-public import Morrey.HomogeneousIsotropic.Main
+public import Morrey.HomogeneousIsotropic.Burkholder
 public import Morrey.HomogeneousIsotropic.Bridges
 
 /-!
@@ -9,7 +9,8 @@ public import Morrey.HomogeneousIsotropic.Bridges
 The statements of `palomar/HomogeneousIsotropic/Challenge.lean`, word for word, proved from the
 library. The library's proofs use the rank-one convexity and the quasiconvexity of the package
 `CalculusOfVariations`; `Morrey/HomogeneousIsotropic/Bridges.lean` identifies them with the
-Challenge's.
+Challenge's. The quasiconvexity of the Burkholder function, for Corollaries 1.6 (a) and 1.8,
+comes from the package lean4-iwaniec (`Morrey/HomogeneousIsotropic/Burkholder.lean`).
 -/
 
 @[expose] public section
@@ -74,9 +75,9 @@ theorem theorem1_5_identity {p : ℝ} (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
 
 theorem corollary1_6_a {p : ℝ} (hp1 : 1 < p) (hp2 : p < 2) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
     (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) (hB : IsQuasiconvex (burkholder p)) : IsQuasiconvex F :=
-  (isQuasiconvex_iff F).2 (quasiconvex_of_rankOneConvex_of_burkholder hp1.le hp2 h0 hiso hhom
-    ((isRankOneConvex_iff F).1 hrc) ((isQuasiconvex_iff _).1 hB))
+    (hrc : IsRankOneConvex F) : IsQuasiconvex F :=
+  (isQuasiconvex_iff F).2 (quasiconvex_of_rankOneConvex_of_lt_two hp1 hp2 h0 hiso hhom
+    ((isRankOneConvex_iff F).1 hrc))
 
 theorem corollary1_6_b {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} (hiso : IsIsotropic F)
     (hhom : IsPosHomogeneous 1 F) (hrc : IsRankOneConvex F) :
@@ -91,9 +92,8 @@ theorem proposition1_7 {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1) {F : Matrix (Fin 2)
 
 theorem corollary1_8 {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
     (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) (hB : 1 < p → p < 2 → IsQuasiconvex (burkholder p)) :
-    IsQuasiconvex F :=
+    (hrc : IsRankOneConvex F) : IsQuasiconvex F :=
   (isQuasiconvex_iff F).2 (quasiconvex_of_rankOneConvex_of_pos hp h0 hiso hhom
-    ((isRankOneConvex_iff F).1 hrc) fun h1 h2 => (isQuasiconvex_iff _).1 (hB h1 h2))
+    ((isRankOneConvex_iff F).1 hrc))
 
 end HomogeneousIsotropicChallenge

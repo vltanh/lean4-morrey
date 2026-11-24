@@ -36,6 +36,7 @@
 \shared{remark}{Remark}{Remarks}
 
 \emergencystretch=1.5em
+\vfuzz=2pt % a page may be up to 2pt too high without a warning
 \setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
 \setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
 \numberwithin{equation}{section}
@@ -63,8 +64,9 @@ integrands, homogeneous integrands, Burkholder function, formal proof}
   not needed, and for $p>2$ it is necessary. If $1\le p<2$, the integrand is supported from
   below, at every matrix, by a nonnegative combination of the Burkholder function and its mirror
   image. Hence it is convex if $p=1$, a theorem of Dacorogna, and it is quasiconvex if
-  $1<p<2$, provided that the Burkholder function is quasiconvex, as stated in a recent preprint
-  on Iwaniec's conjecture. If $0<p<1$, the integrand vanishes. The supports are obtained from the
+  $1<p<2$. The last case uses the quasiconvexity of the Burkholder function, which is claimed
+  in a recent preprint of Agazzi et al.\ on Iwaniec's conjecture and which we audited with a
+  Lean formalization. If $0<p<1$, the integrand vanishes. The supports are obtained from the
   definition of rank-one convexity by one-variable calculus. The results are formalized in
   Lean~4 with Mathlib, and their proofs are checked by Lean's kernel.
 \end{abstract}

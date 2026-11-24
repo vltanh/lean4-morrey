@@ -32,15 +32,16 @@ are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
   `F` has a touching minorant `|A|^{p−2} (c₀ |A|² + m det A)` with `(2 − p) |m| ≤ p c₀`, a
   nonnegative combination of the Burkholder function and its mirror image
   (`burkholderType_eq`).
-* `quasiconvex_of_rankOneConvex_of_burkholder`: hence, for `1 ≤ p < 2`, `F` is quasiconvex
-  **if the Burkholder function `burkholder p` is quasiconvex**. This hypothesis is not proved
-  here for `1 < p < 2`.
+* `quasiconvex_of_rankOneConvex_of_burkholder`: hence, for `1 ≤ p < 2`, `F` is quasiconvex if
+  the Burkholder function `burkholder p` is quasiconvex. For `1 < p < 2` it is: see
+  `Morrey/HomogeneousIsotropic/Burkholder.lean`, which has **Corollary 1.6 (a)**.
 * `convexOn_of_rankOneConvex_one`, `quasiconvex_of_rankOneConvex_one`: for `p = 1` the
-  hypothesis holds and no sign condition is needed: `F` is convex.
+  Burkholder function is convex and no sign condition is needed: `F` is convex.
 * `eq_zero_of_rankOneConvex_of_lt_one` (**Proposition 1.7**): for `0 < p < 1` a positively
   `p`-homogeneous, rank-one convex `F` is `0`; isotropy and the sign condition are not needed.
-* `quasiconvex_of_rankOneConvex_of_pos` (**Corollary 1.8**): for every `p > 0`, a nonnegative `F`
-  of the class is quasiconvex, provided that `burkholder p` is quasiconvex when `1 < p < 2`.
+* `quasiconvex_of_rankOneConvex_of_pos_of_burkholder`: for every `p > 0`, a nonnegative `F` of
+  the class is quasiconvex if `burkholder p` is quasiconvex when `1 < p < 2`. **Corollary 1.8**,
+  without that hypothesis, is in `Morrey/HomogeneousIsotropic/Burkholder.lean`.
 -/
 
 @[expose] public section
@@ -573,11 +574,11 @@ theorem eq_zero_of_rankOneConvex_of_lt_one (hp0 : 0 < p) (hp1 : p < 1)
 
 /-! ### All exponents `p > 0` -/
 
-/-- **Corollary 1.8.** Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and
-rank-one convex on `ℝ^{2×2}`. Then `F` is quasiconvex, provided that, when `1 < p < 2`, the
-Burkholder function `burkholder p` is quasiconvex. For `0 < p < 1` it is `0`, for `p = 1` it is
-convex, and for `p ≥ 2` it is polyconvex. -/
-theorem quasiconvex_of_rankOneConvex_of_pos (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
+/-- Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on
+`ℝ^{2×2}`. Then `F` is quasiconvex, if the Burkholder function `burkholder p` is quasiconvex
+when `1 < p < 2`. For `0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is
+polyconvex. Corollary 1.8 (`quasiconvex_of_rankOneConvex_of_pos`) removes the hypothesis. -/
+theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholder (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F)
     (hB : 1 < p → p < 2 → Quasiconvex (burkholder p)) : Quasiconvex F := by
   rcases lt_or_ge p 1 with hp1 | hp1

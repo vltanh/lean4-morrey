@@ -23,8 +23,9 @@ submission; the papers share general lemmas, the cited results and the checks.
 The repository also proves a result of its own on the open `2 × 2` case
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, a
 nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is
-quasiconvex. For `p ≥ 2` it is even polyconvex; for `1 < p < 2` the proof assumes that the
-Burkholder function is quasiconvex.
+quasiconvex. For `p ≥ 2` it is even polyconvex. For `1 < p < 2` the proof uses the quasiconvexity
+of the Burkholder function, claimed in a 2026 preprint that we audited with a Lean formalization,
+[lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it from there.
 
 ## The state of the problem
 
@@ -43,8 +44,8 @@ That every size but `2 × 2` fails is proved here as one theorem, from Šverák'
 ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296)).
 
 In `2 × 2` the answer is yes for nonnegative, isotropic, positively `p`-homogeneous integrands,
-for every `p > 0`; for `1 < p < 2` this assumes the quasiconvexity of the Burkholder function.
-This is proved here ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
+for every `p > 0`. This is proved here
+([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
 convex, `p`-homogeneous `f` (`f(tA) = |t|^p f(A)`) quasiconvex at `0`? For a continuous
@@ -122,17 +123,23 @@ needs, and what it gives (`J = diag(1, −1)`):
 | --- | --- | --- | --- |
 | `0 < p < 1` | H2, H3 | `F = 0` | **proved** |
 | `p = 1` | H1, H2, H3 | `F ≥ 0`, and `F` is convex (Dacorogna 1995) | **proved** |
-| `1 < p < 2` | H1, H2, H3, N | at every matrix, a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | **proved** |
-| `1 < p < 2` | H1, H2, H3, N, and `B_p` quasiconvex | `F` is quasiconvex | **proved**, with the quasiconvexity of `B_p` as a hypothesis |
+| `1 < p < 2` | H1, H2, H3, N | `F` is quasiconvex; at every matrix it has a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | **proved** |
 | `p = 2` | H1, H2, H3 | `F` is polyconvex | **proved** |
 | `p > 2` | H1, H2, H3, N | `F` is polyconvex, with a polyaffine support at every matrix in closed form | **proved** |
 | `p > 2` | H1, H2, and `F < 0` somewhere | `F` is not polyconvex | **proved** |
-| every `p > 0` | H1, H2, H3, N, and `B_p` quasiconvex if `1 < p < 2` | `F` is quasiconvex | **proved**, with that hypothesis |
+| every `p > 0` | H1, H2, H3, N | `F` is quasiconvex | **proved** |
+
+For `1 < p < 2` the proof uses one result from outside, the quasiconvexity of the Burkholder
+function `B_p`:
+
+- it is claimed in the preprint of Agazzi et al.,
+  [arXiv:2609.28311](https://arxiv.org/abs/2609.28311), Corollary 2;
+- we audited that preprint with a Lean formalization,
+  [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which proves its results;
+- this repository requires that package, so the Lean proofs here assume nothing.
 
 What is not proved here:
 
-- the quasiconvexity of `B_p` for `1 < p < 2`. It is stated as Corollary 2 of the preprint
-  [arXiv:2609.28311](https://arxiv.org/abs/2609.28311), which has not been refereed;
 - the quasiconvexity of integrands with `p > 2` that take negative values;
 - anything for integrands that are not isotropic or not homogeneous.
 
@@ -196,8 +203,10 @@ becomes quasiconvex after transposition. In `2 × 2`, its mechanism cannot detec
 - the Burkholder function: Astala, Iwaniec, Prause and Saksman (2012) related the `2 × 2` problem
   to Burkholder's martingale inequalities; a positive answer in `2 × 2` would prove Iwaniec's
   conjecture on the norm of the Beurling–Ahlfors transform. That conjecture is now claimed proved,
-  by a preprint of twenty authors, Cassese and Šverák among them ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October
-  2026); the converse is not known, so the claim leaves the `2 × 2` problem open;
+  by a preprint of twenty authors, Cassese and Šverák among them
+  ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October 2026), which we
+  audited with a Lean formalization, [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec);
+  the converse is not known, so the claim leaves the `2 × 2` problem open;
 - analogues of Šverák's gradient measure in `2 × 2` (Pedregal 1996, Pedregal–Šverák 1998,
   Bandeira–Ornelas 2011) turned out to be laminates, and Sebestyén and Székelyhidi (2017) proved it
   for the whole class: in `2 × 2`, the gradient measure of a sum of three sawtooth waves along
@@ -298,9 +307,11 @@ How Cassese relates to the other two papers:
   duality: the rank-one convex envelope is computed by (pre)laminates, Pedregal's starting point and
   Cassese's Proposition 2.1. Cassese expects the `2 × 2` homogeneous problem to have a positive
   answer, and notes that a positive answer would imply Iwaniec's conjecture; for the integrands
-  behind his Theorem 1.2, the question in `2 × 2` (the case `n = 1`) is equivalent to Iwaniec's
+  behind Theorem 1.2, the question in `2 × 2` (the case `n = 1`) is equivalent to Iwaniec's
   conjecture, so a proof of it must use features specific to `2 × 2`. Iwaniec's conjecture has
-  since been claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311)); if the proof is right, those integrands give no
+  since been claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311)), and the
+  proof passes our audit by formalization
+  ([lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec)); by it, those integrands give no
   counterexample in `2 × 2`.
 - **Kristensen.** Cassese's Corollary 5.2 (by Kristensen's smoothing) states a smooth integrand on
   `ℝ^{2×m}`, `m ≥ 3`, uniformly rank-one convex with quadratic growth, that is not quasiconvex at
@@ -345,7 +356,7 @@ How Cassese relates to the other two papers:
   integrands, rank-one convexity implies quasiconvexity for every `p > 0`
   ([above](#a-result-of-this-repository-nonnegative-homogeneous-isotropic-integrands-in-2--2)):
   - polyconvexity for `p ≥ 2`;
-  - quasiconvexity for `1 < p < 2`, if the Burkholder function is quasiconvex;
+  - quasiconvexity for `1 < p < 2`, by the quasiconvexity of the Burkholder function;
   - convexity for `p = 1`;
   - `F = 0` for `0 < p < 1`.
 - The refutation of Pedregal's Corollary 7.2, Proposition 7.1 and the summary of Step 2 of its
@@ -412,7 +423,7 @@ How Cassese relates to the other two papers:
 - `External/<Source>/`, one directory per cited source, with its statements in the source's terms,
   their proofs from a package, and a README.
 
-Besides Mathlib, the proofs use four packages:
+Besides Mathlib, the proofs use five packages:
 
 | Package | Lean library | Provides | Used by |
 | --- | --- | --- | --- |
@@ -420,6 +431,7 @@ Besides Mathlib, the proofs use four packages:
 | [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity, quasiconvexity and more (below) | Cassese, HomogeneousIsotropic |
 | [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar and vector-valued harmonic analysis (below) | Cassese |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | martingales, UMD spaces and more (below) | Cassese |
+| [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec) | `Agazzi` | the audit by formalization of Agazzi et al., arXiv:2609.28311: the quasiconvexity of the Burkholder function | HomogeneousIsotropic |
 
 `CalculusOfVariations` provides:
 
@@ -462,8 +474,8 @@ imports this repository. Among the packages, the vector-valued part of `Harmonic
 
 ## Building
 
-Lean and Mathlib `v4.36.0-rc2`. [`lakefile.toml`](lakefile.toml) requires the four packages from
-their GitHub repositories, each pinned by its commit. Lake fetches all four into
+Lean and Mathlib `v4.36.0-rc2`. [`lakefile.toml`](lakefile.toml) requires the five packages from
+their GitHub repositories, each pinned by its commit. Lake fetches all five into
 `.lake/packages`, whichever part of the repository is built. From the root:
 
 ```sh

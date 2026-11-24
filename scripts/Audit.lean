@@ -81,6 +81,7 @@ import all Morrey.Common.External.Rindler.Lemmas
 import all Morrey.Common.External.Yaroslavtsev.ComplexUMD
 import all HomogeneousIsotropic.Solution
 import all Morrey.HomogeneousIsotropic.Bridges
+import all Morrey.HomogeneousIsotropic.Burkholder
 import all Morrey.HomogeneousIsotropic.Coordinates
 import all Morrey.HomogeneousIsotropic.Defs
 import all Morrey.HomogeneousIsotropic.Example
@@ -385,8 +386,12 @@ meta def paperResults : List (String × Name) :=
     ``HomogeneousIsotropic.exists_burkholderType_le),
    ("HomogeneousIsotropic Theorem 1.5 (the identity)",
     ``HomogeneousIsotropic.burkholderType_eq),
-   ("HomogeneousIsotropic Corollary 1.6 (a) (given the Burkholder function)",
+   ("HomogeneousIsotropic Corollary 1.6 (a) (the implication from the Burkholder function)",
     ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_burkholder),
+   ("HomogeneousIsotropic (the Burkholder function is quasiconvex, 1 < p < 2)",
+    ``HomogeneousIsotropic.quasiconvex_burkholder),
+   ("HomogeneousIsotropic Corollary 1.6 (a) (1 < p < 2)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_lt_two),
    ("HomogeneousIsotropic Corollary 1.6 (b) (nonnegativity, p = 1)",
     ``HomogeneousIsotropic.nonneg_of_rankOneConvex_one),
    ("HomogeneousIsotropic Corollary 1.6 (b) (convexity, p = 1)",

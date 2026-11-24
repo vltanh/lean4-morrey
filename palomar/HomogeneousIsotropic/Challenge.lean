@@ -69,21 +69,18 @@ For `F : ℝ^{2×2} → ℝ` isotropic, positively `p`-homogeneous and rank-one 
   `theorem1_5_identity`: `burkholderType p c₀ m` is the combination of `burkholder p (A)` and
   `burkholder p (J A)` with the coefficients `(p c₀ ± (2 − p) m) / (p (2 − p))`, which are
   nonnegative under that condition.
-* `corollary1_6_a` (`1 < p < 2`, `F ≥ 0`): **if the Burkholder function `burkholder p` is
-  quasiconvex**, then `F` is quasiconvex. `corollary1_6_b` (`p = 1`): `F` is nonnegative and
-  convex (a theorem of Dacorogna, 1995).
+* `corollary1_6_a` (`1 < p < 2`, `F ≥ 0`): `F` is quasiconvex. `corollary1_6_b` (`p = 1`): `F`
+  is nonnegative and convex (a theorem of Dacorogna, 1995).
 * `proposition1_7` (`0 < p < 1`): a positively `p`-homogeneous, rank-one convex `F` is `0`;
   isotropy is not needed.
-* `corollary1_8` (`p > 0`, `F ≥ 0`): `F` is quasiconvex, **provided that `burkholder p` is
-  quasiconvex when `1 < p < 2`**.
+* `corollary1_8` (`p > 0`, `F ≥ 0`): `F` is quasiconvex.
 
-## The assumed result
+## The cited result
 
-`corollary1_6_a` and `corollary1_8` take the quasiconvexity of the Burkholder function,
-`IsQuasiconvex (burkholder p)` for `1 < p < 2`, as a hypothesis; it is not proved in this
-repository. It is stated as Corollary 2 of the preprint arXiv:2609.28311 (Agazzi et al., 2026,
-not refereed), for a positive multiple of `burkholder p` and with smooth periodic test maps; the
-passage to the test maps used here is not formalized.
+The proofs of `corollary1_6_a` and `corollary1_8` use the quasiconvexity of the Burkholder
+function `burkholder p` for `1 < p < 2`. It is claimed as Corollary 2 of the preprint of Agazzi et
+al., arXiv:2609.28311v2, and proved in the package lean4-iwaniec, the Lean formalization with
+which that preprint was audited. Nothing is assumed.
 
 The definitions are copied word for word from `Morrey/HomogeneousIsotropic/Defs.lean` by
 `scripts/sync_challenge_defs.py`; the theorems are proved in the Solution of the same directory.
@@ -267,11 +264,10 @@ theorem theorem1_5_identity {p : ℝ} (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
   sorry
 
 /-- **Corollary 1.6 (a).** Let `1 < p < 2` and let `F ≥ 0` be isotropic, positively
-`p`-homogeneous and rank-one convex. If the Burkholder function `burkholder p` is quasiconvex,
-then `F` is quasiconvex. -/
+`p`-homogeneous and rank-one convex. Then `F` is quasiconvex. -/
 theorem corollary1_6_a {p : ℝ} (hp1 : 1 < p) (hp2 : p < 2) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
     (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) (hB : IsQuasiconvex (burkholder p)) : IsQuasiconvex F := by
+    (hrc : IsRankOneConvex F) : IsQuasiconvex F := by
   sorry
 
 /-- **Corollary 1.6 (b).** An isotropic, positively `1`-homogeneous, rank-one convex `F` is
@@ -289,12 +285,10 @@ theorem proposition1_7 {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1) {F : Matrix (Fin 2)
   sorry
 
 /-- **Corollary 1.8.** Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and
-rank-one convex. Then `F` is quasiconvex, provided that the Burkholder function `burkholder p`
-is quasiconvex when `1 < p < 2`. -/
+rank-one convex. Then `F` is quasiconvex. -/
 theorem corollary1_8 {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
     (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) (hB : 1 < p → p < 2 → IsQuasiconvex (burkholder p)) :
-    IsQuasiconvex F := by
+    (hrc : IsRankOneConvex F) : IsQuasiconvex F := by
   sorry
 
 end HomogeneousIsotropicChallenge
