@@ -1,5 +1,69 @@
 # Roadmap to completion
 
+## General homogeneous cone — quantitative compactness and uniform finite angular tests
+
+The [new all-profile quantitative theorem](IWANIEC_MORREY_HOMOGENEOUS_UNIFORM_CONE.md)
+covers EVERY signed finite p-homogeneous RC integrand, p>1, with
+no isotropy. For a Gaussian matrix Z with independent N(0,16)
+entries, let M(F)=E F(Z)>=0. Gaussian rank-one product splitting
+gives the uniform midpoint bound
+    0 <= (F(X+V)+F(X-V))/2-F(X) <= 4096 M(F)
+for all |X|<=2 and rank-one |V|<=1. The all-uniform branch of
+a Gaussian mixture has probability (1/8)^4; split that branch
+in direction V. Separate coordinate Jensen bounds the other
+components. This works for signed F directly.
+
+Multilinear interpolation on [-1,1]^4 and the adjacent-entry
+rank-one midpoint tests bound every unwanted mixed monomial
+coefficient. One additional rank-one all-entries direction
+bounds the sum of the two opposite-pair coefficients.
+Thus |F-L:X-k det X|<=529*4096 M(F) on the cube.
+Positive homogeneity bounds the linear coefficients, and
+the determinant coefficient unless p=2. At p=2 subtract
+the canonical determinant coefficient k_*(F) obtained
+from the four values at +/-I and +/-diag(1,-1).
+For the resulting representative F^#, explicit constants give
+    ||F^#||_{S³} <= C_p M(F).
+M(F)=0 only for the zero class (modulo determinant at p=2).
+Consequently M(F)=1 and the determinant normalization at p=2
+define a compact convex base with a uniform Lipschitz bound.
+Any strict homogeneous Jensen violation has an extremal
+witness on this base; no extremal classification is assumed.
+
+**Uniform finite tolerance theorem for the WHOLE angular cone:**
+for EVERY fixed p>1 and epsilon>0 there is a SINGLE finite
+collection T_(p,epsilon) of globally strongly RC homogeneous
+angular rational polynomials, chosen before F or the test law.
+Each normalized F is within epsilon |X|^p of a member
+everywhere. The uniform Lipschitz bound supplies common
+log-mollification scales in the earlier regularization;
+an explicit C³ convolution kernel gives uniform derivative
+bounds. Tensor Bernstein approximation with a rational grid
+gives a computable degree bound 4n depending only on p,epsilon,
+and a vanishing homogeneous convex correction preserves
+strong RC. For rational p,epsilon the finite list is
+specified by exact semialgebraic rank-one Hessian tests.
+No polynomial family is assumed in the original hypothesis.
+
+If every member of T_(p,epsilon) satisfies Jensen against
+ANY given compatible law nu with mean A, then every original
+signed homogeneous RC F satisfies
+    E F-F(A) >= -epsilon M(F)(E|X|^p+|A|^p).
+Equivalently every violation larger than this prescribed
+relative error is detected by one of finitely many tests,
+uniformly over all gradient laws and arbitrary angular
+profiles. This strengthens the previous qualitative density
+statement to a uniform finite-accuracy bound. It does NOT
+bound the gradient witness, prove QC of the test collection,
+or produce a finite cutoff independent of epsilon.
+The explicit estimates are conservative, and no enumeration
+of the large finite lists was carried out. The algebra
+checker was actually executed successfully. Hand proofs;
+no new Lean result or general homogeneous anisotropic
+closure. Do not turn the tolerance result into a claim
+that exact Morrey reduces to finitely many tests without
+a further theorem.
+
 ## General homogeneous cone — exact regularization and positive-trace normalization
 
 The [new global approximation and rigidity note](IWANIEC_MORREY_HOMOGENEOUS_REGULARIZATION.md)
