@@ -1,5 +1,55 @@
 # Roadmap to completion
 
+## SIGNED HOMOGENEOUS ISOTROPIC — candidate complete hand proof, every p>0
+
+**Formal baseline corrected:** the separate
+[homogeneous-isotropic branch at f70d7e9](https://github.com/vltanh/lean4-morrey/tree/f70d7e9253ecf59ea6c862893d1fdd3fb60cffa9)
+has Lean proofs of the nonnegative theorem for every p>0,
+signed p=2, p=1 and 0<p<1, and its
+[CI including axiom audit passed](https://github.com/vltanh/lean4-morrey/actions/runs/45323677832).
+The pinned lean4-iwaniec dependency at 972c0127 contains
+Agazzi.quasiconvex_integrandL and Agazzi.quasiconvex_burkholderB.
+Older descriptions of this baseline as unformalized/conditional
+are superseded.
+
+The [new signed characteristic-integration proof](IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md)
+removes the nonnegativity assumption at hand-proof level for
+EVERY p>0 and EVERY base, retaining isotropy and homogeneity.
+It uses the formalized truncated determinant L rather than
+postulating a new analytic theorem.
+
+At a hard base the restricted signed support q in the previous
+spectral note touches F, is valid on the unit operator-norm ball,
+and supplies monotone supporting planes in (|z|,det) for p<2
+or (|w|,det) for p>2. Choose e=-1 or +1 respectively.
+Strongly convexify the scalar profile by adding a vanishing
+convex Frobenius p-power; parameterize by the inverse supporting
+slope T(m) and k(m)=h(T(m))-mT(m). The scalar ODE
+dm/dlog(s)=p(k(m)-a m)/(T(m)+e) stays in the hard region
+and is well-defined through nonsmooth profile kinks.
+The scaled determinant coefficient c_s satisfies e c_s'>=0
+by monotonicity of the restricted supporting planes; the t'
+terms cancel exactly. Thus w(s)=e c_s' is a nonnegative weight.
+
+Integrate the scaled truncated-determinant QC kernels
+K_r^e=(sigma-r)(r+e delta) for sigma>r, zero otherwise,
+from radius 1 to infinity with weight w. The resulting global
+QC function q+integral w K touches F at the base and, for
+every sigma>=1, equals sigma^p times the supporting line
+of h at the evolved slope. Hence it lies below F on ALL
+matrices, including the earlier exceptional cones. Endpoint,
+nonsmooth and non-strict cases follow by the argument in the
+note. There is no fixed-wave or fixed-exponent hierarchy.
+
+**Status:** proposed complete signed homogeneous-isotropic
+QC theorem by hand; independent proof audit and new Lean
+formalization remain. The symbolic checker was executed:
+14 exact identities and two exact kink controls passed.
+Do NOT claim unrestricted Morrey or general nonhomogeneous
+isotropic Morrey. Next priority is independent logical audit
+and formalization of the signed extension, then removing
+homogeneity while retaining isotropy.
+
 ## Signed problem: unconditional spectral half-space supports for EVERY nonzero base
 
 The [new signed spectral-support theorem](IWANIEC_MORREY_SIGNED_SPECTRAL_SUPPORT.md)
