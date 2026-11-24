@@ -85,7 +85,7 @@ For `F : ℝ^{2×2} → ℝ` isotropic, positively `p`-homogeneous and rank-one 
 The proofs of `proposition6_8`, `theoremA` and `corollary1_6_a` use the quasiconvexity of the
 truncated determinant. It is claimed in the preprint of Agazzi et al., arXiv:2609.28311v2,
 Theorem 1, and proved in the package lean4-iwaniec, the Lean formalization with which that
-preprint was audited. Nothing is assumed.
+preprint was audited.
 
 The definitions are copied word for word from `Morrey/HomogeneousIsotropic/Defs.lean` by
 `scripts/sync_challenge_defs.py`; the theorems are proved in the Solution of the same directory.

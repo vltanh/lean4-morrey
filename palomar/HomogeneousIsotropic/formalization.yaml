@@ -4,12 +4,12 @@ version: "v0.4"
 project:
   name: "Morrey's problem for homogeneous isotropic integrands on 2x2 matrices, in Lean"
   description: >-
-    An original result on Morrey's problem for integrands on real 2x2 matrices, proved in Lean 4
-    with nothing assumed: for every p > 0, an F that is isotropic (invariant under rotations on
-    both sides), positively p-homogeneous and rank-one convex is quasiconvex (Theorem A). The
-    proof for integrands that change sign integrates scaled
-    truncated determinants over the radius (Proposition 6.8: for every convex N with N(0) <= 0, an
-    explicit radial function of N is quasiconvex). What a sign condition adds, range by range:
+    An original result on Morrey's problem for integrands on real 2x2 matrices, proved in Lean 4:
+    for every p > 0, an F that is isotropic (invariant under rotations on both sides), positively
+    p-homogeneous and rank-one convex is quasiconvex (Theorem A). The proof for integrands that
+    change sign integrates scaled truncated determinants over the radius (Proposition 6.8: for
+    every convex N with N(0) <= 0, an explicit radial function of N is quasiconvex). What a sign
+    condition adds, range by range:
 
 
     For p >= 2 and F >= 0, F is polyconvex, hence quasiconvex, with a polyaffine support at
@@ -20,16 +20,15 @@ project:
     F >= 0, F has at every matrix a touching minorant that is a nonnegative combination of the
     Burkholder function and its mirror image (Theorem 1.5). Hence, for 1 < p < 2, F is
     quasiconvex (Corollary 1.6 (a)), by the quasiconvexity of the Burkholder function, which
-    Proposition 6.8 gives for every p > 1 (Corollary 6.11). Proposition 6.8 rests on the quasiconvexity of the truncated
-    determinant, claimed as Theorem 1 of the preprint of Agazzi et al., arXiv:2609.28311, and
-    taken here from lean4-iwaniec, the Lean formalization with which that preprint was audited.
-    For p = 1, F is
-    convex, with no sign condition, a theorem of Dacorogna (Corollary 1.6 (b)). For 0 < p < 1,
-    F is zero, with neither isotropy nor a sign condition (Proposition 1.7).
+    Proposition 6.8 gives for every p > 1 (Corollary 6.11). Proposition 6.8 rests on the
+    quasiconvexity of the truncated determinant, claimed as Theorem 1 of the preprint of Agazzi
+    et al., arXiv:2609.28311, and taken here from lean4-iwaniec, the Lean formalization with
+    which that preprint was audited. For p = 1, F is convex, with no sign condition, a theorem
+    of Dacorogna (Corollary 1.6 (b)). For 0 < p < 1, F is zero, with neither isotropy nor a sign
+    condition (Proposition 1.7).
 
 
-    The paper is docs/HomogeneousIsotropic/paper/main.tex in the repository, which also holds the
-    formalizations of three papers on Morrey's problem, each its own submission.
+    The paper is docs/HomogeneousIsotropic/paper/main.tex in the repository.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -41,7 +40,7 @@ classification:
   msc2020: ["49J45", "26B25", "30C62", "68V15"]
 
 sources:
-  - title: "Morrey's problem for nonnegative homogeneous isotropic integrands in the plane"
+  - title: "Morrey's problem for homogeneous isotropic integrands in the plane"
     authors:
       - "The-Anh Vu-Le"
     id: "docs/HomogeneousIsotropic/paper/main.tex in this repository"
@@ -78,8 +77,7 @@ sources:
     note: >-
       Poses the question that Theorem 1.1 answers (Question 1.7 of the accepted version) and
       proves polyconvexity and conditional quasiconvexity at the multiples of orthogonal
-      matrices (Theorems 1.2 and 1.3). Read in the arXiv version and the accepted manuscript;
-      nothing of it is used by the proofs.
+      matrices (Theorems 1.2 and 1.3). Read in the arXiv version and the accepted manuscript.
   - title: "Sharp Higher Integrability Theory, Part I: The L^p-norm of the Beurling-Ahlfors transform"
     authors:
       - "Andrea Agazzi"
@@ -108,10 +106,8 @@ sources:
     relationship: "background"
     note: >-
       Its Theorem 1 (the truncated determinant L is quasiconvex) is the one result from outside
-      that the proofs use, through Proposition 6.8; it is not assumed: the proofs take it from
-      lean4-iwaniec, a Lean formalization of that paper (Agazzi.quasiconvex_integrandL). Its
-      Corollary 2 (the Burkholder function is quasiconvex) is reproved here from Proposition 6.8 (Corollary 6.11). The
-      paper is a preprint.
+      that the proofs use, through Proposition 6.8; the proofs take it from lean4-iwaniec, the
+      Lean formalization with which the preprint was audited (Agazzi.quasiconvex_integrandL).
   - title: "On rank one convex functions which are homogeneous of degree one"
     authors:
       - "Bernard Dacorogna"
@@ -165,12 +161,11 @@ related_formalizations:
 
 status:
   scope: >-
-    Complete and unconditional: Theorems A, 1.1, 1.2, 1.3 and 1.5, Proposition 6.8, Corollaries 1.4 and 1.6,
+    Complete: Theorems A, 1.1, 1.2, 1.3 and 1.5, Proposition 6.8, Corollaries 1.4 and 1.6,
     Proposition 1.7, and all the lemmas of the paper. Proposition 6.8, and through it Theorem A and
     Corollary 1.6 (a), uses the quasiconvexity of the truncated determinant, taken from the
-    package lean4-iwaniec. Every numbered statement of the paper has a Lean theorem
-    with the same hypotheses and conclusion. Not formalized: the facts that the paper quotes
-    from the literature, such as the rank-one convexity of the Burkholder function.
+    package lean4-iwaniec. Not formalized: the facts that the paper quotes from the literature,
+    such as the rank-one convexity of the Burkholder function.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: []
@@ -232,16 +227,13 @@ automation:
 fidelity:
   divergences: >-
     The paper was written after the formalization and follows the formal proofs; there is no
-    departure in the proofs, and the formal statements are those of the paper: the operator
-    norm, the Burkholder-type functions and the Burkholder function are defined as in the text,
-    and the passage to conformal coordinates (|A| = |z| + |w|, det A = |z|^2 - |w|^2) is proved.
-    Representation: matrices are Matrix (Fin 2) (Fin 2) R and gradients have the components as
-    rows; quasiconvexity is tested with Lipschitz maps vanishing outside the open unit square,
-    with the requirement that the integral exist, as in the paper; positive homogeneity uses the
-    real power; Corollary 1.4 states local boundedness as boundedness on a neighbourhood of every
-    matrix. Nothing is assumed: the quasiconvexity of the truncated determinant (Theorem 1 of
-    arXiv:2609.28311) comes from the package lean4-iwaniec. See the paper's
-    Appendix F and docs/HomogeneousIsotropic/README.md.
+    departure in the proofs. Representation: matrices are Matrix (Fin 2) (Fin 2) R and gradients
+    have the components as rows; quasiconvexity is tested with Lipschitz maps vanishing outside
+    the open unit square, with the requirement that the integral exist, as in the paper;
+    positive homogeneity uses the real power; Corollary 1.4 states local boundedness as
+    boundedness on a neighbourhood of every matrix. The quasiconvexity of the truncated
+    determinant (Theorem 1 of arXiv:2609.28311) comes from the package lean4-iwaniec. See the
+    paper's Appendix F and docs/HomogeneousIsotropic/README.md.
 
 review:
   status: "agent-reviewed"
@@ -251,8 +243,8 @@ review:
     No human review. An independent AI agent (Claude Fable 5.2) restated every definition and
     theorem of the library and looked for vacuous statements, recomputed every identity of the
     paper symbolically, tested the supports numerically, and compared each row of the paper's
-    table with the Lean declaration; it found no error in a theorem or a proof, and its
-    corrections to remarks are applied. It reviewed the first version of the paper: the
+    table with the Lean declaration; it found no error in a theorem or a proof. It reviewed the
+    first version of the paper: the
     version with the proofs in appendices, Proposition 1.7, the use of lean4-iwaniec and Theorem
     A were written after its review. Another agent checked the citations against the sources
     and searched the literature for earlier proofs (none found; Google Scholar and MathSciNet

@@ -8,7 +8,7 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 # Integrands of any sign: the definitions
 
 The objects of the proof that an isotropic, positively `p`-homogeneous, rank-one convex integrand
-on `ℝ^{2×2}` is quasiconvex with no sign condition (`Morrey/HomogeneousIsotropic/Signed/Main.lean`).
+on `ℝ^{2×2}` is quasiconvex (`Morrey/HomogeneousIsotropic/Signed/Main.lean`).
 Throughout, `p > 1`, `p ≠ 2`, and `e` is the sign of `p − 2`: `e = −1` if `p < 2`, `e = 1` if
 `p > 2` (the hypotheses `e = 1 ∨ e = −1` and `0 < e (p − 2)`); `a = e (p − 2)/p = |p − 2|/p`.
 

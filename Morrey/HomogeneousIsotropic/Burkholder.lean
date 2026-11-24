@@ -8,9 +8,8 @@ public import Agazzi.Quasiconvex
 # The operator norm, the Burkholder function, and the exponents below `2`
 
 `Morrey/HomogeneousIsotropic/Main.lean` works in conformal coordinates. This file passes to the
-operator norm `|A|` and to the Burkholder function `B_p` as the paper writes them, and states
-the results for `1 ≤ p < 2` and for every `p > 0`. The numbers are those of the paper,
-`docs/HomogeneousIsotropic/paper/main.tex`.
+operator norm `|A|` and to the Burkholder function `B_p`, and states Theorem 1.5 with them. The
+numbers are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
 
 * `opNorm_eq` (**Lemma 2.1 (a)**): `|A| = |z| + |w|`.
 * `burkholderType_eq_coord`, `burkholder_eq_coord`: `G_{c₀,m}` and `B_p` in conformal
@@ -20,13 +19,10 @@ the results for `1 ≤ p < 2` and for every `p > 0`. The numbers are those of th
 * `quasiconvex_of_rankOneConvex_of_burkholder`: for `1 ≤ p < 2`, if `B_p` is quasiconvex, so is
   every nonnegative, isotropic, positively `p`-homogeneous, rank-one convex `F`.
 
-The quasiconvexity of `B_p` for `1 < p < 2` is claimed as Corollary 2 of the preprint of
-A. Agazzi et al., *Sharp higher integrability theory, Part I: the `L^p`-norm of the
-Beurling–Ahlfors transform*, arXiv:2609.28311v2. The library proves it for every `p > 1` from
-Proposition 6.8, that is, from the quasiconvexity of the truncated determinant of that preprint
-(`Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`, **Corollary 6.11**). That file also
-holds `quasiconvex_burkholder`, `quasiconvex_of_rankOneConvex_of_lt_two` (**Corollary 1.6 (a)**)
-and `quasiconvex_of_rankOneConvex_of_pos` (the nonnegative case of **Theorem A**).
+The quasiconvexity of `B_p` for every `p > 1` (**Corollary 6.11**) is in
+`Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`, with `quasiconvex_burkholder`,
+`quasiconvex_of_rankOneConvex_of_lt_two` (**Corollary 1.6 (a)**) and
+`quasiconvex_of_rankOneConvex_of_pos` (the nonnegative case of **Theorem A**).
 -/
 
 @[expose] public section

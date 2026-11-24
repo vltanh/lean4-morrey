@@ -36,11 +36,10 @@ Let $p>0$, and let $F\colon\M\to\R$ satisfy~\Hyp. Then $F$ is quasiconvex.
 For nonnegative integrands, \cref{thm:A} follows from the results of
 \cref{sec:intro-large,sec:intro-low,sec:intro-small}, which say more: for $p\ge2$ such an
 integrand is polyconvex, with explicit supports, and for $1\le p<2$ it has a touching minorant
-built from the Burkholder function at every matrix. The integrands that take negative values
-are the ones whose quasiconvexity was in question. For $p>2$, by \cref{thm:iff}\,(a), every
+built from the Burkholder function at every matrix. For $p>2$, by \cref{thm:iff}\,(a), every
 integrand with~\Hyp\ that is not polyconvex takes negative values; the Burkholder function and
 the Dacorogna--Marcellini integrands of \cref{sec:intro-related} beyond the polyconvex range are
-of this kind. They are treated in \cref{sec:signed}.
+of this kind. The integrands that take negative values are treated in \cref{sec:signed}.
 
 The best known function with the properties \Hyp\ is the \emph{Burkholder function}, defined
 for $1<p<\infty$ and normalized as in~\cite[(1.4)]{GuerraKristensen2022}:
@@ -60,9 +59,8 @@ $\det X=\abs z^2-\abs w^2$. The truncated determinant is
 \begin{equation}\label{eq:truncated}
   L(X)=\det X\quad\text{if }\abs X\le1,\qquad L(X)=2\abs z-1\quad\text{if }\abs X>1 .
 \end{equation}
-We audited the proofs of both claims with a Lean formalization~\cite{IwaniecLean}. Our proofs use
-only the first, Theorem~1, and the quasiconvexity of $B_p$ follows from it
-(\cref{cor:burkholder}).
+Our proofs use Theorem~1, whose proof we audited with a Lean formalization~\cite{IwaniecLean},
+and the quasiconvexity of $B_p$ follows from it (\cref{cor:burkholder}).
 
 \subsection{What is proved, and from which hypotheses}\label{sec:intro-table}
 
@@ -79,10 +77,7 @@ consequence of \Hyp. For $p>2$ it is necessary for polyconvexity.
 \centering
 \caption{The results for each range of the exponent: what follows from \Hyp, and what the sign
   condition \ref{N} adds. Here $J=\diag(1,-1)$. \Cref{thm:A} and \cref{cor:low}\,(a) rest on
-  the quasiconvexity of the truncated determinant, claimed as Theorem~1 of~\cite{SharpHI},
-  which we audited with a Lean formalization~\cite{IwaniecLean}, and on nothing else from
-  outside. The quasiconvexity of the Burkholder function $B_p$, claimed as Corollary~2 there, is
-  a consequence of \cref{prop:radial} (\cref{cor:burkholder}).}
+  the quasiconvexity of the truncated determinant, claimed as Theorem~1 of~\cite{SharpHI}.}
 \label{tab:summary}
 \small
 \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.25\textwidth}%
@@ -192,10 +187,8 @@ two functions passes to $F$ if nonnegative combinations and touching minorants p
 Quasiconvexity and convexity are such properties.
 
 The Burkholder function is quasiconvex for every $p>1$, by the radial integration of the
-truncated determinant in \cref{sec:signed} (\cref{prop:radial,cor:burkholder}). The
-preprint~\cite{SharpHI} also claims this, as the first assertion of its Corollary~2; the second
-is Iwaniec's conjecture. The next corollary takes the
-quasiconvexity of $B_p$ from \cref{cor:burkholder}. For $p=1$, $B_1=2\abs z$ is convex.
+truncated determinant in \cref{sec:signed} (\cref{prop:radial,cor:burkholder}), and for $p=1$,
+$B_1=2\abs z$ is convex.
 
 \begin{corollary}\label{cor:low}
 \begin{enumerate}[label=\textup{(\alph*)}]
@@ -258,9 +251,7 @@ subject of the preprint~\cite{BrunoPasqualotto2026}.
 Cassese~\cite[Conjecture~1]{Cassese2026} conjectures that an integrand with~\Hyp\ that changes
 sign is quasiconvex at $0$; the conjecture is stated for $f(tA)=\abs t^pf(A)$. This condition
 implies~\ref{H2}, so for integrands on $\M$ \cref{thm:A} gives the conclusion of the conjecture,
-and quasiconvexity at every matrix. The Burkholder function is an integrand of this kind; its
-quasiconvexity, claimed in~\cite{SharpHI}, follows from \cref{prop:radial}
-(\cref{cor:burkholder}).
+and quasiconvexity at every matrix. The Burkholder function is an integrand of this kind.
 
 \subsection{The strategy}\label{sec:strategy}
 
@@ -328,11 +319,8 @@ and Lean's kernel checks every step. \Cref{thm:A}, \cref{thm:main,thm:closed,thm
 \cref{cor:equiv,cor:low} and \cref{prop:small,prop:radial} are stated in a file that imports
 only Mathlib, and their proofs use only Lean's standard axioms. The formal proofs of
 \cref{thm:A}, \cref{cor:low}\,(a) and \cref{prop:radial} take the quasiconvexity of the truncated
-determinant from the formalization~\cite{IwaniecLean} of~\cite{SharpHI}, and derive that of the
-Burkholder function from it, so no formal statement has a hypothesis on them. The
-repository~\cite{Companion} also contains the formalizations of the two papers quoted above for
-the negative answers, \cite{Sverak1992} and~\cite{Cassese2026}. The formal statements are those
-of the text; \cref{app:formal} describes them and lists the corresponding Lean declarations.
+determinant from the formalization~\cite{IwaniecLean} of~\cite{SharpHI}. \Cref{app:formal}
+describes the formal statements and lists the corresponding Lean declarations.
 
 \subsection{Organization}\label{sec:intro-organization}
 

@@ -33,7 +33,7 @@ are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
   `(2 − p) |m| ≤ p c₀`, a nonnegative combination of `burkholderCoord p` and its mirror image
   (`burkholderTypeCoord_eq`). This is **Theorem 1.5** in conformal coordinates;
   `Morrey/HomogeneousIsotropic/Burkholder.lean` states it with the operator norm and the
-  Burkholder function of the paper.
+  Burkholder function `B_p`.
 * `quasiconvex_of_rankOneConvex_of_burkholderCoord`: hence, for `1 ≤ p < 2`, `F` is quasiconvex
   if `burkholderCoord p` is quasiconvex.
 * `convexOn_of_rankOneConvex_one`, `quasiconvex_of_rankOneConvex_one` (**Corollary 1.6 (b)**):
@@ -43,7 +43,7 @@ are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
   `p`-homogeneous, rank-one convex `F` is `0`; isotropy and the sign condition are not needed.
 * `quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord`: for every `p > 0`, a nonnegative `F`
   of the class is quasiconvex if `burkholderCoord p` is quasiconvex when `1 < p < 2`.
-  **Corollary 1.6 (a)** and the nonnegative case of **Theorem A**, without that hypothesis, are in
+  **Corollary 1.6 (a)** and the nonnegative case of **Theorem A** are in
   `Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`.
 -/
 
@@ -579,8 +579,8 @@ theorem eq_zero_of_rankOneConvex_of_lt_one (hp0 : 0 < p) (hp1 : p < 1)
 
 /-- Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on
 `ℝ^{2×2}`. Then `F` is quasiconvex, if `burkholderCoord p` is quasiconvex when `1 < p < 2`. For
-`0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is polyconvex.
-`quasiconvex_of_rankOneConvex_of_pos` removes the hypothesis. -/
+`0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is polyconvex. The
+hypothesis holds by `quasiconvex_burkholderCoord`; see `quasiconvex_of_rankOneConvex_of_pos`. -/
 theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F)
     (hB : 1 < p → p < 2 → Quasiconvex (burkholderCoord p)) : Quasiconvex F := by

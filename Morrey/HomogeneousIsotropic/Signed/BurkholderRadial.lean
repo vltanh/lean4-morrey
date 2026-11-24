@@ -21,9 +21,7 @@ of Proposition 6.8 is `radial e N = σ^{p−1} ((1 − 2/p) σ + e δ)`, the Bur
   `[0, ∞)`.
 * `quasiconvex_burkholder_of_one_lt`, `quasiconvex_burkholder_reflection_mul`: by Proposition 6.8,
   `B_p` and `B_p (J ·)` are quasiconvex for every `p > 1`. The proof uses the quasiconvexity of
-  the truncated determinant (`Agazzi.quasiconvex_integrandL` of the package lean4-iwaniec), and
-  not that of the Burkholder function, which is claimed as Corollary 2 of the preprint of
-  A. Agazzi et al., arXiv:2609.28311v2.
+  the truncated determinant (`Agazzi.quasiconvex_integrandL` of the package lean4-iwaniec).
 
 The consequences:
 
@@ -181,7 +179,7 @@ theorem quasiconvex_burkholder_of_le_two (hp1 : 1 < p) (hp2 : p ≤ 2) :
 
 /-- **Corollary 6.11. The Burkholder function is quasiconvex for every `p > 1`**, by Proposition
 6.8: it is `radial 1 N` with `N (r) = r₊^{p−1}` for `p ≥ 2`, and `radial (−1) N` with
-`N (r) = −r₊^{p−1}` for `p ≤ 2`. Only the quasiconvexity of the truncated determinant is used. -/
+`N (r) = −r₊^{p−1}` for `p ≤ 2`. -/
 theorem quasiconvex_burkholder_of_one_lt (hp : 1 < p) : Quasiconvex (burkholder p) := by
   rcases le_total 2 p with hp2 | hp2
   · exact quasiconvex_burkholder_of_two_le hp2
@@ -193,9 +191,8 @@ theorem quasiconvex_burkholder_reflection_mul (hp : 1 < p) :
     Quasiconvex fun A => burkholder p (reflection * A) :=
   quasiconvex_comp_reflection_mul (quasiconvex_burkholder_of_one_lt hp)
 
-/-- **The Burkholder function is quasiconvex for `1 < p < 2`** (claimed as Corollary 2 of Agazzi
-et al., arXiv:2609.28311v2): the case `p < 2` of `quasiconvex_burkholder_of_one_lt`, from the
-quasiconvexity of the truncated determinant by Proposition 6.8. -/
+/-- **The Burkholder function is quasiconvex for `1 < p < 2`**: the case `p < 2` of
+`quasiconvex_burkholder_of_one_lt`. -/
 theorem quasiconvex_burkholder (hp1 : 1 < p) (hp2 : p < 2) : Quasiconvex (burkholder p) :=
   quasiconvex_burkholder_of_le_two hp1 hp2.le
 

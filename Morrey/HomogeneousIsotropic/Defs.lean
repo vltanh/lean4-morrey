@@ -40,18 +40,21 @@ between the two marker lines, and are copied word for word into the Challenge by
 * `conformalPart A`, `anticonformalPart A`: the complex numbers `z`, `w` with
   `A ζ = z ζ + w ζ̄`, when `ℝ²` is identified with `ℂ`. Then `det A = |z|² − |w|²` and an isotropic
   `F` is a function of `(|z|, |w|)` (both proved in
-  `Morrey/HomogeneousIsotropic/Coordinates.lean`). The singular values of `A` are `|z| + |w|` and
-  `||z| − |w||`, so that `|z| + |w|` is the operator norm `|A|`; this is not proved here, and the
-  definitions below use `|z| + |w|`.
-* `burkholderType p c₀ m`: the function `|A|^{p-2} (c₀ |A|² + m det A)`; `burkholder p`: the
-  Burkholder function `(|z| − (p − 1) |w|) (|z| + |w|)^{p−1}`, in the form used for `1 < p ≤ 2`.
+  `Morrey/HomogeneousIsotropic/Coordinates.lean`).
+* `opNorm A`: the operator norm `|A|` on Euclidean `ℝ²`; it equals `|z| + |w|` (`opNorm_eq`).
+* `burkholderType p c₀ m`: the function `|A|^{p−2} (c₀ |A|² + m det A)`; `burkholder p`: the
+  Burkholder function `(|1 − 2/p| |A|² + det A) |A|^{p−2}`.
 * `reflection`: the matrix `J = diag (1, −1)`.
 * `multiplier p H m t`: the determinant coefficient of the support of Theorem 1.2.
+* `radialProfile e N`, `radial e N`: the radial function of Proposition 6.8, of the profile
+  variables and of a matrix.
 
 The library's proofs use the rank-one convexity and the quasiconvexity of the package
 `CalculusOfVariations`; `Morrey/HomogeneousIsotropic/Bridges.lean` proves that they are the
 notions above. After the shared block:
 
+* `burkholderTypeCoord p c₀ m`, `burkholderCoord p`: the Burkholder-type function and `p/2` times
+  the Burkholder function (`0 < p ≤ 2`) in conformal coordinates.
 * `ofComplex z w`: the matrix with conformal part `z` and anticonformal part `w`.
 * `profile F x y = F (ofComplex x y)` for real `x`, `y`: the *profile* of an isotropic `F`.
 * `IsProfile p Φ`: the two properties of the profile of an isotropic, positively `p`-homogeneous,

@@ -23,11 +23,10 @@ submission; the papers share general lemmas, the cited results and the checks.
 The repository also proves a result of its own on the open `2 × 2` case
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, an
 isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex.
-A nonnegative one is even polyconvex if `p ≥ 2`, so the integrands whose quasiconvexity was in
-question are those that take negative values. The proof uses one
-result from outside, the quasiconvexity of the truncated determinant, claimed in a 2026 preprint
-that we audited with a Lean formalization,
-[lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it from there.
+A nonnegative one is even polyconvex if `p ≥ 2`. The proof uses one result from outside, the
+quasiconvexity of the truncated determinant, claimed in a 2026 preprint that has been audited with a
+Lean formalization, [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it
+from there.
 
 ## The state of the problem
 
@@ -72,7 +71,7 @@ claims of Cassese's preprint, and all are proved here.
 | --- | --- | --- | --- | --- |
 | V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A (1992) | a quartic polynomial on `ℝ^{3×2}`, rank-one convex and not quasiconvex; hence no for `d ≥ 3`, `m ≥ 2` | **proved**, every step by the paper's argument | no false statement; the steps left to the reader are supplied, chief among them the limit in Lemma 1, "easily seen" | [README](docs/Sverak/README.md), [REPORT](docs/Sverak/REPORT.md), [Challenge](palomar/Sverak/Challenge.lean) |
 | P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | three statements **false**; the main theorems stated, not proved; most of Sections 3–7 proved (below) | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open | [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md), [Challenge](palomar/Pedregal/Challenge.lean) |
-| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved**, with nothing assumed (below) | no false statement; gaps, all filled (below) | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
+| G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved** (below) | no false statement; gaps, all filled (below) | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
 
 The formalization of Pedregal's paper:
 
@@ -80,8 +79,7 @@ The formalization of Pedregal's paper:
 - the rest of Sections 3–7, except Claim 7.3, is proved;
 - Theorems 1.1 (2) and 1.2 are stated, not proved.
 
-In the formalization of Cassese's paper, every result that the paper proves is **proved**, with
-nothing assumed:
+In the formalization of Cassese's paper, every result that the paper proves is **proved**:
 
 - Theorem 1.2 by the paper's UMD route;
 - the UMD, Khintchine and Beurling–Ahlfors results behind Theorems 1.2, 1.4, 1.5 and Corollary 1.6
@@ -136,15 +134,13 @@ gives (`J = diag(1, −1)`):
 
 The proof uses one result from outside: the quasiconvexity of the truncated determinant, claimed
 as Theorem 1 of the preprint of Agazzi et al., [arXiv:2609.28311](https://arxiv.org/abs/2609.28311).
-A radial integration over scales (Proposition 6.8 of the paper) turns it into the minorants that the proof needs,
-and also into the quasiconvexity of the Burkholder function for every `p > 1`, which the preprint
-claims as its Corollary 2. We audited that preprint with a Lean formalization,
-[lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which proves its results; this
-repository requires that package, so the Lean proofs here assume nothing. The argument for
-integrands that change sign is due to ChatGPT Chat 6 Extra High.
+A radial integration over scales (Proposition 6.8 of the paper) turns it into the minorants that
+the proof needs. That preprint has been audited with a Lean formalization,
+[lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which this repository requires. The
+argument for integrands that change sign is due to ChatGPT Chat 6 Extra High.
 
 Integrands that are not isotropic or not homogeneous are not covered. The rest of the proof uses
-the definition of rank-one convexity and one-variable calculus:
+the definition of rank-one convexity and one-variable calculus. The documents:
 
 - [the statements, the proof in outline and the files](docs/HomogeneousIsotropic/README.md);
 - the paper, [`docs/HomogeneousIsotropic/paper/main.tex`](docs/HomogeneousIsotropic/paper/main.tex)
@@ -205,8 +201,8 @@ becomes quasiconvex after transposition. In `2 × 2`, its mechanism cannot detec
   to Burkholder's martingale inequalities; a positive answer in `2 × 2` would prove Iwaniec's
   conjecture on the norm of the Beurling–Ahlfors transform. That conjecture is now claimed proved,
   by a preprint of twenty authors, Cassese and Šverák among them
-  ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October 2026), which we
-  audited with a Lean formalization, [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec);
+  ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311), September–October 2026), which has
+  been audited with a Lean formalization, [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec);
   the converse is not known, so the claim leaves the `2 × 2` problem open;
 - analogues of Šverák's gradient measure in `2 × 2` (Pedregal 1996, Pedregal–Šverák 1998,
   Bandeira–Ornelas 2011) turned out to be laminates, and Sebestyén and Székelyhidi (2017) proved it
@@ -312,10 +308,10 @@ How Cassese relates to the other two papers:
   answer, and notes that a positive answer would imply Iwaniec's conjecture; for the integrands
   behind Theorem 1.2, the question in `2 × 2` (the case `n = 1`) is equivalent to Iwaniec's
   conjecture, so a proof of it must use features specific to `2 × 2`. Iwaniec's conjecture has
-  since been claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311)), and the
-  proof passes our audit by formalization
-  ([lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec)); by it, those integrands give no
-  counterexample in `2 × 2`.
+  since been claimed proved ([arXiv:2609.28311](https://arxiv.org/abs/2609.28311)), in a
+  preprint audited with a Lean formalization
+  ([lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec)); by that claim, those integrands give
+  no counterexample in `2 × 2`.
 - **Kristensen.** Cassese's Corollary 5.2 (by Kristensen's smoothing) states a smooth integrand on
   `ℝ^{2×m}`, `m ≥ 3`, uniformly rank-one convex with quadratic growth, that is not quasiconvex at
   `0`. With Kristensen's theorem, quasiconvexity is then not a local condition on `ℝ^{2×m}`,
@@ -351,7 +347,7 @@ How Cassese relates to the other two papers:
 - This repository does not use either: its proofs were written without consulting them. Parts of both
   were displayed on 21 and 22 November 2026 by searches for earlier formalizations and for the
   literature, and by checks of the documents; [Cassese's credits](docs/Cassese/CREDITS.md#who) say which.
-- We found no earlier formalization of Šverák's theorem or of Pedregal's paper.
+- No earlier formalization of Šverák's theorem or of Pedregal's paper was found.
 
 ## What the repository adds to the papers
 
@@ -468,7 +464,7 @@ Besides Mathlib, the proofs use five packages:
 - UMD spaces;
 - Schatten classes (real and complex) and Randrianantoanina's martingale transforms;
 - type 2 and K-convexity;
-- also the non-commutative Khintchine inequality by exchangeable pairs, which is not used here.
+- the non-commutative Khintchine inequality by exchangeable pairs.
 
 Šverák's library uses only Mathlib and `Common/Basic`. The dependencies run one way: no package
 imports this repository. Among the packages, the vector-valued part of `HarmonicAnalysis` imports
