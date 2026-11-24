@@ -1,5 +1,75 @@
 # Roadmap to completion
 
+## Angular realization — exact law-side reduction and uniform finite-depth approximation
+
+The [new angular-laminate theorem](IWANIEC_MORREY_ANGULAR_LAMINATE_REALIZATION.md)
+uses the previous finite-ray envelope but does not assume
+any regularity of its Hessian. For arbitrary p>1 and finite
+unit directions D including the cube-vertex directions,
+let L_D,p(A) be the angular p-weight vectors of finite
+laminate trees rooted at A with leaves t v_j:
+    k_j=sum_{leaf i on ray j} theta_i t_i^p.
+The set is convex by randomizing trees at their common root.
+For ANY law on those rays with finite p-moment and angular
+vector w, Jensen against EVERY homogeneous RC F is
+EQUIVALENT to w in closure L_D,p(A). A strict separator
+f gives a finite ray envelope even when f is arbitrary
+signed data: a product tree at A contains any given B with
+weight 1/16, and all remaining vertices can be sent to
+the cube rays. Thus a finite lower bound at A forces
+finiteness at every root. The RC homogeneous envelope then
+violates Jensen, since E_D^f(v_j)<=f_j and w>=0.
+This only requires realization of angular moments, NOT
+the full gradient law. Add cube directions with zero
+law weights when necessary. The finite-law reduction
+covers the whole homogeneous anisotropic implication.
+
+**Two-sided computability for finite algebraic data and
+rational p:** the l1 distance from w to closure L_D,p(A)
+has finite upper certificates from finite-depth trees
+(semialgebraic constraints), and lower certificates from
+norm-bounded separators and rational angular polynomial
+RC minorants of the data. The finite-dimensional convex
+distance dual and a shrink/raise strict-slack perturbation
+show lower certificates approach the true distance.
+Dovetailing terminates to ANY prescribed positive accuracy,
+including when the true distance is zero. It does not decide
+exact equality. Likewise ray-envelope values for data
+admitting a strictly lower homogeneous RC minorant have
+two-sided terminating approximation certificates.
+
+**Uniform effective finite-depth theorem, independent of
+ray count and arrangement:** for fixed p>1,M,eta,epsilon>0,
+ALL homogeneous F with ||F||_{S³}<=M and F-eta |X|^p RC,
+ALL closed angular sets D containing the cube directions,
+and ALL A admit a tree of depth <=N(p,M,eta,epsilon)
+with cost <=E_D^F(A)+epsilon |A|^p. Adding a small convex
+homogeneous term supplies this margin for arbitrary F.
+For rational parameters N is effectively computable.
+Key mechanism: replace a leaf t v by a four-level coordinate
+split with mass >=1-4delta on the nearby ray t v', then
+send the other vertices to cube rays. This changes depth
+by at most eight and costs O(t^p (data error+delta)).
+The strict margin bounds the p-moment of every near-optimal
+tree even for signed F. This yields joint envelope
+continuity under Hausdorff changes of D and uniform changes
+of F. Apply the prior uniform angular polynomial net
+and a finite direction/base net, compute the depth of a
+near-optimal tree for every auxiliary configuration, then
+transfer back to the original arbitrary rays and base.
+The existence/effectivity proof does not enumerate or
+compute these very large finite lists in this turn.
+
+**Remaining gate:** prove actual compatible gradient laws
+have the angular membership in (1). The new finite-accuracy
+depth bound and distance oracle are not a finite exact
+classification and do not settle this membership. There
+is no bound uniform as epsilon or strictification decreases
+to zero. The 243 exact product-split controls and root
+embedding check were actually executed. Hand proofs, no
+new Lean theorem or priority claim; homogeneous anisotropic
+Morrey remains OPEN.
+
 ## MAIN GATE REDUCTION — dense exactly saturated homogeneous envelopes
 
 The [new finite-ray envelope theorem](IWANIEC_MORREY_HOMOGENEOUS_RAY_ENVELOPES.md)
