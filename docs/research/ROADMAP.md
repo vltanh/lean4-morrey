@@ -1,5 +1,60 @@
 # Roadmap to completion
 
+## MAIN GATE refinement — quantitative compatibility penalty detecting EVERY terminal trap
+
+The [new trap compatibility note](IWANIEC_MORREY_TRAP_COMPATIBILITY.md)
+uses spatial compatibility beyond mean/determinant moments. Every
+blocked geometry from the adaptive theorem has an invertible affine
+normalization to a symmetric law of mean I and determinant one,
+with opposite-sheet mass w>0. The classical Šverák determinant-index
+integrand, together with a periodic Helmholtz decomposition, gives
+an explicit all-gradient inequality for arbitrary full 2x2 laws:
+h(sym A)<=E h(sym X)+||sym X||_2 ||skew(X-A)||_2.
+Thus a normalized blocked law is at W2 distance at least
+w/(3||X||_2+2) from every compact homogeneous gradient law.
+The known qualitative hyperboloid rigidity is acknowledged as
+prior art; this is a quantitative form and all-trap application.
+
+A full-matrix extension theorem approximates any continuous
+quadratic-growth symmetric Hessian-quasiconvex function on compact
+symmetric sets by smooth globally strongly QC functions with
+bounded Hessian (Helmholtz projection plus quadratic skew penalty).
+It gives explicit full-matrix QC separators for every trap.
+
+**Single compatibility penalty Delta(eta):** maximize the positive
+violation of the displayed sheet inequality over affine transforms
+P X Q+B with the three Frobenius norms <=1. This is a compact
+12-real-parameter maximum, continuous on laws with common compact
+support, zero for every gradient law, and strictly positive for
+EVERY nontrivial blocked law. It does not depend on wave count,
+atom count or integrand degree.
+
+Let r be the earlier minimum unresolved variance over feasible
+adaptive decompositions, and r_comp the same minimum constrained
+to average Delta=0. For gradient laws r_comp is feasible at least
+at the trivial decomposition. **The sole new main target** is
+r_comp=r for all actual gradient laws. Equivalently it suffices
+to construct feasible decompositions with residual approaching
+r and average Delta approaching zero. Compactness and the exact
+trap classification would then force r=0 and settle Morrey.
+A stronger sufficient uniform construction is a nonzero rank-one
+split preserving Delta=0 at every non-Dirac minor-compatible
+law with Delta=0; its existence is NOT established.
+
+**Mandatory caution:** an explicit smooth separable product
+gradient (already a laminate) admits a legal nonzero rank-one
+minor-preserving observation with a nonlaminate trapped posterior
+of probability 1/9. Thus arbitrary greedy neutral conditioning
+does NOT preserve compatibility. The optimization over choices
+is essential. This is not a negative Morrey witness.
+
+The [exact checker](../../research/audit/iwaniec_trap_compatibility_exact.py)
+was actually executed: 2D/3D trap moments, four nonsymmetric
+normalization controls and the smooth plateau probability bounds
+passed (explicit W2 lower bound 1/72 for the diagonal trap).
+Hand proofs only, no Lean/external review/novelty claim.
+No fixed-wave or atom-count investigation is resumed.
+
 ## MAIN GATE refinement — exact input-adaptive representation and complete terminal-trap geometry
 
 The [new adaptive martingale note](IWANIEC_MORREY_ADAPTIVE_MARTINGALE.md)
