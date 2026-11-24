@@ -1,5 +1,42 @@
 # Roadmap to completion
 
+## STOP RULE — full-vector L² projection is not a universal energy descent
+
+The [new exact normal-stress obstruction](IWANIEC_MORREY_VECTOR_DESCENT_NOGO.md)
+refutes the last proposed direct energy-decreasing use of the
+operator-ball projection. Even for the convex isotropic energy
+F=||A||_F^4 it can strictly INCREASE the gradient energy.
+The actual compatible projected map is locally (r-1,(4/5)theta),
+extended periodically by Kirszbraun. A compactly supported
+normal stress certifies its exact L² projection status;
+differentiation gives strictly reversed energy. No abstract
+spectral law, numerical projection, or grid is involved.
+
+More generally for EVERY C³ isotropic F, descent for all
+operator-ball radii at zero affine base would force
+f_st+(t f_s-s f_t)/(s²-t²)=0 at every s>|t|.
+The proof realizes arbitrary relevant compatible third jets
+on the saturated operator-norm sphere by an analytic
+Cauchy problem. Violation of this PDE at any interior
+spectral pair gives an actual periodic projection reversal.
+Rank-one convexity does not imply the PDE. The exact
+checker passed. The valid full-vector boundary selection,
+quadratic signs and QC-extension theorem are unaffected.
+
+**Next analytic direction, not a solved gate:** exact
+two-form heat-flow dissipation for arbitrary smooth
+isotropic profiles, extending the approach of
+Bruno--Pasqualotto (arXiv:2608.06367). Section 4 gives
+two explicit 3x3 PSD tests for two scalar angular-form
+potentials, with no fixed exponent or polynomial degree.
+Pointwise feasibility follows from quadratic polyconvexity;
+global integrability of the correcting form is NOT proved.
+Do not treat this as a completed general theorem. Avoid
+further fixed-L²-projection energy-descent attempts,
+unshifted affine-shell completeness, or another ladder
+of restricted exponents. General isotropic Morrey remains
+open. The signed homogeneous audit/formalization is separate.
+
 ## Nonhomogeneous main attack — full-vector operator-ball projection
 
 The [vector projection theorem](IWANIEC_MORREY_NONHOMOG_VECTOR_PROJECTION.md)
@@ -31,8 +68,9 @@ The spectral form for a mixed-minor calibration is an
 explicit scalar clamped quadratic; the exact local constants
 and 792 rational boundary checks passed.
 
-**Remaining goal:** energy-decreasing comparison with the
-full-vector projection, or global touching lower supports
+**Historical goal (direct universal energy descent refuted above):**
+energy-decreasing comparison with the full-vector projection,
+or global touching lower supports
 using its boundary calibrations for arbitrary isotropic RC F.
 The new lemma does not say Du-Dv is rank one or provide
 arbitrary nonlinear matrix-potential signs. No universal
