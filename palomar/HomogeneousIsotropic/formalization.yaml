@@ -156,8 +156,7 @@ related_formalizations:
     relationship: "builds-on"
     note: >-
       Provides rank-one convexity, quasiconvexity, the null Lagrangian property of minors and
-      the local Lipschitz continuity of rank-one convex functions (commit 220f56c), used by the
-      proofs only.
+      the local Lipschitz continuity of rank-one convex functions, used by the proofs only.
 
 status:
   scope: >-

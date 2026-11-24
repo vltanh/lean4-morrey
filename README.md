@@ -1,5 +1,7 @@
 # Morrey's problem in Lean
 
+[![Lean Action CI](https://github.com/vltanh/lean4-morrey/actions/workflows/lean_action_ci.yml/badge.svg)](https://github.com/vltanh/lean4-morrey/actions/workflows/lean_action_ci.yml)
+
 An integrand `f : ℝ^{d×m} → ℝ` is *quasiconvex* if affine maps minimize `∫ f(∇u)` among maps
 with the same boundary values: `∫_{(0,1)^m} f(A + ∇φ) ≥ f(A)` for every matrix `A` and every
 Lipschitz `φ : (0,1)^m → ℝ^d` vanishing on the boundary. It is *rank-one convex* if it is convex

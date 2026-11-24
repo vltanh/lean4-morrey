@@ -217,7 +217,7 @@ The files of a Palomar submission are in [`palomar/HomogeneousIsotropic/`](../..
   the quasiconvexity of the truncated determinant as a result claimed in a preprint and taken
   from its Lean formalization, lean4-iwaniec.
 
-Nothing has been submitted, and the preflight workflow has not been run.
+Nothing has been submitted.
 
 ## Trust
 
