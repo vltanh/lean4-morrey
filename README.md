@@ -8,17 +8,15 @@ condition under which `∫ f(∇u)` is weakly-∗ lower semicontinuous, and that
 convexity; he asked whether the converse holds. This is *Morrey's problem*. Here `d` is the number
 of components of `u` and `m` the number of variables.
 
-This repository formalizes, in Lean 4 with Mathlib, three papers on the problem:
+This repository formalizes, in Lean 4 with Mathlib, two papers on the problem:
 
 - a theorem that settles it for three or more components (Šverák 1992);
-- a claimed proof for `2 × 2` matrices (Pedregal);
 - a recent preprint on the two-component case in higher dimension and on the homogeneous problem
   (Cassese 2026).
 
-**Every result that Šverák's and Cassese's papers prove is proved here, and nothing is assumed.**
-Pedregal's proof fails at a corollary, refuted here; his main theorems, the open `2 × 2` case, are
-stated and not proved. Each paper is audited on its own, with its own Challenge, report and Palomar
-submission; the papers share general lemmas, the cited results and the checks.
+**Every result that these papers prove is proved here, and nothing is assumed.** Each paper is
+audited on its own, with its own Challenge, report and Palomar submission; the papers share general
+lemmas, the cited results and the checks.
 
 The repository also proves a result of its own on the open `2 × 2` case
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, an
@@ -39,14 +37,10 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 | `d = 1` or `m = 1` | yes: both notions are convexity | classical | **proved** (Cassese, Section 1: [`Cassese.morreyPositive_of_min_le_one`](Morrey/Cassese/Introduction.lean#L476)) |
 | `d ≥ 3`, `m ≥ 2` | no | Šverák (1992), on `ℝ^{3×2}` | **proved** ([Šverák](docs/Sverak/README.md)) |
 | `d = 2`, `m ≥ 3` | no, claimed in two 2026 preprints | Cassese, on `ℝ^{2×3}`; Agazzi, Bruno, Guerra and Pasqualotto, on `ℝ^{2×4}` | **proved**: Cassese's quartic and the monotonicity ([Cassese](docs/Cassese/README.md)) |
-| `2 × 2` | **open** | Pedregal (2019–2026, preprint) claims yes | the proof fails: its Corollary 7.2 is **refuted** ([Pedregal](docs/Pedregal/README.md)) |
+| `2 × 2` | **open** | — | yes for isotropic, positively homogeneous integrands ([below](#a-result-of-this-repository-homogeneous-isotropic-integrands-in-2--2)); a claimed proof of the general case fails ([below](#a-claimed-proof-of-the-2--2-case)) |
 
 That every size but `2 × 2` fails is proved here as one theorem, from Šverák's example and Cassese's
 ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296)).
-
-In `2 × 2` the answer is yes for isotropic, positively `p`-homogeneous integrands, for every
-`p > 0`. This is proved here
-([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
 convex, `p`-homogeneous `f` (`f(tA) = |t|^p f(A)`) quasiconvex at `0`? For a continuous
@@ -70,14 +64,7 @@ claims of Cassese's preprint, and all are proved here.
 | Paper | Claim | Formalization | Main finding | Documents |
 | --- | --- | --- | --- | --- |
 | V. Šverák, *Rank-one convexity does not imply quasiconvexity*, Proc. Roy. Soc. Edinburgh 120A (1992) | a quartic polynomial on `ℝ^{3×2}`, rank-one convex and not quasiconvex; hence no for `d ≥ 3`, `m ≥ 2` | **proved**, every step by the paper's argument | no false statement; the steps left to the reader are supplied, chief among them the limit in Lemma 1, "easily seen" | [README](docs/Sverak/README.md), [REPORT](docs/Sverak/REPORT.md), [Challenge](palomar/Sverak/Challenge.lean) |
-| P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026) | yes for `2 × 2` | three statements **false**; the main theorems stated, not proved; most of Sections 3–7 proved (below) | the paper's use of Kakutani's theorem needs Corollary 7.2, which an explicit counterexample, checked in Lean, refutes; the claim stays open | [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md), [Challenge](palomar/Pedregal/Challenge.lean) |
 | G. Cassese, *A solution to Morrey's problem in `ℝ^{2×m}`*, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3) (2026) | no for `2 × m`, `m ≥ 3`; the homogeneous problem fails at `p = 4` in every size above `2 × 2`, and at every `p > 1` in suitable sizes | every result that the paper proves is **proved** (below) | no false statement; gaps, all filled (below) | [README](docs/Cassese/README.md), [REPORT](docs/Cassese/REPORT.md), [Challenge](palomar/Cassese/Challenge.lean) |
-
-The formalization of Pedregal's paper:
-
-- Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**;
-- the rest of Sections 3–7, except Claim 7.3, is proved;
-- Theorems 1.1 (2) and 1.2 are stated, not proved.
 
 In the formalization of Cassese's paper, every result that the paper proves is **proved**:
 
@@ -147,6 +134,22 @@ the definition of rank-one convexity and one-variable calculus. The documents:
   ([PDF](docs/HomogeneousIsotropic/paper/main.pdf));
 - the statements of record, [`palomar/HomogeneousIsotropic/Challenge.lean`](palomar/HomogeneousIsotropic/Challenge.lean);
 - [how it was made](docs/HomogeneousIsotropic/CREDITS.md).
+
+## A claimed proof of the `2 × 2` case
+
+P. Pedregal, *Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional,
+two-component maps*, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5) (2026), claims a
+positive answer for `2 × 2` matrices. Its proof fails:
+
+- Proposition 7.1, Corollary 7.2 and the summary of Step 2 of the proof are **false**: an explicit
+  counterexample, checked in Lean, refutes Corollary 7.2, on which the paper's use of Kakutani's
+  theorem rests;
+- the rest of Sections 3–7, except Claim 7.3, is proved;
+- the main theorems, Theorems 1.1 (2) and 1.2, are stated and not proved, so the claim is neither
+  proved nor refuted, and the `2 × 2` problem stays open.
+
+The documents: [README](docs/Pedregal/README.md), [REPORT](docs/Pedregal/REPORT.md),
+[Challenge](palomar/Pedregal/Challenge.lean).
 
 ## How the papers connect
 
