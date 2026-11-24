@@ -1,5 +1,68 @@
 # Roadmap to completion
 
+## Anisotropic advance — full-matrix half-space projection and QC gluing
+
+The [new half-space projection theorem](IWANIEC_MORREY_FULL_MATRIX_HALFSPACE.md)
+imposes ANY full-rank linear gradient constraint ell(X)=B:X>=0
+at a base with ell(A)>0. Minimize the scalar periodic obstacle
+functional int |B grad rho|²/2+ell(X)rho over rho>=0.
+The projected vector map is zeta=phi-B grad rho. Its L²
+projection property follows from the obstacle variational
+inequality, giving H¹ regularity by translation contraction.
+Invertibility of B gives rho in H². Complementarity and the
+Sobolev zero-set derivative property then give the EXACT
+selection Z=X or ell(Z)=0, with ell(Z)>=0. The residual
+ell(X)-ell(Z) is bounded, so the standard linear elliptic
+L^q estimates give the projected map W^(1,q) for all finite q.
+No Lipschitz claim is made.
+
+The new strong identity is int Ze·(X-Z)e=0 for EVERY spatial
+direction e, by integration by parts to int ell(Z)D_ee rho,
+which vanishes pointwise. The projection also preserves
+J:(B^(-1)X) pointwise and contracts every convex function
+of ell(X), since the original ell has zero conditional mean
+on the set where the pressure is positive.
+
+**Global QC gluing:** take Q0 to be a nonnegative spatial
+quadratic form plus determinant/affine terms and arbitrary
+convex functions of ell and the preserved skew scalar.
+For any continuous QC Q1 of polynomial growth with Q1<=Q0
+on ell=0, define G=max(Q0,Q1) on ell>0 and G=Q0 on ell<=0.
+Then G is QC, by the projection pointwise comparison
+G(X)>=Q0(X)+Q1(Z)-Q0(Z) and the three contraction/invariance
+properties. This allows genuinely full-rank constraints,
+not just scalar rows, and arbitrary QC branches.
+
+For B=I, using Q0=|Im z|^p and Q1=(det_+)^(p/2) yields
+explicit nonnegative anisotropic non-PC QC integrands for
+ALL p>=2; the corrected three-atom minors witness at I
+works for every exponent. For p=2 the energy is squared
+skew part/4 (in entry-difference coordinates) plus the
+positive-definite symmetric determinant truncation.
+Using Q0=M_p|Im z|^p and Q1=B_p instead (the verified
+signed Burkholder) gives QC nonconvex anisotropic energies
+for all p>1, with an explicit four-atom minors witness for
+1<p<2 by a vanishing-mass determinant repair.
+
+The note also gives a degree-demotion quantitative origin
+bound for arbitrary smooth p-homogeneous anisotropic F:
+with rank-one ellipticity m and full Hessian bound M on
+the unit sphere, put m'=m-M|p-2|(3p+1)/(p(p-1)) and
+K(p)=|p-2|/p+(2^(|p-2|/2)-1)/2. If m'>=0 then
+E F(X)>=(m'/2-2M K(p)/(p(p-1))) E |X|^p at zero.
+For each positive m/M this proves the original signed
+origin Jensen on an open exponent interval around two,
+without any closeness to isotropy. Not a universal
+exponent closure; the main direction is the new
+full-matrix spatial calibration, not an exponent ladder.
+
+The exact algebra checker was run successfully. These
+are hand proofs, not Lean-verified new theorems. The
+general homogeneous anisotropic gate is open; no
+universality of the gluing class has been established.
+The homogeneous isotropic theorem for all signed p>0
+is formally CLOSED on main.
+
 ## CURRENT DIRECTION — remove isotropy first (homogeneity retained)
 
 **Verified baseline:** main at
