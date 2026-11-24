@@ -1,5 +1,52 @@
 # Roadmap to completion
 
+## PRIMARY RESEARCH DIRECTION — remove homogeneity while retaining isotropy
+
+The user is handling the audit/formalization of the signed homogeneous
+candidate. Do not reopen the already verified nonnegative theorem.
+The new [nonhomogeneous affine-shell theorem](IWANIEC_MORREY_NONHOMOG_SHELL_AFFINE.md)
+proves RC=>QC for every finite-valued integrand
+F(X)=U(s)+V(s)delta, s=operator norm, delta=signed smaller singular value,
+without homogeneity, sign, smoothness or growth assumptions.
+It uses only the already formalized L theorem, NOT the signed
+homogeneous candidate under separate audit.
+
+Rank-one convexity gives the distributional inequality
+U''>=s|V''| and the conformal boundary condition
+U'>=|V-sV'|. Hence the two nonnegative measures
+mu_±=(U''/s ± V'')/2 represent the entire function, by
+positive integrals of the QC kernels K_r^±=(s-r)_+(r±delta)
+plus a polyconvex initial support. Truncation at epsilon>0
+handles possibly infinite measure near zero and converges
+locally uniformly. This closes the full arbitrary radial
+affine-shell class, not a fixed-exponent family.
+
+The exact spectral tests for this whole class consist of
+the two conformal norm inequalities, the determinant identity,
+and the two kernel tests at all positive radii. Compress any
+spectral law to its conditional mean delta at each radius:
+all these tests are unchanged, while Jensen in delta lowers
+EVERY isotropic RC integrand. This does not preserve actual
+gradient compatibility. The compact obstacle duality gives
+an exact criterion for universal touching affine-shell lower
+supports on bounded sets.
+
+**Remaining global target:** arbitrary two-variable isotropic
+profiles. The contact-path calculation gives a scalar
+differential inclusion for c=M' with
+z'=(c-f_sdelta)/f_deltadelta, D*=f_ss-(c-f_sdelta)^2/f_deltadelta,
+and -D*/(s-z)<=c'<=D*/(s+z), plus the explicit angular bounds.
+Pointwise feasibility follows from planar quadratic
+polyconvexity; global viability does NOT follow. Need a
+global obstacle minorant, allowing noncontact intervals.
+Do not infer full isotropic Morrey or pursue a new exponent,
+wave, or polynomial-degree ladder.
+
+Exact rational mixed atomic/diffuse representation and
+spectral compression controls passed in the working container.
+Hand proofs, not new Lean results. The signed homogeneous
+audit and formalization remain separate.
+
 ## SIGNED HOMOGENEOUS ISOTROPIC — candidate complete hand proof, every p>0
 
 **Formal baseline corrected:** the separate
