@@ -1,5 +1,85 @@
 # Roadmap to completion
 
+## MAIN GATE REDUCTION — dense exactly saturated homogeneous envelopes
+
+The [new finite-ray envelope theorem](IWANIEC_MORREY_HOMOGENEOUS_RAY_ENVELOPES.md)
+bypasses regularity of extremals and applies to EVERY positively
+p-homogeneous finite RC F, p>1, with no symmetry or sign restriction.
+Take finitely many rays K_D (including directions of the 16
+coordinate cube vertices), prescribe the original F data there,
+and define E_D(X) as the infimum of F costs over finite laminates
+rooted at X and supported on K_D. Four coordinate splitting
+levels ensure a finite upper bound E_D<=2^p M |X|^p, with
+M=angular sup |F|. RC Jensen gives E_D>=F. Concatenation
+gives RC, positive scaling gives exact homogeneity, and
+E_D=F on all prescribed rays. It is the maximal RC function
+below the data even among nonhomogeneous competitors.
+
+Off those rays E_D is viscosity saturated: a smooth lower
+touching with strictly positive rank-one Hessian would allow
+a local max with a slightly raised, strictly rank-one convex
+quadratic perturbation of the test, preserving every datum.
+This contradicts maximality.
+
+**A.e. Taylor theorem for the entire homogeneous cone:**
+the previous weak-Hessian theorem gives DF locally BV. At
+Lebesgue points of its ac Hessian Q with singular density
+zero, subtract the Taylor polynomial. BV Poincare and dyadic
+telescoping of gradient means give mean gradient remainder
+o(r); W^(1,1) Poincare and the same telescoping give mean
+function remainder o(r²). The rescaled original functions
+after subtracting ONLY their affine first jet are separately
+convex. Local L¹ bounds give uniform local bounds and
+equicontinuity by signed separate-convex interpolation, so
+averaged convergence to the Taylor quadratic upgrades to
+local uniform convergence. Thus Q is an ordinary second-order
+Taylor coefficient a.e. The lower-touching condition then
+forces min_{rank H=1,|H|=1} Q_D[H,H]=0 a.e., since K_D
+is a finite union of rays of Lebesgue measure zero.
+
+**Exact density of the saturated class:** if D includes
+a delta-net of the unit sphere, uniform secant Lipschitz
+bounds from the cube interpolation upper bound and equality
+of the data yield
+    0<=E_D(X)-F(X)<=8*4^p M delta |X|^p
+for ALL X. Hence a.e.-saturated homogeneous RC integrands
+are dense from above in the entire homogeneous cone.
+Proving QC for them is EQUIVALENT to proving general
+homogeneous anisotropic Morrey. No smooth-extreme-point
+regularity assumption is needed. The ray directions at
+any positive approximation accuracy can be chosen uniformly
+over the normalized cone. If a strict counterexample
+has finitely many gradient atoms, include their directions:
+E_D retains their energies EXACTLY and can only increase
+the base energy. The violation survives unchanged or
+strengthened. There is no finite ray-count bound for
+exact Jensen and no finite-depth assertion for envelopes.
+
+**Further global theorem:** for homogeneous p>1, viscosity
+saturation on the whole punctured space extends across
+zero by perturbing a lower touching with a small nonzero
+linear function (DF(0)=0). Comparison with a smoothed,
+strictly rank-one convex exterior-data envelope then gives
+F(A)=inf of all finite laminate costs rooted at A with
+every leaf norm >=R, for EVERY R>0. Hence a globally
+viscosity-saturated F cannot be coercive. At degree two,
+the earlier coercive determinant-shift theorem for positive
+rank-one trace implies that every such globally saturated
+F has a zero rank-one direction, without smoothness or
+symmetry. This is stronger than the earlier smooth
+null-direction conclusion, but requires viscosity saturation
+everywhere, not just a.e.
+
+The exact rational checker was actually executed: 625
+coordinate-laminate controls and 153 signed interpolation
+controls passed. Analytic hand proofs; no new Lean theorem.
+**Remaining single full-cone target:** QC of the nonsmooth
+a.e.-saturated envelopes. Smooth saturation is not enough;
+the new approximants may have angular singularities and
+can fail viscosity saturation on obstacle rays. Their
+variable determinant multiplier is still uncontrolled.
+No universal QC proof or claim of finite exact classification.
+
 ## Entire nonsmooth homogeneous cone — weak Hessian recovery and vanishing-ac-curvature rigidity
 
 The [new weak-Hessian theorem](IWANIEC_MORREY_HOMOGENEOUS_WEAK_HESSIAN.md)
