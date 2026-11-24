@@ -1,5 +1,45 @@
 # Roadmap to completion
 
+## N=0,...,4 ledger: entire four-wave problem reduced to TWO fixed corner inequalities
+
+The [new exhaustive four-wave reduction](IWANIEC_MORREY_FOUR_WAVE_CASES.md)
+clarifies the crucial quantifier: the bound of four applies to
+minimal odd-resonance supports, NOT to total wave count.
+N=0,1,2 are elementary and N=3 is the published
+Sebestyén–Székelyhidi theorem. The general N=4 gate is now
+reduced by hand proofs to **two fixed 16-atom weight laws**,
+each tested on arbitrary rank-one H_1,...,H_4 and arbitrary F:
+D has density (1+e123/2+e124/2)/16 and TQ has density
+(1+e123/2+e1234/2)/16. Both corner inequalities remain OPEN.
+
+New proof components: (i) exhaustive six-row normalized mod-2
+classification of four pairwise nonparallel frequencies;
+(ii) **universal absolute fourth-Walsh-correlation bound 1/2**
+for all distinct directions, including the nonminimal
+triple+quadruple case, by lattice-projection index bounds,
+Cauchy–Schwarz, and a separate explicit unit-triad integral;
+(iii) complete three-direction case (one parallel pair) using
+conditional triangular correlation, 2-adic support and a
+six-vertex outer polytope, reduced to the SAME two corners.
+One/two spatial directions are elementary. No additional
+integer-frequency cases remain in this sufficient N=4 reduction.
+
+The [exact checker](../../research/audit/iwaniec_four_wave_cases_exact.py)
+was run locally: 22 mod-2 multisets, six parallel-pair
+generating points and two rational polygon sign-law controls
+passed. One actual unit double triad attains D exactly;
+one triple+quadruple field has correlations 1/2 and 1/4,
+so the earlier total-parity budget genuinely fails.
+
+**Next bounded task:** prove D and TQ, e.g. via fixed-weight
+rank-one cube certificates parametrized by split-signature
+determinant forms. These are sufficient outer corner laws;
+failure for arbitrary H_i without actual spatial compatibility
+would not itself be a four-wave counterexample. No bound on
+certificate-tree size is asserted. Neither Lean nor external
+human review yet. Even closing both corners would not prove
+the all-N induction needed for unrestricted Morrey.
+
 ## All-N composition theorem for overlapping circuits, and nonunit three-ridge waveforms
 
 The [new random-cube composition theorem](IWANIEC_MORREY_CUBE_COUPLING.md)
