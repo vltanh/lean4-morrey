@@ -1,5 +1,49 @@
 # Roadmap to completion
 
+## Exact energy-dependent tail budget and target-composition compatibility
+
+The [new determinant-tail and spatial weighting note](IWANIEC_MORREY_TARGET_WEIGHTED_TAIL.md)
+removes the smoothing error from the previous transport bound.
+For any C³ isotropic RC F and any smooth contact path through
+the base, let U(s)+V(s)delta be its angular supporting line on
+each shell, and Q>=0 the angular remainder. Define
+N(r)=E(s-r)_+-(s_A-r)_+,
+T(r)=E[(s-r)_+delta]-(s_A-r)_+delta_A.
+The exact original-energy identity is
+    E F-F(A)=E Q+integral (U'' N+V'' T).
+The known K_r tests give |T|<=rN, so an explicit sufficient
+budget is E Q + integral (U''-r|V''|)_+ N
+>= integral (r|V''|-U'')_+ N.
+No global log-Lipschitz estimate or smoothing error is needed.
+This is not a proof of the sufficient budget for all F/laws.
+
+**Spatial improvement at zero base:** any periodic Lipschitz
+u satisfies int q(u) det Du=0 for every bounded Borel q,
+by the determinant null Lagrangian applied to target
+compositions. Thus positive and negative determinant mass
+balance even after pushforward to target values.
+The QC entropy calibrations s²/2 ± d log s follow directly
+from positive truncated-determinant integrals.
+For any C¹ target transformation with B=DT(u), apply them
+to T composed with u. The result is
+    |int det B d log s| <= (1/2) int s(BDu)²
+                          +(1/2) int |det B d| log kappa(B).
+Singular-matrix determinant products are continuously zero.
+For conformal target transformations with holomorphic
+derivative h this gives the exact weighted inequality
+    |int |h(u)|² d log s| <= (1/2) int |h(u)|² s²,
+including its polarized cross-moment version for all
+holomorphic polynomials at once. These constraints depend
+on spatial/target information, not merely on the radial law.
+They do not imply unrestricted localization by arbitrary
+nonnegative target weights without distortion costs.
+
+The symbolic truncated-log and moving-ray identities and
+15 full-moment exact tail identities were actually checked.
+The universal energy-dependent compensation remains unproved;
+do not call this closure of the isotropic gate. No new Lean
+theorem, and no fixed-wave/degree enumeration is proposed.
+
 ## Positive transport advance — compatibility across arbitrary spectral scales
 
 The [weighted spectral transport theorem](IWANIEC_MORREY_WEIGHTED_SPECTRAL_TRANSPORT.md)
