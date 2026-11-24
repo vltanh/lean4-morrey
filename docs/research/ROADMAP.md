@@ -1,5 +1,66 @@
 # Roadmap to completion
 
+## GATE 1 — positive directional marginals, affine-frame calibration, and polar residual
+
+The [new spatial constructions](IWANIEC_MORREY_DIRECTIONAL_FRAME_STRESS.md)
+preserve positivity, but do NOT yet close G1. Directional
+heat along any e followed by heat of the surviving field along
+e-perp gives a PSD full-matrix stress M_e with the correct
+Hessian source for every smooth F. It has the exact vanishing
+cofactor marginal
+    (Y -> Ye)_# (C:M_e)=0.
+During the first stage H=D(Ye), and g(Ye) det H integrates
+to zero by pullback of an exact two-form for every continuous g.
+The second-stage H has rank at most one. Thus all F with a
+feasible determinant multiplier depending only on Ye satisfy
+global Jensen; no curvature-contrast restriction is needed.
+Homogeneous angular pushforward retains the corresponding
+integrable weighted marginal cancellation.
+
+**Do not attempt to close G1 by simply averaging these sweeps.**
+For the radial plane map phi=x exp(-|x|²/2), p=4, the angular
+test det u has cofactor pairing pi/56>0 for EVERY sweep direction.
+The Gaussian moment identity is exact. Radial cutoff and
+periodization on a large torus preserve positivity uniformly
+in e, using the heat L⁴ energy estimate for tails and uniform
+finite-time Gaussian convolution bounds. Thus an actual
+periodic compatible gradient defeats this particular family
+of corrections. This does not refute G1 or Morrey.
+
+**Fully positive affine-frame stress:** let u=B(x)x+b(x),
+where the Lipschitz affine-frame map (B,b) has derivative rank
+<=1 a.e. and is constant (A,b0) near the boundary of a disk.
+Then R=Du-B is rank one. For every C² F the one-forms
+DF(B)^T dB and DF(B)^T db are closed by rank-one dependence
+of the combined derivatives. Integrate to K,l, with
+tr K=F(B), and div(Kx+l)=F(B)+DF(B):R. Boundary flux
+equals |Omega| F(A). Consequently the energy gap equals
+int int_0^1 (1-t) D²F(B+tR)[R,R] dt dx, a completely
+PSD cofactor-free stress for ALL F, independent of F.
+This includes arbitrary scalar-parameter affine frames
+(arbitrary nested or non-nested level sets, matrix and
+translation paths), not just radial scalar stretches.
+No universal frame-factorization or approximation is proved.
+
+**Polar decomposition for every smooth compact perturbation:**
+write w=u(r n)/r, m=n_theta, Y=w tensor n+w_theta tensor m,
+xi=r w_r, zeta=w+w_thetatheta. Then Du=Y+xi tensor n
+and Y_theta=zeta tensor m. Radial Taylor and angular
+integration by parts give the exact energy gap as a
+positive rank-one radial Taylor stress (for RC tests)
+plus (1/2) int r D²F(Y)[xi tensor m,zeta tensor m] dtheta dr.
+The latter is pointwise cofactor-free, but signed. It
+vanishes for affine first-harmonic shells. Its absorption
+for general w remains unproved. This is an actual spatial
+identity, not an enumeration of angular integrands.
+
+The exact polar/frame algebra and Gaussian calculation
+were executed successfully. **G1 remains OPEN.** Neither
+the marginal criterion, the affine-frame factorization,
+nor the polar decomposition proves the required universal
+positive correction. No new Lean verification or priority
+claim.
+
 ## GATE 1 — explicit spatial cofactor correction; positive absorption remains open
 
 The [new spatial heat-stress exchange](IWANIEC_MORREY_HEAT_STRESS_EXCHANGE.md)
