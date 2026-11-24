@@ -1,5 +1,47 @@
 # Roadmap to completion
 
+## Nonhomogeneous main attack — full-vector operator-ball projection
+
+The [vector projection theorem](IWANIEC_MORREY_NONHOMOG_VECTOR_PROJECTION.md)
+is a hand-proved analytic extension of the scalar projection
+mechanism. For arbitrary finite-dimensional vector maps,
+project the periodic part in L2 onto maps whose full
+gradient has operator norm <=R, with the same affine base.
+**Exact boundary selection:** the projected gradient
+equals the original gradient or has operator norm exactly R,
+almost everywhere. The local proof uses a shifted affine
+inner ball, Kirszbraun's Euclidean extension theorem to
+fill a thin annulus, and a strict improvement of the
+projection objective if an interior-gradient noncontact
+point exists. Translation variations give the simultaneous
+directional signs int (Dv)e dot (Du-Dv)e>=0 for every e,
+and the corresponding squared-gradient contraction.
+
+This clips the whole compatible matrix field at once, not
+independent scalar output rows. The new projection-max
+theorem takes the maximum over the entire operator-norm
+sphere or the original interior matrix, of arbitrary
+polyconvex stacked [X;Z] calibrations plus a nonnegative
+quadratic directional correction. All mixed minors of the
+stack have the correct mean. A further extension theorem
+allows ANY already QC core on the closed operator ball
+(localized Jensen only), and gives a globally QC exterior
+extension via a convex boundary supremum and determinant.
+The spectral form for a mixed-minor calibration is an
+explicit scalar clamped quadratic; the exact local constants
+and 792 rational boundary checks passed.
+
+**Remaining goal:** energy-decreasing comparison with the
+full-vector projection, or global touching lower supports
+using its boundary calibrations for arbitrary isotropic RC F.
+The new lemma does not say Du-Dv is rank one or provide
+arbitrary nonlinear matrix-potential signs. No universal
+calibration existence or full isotropic QC theorem is
+claimed. No new Lean theorem or novelty claim.
+Avoid another sequence of separated-curvature subclasses,
+fixed wave counts or projection counts. The signed
+homogeneous audit remains separate.
+
 ## Nonhomogeneous follow-up — arbitrary separated angular curvature and quantitative mixed-curvature bound
 
 The [new angular-curvature theorem](IWANIEC_MORREY_NONHOMOG_ANGULAR.md)
