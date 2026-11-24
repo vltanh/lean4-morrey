@@ -1,5 +1,84 @@
 # Roadmap to completion
 
+## Global extremal rigidity — straight saturated characteristics and degree-two classification
+
+The [new saturated-characteristic theorem](IWANIEC_MORREY_SATURATED_CHARACTERISTICS.md)
+studies the full anisotropic normalized homogeneous cone, with
+no symmetry or fixed angular polynomial assumption. For C³ RC F
+off zero whose minimum rank-one Hessian curvature vanishes everywhere,
+write Q=D²F, C=linear cofactor (signature (2,2)), and
+P=Q-lambda C>=0. Saturation makes lambda unique and continuous:
+every null rank-one R satisfies Q R=lambda C R. Also
+D³F[W,R,R]=0 for every W by differentiating the nonnegative
+rank-one curvature at a zero. On constant-rank kernel strata
+lambda is C¹ by Schur complement/implicit function theorem
+(including totally determinant-null kernels using tr S_k=0).
+
+**Global affine-ray theorem:** choose maximal rank of P on
+the punctured space or a nonempty open multiplier-level region.
+If C restricted to ker P is indefinite at maximal rank,
+its regular nulls span the kernel, and differentiating the
+kernel relation shows Dlambda[R]=0 for all such R. The
+ambient field (X',R')=(R,0) is tangent to the regular null
+bundle. In the remaining radical case, differentiate PR=0
+and use PSD to get Dlambda[R]=0 and D_R K=0, hence straight
+radical characteristics with constant kernel. Both yield
+DF(X+tR)=DF(X)+t lambda CR. Vary the initial X in a local
+C¹ null section and differentiate:
+    P(X+tR)(I+t DR(X))=P(X)+t (CR) tensor Dlambda(X).
+This rank-one update is the global continuation identity.
+On a regular stratum the RHS retains rank and CR remains
+transverse to its range, so no finite endpoint exists.
+On a maximal radical stratum a finite endpoint must drop
+rank, which can occur for at most one t (a nonzero maximal
+minor of the RHS is affine in t). Thus every invertible
+point in a chosen nonempty open maximal stratum has an
+unbounded affine rank-one half-line; regular case gives
+an entire line. Multiplier constant throughout. Homogeneity
+p>1 then forces a zero rank-one trace direction.
+
+**Positive global degree-two theorem:** EVERY C³ saturated
+2-homogeneous RC F (arbitrary signs and anisotropy) is a
+convex function plus a constant determinant, hence PC/QC
+at ALL bases. First subtract a determinant to make G>=0
+by the complete degree-two origin theorem. For G, Q is
+PSD iff its multiplier lambda is zero. If U={lambda!=0}
+is nonempty, choose a maximal stratum THERE (lambda stays
+constant along a characteristic). The unbounded affine
+half-line X+tH has G(H)=0 and DG(H)=0. Taylor gives
+    lim G(Y+tH)=q_H(Y)=D²G(H)[Y,Y]/2
+for every Y. Rank-one convexity and finite limit force
+G>=q_H globally; the affine ray is constant, giving
+contact at X. Since H is a global minimum, q_H is convex.
+Thus D²G(X)>=D²G(H)>=0, a contradiction to X in U.
+The rank-zero case gives a constant determinant directly.
+
+**All noninteger p>1:** for C³ and C^(ceil p) profiles,
+global saturation forces F=0. Taylor at H on an unbounded
+affine ray gives distinct positive powers t^(p-j), none
+equal to 1 or 0, plus a vanishing remainder. Comparing
+with the affine function forces F(X)=0 on the whole
+chosen open stratum, contradicting its positive rank.
+
+Every smooth extreme point of the compact normalized
+signed cone must be saturated everywhere: a strictly
+elliptic angular patch admits a nonzero smooth local
+homogeneous bump preserving the linear normalizations,
+and F±eps bump stay RC. Hence all C³ degree-two extremes
+are QC; at noninteger degrees no extreme has the indicated
+smoothness. Any general proof via extremality must address
+nonsmooth angular profiles. Ordinary smooth approximation
+does NOT preserve extremality or saturation, so these
+theorems do not close the general gate. They describe
+global characteristics for arbitrary null multiplicities,
+not a fixed-case or degree enumeration.
+
+Exact cofactor/Schur/continuation identities were checked
+by the executed symbolic script. Hand proofs, no new Lean
+verification or novelty claim. General homogeneous
+anisotropic Morrey remains open; the signed homogeneous
+isotropic theorem remains formally closed.
+
 ## General homogeneous cone — quantitative compactness and uniform finite angular tests
 
 The [new all-profile quantitative theorem](IWANIEC_MORREY_HOMOGENEOUS_UNIFORM_CONE.md)
