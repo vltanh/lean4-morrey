@@ -1,6 +1,6 @@
 module
 
-public import Morrey.HomogeneousIsotropic.Burkholder
+public import Morrey.HomogeneousIsotropic.Signed.Main
 public import Morrey.HomogeneousIsotropic.Bridges
 
 /-!
@@ -9,8 +9,8 @@ public import Morrey.HomogeneousIsotropic.Bridges
 The statements of `palomar/HomogeneousIsotropic/Challenge.lean`, word for word, proved from the
 library. The library's proofs use the rank-one convexity and the quasiconvexity of the package
 `CalculusOfVariations`; `Morrey/HomogeneousIsotropic/Bridges.lean` identifies them with the
-Challenge's. The quasiconvexity of the Burkholder function, for Corollaries 1.6 (a) and 1.8,
-comes from the package lean4-iwaniec (`Morrey/HomogeneousIsotropic/Burkholder.lean`).
+Challenge's. The quasiconvexity of the truncated determinant, on which Theorem A, Proposition 6.8
+and Corollary 1.6 (a) rest, comes from the package lean4-iwaniec.
 -/
 
 @[expose] public section
@@ -94,10 +94,13 @@ theorem proposition1_7 {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1) {F : Matrix (Fin 2)
     F A = 0 :=
   eq_zero_of_rankOneConvex_of_lt_one hp0 hp1 hhom ((isRankOneConvex_iff F).1 hrc) A
 
-theorem corollary1_8 {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
-    (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) : IsQuasiconvex F :=
-  (isQuasiconvex_iff F).2 (quasiconvex_of_rankOneConvex_of_pos hp h0 hiso hhom
+theorem theoremA {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} (hiso : IsIsotropic F)
+    (hhom : IsPosHomogeneous p F) (hrc : IsRankOneConvex F) : IsQuasiconvex F :=
+  (isQuasiconvex_iff F).2 (quasiconvex_of_rankOneConvex_of_isotropic hp hiso hhom
     ((isRankOneConvex_iff F).1 hrc))
+
+theorem proposition6_8 {e : ℝ} (he : e = 1 ∨ e = -1) {N : ℝ → ℝ} (hN : ConvexOn ℝ (Set.Ici 0) N)
+    (hNc : Continuous N) (hN0 : N 0 ≤ 0) : IsQuasiconvex (radial e N) :=
+  (isQuasiconvex_iff _).2 (quasiconvex_radial he hN hNc hN0)
 
 end HomogeneousIsotropicChallenge

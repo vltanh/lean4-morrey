@@ -14,7 +14,8 @@
     "HomogeneousIsotropicChallenge.corollary1_6_a",
     "HomogeneousIsotropicChallenge.corollary1_6_b",
     "HomogeneousIsotropicChallenge.proposition1_7",
-    "HomogeneousIsotropicChallenge.corollary1_8"
+    "HomogeneousIsotropicChallenge.theoremA",
+    "HomogeneousIsotropicChallenge.proposition6_8"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],

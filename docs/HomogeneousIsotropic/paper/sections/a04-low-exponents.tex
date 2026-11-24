@@ -44,10 +44,10 @@ are nonnegative because $(2-p)\abs m\le pc_0$.
 \end{proof}
 
 \begin{proof}[Proof of \cref{cor:low}]
-(a) The Burkholder function $B_p$ is quasiconvex, by \cite[Corollary~2]{SharpHI} as
-formalized in~\cite{IwaniecLean}; see \cref{sec:intro-low} for the test maps. So is
-$A\mapsto B_p(JA)$, by composing the test maps with $J$, and both are continuous. Hence every $G_{c_0,m}$ as in \cref{thm:low} is quasiconvex,
-and for a test map $\varphi$,
+(a) The Burkholder function $B_p$ and its mirror image $A\mapsto B_p(JA)$ are quasiconvex by
+\cref{cor:burkholder}, and both are continuous. Hence every
+$G_{c_0,m}$ with $(2-p)\abs m\le pc_0$ is quasiconvex, by the identity of \cref{thm:low}, and
+for a test map $\varphi$,
 \[
   F(A_0)=G_{c_0,m}(A_0)\le\int_{(0,1)^2}G_{c_0,m}(A_0+\nabla\varphi)\,dx
   \le\int_{(0,1)^2}F(A_0+\nabla\varphi)\,dx .
@@ -85,11 +85,4 @@ $F(A+\tau B)=F(A)$ for every $\tau$.
 
 The four matrices with one entry equal to $1$ and the others $0$ have rank one. Removing the
 entries of $A$ one at a time gives $F(A)=F(0)=0$.
-\end{proof}
-
-\begin{proof}[Proof of \cref{cor:all}]
-For $0<p<1$, $F=0$ by \cref{prop:small}. For $p=1$, $F$ is convex by \cref{cor:low}\,(b), hence
-quasiconvex. For $1<p<2$ this is
-\cref{cor:low}\,(a). For $p\ge2$, $F$ is polyconvex by \cref{thm:main}, hence quasiconvex by
-\cref{lem:supports}.
 \end{proof}

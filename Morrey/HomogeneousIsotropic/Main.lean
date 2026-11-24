@@ -43,8 +43,8 @@ are those of the paper, `docs/HomogeneousIsotropic/paper/main.tex`.
   `p`-homogeneous, rank-one convex `F` is `0`; isotropy and the sign condition are not needed.
 * `quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord`: for every `p > 0`, a nonnegative `F`
   of the class is quasiconvex if `burkholderCoord p` is quasiconvex when `1 < p < 2`.
-  **Corollaries 1.6 (a)** and **1.8**, without that hypothesis, are in
-  `Morrey/HomogeneousIsotropic/Burkholder.lean`.
+  **Corollary 1.6 (a)** and the nonnegative case of **Theorem A**, without that hypothesis, are in
+  `Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`.
 -/
 
 @[expose] public section
@@ -580,7 +580,7 @@ theorem eq_zero_of_rankOneConvex_of_lt_one (hp0 : 0 < p) (hp1 : p < 1)
 /-- Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on
 `ℝ^{2×2}`. Then `F` is quasiconvex, if `burkholderCoord p` is quasiconvex when `1 < p < 2`. For
 `0 < p < 1` it is `0`, for `p = 1` it is convex, and for `p ≥ 2` it is polyconvex.
-Corollary 1.8 (`quasiconvex_of_rankOneConvex_of_pos`) removes the hypothesis. -/
+`quasiconvex_of_rankOneConvex_of_pos` removes the hypothesis. -/
 theorem quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
     (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F)
     (hB : 1 < p → p < 2 → Quasiconvex (burkholderCoord p)) : Quasiconvex F := by

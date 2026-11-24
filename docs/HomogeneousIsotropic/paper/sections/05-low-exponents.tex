@@ -24,8 +24,8 @@ and outside the overlap the missing inequality follows from the other one and fr
 
 \Cref{thm:low} is \cref{prop:low} for the profile of $F$, since the Burkholder-type functions
 are positively $p$-homogeneous. \Cref{cor:low}\,(a) follows by the remark after
-\cref{lem:supports}: $B_p$ is quasiconvex (\cite[Corollary~2]{SharpHI}, formalized
-in~\cite{IwaniecLean}), hence so are its mirror image and every $G_{c_0,m}$ of \cref{thm:low}.
+\cref{lem:supports}: $B_p$ and its mirror image are quasiconvex by \cref{cor:burkholder}, a
+consequence of \cref{prop:radial}, hence so is every $G_{c_0,m}$ of \cref{thm:low}.
 
 Nonnegativity enters \cref{prop:low} at the ends, through $h(\pm1)\ge0$, and at the interior
 points outside the overlap. For $p=1$ it is automatic:
@@ -50,9 +50,3 @@ For a matrix $A$ and a matrix $B$ of rank one, homogeneity gives
 $F(A+\tau B)=\tau^pF(B+A/\tau)$ for $\tau>0$, so that $F(A+\tau B)/\tau\to0$. By
 \cref{lem:sublinear}, $F$ is constant along every rank-one line. The matrices of rank one span
 $\M$, so $F$ is constant, and the constant is $F(0)=0$. This proves \cref{prop:small}.
-
-\subsection{All exponents}
-
-\Cref{cor:all} collects the cases: $F=0$ for $0<p<1$ (\cref{prop:small}), $F$ convex for $p=1$
-(\cref{cor:low}\,(b)), $F$ quasiconvex for $1<p<2$ (\cref{cor:low}\,(a)), and $F$ polyconvex
-for $p\ge2$ (\cref{thm:main}).

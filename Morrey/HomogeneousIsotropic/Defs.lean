@@ -12,6 +12,7 @@ public import Mathlib.LinearAlgebra.Matrix.Rank
 public import Mathlib.LinearAlgebra.UnitaryGroup
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 public import Mathlib.MeasureTheory.Integral.IntegrableOn
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 public import Mathlib.Topology.EMetricSpace.Lipschitz
 public import Mathlib.Topology.Instances.Matrix
@@ -149,6 +150,18 @@ def reflection : Matrix (Fin 2) (Fin 2) ℝ :=
 interval `[L, U]`, `L = ((1 + t) m − p H)/(1 − t)`, `U = (p H + (1 − t) m)/(1 + t)`. -/
 noncomputable def multiplier (p H m t : ℝ) : ℝ :=
   min ((p * H + (1 - t) * m) / (1 + t)) (max (((1 + t) * m - p * H) / (1 - t)) ((p - 1) * m))
+
+/-- The radial function of the profile variables,
+`(x + y + e (x − y)) N (x + y) − 2 ∫₀^{x+y} N`: it is `2 x N (x + y) − 2 ∫₀^{x+y} N` for `e = 1`
+and `2 y N (x + y) − 2 ∫₀^{x+y} N` for `e = −1`. -/
+noncomputable def radialProfile (e : ℝ) (N : ℝ → ℝ) (x y : ℝ) : ℝ :=
+  (x + y + e * (x - y)) * N (x + y) - 2 * ∫ r in (0 : ℝ)..(x + y), N r
+
+/-- The radial function of Proposition 6.8, `(|A| + e δ) N (|A|) − 2 ∫₀^{|A|} N (r) dr`, in
+conformal coordinates: `|A| = |z| + |w|` and `δ = |z| − |w|`, so that `|A| + e δ` is `2 |z|` for
+`e = 1` and `2 |w|` for `e = −1`. -/
+noncomputable def radial (e : ℝ) (N : ℝ → ℝ) (X : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  radialProfile e N ‖conformalPart X‖ ‖anticonformalPart X‖
 
 -- END SHARED DEFINITIONS
 

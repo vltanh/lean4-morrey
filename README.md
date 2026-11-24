@@ -21,10 +21,11 @@ stated and not proved. Each paper is audited on its own, with its own Challenge,
 submission; the papers share general lemmas, the cited results and the checks.
 
 The repository also proves a result of its own on the open `2 × 2` case
-([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, a
-nonnegative, isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is
-quasiconvex. For `p ≥ 2` it is even polyconvex. For `1 < p < 2` the proof uses the quasiconvexity
-of the Burkholder function, claimed in a 2026 preprint that we audited with a Lean formalization,
+([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md)): for every exponent `p > 0`, an
+isotropic, positively `p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex,
+with no sign condition. A nonnegative one is even polyconvex if `p ≥ 2`. The proof uses one
+result from outside, the quasiconvexity of the truncated determinant, claimed in a 2026 preprint
+that we audited with a Lean formalization,
 [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it from there.
 
 ## The state of the problem
@@ -43,8 +44,8 @@ larger size (Cassese, Section 1.1), so the answer is decided by a few sizes:
 That every size but `2 × 2` fails is proved here as one theorem, from Šverák's example and Cassese's
 ([`CasseseChallenge.morrey_landscape`](palomar/Cassese/Challenge.lean#L296)).
 
-In `2 × 2` the answer is yes for nonnegative, isotropic, positively `p`-homogeneous integrands,
-for every `p > 0`. This is proved here
+In `2 × 2` the answer is yes for isotropic, positively `p`-homogeneous integrands, for every
+`p > 0`, with no sign condition. This is proved here
 ([HomogeneousIsotropic](docs/HomogeneousIsotropic/README.md), below).
 
 **The homogeneous problem** (Kirchheim–Kristensen 2016): for `p ∈ (1, ∞)`, is every rank-one
@@ -103,7 +104,7 @@ Each paper's report (`docs/<Paper>/REPORT.md`) gives:
 
 Each paper's credits (`CREDITS.md`) say how it was made.
 
-## A result of this repository: nonnegative homogeneous isotropic integrands in `2 × 2`
+## A result of this repository: homogeneous isotropic integrands in `2 × 2`
 
 [`Morrey/HomogeneousIsotropic/`](Morrey/HomogeneousIsotropic) answers Morrey's problem for a
 class of integrands `F` on `ℝ^{2×2}`. Four hypotheses occur:
@@ -116,34 +117,33 @@ class of integrands `F` on `ℝ^{2×2}`. Four hypotheses occur:
 The Burkholder function `B_p(A) = (|1 − 2/p| |A|² + det A) |A|^{p−2}` (`|A|` the operator norm)
 satisfies H1, H2 and H3. Guerra and Kristensen (2022) proved that, for `p ≥ 2`, the integrands
 with H1, H2, H3 and N are polyconvex at the multiples of orthogonal matrices, and asked whether
-they are polyconvex everywhere (their Question 1.7). They are. What each range of the exponent
-needs, and what it gives (`J = diag(1, −1)`):
+they are polyconvex everywhere (their Question 1.7). They are. Without N, every integrand with
+H1, H2 and H3 is quasiconvex (Theorem A). What each range of the exponent needs, and what it
+gives (`J = diag(1, −1)`):
 
 | Exponent | Hypotheses | Conclusion | Here |
 | --- | --- | --- | --- |
 | `0 < p < 1` | H2, H3 | `F = 0` | **proved** |
 | `p = 1` | H1, H2, H3 | `F ≥ 0`, and `F` is convex (Dacorogna 1995) | **proved** |
-| `1 < p < 2` | H1, H2, H3, N | `F` is quasiconvex; at every matrix it has a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | **proved** |
+| `1 < p < 2` | H1, H2, H3 | `F` is quasiconvex | **proved** |
+| `1 < p < 2` | H1, H2, H3, N | at every matrix `F` has a touching minorant `α B_p(A) + β B_p(JA)` with `α, β ≥ 0` | **proved** |
 | `p = 2` | H1, H2, H3 | `F` is polyconvex | **proved** |
+| `p > 2` | H1, H2, H3 | `F` is quasiconvex | **proved** |
 | `p > 2` | H1, H2, H3, N | `F` is polyconvex, with a polyaffine support at every matrix in closed form | **proved** |
 | `p > 2` | H1, H2, and `F < 0` somewhere | `F` is not polyconvex | **proved** |
-| every `p > 0` | H1, H2, H3, N | `F` is quasiconvex | **proved** |
+| every `p > 0` | H1, H2, H3 | `F` is quasiconvex (Theorem A) | **proved** |
 
-For `1 < p < 2` the proof uses one result from outside, the quasiconvexity of the Burkholder
-function `B_p`:
+The proof uses one result from outside: the quasiconvexity of the truncated determinant, claimed
+as Theorem 1 of the preprint of Agazzi et al., [arXiv:2609.28311](https://arxiv.org/abs/2609.28311).
+A radial integration over scales (Proposition 6.8 of the paper) turns it into the minorants that the proof needs,
+and also into the quasiconvexity of the Burkholder function for every `p > 1`, which the preprint
+claims as its Corollary 2. We audited that preprint with a Lean formalization,
+[lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which proves its results; this
+repository requires that package, so the Lean proofs here assume nothing. The argument for
+integrands that change sign is due to ChatGPT Chat 6 Extra High.
 
-- it is claimed in the preprint of Agazzi et al.,
-  [arXiv:2609.28311](https://arxiv.org/abs/2609.28311), Corollary 2;
-- we audited that preprint with a Lean formalization,
-  [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec), which proves its results;
-- this repository requires that package, so the Lean proofs here assume nothing.
-
-What is not proved here:
-
-- the quasiconvexity of integrands with `p > 2` that take negative values;
-- anything for integrands that are not isotropic or not homogeneous.
-
-The proof uses the definition of rank-one convexity and one-variable calculus:
+Integrands that are not isotropic or not homogeneous are not covered. The rest of the proof uses
+the definition of rank-one convexity and one-variable calculus:
 
 - [the statements, the proof in outline and the files](docs/HomogeneousIsotropic/README.md);
 - the paper, [`docs/HomogeneousIsotropic/paper/main.tex`](docs/HomogeneousIsotropic/paper/main.tex)
@@ -272,7 +272,7 @@ All four theorems, 1.2–1.5, follow this scheme. Symmetry can force quasiconvex
 
 - Guerra and Kristensen (2022) proved it for nonnegative homogeneous isotropic integrands at the
   multiples of orthogonal matrices (at every matrix:
-  [above](#a-result-of-this-repository-nonnegative-homogeneous-isotropic-integrands-in-2--2));
+  [above](#a-result-of-this-repository-homogeneous-isotropic-integrands-in-2--2));
 - Bruno and Pasqualotto (2026, a preprint) show that the planar Dacorogna–Marcellini energy is
   quasiconvex exactly when it is rank-one convex (`|γ| ≤ 2/√3`), and that quasiconvexity is
   equivalent to rank-one convexity for homogeneous quartics on `2 × 2` invariant under left and
@@ -280,7 +280,9 @@ All four theorems, 1.2–1.5, follow this scheme. Symmetry can force quasiconvex
 
 Cassese conjectures that isotropic homogeneous rank-one convex integrands are
 quasiconvex at `0` (Conjecture 1); Theorem 1.4's examples have only the weaker conjugation and
-transposition invariance. The paper also answers
+transposition invariance. For integrands on `ℝ^{2×2}` that are positively homogeneous, this
+repository proves quasiconvexity at every matrix
+([above](#a-result-of-this-repository-homogeneous-isotropic-integrands-in-2--2)). The paper also answers
 Kirchheim and Kristensen's homogeneous problem negatively, which Šverák's example cannot do: its
 quartic part at infinity, `ε|X|⁴`, is convex. Grabovsky's examples cannot either: they are
 nonnegative, hence quasiconvex at `0`.
@@ -352,11 +354,10 @@ How Cassese relates to the other two papers:
 
 ## What the repository adds to the papers
 
-- A theorem of its own in `2 × 2`: for nonnegative, isotropic, positively `p`-homogeneous
-  integrands, rank-one convexity implies quasiconvexity for every `p > 0`
-  ([above](#a-result-of-this-repository-nonnegative-homogeneous-isotropic-integrands-in-2--2)):
-  - polyconvexity for `p ≥ 2`;
-  - quasiconvexity for `1 < p < 2`, by the quasiconvexity of the Burkholder function;
+- A theorem of its own in `2 × 2`: for isotropic, positively `p`-homogeneous integrands,
+  rank-one convexity implies quasiconvexity for every `p > 0`, with no sign condition
+  ([above](#a-result-of-this-repository-homogeneous-isotropic-integrands-in-2--2)):
+  - polyconvexity for nonnegative integrands with `p ≥ 2`, and for all with `p = 2`;
   - convexity for `p = 1`;
   - `F = 0` for `0 < p < 1`.
 - The refutation of Pedregal's Corollary 7.2, Proposition 7.1 and the summary of Step 2 of its
@@ -431,7 +432,7 @@ Besides Mathlib, the proofs use five packages:
 | [lean4-calculus-of-variations](https://github.com/vltanh/lean4-calculus-of-variations) | `CalculusOfVariations` | rank-one convexity, quasiconvexity and more (below) | Cassese, HomogeneousIsotropic |
 | [lean4-harmonic-analysis](https://github.com/vltanh/lean4-harmonic-analysis) | `HarmonicAnalysis` | scalar and vector-valued harmonic analysis (below) | Cassese |
 | [lean4-banach-probability](https://github.com/vltanh/lean4-banach-probability) | `BanachProbability` | martingales, UMD spaces and more (below) | Cassese |
-| [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec) | `Agazzi` | the audit by formalization of Agazzi et al., arXiv:2609.28311: the quasiconvexity of the Burkholder function | HomogeneousIsotropic |
+| [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec) | `Agazzi` | the audit by formalization of Agazzi et al., arXiv:2609.28311: the quasiconvexity of the truncated determinant and of the Burkholder function | HomogeneousIsotropic |
 
 `CalculusOfVariations` provides:
 
@@ -522,8 +523,9 @@ Each preflight workflow names its submission's `comparator.json` and `formalizat
   paper's route, on 21–22 November; the cited results by their sources' proofs on 22 November:
   [`docs/Cassese/CREDITS.md`](docs/Cassese/CREDITS.md).
 - HomogeneousIsotropic: the research in pull request 1, with ChatGPT Chat 6 Extra High (OpenAI)
-  and Claude (Anthropic); proved in Lean and written up on 23 November 2026 by Claude Fable 5.2
-  in Claude Code: [`docs/HomogeneousIsotropic/CREDITS.md`](docs/HomogeneousIsotropic/CREDITS.md).
+  and Claude (Anthropic), the argument for integrands that change sign by ChatGPT Chat 6 Extra
+  High; proved in Lean and written up on 23–24 November 2026 by Claude Fable 5.2 and Claude
+  Opus 5.5 in Claude Code: [`docs/HomogeneousIsotropic/CREDITS.md`](docs/HomogeneousIsotropic/CREDITS.md).
 - The three papers were formalized by Claude (Anthropic): Claude Opus 5.5 in Claude Code (and Claude Haiku 5.5 for
   reading web pages), at the request of The-Anh Vu-Le, following the
   [formalize-math-paper](https://github.com/vltanh/formalize-math-paper) procedure. No person has

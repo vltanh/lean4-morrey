@@ -1,0 +1,39 @@
+\section{Remarks and open questions}\label{sec:discussion}
+
+\begin{remark}[What the results rest on]
+The proofs use the following inputs.
+\begin{itemize}
+\item \Cref{thm:main,thm:closed,thm:iff,thm:low}, \cref{cor:equiv}, \cref{cor:low}\,(b) and
+  \cref{prop:small}, which contain the cases $p\le1$ and $p=2$ of \cref{thm:A}, use the
+  definition of rank-one convexity, one-variable calculus, and the fact that polyaffine
+  functions are null Lagrangians.
+\item \Cref{thm:A}, \cref{cor:low}\,(a), \cref{prop:radial} and \cref{cor:burkholder} use in
+  addition the quasiconvexity of the truncated determinant, claimed
+  in~\cite[Theorem~1]{SharpHI}, which we audited with a Lean formalization~\cite{IwaniecLean}.
+  \Cref{thm:A} uses it through \cref{prop:radial} at the hard bases, and through
+  \cref{cor:burkholder} at the easy bases and, for nonnegative integrands with $1<p<2$, in
+  \cref{cor:low}\,(a).
+\end{itemize}
+The quasiconvexity of the Burkholder function, which is Iwaniec's conjecture in the form
+of~\cite[Conjecture~1.1]{GuerraKristensen2022} and is claimed in~\cite[Corollary~2]{SharpHI}, is
+not an input: it follows from \cref{prop:radial} (\cref{cor:burkholder}). Some input of this kind is
+needed, since $B_p$ satisfies~\Hyp\ and \cref{thm:A} contains its quasiconvexity.
+\end{remark}
+
+\begin{remark}[The role of the hypotheses]
+Isotropy and homogeneity enter at every step, through the profile and the function $h$ of one
+variable. The sign condition is not needed for quasiconvexity. It is necessary for
+polyconvexity when $p>2$ (\cref{thm:iff}\,(a)), and the proof of \cref{thm:main} uses it in
+three places: in Case III, where the positive part of the minorant is used; in Case I, when
+$\psi(1)\le0$; and at the ends. For $1\le p<2$ it gives a Burkholder-type minorant at every
+matrix (\cref{thm:low}). For an integrand that changes sign such minorants exist at the easy
+bases. At a hard base $A_0$ the proof gives, for every $R\ge1$, a quasiconvex function that
+touches $F$ at $A_0$ and lies below $F$ on the matrices of norm at most $R\abs{A_0}$; this is
+enough because a test map has a bounded gradient.
+\end{remark}
+
+\begin{remark}[Open questions]
+\Cref{thm:A} answers the question, left open by \cref{thm:iff}\,(a) for $p>2$, whether the
+integrands with~\Hyp\ that take negative values are quasiconvex. The arguments do not bear on
+Morrey's problem for integrands on $\M$ that are not isotropic or not homogeneous.
+\end{remark}

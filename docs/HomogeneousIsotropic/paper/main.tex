@@ -15,7 +15,10 @@
 \usepackage[margin=1.2in]{geometry}
 \usepackage[hyphens]{url}
 \usepackage{xurl}
-\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black,pdftitle={Morrey's problem for nonnegative homogeneous isotropic integrands in the plane},pdfauthor={The-Anh Vu-Le}]{hyperref}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,
+  urlcolor=blue!50!black,
+  pdftitle={Morrey's problem for homogeneous isotropic integrands in the plane},
+  pdfauthor={The-Anh Vu-Le}]{hyperref}
 \usepackage[capitalize,noabbrev]{cleveref}
 
 \input{macros}
@@ -24,6 +27,10 @@
 % All environments share one counter (numbered within sections); the alias counters let cleveref
 % recover the type of each label.
 \theoremstyle{plain}
+% The main theorem of the Introduction is numbered by a letter.
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\crefname{maintheorem}{Theorem}{Theorems}
 \newtheorem{theorem}{Theorem}[section]
 \newcommand{\shared}[3]{%
   \newaliascnt{#1}{theorem}\newtheorem{#1}[#1]{#2}\aliascntresetthe{#1}\crefname{#1}{#2}{#3}}
@@ -52,8 +59,8 @@
 \makeatother
 
 % ---------------------------------------------------------------- title
-\title[Homogeneous isotropic integrands in the plane]{Morrey's problem for nonnegative
-homogeneous isotropic integrands in the plane}
+\title[Homogeneous isotropic integrands in the plane]{Morrey's problem for homogeneous
+isotropic integrands in the plane}
 
 \author{The-Anh Vu-Le}
 % Affiliation and e-mail are the author's to fill in before submission.
@@ -61,20 +68,20 @@ homogeneous isotropic integrands in the plane}
 \date{November 2026}
 \subjclass[2020]{Primary 49J45; Secondary 26B25, 30C62, 68V20}
 \keywords{Morrey's problem, rank-one convexity, quasiconvexity, polyconvexity, isotropic
-integrands, homogeneous integrands, Burkholder function, formal proof}
+integrands, homogeneous integrands, Burkholder function, truncated determinant, formal proof}
 
 \begin{document}
 
 \begin{abstract}
   Morrey's problem asks whether rank-one convexity implies quasiconvexity. It is open for
-  integrands on real $2\times2$ matrices. We prove that the answer is yes for nonnegative,
-  isotropic, positively $p$-homogeneous integrands, for every $p>0$. If $p\ge2$, such an
-  integrand is polyconvex, with an explicit polyaffine support at every matrix; this answers a
-  question of Guerra and Kristensen. If $1\le p<2$, it has at every matrix a touching minorant
-  built from the Burkholder function. So it is convex if $p=1$, and quasiconvex if $1<p<2$ by
-  the quasiconvexity of the Burkholder function, which is claimed in a recent preprint of Agazzi
-  et al.\ and which we audited with a Lean formalization. If $0<p<1$, it is zero. All results are
-  formalized in Lean~4.
+  integrands on real $2\times2$ matrices. We prove that the answer is yes for every isotropic,
+  positively $p$-homogeneous integrand on these matrices, for every $p>0$, with no sign
+  condition. If $p\ge2$, the nonnegative integrands of this class are polyconvex, with an
+  explicit polyaffine support at every matrix; this answers a question of Guerra and Kristensen.
+  For an integrand that changes sign, the proof builds touching quasiconvex minorants by
+  integrating the truncated determinant over scales. It uses the
+  quasiconvexity of the truncated determinant, which is claimed in a recent preprint of Agazzi
+  et al.\ and which we audited with a Lean formalization. All results are formalized in Lean~4.
 \end{abstract}
 
 \maketitle
@@ -87,7 +94,8 @@ integrands, homogeneous integrands, Burkholder function, formal proof}
 \input{sections/03-rank-one}
 \input{sections/04-supports}
 \input{sections/05-low-exponents}
-\input{sections/06-discussion}
+\input{sections/06-signed}
+\input{sections/07-discussion}
 
 \appendix
 \crefalias{section}{appendix}
@@ -98,7 +106,8 @@ integrands, homogeneous integrands, Burkholder function, formal proof}
 \input{sections/a02-rank-one}
 \input{sections/a03-supports}
 \input{sections/a04-low-exponents}
-\input{sections/a05-formal}
+\input{sections/a05-signed}
+\input{sections/a06-formal}
 
 \input{sections/acknowledgments}
 

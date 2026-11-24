@@ -17,15 +17,16 @@ the results for `1 ≤ p < 2` and for every `p > 0`. The numbers are those of th
   coordinates; `burkholder_eq_burkholderType`: `B_p = G_{|1 − 2/p|, 1}`.
 * `apply_eq_opNorm_rpow_mul`: `F (A) = |A|^p h (det A / |A|²)` with `h (s) = F (diag (1, s))`.
 * `exists_burkholderType_le` (**Theorem 1.5**) and the identity `burkholderType_eq`.
-* `quasiconvex_burkholder`: `B_p` is quasiconvex for `1 < p < 2`. This is claimed as Corollary 2
-  of the preprint of A. Agazzi et al., *Sharp higher integrability theory, Part I: the
-  `L^p`-norm of the Beurling–Ahlfors transform*, arXiv:2609.28311v2. The package lean4-iwaniec is
-  the Lean formalization with which that preprint was audited; it proves the statement
-  (`Agazzi.quasiconvex_burkholder`), and it is taken from there.
 * `quasiconvex_of_rankOneConvex_of_burkholder`: for `1 ≤ p < 2`, if `B_p` is quasiconvex, so is
   every nonnegative, isotropic, positively `p`-homogeneous, rank-one convex `F`.
-* `quasiconvex_of_rankOneConvex_of_lt_two` (**Corollary 1.6 (a)**) and
-  `quasiconvex_of_rankOneConvex_of_pos` (**Corollary 1.8**).
+
+The quasiconvexity of `B_p` for `1 < p < 2` is claimed as Corollary 2 of the preprint of
+A. Agazzi et al., *Sharp higher integrability theory, Part I: the `L^p`-norm of the
+Beurling–Ahlfors transform*, arXiv:2609.28311v2. The library proves it for every `p > 1` from
+Proposition 6.8, that is, from the quasiconvexity of the truncated determinant of that preprint
+(`Morrey/HomogeneousIsotropic/Signed/BurkholderRadial.lean`, **Corollary 6.11**). That file also
+holds `quasiconvex_burkholder`, `quasiconvex_of_rankOneConvex_of_lt_two` (**Corollary 1.6 (a)**)
+and `quasiconvex_of_rankOneConvex_of_pos` (the nonnegative case of **Theorem A**).
 -/
 
 @[expose] public section
@@ -170,18 +171,6 @@ theorem burkholderType_eq (hp0 : 0 < p) (hp2 : p < 2) (c₀ m : ℝ)
   have h2 : (2 - p) ≠ 0 := by linarith
   field_simp
 
-/-- **The Burkholder function is quasiconvex for `1 < p < 2`** (claimed as Corollary 2 of Agazzi
-et al., arXiv:2609.28311v2): from `Agazzi.quasiconvex_burkholder` of the package lean4-iwaniec,
-which states it for `(p/2) B_p` in conformal coordinates. -/
-theorem quasiconvex_burkholder (hp1 : 1 < p) (hp2 : p < 2) : Quasiconvex (burkholder p) := by
-  have hp0 : 0 < p := by linarith
-  have h : Quasiconvex (burkholderCoord p) := Agazzi.quasiconvex_burkholder p hp1 hp2
-  have h' := Agazzi.quasiconvex_const_mul h (c := 2 / p) (by positivity)
-  have he : burkholder p = fun A => 2 / p * burkholderCoord p A :=
-    funext fun A => burkholder_eq_coord hp0 hp2.le A
-  rw [he]
-  exact h'
-
 /-- Let `F ≥ 0` be isotropic, positively `p`-homogeneous and rank-one convex on `ℝ^{2×2}`,
 `1 ≤ p < 2`. If the Burkholder function `B_p` is quasiconvex, then `F` is quasiconvex. -/
 theorem quasiconvex_of_rankOneConvex_of_burkholder (hp1 : 1 ≤ p) (hp2 : p < 2)
@@ -196,25 +185,5 @@ theorem quasiconvex_of_rankOneConvex_of_burkholder (hp1 : 1 ≤ p) (hp2 : p < 2)
   refine quasiconvex_of_rankOneConvex_of_burkholderCoord hp1 hp2 h0 hiso hhom hrc ?_
   rw [he]
   exact h'
-
-/-- **Corollary 1.6 (a).** For `1 < p < 2`, a nonnegative, isotropic, positively
-`p`-homogeneous, rank-one convex integrand on `ℝ^{2×2}` is quasiconvex. -/
-theorem quasiconvex_of_rankOneConvex_of_lt_two (hp1 : 1 < p) (hp2 : p < 2)
-    (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : RankOneConvex F) : Quasiconvex F :=
-  quasiconvex_of_rankOneConvex_of_burkholder hp1.le hp2 h0 hiso hhom hrc
-    (quasiconvex_burkholder hp1 hp2)
-
-/-! ### All exponents `p > 0` -/
-
-/-- **Corollary 1.8.** For every `p > 0`, a nonnegative, isotropic, positively `p`-homogeneous,
-rank-one convex integrand on `ℝ^{2×2}` is quasiconvex. For `0 < p < 1` it is `0`, for `p = 1` it
-is convex, for `1 < p < 2` this is Corollary 1.6 (a), and for `p ≥ 2` it is polyconvex. -/
-theorem quasiconvex_of_rankOneConvex_of_pos (hp : 0 < p) (h0 : ∀ A, 0 ≤ F A)
-    (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F) (hrc : RankOneConvex F) :
-    Quasiconvex F := by
-  refine quasiconvex_of_rankOneConvex_of_pos_of_burkholderCoord hp h0 hiso hhom hrc
-    fun h1 h2 => ?_
-  exact Agazzi.quasiconvex_burkholder p h1 h2
 
 end HomogeneousIsotropic

@@ -12,6 +12,7 @@ public import Mathlib.LinearAlgebra.Matrix.Rank
 public import Mathlib.LinearAlgebra.UnitaryGroup
 public import Mathlib.MeasureTheory.Integral.Bochner.Basic
 public import Mathlib.MeasureTheory.Integral.IntegrableOn
+public import Mathlib.MeasureTheory.Integral.IntervalIntegral.Basic
 public import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
 public import Mathlib.Topology.EMetricSpace.Lipschitz
 public import Mathlib.Topology.Instances.Matrix
@@ -21,8 +22,8 @@ public import Mathlib.Topology.Instances.Matrix
 
 Morrey's problem asks whether rank-one convexity implies quasiconvexity. For integrands on real
 `2 × 2` matrices it is open. This file states the results of the paper of this repository,
-`docs/HomogeneousIsotropic/paper/main.tex`, which answer it in the class of nonnegative,
-isotropic, positively `p`-homogeneous integrands, for every `p > 0`.
+`docs/HomogeneousIsotropic/paper/main.tex`, which answer it for isotropic, positively
+`p`-homogeneous integrands, for every `p > 0` and with no sign condition (`theoremA`).
 
 ## Conventions
 
@@ -50,6 +51,11 @@ isotropic, positively `p`-homogeneous integrands, for every `p > 0`.
 
 ## The statements
 
+* `theoremA` (`p > 0`): an isotropic, positively `p`-homogeneous, rank-one convex `F` is
+  quasiconvex. No sign condition.
+* `proposition6_8`: if `N` is convex on `[0, ∞)`, continuous, and `N 0 ≤ 0`, then `radial e N`,
+  that is `X ↦ (|X| + e δ) N (|X|) − 2 ∫₀^{|X|} N`, is quasiconvex, for `e = 1` and for `e = −1`.
+
 For `F : ℝ^{2×2} → ℝ` isotropic, positively `p`-homogeneous and rank-one convex:
 
 * `theorem1_1` (`p ≥ 2`, `F ≥ 0`): `F` has a polyaffine support at every matrix, and is
@@ -73,14 +79,13 @@ For `F : ℝ^{2×2} → ℝ` isotropic, positively `p`-homogeneous and rank-one 
   is nonnegative and convex (a theorem of Dacorogna, 1995).
 * `proposition1_7` (`0 < p < 1`): a positively `p`-homogeneous, rank-one convex `F` is `0`;
   isotropy is not needed.
-* `corollary1_8` (`p > 0`, `F ≥ 0`): `F` is quasiconvex.
 
-## The cited result
+## The cited results
 
-The proofs of `corollary1_6_a` and `corollary1_8` use the quasiconvexity of the Burkholder
-function `burkholder p` for `1 < p < 2`. It is claimed as Corollary 2 of the preprint of Agazzi et
-al., arXiv:2609.28311v2, and proved in the package lean4-iwaniec, the Lean formalization with
-which that preprint was audited. Nothing is assumed.
+The proofs of `proposition6_8`, `theoremA` and `corollary1_6_a` use the quasiconvexity of the
+truncated determinant. It is claimed in the preprint of Agazzi et al., arXiv:2609.28311v2,
+Theorem 1, and proved in the package lean4-iwaniec, the Lean formalization with which that
+preprint was audited. Nothing is assumed.
 
 The definitions are copied word for word from `Morrey/HomogeneousIsotropic/Defs.lean` by
 `scripts/sync_challenge_defs.py`; the theorems are proved in the Solution of the same directory.
@@ -177,6 +182,18 @@ def reflection : Matrix (Fin 2) (Fin 2) ℝ :=
 interval `[L, U]`, `L = ((1 + t) m − p H)/(1 − t)`, `U = (p H + (1 − t) m)/(1 + t)`. -/
 noncomputable def multiplier (p H m t : ℝ) : ℝ :=
   min ((p * H + (1 - t) * m) / (1 + t)) (max (((1 + t) * m - p * H) / (1 - t)) ((p - 1) * m))
+
+/-- The radial function of the profile variables,
+`(x + y + e (x − y)) N (x + y) − 2 ∫₀^{x+y} N`: it is `2 x N (x + y) − 2 ∫₀^{x+y} N` for `e = 1`
+and `2 y N (x + y) − 2 ∫₀^{x+y} N` for `e = −1`. -/
+noncomputable def radialProfile (e : ℝ) (N : ℝ → ℝ) (x y : ℝ) : ℝ :=
+  (x + y + e * (x - y)) * N (x + y) - 2 * ∫ r in (0 : ℝ)..(x + y), N r
+
+/-- The radial function of Proposition 6.8, `(|A| + e δ) N (|A|) − 2 ∫₀^{|A|} N (r) dr`, in
+conformal coordinates: `|A| = |z| + |w|` and `δ = |z| − |w|`, so that `|A| + e δ` is `2 |z|` for
+`e = 1` and `2 |w|` for `e = −1`. -/
+noncomputable def radial (e : ℝ) (N : ℝ → ℝ) (X : Matrix (Fin 2) (Fin 2) ℝ) : ℝ :=
+  radialProfile e N ‖conformalPart X‖ ‖anticonformalPart X‖
 
 -- END SHARED DEFINITIONS
 
@@ -285,11 +302,17 @@ theorem proposition1_7 {p : ℝ} (hp0 : 0 < p) (hp1 : p < 1) {F : Matrix (Fin 2)
     F A = 0 := by
   sorry
 
-/-- **Corollary 1.8.** Let `p > 0` and let `F ≥ 0` be isotropic, positively `p`-homogeneous and
-rank-one convex. Then `F` is quasiconvex. -/
-theorem corollary1_8 {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ}
-    (h0 : ∀ A, 0 ≤ F A) (hiso : IsIsotropic F) (hhom : IsPosHomogeneous p F)
-    (hrc : IsRankOneConvex F) : IsQuasiconvex F := by
+/-- **Theorem A.** For every `p > 0`, an isotropic, positively `p`-homogeneous, rank-one convex
+`F` is quasiconvex. -/
+theorem theoremA {p : ℝ} (hp : 0 < p) {F : Matrix (Fin 2) (Fin 2) ℝ → ℝ} (hiso : IsIsotropic F)
+    (hhom : IsPosHomogeneous p F) (hrc : IsRankOneConvex F) : IsQuasiconvex F := by
+  sorry
+
+/-- **Proposition 6.8, radial integration of the truncated determinant.** If `N` is convex on
+`[0, ∞)`, continuous, and `N 0 ≤ 0`, then `X ↦ (|X| + e δ) N (|X|) − 2 ∫₀^{|X|} N` is
+quasiconvex, for `e = 1` and for `e = −1`. -/
+theorem proposition6_8 {e : ℝ} (he : e = 1 ∨ e = -1) {N : ℝ → ℝ} (hN : ConvexOn ℝ (Set.Ici 0) N)
+    (hNc : Continuous N) (hN0 : N 0 ≤ 0) : IsQuasiconvex (radial e N) := by
   sorry
 
 end HomogeneousIsotropicChallenge

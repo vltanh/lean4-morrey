@@ -1,15 +1,16 @@
 # Credits
 
-How the result on nonnegative homogeneous isotropic integrands, its formal proof and its paper
-were made.
+How the result on homogeneous isotropic integrands, its formal proof and its paper were made.
 
 ## Who
 
 - Author and maintainer: The-Anh Vu-Le, who directed the research and asked for the proof to be
   validated in Lean, extended to every exponent `p > 0`, written up and packaged for Palomar.
 - Research: the author with two AI systems, ChatGPT Chat 6 Extra High (OpenAI) and Claude
-  (Anthropic).
-- Formal proof, Palomar files and the paper: Claude Fable 5.2 (Anthropic).
+  (Anthropic). The argument for integrands that change sign (Theorem A without the sign
+  condition) is by ChatGPT Chat 6 Extra High.
+- Formal proof, Palomar files and the paper: Claude Fable 5.2 (Anthropic); the last revision of
+  the paper by Claude Opus 5.5 (Anthropic).
 - Review: no person has reviewed the proofs or the paper.
 
 ## The research (before 23 November 2026)
@@ -88,3 +89,38 @@ How the formal proof differs from the note:
   needs, and added the case `0 < p < 1`. It then stated the results for `1 < p < 2` with no
   hypothesis on the Burkholder function, and revised the wording of the whole paper. The
   rewritten paper has not been refereed again.
+
+## Integrands that change sign (23–24 November 2026)
+
+The author reported a new result in pull request 1: the theorem holds with no sign condition.
+
+- The argument is by ChatGPT Chat 6 Extra High, recorded in pull request 1
+  (`docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md`, commit b0cc8f7, with the restricted
+  supports of `IWANIEC_MORREY_SIGNED_SPECTRAL_SUPPORT.md`, commit 2273662). It is a candidate hand
+  proof there: it integrates scaled truncated determinants with a weight given by an ordinary
+  differential equation on supporting slopes.
+- The main session (Claude Fable 5.2) checked the argument by hand and wrote a blueprint that
+  needs no theory of ordinary differential equations and no measure-valued weight: radial
+  integration of the truncated determinant for every convex `N` (Proposition 6.8), and a path of
+  supporting lines whose scale is given by a quadrature.
+- A lead agent (Claude Fable 5.2) and its sub-agents formalized the blueprint in about 40
+  minutes, in [`Morrey/HomogeneousIsotropic/Signed/`](../../Morrey/HomogeneousIsotropic/Signed) and five general modules of
+  [`Morrey/Common/Basic/`](../../Morrey/Common/Basic). They found no false statement. Differences from the blueprint:
+  - one parameter for both exponent ranges;
+  - `N` built as the upper envelope of the tangent lines of the path, which needs no inverse
+    function and gives convexity directly;
+  - the path exists without the orientation of the negative values, which only the minorant
+    needs.
+- The main session replaced Corollary 1.8 of the Challenge by Theorem A and Proposition 6.8, and checked the
+  build, the axioms and Comparator.
+- Claude Opus 5.5 revised the paper (a first attempt by Claude Fable 5.2 stopped at a usage
+  limit before making changes).
+
+Figures, from 04:21 UTC to 13:52 UTC on 24 November 2026, from `session_stats.py`:
+
+- elapsed time: 9.5 h, which includes a pause of several hours at a usage limit;
+- sub-agents: 12, at most 10 running at once, 4.4 h of sub-agent time;
+- tool calls: 213 by sub-agents and 31 by the main session;
+- tokens: 0.58M output and 1.77M input for sub-agents, 0.15M output and 0.79M input for the main
+  session; cache reads are not counted here.
+

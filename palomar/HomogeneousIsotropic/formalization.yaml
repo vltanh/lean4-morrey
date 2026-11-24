@@ -2,13 +2,14 @@
 version: "v0.4"
 
 project:
-  name: "Morrey's problem for nonnegative homogeneous isotropic integrands on 2x2 matrices, in Lean"
+  name: "Morrey's problem for homogeneous isotropic integrands on 2x2 matrices, in Lean"
   description: >-
     An original result on Morrey's problem for integrands on real 2x2 matrices, proved in Lean 4
-    with nothing assumed:
-    for every p > 0, a nonnegative F that is isotropic (invariant under rotations on both
-    sides), positively p-homogeneous and rank-one convex is quasiconvex (Corollary 1.8). The
-    hypotheses that each range of p needs are as follows.
+    with nothing assumed: for every p > 0, an F that is isotropic (invariant under rotations on
+    both sides), positively p-homogeneous and rank-one convex is quasiconvex, with no sign
+    condition (Theorem A). The proof for integrands that change sign integrates scaled
+    truncated determinants over the radius (Proposition 6.8: for every convex N with N(0) <= 0, an
+    explicit radial function of N is quasiconvex). What a sign condition adds, range by range:
 
 
     For p >= 2 and F >= 0, F is polyconvex, hence quasiconvex, with a polyaffine support at
@@ -18,9 +19,11 @@ project:
     nonnegative, and for p = 2 no sign condition is needed (Theorem 1.3). For 1 <= p < 2 and
     F >= 0, F has at every matrix a touching minorant that is a nonnegative combination of the
     Burkholder function and its mirror image (Theorem 1.5). Hence, for 1 < p < 2, F is
-    quasiconvex (Corollary 1.6 (a)), by the quasiconvexity of the Burkholder function: this is
-    claimed as Corollary 2 of the preprint of Agazzi et al., arXiv:2609.28311, and is taken here
-    from lean4-iwaniec, the Lean formalization with which that preprint was audited. For p = 1, F is
+    quasiconvex (Corollary 1.6 (a)), by the quasiconvexity of the Burkholder function, which
+    Proposition 6.8 gives for every p > 1 (Corollary 6.11). Proposition 6.8 rests on the quasiconvexity of the truncated
+    determinant, claimed as Theorem 1 of the preprint of Agazzi et al., arXiv:2609.28311, and
+    taken here from lean4-iwaniec, the Lean formalization with which that preprint was audited.
+    For p = 1, F is
     convex, with no sign condition, a theorem of Dacorogna (Corollary 1.6 (b)). For 0 < p < 1,
     F is zero, with neither isotropy nor a sign condition (Proposition 1.7).
 
@@ -60,7 +63,10 @@ sources:
       formal proof reorganizes it: it takes a supporting line of the profile where the note
       differentiates and approximates, derives the Baker-Ericksen inequality from the
       first-order inequality along a chord, and proves the Burkholder-type inequality by two
-      identities and Bernoulli's inequality.
+      identities and Bernoulli's inequality. The argument for integrands that change sign is
+      in docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md (commit b0cc8f7), by ChatGPT
+      Chat 6 Extra High; the formal proof replaces its differential equation and its
+      measure-valued weight by a quadrature and by the radial integration of Proposition 6.8.
   - title: "Automatic quasiconvexity of homogeneous isotropic rank-one convex integrands"
     authors:
       - "André Guerra"
@@ -101,11 +107,11 @@ sources:
     location: "https://arxiv.org/abs/2609.28311v2"
     relationship: "background"
     note: >-
-      Its Corollary 2 (the Burkholder function is quasiconvex for 1 < p < infinity) is used by
-      the proofs of Corollary 1.6 (a) and of Corollary 1.8, for 1 < p < 2. It is not assumed:
-      the proofs take it from lean4-iwaniec, a Lean formalization of that paper
-      (Agazzi.quasiconvex_burkholder, for Lipschitz test maps vanishing outside the unit square
-      and for the multiple of the function used here). The paper is a preprint.
+      Its Theorem 1 (the truncated determinant L is quasiconvex) is the one result from outside
+      that the proofs use, through Proposition 6.8; it is not assumed: the proofs take it from
+      lean4-iwaniec, a Lean formalization of that paper (Agazzi.quasiconvex_integrandL). Its
+      Corollary 2 (the Burkholder function is quasiconvex) is reproved here from Proposition 6.8 (Corollary 6.11). The
+      paper is a preprint.
   - title: "On rank one convex functions which are homogeneous of degree one"
     authors:
       - "Bernard Dacorogna"
@@ -145,9 +151,11 @@ related_formalizations:
   - id: "https://github.com/vltanh/lean4-iwaniec"
     relationship: "builds-on"
     note: >-
-      The formalization of Agazzi et al., arXiv:2609.28311v2. The proofs of Corollaries 1.6 (a)
-      and 1.8 use one theorem of it, the quasiconvexity of the Burkholder function for
-      1 < p < 2 (Agazzi.quasiconvex_burkholder).
+      The formalization of Agazzi et al., arXiv:2609.28311v2. The proofs use its quasiconvexity
+      of the truncated determinant (Agazzi.quasiconvex_integrandL) and its continuity
+      (Agazzi.continuous_integrandL), its identity for the operator norm (Agazzi.opNorm_eq), and
+      the lemma that a positive multiple of a quasiconvex function is quasiconvex
+      (Agazzi.quasiconvex_const_mul).
   - id: "https://github.com/vltanh/lean4-calculus-of-variations"
     relationship: "builds-on"
     note: >-
@@ -157,10 +165,10 @@ related_formalizations:
 
 status:
   scope: >-
-    Complete and unconditional: Theorems 1.1, 1.2, 1.3 and 1.5, Corollaries 1.4, 1.6 and 1.8,
-    Proposition 1.7, and all the lemmas of the paper. For 1 < p < 2 the quasiconvexity of F
-    (Corollaries 1.6 (a) and 1.8) uses the quasiconvexity of the Burkholder function, taken
-    from the package lean4-iwaniec. Every numbered statement of the paper has a Lean theorem
+    Complete and unconditional: Theorems A, 1.1, 1.2, 1.3 and 1.5, Proposition 6.8, Corollaries 1.4 and 1.6,
+    Proposition 1.7, and all the lemmas of the paper. Proposition 6.8, and through it Theorem A and
+    Corollary 1.6 (a), uses the quasiconvexity of the truncated determinant, taken from the
+    package lean4-iwaniec. Every numbered statement of the paper has a Lean theorem
     with the same hypotheses and conclusion. Not formalized: the facts that the paper quotes
     from the literature, such as the rank-one convexity of the Burkholder function.
   sorry_count: 0
@@ -190,8 +198,10 @@ automation:
         in the repository and written up as a paper; then for the case 0 < p < 1, so that every
         p > 0 is covered, for a paper with the proofs in appendices and the hypotheses of each
         range of p in a table, for a name that states the hypotheses, and for the Palomar files;
-        and last, the formalization of arXiv:2609.28311 being finished, for the result to be
-        stated and proved with no hypothesis on the Burkholder function.
+        then, the formalization of arXiv:2609.28311 being finished, for the result to be stated
+        and proved with no hypothesis on the Burkholder function; then for the paper and the
+        Lean statements to agree; and last, for the argument of pull request 1 for integrands
+        that change sign to be incorporated.
     - method: "agent"
       models: ["claude-fable-5-2"]
       framework: "Claude Code (claude.ai/code)"
@@ -206,9 +216,11 @@ automation:
       models: ["ChatGPT Chat 6 Extra High"]
       framework: "not recorded"
       tool_setup: >-
-        According to the author, ChatGPT Chat 6 Extra High (OpenAI) also worked on the research
-        of pull request 1, of which the notes above are part. Which documents of the pull
-        request it wrote is not recorded in this repository.
+        According to the author, ChatGPT Chat 6 Extra High (OpenAI) worked on the research of
+        pull request 1, of which the notes above are part, and found the argument for integrands
+        that change sign (docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md, commit
+        b0cc8f7). Which other documents of the pull request it wrote is not recorded in this
+        repository.
       cost:
         wall_time: "not tracked"
         spend_usd: "not tracked"
@@ -227,9 +239,9 @@ fidelity:
     rows; quasiconvexity is tested with Lipschitz maps vanishing outside the open unit square,
     with the requirement that the integral exist, as in the paper; positive homogeneity uses the
     real power; Corollary 1.4 states local boundedness as boundedness on a neighbourhood of every
-    matrix. Nothing is assumed: the quasiconvexity of the Burkholder function for 1 < p < 2
-    (Corollary 2 of arXiv:2609.28311) comes from the package lean4-iwaniec. See the paper's
-    Appendix E and docs/HomogeneousIsotropic/README.md.
+    matrix. Nothing is assumed: the quasiconvexity of the truncated determinant (Theorem 1 of
+    arXiv:2609.28311) comes from the package lean4-iwaniec. See the paper's
+    Appendix F and docs/HomogeneousIsotropic/README.md.
 
 review:
   status: "agent-reviewed"
@@ -241,8 +253,8 @@ review:
     paper symbolically, tested the supports numerically, and compared each row of the paper's
     table with the Lean declaration; it found no error in a theorem or a proof, and its
     corrections to remarks are applied. It reviewed the first version of the paper: the
-    version with the proofs in appendices, Proposition 1.7 and Corollary 1.8 were written after
-    its review, and so was the use of lean4-iwaniec. Another agent checked the citations against the sources
+    version with the proofs in appendices, Proposition 1.7, the use of lean4-iwaniec and Theorem
+    A were written after its review. Another agent checked the citations against the sources
     and searched the literature for earlier proofs (none found; Google Scholar and MathSciNet
     were not covered).
 
@@ -309,11 +321,16 @@ alignment:
       module: "HomogeneousIsotropic.Challenge"
       status: "proved"
       note: "0 < p < 1: a positively p-homogeneous, rank-one convex F is zero."
-    - source: "Corollary 1.8"
-      lean: "HomogeneousIsotropicChallenge.corollary1_8"
+    - source: "Theorem A"
+      lean: "HomogeneousIsotropicChallenge.theoremA"
       module: "HomogeneousIsotropic.Challenge"
       status: "proved"
-      note: "p > 0, F >= 0: F is quasiconvex."
+      note: "p > 0, F isotropic, positively p-homogeneous, rank-one convex, of any sign: F is quasiconvex."
+    - source: "Proposition 6.8"
+      lean: "HomogeneousIsotropicChallenge.proposition6_8"
+      module: "HomogeneousIsotropic.Challenge"
+      status: "proved"
+      note: "N convex on [0, infinity), continuous, N(0) <= 0, e = 1 or -1: the radial function (|X| + e delta) N(|X|) - 2 int_0^|X| N is quasiconvex."
 
 acknowledgements: >-
   Mathlib; Lean's Comparator and NanoDa kernel; Palomar's validation scripts; arXiv, Numdam and

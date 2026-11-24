@@ -1,0 +1,630 @@
+\section{Proofs for Section~\ref{sec:signed}}\label{app:signed}
+
+We keep the notation of \cref{sec:signed}. The test maps are the Lipschitz maps
+$\varphi\colon\R^2\to\R^2$ that vanish outside $(0,1)^2$. If $\varphi$ has the Lipschitz constant
+$K$, the entries of $\nabla\varphi$ are bounded by $K$, so that the coordinates of
+$\nabla\varphi(x)$ satisfy $\abs z+\abs w\le4K$: each of $\re z$, $\im z$, $\re w$, $\im w$ is
+half a sum or difference of two entries. In particular $F(A+\nabla\varphi)$ is bounded and
+integrable on $(0,1)^2$ if $F$ is continuous.
+
+\subsection{Operations that preserve quasiconvexity}
+
+\begin{lemma}\label{lem:qc-operations}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item If $f\colon\M\to\R$ is quasiconvex, so are $X\mapsto f(\lambda X)$ and
+  $X\mapsto\kappa+f(X)$, for $\lambda,\kappa\in\R$.
+\item If $g_1,\dots,g_n$ are continuous and quasiconvex and $w_1,\dots,w_n\ge0$, then
+  $\sum_iw_ig_i$ is quasiconvex.
+\item For $b_1,b_2\ge0$ and $c\in\R$, the function $X\mapsto b_1\abs z+b_2\abs w+c\det X$ is
+  quasiconvex.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) If $\varphi$ is a test map, so is $\lambda\varphi$, and
+$f(\lambda(A+\nabla\varphi))=f(\lambda A+\nabla(\lambda\varphi))$. For the constant, the unit
+square has measure~$1$.
+
+(b) For a test map the functions $g_i(A+\nabla\varphi)$ are integrable, because the $g_i$ are
+continuous; add the inequalities.
+
+(c) The function is isotropic, with the profile $b_1x+b_2y+c(x^2-y^2)$, by
+\cref{lem:coordinates}. This profile is a support of itself at every point, in the sense of
+\eqref{eq:profilesupport}. By \cref{lem:lift} the function has a polyaffine support at every
+matrix, and it is quasiconvex by \cref{lem:supports}.
+\end{proof}
+
+\subsection{Orientation and hard bases}
+
+\begin{proof}[Proof of \cref{lem:orient}]
+(a) By \ref{P2} with $z_0=w_0=0$ and $\alpha=\beta=\tfrac12$, and by \ref{P1}, the function
+$\tau\mapsto\Phi(\abs\tau/2,\abs\tau/2)=\abs\tau^ph(0)$ is convex. It vanishes at $0$ and equals
+$h(0)$ at $\pm1$, so $0\le h(0)$.
+
+(b) For $t=0$ this is (a). Let $-1\le t<0$ and $u=\sqrt{-t}$. Then $0-u^2=t=x_t^2-y_t^2$, and
+$u\le y_t$ because $y_t^2-u^2=(1+t)^2/4$. \Cref{lem:basic}\,(b), from $(0,u)$ to $(x_t,y_t)$,
+and \ref{P1} give $(-t)^{p/2}h(-1)=u^p\Phi(0,1)=\Phi(0,u)\le h(t)$. The second inequality is the
+first for the mirror image, whose function $h$ is $s\mapsto h(-s)$.
+
+(c) Since $\Phi(0,0)=0$, the point $(x,y)$ is not the origin, and $h(\eta)<0$ for
+$\eta=(x-y)/(x+y)\in[-1,1]$. If $\eta\le0$, (b) gives $(-\eta)^{p/2}h(-1)<0$, hence
+$h(-1)<0$; if $\eta\ge0$, it gives $h(1)<0$.
+
+(d) The supporting line at $s=-1$ and \cref{lem:ends} at $s=t$ give $h(t)-m(1+t)\le h(-1)$ and
+$h(t)\ge h(-1)\bigl(1-\tfrac p2(1+t)\bigr)$. Hence $m(1+t)\ge-\tfrac p2h(-1)(1+t)$, which is the
+first claim if $t>-1$. Likewise $h(t)+m(1-t)\le h(1)$ and
+$h(t)\ge h(1)\bigl(1-\tfrac p2(1-t)\bigr)$ give $m(1-t)\le\tfrac p2h(1)(1-t)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:hard}]
+(a) If $p>2$, then $1-a=2/p$, and \cref{lem:ends} at $s=-a$ gives
+$h(-a)\ge h(-1)(1-\tfrac p2(1-a))=0$. If $p<2$, then $1+a=2/p$, and
+$h(-a)\ge h(1)(1-\tfrac p2(1+a))=0$.
+
+(b) Let $p>2$, let $\lambda(s)=h(-1)(1-\tfrac p2(s+1))$ be the line of \cref{lem:ends} at $-1$,
+with the slope $m_-=-\tfrac p2h(-1)$, and let $\ell(s)=H+m(s-t)$, $H=h(t)$. Then
+$\lambda(-a)=0$, $H\ge\lambda(t)$ by \cref{lem:ends}, and $m\ge m_-$ by \cref{lem:orient}\,(d).
+The identity
+\[
+  p\,\ell(-a)=p(H-mt)-(p-2)m=p\bigl(H-\lambda(t)\bigr)+(m-m_-)\bigl(-(pt+p-2)\bigr)
+\]
+shows that $\ell(-a)\ge0$ if $pt+p-2\le0$, that is, if $t\le-a$. So a hard base has $t>-a$. For
+$p<2$ the same argument with the line $h(1)(1+\tfrac p2(s-1))$ at $1$, whose slope is at least
+$m$, shows that $\ell(-a)\ge0$ if $t\ge-a$.
+
+(c) By \cref{lem:orient}\,(d), $m>0$. If $p>2$, then $t>-a$ by (b), so
+$1-\tfrac p2(t+1)<0$ and $h(t)\ge h(-1)(1-\tfrac p2(t+1))>0$ by \cref{lem:ends}. If $p<2$, then
+$t<-a$, and $h(t)=\ell(-a)-m(-a-t)<0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:easy}]
+(a) In conformal coordinates, $G_{c_0,m}=\sigma^{p-1}(c_0\sigma+m\delta)$ and
+$B_p=\sigma^{p-1}(\abs{1-2/p}\,\sigma+\delta)$, so that
+$G_{c_0,m}-mB_p=(c_0-\abs{1-2/p}\,m)\,\sigma^p$.
+
+(b) For $p>2$, $c_0-\abs{1-2/p}\,m=(pc_0-(p-2)m)/p\ge0$, so (a) writes $G_{c_0,m}$ as a
+nonnegative combination of $B_p$, which is quasiconvex by \cref{cor:burkholder}, and of
+$\abs A^p$, which is convex, hence polyconvex and quasiconvex (\cref{lem:supports}). Both are
+continuous, and \cref{lem:qc-operations}\,(b) applies.
+
+(c) For $1<p<2$, the identity of \cref{thm:low} writes $G_{c_0,m}$ as a combination of $B_p$
+and of $A\mapsto B_p(JA)$ with nonnegative coefficients, and both are quasiconvex and continuous
+(\cref{cor:burkholder}).
+\end{proof}
+
+\subsection{Restricted supports}
+
+\begin{lemma}\label{lem:psi-low}
+Let $1<p<2$, $a_0<0$, $a_2<0$ and $a_1\in\R$, and let $\psi(l)=a_0l^p+a_1l^{p-1}+a_2l^{p-2}$
+for $l>0$. There is $l>0$ with $pa_0l^2+(p-1)a_1l+(p-2)a_2=0$ and $\psi(l)\ge\psi(1)$.
+\end{lemma}
+
+\begin{proof}
+Let $K_0=\abs{\psi(1)}+1$. For $l_1\ge\max\{1,(a_1+K_0)/(-a_0)\}$,
+$\psi(l_1)\le l_1^{p-1}(a_0l_1+a_1)\le-K_0$, because $a_2<0$. For $l_0\le1$ with
+$l_0^{p-2}\ge(\abs{a_1}+K_0)/(-a_2)$, which exists because $p<2$,
+$\psi(l_0)\le\abs{a_1}+a_2l_0^{p-2}\le-K_0$. So the maximum of the continuous function $\psi$
+on $[l_0,l_1]$ is attained at an inner point $l$, where $\psi(l)\ge\psi(1)$ and
+$0=\psi'(l)=l^{p-3}(pa_0l^2+(p-1)a_1l+(p-2)a_2)$.
+\end{proof}
+
+\begin{lemma}\label{lem:decreasing}
+Let $p,a_0,a_1,a_2\in\R$, let $0<s\le1$, and let $pa_0l^2+(p-1)a_1l+(p-2)a_2\le0$ for
+$l\in[s,1]$. Then $a_0+a_1+a_2\le a_0s^p+a_1s^{p-1}+a_2s^{p-2}$.
+\end{lemma}
+
+\begin{proof}
+The function $\psi(l)=a_0l^p+a_1l^{p-1}+a_2l^{p-2}$ has the derivative
+$l^{p-3}(pa_0l^2+(p-1)a_1l+(p-2)a_2)\le0$ on $[s,1]$, so $\psi(1)\le\psi(s)$.
+\end{proof}
+
+The next two lemmas are the mirror images of \cref{lem:caseI-algebra,lem:mu,lem:line}.
+
+\begin{lemma}\label{lem:caseII-algebra}
+Let $p,H,m,t,c,v\in\R$ with $t<1$, $c(1-t)=(1+t)m-pH$ and $v(1-t)=2C$, where $C=pH-2tm$, and
+let $\alpha=ct-(p-1)H$. Then
+\begin{align}
+  &v\,x_t+2ct=pH,\label{eq:II1}\\
+  &v+c(1+t)=pH+(1-t)m,\label{eq:II2}\\
+  &p\alpha+(p-1)v\,x_t+(p-2)ct=0.\label{eq:II3}
+\end{align}
+If moreover $p<2$, $t>-1$, $H<0$ and $C\ge0$, then $\alpha<0$. If $1<p<2$, $c>0$, $v\ge0$ and
+$p(H-mt)+(p-2)m<0$, then $\mu=(p-1)v/((2-p)c)$ satisfies $0\le\mu\le2$.
+\end{lemma}
+
+\begin{proof}
+The three relations are computations from the definitions, and so are
+\[
+  2(1-t)\,\alpha=-\bigl((1+t)C+(p-2)(1-t)H\bigr),\qquad
+  (2-\mu)(2-p)c(1-t)=-2\bigl(p(H-mt)+(p-2)m\bigr).
+\]
+Under the respective hypotheses the first right side is negative and the second positive.
+Finally $\mu\ge0$ because $v\ge0$ and $c>0$.
+\end{proof}
+
+\begin{lemma}\label{lem:line-low}
+Let $\Phi$ be a profile of degree $p<2$. Let $\abs t<1$, $H,m\in\R$, and suppose that
+$G_{H-mt,m}\le\Phi$ on the quadrant and $\Phi(x_t,y_t)=H$. Let $c>0$ and $v$ satisfy
+$c(1-t)=(1+t)m-pH$ and $v(1-t)=2C$, let $\alpha=ct-(p-1)H$, and let $\mu(2-p)c=(p-1)v$ with
+$2t\le\mu\le2$. If $X,Y\ge0$ satisfy
+\begin{equation}\label{eq:stationary-low}
+  p\alpha+(p-1)v\,X+(p-2)c\,(X^2-Y^2)=0,
+\end{equation}
+then $\alpha+vX+c(X^2-Y^2)\le\Phi(X,Y)$.
+\end{lemma}
+
+\begin{proof}
+Subtracting \eqref{eq:II3} from \eqref{eq:stationary-low} and dividing by $(2-p)c$ gives
+$X^2-Y^2=t+\mu\tau$ with $\tau=X-x_t$. Since $2t\le\mu\le2$, there is $\theta$ with
+$\cos\theta\,(1-t)=1+t-\mu$. Consider the rank-one line with $\alpha'=1$ and
+$\beta'=e^{i\theta}$ in \cref{prop:tangent}. Then $\abs{x_t+\tau}=X$, and, since $2y_t=1-t$ and
+$x_t^2-y_t^2=t$,
+\[
+  \abs{y_t+\tau e^{i\theta}}^2=y_t^2+\tau(1+t-\mu)+\tau^2=(x_t+\tau)^2-t-\mu\tau=Y^2 .
+\]
+By \eqref{eq:II2}, $\Phi_x=v+c(1+t)$, and by the definition of $c$, $\Phi_y=-c(1-t)$. So
+\cref{prop:tangent} gives
+\[
+  \Phi(X,Y)\ge H+\tau(\Phi_x+\Phi_y\cos\theta)=H+\tau(v+c\mu)=\alpha+vX+c(X^2-Y^2),
+\]
+where the last equality uses $\alpha+vx_t+ct=H$, a consequence of \eqref{eq:II1}, and
+$X^2-Y^2=t+\mu\tau$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:rs-identities}]
+(b) $(1+et)(c-ev/2)=epH+(1-et)m-e(pH-2tm)=(1+et)m$, and $\alpha+v/2=H-tm$ is a computation.
+
+(a) If $x+y=1$, then $r=(1-e\delta)/2$ and $x^2-y^2=\delta$, so by (b)
+$q(x,y)=(\alpha+v/2)+\delta(c-ev/2)=H-tm+m\delta$. At $(x_t,y_t)$, $\delta=t$ and this is $H$.
+
+(c) The point $(x/s,y/s)$ is on the segment, with $\delta/s$ in place of $\delta$. Since $r$ and
+$x^2-y^2$ are homogeneous of degrees $1$ and $2$, (a) gives
+$\alpha s^p+vrs^{p-1}+c(x^2-y^2)s^{p-2}=s^pq(x/s,y/s)=s^{p-1}((H-mt)s+m\delta)
+=G_{H-mt,m}(x,y)$.
+
+(d) Here $1\pm et>0$, and $v\ge0$ because $C\ge0$ (\cref{cor:BE}). Let $h(-1)<0$. By
+\cref{lem:hard}\,(c), $m>0$ and $eH>0$, so the numerator $p\,eH+(1-et)m$ of $c$ is positive.
+Finally, a computation gives
+\[
+  2(1+et)\,\alpha=-\bigl((1-et)C+(p-2)(1+et)H\bigr),
+\]
+and $(p-2)H=\abs{p-2}\,eH>0$; so $\alpha<0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:restricted}]
+Let $C=pH-2tm\ge0$. By \cref{lem:hard}\,(c) and \cref{lem:rs-identities}\,(d), $m>0$, $eH>0$,
+$c>0$, $v\ge0$ and $\alpha<0$. For a point $(x,y)$ let
+$\psi(l)=\alpha l^p+vrl^{p-1}+c(x^2-y^2)l^{p-2}$, where $r$ is taken at $(x,y)$, so that
+$\psi(1)=q(x,y)$ and $\psi(l)=l^pq(x/l,y/l)$.
+
+(a) Let $p<2$, so that $e=-1$, $r=x$, $c(1-t)=(1+t)m-pH$ and $v(1-t)=2C$. By
+\cref{lem:hard}, $t<-a<0$. Let $x<y$; then $c(x^2-y^2)<0$. \Cref{lem:psi-low} with $a_0=\alpha$,
+$a_1=vx$ and $a_2=c(x^2-y^2)$ gives $l>0$ with $\psi(l)\ge\psi(1)$ and
+$p\alpha l^2+(p-1)vxl+(p-2)c(x^2-y^2)=0$. Dividing by $l^2$, the point $(X,Y)=(x/l,y/l)$
+satisfies \eqref{eq:stationary-low}. By \cref{lem:caseII-algebra}, $\mu=(p-1)v/((2-p)c)$ lies in
+$[0,2]$, and $2t<0$. So \cref{lem:line-low} gives $q(X,Y)\le\Phi(X,Y)$, and
+\[
+  \Phi(x,y)=l^p\Phi(X,Y)\ge l^pq(X,Y)=\psi(l)\ge\psi(1)=q(x,y).
+\]
+
+(b) Let $p>2$, so that $e=1$, $r=y$, and $c$, $v$, $\alpha$ are the numbers $c$, $\gamma$, $k$
+of \cref{sec:caseI}. The hard base satisfies \eqref{eq:caseIhyp} and $H>0$. The proofs of
+\cref{lem:caseI-algebra,lem:mu,lem:line} use $H>0$, \eqref{eq:caseIhyp} and
+\cref{prop:tangent}, but not the sign of $\Phi$, so these lemmas hold here. Let
+$\Phi(x,y)\ge0$. If $q(x,y)\le0$, then $q(x,y)\le\Phi(x,y)$. Otherwise $\psi(1)>0$, and the
+argument after \cref{lem:line} gives $\psi(1)\le\Phi(x,y)$.
+
+(c) At the origin $q=\alpha<0=\Phi(0,0)$. Let $0<s=x+y\le1$. By \cref{lem:decreasing} and
+\cref{lem:rs-identities}\,(c), it is enough to show that
+$P(l)=p\alpha l^2+(p-1)vrl+(p-2)c(x^2-y^2)\le0$ for $l\in[s,1]$: then
+$q(x,y)=\psi(1)\le\psi(s)=G_{H-mt,m}(x,y)\le\Phi(x,y)$.
+
+Let $p<2$. Where $x<y$ the claim is (a). Let $x\ge y$, so that $\delta\ge0\ge ts$. With $\mu$
+as in (a), a computation from \eqref{eq:II3} gives
+\[
+  P(l)=(2-p)c\Bigl(s(ts-\delta)\Bigl(1-\frac\mu2\Bigr)+(l-s)\Bigl(t\Bigl(1-\frac\mu2\Bigr)(l+s)
+  +\frac\mu2(\delta-l)\Bigr)\Bigr).
+\]
+For $l\ge s\ge\delta$ each term in the bracket is at most $0$, since $t\le0$ and $0\le\mu\le2$.
+
+Let $p>2$. Where $\Phi\ge0$ the claim is (b). Let $\Phi(x,y)<0$. Then
+$G_{H-mt,m}(x,y)<0$, that is, $Hs+m(\delta-ts)<0$, and since $H>0$ and $m>0$, $\delta<ts$.
+Let $b=(p-1)v/(2(p-2)c)\ge0$. Computations from \eqref{eq:I1} and the definitions give
+\begin{align*}
+  (1-b)\cdot2(p-2)c(1+t)&=-2\bigl(p(H-mt)-(p-2)m\bigr)>0,\\
+  c\bigl((p-2)b(1-t)+2(p-1)t\bigr)&=(p-1)pH>0 .
+\end{align*}
+So $b<1$, and $(p-1)(b(1-t)+2t)>b(1-t)\ge0$. From $b(1-t)+2t>0$ and the identity
+$b(1-t)+2t=(b+t)(1-t)+t(1+t)$ it follows that $b+t\ge0$ and $\beta=b(1-t)+t\ge0$. Now
+$P(l)=(p-2)c\,Q(l)$ with $Q(l)=-\beta l^2+2byl+x^2-y^2$, and
+\[
+  (1+t)s\,Q(l)=(ts-\delta)\bigl(-(1-b)(b+t)l^2-(bl-s)^2\bigr)+2x(l-s)(-\beta l-ts).
+\]
+For $l\ge s$ the first term is at most $0$, and so is the second, because
+$-\beta l-ts\le-(\beta+t)s=-(b(1-t)+2t)s<0$. Hence $Q(l)\le0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:monotone}]
+Write $q_i$ and $\alpha_i$ for the function $q$ and the number $\alpha$ of the base $i$, and
+$P_i=S_i(x_{t_i},y_{t_i})$; at $P_i$, $r=r_i$ and $x^2-y^2=d_i$. By homogeneity and
+\cref{lem:rs-identities}\,(a),
+\[
+  S_i^p\alpha_i+\hat v_ir_i+\hat c_id_i=S_i^pq_i(x_{t_i},y_{t_i})=S_i^ph(t_i)=\Phi(P_i).
+\]
+Let $j\ne i$. Then $S_i^p\alpha_i+\hat v_ir_j+\hat c_id_j=S_i^pq_i(P_j/S_i)$. If $p<2$, the point
+$P_j/S_i$ has $x<y$, because $t_j<-a<0$ by \cref{lem:hard}\,(b); if $p>2$,
+$\Phi(P_j/S_i)=(S_j/S_i)^ph(t_j)>0$ by \cref{lem:hard}\,(c). By \cref{prop:restricted}\,(a)
+or~(b), $S_i^pq_i(P_j/S_i)\le S_i^p\Phi(P_j/S_i)=\Phi(P_j)$. Adding the two inequalities, for
+$(i,j)=(1,2)$ and $(2,1)$, and subtracting the two equalities gives the claim.
+\end{proof}
+
+\subsection{Radial integration}
+
+\begin{proof}[Proof of \cref{lem:radial}]
+(a) $\int_0^\sigma(n_0+n_1r)\,dr=n_0\sigma+n_1\sigma^2/2$, so
+$\Psi^e_N(X)=(\sigma+e\delta)(n_0+n_1\sigma)-2n_0\sigma-n_1\sigma^2=-n_0(\sigma-e\delta)
++en_1\sigma\delta$, and $\sigma\delta=\det X$ by \cref{lem:coordinates}\,(a).
+
+(b) $\int_0^\sigma(r-\rho)_+\,dr=(\sigma-\rho)_+^2/2$, so
+$\Psi^e_N(X)=(\sigma-\rho)_+\bigl(\sigma+e\delta-(\sigma-\rho)\bigr)=(\sigma-\rho)_+(\rho+e\delta)$.
+The matrix $\rho^{-1}X$ has the numbers $\sigma/\rho$ and $\delta/\rho$, so
+$\rho^2K_e(\rho^{-1}X)=\rho^2(\sigma/\rho-1)_+(1+e\delta/\rho)$ is the same.
+
+(c) By \cref{lem:coordinates}\,(d), $JX$ has the coordinates $(\bar w,\bar z)$. If $\sigma\le1$,
+then $L(JX)+\det X=(\abs w^2-\abs z^2)+(\abs z^2-\abs w^2)=0=K_1(X)$, and likewise
+$L(X)-\det X=0=K_{-1}(X)$. If $\sigma>1$, then, as $2\abs w=\sigma-\delta$ and
+$2\abs z=\sigma+\delta$,
+\[
+  L(JX)+\det X=2\abs w-1+\sigma\delta=(\sigma-1)(1+\delta),\qquad
+  L(X)-\det X=2\abs z-1-\sigma\delta=(\sigma-1)(1-\delta).
+\]
+The truncated determinant $L$ is continuous, and it is quasiconvex
+by~\cite[Theorem~1]{SharpHI}, as formalized in~\cite{IwaniecLean} for the test maps of this
+paper (\cref{sec:intro-low}). So is $X\mapsto L(JX)$ (\cref{lem:reflect}). The functions
+$\pm\det X$ are polyaffine, hence quasiconvex (\cref{lem:supports}). By
+\cref{lem:qc-operations}\,(b), $K_1$ and $K_{-1}$ are quasiconvex.
+
+(d) $\Psi^e_N(X)-\Psi^e_{N'}(X)=(\sigma+e\delta)(N-N')(\sigma)-2\int_0^\sigma(N-N')$. Since
+$\abs{\sigma+e\delta}\le2\sigma$ and $\sigma\le R$, each term is at most $2R\varepsilon$ in
+absolute value.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:hinge}]
+Let $\eta>0$ be such that $\abs{N(r)-N(r')}<\varepsilon$ for $r,r'\in[0,R]$ with
+$\abs{r-r'}\le\eta$, and let $n$ be an integer with $d=R/n<\eta$. Put $\rho_j=jd$ and
+$s_j=(N(\rho_{j+1})-N(\rho_j))/d$ for $0\le j<n$. By convexity $s_0\le s_1\le\dots\le s_{n-1}$.
+Let
+\[
+  P(r)=N(0)+s_0r+\sum_{j=1}^{n-1}(s_j-s_{j-1})(r-\rho_j)_+ .
+\]
+For $\rho_j\le r\le\rho_{j+1}$ the terms with an index above $j$ vanish, and the telescoping sum
+gives $P(r)=N(\rho_j)+s_j(r-\rho_j)$, the chord of $N$ over $[\rho_j,\rho_{j+1}]$. There
+\[
+  \bigl(N(r)-P(r)\bigr)d=(\rho_{j+1}-r)\bigl(N(r)-N(\rho_j)\bigr)+(r-\rho_j)\bigl(N(r)
+  -N(\rho_{j+1})\bigr),
+\]
+which is less than $\varepsilon d$ in absolute value. Take $n_1=s_0$, $w_j=s_j-s_{j-1}\ge0$
+and the nodes $\rho_j>0$, $1\le j<n$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:radial}]
+\emph{Step 1.} Let $N(r)=n_0+n_1r+\sum_iw_i(r-\rho_i)_+$ with $n_0\le0$, $w_i\ge0$ and
+$\rho_i>0$. The function $\Psi^e_N$ is linear in $N$, so it is the sum of
+$\Psi^e_{n_0+n_1r}$ and of the functions $w_i\Psi^e_{(r-\rho_i)_+}$. By
+\cref{lem:radial}\,(a),
+$\Psi^e_{n_0+n_1r}(X)=-n_0(1-e)\abs z-n_0(1+e)\abs w+en_1\det X$, which is quasiconvex by
+\cref{lem:qc-operations}\,(c), since $-n_0(1\pm e)\ge0$. By \cref{lem:radial}\,(b) and (c),
+$\Psi^e_{(r-\rho_i)_+}(X)=\rho_i^2K_e(\rho_i^{-1}X)$ is quasiconvex, by
+\cref{lem:qc-operations}\,(a) and~(b). These functions are continuous, and
+\cref{lem:qc-operations}\,(b) gives the quasiconvexity of $\Psi^e_N$.
+
+\emph{Step 2.} Let $N$ be as in the theorem, $A\in\M$, and $\varphi$ a test map with the
+Lipschitz constant $K$ such that $\Psi^e_N(A+\nabla\varphi)$ is integrable. Let
+$R=\abs A+4K+1$; then $\abs{A+\nabla\varphi(x)}\le R$ for every $x$. Let $\eta>0$ and
+$\varepsilon=\eta/(8R)$. \Cref{lem:hinge} on $[0,R]$ gives a function $N'$ as in Step~1, with
+$N'(0)=N(0)\le0$ and $\abs{N-N'}\le\varepsilon$ on $[0,R]$. By \cref{lem:radial}\,(d),
+$\abs{\Psi^e_N-\Psi^e_{N'}}\le4R\varepsilon=\eta/2$ at $A$ and at the matrices
+$A+\nabla\varphi(x)$. By Step~1,
+\[
+  \Psi^e_N(A)\le\Psi^e_{N'}(A)+\frac\eta2\le\int_{(0,1)^2}\Psi^e_{N'}(A+\nabla\varphi)\,dx
+  +\frac\eta2\le\int_{(0,1)^2}\Psi^e_N(A+\nabla\varphi)\,dx+\eta .
+\]
+As $\eta>0$ is arbitrary, $\Psi^e_N$ is quasiconvex.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:burkholder}]
+(a) Let $p>0$ and $\sigma\ge0$. Then $\int_0^\sigma N_p=\sigma^p/p$, so that, for every $e\in\R$,
+\[
+  \Psi^e_{N_p}(X)=(\sigma+e\delta)\sigma^{p-1}-\frac2p\sigma^p
+  =\sigma^{p-1}\Bigl(\Bigl(1-\frac2p\Bigr)\sigma+e\delta\Bigr),
+\]
+and $\Psi^e_{-N_p}=-\Psi^e_{N_p}$. In conformal coordinates
+$B_p(X)=\sigma^{p-1}(\abs{1-2/p}\,\sigma+\delta)$, and $B_p(JX)$ is the same with $-\delta$ in
+place of $\delta$, by \cref{lem:coordinates}\,(d). For $p\ge2$, $\abs{1-2/p}=1-2/p$, which gives
+the first two identities; for $p\le2$, $\abs{1-2/p}=2/p-1$, which gives the other two.
+
+(b) The function $N_p$ is continuous for $p\ge1$, and $N_p(0)=0$ for $p>1$. For $p\ge2$ it is
+convex on $[0,\infty)$, since $p-1\ge1$, and \cref{prop:radial} with $e=1$ and (a) show that
+$B_p$ is quasiconvex. For $1<p\le2$ the function $r\mapsto r^{p-1}$ is concave on $[0,\infty)$,
+so $-N_p$ is convex there, and \cref{prop:radial} with $e=-1$ and (a) show that $B_p$ is
+quasiconvex. The mirror image is quasiconvex by \cref{lem:reflect}.
+\end{proof}
+
+\subsection{The path}
+
+\begin{lemma}\label{lem:legendre}
+Let $u_0\le u_1$, and let $h_0$ be strictly convex and continuous on $[u_0,u_1]$. There are
+functions $T^\ast,k^\ast\colon\R\to\R$ such that, for every $m\in\R$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item $T^\ast(m)\in[u_0,u_1]$, $k^\ast(m)=h_0(T^\ast(m))-mT^\ast(m)$, and
+  $k^\ast(m)+ms\le h_0(s)$ for $s\in[u_0,u_1]$;
+\item if $t\in[u_0,u_1]$ and $h_0(t)+m(s-t)\le h_0(s)$ for $s\in[u_0,u_1]$, then
+  $T^\ast(m)=t$;
+\item $k^\ast$ has the derivative $-T^\ast(m)$ at $m$.
+\end{enumerate}
+Moreover, $T^\ast$ is nondecreasing and continuous.
+\end{lemma}
+
+\begin{proof}
+Let $T^\ast(m)$ be a point where the continuous function $t\mapsto h_0(t)-mt$ attains its
+minimum on $[u_0,u_1]$, and $k^\ast(m)$ the minimum; this is (i). If $t$ is as in (ii), it is
+also a minimizer, and if $t\ne T^\ast(m)$, strict convexity makes the midpoint smaller; so the
+minimizer is unique, which is (ii). Adding the minimality inequalities for $m_1<m_2$ at
+$T^\ast(m_2)$ and at $T^\ast(m_1)$ gives $(m_2-m_1)(T^\ast(m_2)-T^\ast(m_1))\ge0$, so
+$T^\ast$ is nondecreasing. A one-sided limit of $T^\ast$ at $m$ is a minimizer for the slope
+$m$, by the continuity of $h_0$, hence equals $T^\ast(m)$; so $T^\ast$ is continuous. Finally,
+the minimality of $T^\ast(m')$ and of $T^\ast(m)$ give
+\[
+  -(m'-m)\bigl(T^\ast(m')-T^\ast(m)\bigr)\le k^\ast(m')-k^\ast(m)+(m'-m)T^\ast(m)\le0,
+\]
+and the left side is $o(\abs{m'-m})$ by the continuity of $T^\ast$. This is (iii).
+\end{proof}
+
+\begin{lemma}\label{lem:quadrature}
+Let $b>0$ and $\nu>0$, and let $\rho$ be continuous on an open set $U\supseteq[0,b)$, with
+$\rho(\xi)\ge\nu/(b-\xi)$ for $\xi\in[0,b)$. For every $R\ge1$ there is $\bar\xi\in[0,b)$ with
+$\exp\int_0^{\bar\xi}\rho=R$. If $U$ contains the closed interval between $0$ and $\xi$, the
+function $u\mapsto\exp\int_0^u\rho$ has the derivative $\rho(\xi)\exp\int_0^\xi\rho$ at $\xi$.
+\end{lemma}
+
+\begin{proof}
+For $\xi\in[0,b)$, $\int_0^\xi\rho\ge\nu\log(b/(b-\xi))$, which tends to $\infty$ as
+$\xi\to b$. The function $\xi\mapsto\exp\int_0^\xi\rho$ is continuous on $[0,b)$ and equals $1$
+at $0$, so it takes the value $R$. The derivative is the fundamental theorem of calculus.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:path}]
+The function $h$ is continuous on $[-1,1]$, as the restriction of the convex function $\tilde h$
+on $\R$ (\cref{lem:basic}\,(a)). Let $T^\ast$, $k^\ast$ be the functions of
+\cref{lem:legendre} for $h$ on $[-1,1]$. The supporting line of slope $m_0$ at $t_0$ gives
+$T^\ast(m_0)=t_0$. Let $m_a$ be the slope of a supporting line of $h$ at $-a$
+(\cref{lem:minorant}), so that $T^\ast(m_a)=-a$, and let $\xi_a=e(m_0-m_a)$, so that
+$m_0-e\xi_a=m_a$. By \cref{lem:hard}\,(b), $e(t_0+a)>0$; since $T^\ast$ is nondecreasing, this
+forces $e(m_0-m_a)>0$, that is, $\xi_a>0$.
+
+For $\xi\in\R$ let $m(\xi)=m_0-e\xi$, $T(\xi)=T^\ast(m(\xi))$, $k(\xi)=k^\ast(m(\xi))$ and
+$g(\xi)=k(\xi)-a\,m(\xi)$. By \cref{lem:legendre}, $T$ is continuous, $k$ has the derivative
+$eT(\xi)$, and $g$ has the derivative $e(T(\xi)+a)$. Since $pa=e(p-2)$, $p\,g(0)<0$ is the
+condition of \cref{def:hard}, and $g(\xi_a)=h(-a)\ge0$ by \cref{lem:hard}\,(a). Let $b$ be the
+smallest $\xi\in[0,\xi_a]$ with $g(\xi)\ge0$; then $b>0$ and $g<0$ on $[0,b)$. For
+$\xi\in[0,\xi_a]$ the slope $m(\xi)$ lies between $m_0$ and $m_a$, so $T(\xi)$ lies between
+$t_0$ and $-a$, and $\abs{T(\xi)}\le\vartheta=\max\{\abs{t_0},a\}<1$.
+
+The function $\xi\mapsto2\xi-g(\xi)$ has the derivative $2-e(T+a)>0$, so that
+$2\xi-g(\xi)\le2b-g(b)\le2b$ for $\xi\in[0,b)$, that is, $-g(\xi)\le2(b-\xi)$. Let
+$\rho(\xi)=-(1+eT(\xi))/(p\,g(\xi))$, which is continuous on the open set where $g<0$. For
+$\xi\in[0,b)$, $1+eT(\xi)\ge1-\vartheta$, so that $\rho(\xi)\ge(1-\vartheta)/(2p(b-\xi))$.
+\Cref{lem:quadrature} gives $\bar\xi\in[0,b)$ with $S(\bar\xi)=R$ for
+$S(\xi)=\exp\int_0^\xi\rho$; then $S(0)=1$, $S>0$, and $S$ has the derivative
+$S\rho=-S(1+eT)/(pg)$ on $[0,\bar\xi]$. Finally, for $\xi\in[0,\bar\xi]$, $\abs{T(\xi)}<1$, the
+line of slope $m(\xi)$ through $(T(\xi),h(T(\xi)))$ supports $h$ on $[-1,1]$ with the intercept
+$k(\xi)$ (\cref{lem:legendre}\,(i)), and $g(\xi)<0$: $(T(\xi),m(\xi))$ is a hard base.
+\end{proof}
+
+\begin{lemma}\label{lem:self-improving}
+Let $f_0$ be continuous on $[u_0,u_1]$, and let $\eta>0$. Suppose that for all
+$\xi_1<\xi_2$ in $[u_0,u_1]$ with $\xi_2-\xi_1\le\eta$ and every $D$ with
+$\abs{f_0(\zeta)-f_0(\xi_1)}\le D$ for $\zeta\in[\xi_1,\xi_2]$, we have
+$f_0(\xi_1)-f_0(\xi_2)\le D/2$. Then $f_0$ is nondecreasing on $[u_0,u_1]$.
+\end{lemma}
+
+\begin{proof}
+It is enough to compare points $\zeta_1<\zeta_2$ with $\zeta_2-\zeta_1\le\eta$, and to chain.
+Suppose $f_0(\zeta_2)<f_0(\zeta_1)$. Let $\xi_2$ be a minimizer of $f_0$ on
+$[\zeta_1,\zeta_2]$, and $\xi_1$ a maximizer of $f_0$ on $[\zeta_1,\xi_2]$. Then
+$f_0(\xi_1)\ge f_0(\zeta_1)>f_0(\zeta_2)\ge f_0(\xi_2)$, so $\xi_1<\xi_2$, and
+$D=f_0(\xi_1)-f_0(\xi_2)>0$ bounds $\abs{f_0-f_0(\xi_1)}$ on $[\xi_1,\xi_2]$. The hypothesis
+gives $D\le D/2$, a contradiction.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:path}]
+On $[0,\bar\xi]$ we have $g<0$ and $1+eT>0$, so $S'>0$. We write $S$, $T$, $m$, $c$, $M$, $f$
+for their values at $\xi$, and use $e^2=1$ and $H=h(T)=k+mT$.
+
+(a) Since $m'=-e$, $M'=(p-1)S^{p-2}S'm-eS^{p-1}$, while $efS'=S^{p-2}cS'$. These agree if and
+only if $S'(c-(p-1)m)=-eS$, that is, by the definition of $S'$, if and only if
+\begin{equation}\label{eq:path-M}
+  (1+eT)\bigl(c-(p-1)m\bigr)=e\,p\,g,
+\end{equation}
+which is a computation from the definition of $c$, with $pa=e(p-2)$.
+
+(b) The function $f$ is continuous on $[0,\bar\xi]$, because $S$, $T$ and $k$ are. Let
+$\xi_1<\xi_2$ in $[0,\bar\xi]$, and write $S_i$, $T_i$, $M_i$, $f_i$ for the values at $\xi_i$
+and $r_i=S_i(1-eT_i)/2$. Apply \cref{prop:monotone} to the hard bases $(T_i,m(\xi_i))$ with the
+scales $S_i$. By \cref{lem:rs-identities}\,(b), $v=2e(c-m)$, and a computation turns its
+inequality into
+\[
+  (f_2-f_1)(S_2-S_1)\,W\ge2(r_2-r_1)\,Y,\qquad W=S_2+eS_1T_1,\quad
+  Y=e(M_2-M_1)-f_1(S_2-S_1).
+\]
+Let $W_0=1-\max_{[0,\bar\xi]}\abs T>0$. Since $S$ is increasing with $S(0)=1$, $S_2>S_1\ge1$,
+and $W\ge S_1(1-\abs{T_1})\ge W_0$. The function $S(1-eT)/2$ is uniformly continuous on
+$[0,\bar\xi]$; let $\eta>0$ be such that $\abs{r_2-r_1}\le W_0/4$ when $\xi_2-\xi_1\le\eta$.
+Let $\abs{f-f_1}\le D$ on $[\xi_1,\xi_2]$. By (a), the functions $DS\mp(eM-f_1S)$ have the
+derivatives $(D\mp(f-f_1))S'\ge0$ on $[\xi_1,\xi_2]$, so that $\abs Y\le D(S_2-S_1)$. Hence
+$(f_2-f_1)W\ge-DW_0/2$. If $f_1-f_2>D/2$, then $(f_2-f_1)W\le(f_2-f_1)W_0<-DW_0/2$, a
+contradiction. So $f_1-f_2\le D/2$, and \cref{lem:self-improving} applies.
+
+(c) By (a), the function $eM-f(\xi')S$ has the derivative $(f-f(\xi'))S'$, which is at least $0$
+on $[\xi',\bar\xi]$ and at most $0$ on $[0,\xi']$. So it is smallest at $\xi'$:
+$eM(\xi)-f(\xi')S(\xi)\ge eM(\xi')-f(\xi')S(\xi')$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:envelope}]
+(a) The lines depend continuously on $\xi\in[0,\bar\xi]$, so the supremum is finite at every
+$s$, and a supremum of affine functions is convex.
+
+(b) The line with the index $\xi$ gives $N(S(\xi))\ge eM(\xi)$, and \cref{lem:path}\,(c) gives
+the converse inequality.
+
+(c) Let $s\le1$ and $\xi\in[0,\bar\xi]$. By \cref{lem:path}\,(c) at the point $S(0)=1$,
+$eM(\xi)+f(\xi)(1-S(\xi))\le eM(0)=em_0$, and $f(\xi)\ge f(0)=ec(0)$. Hence
+\[
+  eM(\xi)+f(\xi)(s-S(\xi))\le em_0+f(\xi)(s-1)\le em_0+ec(0)(s-1),
+\]
+which is the line with the index $0$. So $N(s)=em_0+ec(0)(s-1)$, and this is
+$ec(0)s-v(0)/2$ by \cref{lem:rs-identities}\,(b).
+
+(d) $N$ is continuous, being convex on $\R$. Let
+$J(\xi)=\alpha(0)+S\,eM-2\int_0^SN(r)\,dr-S^pk$. By (b), the fundamental theorem of calculus,
+\cref{def:path}\,(ii) and \cref{lem:path}\,(a),
+\[
+  J'=e(SM'-MS')-pS^{p-1}S'k-eS^pT=S^{p-1}\bigl(S'(e(c-m)-pk)-eST\bigr).
+\]
+By the definition of $S'$, this vanishes because of the identity
+\begin{equation}\label{eq:path-I}
+  (1+eT)\bigl(pk-e(c-m)\bigr)=e\,p\,g\,T,
+\end{equation}
+a computation like \eqref{eq:path-M}. So $J$ is constant on $[0,\bar\xi]$. At $0$, $S=1$,
+$M=m_0$, $k(0)=h(t_0)-m_0t_0$ and $\int_0^1N=ec(0)/2-v(0)/2$ by (c), so that
+$J(0)=\alpha(0)+v(0)/2-(h(t_0)-m_0t_0)+(em_0-ec(0)+v(0)/2)=0$ by \cref{lem:rs-identities}\,(b).
+With (b), $I(S(\xi))=J(\xi)+S(\xi)^pk(\xi)=S(\xi)^pk(\xi)$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:minorant}]
+Let $N$ be the upper envelope of \cref{sec:path}. By \cref{lem:path}\,(b), $f$ is nondecreasing,
+so \cref{lem:envelope} applies: $N$ is convex, and $N(0)=-v(0)/2\le0$ by
+\cref{lem:rs-identities}\,(d). Since $T(0)=t_0$ and $m(0)=m_0$, $\alpha(0)=\alpha_0$. Let
+$x,y\ge0$ with $s=x+y\le R$.
+
+If $s\le1$, then $N(r)=n_0+n_1r$ for $r\le1$, with $n_0=-v(0)/2$ and $n_1=ec(0)$, by
+\cref{lem:envelope}\,(c). The computation of \cref{lem:radial}\,(a) gives
+$\Psi^e_N(x,y)=-n_0(\sigma-e\delta)+en_1\sigma\delta=v(0)r+c(0)(x^2-y^2)$, so that
+$\alpha_0+\Psi^e_N$ is the restricted support $q$ at $(t_0,m_0)$, which lies below $\Phi$ by
+\cref{prop:restricted}\,(c).
+
+If $1<s\le R$, there is $\xi\in[0,\bar\xi]$ with $S(\xi)=s$, since $S$ is continuous, $S(0)=1$
+and $S(\bar\xi)=R$. By \cref{lem:envelope}\,(b) and (d),
+\[
+  \alpha_0+\Psi^e_N(x,y)=I(s)+eN(s)\,\delta=s^pk(\xi)+s^{p-1}m(\xi)\,\delta
+  =G_{k(\xi),m(\xi)}(x,y)\le\Phi(x,y),
+\]
+because $(T(\xi),m(\xi))$ is a hard base with the intercept $k(\xi)$.
+
+At $(x_{t_0},y_{t_0})$, $s=1$ and $\alpha_0+\Psi^e_N=q(x_{t_0},y_{t_0})=h(t_0)$ by
+\cref{lem:rs-identities}\,(a).
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:minorant}]
+\Cref{prop:path} gives a path of hard bases from $(t_0,m_0)$ to the scale $R$, and
+\cref{prop:minorant} the function $N$.
+\end{proof}
+
+\subsection{The proof of \texorpdfstring{\cref{thm:A}}{Theorem A}}
+
+\begin{proof}[Proof of \cref{lem:reflect}]
+By \cref{lem:coordinates}\,(d), $JA$ has the coordinates $(\bar w,\bar z)$. So, if $F$ is
+isotropic, $F(JA)=\Phi(\abs w,\abs z)$, which is isotropic by \cref{lem:coordinates}\,(c), and
+the function $h$ of its profile has at $-1$ the value $\Phi(1,0)=h(1)$. Homogeneity passes
+because $J(\lambda A)=\lambda JA$. If $B$ has rank one, so has $JB$, and
+$F(J(A+\tau B))=F(JA+\tau JB)$; so rank-one convexity passes.
+Finally, if $\varphi=(\varphi_1,\varphi_2)$ is a test map, so is $(\varphi_1,-\varphi_2)$, with
+the gradient $J\nabla\varphi$; Jensen's inequality for $f$ at $JA$ with this test map is Jensen's
+inequality for $A\mapsto f(JA)$ at $A$ with $\varphi$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:perturb}]
+(a) $\Theta$ depends only on $\abs z$ and $\abs w$, so it is isotropic by
+\cref{lem:coordinates}\,(c); the matrix $\lambda A$ has the coordinates $(\lambda z,\lambda w)$;
+and $\diag(x+y,x-y)$ has the coordinates $(x,y)$. Along a line,
+$\tau\mapsto\abs{z_0+\tau\alpha}^p$ is convex for $p\ge1$, as the composition of a convex
+function with values in $[0,\infty)$ and the convex nondecreasing function $r\mapsto r^p$ on
+$[0,\infty)$; likewise for $w$.
+
+(b) For $p>1$, $r\mapsto r^p$ is strictly convex on $[0,\infty)$, so $t\mapsto((1+t)/2)^p$ is
+strictly convex on $[-1,1]$, and $t\mapsto((1-t)/2)^p$ and $h_0$ are convex.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:interior}]
+Let $\Phi$ be the profile of $F$, $x_0=\abs{z_0}$, $y_0=\abs{w_0}$, $\sigma_0=x_0+y_0=\abs{A_0}>0$
+and $t_0=(x_0-y_0)/\sigma_0$, so that $\abs{t_0}<1$ and $(x_0,y_0)=\sigma_0(x_{t_0},y_{t_0})$.
+By \cref{lem:minorant} there is a supporting slope $m_0$ of $h$ at $t_0$, and $m_0>0$ by
+\cref{lem:orient}\,(d). Let $H=h(t_0)$.
+
+If $p(H-m_0t_0)-e(p-2)m_0\ge0$, the Burkholder-type function $G=G_{H-m_0t_0,m_0}$ satisfies
+$G(A)\le\Phi(\abs z,\abs w)=F(A)$ for every $A$, and, as $\det A_0=\sigma_0^2t_0$,
+$G(A_0)=\sigma_0^p(H-m_0t_0+m_0t_0)=\sigma_0^ph(t_0)=F(A_0)$. It is continuous, and
+quasiconvex by \cref{lem:easy}\,(b) or (c): since $m_0>0$, the assumption reads
+$(p-2)m_0\le p(H-m_0t_0)$ if $p>2$, and $(2-p)\abs{m_0}\le p(H-m_0t_0)$ if $p<2$. So $F$ is
+quasiconvex at $A_0$ by the remark after \cref{lem:supports}.
+
+Otherwise $(t_0,m_0)$ is a hard base. Let $\varphi$ be a test map with the Lipschitz constant
+$K$, for which $F(A_0+\nabla\varphi)$ is integrable. Then
+$\abs{A_0+\nabla\varphi(x)}\le\sigma_0+4K=R\sigma_0$ with $R=1+4K/\sigma_0\ge1$. Let $N$ be given
+by \cref{cor:minorant} for this $R$, and let
+\[
+  G(X)=\sigma_0^p\bigl(\alpha_0+\Psi^e_N(\sigma_0^{-1}X)\bigr).
+\]
+It is quasiconvex by \cref{prop:radial} and \cref{lem:qc-operations}, and continuous. If
+$\abs X\le R\sigma_0$, the point $(\abs z/\sigma_0,\abs w/\sigma_0)$ has coordinate sum at
+most $R$, and by \ref{P1}
+\[
+  G(X)=\sigma_0^p\bigl(\alpha_0+\Psi^e_N(\abs z/\sigma_0,\abs w/\sigma_0)\bigr)\le
+  \sigma_0^p\,\Phi(\abs z/\sigma_0,\abs w/\sigma_0)=F(X),
+\]
+with equality at $A_0$, where the point is $(x_{t_0},y_{t_0})$. Hence
+\[
+  F(A_0)=G(A_0)\le\int_{(0,1)^2}G(A_0+\nabla\varphi)\,dx\le\int_{(0,1)^2}F(A_0+\nabla\varphi)\,dx.
+  \qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:dense}]
+Let $A_0\in\M$ with the coordinates $(z_0,w_0)$, and let $\varphi$ be a test map. Let $u=z_0$ if
+$z_0\ne0$ and $u=1$ otherwise, $v=w_0$ if $w_0\ne0$ and $v=1$ otherwise, and let $B$ have the
+coordinates $(u,v)$. For $\lambda_n=1/(n+1)$ the matrix $A_n=A_0+\lambda_nB$ has the
+coordinates $z_0+\lambda_nu$ and $w_0+\lambda_nv$, which are nonzero: each is
+$(1+\lambda_n)z_0$ or $\lambda_n$, and likewise for $w$. So
+$F(A_n)\le\int_{(0,1)^2}F(A_n+\nabla\varphi)\,dx$. As $n\to\infty$, $F(A_n)\to F(A_0)$ by
+continuity, and the integrals converge to $\int_{(0,1)^2}F(A_0+\nabla\varphi)\,dx$ by dominated
+convergence: the matrices $A_n+\nabla\varphi(x)$ lie in a bounded set, on which $F$ is
+bounded.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:oriented}]
+A rank-one convex function is continuous (proof of \cref{prop:small}), and so is $\Theta$. Let
+$0<\varepsilon<-h(-1)$ and $F_\varepsilon=F+\varepsilon\Theta$. By \cref{lem:perturb},
+$F_\varepsilon$ satisfies~\Hyp, its profile is $\Phi+\varepsilon(x^p+y^p)$, and the function $h$
+of this profile, $h(t)+\varepsilon(((1+t)/2)^p+((1-t)/2)^p)$, is strictly convex on $[-1,1]$
+and equals $h(-1)+\varepsilon<0$ at $-1$. By \cref{prop:interior,lem:dense}, $F_\varepsilon$ is
+quasiconvex. Let $A\in\M$ and let $\varphi$ be a test map for which $F(A+\nabla\varphi)$ is
+integrable; so is $\Theta(A+\nabla\varphi)$. Then
+\[
+  F(A)+\varepsilon\Theta(A)\le\int_{(0,1)^2}F(A+\nabla\varphi)\,dx
+  +\varepsilon\int_{(0,1)^2}\Theta(A+\nabla\varphi)\,dx,
+\]
+and $\varepsilon\to0$ gives Jensen's inequality for $F$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:A}]
+Let $F\ge0$. For $0<p<1$, $F=0$ by \cref{prop:small}. For $p=1$, $F$ is convex by
+\cref{cor:low}\,(b), hence polyconvex and quasiconvex (\cref{lem:supports}). For $1<p<2$ this is
+\cref{cor:low}\,(a). For $p\ge2$, $F$ is polyconvex by \cref{thm:main}, hence quasiconvex.
+
+Let $F(A)<0$ for some $A$. Then $p>1$, since $F=0$ for $p<1$ and $F\ge0$ for $p=1$. If $p=2$,
+$F$ is polyconvex by \cref{thm:iff}\,(b), hence quasiconvex. Let $p\ne2$. The profile $\Phi$ of
+$F$ is negative at $(\abs z,\abs w)$ for the coordinates of $A$, so $h(-1)<0$ or $h(1)<0$ by
+\cref{lem:orient}\,(c). In the first case \cref{prop:oriented} applies to $F$. In the second, it
+applies to $A\mapsto F(JA)$ by \cref{lem:reflect}, and then $F(A)=F(J(JA))$ is quasiconvex by
+the same lemma, as $J^2=I$.
+\end{proof}

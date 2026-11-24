@@ -56,8 +56,13 @@ import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
 import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
+import all Morrey.Common.Basic.Analysis.Calculus.Deriv.MeanValue
+import all Morrey.Common.Basic.Analysis.Convex.Hinge
+import all Morrey.Common.Basic.Analysis.Convex.Legendre
 import all Morrey.Common.Basic.Analysis.Convex.Tangent
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
+import all Morrey.Common.Basic.MeasureTheory.Integral.IntervalIntegral.Primitive
+import all Morrey.Common.Basic.Topology.Order.SelfImproving
 import all Morrey.Common.External.Burkholder.ScalarFunction
 import all Morrey.Common.External.CoxVeraar.Decoupling
 import all Morrey.Common.External.Dacorogna.Minors
@@ -90,6 +95,15 @@ import all Morrey.HomogeneousIsotropic.LowExponent
 import all Morrey.HomogeneousIsotropic.Main
 import all Morrey.HomogeneousIsotropic.Polyaffine
 import all Morrey.HomogeneousIsotropic.Profile
+import all Morrey.HomogeneousIsotropic.Signed.Basic
+import all Morrey.HomogeneousIsotropic.Signed.BurkholderRadial
+import all Morrey.HomogeneousIsotropic.Signed.Defs
+import all Morrey.HomogeneousIsotropic.Signed.Interior
+import all Morrey.HomogeneousIsotropic.Signed.Main
+import all Morrey.HomogeneousIsotropic.Signed.Minorant
+import all Morrey.HomogeneousIsotropic.Signed.Path
+import all Morrey.HomogeneousIsotropic.Signed.Radial
+import all Morrey.HomogeneousIsotropic.Signed.RestrictedSupport
 import all Morrey.HomogeneousIsotropic.Supports
 import all Morrey.Pedregal.Checks
 import all Morrey.Pedregal.Defs
@@ -398,8 +412,40 @@ meta def paperResults : List (String × Name) :=
     ``HomogeneousIsotropic.convexOn_of_rankOneConvex_one),
    ("HomogeneousIsotropic Proposition 1.7 (0 < p < 1)",
     ``HomogeneousIsotropic.eq_zero_of_rankOneConvex_of_lt_one),
-   ("HomogeneousIsotropic Corollary 1.8 (every p > 0)",
+   ("HomogeneousIsotropic (the nonnegative case of Theorem A)",
     ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_pos),
+   ("HomogeneousIsotropic Theorem A (every p > 0, no sign condition)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_isotropic),
+   ("HomogeneousIsotropic signed: a negative value at −1 or at 1 of the slice",
+    ``HomogeneousIsotropic.IsProfile.slice_neg_one_neg_or_slice_one_neg),
+   ("HomogeneousIsotropic signed: restricted support (x < y, 1 < p < 2)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_lt),
+   ("HomogeneousIsotropic signed: restricted support (where F ≥ 0, p > 2)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_nonneg),
+   ("HomogeneousIsotropic signed: restricted support (the unit ball)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_add_le_one),
+   ("HomogeneousIsotropic signed: monotonicity of the supporting planes",
+    ``HomogeneousIsotropic.IsHardBase.scaled_monotone),
+   ("HomogeneousIsotropic Proposition 6.8 (radial integration of the truncated determinant)",
+    ``HomogeneousIsotropic.quasiconvex_radial),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p as a radial function, p ≥ 2)",
+    ``HomogeneousIsotropic.radial_rpow_eq_burkholder),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p (J ·) as a radial function, p ≥ 2)",
+    ``HomogeneousIsotropic.radial_rpow_eq_burkholder_reflection_mul),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p as a radial function, 1 < p ≤ 2)",
+    ``HomogeneousIsotropic.radial_neg_rpow_eq_burkholder),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p (J ·) as a radial function, 1 < p ≤ 2)",
+    ``HomogeneousIsotropic.radial_neg_rpow_eq_burkholder_reflection_mul),
+   ("HomogeneousIsotropic Corollary 6.11 (the Burkholder function is quasiconvex, p > 1)",
+    ``HomogeneousIsotropic.quasiconvex_burkholder_of_one_lt),
+   ("HomogeneousIsotropic signed: the path of hard bases",
+    ``HomogeneousIsotropic.IsHardBase.exists_isPath),
+   ("HomogeneousIsotropic signed: the radial minorant along a path",
+    ``HomogeneousIsotropic.IsPath.exists_convex_minorant),
+   ("HomogeneousIsotropic signed: the radial minorant at a hard base",
+    ``HomogeneousIsotropic.IsHardBase.exists_convex_minorant),
+   ("HomogeneousIsotropic signed: Jensen at the matrices with two nonzero coordinates",
+    ``HomogeneousIsotropic.quasiconvexAtOn_of_strictConvexOn_slice),
    ("HomogeneousIsotropic Lemma 2.1 (a) (the determinant)",
     ``HomogeneousIsotropic.det_eq_norm_sq_sub),
    ("HomogeneousIsotropic Lemma 2.1 (a) (the operator norm)",
@@ -435,7 +481,8 @@ meta def solutionResults : List Name :=
    ``HomogeneousIsotropicChallenge.theorem1_3_b, ``HomogeneousIsotropicChallenge.corollary1_4,
    ``HomogeneousIsotropicChallenge.theorem1_5, ``HomogeneousIsotropicChallenge.theorem1_5_identity,
    ``HomogeneousIsotropicChallenge.corollary1_6_a, ``HomogeneousIsotropicChallenge.corollary1_6_b,
-   ``HomogeneousIsotropicChallenge.proposition1_7, ``HomogeneousIsotropicChallenge.corollary1_8]
+   ``HomogeneousIsotropicChallenge.proposition1_7, ``HomogeneousIsotropicChallenge.theoremA,
+   ``HomogeneousIsotropicChallenge.proposition6_8]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
