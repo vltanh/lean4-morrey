@@ -1,5 +1,51 @@
 # Roadmap to completion
 
+## Nonhomogeneous main result — spectral-component selection at all bases, rank-deficient supremal Jensen
+
+The [new spectral-component theorem](IWANIEC_MORREY_SPECTRAL_COMPONENTS.md)
+uses the formalized truncated determinant and the published
+connected isotropic set theorem of Conti--De Lellis--Müller--Romeo
+(2003). For every compact SO(2)xSO(2)-invariant lamination-convex K,
+its connected components correspond exactly to components of the
+union of singular-value intervals I(X)=[|delta(X)|,s(X)].
+Each fiber at a common possible column norm is path connected:
+proper rotations align one column, then use a rank-one segment.
+Each component is polyconvex by the published theorem.
+
+For ANY compact gradient law supported in K (or a correct-minors
+law satisfying every K_r^± test), let R be its largest support
+operator norm and J=[a,b] the component of the interval union
+containing R. If a=0, the entire law and its mean belong to the
+single connected component K_J. If a>0, J has fixed determinant
+sign sigma; gap radii r tending to a from below give a strictly
+negative K_r^(-sigma) average, forcing sigma*delta(A)>=a.
+The base interval must lie in J with that orientation.
+At rank-deficient bases the second case is IMPOSSIBLE. This
+removes connectedness for the rank-deficient-base QC hull
+assertion, for arbitrarily many components.
+
+**New theorem for EVERY finite-valued isotropic RC F, without
+homogeneity:** F(A)<=ess sup F(X) at every rank-deficient base
+and every compact gradient law. Apply component selection to
+a norm-truncated energy sublevel. For strictly RC F, saturation
+of this supremal inequality forces all energies equal, by
+interiority of the lifted minors hull. This is a positive
+all-profile SUPPORT-level result, not integral Jensen.
+A law with positive mass above F(A) can still have mean
+energy below F(A); the remaining step is a weighted Jensen
+inequality, not another component-count ladder.
+
+**STOP RULE for fixed componentwise heat:** start from
+u=(v,v²), v=cos x+cos y. det Du=0 initially but Fourier decay
+creates a nonzero Jacobian at t>0. The already polyconvex
+energy (det X)²+||X||_F²/1000 has an exact heat-energy INCREASE
+of 99/128000 at t=log 2. Therefore universal solvability of
+the previous sufficient exact-two-form PSD criterion is
+false, even for smooth uniformly strictly RC PC functions.
+The criterion remains valid where feasible. Exact checker
+executed successfully. Hand proofs, no new Lean verification.
+General nonhomogeneous isotropic integral Morrey remains open.
+
 ## STOP RULE — full-vector L² projection is not a universal energy descent
 
 The [new exact normal-stress obstruction](IWANIEC_MORREY_VECTOR_DESCENT_NOGO.md)
@@ -23,7 +69,7 @@ Rank-one convexity does not imply the PDE. The exact
 checker passed. The valid full-vector boundary selection,
 quadratic signs and QC-extension theorem are unaffected.
 
-**Next analytic direction, not a solved gate:** exact
+**Historical direction (universal heat feasibility refuted above):** exact
 two-form heat-flow dissipation for arbitrary smooth
 isotropic profiles, extending the approach of
 Bruno--Pasqualotto (arXiv:2608.06367). Section 4 gives
