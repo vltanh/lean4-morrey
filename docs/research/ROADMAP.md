@@ -1,5 +1,82 @@
 # Roadmap to completion
 
+## Literature-guided theorem — entire continuous isotropic additive split on GL^+(2)
+
+The [new volumetric–isochoric theorem](IWANIEC_MORREY_VOLUMETRIC_SHIELD.md)
+uses the completed homogeneous result to attack a major class
+identified by the numerical literature. Voss et al. (2022) failed
+to find a counterexample in magic-plus, and Astala–Faraco–Guerra–
+Koski–Kristensen subsequently proved its QC and the entire split
+when the distortion profile h is convex (arXiv:2309.03495,
+Theorem 1.8). The convex-volumetric branch, including the three
+minus candidates and arbitrary other profiles, is the complementary
+target. The new result is STRONGER than QC on that branch.
+
+**New theorem:** EVERY continuous RC isotropic
+    W(A)=h(K(A))+g(det A), A in GL^+(2),
+with g convex is PC, without any convexity hypothesis on h.
+The proof uses ONLY our verified nonnegative homogeneous PC
+theorem p>=2. First extend any nonnegative p-homogeneous RC
+energy on GL^+ to a global finite RC energy agreeing on ANY
+prescribed compact distortion cone r=d/s²>=r0>0: use the PC
+barrier (kappa s²-d)_+^(p/2), with 0<r1<kappa<r0,
+scaled to dominate the original on r=r1. Max inside and
+barrier outside. The strict boundary gap gives local RC;
+all rank-one lines through zero use the barrier. Global
+homogeneous PC and finite-minors tests imply original PC
+on GL^+, even if the original blows up near det=0.
+
+**Shield/exponential bridge:** every RC isotropic W with
+W(tA)=W(A)+2c log t, c<=0, is PC. Apply the preceding lemma
+to E_eps(Y)=det Y exp(eps W(Y^(-1))), which is positive RC
+and homogeneous of degree 2-2eps c>=2. For a finite lifted
+minors law X_i of mean A, reweight inverse atoms by
+theta_i det X_i/det A. Linearity of the 2x2 adjugate gives
+the inverse mean and correct inverse determinant moment.
+E_eps Jensen becomes ordinary exponential W Jensen;
+subtract one, divide by eps and let eps->0. A proper
+convex roof gives W polyconvex. Also nonnegative homogeneous
+energies on GL^+ of degree q<=0 are PC by Shield.
+
+**Exact logarithmic normalization:** for C² g, even with
+merely continuous h, beta=inf z²g''(z) is finite by RC.
+On every rank-one line, the determinant is affine and
+q(t)=h(K(Y(t))) has a measure second derivative (difference
+of convex and smooth); dilate the whole line by lambda
+and use the nonnegative curvature of q+g(lambda² d).
+Take the infimum in lambda on a common full-measure set
+of rational scales, and use positivity of the singular
+part. This proves W0=h(K)-beta log d is RC, and W-W0
+is convex in d. If g is convex then beta>=0, so W0 PC
+by the Shield theorem. Otherwise beta<0 implies h convex
+from the diag(t,1) line. Smooth arbitrary continuous g
+by averaging log-scale dilations, preserving RC and
+convexity of g if present. Pass Jensen to the limit;
+nonconvex g forces convex h. Thus the COMPLETE additive
+split RC=>QC follows, in the orientation-preserving
+definition of the published theorem. Every RC split is
+also a sum of a PC split and a nonnegative multiple of
+the already established magic-plus energy, by the known
+logarithmic reduction on the other branch.
+
+For c>0 an optional direct compact-distortion QC transfer
+uses p=2-2eps c near two, the barrier
+[s^(p-2)(kappa s²-d)]_+ with kappa>|1-2/p|, and the full
+verified homogeneous QC theorem. Apply inverse-gradient
+Jensen and the change of variables, then eps->0. No
+unbounded-distortion or singular inverse claim for this
+particular argument.
+
+These are analytic hand proofs, exact Shield/logarithmic
+algebra controls actually executed, no new Lean theorem.
+The prior art and the verified input are linked in the
+note. **Scope:** a new nonhomogeneous positive-determinant
+isotropic class, NOT the unrestricted anisotropic G1 or
+general nonhomogeneous isotropic Morrey. G1 remains open.
+The literature-guided next target is genuinely coupled
+scale/distortion profiles rather than more stress gauges,
+fixed wave counts, or numerical counterexample searches.
+
 ## GATE 1 — angular radial reweighting and exact terminal-state geometry at degree two
 
 The [new angular adaptive theorem](IWANIEC_MORREY_ANGULAR_ADAPTIVE_SPLITTING.md)
