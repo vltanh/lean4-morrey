@@ -1,5 +1,57 @@
 # Roadmap to completion
 
+## POSITIVE general isotropic reduction — determinant-only stabilization and two convex branches
+
+The [new determinant-stabilization theorem](IWANIEC_MORREY_DETERMINANT_STABILIZATION.md)
+applies to EVERY C⁴ strongly rank-one-convex isotropic integrand,
+without homogeneity or separated profile. On each bounded test
+ball B_R, F+C_R det² is polyconvex, with an explicit coefficient
+C_R=M4/24+(M3/2+R M4/6)²/(4m), where m is the strict
+rank-one Hessian margin on B_(3R), and M3,M4 are stated spectral
+derivative bounds. It has touching poly-affine supports using
+only one complex coordinate and determinant, with a strict
+quadratic margin in that coordinate.
+
+The key elementary fact is the constant-determinant shear
+line z=sqrt(d)+it,w=t. For d>=0 the restriction
+g_d(t)=f(sqrt(d+t²),|t|) is even convex; hence F on the
+determinant-d fiber agrees with a convex function of w.
+Reflect for d<0. This gives the ORIGINAL integral Jensen
+inequality for all constant-Jacobian gradient laws, arbitrary
+finite-valued isotropic RC F, all bases, no smoothness.
+For smooth strongly RC F, determinant Taylor estimates and
+this strong fiber convexity give
+    int F(X)-F(A) >= (m/4) int |X-A|_F²
+                       - C_R int (det X-det A)²
+for EVERY bounded compatible law and every base, without
+exponential amplification. The determinant is allowed to
+change sign. The remaining cost is explicitly isolated.
+
+**Exact global reduction of the entire finite-valued isotropic
+problem:** it suffices to prove QC of every globally RC function
+    max{p_+(|w|,det X), p_-(|z|,det X)} - (det X)²,
+where both p_± are finite convex functions of two variables,
+nondecreasing in their modulus argument. The determinant
+coefficient is fixed to one. Construct the two convex branches
+by taking suprema of the above supports on an enlarged test
+ball. Repair global RC outside that ball with a convex radial
+term b(|X|_F²-4R²)_+², zero on the original test ball;
+this term has an identical convex representation in either
+branch's variables. Local rank-one convexity on overlapping
+interior/exterior regions yields global RC. Scaling the
+energy gives the fixed coefficient. Every hypothetical
+strict Jensen violation of the original arbitrary isotropic
+F survives smoothing, strictification and this construction.
+
+This is not another homogeneous-exponent or finite-case
+ladder. It is a structural normal form for the WHOLE gate.
+The determinant cost is not eliminated yet. No claim of a
+general isotropic proof or new Lean result; 4050 exact rational
+support controls and the symbolic checker passed. The signed
+homogeneous audit is separate. Prior literature on planar
+incompressible isotropic elasticity is acknowledged. The new
+theorems are independent of the signed homogeneous candidate.
+
 ## POSITIVE nonhomogeneous theorem — uniform exponential quasiconvexification on bounded ranges
 
 The [new integral Jensen theorem](IWANIEC_MORREY_NONHOMOG_EXPONENTIAL.md)
