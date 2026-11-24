@@ -1,5 +1,92 @@
 # Roadmap to completion
 
+## GATE 1 — angular radial reweighting and exact terminal-state geometry at degree two
+
+The [new angular adaptive theorem](IWANIEC_MORREY_ANGULAR_ADAPTIVE_SPLITTING.md)
+exploits freedom of amplitudes/probabilities while preserving homogeneous
+moments. It does NOT yet supply the required universal positive stress.
+For finite unit directions v_i, normalize second angular weights to a_i
+summing to one and base to b. Generalized feasible states satisfy
+    b=sum s_i v_i, s_i>=0, sum s_i²/a_i<=1,
+    det b=sum a_i det v_i.
+At positive s_i the radial realization is r_i=a_i/s_i,
+theta_i=s_i²/a_i; zero s_i with a_i>0 denotes concentration.
+This compact state space includes all finite compatible input laws.
+Let rho be the minimum of the norm sum at fixed a,b.
+
+**Strict slack gives an exact positive split:** choose first-moment
+coefficients positive on all generators of the minimal conic face
+containing b, with norm sum<1. If their span contains rank-one H,
+perturb s along a coefficient representation of H and a along
+h with sum h_i det v_i=cof b:H. Small symmetric variations
+b±eps H,s±eps k,a±eps h are feasible. Normalize each child's
+angular mass m, scale its base by 1/sqrt(m), and use mixture
+weight m/2. The base source is a rank-one Jensen source, angular
+mixture unchanged, and resolved second moment strictly increases
+by eps² |H|². Every nontrivial ordinary minor-compatible slack
+law has such an H. An explicit ordinarily blocked diagonal law
+at b=(1,2) was unblocked by radial reweighting; exact norm slack
+4257/125000 and both exact children verified.
+
+**Tightness:** rho=1 gives a linear ell with
+s_i=a_i ell(v_i)_+, ell(b)=sum a_i ell(v_i)_+²=1. Finite
+matrices are v_i/ell(v_i) on ell=1, other angular data
+are concentrations on ell<=0. Strict convexity of scalar
+square forces EVERY split to preserve this hyperplane and
+the finite radii. For an ordinary law, tightness iff its
+affine support avoids zero. In particular all ordinarily
+blocked states whose affine span contains zero have slack.
+
+**Global optimal decomposition:** maximize integral |b|² over
+probability measures on the compact angular state space with
+fixed angular mixture and all homogeneous RC Jensen inequalities
+from original base to conditional bases. Exact splits improve
+the objective. Any inactive concentration submass with zero
+determinant moment can be separated and atomized by the complete
+degree-two origin theorem, also improving the objective.
+Solved states (e.g. base zero, or a contains |b|² at direction b)
+can be replaced by atomic states. Every nonsolved optimal
+residual is one of three explicit types: (I) tight ordinary
+two-sheeted determinant hyperboloid trap on ell=1; (II) slack
+determinant-definite 2D mean face with opposite-sign inactive
+concentration; (III) tight finite part on ell=1 with
+determinant-definite 1D or 2D centered variation and opposite-sign
+concentration. This handles concentration rigorously, rather
+than assuming bounded radial amplitudes. A specific type III
+state has exact negative RC gap -1/16 (two finite diagonals
+around I plus concentration at -I). It is NOT a gradient
+counterexample. Thus these residuals cannot be eliminated by
+the algebraic determinant constraint alone.
+
+**All p>1 hyperplane transfer theorem:** on a compact law
+supported on ell(X)=1, homogeneous p-Jensen for ALL RC
+integrands already implies the unrestricted RC Jensen tests.
+Use weak-* angular laminate realization (proved for arbitrary
+angular measures), then scalar strict convexity:
+E ell=1, E |ell|^p->1 forces concentration on ell=1 and
+uniform p-integrability there. Angular mass outside a positive
+ell-direction neighborhood tends to zero, giving uniform
+integrability of the full p-moments. On ell=1 the angular
+measure determines the full law. Test arbitrary RC functions
+by patching their values on a compact range with a convex
+p-growth exterior using max. Thus homogeneous G1 at any fixed
+p>1 would already settle unrestricted RC Jensen on all affine
+hyperplane-supported gradient laws (translate hyperplanes
+through zero if needed).
+
+Actual scalar-level conditioning: the signed pushforwards
+of Dphi_1 and det Dphi under phi_1 both vanish by primitive
+integration. Conditional means vary only in the second row
+and each conditional law obeys the determinant identity.
+This is a legitimate positive barycenter split, but the
+conditional laws need not be actual compatible gradients.
+No theorem relating the optimal remaining residuals I--III
+to sufficient spatial compatibility was obtained. The
+earlier heat/polar signed stress absorption also remains
+unproved. Exact rational/symbolic script was executed;
+no Lean proof. G1 remains OPEN, not a finite exhaustive
+classification or an absorption proof.
+
 ## GATE 1 — positive directional marginals, affine-frame calibration, and polar residual
 
 The [new spatial constructions](IWANIEC_MORREY_DIRECTIONAL_FRAME_STRESS.md)
