@@ -1,5 +1,46 @@
 # Roadmap to completion
 
+## MAIN GATE correction — the proposed universal Delta-preserving split is REFUTED
+
+The [new exact no-go theorem](IWANIEC_MORREY_DELTA_NOGO.md)
+proves that **all minor-compatible laws with full covariance condition
+number <=3/2 automatically have Delta=0**, uniformly over EVERY affine
+transform in the penalty. The proof combines the semiconvex bound
+g<=s/2 for the determinant-index Jensen gap with the negative-sheet
+bound g<=(1/2+kappa)v, where s,v are the transformed centered symmetric
+and skew variances and kappa is the covariance condition number.
+
+The explicit law with atoms +/-5I,+/-5J each of mass 1/104 and
++/-diag(1,-1),+/-[[0,1],[1,0]] each of mass 25/104 has mean and
+mean determinant zero, covariance (25/26)I4, and Delta=0. Yet the
+globally rank-one convex signed Dacorogna--Marcellini quartic
+F=|X|^4-(9/4)|X|²det X has **exact Jensen gap -50/13**.
+Rank-one convexity has a direct rational SOS proof. This is an
+abstract nonlaminate, NOT an actual compatible-gradient witness.
+The no-go does not depend on the recent quasiconvexity preprint.
+
+Consequently r_comp(nu)>r(nu)>0 for this abstract law: an optimal
+unconstrained decomposition cannot simultaneously have zero average
+Delta, by the exact trap classification. The stronger proposed
+uniform splitting principle on ALL minor-compatible Delta-zero
+laws is false and must NOT be pursued further. The counterexample
+persists for smooth compact densities with connected support.
+A further proof gives both laminate and nonlaminate realizations
+of any prescribed positive definite determinant-neutral covariance.
+
+The original equality r_comp=r for ACTUAL gradient laws remains
+open and equivalent to Morrey; it is not refuted by this example.
+The quantitative trap exclusion and exact neutral martingale tools
+are unaffected. Any continuation must use spatial information
+beyond these determinant-index tests and second moments, not
+another finite-wave hierarchy.
+
+The [exact checker](../../research/audit/iwaniec_delta_nogo_exact.py)
+was actually executed locally: exact moments, quartic gap, SOS
+coefficients and 256 rational affine controls passed. The all-transform
+inequality is a hand proof, not a sampling inference. No Lean or
+external review claim.
+
 ## MAIN GATE refinement — quantitative compatibility penalty detecting EVERY terminal trap
 
 The [new trap compatibility note](IWANIEC_MORREY_TRAP_COMPATIBILITY.md)
@@ -39,7 +80,7 @@ r and average Delta approaching zero. Compactness and the exact
 trap classification would then force r=0 and settle Morrey.
 A stronger sufficient uniform construction is a nonzero rank-one
 split preserving Delta=0 at every non-Dirac minor-compatible
-law with Delta=0; its existence is NOT established.
+law with Delta=0; its existence is NOT established. **SUPERSEDED: this stronger uniform principle is refuted by the Delta no-go above.**
 
 **Mandatory caution:** an explicit smooth separable product
 gradient (already a laminate) admits a legal nonzero rank-one
