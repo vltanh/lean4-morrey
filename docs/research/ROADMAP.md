@@ -4,7 +4,7 @@ The question is stated in [HANDOFF](HANDOFF.md). The previous chronological road
 
 ## G0 — trustworthy working baseline
 
-**Status:** pinned main verified; reset PR CI not yet checked. Use the current main theorem and dependency, not the outdated candidate summary. Four PR-only unverified interface modules are archived pending repair. Keep source proof and verification changes separate from research notes. Details in [FORMAL_STATUS](FORMAL_STATUS.md).
+**Status:** pinned main verified; reset-tree Lean build, axiom/dependency audit, import, route and Challenge checks passed. The link checker flagged the credits paths newly resolvable in the combined branch; links have been repaired, fresh complete CI still pending. Use the current main theorem and dependency, not the outdated candidate summary. Four PR-only unverified interface modules are archived pending repair. Keep source proof and verification changes separate from research notes. Details in [FORMAL_STATUS](FORMAL_STATUS.md).
 
 ## G1 — genuinely global proof route (open)
 
