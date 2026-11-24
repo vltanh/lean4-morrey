@@ -5,6 +5,7 @@ public import Morrey.Cassese.TwoByThree.Polynomial
 public import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.Calculus.ContDiff.RCLike
+public import Mathlib.Analysis.Calculus.ImplicitContDiff
 public import Mathlib.Analysis.SpecialFunctions.JapaneseBracket
 public import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
 public import Mathlib.Analysis.SpecialFunctions.Arsinh
@@ -22,9 +23,10 @@ public import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
 The construction of the proof of Proposition 5.2 (TeX lines 1717–1796). Identify `ℝ³` with
 `ℂ × ℝ`, `X = (x, y, t) ↦ (w, t)` with `w = x + i y`. With the principal square root
 `s = √((1 − i t)² + |w|²)` (`tbtS`, written `exp (log z / 2)`), the root in the unit disc of
-`w̄ ζ² + 2 (t + i) ζ + w = 0` is `ζ = i w / (1 − i t + s)` (`tbtZeta`), and the witness is
-`u = ζ̄ + ζ² / 2` (`tbtU`, the profile `F (z) = z`, `G (z) = z² / 2`), as a map into `ℝ²`
-(`tbtWitness`). The integrals are evaluated, as in the paper, in the coordinates
+`w̄ ζ² + 2 (t + i) ζ + w = 0` is `ζ = i w / (1 − i t + s)` (`tbtZeta`). That root is unique in
+the disc and simple, so `ζ` is smooth by the implicit function theorem (`tbt_Zeta_contDiff`). The
+witness is `u = ζ̄ + ζ² / 2` (`tbtU`, the profile `F (z) = z`, `G (z) = z² / 2`), as a map into
+`ℝ²` (`tbtWitness`). The integrals are evaluated, as in the paper, in the coordinates
 `(ζ, τ) ∈ 𝔻 × ℝ`, `τ = −Im s`, through the change of variables `(ζ, τ) ↦ (w, t)` (`tbtInv`).
 
 Helpers are prefixed `tbt_`.
@@ -184,24 +186,161 @@ theorem tbt_S_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbtS := by
       tbt_Z_contDiff.contDiffAt
   exact (Complex.contDiff_exp (𝕜 := ℝ)).contDiffAt.comp X (hlog.div_const 2)
 
-/-- `ζ` is smooth. The paper argues that `ζ` is the unique, simple root in the unit disc of
-`w̄ ζ² + 2 (t + i) ζ + w = 0` and hence smooth (TeX 1745–1752); here smoothness is read off the
-closed form `ζ = i w / (1 − i t + s)`, `s` the principal square root of a point of the slit plane
-(`tbt_S_contDiff`) and `Re (1 − i t + s) > 0`. This is a mechanical difference: the closed form
-is that root (`tbt_Zeta_eq`, `tbt_norm_Zeta_lt_one`). -/
+/-! ### Smoothness of `ζ` by the implicit function theorem (TeX 1743–1752) -/
+
+/-- The defining polynomial of `ζ` in the variables `(X, z)`: `w̄ z² + 2 (t + i) z + w`, the
+equation `w + 2 t z + w̄ z² = h (z)` with `h (ξ) = −2 i ξ` (TeX 1743–1744). -/
+noncomputable def tbt_ift_poly (p : (Fin 3 → ℝ) × ℂ) : ℂ :=
+  conj (tbtW p.1) * p.2 ^ 2 + 2 * ((p.1 2 : ℂ) + I) * p.2 + tbtW p.1
+
+/-- `ζ (X)` is a root of `z ↦ w̄ z² + 2 (t + i) z + w` (`tbt_Zeta_eq`). -/
+theorem tbt_ift_poly_Zeta (X : Fin 3 → ℝ) : tbt_ift_poly (X, tbtZeta X) = 0 := tbt_Zeta_eq X
+
+/-- The defining polynomial is a polynomial in the real coordinates of `(X, z)`, hence `C^n` for
+every `n`. -/
+theorem tbt_ift_poly_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbt_ift_poly := by
+  have hW : ContDiff ℝ n fun p : (Fin 3 → ℝ) × ℂ => tbtW p.1 := tbt_W_contDiff.comp contDiff_fst
+  have h2 : ContDiff ℝ n fun p : (Fin 3 → ℝ) × ℂ => (p.1 2 : ℂ) :=
+    ofRealCLM.contDiff.comp
+      ((contDiff_apply (𝕜 := ℝ) (F' := fun _ : Fin 3 => ℝ) (2 : Fin 3)).comp contDiff_fst)
+  have hz : ContDiff ℝ n fun p : (Fin 3 → ℝ) × ℂ => p.2 := contDiff_snd
+  unfold tbt_ift_poly
+  exact (((conjCLE.contDiff.comp hW).mul (hz.pow 2)).add
+    ((contDiff_const.mul (h2.add contDiff_const)).mul hz)).add hW
+
+/-- No root on the unit circle (TeX 1749–1750): if `w̄ z² + 2 (t + i) z + w = 0` and `|z| = 1`,
+multiplying by `z̄` gives `2 (t + i) + 2 Re (w z̄) = 0`, whose imaginary part is `2`. -/
+theorem tbt_ift_norm_ne_one {X : Fin 3 → ℝ} {z : ℂ} (hz : tbt_ift_poly (X, z) = 0) :
+    ‖z‖ ≠ 1 := by
+  intro h1
+  have hzz : z * conj z = 1 := by
+    rw [mul_conj, Complex.normSq_eq_norm_sq, h1]; simp
+  have hre : ((tbtW X * conj z).re : ℂ) * 2 = tbtW X * conj z + conj (tbtW X) * z := by
+    apply Complex.ext <;> simp <;> ring
+  have key : 2 * ((X 2 : ℂ) + I) + 2 * ((tbtW X * conj z).re : ℂ) = 0 := by
+    simp only [tbt_ift_poly] at hz
+    linear_combination conj z * hz - (conj (tbtW X) * z + 2 * ((X 2 : ℂ) + I)) * hzz + hre
+  have := congrArg Complex.im key
+  simp at this
+
+/-- For `w ≠ 0`, two distinct roots have product of modulus one (TeX 1747–1748): their sum is
+`−2 (t + i) / w̄` and their product `w / w̄`. -/
+theorem tbt_ift_norm_mul_roots {X : Fin 3 → ℝ} {z₁ z₂ : ℂ} (hw : tbtW X ≠ 0) (hne : z₁ ≠ z₂)
+    (h₁ : tbt_ift_poly (X, z₁) = 0) (h₂ : tbt_ift_poly (X, z₂) = 0) : ‖z₁ * z₂‖ = 1 := by
+  simp only [tbt_ift_poly] at h₁ h₂
+  have hsum : conj (tbtW X) * (z₁ + z₂) + 2 * ((X 2 : ℂ) + I) = 0 := by
+    have : (z₁ - z₂) * (conj (tbtW X) * (z₁ + z₂) + 2 * ((X 2 : ℂ) + I)) = 0 := by
+      linear_combination h₁ - h₂
+    exact (mul_eq_zero.mp this).resolve_left (sub_ne_zero.mpr hne)
+  have hprod : conj (tbtW X) * (z₁ * z₂) = tbtW X := by
+    linear_combination z₁ * hsum - h₁
+  have := congrArg norm hprod
+  rw [norm_mul, Complex.norm_conj] at this
+  exact mul_left_cancel₀ (norm_ne_zero_iff.mpr hw) (this.trans (mul_one _).symm)
+
+/-- The root in the unit disc is unique (TeX 1746–1751): for `w ≠ 0` two distinct roots have
+product of modulus one (`tbt_ift_norm_mul_roots`), so they cannot both lie in the disc; at `w = 0`
+the equation is `2 (t + i) z = 0`, whose only root is `0`. -/
+theorem tbt_ift_root_unique {X : Fin 3 → ℝ} {z₁ z₂ : ℂ} (h₁ : tbt_ift_poly (X, z₁) = 0)
+    (h₂ : tbt_ift_poly (X, z₂) = 0) (hn₁ : ‖z₁‖ < 1) (hn₂ : ‖z₂‖ < 1) : z₁ = z₂ := by
+  by_cases hw : tbtW X = 0
+  · have htI : (X 2 : ℂ) + I ≠ 0 := by
+      intro h; have := congrArg Complex.im h; simp at this
+    have hzero : ∀ z : ℂ, tbt_ift_poly (X, z) = 0 → z = 0 := by
+      intro z hz
+      simp only [tbt_ift_poly, hw, map_zero, zero_mul, zero_add, add_zero] at hz
+      exact (mul_eq_zero.mp hz).resolve_left (mul_ne_zero two_ne_zero htI)
+    rw [hzero z₁ h₁, hzero z₂ h₂]
+  · by_contra hne
+    have h := tbt_ift_norm_mul_roots hw hne h₁ h₂
+    rw [norm_mul] at h
+    nlinarith [norm_nonneg z₁, norm_nonneg z₂]
+
+/-- Every root is simple (TeX 1746–1751): `∂_z (w̄ z² + 2 (t + i) z + w) = 2 (w̄ z + t + i) ≠ 0`.
+For `w ≠ 0` a double root `z` has `z² = w / w̄`, so `|z| = 1`, which `tbt_ift_norm_ne_one` excludes;
+at `w = 0` the derivative is `2 (t + i) ≠ 0`. -/
+theorem tbt_ift_deriv_ne_zero {X : Fin 3 → ℝ} {z : ℂ} (hz : tbt_ift_poly (X, z) = 0) :
+    conj (tbtW X) * z + X 2 + I ≠ 0 := by
+  intro hd
+  by_cases hw : tbtW X = 0
+  · rw [hw, map_zero, zero_mul, zero_add] at hd
+    have := congrArg Complex.im hd; simp at this
+  · have hsq : conj (tbtW X) * z ^ 2 = tbtW X := by
+      simp only [tbt_ift_poly] at hz
+      linear_combination 2 * z * hd - hz
+    apply tbt_ift_norm_ne_one hz
+    have := congrArg norm hsq
+    rw [norm_mul, norm_pow, Complex.norm_conj] at this
+    have h2 : ‖z‖ ^ 2 = 1 :=
+      mul_left_cancel₀ (norm_ne_zero_iff.mpr hw) (this.trans (mul_one _).symm)
+    exact (pow_eq_one_iff_of_nonneg (norm_nonneg z) two_ne_zero).mp h2
+
+/-- The complex derivative in `z` of the defining polynomial: `2 (w̄ z + t + i)`. -/
+theorem tbt_ift_hasDerivAt (X : Fin 3 → ℝ) (z : ℂ) :
+    HasDerivAt (fun z => tbt_ift_poly (X, z)) (2 * (conj (tbtW X) * z + X 2 + I)) z := by
+  have h := ((((hasDerivAt_id' z).fun_pow 2).const_mul (conj (tbtW X))).add
+    ((hasDerivAt_id' z).const_mul (2 * ((X 2 : ℂ) + I)))).add_const (tbtW X)
+  convert h using 1
+  · funext x; simp only [tbt_ift_poly, Pi.add_apply]
+  · norm_num; ring
+
+/-- The partial derivative in `z` of the defining polynomial, as an `ℝ`-linear map of `ℂ`, is
+multiplication by `2 (w̄ z + t + i)`. -/
+theorem tbt_ift_fderiv_inr (X : Fin 3 → ℝ) (z : ℂ) :
+    fderiv ℝ tbt_ift_poly (X, z) ∘L .inr ℝ (Fin 3 → ℝ) ℂ =
+      (ContinuousLinearMap.smulRight (1 : ℂ →L[ℂ] ℂ)
+        (2 * (conj (tbtW X) * z + X 2 + I))).restrictScalars ℝ := by
+  have hf : HasFDerivAt tbt_ift_poly (fderiv ℝ tbt_ift_poly (X, z)) (X, z) :=
+    ((tbt_ift_poly_contDiff (n := 1)).differentiable one_ne_zero _).hasFDerivAt
+  exact (hf.comp z (hasFDerivAt_prodMk_right X z)).unique
+    ((tbt_ift_hasDerivAt X z).hasFDerivAt.restrictScalars ℝ)
+
+/-- At a root, the partial derivative in `z` of the defining polynomial is invertible: it is
+multiplication by `2 (w̄ z + t + i) ≠ 0` (`tbt_ift_deriv_ne_zero`), the hypothesis of the implicit
+function theorem. -/
+theorem tbt_ift_isInvertible {X : Fin 3 → ℝ} {z : ℂ} (hz : tbt_ift_poly (X, z) = 0) :
+    (fderiv ℝ tbt_ift_poly (X, z) ∘L .inr ℝ (Fin 3 → ℝ) ℂ).IsInvertible := by
+  have hc : 2 * (conj (tbtW X) * z + X 2 + I) ≠ 0 :=
+    mul_ne_zero two_ne_zero (tbt_ift_deriv_ne_zero hz)
+  rw [tbt_ift_fderiv_inr]
+  refine ⟨(ContinuousLinearEquiv.unitsEquivAut ℂ (Units.mk0 _ hc)).restrictScalars ℝ, ?_⟩
+  refine ContinuousLinearMap.ext fun v => ?_
+  simp [mul_comm]
+
+open scoped Topology in
+/-- `ζ` is smooth (TeX 1743–1752). `ζ (X)` is a root of `z ↦ w̄ z² + 2 (t + i) z + w`
+(`tbt_ift_poly_Zeta`) in the unit disc (`tbt_norm_Zeta_lt_one`). The root is simple
+(`tbt_ift_deriv_ne_zero`: a double root would lie on the unit circle, which carries no root,
+`tbt_ift_norm_ne_one`), so the implicit function theorem (`ContDiffAt.implicitFunction`, applied to
+the polynomial `tbt_ift_poly`, which is `C^n`, with the invertible partial derivative
+`tbt_ift_isInvertible`) gives, near each `X₀`, a `C^n` map `g` with `g (X₀) = ζ (X₀)` whose values
+are roots. By continuity `|g| < 1` near `X₀`, and the root in the disc is unique
+(`tbt_ift_root_unique`: for `w ≠ 0` two distinct roots have product of modulus one, at `w = 0` the
+root is `0`), so `g = ζ` near `X₀`. For `n = 0` the case `n = 1` applies. -/
 theorem tbt_Zeta_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbtZeta := by
+  suffices h : ∀ n : WithTop ℕ∞, n ≠ 0 → ContDiff ℝ n tbtZeta by
+    rcases eq_or_ne n 0 with rfl | hn
+    · exact (h 1 one_ne_zero).of_le zero_le_one
+    · exact h n hn
+  intro n hn
   rw [contDiff_iff_contDiffAt]
-  intro X
-  have h2 : ContDiff ℝ n fun X : Fin 3 → ℝ => (X 2 : ℂ) :=
-    ofRealCLM.contDiff.comp (contDiff_apply (𝕜 := ℝ) (F' := fun _ : Fin 3 => ℝ) (2 : Fin 3))
-  have hD : ContDiff ℝ n tbtDen := (contDiff_const.sub (h2.mul contDiff_const)).add tbt_S_contDiff
-  have hinv : ContDiffAt ℝ n (fun X => (tbtDen X)⁻¹) X :=
-    hD.contDiffAt.inv (tbt_Den_ne_zero X)
-  have : ContDiffAt ℝ n (fun X => I * tbtW X * (tbtDen X)⁻¹) X :=
-    (contDiff_const.mul tbt_W_contDiff).contDiffAt.mul hinv
-  have he : tbtZeta = fun X => I * tbtW X * (tbtDen X)⁻¹ := by
-    funext X; rw [tbtZeta, div_eq_mul_inv]
-  rw [he]; exact this
+  intro X₀
+  have cdf : ContDiffAt ℝ n tbt_ift_poly (X₀, tbtZeta X₀) := tbt_ift_poly_contDiff.contDiffAt
+  have if₂ := tbt_ift_isInvertible (tbt_ift_poly_Zeta X₀)
+  -- the implicit function `g` through `(X₀, ζ (X₀))`
+  have hg : ContDiffAt ℝ n (cdf.implicitFunction hn if₂) X₀ :=
+    cdf.contDiffAt_implicitFunction hn if₂
+  have hg0 : cdf.implicitFunction hn if₂ X₀ = tbtZeta X₀ := cdf.implicitFunction_apply_self hn if₂
+  have hgf : ∀ᶠ X in 𝓝 X₀, tbt_ift_poly (X, cdf.implicitFunction hn if₂ X) = 0 := by
+    simpa [tbt_ift_poly_Zeta] using cdf.eventually_apply_implicitFunction hn if₂
+  -- `|g| < 1` near `X₀`, so `g = ζ` near `X₀` by uniqueness of the root in the disc
+  have hgn : ∀ᶠ X in 𝓝 X₀, ‖cdf.implicitFunction hn if₂ X‖ < 1 :=
+    hg.continuousAt.norm.eventually_lt continuousAt_const
+      (by rw [hg0]; exact tbt_norm_Zeta_lt_one X₀)
+  have heq : tbtZeta =ᶠ[𝓝 X₀] cdf.implicitFunction hn if₂ :=
+    (hgf.and hgn).mono fun X hX =>
+      tbt_ift_root_unique (tbt_ift_poly_Zeta X) hX.1 (tbt_norm_Zeta_lt_one X) hX.2
+  exact hg.congr_of_eventuallyEq heq
 
 theorem tbt_U_contDiff {n : WithTop ℕ∞} : ContDiff ℝ n tbtU :=
   (conjCLE.contDiff.comp tbt_Zeta_contDiff).add ((tbt_Zeta_contDiff.pow 2).div_const 2)
@@ -1166,8 +1305,9 @@ bounded `u : ℝ³ → ℝ²` with `∇u (x) ∈ 𝓛₃` and `q₃ (∇u (x)) <
 Proof, as in the paper (TeX lines 1717–1796): `u = ζ̄ + ζ² / 2` with `ζ` the root in the unit disc
 of `w̄ ζ² + 2 t ζ + w = h (ζ)`, `h (ξ) = −2 i ξ`, explicitly `ζ = i w / (1 − i t + s)` with
 `s = √((1 − i t)² + |w|²)` (`tbtZeta`; `|ζ| < 1` from `σ = Re s = (1 + |ζ|²) / (1 − |ζ|²)`,
-`tbt_sigma_eq`). Implicit differentiation gives `∂ζ = i / (2 s)`, `∂̄ζ = ζ² ∂ζ`, `ζ_t = 2 ζ ∂ζ`
-(`tbt_ZetaD_eq`), hence `∇u ∈ 𝓛₃` (`tbt_jac_mem_L3`) and, by (24),
+`tbt_sigma_eq`). This root is unique in the disc and simple, so `ζ` is smooth by the implicit
+function theorem (`tbt_Zeta_contDiff`). Implicit differentiation gives `∂ζ = i / (2 s)`,
+`∂̄ζ = ζ² ∂ζ`, `ζ_t = 2 ζ ∂ζ` (`tbt_ZetaD_eq`), hence `∇u ∈ 𝓛₃` (`tbt_jac_mem_L3`) and, by (24),
 `q₃ (∇u) = −|∂ζ|⁴ (1 − |ζ|²)⁶ < 0` (`tbt_q3_jac`, `F' = 1`). The integrals are evaluated in the
 coordinates `(ζ, τ)`, `τ = −Im s`: the inverse coordinates `w = −2 ζ (τ + i) / (1 − |ζ|²)`,
 `t = σ τ` map `𝔻 × ℝ` bijectively onto `ℝ³` with
@@ -1181,11 +1321,9 @@ coordinates with the substitution `σ = (1 + |ζ|²) / (1 − |ζ|²)`, gives
 `∫_{B_R} |∇u|⁴ ≤ 288 π² ∫_1^{√(1+R²)} dσ / σ ≤ 576 π² log (2 + R)` (`tbt_lintegral_inv_S4_le`,
 `tbt_integral_radial`, `tbt_log_bound`).
 
-Mechanical differences: smoothness of `ζ` is read off the closed form rather than from "unique
-simple root, hence smooth" (`tbt_Zeta_contDiff`); `q₃ (∇u) ∈ L¹` is concluded from the formula for
-`∫ |q₃ (∇u)|` (the paper writes the integral of `q₃`, which is `−∫ |q₃|` since `q₃ < 0`); and the
-radial integral `∫ r dr / ((1 − r²) (1 + r²))` is turned into `¼ ∫ dσ / σ` by the substitution
-theorem. -/
+Details: `q₃ (∇u) ∈ L¹` is concluded from the formula for `∫ |q₃ (∇u)|` (the
+paper writes the integral of `q₃`, which is `−∫ |q₃|` since `q₃ < 0`); and the radial integral
+`∫ r dr / ((1 − r²) (1 + r²))` is turned into `¼ ∫ dσ / σ` by the substitution theorem. -/
 theorem proposition5_2 :
     ∃ u : (Fin 3 → ℝ) → Fin 2 → ℝ, ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) u ∧
       (∃ M : ℝ, ∀ x, ‖u x‖ ≤ M) ∧ (∀ x, jac u x ∈ L3) ∧ (∀ x, q3 (jac u x) < 0) ∧

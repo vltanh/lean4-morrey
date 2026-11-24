@@ -28,12 +28,12 @@ public import Mathlib.Analysis.Complex.ExponentialBounds
 # Section 6: the square case `ℝ^{d×d}`
 
 * `symPart A = (A + Aᵀ)/2`, `skewPart A = (A − Aᵀ)/2`, `symHalfPart A = Sym A − ½ tr (A) Id`
-  (`Sym_{1/2}`, Section 6.4);
+  (`Sym_{1/2}`, Section 6.3);
 * `kornF d p q C (A) = C^p ‖Sym A‖_{S_q}^p − ‖Skew A‖_{S_q}^p`, the integrand (30), with thresholds
   `C^{rc} (S_q^{d×d}, p) = rcThreshold (kornF d p q)` and
   `C^{qc} (S_q^{d×d}, p) = qcThreshold (kornF d p q)`;
 * `hF d p q C (A) = C^p ‖Sym_{1/2} A‖_{S_q}^p − ‖Skew A‖_{S_q}^p` (Section 6.3), with
-  `C^{rc} (d) = rcThreshold (hF d 4 4)` and `C^{qc} (d) = qcThreshold (hF d 4 4)` (Section 6.4);
+  `C^{rc} (d) = rcThreshold (hF d 4 4)` and `C^{qc} (d) = qcThreshold (hF d 4 4)` (Section 6.3);
 * `gSquare d` and the function `U` of Corollary 6.4.
 
 The proofs use the submodules `Square.Trace` (`‖·‖_{S_2}²`, `‖·‖_{S_4}⁴` as traces),
@@ -72,7 +72,7 @@ noncomputable def symPart (A : Matrix (Fin d) (Fin d) ℝ) : Matrix (Fin d) (Fin
 noncomputable def skewPart (A : Matrix (Fin d) (Fin d) ℝ) : Matrix (Fin d) (Fin d) ℝ :=
   (1 / 2 : ℝ) • (A - Aᵀ)
 
-/-- `Sym_{1/2} (A) = Sym (A) − ½ tr (A) Id` (Section 6.4). -/
+/-- `Sym_{1/2} (A) = Sym (A) − ½ tr (A) Id` (Section 6.3). -/
 noncomputable def symHalfPart (A : Matrix (Fin d) (Fin d) ℝ) : Matrix (Fin d) (Fin d) ℝ :=
   symPart A - ((1 / 2 : ℝ) * A.trace) • (1 : Matrix (Fin d) (Fin d) ℝ)
 
@@ -417,26 +417,27 @@ theorem schattenNorm_mono {q : ℝ≥0∞} (hq : 1 ≤ q) {A B : Matrix (Fin d) 
 /-! ### The Schatten norm is a norm
 
 The paper takes for granted that `‖·‖_{S_q}`, `q ∈ [1, ∞]`, is a norm on `ℝ^{d×m}` (Section 1.5,
-TeX lines 348–357; Bhatia, *Matrix analysis*, Chapter IV). Propositions 6.2, 6.5 and
-Corollary 6.1 apply `HNVWExtrapolation` and `CoxVeraarDecoupling` to `S_q^{d×d}`, that is to
-`E = Fin d → Fin d → ℝ` with `nrm X = ‖X‖_{S_q}`, which requires the hypotheses on `nrm` of those
-statements: the triangle inequality, absolute homogeneity, and equivalence with the norm of `E`
+TeX lines 348–357, with no source; its citation of Bhatia, *Matrix analysis*, Chapter 4, TeX line
+374, is for the facts (1)–(3)). Propositions 6.2, 6.5 and
+Corollary 6.1 apply `HNVWExtrapolation` and `CoxVeraarDecoupling` (`hnvwExtrapolation_holds`,
+`coxVeraarDecoupling_holds`) to `S_q^{d×d}`, that is to `E = Fin d → Fin d → ℝ` with
+`nrm X = ‖X‖_{S_q}`, which requires the hypotheses on `nrm` of those statements: the triangle inequality, absolute homogeneity, and equivalence with the norm of `E`
 (the supremum norm of the entries). They are proved here (nonnegativity, `schattenNorm_nonneg`,
 in `Square.Schatten`), and bundled in `schattenNorm_renorms`. -/
 
-/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]` (Bhatia, Chapter IV).
+/-- The triangle inequality for `‖·‖_{S_q}`, `q ∈ [1, ∞]`: a standard fact, which the paper uses
+without a source (Bhatia, *Matrix analysis* (1997), Theorem IV.2.1, proves it for all symmetric gauge
+norms by majorization).
 
-Proof (`square_schattenNorm_add_le`, module `Square.Triangle`), by the standard argument through
-doubly substochastic matrices: with `v_k` the eigenvectors of `(A + B)ᵀ (A + B)` and
-`ξ_k = (A + B) v_k / s_k (A + B)`, `s_k (A + B) = ⟨ξ_k, A v_k⟩ + ⟨ξ_k, B v_k⟩`; the diagonal entries
-`|⟨ξ_k, A v_k⟩|` are dominated by a doubly substochastic average `Σ_j M_{kj} s_j (A)`
-(`M_{kj} = (⟨ξ_k, A y_j⟩² / s_j² + ⟨y_j, v_k⟩²) / 2`, Bessel's inequality), so that
-`Σ_k |⟨ξ_k, A v_k⟩|^q ≤ ‖A‖_{S_q}^q` (Jensen) and `|⟨ξ_k, A v_k⟩| ≤ ‖A‖_{S_∞}`; Minkowski's
-inequality in `ℓ^q` concludes. Departure from the source: Bhatia, Chapter IV, derives the
-triangle inequality from Ky Fan's dominance theorem (the Ky Fan `k`-norms are norms, and
-symmetric gauge functions are monotone under weak majorization); the argument here avoids the
-theory of majorization, which Mathlib lacks, and uses only Bessel's, Jensen's and Minkowski's
-inequalities. -/
+Proof (`square_schattenNorm_add_le`, module `Square.Triangle`): the package `BanachProbability`'s
+`schattenNorm_add_le`, which follows the open source J.-C. Bourin and T. Zhang, *Matrix triangle
+inequalities: past, present, and future*, arXiv:2610.30538 (2026), Proposition 3.13 by their
+Remark 3.14. For `q < ∞`, if `‖A‖_{S_q} = ‖B‖_{S_q} = 1` and `t ∈ [0, 1]`, von Neumann's
+convexity inequality `Tr g (t X + (1 − t) Y) ≤ t Tr g (X) + (1 − t) Tr g (Y)` (their (1.1), proved
+by Peierls's argument) for `g = |·|^q` and the Hermitian dilations `X = [[0, A], [Aᵀ, 0]]`,
+`Y = [[0, B], [Bᵀ, 0]]` gives `‖t A + (1 − t) B‖_{S_q} ≤ 1`; the general case follows with
+`A / ‖A‖_{S_q}`, `B / ‖B‖_{S_q}` and `t = ‖A‖_{S_q} / (‖A‖_{S_q} + ‖B‖_{S_q})`. For `q = ∞`, the
+first of Weyl's inequalities, `s_1 (A + B) ≤ s_1 (A) + s_1 (B)`. -/
 theorem schattenNorm_add_le {m : ℕ} {q : ℝ≥0∞} (hq : 1 ≤ q) (A B : Matrix (Fin d) (Fin m) ℝ) :
     schattenNorm q (A + B) ≤ schattenNorm q A + schattenNorm q B :=
   square_schattenNorm_add_le hq A B
@@ -560,7 +561,7 @@ theorem schattenNorm_renorms {q : ℝ≥0∞} (hq : 1 ≤ q) :
   · calc schattenNorm q (Matrix.of X) ≤ (d * d : ℝ) * ‖X‖ := schattenNorm_le_norm hq X
       _ ≤ ((d * d : ℝ) + 1) * ‖X‖ := by nlinarith [norm_nonneg X]
 
-/-! ### Tools for the conditional results of Section 6.2
+/-! ### Tools for the results of Section 6.2
 
 The proofs of equation (31), Propositions 6.2, 6.5 and Remark 6.3. Helpers have the prefix
 `square_`. -/
@@ -735,7 +736,7 @@ theorem square_lpNormWith_two {N : ℕ} {E : Type*} (nrm : E → ℝ) (X : (Fin 
 /-- Decoupling (Proposition 2.8, `CoxVeraarDecoupling`) in `S_q^{d×d}`, in real form, for a
 `UMD_p` bound `u` of `S_q^{d×d}`: with `f̃_N` the decoupled martingale,
 `‖f̃_N‖_{L^p (S_q)} ≤ u ‖f_N‖_{L^p (S_q)}` and `‖f_N‖_{L^p (S_q)} ≤ u ‖f̃_N‖_{L^p (S_q)}`. -/
-theorem square_decoupling (hCV : CoxVeraarDecoupling) {q u : ℝ} (hq : 1 < q) (hu : 0 ≤ u)
+theorem square_decoupling {q u : ℝ} (hq : 1 < q) (hu : 0 ≤ u)
     {p : ℝ} (hp : 1 < p)
     (hU : umdConstWith (Fin d → Fin d → ℝ)
       (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) p ≤ ENNReal.ofReal u)
@@ -750,7 +751,8 @@ theorem square_decoupling (hCV : CoxVeraarDecoupling) {q u : ℝ} (hq : 1 < q) (
     rw [← ENNReal.ofReal_one]; exact ENNReal.ofReal_le_ofReal hq.le
   have hp0 : 0 < p := by linarith
   obtain ⟨htri, hhom, hequiv⟩ := schattenNorm_renorms (d := d) hQ1
-  obtain ⟨h1, h2⟩ := hCV (Fin d → Fin d → ℝ) _ htri hhom hequiv p hp N ξ hξ N
+  obtain ⟨h1, h2⟩ :=
+    coxVeraarDecoupling_holds (Fin d → Fin d → ℝ) _ htri hhom hequiv p hp N ξ hξ N
   set a := (avg fun ε => avg fun ε' =>
     schattenNorm (ENNReal.ofReal q) (∑ k, coin (ε' k) • ξ k ε) ^ p) ^ (1 / p) with ha
   set b := lpNormWith (schattenNorm (ENNReal.ofReal q)) p (mart ξ N) with hb
@@ -797,9 +799,9 @@ theorem square_symPart_transpose (A : Matrix (Fin d) (Fin d) ℝ) : (symPart A)�
 
 /-- **Equation (31)** (`eq:KKgen`): for `q ∈ [2, ∞)` and `p ∈ (1, ∞)`,
 `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q} ≈_{p,q} (E ‖Σ ε_i x_i‖_{S_q}^p)^{1/p}` for normal `d × d` matrices
-`x_i`, uniformly in `d` and `n`. Conditional on Propositions 6.3 and 6.4, which it combines
-(`KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants; the
-hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used). Stated, like
+`x_i`, uniformly in `d` and `n`. From Propositions 6.3 and 6.4, which it combines
+(`pisierXuKhintchine_holds`, `kahaneKhintchine_holds`; Proposition 6.4 with no bound on its
+constants: the hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used). Stated, like
 `PisierXuKhintchine`, with `√‖Σ x_i x_iᵀ‖_{S_{q/2}}` in place of `‖(Σ x_i x_iᵀ)^{1/2}‖_{S_q}`;
 the two are equal, `‖B^{1/2}‖_{S_q}² = ‖B‖_{S_{q/2}}` for the positive semidefinite
 `B = Σ x_i x_iᵀ` (`schattenNorm_sqrt_sq`, fact (1) applied to the square root `B^{1/2}`).
@@ -811,8 +813,7 @@ exponents `p` and `q` (Proposition 6.4, `KahaneKhintchine`, for the norm `‖·�
 `schattenNorm_add_le` and `schattenNorm_smul`), `k_{q,p}⁻¹ ‖·‖_{L^q} ≤ ‖·‖_{L^p} ≤ k_{p,q} ‖·‖_{L^q}`;
 the constant is `max (k_{q,p}, k_{p,q} C √q)`. Stated here, before Proposition 6.2, whose proof
 uses it. -/
-theorem equation31 (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (p q : ℝ) (hp : 1 < p) (hq : 2 ≤ q) :
+theorem equation31 (p q : ℝ) (hp : 1 < p) (hq : 2 ≤ q) :
     ∃ c : ℝ, 0 < c ∧ ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
       (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
         c⁻¹ * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) ≤
@@ -821,8 +822,8 @@ theorem equation31 (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
           lpNormWith (schattenNorm (ENNReal.ofReal q)) p
               (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             c * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) := by
-  obtain ⟨C, hC, hPX'⟩ := hPX
-  obtain ⟨κ, hκ, hKK'⟩ := hKK
+  obtain ⟨C, hC, hPX'⟩ := pisierXuKhintchine_holds
+  obtain ⟨κ, hκ, hKK'⟩ := kahaneKhintchine_holds
   have hq1 : 1 < q := by linarith
   have hQ1 : (1 : ℝ≥0∞) ≤ ENNReal.ofReal q := by
     rw [← ENNReal.ofReal_one]; exact ENNReal.ofReal_le_ofReal hq1.le
@@ -868,7 +869,7 @@ signs `E_ε̃ ‖g̃_N‖² ≤ c² ‖𝔖_N g‖²`; the pointwise comparison
 `E ‖𝔖_N f‖_{S_q}² ≤ c² ‖f̃_N‖² ≤ c² u² ‖f_N‖²` ((31) and decoupling); and
 `E ‖𝔖_N f‖²_{S_2} = E ‖f_N‖²_{S_2} ≤ d^{1 − 2/q} ‖f_N‖²_{L² (S_q)}` (orthogonality of martingale
 increments, `square_korn_avg_frob_mart`, and fact (2)). -/
-theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q) {u c : ℝ}
+theorem square_skew_le_sym_two {q : ℝ} (hq : 2 < q) {u c : ℝ}
     (hu : 0 ≤ u) (hc : 0 < c)
     (hU : umdConstWith (Fin d → Fin d → ℝ)
       (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤ ENNReal.ofReal u)
@@ -924,8 +925,8 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
   have hW0 : ∀ ε, 0 ≤ W ε := fun ε =>
     (Matrix.posSemidef_sum _ fun k _ => hpsd (S k ε)).trace_nonneg
   -- decoupling
-  have hdS := (square_decoupling hCV hq1 hu one_lt_two hU S hSp).1
-  have hdK := (square_decoupling hCV hq1 hu one_lt_two hU K hKp).2
+  have hdS := (square_decoupling hq1 hu one_lt_two hU S hSp).1
+  have hdK := (square_decoupling hq1 hu one_lt_two hU K hKp).2
   rw [square_lpNormWith_two] at hdS hdK
   simp only [Real.rpow_two, ← Real.sqrt_eq_rpow] at hdS hdK
   have hdS' : avg IS ≤ u ^ 2 * LS :=
@@ -995,9 +996,9 @@ theorem square_skew_le_sym_two (hCV : CoxVeraarDecoupling) {q : ℝ} (hq : 2 < q
     _ = (u * c) ^ 3 * D * LS := by rw [Real.mul_self_sqrt hLS0]
 
 /-- **Proposition 6.2** (`prop:qgenp2`): for `q ∈ (2, ∞)` there is `C_q` such that for every
-`d ≥ 2`, `C^{rc} (S_q^{d×d}, 2) ≤ C_q d^{1/4 − 1/(2q)}`. Conditional on Proposition 2.7 (2)
+`d ≥ 2`, `C^{rc} (S_q^{d×d}, 2) ≤ C_q d^{1/4 − 1/(2q)}`. The proof uses Proposition 2.7 (2)
 (Randrianantoanina), Proposition 2.8 (decoupling), Proposition 6.3 (non-commutative Khintchine)
-and Proposition 6.4 (Kahane–Khintchine).
+and Proposition 6.4 (Kahane–Khintchine), all proved (`Morrey/Cassese/Hypotheses.lean`).
 
 Proof (the paper's, TeX lines 2329–2415): with `UMD₂ (S_q^{d×d}) ≤ u = C_R (q* − 1)`
 (Proposition 2.7 (2)) and the constant `c` of (31) at `p = 2` (`equation31`), every rank-one
@@ -1010,18 +1011,15 @@ Proposition 2.5. The paper's proof stops at the martingale bound (TeX line 2415)
 last step implicit: `C^{rc}` is defined through rank-one convexity at `0`, which Proposition 2.5
 (as the paper says at TeX lines 708–712 and 905–912) characterizes by the rank-one Rademacher
 martingales started at `0`.
-
-The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4, with no bound on its constants
-(the hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used here). -/
-theorem proposition6_2 (hR : RandrianantoaninaSchattenUMD)
-    (hCV : CoxVeraarDecoupling) (hPX : PisierXuKhintchine)
-    (hKK : KahaneKhintchine) (q : ℝ) (hq : 2 < q) :
+Proposition 6.4 is used with no bound on its constants (the hypercontractive bound,
+`KahaneKhintchineHypercontractive`, is not used here). -/
+theorem proposition6_2 (q : ℝ) (hq : 2 < q) :
     ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d 2 (ENNReal.ofReal q)) ≤
         ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 - 1 / (2 * q))) := by
-  obtain ⟨CR, hCR, hR'⟩ := hR
+  obtain ⟨CR, hCR, hR'⟩ := randrianantoaninaSchattenUMD_holds
   have hq1 : 1 < q := by linarith
-  obtain ⟨c, hc, h31⟩ := equation31 hPX hKK 2 q one_lt_two hq.le
+  obtain ⟨c, hc, h31⟩ := equation31 2 q one_lt_two hq.le
   set u := CR * (pStar q - 1) with hudef
   have hu : 0 < u := mul_pos hCR (by have : q ≤ pStar q := le_max_left _ _; linarith)
   refine ⟨(u * c) ^ (3 / 2 : ℝ), by positivity, fun d _ => ?_⟩
@@ -1040,7 +1038,7 @@ theorem proposition6_2 (hR : RandrianantoaninaSchattenUMD)
   refine iInf₂_le C ⟨hC0, (proposition2_5 (square_continuous_kornF (by norm_num) hQ1 C)).2
     fun N A hA => ?_⟩
   rw [square_kornF_zero (by norm_num) hQ1]
-  have hb := square_skew_le_sym_two hCV hq hu.le hc (hR' q hq1 d) (h31 d) A hA
+  have hb := square_skew_le_sym_two hq hu.le hc (hR' q hq1 d) (h31 d) A hA
   have hval : (avg fun ε => kornF d 2 (ENNReal.ofReal q) C (radMart 0 A N ε)) =
       C ^ 2 * (avg fun ε => schattenNorm (ENNReal.ofReal q) (symPart (radMart 0 A N ε)) ^ 2) -
         avg fun ε => schattenNorm (ENNReal.ofReal q) (skewPart (radMart 0 A N ε)) ^ 2 := by
@@ -1087,9 +1085,9 @@ theorem square_lpNormWith_two_le {N : ℕ} {E F : Type*} {n₁ : E → ℝ} {n�
 
 /-- (31) at `p = 2` with a constant `c₀ √q` (the constant tracked in Remark 6.3): the
 non-commutative Khintchine inequality (Proposition 6.3) at the exponent `q`, the hypercontractive
-Kahane–Khintchine bound `‖·‖_{L^q} ≤ √(q − 1) ‖·‖_{L²}` (`KahaneKhintchineHypercontractive`) for
+Kahane–Khintchine bound `‖·‖_{L^q} ≤ √(q − 1) ‖·‖_{L²}` (`kahaneKhintchineHypercontractive_holds`) for
 the lower bound, and `‖·‖_{L²} ≤ ‖·‖_{L^q}` (monotonicity of `L^p` norms) for the upper bound. -/
-theorem square_eq31_two (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHypercontractive) :
+theorem square_eq31_two :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ q : ℝ, 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
       (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
         (c₀ * √q)⁻¹ * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) ≤
@@ -1098,13 +1096,13 @@ theorem square_eq31_two (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHyper
           lpNormWith (schattenNorm (ENNReal.ofReal q)) 2
               (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             (c₀ * √q) * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) := by
-  obtain ⟨C, hC, hPX'⟩ := hPX
+  obtain ⟨C, hC, hPX'⟩ := pisierXuKhintchine_holds
   refine ⟨max 1 C, lt_max_of_lt_left one_pos, fun q hq d n x hx => ?_⟩
   have hq1 : 1 < q := by linarith
   have hQ1 : (1 : ℝ≥0∞) ≤ ENNReal.ofReal q := by
     rw [← ENNReal.ofReal_one]; exact ENNReal.ofReal_le_ofReal hq1.le
   obtain ⟨h1, h2⟩ := hPX' q hq d n x hx
-  have k1 := hKKH 2 q one_lt_two hq (Matrix (Fin d) (Fin d) ℝ)
+  have k1 := kahaneKhintchineHypercontractive_holds 2 q one_lt_two hq (Matrix (Fin d) (Fin d) ℝ)
     (schattenNorm (ENNReal.ofReal q)) (fun x y => schattenNorm_add_le hQ1 x y)
     (fun c x => schattenNorm_smul hQ1 c x) n x
   set s := √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
@@ -1136,16 +1134,14 @@ theorem square_eq31_two (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHyper
 Rademacher martingale `M` (`f = Sym M`, `g = Skew M`): the bound of Proposition 6.2
 (`square_skew_le_sym_two`) with `UMD₂ (S_q) ≤ C_R (q* − 1) ≤ C_R q` and the constant `c₀ √q` of
 (31) (`square_eq31_two`), since `(C_R q · c₀ √q)^{3/2} ≲ q³`. -/
-theorem square_skew_le_sym_two_q (hR : RandrianantoaninaSchattenUMD)
-    (hCV : CoxVeraarDecoupling) (hPX : PisierXuKhintchine)
-    (hKKH : KahaneKhintchineHypercontractive) :
+theorem square_skew_le_sym_two_q :
     ∃ C : ℝ, 0 < C ∧ ∀ q : ℝ, 2 < q → ∀ (d N : ℕ)
       (A : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin d) ℝ), IsRankOneIncrements A →
         lpNormWith (schattenNorm (ENNReal.ofReal q)) 2 (fun ε => skewPart (radMart 0 A N ε)) ≤
           C * q ^ 3 * (d : ℝ) ^ (1 / 4 - 1 / (2 * q)) *
             lpNormWith (schattenNorm (ENNReal.ofReal q)) 2 (fun ε => symPart (radMart 0 A N ε)) := by
-  obtain ⟨CR, hCR, hR'⟩ := hR
-  obtain ⟨c₀, hc₀, h31⟩ := square_eq31_two hPX hKKH
+  obtain ⟨CR, hCR, hR'⟩ := randrianantoaninaSchattenUMD_holds
+  obtain ⟨c₀, hc₀, h31⟩ := square_eq31_two
   refine ⟨(CR * c₀) ^ 2 + 1, by positivity, fun q hq d N A hA => ?_⟩
   have hq1 : 1 < q := by linarith
   have hqs : 0 < √q := Real.sqrt_pos.2 (by linarith)
@@ -1156,7 +1152,7 @@ theorem square_skew_le_sym_two_q (hR : RandrianantoaninaSchattenUMD)
   have hu : 0 ≤ u := mul_nonneg hCR.le (by rw [hpq]; linarith)
   set c := c₀ * √q with hcdef
   have hc : 0 < c := mul_pos hc₀ hqs
-  have hb := square_skew_le_sym_two hCV hq hu hc (hR' q hq1 d) (fun n x hx => h31 q hq.le d n x hx)
+  have hb := square_skew_le_sym_two hq hu hc (hR' q hq1 d) (fun n x hx => h31 q hq.le d n x hx)
     A hA
   set D := (d : ℝ) ^ (1 / 4 - 1 / (2 * q)) with hD
   have hD0 : 0 ≤ D := Real.rpow_nonneg (Nat.cast_nonneg _) _
@@ -1202,12 +1198,13 @@ theorem square_skew_le_sym_two_q (hR : RandrianantoaninaSchattenUMD)
 for every rank-one Rademacher martingale `M` in `ℝ^{d×d}` started at `0`, with `f = Sym M` and
 `g = Skew M`, `‖g_N‖_{L² (S_q)} ≲ d^{1/4} q³ d^{−1/(2q)} ‖f_N‖_{L² (S_q)}` and
 `‖g_N‖_{L² (S_∞)} ≲ d^{1/4} q³ d^{1/(2q)} ‖f_N‖_{L² (S_∞)}` for `q ∈ (2, ∞)`, with absolute
-constants; with `q ≈ log d`, `C^{rc} (S_∞^{d×d}, 2) ≲ d^{1/4} log³ d`. Conditional on
+constants; with `q ≈ log d`, `C^{rc} (S_∞^{d×d}, 2) ≲ d^{1/4} log³ d`. The proof uses
 Proposition 2.7 (2) (Randrianantoanina), Proposition 2.8 (decoupling), Proposition 6.3
 (non-commutative Khintchine) and the hypercontractive Kahane–Khintchine bound
-`k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`), which gives the constants of
-Proposition 6.4 that the tracking of the constants needs; the proof uses only that bound, not
-`KahaneKhintchine` itself.
+`k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`, part of HNVW II, Theorem 6.2.4,
+which Proposition 6.4 cites), the bound on the constants of Proposition 6.4 that the tracking of the
+constants needs (inventory E27: Proposition 6.4 leaves it out), all proved
+(`Morrey/Cassese/Hypotheses.lean`); it uses only that bound, not `KahaneKhintchine` itself.
 
 Proof (the paper's: "tracking the constants in the proof", TeX lines 2425–2437): the bound of
 the proof of Proposition 6.2 (`square_skew_le_sym_two`) with `UMD₂ (S_q) ≤ C_R (q* − 1) ≤ C_R q`
@@ -1219,9 +1216,7 @@ so that `(u c)^{3/2} ≲ q^{9/4} ≤ q³` (`square_skew_le_sym_two_q`); then
 `q³ d^{1/(2q)} ≤ 250 log³ d`, with Proposition 2.5. The constants of (31) and of
 `UMD₂ (S_q)` are tracked directly (`square_eq31_two`, `square_skew_le_sym_two_q`) rather than
 through the statements of `equation31` and `proposition6_2`, whose constants are existential. -/
-theorem remark6_3 (hR : RandrianantoaninaSchattenUMD)
-    (hCV : CoxVeraarDecoupling) (hPX : PisierXuKhintchine)
-    (hKKH : KahaneKhintchineHypercontractive) :
+theorem remark6_3 :
     (∃ C : ℝ, 0 < C ∧ ∀ (q : ℝ), 2 < q → ∀ (d : ℕ), 2 ≤ d → ∀ (N : ℕ)
       (A : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin d) ℝ), IsRankOneIncrements A →
         lpNormWith (schattenNorm (ENNReal.ofReal q)) 2
@@ -1235,7 +1230,7 @@ theorem remark6_3 (hR : RandrianantoaninaSchattenUMD)
     ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d 2 ⊤) ≤
         ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 : ℝ) * Real.log d ^ 3) := by
-  obtain ⟨C, hC, hb⟩ := square_skew_le_sym_two_q hR hCV hPX hKKH
+  obtain ⟨C, hC, hb⟩ := square_skew_le_sym_two_q
   have hQ1 : ∀ q : ℝ, 2 < q → (1 : ℝ≥0∞) ≤ ENNReal.ofReal q := fun q hq => by
     rw [← ENNReal.ofReal_one]; exact ENNReal.ofReal_le_ofReal (by linarith)
   -- the two bounds of the remark
@@ -1377,8 +1372,8 @@ comparison `square_rankOne_comparison` and Cauchy–Schwarz); decoupling and (31
 Hilbert-valued square function inequality in `S_2` (Burkholder, Theorem 2.3 (2),
 `square_korn_burkholder`) with fact (2):
 `‖𝔖_N f‖_{L^p (S_2)} = ‖𝒮_N f‖_{L^p} ≤ (p* − 1) ‖f_N‖_{L^p (S_2)} ≤ (p* − 1) d^{1/2 − 1/q} ‖f_N‖_{L^p (S_q)}`. -/
-theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
-    {q : ℝ} (hq : 2 < q) {p : ℝ} (hp : 1 < p) {u c : ℝ} (hu : 0 ≤ u) (hc : 0 < c)
+theorem square_skew_le_sym_p {q : ℝ} (hq : 2 < q) {p : ℝ} (hp : 1 < p) {u c : ℝ} (hu : 0 ≤ u)
+    (hc : 0 < c)
     (hU : umdConstWith (Fin d → Fin d → ℝ)
       (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) p ≤ ENNReal.ofReal u)
     (h31 : ∀ (n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
@@ -1445,8 +1440,8 @@ theorem square_skew_le_sym_p (hCV : CoxVeraarDecoupling)
   have hZp0 : 0 ≤ avg fun ε => Z ε ^ (p / 2) :=
     rad_avg_nonneg fun ε => Real.rpow_nonneg (hZ0 ε) _
   -- decoupling
-  have hdS := (square_decoupling hCV hq1 hu hp hU S hSp).1
-  have hdK := (square_decoupling hCV hq1 hu hp hU K hKp).2
+  have hdS := (square_decoupling hq1 hu hp hU S hSp).1
+  have hdK := (square_decoupling hq1 hu hp hU K hKp).2
   -- (31) in the decoupled signs: `E_ε̃ ‖g̃‖^p ≤ c^p ‖𝔖 g‖^p`, `‖𝔖 f‖^p ≤ c^p E_ε̃ ‖f̃‖^p`
   have h31K : ∀ ε, IK ε ≤ c ^ p * Z ε ^ (p / 2) := fun ε => by
     have h := (h31 N (fun k => K k ε) fun i => by
@@ -1571,8 +1566,8 @@ theorem square_avg_kornF_nonneg {p : ℝ} (hp : 0 < p) {q : ℝ≥0∞} {C : ℝ
   exact h'
 
 /-- `UMD_p (S_q^{d×d}) ≤ 100 p* C_R (q* − 1)`: extrapolation (Proposition 2.7 (1),
-`HNVWExtrapolation`) from Randrianantoanina's bound (Proposition 2.7 (2)). -/
-theorem square_umd_p (hH : HNVWExtrapolation) {CR : ℝ}
+`hnvwExtrapolation_holds`) from Randrianantoanina's bound (Proposition 2.7 (2)). -/
+theorem square_umd_p {CR : ℝ}
     (hR' : ∀ (q : ℝ), 1 < q → ∀ d : ℕ,
       umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
         ENNReal.ofReal (CR * (pStar q - 1)))
@@ -1585,7 +1580,7 @@ theorem square_umd_p (hH : HNVWExtrapolation) {CR : ℝ}
     have : p ≤ pStar p := le_max_left _ _
     linarith
   obtain ⟨htri, hhom, hequiv⟩ := schattenNorm_renorms (d := d) hQ1
-  have h := ((hH (Fin d → Fin d → ℝ) _ htri hhom hequiv).2 p hp).2
+  have h := ((hnvwExtrapolation_holds (Fin d → Fin d → ℝ) _ htri hhom hequiv).2 p hp).2
   calc _ ≤ ENNReal.ofReal (100 * pStar p) * umdConstWith (Fin d → Fin d → ℝ)
         (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 := h
     _ ≤ ENNReal.ofReal (100 * pStar p) * ENNReal.ofReal (CR * (pStar q - 1)) := by
@@ -1595,10 +1590,10 @@ theorem square_umd_p (hH : HNVWExtrapolation) {CR : ℝ}
 /-- (31) at a general `p ∈ (1, ∞)` with a constant `c₀ (p) √q`, uniformly in `q ∈ [2, ∞)`
 (the polynomial dependence on `q` used for the case `q = ∞` of Proposition 6.5): Proposition 6.3
 at the exponent `q`, with the hypercontractive Kahane–Khintchine bound
-(`KahaneKhintchineHypercontractive`) and the monotonicity of `L^p` norms (for `p ≤ q`: `‖·‖_{L^q} ≤ √((q − 1)/(p − 1)) ‖·‖_{L^p}` and `‖·‖_{L^p} ≤ ‖·‖_{L^q}`; for
+(`kahaneKhintchineHypercontractive_holds`) and the monotonicity of `L^p` norms (for `p ≤ q`:
+`‖·‖_{L^q} ≤ √((q − 1)/(p − 1)) ‖·‖_{L^p}` and `‖·‖_{L^p} ≤ ‖·‖_{L^q}`; for
 `p > q`: `‖·‖_{L^q} ≤ ‖·‖_{L^p} ≤ √((p − 1)/(q − 1)) ‖·‖_{L^q}`). -/
-theorem square_eq31_q (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHypercontractive) {p : ℝ}
-    (hp : 1 < p) :
+theorem square_eq31_q {p : ℝ} (hp : 1 < p) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ q : ℝ, 2 ≤ q → ∀ (d n : ℕ) (x : Fin n → Matrix (Fin d) (Fin d) ℝ),
       (∀ i, x i * (x i)ᵀ = (x i)ᵀ * x i) →
         (c₀ * √q)⁻¹ * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) ≤
@@ -1607,7 +1602,7 @@ theorem square_eq31_q (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHyperco
           lpNormWith (schattenNorm (ENNReal.ofReal q)) p
               (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
             (c₀ * √q) * √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ)) := by
-  obtain ⟨C, hC, hPX'⟩ := hPX
+  obtain ⟨C, hC, hPX'⟩ := pisierXuKhintchine_holds
   have hp0 : 0 < p := by linarith
   have hs : 0 < √(p - 1) := Real.sqrt_pos.2 (by linarith)
   set c₀ := (1 + C) * (1 + √(p - 1) + (√(p - 1))⁻¹) with hc₀
@@ -1638,8 +1633,9 @@ theorem square_eq31_q (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHyperco
           (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) ≤
         √((b - 1) / (a - 1)) * lpNormWith (schattenNorm (ENNReal.ofReal q)) a
           (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i) := fun a b ha hab =>
-    hKKH a b ha hab (Matrix (Fin d) (Fin d) ℝ) (schattenNorm (ENNReal.ofReal q))
-      (fun x y => schattenNorm_add_le hQ1 x y) (fun c x => schattenNorm_smul hQ1 c x) n x
+    kahaneKhintchineHypercontractive_holds a b ha hab (Matrix (Fin d) (Fin d) ℝ)
+      (schattenNorm (ENNReal.ofReal q)) (fun x y => schattenNorm_add_le hQ1 x y)
+      (fun c x => schattenNorm_smul hQ1 c x) n x
   set s := √(schattenNorm (ENNReal.ofReal (q / 2)) (∑ i, x i * (x i)ᵀ))
   set Lp := lpNormWith (schattenNorm (ENNReal.ofReal q)) p
     (fun ε : Fin n → Bool => ∑ i, coin (ε i) • x i)
@@ -1712,9 +1708,9 @@ theorem square_log_choice {d : ℕ} (hd : 2 ≤ d) :
 
 /-- **Proposition 6.5** (`cs-prop6.5`), case `q ∈ (2, ∞)`: for `q ∈ (2, ∞)` and `p ∈ (1, ∞)`
 there is `C_{q,p}` with `C^{rc} (S_q^{d×d}, p) ≤ C_{q,p} d^{1/4 − 1/(2q)}` for every `d ≥ 2`.
-Conditional on Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 (Burkholder's square function inequality,
-Theorem 2.3 (2), is proved). The hypothesis `KahaneKhintchine` is the paper's Proposition 6.4,
-with no bound on its constants: this case does not use the hypercontractive bound
+The proof uses Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 and Burkholder's square function
+inequality, Theorem 2.3 (2), all proved (`Morrey/Cassese/Hypotheses.lean`); Proposition 6.4 with no
+bound on its constants: this case does not use the hypercontractive bound
 (`KahaneKhintchineHypercontractive`).
 
 Proof (the paper's, TeX lines 2448–2480): the bound
@@ -1723,13 +1719,11 @@ Proof (the paper's, TeX lines 2448–2480): the bound
 (Propositions 2.7 (1), (2), `square_umd_p`), (31) at `p` (`equation31`), and the Hilbert-valued
 square function inequality in `S_2` (Theorem 2.3 (2), `square_korn_burkholder`) with fact (2)),
 then Proposition 2.5. -/
-theorem proposition6_5_finite (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine) :
+theorem proposition6_5_finite :
     ∀ q : ℝ, 2 < q → ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p (ENNReal.ofReal q)) ≤
         ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 - 1 / (2 * q))) := by
-  obtain ⟨CR, hCR, hR'⟩ := hR
+  obtain ⟨CR, hCR, hR'⟩ := randrianantoaninaSchattenUMD_holds
   have hCRq : ∀ q : ℝ, 1 < q → ∀ d : ℕ,
       umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
         ENNReal.ofReal (CR * (pStar q - 1)) := hR'
@@ -1739,7 +1733,7 @@ theorem proposition6_5_finite (hH : HNVWExtrapolation)
   have hp0 : 0 < p := by linarith
   have hQ1 : (1 : ℝ≥0∞) ≤ ENNReal.ofReal q := by
     rw [← ENNReal.ofReal_one]; exact ENNReal.ofReal_le_ofReal hq1.le
-  obtain ⟨c, hc, h31⟩ := equation31 hPX hKK p q hp hq.le
+  obtain ⟨c, hc, h31⟩ := equation31 p q hp hq.le
   set u := 100 * pStar p * (CR * (pStar q - 1)) with hudef
   have hu : 0 < u := by
     have h1 := hps p hp; have h2 := hps q hq1
@@ -1752,38 +1746,38 @@ theorem proposition6_5_finite (hH : HNVWExtrapolation)
   refine (iInf₂_le C ⟨hC0, (proposition2_5 (square_continuous_kornF hp0.le hQ1 C)).2
     fun N A hA => ?_⟩).trans (le_of_eq (by rw [hCdef]))
   rw [square_kornF_zero hp0 hQ1]
-  exact square_avg_kornF_nonneg hp0 hC0 _ (square_skew_le_sym_p hCV hq hp hu.le hc
-    (square_umd_p hH hCRq hq1 hp d) (h31 d) A hA)
+  exact square_avg_kornF_nonneg hp0 hC0 _ (square_skew_le_sym_p hq hp hu.le hc
+    (square_umd_p hCRq hq1 hp d) (h31 d) A hA)
 
 /-- **Proposition 6.5** (`cs-prop6.5`), case `q = ∞`: there is `α > 0` such that for every
 `p ∈ (1, ∞)` there is `C_p` with `C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for every `d ≥ 2`;
-the proof gives `α = 3`. Conditional on Propositions 2.7 (1), (2), 2.8, 6.3 and the hypercontractive
-Kahane–Khintchine bound `k_{q,p} ≤ √((q − 1)/(p − 1))` (`KahaneKhintchineHypercontractive`), which
-gives the constants of Proposition 6.4 polynomial in `q` that this case needs.
+the proof gives `α = 3`. The proof uses Propositions 2.7 (1), (2), 2.8, 6.3, Theorem 2.3 (2) and
+the hypercontractive Kahane–Khintchine bound `k_{q,p} ≤ √((q − 1)/(p − 1))`
+(`KahaneKhintchineHypercontractive`, part of HNVW II, Theorem 6.2.4), which makes the constants of
+Proposition 6.4 polynomial in `q`, as this case needs (inventory E27), all proved
+(`Morrey/Cassese/Hypotheses.lean`).
 
-Statement change. The paper's "`C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for some
-`α > 0`" was formalized with `α` depending on `p` (`∀ p, ∃ α`); it is now stated uniformly
-(`∃ α, ∀ p`), a strengthening that covers both readings, since the proof gives `α = 3` for every
-`p`.
+Reading of the statement. The paper's "`C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for some
+`α > 0`" does not say whether `α` may depend on `p`. The statement takes one `α` for every `p`
+(`∃ α, ∀ p`), which implies the reading with `α` depending on `p` (`∀ p, ∃ α`); the proof gives
+`α = 3` for every `p`.
 
 Proof (the paper's, TeX lines 2448–2480): "the same norm-comparison and optimisation argument as
 in Remark 6.3": the constants are polynomial in `q` (`UMD_p (S_q) ≤ 100 p* C_R q`, and (31) at `p`
 with a constant `c₀ (p) √q`, `square_eq31_q`, from the hypercontractive bound), so
 `‖·‖_{L^p (S_∞)}` of `Skew M_N` is at most `K_p q³ d^{1/4} d^{1/(2q)}` times that of `Sym M_N`;
 with `q = log d + 2`, `α = 3`. -/
-theorem proposition6_5_infty (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKKH : KahaneKhintchineHypercontractive) :
+theorem proposition6_5_infty :
     ∃ α : ℝ, 0 < α ∧ ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p ⊤) ≤ ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 : ℝ) * Real.log d ^ α) := by
-  obtain ⟨CR, hCR, hR'⟩ := hR
+  obtain ⟨CR, hCR, hR'⟩ := randrianantoaninaSchattenUMD_holds
   have hCRq : ∀ q : ℝ, 1 < q → ∀ d : ℕ,
       umdConstWith (Fin d → Fin d → ℝ) (fun X => schattenNorm (ENNReal.ofReal q) (Matrix.of X)) 2 ≤
         ENNReal.ofReal (CR * (pStar q - 1)) := hR'
   have hps : ∀ p : ℝ, 1 < p → 1 < pStar p := fun p hp => lt_of_lt_of_le hp (le_max_left _ _)
   refine ⟨3, by norm_num, fun p hp => ?_⟩
   have hp0 : 0 < p := by linarith
-  obtain ⟨c₀, hc₀, h31⟩ := square_eq31_q hPX hKKH hp
+  obtain ⟨c₀, hc₀, h31⟩ := square_eq31_q hp
   have hβ : 0 < pStar p - 1 := by linarith [hps p hp]
   set G := 100 * pStar p * CR * c₀ with hG
   have hG0 : 0 < G := by have := hps p hp; positivity
@@ -1806,8 +1800,8 @@ theorem proposition6_5_infty (hH : HNVWExtrapolation)
   have hsq : 0 < √q := Real.sqrt_pos.2 (by linarith)
   have hc : 0 < c := mul_pos hc₀ hsq
   have hb := fun N (A : Fin N → (Fin N → Bool) → Matrix (Fin d) (Fin d) ℝ)
-    (hA : IsRankOneIncrements A) => square_skew_le_sym_p hCV hq hp hu hc
-      (square_umd_p hH hCRq hq1 hp d) (fun n x hx => h31 q hq.le d n x hx) A hA
+    (hA : IsRankOneIncrements A) => square_skew_le_sym_p hq hp hu hc
+      (square_umd_p hCRq hq1 hp d) (fun n x hx => h31 q hq.le d n x hx) A hA
   -- `u c √(u c) ≤ G √G q³`
   have huc : u * c ≤ G * q ^ 2 := by
     have h1 : u ≤ 100 * pStar p * CR * q := by
@@ -1893,25 +1887,18 @@ theorem proposition6_5_infty (hH : HNVWExtrapolation)
 /-- **Proposition 6.5** (`cs-prop6.5`): for `q ∈ (2, ∞)` and `p ∈ (1, ∞)` there is `C_{q,p}` with
 `C^{rc} (S_q^{d×d}, p) ≤ C_{q,p} d^{1/4 − 1/(2q)}` for every `d ≥ 2`; and there is `α > 0` such
 that for every `p ∈ (1, ∞)` there is `C_p` with `C^{rc} (S_∞^{d×d}, p) ≤ C_p d^{1/4} log^α d` for
-every `d ≥ 2`. Conditional on Propositions 2.7 (1), (2), 2.8, 6.3, 6.4 and, for the case `q = ∞`,
-the hypercontractive Kahane–Khintchine bound (`KahaneKhintchineHypercontractive`); Burkholder's
-square function inequality, Theorem 2.3 (2), is proved. The two cases are
-`proposition6_5_finite` and `proposition6_5_infty`.
-
-Statement changes: the hypothesis `KahaneKhintchine` is the paper's Proposition 6.4,
-with no bound on its constants, and the bound is the separate hypothesis
-`KahaneKhintchineHypercontractive` (before, `KahaneKhintchine` bundled it); and `α` is uniform in
-`p` (`∃ α, ∀ p`, a strengthening of the former `∀ p, ∃ α`; the proof gives `α = 3`). -/
-theorem proposition6_5 (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (hKKH : KahaneKhintchineHypercontractive) :
+every `d ≥ 2`. The proof uses Propositions 2.7 (1), (2), 2.8, 6.3, 6.4, Theorem 2.3 (2) and, for
+the case `q = ∞`, the hypercontractive Kahane–Khintchine bound
+(`KahaneKhintchineHypercontractive`), all proved (`Morrey/Cassese/Hypotheses.lean`). The two cases
+are `proposition6_5_finite` and `proposition6_5_infty`. The exponent `α` does not depend on `p` (the
+proof gives `α = 3`). -/
+theorem proposition6_5 :
     (∀ q : ℝ, 2 < q → ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p (ENNReal.ofReal q)) ≤
         ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 - 1 / (2 * q)))) ∧
     ∃ α : ℝ, 0 < α ∧ ∀ p : ℝ, 1 < p → ∃ C : ℝ, 0 < C ∧ ∀ d : ℕ, 2 ≤ d →
       rcThreshold (kornF d p ⊤) ≤ ENNReal.ofReal (C * (d : ℝ) ^ (1 / 4 : ℝ) * Real.log d ^ α) :=
-  ⟨proposition6_5_finite hH hR hCV hPX hKK, proposition6_5_infty hH hR hCV hPX hKKH⟩
+  ⟨proposition6_5_finite, proposition6_5_infty⟩
 
 /-- **Periodic test maps for Hessian quasiconvexity** (`cs-hess-periodic`): a smooth
 `ℤ^n`-periodic `φ : ℝ^n → ℝ` with `∫_{(0,1)^n} F (A + D²φ) < F (A)`, for a continuous `F`,
@@ -1921,7 +1908,7 @@ characterization of quasiconvexity (Lemma 2.2; Šverák's Lemma 1, `Sverak.lemma
 
 Proof (`square_not_hessianQuasiconvexAt_of_periodic`, module `Square.Hessian`): the test maps are
 `ψ_K (x) = N_K⁻² η_K (x) φ (N_K x)`, with Šverák's cutoff `η_K = Sverak.l1_eta n K` (equal to `1`
-on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(2K), 1 − 1/(2K))^n`) and the oscillation
+on `[1/K, 1 − 1/K]^n`, vanishing off `(1/(16K), 1 − 1/(16K))^n`) and the oscillation
 `N_K = K + a_K + b_K`, where `a_K`, `b_K` bound `‖D η_K‖`, `‖D² η_K‖` (finite: `η_K` is smooth with
 compact support). By Leibniz's rule `‖D² ψ_K‖ ≤ ‖D²φ‖_∞ + 2 ‖Dφ‖_∞ + ‖φ‖_∞` for `K ≥ 1`, and
 `D² ψ_K (x) = D²φ (N_K x)` on `(1/K, 1 − 1/K)^n`; dominated convergence and the averaging limit of
@@ -2098,15 +2085,12 @@ theorem square_cor61_ge {p : ℝ} {d₀ : ℕ} {F₀ : Matrix (Fin d₀) (Fin d�
 
 /-- The proof of Corollary 6.1, with its periodic witness: `square_Cor61` in the dimension
 `d = 2 m⁸` of the paper's proof (see `corollary6_1`). -/
-theorem square_cor61_core (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (p : ℝ) (hp : 1 < p) :
+theorem square_cor61_core (p : ℝ) (hp : 1 < p) :
     ∃ d : ℕ, 2 ≤ d ∧ ∃ F : Matrix (Fin d) (Fin d) ℝ → ℝ, square_Cor61 p d F := by
   have hp0 : 0 < p := by linarith
   have h4 : ENNReal.ofReal 4 = (4 : ℝ≥0∞) := by norm_num
   have hq4 : (1 : ℝ≥0∞) ≤ ENNReal.ofReal 4 := by rw [h4]; norm_num
-  obtain ⟨Cp, hCp, hrc⟩ := proposition6_5_finite hH hR hCV hPX hKK 4 (by norm_num) p hp
+  obtain ⟨Cp, hCp, hrc⟩ := proposition6_5_finite 4 (by norm_num) p hp
   -- the size `n = m⁸`, with `m > a (b + 1)`
   set a : ℝ := 4 * (2 : ℝ) ^ (1 / 4 : ℝ) * √p with ha
   set b : ℝ := Cp * (2 : ℝ) ^ (1 / 8 : ℝ) with hb
@@ -2248,11 +2232,11 @@ theorem square_cor61_core (hH : HNVWExtrapolation)
 /-- **Corollary 6.1** (`cor:symm`): for every `p ∈ (1, ∞)` there are `d` and an integrand
 `F : Sym (d) → ℝ`, rank-one convex (convex along the lines `H + t a ⊗ a`) and `p`-homogeneous,
 which is not Hessian quasiconvex at `0`, and hence is nowhere Hessian quasiconvex. `F` is given
-on all of `ℝ^{d×d}`; only its values on symmetric matrices enter. Conditional as the case
-`q ∈ (2, ∞)` of Proposition 6.5 (`proposition6_5_finite`), whose bound its proof uses: on
-Propositions 2.7 (1), (2), 2.8, 6.3 and 6.4. The hypothesis `KahaneKhintchine` is the paper's
-Proposition 6.4, with no bound on its constants (the hypercontractive bound,
-`KahaneKhintchineHypercontractive`, is not used). The proof is `square_cor61_core` (which also gives the periodic witness) and
+on all of `ℝ^{d×d}`; only its values on symmetric matrices enter. The proof uses the bound of
+the case `q ∈ (2, ∞)` of Proposition 6.5 (`proposition6_5_finite`), and through it
+Propositions 2.7 (1), (2), 2.8, 6.3 and 6.4, all proved (`Morrey/Cassese/Hypotheses.lean`; the
+hypercontractive bound, `KahaneKhintchineHypercontractive`, is not used). The proof is
+`square_cor61_core` (which also gives the periodic witness) and
 `square_cor61_conclusion`; `corollary6_1_ge` extends the conclusion to every larger `d`.
 
 Proof (the paper's), with `q = 4` and `d = 2n`, `n = m⁸` large: `J = diag (I_n, −I_n)`
@@ -2272,40 +2256,34 @@ ratio `n^{1/4} / (4 · 2^{1/4} √p) > C` for `n = m⁸` large. Hence
 `A`, `F (A + λ D²φ) = λ^p F (λ⁻¹ A + D²φ)`, and `λ → ∞` (`square_not_hessianQuasiconvexAt_of_zero`,
 the Hessian analogue of the consequence of Proposition 2.3 that is
 `quasiconvexAt_zero_of_quasiconvexAt`). -/
-theorem corollary6_1 (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (p : ℝ) (hp : 1 < p) :
+theorem corollary6_1 (p : ℝ) (hp : 1 < p) :
     ∃ (d : ℕ) (F : Matrix (Fin d) (Fin d) ℝ → ℝ), IsIntegrand F ∧
       (∀ H : Matrix (Fin d) (Fin d) ℝ, H.IsSymm → ∀ a : Fin d → ℝ,
         ConvexOn ℝ Set.univ fun t : ℝ => F (H + t • Matrix.vecMulVec a a)) ∧
       (∀ (t : ℝ) (H : Matrix (Fin d) (Fin d) ℝ), H.IsSymm → F (t • H) = |t| ^ p * F H) ∧
       ¬ HessianQuasiconvexAt F 0 ∧
       ∀ A : Matrix (Fin d) (Fin d) ℝ, A.IsSymm → ¬ HessianQuasiconvexAt F A := by
-  obtain ⟨d, -, F, hF⟩ := square_cor61_core hH hR hCV hPX hKK p hp
+  obtain ⟨d, -, F, hF⟩ := square_cor61_core p hp
   exact ⟨d, F, square_cor61_conclusion (by linarith) hF⟩
 
 /-- **Corollary 6.1 in every large dimension**: for every `p ∈ (1, ∞)` there is `d₀` such that
 for every `d ≥ d₀` there is an integrand `F : Sym (d) → ℝ` as in Corollary 6.1. The paper states
 Corollary 6.1 for one `d` ("there are `d` and `F`"; `corollary6_1`); this extension to all larger
 `d` is the trivial embedding `F_{d+1} (H) = F_d (H')`, `H'` the upper left `d × d` block of `H`
-(`square_cor61_succ`, `square_cor61_ge`). Conditional as `corollary6_1`. -/
-theorem corollary6_1_ge (hH : HNVWExtrapolation)
-    (hR : RandrianantoaninaSchattenUMD) (hCV : CoxVeraarDecoupling)
-    (hPX : PisierXuKhintchine) (hKK : KahaneKhintchine)
-    (p : ℝ) (hp : 1 < p) :
+(`square_cor61_succ`, `square_cor61_ge`). -/
+theorem corollary6_1_ge (p : ℝ) (hp : 1 < p) :
     ∃ d₀ : ℕ, ∀ d ≥ d₀, ∃ F : Matrix (Fin d) (Fin d) ℝ → ℝ, IsIntegrand F ∧
       (∀ H : Matrix (Fin d) (Fin d) ℝ, H.IsSymm → ∀ a : Fin d → ℝ,
         ConvexOn ℝ Set.univ fun t : ℝ => F (H + t • Matrix.vecMulVec a a)) ∧
       (∀ (t : ℝ) (H : Matrix (Fin d) (Fin d) ℝ), H.IsSymm → F (t • H) = |t| ^ p * F H) ∧
       ¬ HessianQuasiconvexAt F 0 ∧
       ∀ A : Matrix (Fin d) (Fin d) ℝ, A.IsSymm → ¬ HessianQuasiconvexAt F A := by
-  obtain ⟨d₀, -, F₀, hF₀⟩ := square_cor61_core hH hR hCV hPX hKK p hp
+  obtain ⟨d₀, -, F₀, hF₀⟩ := square_cor61_core p hp
   refine ⟨d₀, fun d hd => ?_⟩
   obtain ⟨F, hF⟩ := square_cor61_ge hF₀ d hd
   exact ⟨F, square_cor61_conclusion (by linarith) hF⟩
 
-/-! ### Section 6.4: the integrand `h_{4,4,C}` and the witness of Proposition 6.6 -/
+/-! ### Section 6.3: the integrand `h_{4,4,C}` and the witness of Proposition 6.6 -/
 
 section SquareFour
 
@@ -2616,8 +2594,10 @@ characterization `External.Rindler.quasiconvexAtOn_iff_periodic`, the paper's fo
 * `Sym (∇w) = diag (−Σ_j sin (θ_i − θ_j))` (`square_symPart_witness`) with
   `|Σ_j sin (θ_i − θ_j)| ≤ |Z|`, `Z = Σ_j e^{iθ_j}` (`square_abs_sum_sin_le`), so
   `‖Sym (∇w)‖_{S_q} ≤ d^{1/q} |Z|` (`square_schattenNorm_diagonal_le`, also for `q = ∞`); and
-  `|Z| ≤ d`, `‖Z‖_{L^p} ≤ √(p d)` (`square_lp_zc_le`: `E |Z|^{2m} ≤ m! d^m`, `square_moment_zc`,
-  and monotonicity of `L^p` norms), so `‖Sym (∇w)‖_{L^p (S_q)} ≤ d^{1/q} min (√(d p), d)`.
+  `|Z| ≤ d`, `‖Z‖_{L^p} ≤ √(p d)` (`square_lp_zc_le`: the exact moments
+  `E |Z|^{2m} = Σ_{k₁ + ⋯ + k_d = m} (m; k₁, …, k_d)² ≤ m! d^m`, `square_moment_zc_eq` and
+  `square_moment_zc`, and monotonicity of `L^p` norms), so
+  `‖Sym (∇w)‖_{L^p (S_q)} ≤ d^{1/q} min (√(d p), d)`.
 The ratio is at least `d^{1 − 1/q} / (8 min (√(d p), d))`. -/
 theorem proposition6_1 (q : ℝ≥0∞) (hq : 2 ≤ q) :
     ∃ c : ℝ, 0 < c ∧ ∀ d : ℕ, 2 ≤ d → ∀ p : ℝ, 1 ≤ p →
@@ -2747,7 +2727,7 @@ theorem proposition6_1 (q : ℝ≥0∞) (hq : 2 ≤ q) :
   -- Lemma 2.2: quasiconvexity at `0` is tested by the periodic Lipschitz maps
   have hfc := square_continuous_kornF (d := d) hp0.le hq1 C
   have hbdd := square_isLocallyBounded_of_continuous hfc
-  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.lowerSemicontinuous hbdd 0).1
+  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.measurable hbdd 0).1
     ((cov_quasiconvexAtOn_unitCube_iff _ 0).2 hC.2)
   obtain ⟨K, hK⟩ := square_lipschitz_witness (d := d)
   have := hper (squareWitness d) K hK (fun x z => squareWitness_periodic x z)
@@ -2795,7 +2775,7 @@ theorem proposition6_6 (d : ℕ) (hd : 2 ≤ d) :
       exact mul_neg_of_pos_of_neg (by positivity) (by linarith)
     -- Lemma 2.2: quasiconvexity at `0` is tested by the periodic Lipschitz maps
     have hfc := square_continuous_hF (d := n + 1) C
-    have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.lowerSemicontinuous
+    have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hfc.measurable
       (square_isLocallyBounded_of_continuous hfc) 0).1 ((cov_quasiconvexAtOn_unitCube_iff _ 0).2 hqc)
     obtain ⟨K, hK⟩ := square_lipschitz_witness (d := n + 1)
     have := hper (squareWitness (n + 1)) K hK (fun x z => squareWitness_periodic x z)
@@ -2950,9 +2930,7 @@ theorem theorem6_2 {N : ℕ} (D : Fin N → (Fin N → Bool) → Matrix (Fin d) 
 
 /-- **Corollary 6.3** (`cor:uncond`), lower bound: `3 ≤ C^{rc} (d)` for every `d ≥ 2`.
 Unconditional: the sharpness of Burkholder's constant `4* − 1 = 3` for dyadic martingales that
-the proof uses is proved (`burkholderSharpness_holds`, module `Square.Sharpness`). Statement change:
-the hypothesis `hS : BurkholderSharpness` of the earlier, conditional version is
-removed.
+the proof uses is proved (`burkholderSharpness_holds`, module `Square.Sharpness`).
 
 Proof (the paper's): for `C < 3`, the sharpness gives a dyadic martingale `f_N` and a `±1`
 transform `g_N` with `‖g_N‖_{L⁴} > C ‖f_N‖_{L⁴}`; then `M_n = f_n Sym (e₁ ⊗ e₂) + g_n Skew (e₁ ⊗ e₂)`
@@ -3594,11 +3572,11 @@ rank-one convex but nowhere quasiconvex; namely the explicit quartic polynomial 
 Corollary 6.4. Unconditional.
 
 This is Theorem 1.4 (`theorem1_4`, `thm:main`) specialised to `p = 4`, with `d₀ (4) = 588`, by the
-route that the paper gives in Section 6.4 (TeX lines 2550–2690): the "simple, somewhat
+route that the paper gives in Section 6.3 (TeX lines 2550–2690): the "simple, somewhat
 quantitative proof" for `p = q = 4` through Proposition 6.6 (the lower bound on `C^{qc} (d)`) and
 Corollary 6.4 (the rank-one convex quartic `g ≤ h_{4,4,98^{1/4}}`, which "fails to be quasiconvex
 at `0` in sufficiently high dimension"). It is a special case proved by a route the paper gives,
-not a departure: it does not use the conditional Propositions 6.2 and 6.5 of the general proof.
+not a departure: it does not use Propositions 6.2 and 6.5 of the general proof.
 The remaining properties of `g`, which Theorem 1.4 asks for but the paper does not state for `g`,
 are immediate from its form: `U (O X Oᵀ, O Y Oᵀ) = U (X, Y)` for orthogonal `O`,
 `Sym_{1/2} (Mᵀ) = Sym_{1/2} (M)`, `Skew (Mᵀ) = −Skew (M)` and `U (X, −Y) = U (X, Y)`, `g` is a

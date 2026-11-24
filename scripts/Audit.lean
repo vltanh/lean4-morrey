@@ -43,8 +43,6 @@ import all Morrey.Cassese.TwoByThree.ExtensionAux
 import all Morrey.Cassese.TwoByThree.ExtensionOne
 import all Morrey.Cassese.TwoByThree.Folklore
 import all Morrey.Cassese.TwoByThree.Folklore.Laminate
-import all Morrey.Cassese.TwoByThree.Folklore.NullLagrangian
-import all Morrey.Cassese.TwoByThree.Folklore.Quasiaffine
 import all Morrey.Cassese.TwoByThree.Hessian
 import all Morrey.Cassese.TwoByThree.HessianCutoff
 import all Morrey.Cassese.TwoByThree.NearFour
@@ -57,31 +55,61 @@ import all Morrey.Cassese.TwoByThree.Transpose.Potential
 import all Morrey.Cassese.TwoByThree.Transpose.Profile
 import all Morrey.Cassese.TwoByThree.Witness
 import all Morrey.Cassese.TwoByThree.WitnessCutoff
-import all Morrey.Common.Basic.Analysis.Convex.SeparatelyConvex
-import all Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
-import all Morrey.Common.Basic.CalculusOfVariations.Basic
-import all Morrey.Common.Basic.CalculusOfVariations.LegendreHadamard
+import all Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
+import all Morrey.Common.Basic.Analysis.Calculus.Deriv.MeanValue
+import all Morrey.Common.Basic.Analysis.Convex.Hinge
+import all Morrey.Common.Basic.Analysis.Convex.Legendre
+import all Morrey.Common.Basic.Analysis.Convex.Tangent
 import all Morrey.Common.Basic.LinearAlgebra.Matrix.RankTwo
-import all Morrey.Common.External.Burkholder.Inequality
+import all Morrey.Common.Basic.MeasureTheory.Integral.IntervalIntegral.Primitive
+import all Morrey.Common.Basic.Topology.Order.SelfImproving
 import all Morrey.Common.External.Burkholder.ScalarFunction
+import all Morrey.Common.External.CoxVeraar.Decoupling
 import all Morrey.Common.External.Dacorogna.Minors
-import all Morrey.Common.External.Dacorogna.Plancherel
+import all Morrey.Common.External.Dragicevic.LowerBound
+import all Morrey.Common.External.HNVW.DyadicUMD
+import all Morrey.Common.External.HNVW.Extrapolation
+import all Morrey.Common.External.HNVW.KahaneKhintchine
+import all Morrey.Common.External.HNVW.Transference
+import all Morrey.Common.External.HNVW.ZigZag
 import all Morrey.Common.External.Kakutani.Theorem
-import all Morrey.Common.External.KinderlehrerPedregal.Basic
-import all Morrey.Common.External.KinderlehrerPedregal.Envelope
 import all Morrey.Common.External.KinderlehrerPedregal.Formula
 import all Morrey.Common.External.KirchheimKristensen.Theorem
 import all Morrey.Common.External.Kristensen.Smoothing
 import all Morrey.Common.External.Osekowski.HilbertCharacterization
+import all Morrey.Common.External.Osekowski.Inequality
+import all Morrey.Common.External.Osekowski.Sharpness
+import all Morrey.Common.External.Pisier.LpUMD
+import all Morrey.Common.External.PisierXu.Khintchine
+import all Morrey.Common.External.Randrianantoanina.SchattenUMD
 import all Morrey.Common.External.Rindler.Lemmas
-import all Morrey.Pedregal.Bridges
+import all Morrey.Common.External.Yaroslavtsev.ComplexUMD
+import all HomogeneousIsotropic.Solution
+import all Morrey.HomogeneousIsotropic.Bridges
+import all Morrey.HomogeneousIsotropic.Burkholder
+import all Morrey.HomogeneousIsotropic.Coordinates
+import all Morrey.HomogeneousIsotropic.Defs
+import all Morrey.HomogeneousIsotropic.Example
+import all Morrey.HomogeneousIsotropic.Inequalities
+import all Morrey.HomogeneousIsotropic.LowExponent
+import all Morrey.HomogeneousIsotropic.Main
+import all Morrey.HomogeneousIsotropic.Polyaffine
+import all Morrey.HomogeneousIsotropic.Profile
+import all Morrey.HomogeneousIsotropic.Signed.Basic
+import all Morrey.HomogeneousIsotropic.Signed.BurkholderRadial
+import all Morrey.HomogeneousIsotropic.Signed.Defs
+import all Morrey.HomogeneousIsotropic.Signed.Interior
+import all Morrey.HomogeneousIsotropic.Signed.Main
+import all Morrey.HomogeneousIsotropic.Signed.Minorant
+import all Morrey.HomogeneousIsotropic.Signed.Path
+import all Morrey.HomogeneousIsotropic.Signed.Radial
+import all Morrey.HomogeneousIsotropic.Signed.RestrictedSupport
+import all Morrey.HomogeneousIsotropic.Supports
 import all Morrey.Pedregal.Checks
-import all Morrey.Pedregal.CounterexampleCertificate
 import all Morrey.Pedregal.Defs
 import all Morrey.Pedregal.Hn.Laminate
 import all Morrey.Pedregal.Hn.Mold
 import all Morrey.Pedregal.Introduction
-import all Morrey.Pedregal.Jensen
 import all Morrey.Pedregal.LevelOne
 import all Morrey.Pedregal.Map
 import all Morrey.Pedregal.MoldTau
@@ -142,9 +170,18 @@ stops at them. -/
 meta def externalResults : List (String × Name) :=
   [("Kakutani's fixed-point theorem (Thm 6.2)", ``External.Kakutani.exists_fixedPoint),
    -- Cassese: the cited results proved in `Morrey/Common/External`
-   ("Burkholder's inequality (Cassese Thm 2.3 (1))", ``External.Burkholder.inequality),
-   ("Burkholder's square function inequality (Cassese Thm 2.3 (2))",
-    ``External.Burkholder.squareFunction),
+   ("Osękowski Thm 3.5, Burkholder's inequality (Cassese Thm 2.3 (1))",
+    ``External.Osekowski.inequality),
+   ("Osękowski Thm 8.6, square function inequality (Cassese Thm 2.3 (2))",
+    ``External.Osekowski.squareFunction),
+   ("Osękowski Thm 3.5, differentially subordinate martingales", ``External.Osekowski.theorem3_5),
+   ("Osękowski Thm 8.6, square functions", ``External.Osekowski.theorem8_6),
+   ("Osękowski Thm 3.5, sharpness for dyadic martingales (Cassese Cor 6.3)",
+    ``External.Osekowski.exists_lt_lpNorm_transform),
+   ("Osękowski Thm 3.5, Rem 3.8, UMD constants of Hilbert spaces",
+    ``External.Osekowski.dyadicUMDConst_of_innerProductSpace),
+   ("Osękowski Thm 3.5, UMD constants of Hilbert spaces",
+    ``External.Osekowski.umdConst_of_innerProductSpace),
    ("Burkholder's scalar function u (Cassese (13), (14))",
     ``External.Burkholder.scalarFunction_holds),
    ("Burkholder's scalar function u_q (Cassese Remark 4.5)",
@@ -156,26 +193,43 @@ meta def externalResults : List (String × Name) :=
    ("Rindler, periodic test maps (Cassese Lemma 2.2)",
     ``External.Rindler.quasiconvexAtOn_iff_periodic),
    ("Dacorogna Thm 5.20 (Cassese Prop 5.1)", ``External.Dacorogna.rankOneAffineMinors_holds),
+   ("Dacorogna Thm 5.20, minors quasiaffine (Cassese Prop 5.1)",
+    ``External.Dacorogna.minor3_quasiaffine),
    ("Dacorogna Thm 5.25 (i) (Cassese Prop 5.1)", ``External.Dacorogna.quadraticForm_quasiconvex),
    ("Dacorogna's formula (Cassese Prop 2.2)",
     ``External.KinderlehrerPedregal.dacorognaFormula_holds),
    ("Kristensen's smoothing (Cassese Cor 5.2)", ``External.Kristensen.smoothing_holds),
-   -- Cassese: the cited results assumed, as hypotheses of the statements that use them
-   ("HNVW extrapolation (Cassese Prop 2.7 (1), assumed)", ``Cassese.HNVWExtrapolation),
-   ("Randrianantoanina (Cassese Prop 2.7 (2), assumed)", ``Cassese.RandrianantoaninaSchattenUMD),
-   ("Pisier (Cassese Prop 2.7 (3), assumed)", ``Cassese.PisierLpUMD),
-   ("HNVW dyadic UMD (Cassese Prop 2.7 (4), assumed)", ``Cassese.HNVWDyadicUMD),
-   ("Yaroslavtsev (Cassese Prop 2.7 (5), assumed)", ``Cassese.YaroslavtsevComplexUMD),
-   ("HNVW zig-zag (Cassese Prop 2.7 (6), assumed)", ``Cassese.HNVWZigZag),
-   ("Cox–Veraar decoupling (Cassese Prop 2.8, assumed)", ``Cassese.CoxVeraarDecoupling),
-   ("Pisier–Xu (Cassese Prop 6.3, assumed)", ``Cassese.PisierXuKhintchine),
-   ("Kahane–Khintchine (Cassese Prop 6.4, assumed)", ``Cassese.KahaneKhintchine),
-   ("Hypercontractive Kahane–Khintchine (Remark 6.3, Prop 6.5 at q = ∞, assumed)",
-    ``Cassese.KahaneKhintchineHypercontractive),
-   ("Sharpness of Burkholder's constant (Cassese Cor 6.3)", ``Cassese.burkholderSharpness_holds),
-   ("HNVW transference (Cassese Prop 7.2, assumed)", ``Cassese.HNVWTransference),
-   ("Dragičević's lower bound (Cassese Thm 7.1, assumed)", ``Cassese.DragicevicLowerBound),
-   ("Dragičević's L⁴ bound (Cassese Cor 7.2, assumed)", ``Cassese.DragicevicL4Bound)]
+   -- Cassese, Sections 2, 4, 6: the cited results proved in `Morrey/Common/External` from the
+   -- package `BanachProbability` (Proposition 6.3 from `HarmonicAnalysis`)
+   ("HNVW I Thm 4.2.7, extrapolation (Cassese Prop 2.7 (1))", ``External.HNVW.theorem4_2_7),
+   ("HNVW I Thm 4.2.7, extrapolation, general exponents", ``External.HNVW.theorem4_2_7_general),
+   ("Randrianantoanina Cor 4.5 (Cassese Prop 2.7 (2))", ``External.Randrianantoanina.corollary4_5),
+   ("Randrianantoanina Cor 4.5, Rem 4.6 (1) (Cassese Prop 2.7 (2))",
+    ``External.Randrianantoanina.remark4_6),
+   ("Pisier Cor 5.22 (Cassese Prop 2.7 (3))", ``External.Pisier.corollary5_22),
+   ("Pisier Cor 5.22, vector-valued", ``External.Pisier.corollary5_22_vector),
+   ("HNVW I Thm 4.2.5, dyadic UMD (Cassese Prop 2.7 (4))", ``External.HNVW.theorem4_2_5),
+   ("Yaroslavtsev Lemma 3.2 (Cassese Prop 2.7 (5))", ``External.Yaroslavtsev.lemma3_2),
+   ("HNVW I Thm 4.5.6, zig-zag (Cassese Prop 2.7 (6))", ``External.HNVW.theorem4_5_6),
+   ("HNVW I Thm 4.5.6, zig-zag, the least constant", ``External.HNVW.theorem4_5_6_isLeast),
+   ("Yaroslavtsev Prop 3.7, complex zig-zag (Cassese Prop 2.7 (6))",
+    ``External.Yaroslavtsev.proposition3_7),
+   ("Yaroslavtsev Prop 3.7, complex zig-zag, the equivalence",
+    ``External.Yaroslavtsev.proposition3_7_iff),
+   ("Cox–Veraar decoupling (Cassese Prop 2.8)", ``External.CoxVeraar.decoupling),
+   ("Pisier–Xu Thm 6.1 (Cassese Prop 6.3)", ``External.PisierXu.theorem6_1),
+   ("Pisier–Xu Thm 6.1, (6.4), every real square matrix", ``External.PisierXu.theorem6_1_general),
+   ("HNVW II Thm 6.2.4, Kahane–Khintchine (Cassese Prop 6.4)",
+    ``External.HNVW.theorem6_2_4_seminorm),
+   ("HNVW II Thm 6.2.4, normed spaces", ``External.HNVW.theorem6_2_4),
+   ("HNVW II Thm 6.2.4, the constant (Cassese Remark 6.3, Prop 6.5 at q = ∞)",
+    ``External.HNVW.theorem6_2_4_hypercontractive),
+   -- Cassese, Section 7: the cited results proved in `Morrey/Common/External` from the package
+   -- `HarmonicAnalysis`
+   ("HNVW I Cor 5.7.6, transference (Cassese Prop 7.2)", ``External.HNVW.transference_beurlingPow),
+   ("Dragičević Thm 1.1 with p*, through CDK §1.3.1 (Cassese Thm 7.1)",
+    ``External.Dragicevic.theorem1_1_two_pStar),
+   ("Dragičević Thm 1.1, n = 2 (Cassese Cor 7.2)", ``External.Dragicevic.theorem1_1_two)]
 
 /-- The numbered results of the paper, in the order of the paper. -/
 meta def paperResults : List (String × Name) :=
@@ -225,7 +279,6 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Thm 1.1 (Kirchheim–Kristensen, quoted)", ``External.KirchheimKristensen.Theorem1_1),
    ("Cassese Section 1.3 (homogeneous monotonicity)", ``Cassese.homMorreyPositive_mono),
    ("Cassese Thm 1.2", ``Cassese.theorem1_2),
-   ("Cassese Thm 1.2 (the paper's proof)", ``Cassese.theorem1_2_umd),
    ("Cassese Thm 1.3 (a)", ``Cassese.theorem1_3_a),
    ("Cassese Thm 1.3 (b)", ``Cassese.theorem1_3_b),
    ("Cassese Section 1.4 (2 × 2 landscape)", ``Cassese.morrey_landscape),
@@ -257,13 +310,13 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Thm 2.3 (1) (Burkholder, cited)", ``Cassese.burkholderInequality_holds),
    ("Cassese Thm 2.3 (2) (Burkholder, cited)", ``Cassese.burkholderSquareFunction_holds),
    ("Cassese Prop 2.6 (Osękowski, quoted)", ``External.Osekowski.HilbertCharacterization),
-   ("Cassese Prop 2.7 (1) (HNVW, assumed)", ``Cassese.HNVWExtrapolation),
-   ("Cassese Prop 2.7 (2) (Randrianantoanina, assumed)", ``Cassese.RandrianantoaninaSchattenUMD),
-   ("Cassese Prop 2.7 (3) (Pisier, assumed)", ``Cassese.PisierLpUMD),
-   ("Cassese Prop 2.7 (4) (HNVW, assumed)", ``Cassese.HNVWDyadicUMD),
-   ("Cassese Prop 2.7 (5) (Yaroslavtsev, assumed)", ``Cassese.YaroslavtsevComplexUMD),
-   ("Cassese Prop 2.7 (6) (HNVW, Yaroslavtsev, assumed)", ``Cassese.HNVWZigZag),
-   ("Cassese Prop 2.8 (Cox–Veraar, assumed)", ``Cassese.CoxVeraarDecoupling),
+   ("Cassese Prop 2.7 (1) (HNVW, cited)", ``Cassese.hnvwExtrapolation_holds),
+   ("Cassese Prop 2.7 (2) (Randrianantoanina, cited)", ``Cassese.randrianantoaninaSchattenUMD_holds),
+   ("Cassese Prop 2.7 (3) (Pisier, cited)", ``Cassese.pisierLpUMD_holds),
+   ("Cassese Prop 2.7 (4) (HNVW, cited)", ``Cassese.hnvwDyadicUMD_holds),
+   ("Cassese Prop 2.7 (5) (Yaroslavtsev, cited)", ``Cassese.yaroslavtsevComplexUMD_holds),
+   ("Cassese Prop 2.7 (6) (HNVW, Yaroslavtsev, cited)", ``Cassese.hnvwZigZag_holds),
+   ("Cassese Prop 2.8 (Cox–Veraar, cited)", ``Cassese.coxVeraarDecoupling_holds),
    ("Cassese Lemma 4.1", ``Cassese.lemma4_1),
    ("Cassese Prop 4.1", ``Cassese.proposition4_1),
    ("Cassese Prop 4.1 (nonnegativity)", ``Cassese.proposition4_1_nonneg),
@@ -296,8 +349,8 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Cor 5.4", ``Cassese.corollary5_4),
    ("Cassese Prop 6.1", ``Cassese.proposition6_1),
    ("Cassese Prop 6.2", ``Cassese.proposition6_2),
-   ("Cassese Prop 6.3 (Pisier–Xu, assumed)", ``Cassese.PisierXuKhintchine),
-   ("Cassese Prop 6.4 (Kahane–Khintchine, assumed)", ``Cassese.KahaneKhintchine),
+   ("Cassese Prop 6.3 (Pisier–Xu, cited)", ``Cassese.pisierXuKhintchine_holds),
+   ("Cassese Prop 6.4 (Kahane–Khintchine, cited)", ``Cassese.kahaneKhintchine_holds),
    ("Cassese Eq. (31)", ``Cassese.equation31),
    ("Cassese Remark 6.3", ``Cassese.remark6_3),
    ("Cassese Prop 6.5", ``Cassese.proposition6_5),
@@ -316,13 +369,97 @@ meta def paperResults : List (String × Name) :=
    ("Cassese Cor 6.3 (separation)", ``Cassese.corollary6_3_separation),
    ("Cassese Cor 6.4", ``Cassese.corollary6_4),
    ("Cassese Cor 6.4 (not quasiconvex)", ``Cassese.corollary6_4_not_quasiconvexAt),
-   ("Cassese Thm 1.4, p = 4 (Section 6.4)", ``Cassese.theorem1_4_four),
+   ("Cassese Thm 1.4, p = 4 (Section 6.3)", ``Cassese.theorem1_4_four),
    ("Cassese Prop 7.1", ``Cassese.proposition7_1),
    ("Cassese Prop 7.2", ``Cassese.proposition7_2),
    ("Cassese Prop 7.2 (lower bound)", ``Cassese.proposition7_2_lower),
    ("Cassese Thm 7.1", ``Cassese.theorem7_1),
    ("Cassese Cor 7.2", ``Cassese.corollary7_2),
-   ("Cassese Conjecture 1 (stated)", ``Cassese.Conjecture1)]
+   ("Cassese Conjecture 1 (stated)", ``Cassese.Conjecture1),
+   -- the nonnegative homogeneous isotropic integrands on `ℝ^{2×2}`
+   -- (`Morrey/HomogeneousIsotropic`, a result of the repository)
+   ("HomogeneousIsotropic Theorem 1.1 (a support at every matrix, p ≥ 2)",
+    ``HomogeneousIsotropic.hasPolyaffineSupportAt_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.1 (polyconvexity, p ≥ 2)",
+    ``HomogeneousIsotropic.polyconvex_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.1 (quasiconvexity, p ≥ 2)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex),
+   ("HomogeneousIsotropic Theorem 1.2 (the support in closed form)",
+    ``HomogeneousIsotropic.polyaffine_multiplier_le),
+   ("HomogeneousIsotropic Theorem 1.3 (a) (nonnegativity is necessary, p > 2)",
+    ``HomogeneousIsotropic.nonneg_of_polyconvex),
+   ("HomogeneousIsotropic Theorem 1.3 (a) (p > 2)",
+    ``HomogeneousIsotropic.polyconvex_iff_of_two_lt),
+   ("HomogeneousIsotropic Theorem 1.3 (b) (no sign condition, p = 2)",
+    ``HomogeneousIsotropic.polyconvex_of_rankOneConvex_two),
+   ("HomogeneousIsotropic Theorem 1.3 (b) (p = 2)",
+    ``HomogeneousIsotropic.polyconvex_iff_two),
+   ("HomogeneousIsotropic Corollary 1.4 (equivalence, p ≥ 2)",
+    ``HomogeneousIsotropic.tfae_of_two_le),
+   ("HomogeneousIsotropic Theorem 1.5 (Burkholder-type minorants, 1 ≤ p < 2)",
+    ``HomogeneousIsotropic.exists_burkholderType_le),
+   ("HomogeneousIsotropic Theorem 1.5 (the identity, 0 < p < 2)",
+    ``HomogeneousIsotropic.burkholderType_eq),
+   ("HomogeneousIsotropic (the Burkholder function is quasiconvex, 1 < p < 2)",
+    ``HomogeneousIsotropic.quasiconvex_burkholder),
+   ("HomogeneousIsotropic (if the Burkholder function is quasiconvex, 1 ≤ p < 2)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_burkholder),
+   ("HomogeneousIsotropic Corollary 1.6 (a) (1 < p < 2)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_lt_two),
+   ("HomogeneousIsotropic Corollary 1.6 (b) (nonnegativity, p = 1)",
+    ``HomogeneousIsotropic.nonneg_of_rankOneConvex_one),
+   ("HomogeneousIsotropic Corollary 1.6 (b) (convexity, p = 1)",
+    ``HomogeneousIsotropic.convexOn_of_rankOneConvex_one),
+   ("HomogeneousIsotropic Proposition 1.7 (0 < p < 1)",
+    ``HomogeneousIsotropic.eq_zero_of_rankOneConvex_of_lt_one),
+   ("HomogeneousIsotropic (the nonnegative case of Theorem A)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_pos),
+   ("HomogeneousIsotropic Theorem A (every p > 0, no sign condition)",
+    ``HomogeneousIsotropic.quasiconvex_of_rankOneConvex_of_isotropic),
+   ("HomogeneousIsotropic signed: a negative value at −1 or at 1 of the slice",
+    ``HomogeneousIsotropic.IsProfile.slice_neg_one_neg_or_slice_one_neg),
+   ("HomogeneousIsotropic signed: restricted support (x < y, 1 < p < 2)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_lt),
+   ("HomogeneousIsotropic signed: restricted support (where F ≥ 0, p > 2)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_nonneg),
+   ("HomogeneousIsotropic signed: restricted support (the unit ball)",
+    ``HomogeneousIsotropic.IsHardBase.restrictedSupport_le_of_add_le_one),
+   ("HomogeneousIsotropic signed: monotonicity of the supporting planes",
+    ``HomogeneousIsotropic.IsHardBase.scaled_monotone),
+   ("HomogeneousIsotropic Proposition 6.8 (radial integration of the truncated determinant)",
+    ``HomogeneousIsotropic.quasiconvex_radial),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p as a radial function, p ≥ 2)",
+    ``HomogeneousIsotropic.radial_rpow_eq_burkholder),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p (J ·) as a radial function, p ≥ 2)",
+    ``HomogeneousIsotropic.radial_rpow_eq_burkholder_reflection_mul),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p as a radial function, 1 < p ≤ 2)",
+    ``HomogeneousIsotropic.radial_neg_rpow_eq_burkholder),
+   ("HomogeneousIsotropic Corollary 6.11 (B_p (J ·) as a radial function, 1 < p ≤ 2)",
+    ``HomogeneousIsotropic.radial_neg_rpow_eq_burkholder_reflection_mul),
+   ("HomogeneousIsotropic Corollary 6.11 (the Burkholder function is quasiconvex, p > 1)",
+    ``HomogeneousIsotropic.quasiconvex_burkholder_of_one_lt),
+   ("HomogeneousIsotropic signed: the path of hard bases",
+    ``HomogeneousIsotropic.IsHardBase.exists_isPath),
+   ("HomogeneousIsotropic signed: the radial minorant along a path",
+    ``HomogeneousIsotropic.IsPath.exists_convex_minorant),
+   ("HomogeneousIsotropic signed: the radial minorant at a hard base",
+    ``HomogeneousIsotropic.IsHardBase.exists_convex_minorant),
+   ("HomogeneousIsotropic signed: Jensen at the matrices with two nonzero coordinates",
+    ``HomogeneousIsotropic.quasiconvexAtOn_of_strictConvexOn_slice),
+   ("HomogeneousIsotropic Lemma 2.1 (a) (the determinant)",
+    ``HomogeneousIsotropic.det_eq_norm_sq_sub),
+   ("HomogeneousIsotropic Lemma 2.1 (a) (the operator norm)",
+    ``HomogeneousIsotropic.opNorm_eq),
+   ("HomogeneousIsotropic Lemma 2.1 (b) (rank one)",
+    ``HomogeneousIsotropic.rank_eq_one_iff_norm_eq),
+   ("HomogeneousIsotropic Lemma 3.3 (a touching minorant)",
+    ``HomogeneousIsotropic.IsProfile.exists_burkholderMinorant_eq),
+   ("HomogeneousIsotropic (isotropy and the profile)",
+    ``HomogeneousIsotropic.isIsotropic_iff_eq_profile),
+   ("HomogeneousIsotropic (F from the function h)",
+    ``HomogeneousIsotropic.apply_eq_opNorm_rpow_mul),
+   ("HomogeneousIsotropic example, (det A)² with p = 4",
+    ``HomogeneousIsotropic.polyconvex_detSq)]
 
 /-- The theorems that Palomar's comparator checks (`theorem_names` of `comparator.json`). -/
 meta def solutionResults : List Name :=
@@ -337,7 +474,15 @@ meta def solutionResults : List Name :=
    ``CasseseChallenge.theorem1_4_four, ``CasseseChallenge.theorem1_5,
    ``CasseseChallenge.corollary1_6, ``CasseseChallenge.corollary5_3,
    ``CasseseChallenge.morrey_landscape, ``CasseseChallenge.homMorrey_landscape,
-   ``CasseseChallenge.projL3_mem]
+   ``CasseseChallenge.projL3_mem,
+   ``HomogeneousIsotropicChallenge.det_eq_norm_sq_sub, ``HomogeneousIsotropicChallenge.opNorm_eq,
+   ``HomogeneousIsotropicChallenge.theorem1_1,
+   ``HomogeneousIsotropicChallenge.theorem1_2, ``HomogeneousIsotropicChallenge.theorem1_3_a,
+   ``HomogeneousIsotropicChallenge.theorem1_3_b, ``HomogeneousIsotropicChallenge.corollary1_4,
+   ``HomogeneousIsotropicChallenge.theorem1_5, ``HomogeneousIsotropicChallenge.theorem1_5_identity,
+   ``HomogeneousIsotropicChallenge.corollary1_6_a, ``HomogeneousIsotropicChallenge.corollary1_6_b,
+   ``HomogeneousIsotropicChallenge.proposition1_7, ``HomogeneousIsotropicChallenge.theoremA,
+   ``HomogeneousIsotropicChallenge.proposition6_8]
 
 /-- Lean's standard axioms. -/
 meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.sound]
@@ -345,7 +490,7 @@ meta def standardAxioms : List Name := [``propext, ``Classical.choice, ``Quot.so
 /-- Whether `m` is a module of the libraries: the papers', `External` or `Basic`. -/
 meta def isLibraryModule (m : Name) : Bool :=
   (`Morrey).isPrefixOf m || (`Pedregal).isPrefixOf m || (`Sverak).isPrefixOf m ||
-    (`Cassese).isPrefixOf m
+    (`Cassese).isPrefixOf m || (`HomogeneousIsotropic).isPrefixOf m
 
 /-- The constants declared in the library. -/
 meta def libraryConstants (env : Environment) : NameSet := Id.run do

@@ -1,0 +1,335 @@
+\section{Introduction}\label{sec:intro}
+
+Let $\M$ be the space of real $2\times2$ matrices. A function $F\colon\M\to\R$ is
+\begin{itemize}
+\item \emph{rank-one convex} if $\tau\mapsto F(A+\tau B)$ is convex on $\R$ for every $A$ and
+  every $B$ with $\rank B=1$;
+\item \emph{quasiconvex} if $F(A)\le\int_{(0,1)^2}F(A+\nabla\varphi)\,dx$ for every $A$ and every
+  Lipschitz $\varphi\colon\R^2\to\R^2$ that vanishes outside $(0,1)^2$, whenever the integral
+  exists;
+\item \emph{polyconvex} if $F(A)=g(A,\det A)$ for a convex $g\colon\M\times\R\to\R$.
+\end{itemize}
+Polyconvexity implies quasiconvexity, which implies rank-one convexity
+\cite{Morrey1952,Ball1977,Dacorogna2008}. Quasiconvexity is the condition under which the
+integral $\int F(\nabla u)$ is lower semicontinuous, and it is hard to verify; rank-one convexity
+is a condition on lines. \emph{Morrey's problem} asks whether rank-one convexity implies
+quasiconvexity. For maps with at least three components the answer is negative, by an example of
+\v{S}ver\'ak~\cite{Sverak1992}. A negative answer for maps $\R^m\to\R^2$ with $m\ge3$ is
+claimed in the preprint of Cassese~\cite{Cassese2026}, whose proof we audited with a Lean
+formalization~\cite{Companion}. For maps $\R^2\to\R^2$, that is, for integrands on $\M$, the
+problem is open.
+
+This paper answers it affirmatively for the isotropic, positively homogeneous integrands on
+$\M$. We fix an exponent $p>0$ and consider functions $F\colon\M\to\R$ with the following three
+properties, which we call the \emph{common hypotheses}~\Hyp.
+\begin{enumerate}[label=\textup{(H\arabic*)}]
+\item\label{H1} $F$ is \emph{isotropic}: $F(QAR)=F(A)$ for all rotations $Q,R\in\SO$.
+\item\label{H2} $F$ is \emph{positively $p$-homogeneous}: $F(\lambda A)=\lambda^pF(A)$ for all
+  $\lambda>0$.
+\item\label{H3} $F$ is rank-one convex.
+\end{enumerate}
+
+\begin{maintheorem}\label{thm:A}
+Let $p>0$, and let $F\colon\M\to\R$ satisfy~\Hyp. Then $F$ is quasiconvex.
+\end{maintheorem}
+
+For nonnegative integrands, \cref{thm:A} follows from the results of
+\cref{sec:intro-large,sec:intro-low,sec:intro-small}, which say more: for $p\ge2$ such an
+integrand is polyconvex, with explicit supports, and for $1\le p<2$ it has a touching minorant
+built from the Burkholder function at every matrix. For $p>2$, by \cref{thm:iff}\,(a), every
+integrand with~\Hyp\ that is not polyconvex takes negative values; the Burkholder function and
+the Dacorogna--Marcellini integrands of \cref{sec:intro-related} beyond the polyconvex range are
+of this kind. The integrands that take negative values are treated in \cref{sec:signed}.
+
+The best known function with the properties \Hyp\ is the \emph{Burkholder function}, defined
+for $1<p<\infty$ and normalized as in~\cite[(1.4)]{GuerraKristensen2022}:
+\[
+  B_p(A)=\Bigl(\Bigl\lvert1-\frac2p\Bigr\rvert\abs A^2+\det A\Bigr)\abs A^{p-2},\qquad B_p(0)=0,
+\]
+where $\abs A$ is the operator norm; the same formula defines $B_p$ for every $p>0$, and we
+use it also for $p=1$. It comes from Burkholder's sharp inequalities for martingale
+transforms~\cite{Burkholder1984,Burkholder1988}, and its quasiconvexity implies Iwaniec's
+conjecture~\cite{Iwaniec1982} on the $L^p$ norm of the Beurling--Ahlfors transform
+\cite{BaernsteinMontgomerySmith1999,Iwaniec2002,AIPS2012,AIPS2015}. The quasiconvexity of
+$B_p$ is claimed in the recent preprint of Agazzi et al.~\cite[Corollary~2]{SharpHI}. The same
+preprint claims, as its Theorem~1, the quasiconvexity of the \emph{truncated determinant}. To
+write it, identify $\R^2$ with $\C$: a matrix $X$ acts as $\zeta\mapsto z\zeta+w\bar\zeta$ for
+two complex numbers $z$, $w$ (\cref{sec:coordinates}), and $\abs X=\abs z+\abs w$,
+$\det X=\abs z^2-\abs w^2$. The truncated determinant is
+\begin{equation}\label{eq:truncated}
+  L(X)=\det X\quad\text{if }\abs X\le1,\qquad L(X)=2\abs z-1\quad\text{if }\abs X>1 .
+\end{equation}
+Our proofs use Theorem~1, whose proof we audited with a Lean formalization~\cite{IwaniecLean},
+and the quasiconvexity of $B_p$ follows from it (\cref{cor:burkholder}).
+
+\subsection{What is proved, and from which hypotheses}\label{sec:intro-table}
+
+\Cref{thm:A} uses only \ref{H1}, \ref{H2} and \ref{H3}. The other results refine it, and some
+of them need a fourth hypothesis, the \emph{sign condition}
+\begin{enumerate}[label=\textup{(N)}]
+\item\label{N} $F\ge0$ on $\M$.
+\end{enumerate}
+\Cref{tab:summary} lists, for each range of the exponent, what follows from \Hyp\ and what
+\ref{N} adds. For $0<p<1$ isotropy is not needed, and for $p\le1$ the sign condition is a
+consequence of \Hyp. For $p>2$ it is necessary for polyconvexity.
+
+\begin{table}[ht]
+\centering
+\caption{The results for each range of the exponent: what follows from \Hyp, and what the sign
+  condition \ref{N} adds. Here $J=\diag(1,-1)$. \Cref{thm:A} and \cref{cor:low}\,(a) rest on
+  the quasiconvexity of the truncated determinant, claimed as Theorem~1 of~\cite{SharpHI}.}
+\label{tab:summary}
+\small
+\begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.25\textwidth}%
+>{\raggedright\arraybackslash}p{0.33\textwidth}>{\raggedright\arraybackslash}p{0.2\textwidth}@{}}
+\toprule
+Exponent & From \Hyp & With \ref{N} in addition & Statements \\
+\midrule
+$0<p<1$ & $F=0$, also without \ref{H1} & --- & \cref{prop:small} \\\addlinespace[3pt]
+$p=1$ & $F\ge0$, and $F$ is convex & --- & \cref{cor:low}\,(b), Dacorogna
+  \cite{Dacorogna1995} \\\addlinespace[3pt]
+$1<p<2$ & $F$ is quasiconvex & at every matrix, a touching minorant $\alpha B_p(A)+\beta B_p(JA)$
+  with $\alpha,\beta\ge0$ & \cref{thm:A}; \cref{thm:low}, \cref{cor:low}\,(a)
+  \\\addlinespace[3pt]
+$p=2$ & $F$ is polyconvex & --- & \cref{thm:iff}\,(b) \\\addlinespace[3pt]
+$p>2$ & $F$ is quasiconvex; it is polyconvex if and only if $F\ge0$ & a polyaffine support at
+  every matrix, in closed form & \cref{thm:A}, \cref{thm:iff}\,(a);
+  \cref{thm:main,thm:closed} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The exponents \texorpdfstring{$p\ge2$}{p >= 2}}\label{sec:intro-large}
+
+A \emph{polyaffine} function is $P(A)=k+\langle K,A\rangle+c\det A$. Guerra and
+Kristensen~\cite{GuerraKristensen2022} studied the nonnegative functions with~\Hyp. Let $\CO$ be
+the set of the multiples of orthogonal matrices. They proved that for $p\ge2$ such a function is
+polyconvex at the matrices of $\CO$ \cite[Theorem~1.3]{GuerraKristensen2022}, and they
+ask~\cite[Question~1.7]{GuerraKristensen2022}: ``When $n=2$, are the integrands satisfying the
+assumptions of Theorem~1.3 polyconvex everywhere?'' \Cref{thm:main} says that they are.
+
+\begin{theorem}\label{thm:main}
+Let $p\ge2$ and let $F\colon\M\to[0,\infty)$ satisfy~\Hyp. Then for every $A_0\in\M$ there is a
+polyaffine function $P$ with $P\le F$ on $\M$ and $P(A_0)=F(A_0)$. In particular $F$ is
+polyconvex.
+\end{theorem}
+
+At the zero matrix the support is $0$. By isotropy and homogeneity it is then enough to give the
+support at the matrices $\diag(1,t)$, $-1\le t\le1$. Put $h(s)=F(\diag(1,s))$ for
+$s\in[-1,1]$. Then $h$ is convex, and $F(A)=\abs A^p\,h(\det A/\abs A^2)$ for $A\ne0$, so the
+function $h$ of one variable determines $F$.
+
+\begin{theorem}\label{thm:closed}
+Let $p$ and $F$ be as in \cref{thm:main}. Let $\abs t<1$, let $H=h(t)>0$, and let $m$ be the slope
+of a supporting line of $h$ at $t$, that is, $h(s)\ge H+m(s-t)$ for $s\in[-1,1]$. Put
+\[
+  L=\frac{(1+t)m-pH}{1-t},\qquad U=\frac{pH+(1-t)m}{1+t},\qquad
+  c^\ast=\min\bigl\{U,\max\{L,(p-1)m\}\bigr\}.
+\]
+Then the polyaffine function
+\[
+  P_t(A)=c^\ast t-(p-1)H+(pH-tm-c^\ast t)\,a_{11}+(m-c^\ast)\,a_{22}+c^\ast\det A
+\]
+satisfies $P_t\le F$ on $\M$ and $P_t(\diag(1,t))=F(\diag(1,t))$.
+\end{theorem}
+
+The determinant coefficient is $(p-1)m$, the value that an inequality of Burkholder type gives
+(\cref{lem:burkholder}), clamped to the interval $[L,U]$. At $t=\pm1$ the support is
+$h(\pm1)\bigl(1+\tfrac p2(\pm\det A-1)\bigr)$, and where $h(t)=0$ it is $0$. The support is
+computed from $t$, $h(t)$ and the slope of one supporting line. It involves no second derivative
+of $h$, and $h$ need not be differentiable.
+
+The sign condition cannot be dropped when $p>2$: the Burkholder function $B_p$ satisfies~\Hyp\
+and is not polyconvex \cite[Remark~1.4, Proposition~4.6]{GuerraKristensen2022}. By the next
+theorem it is the only condition missing, and for $p=2$ none is needed.
+
+\begin{theorem}\label{thm:iff}
+Let $F\colon\M\to\R$ be isotropic and positively $p$-homogeneous.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item If $p>2$, then $F$ is polyconvex if and only if it is rank-one convex and nonnegative.
+\item If $p=2$, then $F$ is polyconvex if and only if it is rank-one convex.
+\end{enumerate}
+\end{theorem}
+
+\begin{corollary}\label{cor:equiv}
+Let $p\ge2$, and let $F\colon\M\to[0,\infty)$ be Borel, locally bounded, isotropic and
+positively $p$-homogeneous. Then $F$ is rank-one convex if and only if it is quasiconvex, if
+and only if it is polyconvex.
+\end{corollary}
+
+\subsection{The exponents \texorpdfstring{$1\le p<2$}{1 <= p < 2}}\label{sec:intro-low}
+
+For $1<p<2$ polyconvexity fails for functions with~\Hyp: the positive part of $B_p$ is not
+polyconvex \cite[Remark~1.4]{GuerraKristensen2022}. The Burkholder function takes the place of
+the polyaffine functions. In the conformal coordinates $(z,w)$ of \cref{sec:setting},
+$B_p=\tfrac2p(\abs z-(p-1)\abs w)(\abs z+\abs w)^{p-1}$ for $0<p\le2$; in particular
+$B_1=2\abs z$. Let $J=\diag(1,-1)$; the function $A\mapsto B_p(JA)$ is the mirror image of
+$B_p$, in which $z$ and $w$ change roles.
+
+\begin{theorem}\label{thm:low}
+Let $1\le p<2$, and let $F\colon\M\to[0,\infty)$ satisfy~\Hyp. Then for every $A_0\in\M$ there
+are $c_0,m\in\R$ with $(2-p)\abs m\le pc_0$ such that the function
+\[
+  G_{c_0,m}(A)=\abs A^{p-2}\bigl(c_0\abs A^2+m\det A\bigr)\quad(A\ne0),\qquad G_{c_0,m}(0)=0,
+\]
+satisfies $G_{c_0,m}\le F$ on $\M$ and $G_{c_0,m}(A_0)=F(A_0)$. Moreover
+\[
+  G_{c_0,m}(A)=\frac{pc_0+(2-p)m}{2(2-p)}\,B_p(A)+\frac{pc_0-(2-p)m}{2(2-p)}\,B_p(JA),
+\]
+with nonnegative coefficients.
+\end{theorem}
+
+The identity holds for every $0<p<2$ and all $c_0,m\in\R$, and its coefficients are
+nonnegative exactly when $(2-p)\abs m\le pc_0$. So a nonnegative $F$ with~\Hyp\ is the upper
+envelope of nonnegative combinations of the Burkholder function and its mirror image, each
+touching $F$ at one matrix. A property of these
+two functions passes to $F$ if nonnegative combinations and touching minorants preserve it.
+Quasiconvexity and convexity are such properties.
+
+The Burkholder function is quasiconvex for every $p>1$, by the radial integration of the
+truncated determinant in \cref{sec:signed} (\cref{prop:radial,cor:burkholder}), and for $p=1$,
+$B_1=2\abs z$ is convex.
+
+\begin{corollary}\label{cor:low}
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item Let $1<p<2$. Every $F\colon\M\to[0,\infty)$ with~\Hyp\ is quasiconvex.
+\item Every $F\colon\M\to\R$ with~\Hyp\ for $p=1$ is nonnegative and convex.
+\end{enumerate}
+\end{corollary}
+
+Part~(b) is a theorem of Dacorogna~\cite{Dacorogna1995}; see also the introduction
+of~\cite{DacorognaHaeberly1996}. For the matrices of $\CO$, \cref{thm:low} and part~(a) go back
+to Guerra and Kristensen: they proved that $F\ge B_p$ if $F(I)=B_p(I)$, after~\cite{AIPS2015},
+and that $F$ is quasiconvex at the matrices of $\CO$ if $B_p$ is quasiconvex
+\cite[Theorems~4.2 and~1.2]{GuerraKristensen2022}. Here the minorant touches at every matrix.
+
+Theorem~1 of~\cite{SharpHI} enters the proof of \cref{prop:radial}, and through it those of
+part~(a) and of \cref{thm:A}. It is stated there with smooth periodic test maps. Its proof
+applies to Lipschitz periodic maps, and for a continuous integrand the periodic test maps and the
+Lipschitz maps vanishing outside the unit square define the same notion
+\cite[Proposition~5.13]{Dacorogna2008}. The formalization~\cite{IwaniecLean} proves the
+quasiconvexity of $L$ in this form, which is the sense used here.
+
+\subsection{The exponents \texorpdfstring{$0<p<1$}{0 < p < 1}}\label{sec:intro-small}
+
+For exponents below $1$ only the zero function remains, and neither isotropy nor a sign
+condition is needed.
+
+\begin{proposition}\label{prop:small}
+Let $0<p<1$, and let $F\colon\M\to\R$ be positively $p$-homogeneous and rank-one convex. Then
+$F=0$.
+\end{proposition}
+
+For a nonnegative $F$ with~\Hyp, \cref{thm:A} follows: $F=0$ for $0<p<1$, $F$ is convex for
+$p=1$, quasiconvex for $1<p<2$ by \cref{cor:low}\,(a), and polyconvex for $p\ge2$ by
+\cref{thm:main}. An $F$ with~\Hyp\ that takes a negative value has $p>1$, by
+\cref{prop:small} and \cref{cor:low}\,(b), and it is polyconvex if $p=2$, by
+\cref{thm:iff}\,(b). \Cref{sec:signed} treats the remaining exponents $p>1$, $p\ne2$.
+
+\subsection{Related work}\label{sec:intro-related}
+
+Guerra and Kristensen~\cite{GuerraKristensen2022} recall two results related to their question.
+Rank-one convexity implies polyconvexity for compact connected isotropic subsets of $\M$
+\cite{CardaliaguetTahraoui2002a,CardaliaguetTahraoui2002b,ContiDeLellisMuellerRomeo2003}, and for
+isotropic $0$-homogeneous integrands on matrices of positive determinant
+\cite{MartinGhibaNeff2017}. The reduction of the polyconvexity of an isotropic function on $\M$
+to supports on diagonal matrices goes back to Dacorogna and
+Koshigoe~\cite[Theorem~2.1]{DacorognaKoshigoe1993}; \cref{lem:lift} is a form of it. We are not
+aware of an earlier proof of \cref{thm:main,thm:closed,thm:iff,thm:low}.
+
+The Dacorogna--Marcellini integrands
+$f_\gamma(A)=\norm A^2(\norm A^2-2\gamma\det A)$, with $\norm A$ the Euclidean norm, satisfy
+\ref{H1} and \ref{H2} with $p=4$. They are rank-one convex if and only if
+$\abs\gamma\le2/\sqrt3$ and polyconvex if and only if $\abs\gamma\le1$
+\cite{DacorognaMarcellini1988,AlibertDacorogna1992}. Since $\norm A^2\ge2\abs{\det A}$, with
+equality on $\CO$, $f_\gamma$ is nonnegative exactly when $\abs\gamma\le1$.
+\Cref{thm:iff}\,(a) explains the second threshold: for $p>2$, polyconvexity is rank-one
+convexity together with nonnegativity. By \cref{thm:A}, $f_\gamma$ is quasiconvex for
+$\abs\gamma\le2/\sqrt3$. The integrands $f_\gamma$ with $1<\abs\gamma\le2/\sqrt3$ are the
+subject of the preprint~\cite{BrunoPasqualotto2026}.
+
+Cassese~\cite[Conjecture~1]{Cassese2026} conjectures that an integrand with~\Hyp\ that changes
+sign is quasiconvex at $0$; the conjecture is stated for $f(tA)=\abs t^pf(A)$. This condition
+implies~\ref{H2}, so for integrands on $\M$ \cref{thm:A} gives the conclusion of the conjecture,
+and quasiconvexity at every matrix. The Burkholder function is an integrand of this kind.
+
+\subsection{The strategy}\label{sec:strategy}
+
+Identify $\R^2$ with $\C$. A matrix acts as $\zeta\mapsto z\zeta+w\bar\zeta$ for two complex
+numbers $z$, $w$, its conformal and its anticonformal part. In these coordinates
+$\det A=\abs z^2-\abs w^2$ and $\abs A=\abs z+\abs w$, a rotation on either side multiplies $z$
+and $w$ by numbers of modulus one, and a line is a rank-one line exactly when $z$ and $w$ move
+with the same speed. So an isotropic $F$ is a function $\Phi(\abs z,\abs w)$ of two nonnegative
+variables, its \emph{profile}, and rank-one convexity of $F$ becomes convexity of $\Phi$ along
+the images of those lines. The proofs use only this and the homogeneity of $\Phi$.
+
+On the segment $\abs z+\abs w=1$ the profile is the convex function $h$. A line below $h$ is the
+same as a function $\abs A^{p-2}(c_0\abs A^2+m\det A)$ below $F$: these \emph{Burkholder-type
+functions} are the ones whose restriction to the segment is affine. So every supporting line of
+$h$ gives a Burkholder-type minorant of $F$ that touches $F$ along a ray. Where such a minorant
+touches, rank-one convexity gives one inequality of first order along every rank-one line
+through the point of contact (\cref{prop:tangent}). The rest of each proof is algebra with this
+inequality.
+\begin{enumerate}[label=\textup{(\arabic*)}]
+\item \emph{$p\ge2$, $F\ge0$.} Let $\kappa=(p-2)/p$. If the supporting line of $h$ at $t$ is
+  nonnegative at $\pm\kappa$, the Burkholder-type minorant has a polyaffine minorant that touches
+  at the same point (\cref{lem:burkholder}); this gives the support with $c^\ast=(p-1)m$.
+  Otherwise the candidate support $q$ is negative at the origin. By homogeneity it is then enough
+  to prove $q\le\Phi$ at the points where $\lambda\mapsto\lambda^pq(\cdot/\lambda)$ is
+  stationary. In the coordinates $(\abs w,\det A)$ these points form a line. This line is the
+  image of a rank-one line through the base point, and on it $q\le\Phi$ is the first-order
+  inequality.
+\item \emph{$1\le p<2$, $F\ge0$.} The supporting lines of $h$ at the ends $t=\pm1$ are multiples
+  of the functions $h$ of $B_p$ and of its mirror image. Every other supporting line is squeezed
+  between them, which is the condition $(2-p)\abs m\le pc_0$.
+\item \emph{$0<p<1$.} Along a rank-one line $F$ is convex and grows at most like the power $p$
+  of the distance, hence is constant.
+\item \emph{$p>1$, $p\ne2$, $F$ changes sign.} After a reflection, $h(-1)<0$, the negative values
+  of $F$ are at matrices of negative determinant, and all supporting slopes of $h$ are positive.
+  Let $a=\abs{p-2}/p$. Where the supporting line $\ell$ of $h$ satisfies $\ell(-a)\ge0$, the
+  Burkholder-type minorant is $mB_p+\ell(-a)\abs A^p$, which is quasiconvex. At the other points,
+  the \emph{hard bases}, the argument of item~(1) gives a function $\alpha+v\abs w+c\det A$ (for
+  $p>2$) or $\alpha+v\abs z+c\det A$ (for $p<2$) that touches $F$ and lies below it on the unit
+  ball and on a cone.
+
+  To go further we integrate scaled truncated determinants against a convex weight. Let $N$ be
+  continuous and convex on $[0,\infty)$ with $N(0)\le0$, and let $e=\pm1$. With
+  $\sigma=\abs z+\abs w=\abs X$ and $\delta=\abs z-\abs w$, the function
+  \[
+    \Psi^e_N(X)=(\sigma+e\delta)\,N(\sigma)-2\int_0^\sigma N(r)\,dr
+  \]
+  is quasiconvex (\cref{prop:radial}). For the hinge function $N(r)=(r-\rho)_+$ it is
+  $\rho^2K_e(X/\rho)$, with $K_1(X)=L(JX)+\det X$ and $K_{-1}(X)=L(X)-\det X$, and a convex $N$
+  is a limit of sums of an affine function and of nonnegative combinations of hinge functions.
+  With $N(r)=\pm r_+^{p-1}$, $\Psi^e_N$ is $B_p$ or its mirror image (\cref{cor:burkholder}), as
+  in the integration over scales of Baernstein and
+  Montgomery-Smith~\cite{BaernsteinMontgomerySmith1999}; this gives the quasiconvexity of $B_p$
+  used above. The new step is the choice of
+  $N$ adapted to $F$ at each hard base. Following the supporting lines of $h$ from the base,
+  with a scale $S$ given by a quadrature, produces a convex $N$ such that $\Psi^e_N$ plus a
+  constant lies below $F$ on a ball of any given radius and touches $F$ at the base
+  (\cref{prop:minorant,cor:minorant}).
+\end{enumerate}
+
+\subsection{Formal verification}\label{sec:intro-formal}
+
+The results of this paper are formalized in the proof assistant Lean~4~\cite{Lean4}, using its
+mathematical library Mathlib~\cite{Mathlib20}. The proofs are in the repository~\cite{Companion},
+and Lean's kernel checks every step. \Cref{thm:A}, \cref{thm:main,thm:closed,thm:iff,thm:low},
+\cref{cor:equiv,cor:low} and \cref{prop:small,prop:radial} are stated in a file that imports
+only Mathlib, and their proofs use only Lean's standard axioms. The formal proofs of
+\cref{thm:A}, \cref{cor:low}\,(a) and \cref{prop:radial} take the quasiconvexity of the truncated
+determinant from the formalization~\cite{IwaniecLean} of~\cite{SharpHI}. \Cref{app:formal}
+describes the formal statements and lists the corresponding Lean declarations.
+
+\subsection{Organization}\label{sec:intro-organization}
+
+\Cref{sec:setting} introduces the conformal coordinates, the profile and its supports.
+\Cref{sec:roc} states what rank-one convexity gives for the profile. \Cref{sec:pge2} constructs
+the supports for $p\ge2$, \cref{sec:plt2} treats the exponents below $2$, and \cref{sec:signed}
+the integrands that change sign; it completes the proof of \cref{thm:A}. \Cref{sec:discussion}
+collects remarks and open questions. These sections give the statements and the ideas of the
+proofs. The appendices supply the details in the same order:
+\cref{app:setting,app:roc,app:pge2,app:plt2,app:signed} prove the statements of
+\cref{sec:setting,sec:roc,sec:pge2,sec:plt2,sec:signed}, and \cref{app:formal} describes the
+formal verification.

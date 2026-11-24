@@ -1,0 +1,183 @@
+\section{Proofs for Section~\ref{sec:pge2}}\label{app:pge2}
+
+We keep the notation of \cref{sec:pge2}: $p\ge2$, $\Phi\ge0$ is a profile of degree $p$,
+$\abs t<1$, $H=h(t)$, $m$ is the slope of a supporting line of $h$ at $t$, $c_0=H-mt$,
+$C=pH-2tm\ge0$, $\Phi_x=pH+(1-t)m$ and $\Phi_y=pH-(1+t)m$.
+
+\subsection{The inequality of Burkholder type}
+
+\begin{proof}[Proof of \cref{lem:burkholder}]
+Write $E$ for the left side of \eqref{eq:burkholder} and $r=c_0\sigma+m\delta$. The hypothesis
+gives $c_0\ge0$ and $(p-2)\abs{m\delta}\le pc_0\sigma$. If $\sigma=0$, then $\delta=0$ and
+$E=-(p-1)c_0\le0$. Let $\sigma>0$.
+
+\emph{Case $r\ge0$.} Bernoulli's inequality with the exponent $p/2\ge1$ gives
+$\sigma^p=(\sigma^2)^{p/2}\ge\tfrac p2\sigma^2-(\tfrac p2-1)$. Together with the identity
+\[
+  r\Bigl(\frac p2\sigma^2-\Bigl(\frac p2-1\Bigr)\Bigr)-\sigma E
+  =(\sigma-1)^2\Bigl(\frac p2c_0\sigma-\Bigl(\frac p2-1\Bigr)m\delta\Bigr)\ge0
+\]
+this yields $\sigma E\le r\sigma^p$, that is, $E\le\sigma^{p-1}r$.
+
+\emph{Case $r<0$.} Let $N=-m\delta$, so that $N>c_0\sigma\ge0$. Then
+\[
+  4(p-1)N\sigma\,E=-\bigl(2(p-1)N\sigma-pc_0\sigma-(p-2)N\bigr)^2
+  -(N-c_0\sigma)\bigl(p^2c_0\sigma-(p-2)^2N\bigr),
+\]
+and $(p-2)^2N\le p(p-2)N\le p^2c_0\sigma$. Hence $E\le0$.
+\end{proof}
+
+For $p=2$ the left side of \eqref{eq:caseIII} is
+$-c_0+2c_0\sigma+m\sigma\delta=\sigma(c_0\sigma+m\delta)-c_0(\sigma-1)^2$, which is at most
+$G_{c_0,m}=\sigma(c_0\sigma+m\delta)\le\Phi$ because $c_0=\tfrac12C\ge0$. This proves
+\eqref{eq:caseIII} for $p=2$ without the assumption $\Phi\ge0$.
+
+\subsection{Case I}
+
+Let $p>2$ and $H>0$, and assume \eqref{eq:caseIhyp}. Recall
+$c=\Phi_x/(1+t)$, $\gamma=2C/(1+t)$, $k=ct-(p-1)H$ and $\mu=-(p-1)\gamma/((p-2)c)$.
+
+\begin{lemma}\label{lem:caseI-algebra}
+In Case I, $m>0$, $c>0$, $\gamma\ge0$, and
+\begin{align}
+  &\gamma y_t+2ct=pH,\label{eq:I1}\\
+  &c(1-t)+\Phi_y=\gamma,\label{eq:I2}\\
+  &pk+(p-1)\gamma y_t+(p-2)ct=0,\label{eq:I3}\\
+  &2(1+t)\,k=-\bigl((1-t)C+(p-2)(1+t)H\bigr)<0 .\label{eq:I4}
+\end{align}
+\end{lemma}
+
+\begin{proof}
+Subtracting $C\ge0$ from \eqref{eq:caseIhyp} gives $-m(p-2)(1+t)<0$, so $m>0$. Hence
+$\Phi_x=pH+(1-t)m>0$ and $c>0$, and $\gamma\ge0$ because $C\ge0$. The four relations are
+computations from the definitions; in \eqref{eq:I4} the right side is negative because $C\ge0$
+and $H>0$.
+\end{proof}
+
+By \eqref{eq:I1}, $k+\gamma y_t+ct=H$: this is the equality at $(x_t,y_t)$ in
+\cref{prop:caseI}.
+
+\begin{lemma}\label{lem:mu}
+In Case I, $-2\le\mu\le2t$.
+\end{lemma}
+
+\begin{proof}
+From the definitions,
+\begin{align*}
+  (\mu+2)(p-2)c(1+t)&=-2\bigl(p(H-mt)-(p-2)m\bigr),\\
+  (2t-\mu)(p-2)c(1+t)&=2\bigl(t(p-2)\Phi_x+(p-1)C\bigr).
+\end{align*}
+The first right side is positive by \eqref{eq:caseIhyp}. The second is nonnegative: for
+$t\ge0$ both terms are, and for $t<0$ it equals
+$2pH\bigl((p-1)+(p-2)t\bigr)+2(-t)m\bigl(p+(p-2)t\bigr)$, where all factors are positive.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:line}]
+Subtracting \eqref{eq:I3} from \eqref{eq:stationary} gives $X^2-Y^2=t+\mu\tau$ with
+$\tau=Y-y_t$. By \cref{lem:mu} there is $\theta$ with
+$\cos\theta=(\mu+1-t)/(1+t)$. Consider the rank-one line with $\alpha=e^{i\theta}$ and
+$\beta=1$. Then $\abs{y_t+\tau}=Y$, and, as $2x_t=1+t$, $2y_t=1-t$ and $x_t^2-y_t^2=t$,
+\[
+  \abs{x_t+\tau e^{i\theta}}^2=x_t^2+\tau(\mu+1-t)+\tau^2=t+\mu\tau+(y_t+\tau)^2=X^2 .
+\]
+By \cref{prop:tangent}, then \eqref{eq:I2} and \eqref{eq:I1},
+\[
+  \Phi(X,Y)\ge H+\tau(\Phi_x\cos\theta+\Phi_y)=H+\tau(c\mu+\gamma)
+  =k+\gamma Y+c(t+\mu\tau).\qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:psi}]
+$\psi$ extends continuously to $[0,\infty)$ with $\psi(0)=0$, and
+$\psi(\Lambda)=\Lambda^{p-2}(a_0\Lambda^2+a_1\Lambda+a_2)\le0$ for
+$\Lambda=\max\{1,(a_1+\abs{a_2})/\abs{a_0}\}$. So the maximum of $\psi$ on $[0,\Lambda]$ is
+attained at some $l\in(0,\Lambda)$, where $\psi(l)\ge\psi(1)$ and
+$0=\psi'(l)=l^{p-3}\bigl(pa_0l^2+(p-1)a_1l+(p-2)a_2\bigr)$.
+\end{proof}
+
+In the proof of \cref{prop:caseI} in \cref{sec:caseI}, \cref{lem:psi} is applied with
+$a_0=k<0$, $a_1=\gamma y$ and $a_2=c(x^2-y^2)$; dividing the relation
+$pkl^2+(p-1)\gamma yl+(p-2)c(x^2-y^2)=0$ by $l^2$ shows that $(X,Y)=(x/l,y/l)$ satisfies
+\eqref{eq:stationary}.
+
+\subsection{Case II and the proof of \cref{prop:clamp}}
+
+Let $p>2$, $H>0$ and $p(H-mt)+(p-2)m<0$. The mirror image $\Phi^\ast$ is a nonnegative profile,
+$G_{c_0,-m}$ touches it from below at $(x_{-t},y_{-t})$, and it is in Case I. Exchanging $x$
+and $y$ in \cref{prop:caseI} gives, with
+\[
+  c=\frac{(1+t)m-pH}{1-t},\qquad b_1=\frac{2C}{1-t}\ge0,
+\]
+the support $ct-(p-1)H+b_1x+c(x^2-y^2)\le\Phi(x,y)$, with equality at $(x_t,y_t)$.
+
+\begin{proof}[Proof of \cref{prop:clamp}]
+From the definitions,
+\[
+  U-L=\frac{2C}{1-t^2}\ge0,\qquad U-(p-1)m=\frac{pc_0-(p-2)m}{1+t},\qquad
+  (p-1)m-L=\frac{pc_0+(p-2)m}{1-t}.
+\]
+In Case III, $L\le(p-1)m\le U$ and $c^\ast=(p-1)m$; then $b_1=pc_0-(p-2)m$,
+$b_2=pc_0+(p-2)m$ and $c^\ast t-(p-1)H=-(p-1)c_0$, and the support is \eqref{eq:caseIII}.
+Otherwise $p>2$. If $m\ge0$, then $pc_0<(p-2)m$, which is Case I; there $(p-1)m>U$, so
+$c^\ast=U$, $b_1=0$ and $b_2=\gamma$, and the support is that of \cref{prop:caseI}. If $m<0$,
+then $pc_0<-(p-2)m$, which is Case II; there $(p-1)m<L\le U$, so $c^\ast=L$, $b_1=2C/(1-t)$ and
+$b_2=0$. The equality at $(x_t,y_t)$ is a computation.
+\end{proof}
+
+\subsection{The ends}
+
+\begin{proof}[Proof of \eqref{eq:end-support}]
+For $x\ge y\ge0$, \cref{lem:basic}\,(b), from $(\sqrt{x^2-y^2},0)$ to $(x,y)$, and \ref{P1} give
+$\Phi(x,y)\ge h(1)(x^2-y^2)^{p/2}$, and Bernoulli's inequality with the exponent $p/2\ge1$ gives
+$(x^2-y^2)^{p/2}\ge1+\tfrac p2(x^2-y^2-1)$. For $x<y$ the right side of \eqref{eq:end-support}
+is nonpositive, because $h(1)\ge0$, and $\Phi\ge0$. At $(1,0)$ both sides are $h(1)$.
+\end{proof}
+
+The mirror image gives the support $h(-1)\bigl(1-\tfrac p2(x^2-y^2+1)\bigr)$ at $(0,1)$.
+
+\subsection{The theorems}
+
+\begin{proof}[Proof of \cref{thm:main}]
+Let $F$ be as in the theorem, with profile $\Phi$; by \cref{lem:profile}, $\Phi$ is a
+nonnegative profile of degree $p$. At $(x_t,y_t)$ a support of the profile is given by
+\cref{prop:clamp} if $\abs t<1$ and $h(t)>0$, by the zero function if $h(t)=0$, and by
+\eqref{eq:end-support} and its mirror image if $t=\pm1$; the zero function is a support at the
+origin. By scaling there is a support of the profile at every point of the quadrant, and
+\cref{lem:lift} gives a polyaffine support of $F$ at every matrix. By \cref{lem:supports}, $F$
+is polyconvex.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:closed}]
+The hypothesis on $m$ says that $G_{H-mt,m}$ touches $\Phi$ from below at $(x_t,y_t)$. In
+coordinates, $a_{11}=\re z+\re w$ and $a_{22}=\re z-\re w$, so that
+\[
+  P_t(A)=c^\ast t-(p-1)H+b_1\re z+b_2\re w+c^\ast\det A
+\]
+with $b_1$ and $b_2$ as in \cref{prop:clamp}, and $P_t\le F$ as in the proof of \cref{lem:lift}.
+At $\diag(1,t)$, where $(z,w)=(x_t,y_t)$, there is equality.
+\end{proof}
+
+\begin{proof}[Proof of \cref{thm:iff}]
+(b) Let $F$ be isotropic, positively $2$-homogeneous and rank-one convex, of any sign. For
+$\abs t<1$, \eqref{eq:caseIII} is a support without the sign condition. At $t=1$,
+\cref{lem:ends} gives $h(s)\ge h(1)s$, so that
+$h(1)(x^2-y^2)=G_{0,h(1)}(x,y)\le\Phi(x,y)$; this is a support at $(1,0)$ and at the origin. The
+point $t=-1$ is the mirror image. Hence $F$ is polyconvex, as in the proof of \cref{thm:main}.
+The converse is \cref{lem:supports}.
+
+(a) By \cref{thm:main} and \cref{lem:supports} it remains to show that a polyconvex, positively
+$p$-homogeneous $F$ with $p>2$ is nonnegative. Let $P(A)=\langle K,A\rangle+c\det A$ be a
+polyaffine support at $0$; its constant term is $F(0)=0$. For $\lambda>0$,
+\[
+  \lambda\langle K,A\rangle+\lambda^2c\det A=P(\lambda A)\le\lambda^pF(A).
+\]
+Dividing by $\lambda$ and letting $\lambda\downarrow0$ gives $\langle K,A\rangle\le0$ for all
+$A$, so $K=0$. Dividing by $\lambda^2$ and letting $\lambda\downarrow0$ gives $c\det A\le0$ for
+all $A$, so $c=0$. Thus $0=P\le F$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:equiv}]
+Rank-one convexity implies polyconvexity by \cref{thm:main}, polyconvexity implies
+quasiconvexity by \cref{lem:supports}, and a Borel, locally bounded, quasiconvex function is
+rank-one convex~\cite{Morrey1952,Dacorogna2008}.
+\end{proof}

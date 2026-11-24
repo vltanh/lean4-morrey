@@ -1,0 +1,53 @@
+\section{Proofs for Section~\ref{sec:setting}}\label{app:setting}
+
+\begin{proof}[Proof of \cref{lem:coordinates}]
+(a) From $a_{11}=\re z+\re w$, $a_{22}=\re z-\re w$, $a_{21}=\im z+\im w$ and
+$a_{12}=\im w-\im z$ we get $\det A=\abs z^2-\abs w^2$. For $\abs\zeta=1$,
+$\abs{z\zeta+w\bar\zeta}\le\abs z+\abs w$, with equality when $z\zeta$ and $w\bar\zeta$ have the
+same argument; so $\abs A=\abs z+\abs w$.
+
+(b) A nonzero matrix has rank one exactly when its determinant vanishes, that is, by (a), when
+$\abs\alpha=\abs\beta$.
+
+(c) The rotation $R_\vartheta$ is $\zeta\mapsto e^{i\vartheta}\zeta$, so
+$R_\vartheta AR_{\vartheta'}\zeta=e^{i\vartheta}\bigl(ze^{i\vartheta'}\zeta
++w e^{-i\vartheta'}\bar\zeta\bigr)$.
+
+(d) $J$ is $\zeta\mapsto\bar\zeta$, so $JA\zeta=\bar z\bar\zeta+\bar w\zeta$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:profile}]
+\ref{P1} is the homogeneity of $F$. For \ref{P2}, the matrix with coordinates
+$(z_0+\tau\alpha,w_0+\tau\beta)$ is $A_0+\tau B$, where $A_0$ and $B$ have the coordinates
+$(z_0,w_0)$ and $(\alpha,\beta)$. By \cref{lem:coordinates}\,(b), $B$ has rank one, or $B=0$. In
+both cases $\tau\mapsto F(A_0+\tau B)=\Phi(\abs{z_0+\tau\alpha},\abs{w_0+\tau\beta})$ is
+convex.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:supports}]
+(a) Let $P$ be a polyaffine support at $A_0$. The entries and the determinant are null
+Lagrangians: $\int_{(0,1)^2}P(A_0+\nabla\varphi)\,dx=P(A_0)$. Hence
+$F(A_0)=P(A_0)=\int P(A_0+\nabla\varphi)\,dx\le\int F(A_0+\nabla\varphi)\,dx$.
+
+(b) Let $T(A)=(A,\det A)$. If $F=g\circ T$ with $g$ convex, an affine support of $g$ at
+$T(A_0)$, composed with $T$, is a polyaffine support of $F$ at $A_0$. Conversely, let
+$\mathcal S$ be the set of affine functions $a$ on $\M\times\R$ with $a\circ T\le F$; it is
+not empty, since $F$ has a polyaffine support. Let $g=\sup_{a\in\mathcal S}a$. For
+$(X,d)\in\M\times\R$ let $D=\diag(d-\det X,1)$; since
+$\det(X+D)+\det(X-D)=2\det X+2\det D$, the point $(X,d)$ is the midpoint of $T(X+D)$ and
+$T(X-D)$, so that $a(X,d)\le\tfrac12F(X+D)+\tfrac12F(X-D)$ for $a\in\mathcal S$. Thus $g$ is
+finite, and it is convex as a supremum of affine functions. Finally $g\circ T\le F$ by
+definition, and $g(T(A))\ge F(A)$ by the support at $A$.
+
+For the last statement, let $F=g\circ T$ be polyconvex. It is quasiconvex by (a) and (b). It
+is continuous, because a finite convex function on $\M\times\R$ is. It is rank-one convex,
+because by (b) it is a supremum of polyaffine functions, which are affine along rank-one
+lines.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:lift}]
+Choose $u,v\in\C$ of modulus one with $uz_0=\abs{z_0}$ and $vw_0=\abs{w_0}$, and put
+$P(A)=k+b_1\re(uz)+b_2\re(vw)+c\det A$, which is polyaffine. Since $b_1,b_2\ge0$,
+$\re(uz)\le\abs z$ and $\re(vw)\le\abs w$, we get $P(A)\le\Phi(\abs z,\abs w)=F(A)$ by
+\eqref{eq:profilesupport} and \cref{lem:coordinates}\,(a), with equality at $A_0$.
+\end{proof}

@@ -37,7 +37,7 @@ theorem tbt6_meas_append (l l' : List (ℝ × Matrix (Fin d) (Fin m) ℝ)) :
     tbt6Meas (l ++ l') = tbt6Meas l + tbt6Meas l' := by
   simp [tbt6Meas]
 
-theorem tbt6_integrable_meas {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (_hg : Continuous g)
+theorem tbt6_integrable_meas {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (l : List (ℝ × Matrix (Fin d) (Fin m) ℝ)) : Integrable g (tbt6Meas l) := by
   induction l with
   | nil => simp [tbt6_meas_nil]
@@ -47,14 +47,14 @@ theorem tbt6_integrable_meas {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (_hg : Con
     exact (integrable_dirac (by simp)).smul_measure ENNReal.ofReal_ne_top
 
 /-- `∫ g d(Σ w_i δ_{x_i}) = Σ w_i g (x_i)` for nonnegative weights. -/
-theorem tbt6_integral_meas {g : Matrix (Fin d) (Fin m) ℝ → ℝ} (hg : Continuous g)
+theorem tbt6_integral_meas {g : Matrix (Fin d) (Fin m) ℝ → ℝ}
     (l : List (ℝ × Matrix (Fin d) (Fin m) ℝ)) (hl : ∀ p ∈ l, 0 ≤ p.1) :
     ∫ X, g X ∂tbt6Meas l = (l.map fun p => p.1 * g p.2).sum := by
   induction l with
   | nil => simp [tbt6_meas_nil]
   | cons p l ih =>
     rw [tbt6_meas_cons, integral_add_measure
-      ((integrable_dirac (by simp)).smul_measure ENNReal.ofReal_ne_top) (tbt6_integrable_meas hg l),
+      ((integrable_dirac (by simp)).smul_measure ENNReal.ofReal_ne_top) (tbt6_integrable_meas l),
       integral_smul_measure, integral_dirac, ih fun q hq => hl q (List.mem_cons_of_mem _ hq)]
     simp [ENNReal.toReal_ofReal (hl p List.mem_cons_self)]
 
@@ -66,7 +66,7 @@ noncomputable def tbt6Disc : Matrix (Fin d) (Fin m) ℝ → ℝ → List (Matrix
 
 /-- A symmetric split of the atom `c δ_S` along `±h R`. -/
 theorem tbt6_split {μ ν : Measure (Matrix (Fin d) (Fin m) ℝ)} {S R : Matrix (Fin d) (Fin m) ℝ}
-    {c h : ℝ} (_hc : 0 ≤ c) (hμ : IsPrelaminate μ) (hμe : μ = ENNReal.ofReal c • Measure.dirac S + ν)
+    {c h : ℝ} (hμ : IsPrelaminate μ) (hμe : μ = ENNReal.ofReal c • Measure.dirac S + ν)
     (hR : R.rank = 1) (hh : h ≠ 0) :
     IsPrelaminate (ENNReal.ofReal (c / 2) • Measure.dirac (S + h • R) +
       ENNReal.ofReal (c / 2) • Measure.dirac (S - h • R) + ν) := by
@@ -99,7 +99,7 @@ theorem tbt6_chain (Es : List (Matrix (Fin d) (Fin m) ℝ)) (hEs : ∀ E ∈ Es,
     simpa [tbt6Disc, tbt6_meas_nil] using h
   | cons E Es ih =>
     intro S c ν hc h
-    have h1 := tbt6_split hc h rfl (hEs E List.mem_cons_self) one_ne_zero
+    have h1 := tbt6_split h rfl (hEs E List.mem_cons_self) one_ne_zero
     simp only [one_smul] at h1
     have h2 := ih (fun E' hE' => hEs E' (List.mem_cons_of_mem _ hE')) (S + E) (c / 2)
       (ENNReal.ofReal (c / 2) • Measure.dirac (S - E) + ν) (by positivity) (by
@@ -283,12 +283,12 @@ theorem tbt6_list_cubic {f f₀ f₁ f₂ f₃ : Matrix (Fin d) (Fin m) ℝ → 
     exact hw q hq
   have hb : IsBarycentre (tbt6Meas (L.map fun p => (p.1, s • p.2))) 0 := by
     intro i j
-    rw [tbt6_integral_meas ((continuous_apply j).comp (continuous_apply i)) _ hLw, List.map_map]
+    rw [tbt6_integral_meas (g := fun X => X i j) _ hLw, List.map_map]
     have := tbt6_bary_smul L s i j
     simp only [Function.comp_def] at this ⊢
     rw [this, hbary, Matrix.zero_apply, mul_zero]
   have hJ := tbt6_jensen hf hrc (hpre s hs) hb
-  rw [tbt6_integral_meas hf _ hLw, List.map_map] at hJ
+  rw [tbt6_integral_meas (g := f) _ hLw, List.map_map] at hJ
   have he : ∀ p : ℝ × Matrix (Fin d) (Fin m) ℝ, ((fun p : ℝ × Matrix (Fin d) (Fin m) ℝ =>
       p.1 * f p.2) ∘ fun p => (p.1, s • p.2)) p =
       p.1 * (f₀ 0 + s * f₁ p.2 + s ^ 2 * f₂ p.2 + s ^ 3 * f₃ p.2) := by
@@ -329,7 +329,7 @@ theorem tbt6_LH {f f₀ f₁ f₂ f₃ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf
     (by intro p hp; simp at hp; rcases hp with rfl | rfl <;> norm_num) (by norm_num)
     (by simp only [List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, smul_neg]; abel)
     (fun s hs => by
-      have := tbt6_split (c := 1) (S := 0) (h := s) (by norm_num)
+      have := tbt6_split (c := 1) (S := 0) (h := s)
         (IsPrelaminate.dirac (0 : Matrix (Fin d) (Fin m) ℝ)) (tbt6_dirac_eq 0) hR hs
       simp only [zero_add, zero_sub] at this
       simp only [List.map_cons, List.map_nil, tbt6_meas_cons, tbt6_meas_nil, smul_neg]
@@ -414,7 +414,7 @@ theorem tbt6_sym {f f₀ f₁ f₂ f₃ : Matrix (Fin d) (Fin m) ℝ → ℝ} (h
         List.sum_singleton, ← hDb]
       congr 1; module)
     (fun s hs => by
-      have := tbt6_split (h := s * h) hpos.le (hchain s hs) rfl hR (mul_ne_zero hs hh)
+      have := tbt6_split (h := s * h) (hchain s hs) rfl hR (mul_ne_zero hs hh)
       rw [List.map_append, tbt6_meas_append, List.map_cons, List.map_singleton, tbt6_meas_cons,
         tbt6_meas_cons, tbt6_meas_nil, add_zero]
       rw [add_zero] at this

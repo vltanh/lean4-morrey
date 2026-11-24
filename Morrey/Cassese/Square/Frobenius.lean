@@ -158,7 +158,6 @@ theorem square_zigzag_arith {a b c e w ρ p1 p2 pW : ℝ} (pa : 0 ≤ a) (pw : 0
     nlinarith
   linarith
 
-set_option linter.unusedSimpArgs false in
 /-- **Zig-zag concavity of `U`** (proof of Corollary 6.4, TeX lines 2668–2690): for `X, D`
 symmetric and `Y, E` skew-symmetric with `EEᵀ ⪯ D²`, the second-order coefficient of `t ↦ U (X + t D, Y + t E)`, `U (X, Y) = ‖Y‖_{S_4}⁴ − (15/2) ‖YX‖_{S_2}² −
 (95/4) ‖X‖_{S_4}⁴`, is `≤ 0`. In the paper's notation this coefficient is `φ''(0) / 2` with
@@ -195,27 +194,27 @@ theorem square_zigzag {X Y D E : Matrix (Fin n) (Fin n) ℝ} (hX : Xᵀ = X) (hY
     simp only [squareFrob, Matrix.transpose_mul, hY, Matrix.mul_neg, Matrix.neg_mul,
       Matrix.trace_neg, Matrix.mul_assoc]
   -- normal forms of the quantities, as traces of four factors
-  have na2 : a2 = (E * (Y * (Y * E))).trace := by simp only [ha2, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-  have nb2 : b2 = -(D * (Y * (Y * D))).trace := by simp only [hb2, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-  have nc2 : c2 = -(X * (E * (E * X))).trace := by simp only [hc2, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-  have ne2 : e2 = (D * (X * (X * D))).trace := by simp only [he2, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+  have na2 : a2 = (E * (Y * (Y * E))).trace := by simp only [ha2, squareFrob, Matrix.transpose_mul, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.mul_assoc]
+  have nb2 : b2 = -(D * (Y * (Y * D))).trace := by simp only [hb2, squareFrob, Matrix.transpose_mul, hY, hD, Matrix.mul_neg, Matrix.neg_mul, Matrix.trace_neg, Matrix.mul_assoc]
+  have nc2 : c2 = -(X * (E * (E * X))).trace := by simp only [hc2, squareFrob, Matrix.transpose_mul, hX, hE, Matrix.mul_neg, Matrix.neg_mul, Matrix.trace_neg, Matrix.mul_assoc]
+  have ne2 : e2 = (D * (X * (X * D))).trace := by simp only [he2, squareFrob, Matrix.transpose_mul, hX, hD, Matrix.mul_assoc]
   -- (f1), (f2)
   have f1 : squareFrob (Yᵀ * Y) (Eᵀ * E) = a2 := by
-    rw [na2, square_tr_cyc]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    rw [na2, square_tr_cyc]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.mul_assoc]
   have f2 : squareFrob (Xᵀ * X) (Dᵀ * D) = e2 := by
-    rw [ne2, square_tr_cyc]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    rw [ne2, square_tr_cyc]; simp only [squareFrob, Matrix.transpose_mul, hX, hD, Matrix.mul_assoc]
   -- (f4): `⟨YX, ED⟩ = −⟨XD, YE⟩`
-  have q2 : squareFrob (Y * X) (E * D) = -(X * (Y * (E * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+  have q2 : squareFrob (Y * X) (E * D) = -(X * (Y * (E * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, hX, hY, Matrix.mul_neg, Matrix.neg_mul, Matrix.trace_neg, Matrix.mul_assoc]
   have f4 : squareFrob (Y * X) (E * D) = -p2 := by
-    have h2 : p2 = (D * (X * (Y * E))).trace := by simp only [hp2, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have h2 : p2 = (D * (X * (Y * E))).trace := by simp only [hp2, squareFrob, Matrix.transpose_mul, hX, hD, Matrix.mul_assoc]
     rw [q2, h2, square_tr_cyc D]
   -- (f5): `⟨Yᵀ E + Eᵀ Y, Xᵀ D + Dᵀ X⟩ = 2 ⟨YD, EX⟩ + 2 ⟨YX, ED⟩`
   have f5 : pW = 2 * p1 + 2 * squareFrob (Y * X) (E * D) := by
-    have t1 : squareFrob (Yᵀ * E) (Xᵀ * D) = -(E * (Y * (X * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-    have t2 : squareFrob (Yᵀ * E) (Dᵀ * X) = -(E * (Y * (D * X))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-    have t3 : squareFrob (Eᵀ * Y) (Xᵀ * D) = -(Y * (E * (X * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-    have t4 : squareFrob (Eᵀ * Y) (Dᵀ * X) = -(Y * (E * (D * X))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
-    have q1 : p1 = -(D * (Y * (E * X))).trace := by simp only [hp1, squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have t1 : squareFrob (Yᵀ * E) (Xᵀ * D) = -(E * (Y * (X * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hX, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have t2 : squareFrob (Yᵀ * E) (Dᵀ * X) = -(E * (Y * (D * X))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have t3 : squareFrob (Eᵀ * Y) (Xᵀ * D) = -(Y * (E * (X * D))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hX, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have t4 : squareFrob (Eᵀ * Y) (Dᵀ * X) = -(Y * (E * (D * X))).trace := by simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have q1 : p1 = -(D * (Y * (E * X))).trace := by simp only [hp1, squareFrob, Matrix.transpose_mul, hY, hD, Matrix.mul_neg, Matrix.neg_mul, Matrix.trace_neg, Matrix.mul_assoc]
     -- `τ(YEXD) = τ(DYEX)`, `τ(YEDX) = τ(XYED)`, `τ(EYXD) = τ(XYED)`, `τ(EYDX) = τ(DYEX)`
     have c3 : (Y * (E * (X * D))).trace = (D * (Y * (E * X))).trace := by
       rw [square_tr_cyc D]
@@ -234,16 +233,16 @@ theorem square_zigzag {X Y D E : Matrix (Fin n) (Fin n) ℝ} (hX : Xᵀ = X) (hY
   -- (f6), (f7): `‖W‖² ≤ 4a²`, `ρ² ≤ 4e²`
   have f6 : w2 ≤ 4 * a2 := by
     have h := squareFrob_add_self_le (Yᵀ * E) (Eᵀ * Y)
-    have e1 : squareFrob (Yᵀ * E) (Yᵀ * E) = a2 := by rw [na2]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have e1 : squareFrob (Yᵀ * E) (Yᵀ * E) = a2 := by rw [na2]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.mul_assoc]
     have e2' : squareFrob (Eᵀ * Y) (Eᵀ * Y) = a2 := by
-      rw [na2, square_tr_cyc, square_tr_cyc]; (try simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc])
+      rw [na2, square_tr_cyc, square_tr_cyc]; (try simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_neg, hY, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.mul_assoc])
     rw [e1, e2'] at h
     linarith
   have f7 : r2 ≤ 4 * e2 := by
     have h := squareFrob_add_self_le (Xᵀ * D) (Dᵀ * X)
-    have e1 : squareFrob (Xᵀ * D) (Xᵀ * D) = e2 := by rw [ne2]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]
+    have e1 : squareFrob (Xᵀ * D) (Xᵀ * D) = e2 := by rw [ne2]; simp only [squareFrob, Matrix.transpose_mul, hX, hD, Matrix.mul_assoc]
     have e2' : squareFrob (Dᵀ * X) (Dᵀ * X) = e2 := by
-      rw [ne2]; simp only [squareFrob, Matrix.transpose_mul, Matrix.transpose_transpose, Matrix.transpose_neg, hX, hY, hD, hE, Matrix.mul_neg, Matrix.neg_mul, neg_neg, Matrix.trace_neg, Matrix.mul_assoc]; rw [square_tr_cyc, square_tr_cyc]
+      rw [ne2]; simp only [squareFrob, Matrix.transpose_mul, hX, hD, Matrix.mul_assoc]; rw [square_tr_cyc, square_tr_cyc]
     rw [e1, e2'] at h
     linarith
   -- `EEᵀ ⪯ D²`: `b² − a² = tr (Y (D² − EEᵀ) Yᵀ) ≥ 0`, `e² − c² = tr (Xᵀ (D² − EEᵀ) X) ≥ 0`
@@ -271,7 +270,7 @@ theorem square_zigzag {X Y D E : Matrix (Fin n) (Fin n) ℝ} (hX : Xᵀ = X) (hY
       rw [he2, hc2]
       simp only [squareFrob, Matrix.mul_sub, Matrix.sub_mul, Matrix.trace_sub,
         Matrix.transpose_mul, hD, hX, hE, Matrix.neg_mul, Matrix.mul_neg, Matrix.trace_neg,
-        neg_neg, Matrix.mul_assoc]
+        Matrix.mul_assoc]
       rw [c1, c2', square_tr_cyc X]
     linarith
   -- Cauchy–Schwarz

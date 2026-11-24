@@ -1,7 +1,7 @@
 module
 
 public import Morrey.Cassese.TwoByThree.Folklore.Laminate
-public import Morrey.Cassese.TwoByThree.Folklore.Quasiaffine
+public import CalculusOfVariations.Minors.Quasiaffine
 public import Morrey.Cassese.TwoByThree.ExtensionAux
 public import Morrey.Common.External.Dacorogna.Minors
 public import Mathlib.RingTheory.MvPolynomial.EulerIdentity
@@ -13,8 +13,10 @@ public import Mathlib.Algebra.Polynomial.Roots
 "Interestingly, among polynomials, degree four is minimal" (TeX lines 1396–1414): a polynomial of
 degree at most `3` that is rank-one convex at `0` is quasiconvex.
 
-The pieces: `Folklore/Laminate.lean` (finite prelaminates and the limiting argument),
-`Folklore/NullLagrangian.lean` and `Folklore/Quasiaffine.lean` (`3 × 3` minors are quasiaffine).
+The pieces: `Folklore/Laminate.lean` (finite prelaminates and the limiting argument), and the
+quasiaffinity of the `3 × 3` minors (Dacorogna's Theorem 5.20,
+`External.Dacorogna.minor3_quasiaffine`, proved in the package `CalculusOfVariations`,
+`Minors/Quasiaffine.lean`).
 
 Helpers are prefixed `tbt6_`.
 -/
@@ -27,6 +29,49 @@ open scoped Matrix ENNReal
 namespace Cassese
 
 variable {d m : ℕ}
+
+section TestMap
+
+/-! The facts on Lipschitz test maps that the proof of Proposition 5.1 uses, from the package
+`CalculusOfVariations` (`Minors/Quasiaffine.lean`), in Cassese's notation (`jac`, `unitCube`). -/
+
+variable {φ : (Fin m → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ)
+  (h0 : ∀ x ∉ unitCube m, φ x = 0)
+include hφ
+
+/-- For continuous `Φ`, `x ↦ Φ (B + ∇φ (x))` is integrable on every set of finite measure. -/
+private theorem tbt6_integrableOn_cube {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hΦ : Continuous Φ)
+    (B : Matrix (Fin d) (Fin m) ℝ) (s : Set (Fin m → ℝ)) (hs : volume s ≠ ⊤) :
+    IntegrableOn (fun x => Φ (B + jac φ x)) s :=
+  CalculusOfVariations.nl_integrableOn_cube hφ hΦ B s hs
+
+include h0
+
+/-- If `Φ (0) = 0`, then `x ↦ Φ (∇φ (x))` is integrable on `ℝ^m`. -/
+private theorem tbt6_integrable_of_zero {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ} (hΦ : Continuous Φ)
+    (hΦ0 : Φ 0 = 0) : Integrable fun x => Φ (jac φ x) :=
+  CalculusOfVariations.nl_integrable_of_zero hφ h0 hΦ hΦ0
+
+omit hφ in
+/-- If `Φ (0) = 0`, the integral of `x ↦ Φ (∇φ (x))` over the open cube is its integral over
+`ℝ^m`. -/
+private theorem tbt6_setIntegral_cube_of_zero {Φ : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hΦ0 : Φ 0 = 0) : ∫ x in unitCube m, Φ (jac φ x) = ∫ x, Φ (jac φ x) :=
+  CalculusOfVariations.nl_setIntegral_cube_of_zero h0 hΦ0
+
+/-- `∫ ∂_k φ_i = 0`. -/
+private theorem tbt6_integral_jac (i : Fin d) (k : Fin m) : ∫ x, jac φ x i k = 0 :=
+  CalculusOfVariations.nl_integral_grad hφ h0 i k
+
+/-- `3 × 3` minors are quasiaffine (Dacorogna, Theorem 5.20,
+`External.Dacorogna.minor3_quasiaffine`): `∫_{(0,1)^m} det ((A + ∇φ)_{rc}) = det (A_{rc})`. -/
+private theorem tbt6_minor3_quasiaffine (A : Matrix (Fin d) (Fin m) ℝ) (r : Fin 3 ↪o Fin d)
+    (c : Fin 3 ↪o Fin m) :
+    ∫ x in unitCube m, External.Dacorogna.minor (A + jac φ x) r c =
+      External.Dacorogna.minor A r c :=
+  External.Dacorogna.minor3_quasiaffine hφ h0 A r c
+
+end TestMap
 
 /-- `A ↦ P (A)` for a polynomial `P` in the entries. -/
 noncomputable def tbt6Ev (P : MvPolynomial (Fin d × Fin m) ℝ) (A : Matrix (Fin d) (Fin m) ℝ) : ℝ :=
@@ -180,7 +225,7 @@ theorem tbt6_minors_extract {N : ℕ} {f₃ : Matrix (Fin d) (Fin m) ℝ → ℝ
 
 /-- **Proposition 5.1** (`cs-prop5.1`): a polynomial `P : ℝ^{d×m} → ℝ` of degree at most `3` that
 is rank-one convex at `0` is quasiconvex. The proof uses Dacorogna's Theorem 5.20 (rank-one
-affine functions are affine combinations of minors), which is proved in the project
+affine functions are linear combinations of minors), which is proved
 (`External.Dacorogna.rankOneAffineMinors_holds`), so the statement has no hypothesis.
 
 Proof, after the paper (TeX lines 1402–1414). Write `P = P₀ + P₁ + P₂ + P₃` (homogeneous parts,
@@ -199,19 +244,19 @@ So `∫ P (A + ∇φ) ≥ P (A)`.
 Departure from the paper. Inventory E9: "`Q` is rank-one affine at `0`. It follows that `Q`
 is rank-one affine" skips an argument; it is supplied by a prelaminate centred at `0` with an atom
 at an arbitrary `A` (symmetric splittings along the rank-one pieces of `A`), split once more along
-`±h R`, so that `Q (A + h R) + Q (A − h R) = 2 Q (A)` (reason 1, a repair). The paper's "`P − Q`
-is rank-one convex, since `P'' (0) = (P − Q)'' (0)`" is obtained in the same way, as the
-Legendre–Hadamard condition for `P₂`.
+`±h R`, so that `Q (A + h R) + Q (A − h R) = 2 Q (A)` (reason 1, a repair). The paper's "Since
+`P'' (0) = (P − Q)'' (0)`, the quadratic polynomial `P − Q` is rank-one convex" is obtained in the
+same way, as the Legendre–Hadamard condition for `P₂`.
 
-Not a departure: the paper concludes from "`Q` is a linear combination of minors" that `P` is
+Not a departure: the paper concludes from `Q` being "a linear combination of minors" that `P` is
 quasiconvex, which uses that the `3 × 3` minors are quasiaffine (null Lagrangians). Dacorogna's
 Theorem 5.20, which the paper cites at this step, is the full equivalence "quasiaffine ⇔ rank-one
 affine ⇔ affine combination of minors"; the proposition `External.Dacorogna.RankOneAffineMinors`
 records only the direction "rank-one affine ⇒ affine combination of minors", and the direction
-"minors ⇒ quasiaffine" of the same cited theorem is proved here, by the standard divergence
-identities and mollification (`tbt6_minor3_quasiaffine`,
-`Morrey/Cassese/TwoByThree/Folklore/NullLagrangian.lean`). This proves part of the cited result;
-the argument of the proposition is the paper's. -/
+"minors ⇒ quasiaffine" of the same cited theorem is `External.Dacorogna.minor3_quasiaffine`, by
+the divergence identities and density of Dacorogna's Theorem 8.35 (in the package
+`CalculusOfVariations`). This proves part of the cited result; the argument of the proposition is
+the paper's. -/
 theorem proposition5_1
     (P : MvPolynomial (Fin d × Fin m) ℝ) (hP : P.totalDegree ≤ 3)
     (hrc : RankOneConvexAt (fun A => MvPolynomial.eval (fun ij => A ij.1 ij.2) P) 0) :
@@ -242,7 +287,7 @@ theorem proposition5_1
   have hRA : CalculusOfVariations.RankOneAffine (fk 3) :=
     tbt6_rankOneAffine (hcont 3) fun A R hR h =>
       tbt6_sym hf hrc hsum h0 h1 (hhom 2) (hhom 3) A hR h
-  obtain ⟨a, ha⟩ := External.Dacorogna.rankOneAffineMinors_holds d m (fk 3) (hcont 3) hRA
+  obtain ⟨a, ha⟩ := External.Dacorogna.rankOneAffineMinors_holds d m (fk 3) hRA
   -- the quadratic part is a quasiconvex quadratic form
   set c : Fin d × Fin m → Fin d × Fin m → ℝ := fun ij kl =>
     (MvPolynomial.pderiv kl (MvPolynomial.pderiv ij

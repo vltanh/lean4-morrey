@@ -3,6 +3,7 @@ module
 public import Morrey.Cassese.Toolkit
 public import Morrey.Cassese.Bridges
 public import Morrey.Common.External.Burkholder.ScalarFunction
+public import Morrey.Cassese.Hypotheses
 public import Morrey.Cassese.Lifting
 public import Mathlib.MeasureTheory.Function.LpSpace.Complete
 public import Mathlib.MeasureTheory.Measure.Count
@@ -10,6 +11,7 @@ public import Mathlib.Analysis.SpecialFunctions.Exp
 public import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 public import Mathlib.Analysis.SpecialFunctions.Sqrt
 public import Mathlib.Analysis.Convex.Deriv
+public import Mathlib.Analysis.Convex.FunctionTopology
 public import Mathlib.Analysis.Normed.Lp.PiLp
 public import Mathlib.Probability.UniformOn
 public import Mathlib.Probability.Martingale.Basic
@@ -23,6 +25,7 @@ public import Mathlib.LinearAlgebra.Complex.FiniteDimensional
 public import Mathlib.Analysis.Calculus.BumpFunction.FiniteDimension
 public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 public import Mathlib.MeasureTheory.Group.Integral
+public import Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify
 
 /-!
 # Section 4: Morrey's problem in `ℝ^{2×m}`
@@ -680,24 +683,26 @@ theorem equation10 {p q : ℝ} (hp : 1 < p) (hq : 1 < q) (n : ℕ) :
     _ = c := ENNReal.ofReal_toReal hctop
 
 /-- **Finiteness of UMD_{ℂ,p} (ℓ_q)** (`cs-ellq-umd`, lines 991–992, "by Proposition 2.7"):
-for `p, q ∈ (1, ∞)`, `UMD_{ℂ,p} (ℓ_q) < ∞`. Conditional on Proposition 2.7 (1), (3), (5):
-`ℓ_q` is UMD (Pisier), hence `UMD_p` (extrapolation, HNVW), hence complex `UMD_p`
-(Yaroslavtsev). -/
-theorem umdEllq_lt_top (hP : PisierLpUMD) (hH : HNVWExtrapolation)
-    (hY : YaroslavtsevComplexUMD) {p q : ℝ} (hp : 1 < p) (hq : 1 < q) :
+for `p, q ∈ (1, ∞)`, `UMD_{ℂ,p} (ℓ_q) < ∞`. From Proposition 2.7 (1), (3), (5), which are proved
+(`Morrey/Cassese/Hypotheses.lean`): `ℓ_q` is UMD (Pisier, `pisierLpUMD_holds`), hence `UMD_p`
+(extrapolation, HNVW, `hnvwExtrapolation_holds`), hence complex `UMD_p` (Yaroslavtsev,
+`yaroslavtsevComplexUMD_holds`). -/
+theorem umdEllq_lt_top {p q : ℝ} (hp : 1 < p) (hq : 1 < q) :
     umdEllq p q < ⊤ := by
   rw [umdEllq, dite_eq_left hq.le]
   have : Fact (1 ≤ ENNReal.ofReal q) := ⟨one_le_ofReal_of_one_le hq.le⟩
   have hq' : (1 : ℝ≥0∞) < ENNReal.ofReal q := by simpa using hq
   -- Pisier: `ℓ_q` is `UMD_q`
-  have h1 := hP (ENNReal.ofReal q) hq' ENNReal.ofReal_ne_top ℕ (Measure.count : Measure ℕ)
+  have h1 := pisierLpUMD_holds (ENNReal.ofReal q) hq' ENNReal.ofReal_ne_top ℕ
+    (Measure.count : Measure ℕ)
   rw [ENNReal.toReal_ofReal (by linarith)] at h1
   -- HNVW: hence `UMD_p`
-  have h2 := (hH (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ)) (fun x => ‖x‖)
-    (fun x y => norm_add_le x y) (fun c x => by rw [norm_smul, Real.norm_eq_abs])
+  have h2 := (hnvwExtrapolation_holds (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ))
+    (fun x => ‖x‖) (fun x y => norm_add_le x y) (fun c x => by rw [norm_smul, Real.norm_eq_abs])
     ⟨1, 1, one_pos, one_pos, fun x => by simp⟩).1 ⟨q, hq, h1⟩ p hp
   -- Yaroslavtsev: hence complex `UMD_p`
-  have h3 := (hY (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ)) p hp).2
+  have h3 := (yaroslavtsevComplexUMD_holds (Lp ℂ (ENNReal.ofReal q) (Measure.count : Measure ℕ))
+    p hp).2
   calc _ ≤ _ := h3
     _ < ⊤ := ENNReal.mul_lt_top ENNReal.ofReal_lt_top h2
 
@@ -1661,66 +1666,41 @@ noncomputable def zigzagU {n : ℕ} (x y : Fin n → ℂ) : ℝ :=
 noncomputable def explicitG (n : ℕ) (A : Matrix (Fin 2) (Fin (2 * n)) ℝ) : ℝ :=
   -zigzagU (fun j => conj (wirtP A j)) (wirtQ A)
 
-/-! ### Proposition 4.2: the explicit rank-one convex minorant -/
+/-! ### Proposition 4.2: the explicit rank-one convex minorant
 
-/-- A concave function on `ℝ` has a supporting line at every point. -/
-theorem twoByM_concave_supporting {κ : ℝ → ℝ} (hκ : ConcaveOn ℝ Set.univ κ) (t₀ : ℝ) :
-    ∃ m : ℝ, ∀ t, κ t ≤ κ t₀ + m * (t - t₀) := by
-  have hg : ConvexOn ℝ Set.univ (-κ) := hκ.neg
-  have hint : t₀ ∈ interior (Set.univ : Set ℝ) := by simp
-  set d := derivWithin (-κ) (Set.Ioi t₀) t₀
-  refine ⟨-d, fun t => ?_⟩
-  rcases lt_trichotomy t t₀ with ht | rfl | ht
-  · -- left of `t₀`: `slope (−κ) t t₀ ≤ slope (−κ) t₀ z` for every `z > t₀`, so `≤ d`
-    have hd : d = sInf (slope (-κ) t₀ '' {y | y ∈ Set.univ ∧ t₀ < y}) :=
-      hg.rightDeriv_eq_sInf_slope_of_mem_interior hint
-    have hle : slope (-κ) t t₀ ≤ d := by
-      rw [hd]
-      refine le_csInf ⟨_, ⟨t₀ + 1, ⟨trivial, by linarith⟩, rfl⟩⟩ ?_
-      rintro _ ⟨z, ⟨-, hz⟩, rfl⟩
-      have := hg.slope_mono_adjacent (Set.mem_univ t) (Set.mem_univ z) ht hz
-      rw [slope_def_field, slope_def_field]
-      exact this
-    rw [slope_def_field] at hle
-    have h1 : 0 < t₀ - t := by linarith
-    rw [div_le_iff₀ h1] at hle
-    simp only [Pi.neg_apply] at hle
-    nlinarith
-  · simp
-  · have hle := hg.rightDeriv_le_slope_of_mem_interior hint (Set.mem_univ t) ht
-    rw [slope_def_field] at hle
-    have h1 : 0 < t - t₀ := by linarith
-    rw [le_div_iff₀ h1] at hle
-    simp only [Pi.neg_apply] at hle
-    nlinarith
+The zig-zag concavity of `U` (TeX 1286–1352) is proved by the paper's mollification. For
+`b (t) = B (x + t h)` and `r (t) = R (x + t h, y + t ε h)`, and a mollifier
+`ρ_η = (ContDiffBump.ofRadius η).normed volume` on `ℝ`, the mollifications
+`b_η = ρ_η ⋆ b`, `r_η = ρ_η ⋆ r` satisfy (17) (`twoByM_eq17`); `b_η^{1/6}` is convex by Minkowski's
+inequality (`twoByM_convexOn_mollify_Bq`) and `b_η > 0` (`twoByM_mollify_Bq_pos`), so (18) holds
+for `b_η` (`twoByM_eq18`); the paper's computation makes `√r_η − 5⁴ √b_η` concave
+(`twoByM_sqrt_concave`), and the limit `η ↓ 0` (`twoByM_concaveOn_of_mollify`) gives the concavity
+of `U (x + t h, y + t ε h)` (`twoByM_zigzag`). The same steps with the exponent `q` give the
+zig-zag concavity of Remark 4.5 (`twoByM_zigzagq`). -/
 
-/-- A function with a supporting line at every point is concave. -/
-theorem twoByM_concave_of_supporting {f : ℝ → ℝ}
-    (h : ∀ t₀, ∃ m : ℝ, ∀ t, f t ≤ f t₀ + m * (t - t₀)) : ConcaveOn ℝ Set.univ f := by
-  refine ⟨convex_univ, fun x _ y _ a b ha hb hab => ?_⟩
-  obtain ⟨m, hm⟩ := h (a • x + b • y)
-  have h1 := hm x
-  have h2 := hm y
-  simp only [smul_eq_mul] at *
-  have : a * (x - (a * x + b * y)) + b * (y - (a * x + b * y)) = 0 := by
-    rw [show b = 1 - a by linarith]; ring
-  calc a * f x + b * f y ≤ a * (f (a * x + b * y) + m * (x - (a * x + b * y))) +
-        b * (f (a * x + b * y) + m * (y - (a * x + b * y))) :=
-        add_le_add (mul_le_mul_of_nonneg_left h1 ha) (mul_le_mul_of_nonneg_left h2 hb)
-    _ = f (a * x + b * y) := by linear_combination f (a * x + b * y) * hab + m * this
+/-- `B_q (x) = ‖x‖_{ℓ_q}^q`: `B_6` is the `B` of the proof of Proposition 4.2 (TeX 1246,
+`twoByM_burkholderB_eq`), and `B_q` that of Remark 4.5. -/
+noncomputable def twoByM_Bq {n : ℕ} (q : ℝ) (x : Fin n → ℂ) : ℝ :=
+  ∑ j, ‖x j‖ ^ q
 
-/-- The tangent line of a differentiable concave function lies above it. -/
-theorem twoByM_concave_tangent {f : ℝ → ℝ} {f' : ℝ} {t₀ : ℝ} (hf : ConcaveOn ℝ Set.univ f)
-    (hd : HasDerivAt f f' t₀) (t : ℝ) : f t ≤ f t₀ + f' * (t - t₀) := by
-  rcases lt_trichotomy t t₀ with ht | rfl | ht
-  · have := hf.le_slope_of_hasDerivAt (Set.mem_univ t) (Set.mem_univ t₀) ht hd
-    rw [slope_def_field, le_div_iff₀ (by linarith)] at this
-    nlinarith
-  · simp
-  · have := hf.slope_le_of_hasDerivAt (Set.mem_univ t₀) (Set.mem_univ t) ht hd
-    rw [slope_def_field, div_le_iff₀ (by linarith)] at this
-    nlinarith
+theorem twoByM_Bq_nonneg {n : ℕ} (q : ℝ) (x : Fin n → ℂ) : 0 ≤ twoByM_Bq q x :=
+  Finset.sum_nonneg fun _ _ => by positivity
 
+/-- `‖z‖_{ℓ_q}^p = B_q (z)^{p/q}`. -/
+theorem twoByM_lqNorm_rpow {n : ℕ} {q : ℝ} (p : ℝ) (z : Fin n → ℂ) :
+    lqNorm q z ^ p = twoByM_Bq q z ^ (p / q) := by
+  rw [lqNorm, twoByM_Bq, ← Real.rpow_mul (Finset.sum_nonneg fun j _ => by positivity)]
+  congr 1; ring
+
+/-- `B = B_6`. -/
+theorem twoByM_burkholderB_eq {n : ℕ} (z : Fin n → ℂ) : burkholderB z = twoByM_Bq 6 z := by
+  refine Finset.sum_congr rfl fun j _ => ?_
+  rw [show (6 : ℝ) = ((6 : ℕ) : ℝ) by norm_num, Real.rpow_natCast]
+
+theorem twoByM_lqNorm_eq_norm {n : ℕ} (q : ℝ) (hq : 0 < q) (z : Fin n → ℂ) :
+    lqNorm q z = ‖WithLp.toLp (ENNReal.ofReal q) z‖ := by
+  rw [PiLp.norm_eq_sum (by rw [ENNReal.toReal_ofReal hq.le]; exact hq), ENNReal.toReal_ofReal hq.le]
+  rfl
 
 /-- The first two derivatives of `√g` for a positive twice differentiable `g`. -/
 theorem twoByM_sqrt_hasDerivAt {g g' g'' : ℝ → ℝ} (hg0 : ∀ t, 0 < g t)
@@ -1736,8 +1716,9 @@ theorem twoByM_sqrt_hasDerivAt {g g' g'' : ℝ → ℝ} (hg0 : ∀ t, 0 < g t)
   convert (hg' t).div ((h1 t).const_mul 2) (by positivity) using 1
   field_simp
 
-/-- Inequality (18) of the proof of Proposition 4.2, for a positive twice differentiable `b`
-with `b^{1/6}` convex: differentiating `b^{1/6}` twice gives `5 b'² ≤ 6 b b''`. -/
+/-- Inequality (18) of the proof of Proposition 4.2 (TeX 1317–1326), for a positive twice
+differentiable `b` with `b^{1/6}` convex: differentiating `b^{1/6}` twice gives
+`5 b'² ≤ 6 b b''`. -/
 theorem twoByM_eq18 {b b' b'' : ℝ → ℝ} (hb0 : ∀ t, 0 < b t) (hb : ∀ t, HasDerivAt b (b' t) t)
     (hb' : ∀ t, HasDerivAt b' (b'' t) t)
     (hconv : ConvexOn ℝ Set.univ fun t => b t ^ (1 / 6 : ℝ)) (t : ℝ) :
@@ -1773,66 +1754,51 @@ theorem twoByM_eq18 {b b' b'' : ℝ → ℝ} (hb0 : ∀ t, 0 < b t) (hb : ∀ t,
   have := (mul_nonneg_iff_of_pos_left hpos).1 this
   linarith
 
-/-- The composition step of the proof of Proposition 4.2: if `κ = r − 2·5⁶ b` is concave,
-`r ≥ 5⁶ b`, and `b > 0` is twice differentiable with (18), then `√r − 5⁴ √b` is concave.
-
-Mechanics (the regularization; the paper's claims (17), (18) and its computation
-`(√r)'' ≤ 5⁴ (√b)''` are kept): the paper mollifies `r` and `b` and lets the mollification
-parameter tend to `0`. Here, at each point `t₀`, `r` is replaced by its smooth
-majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`, `m` a supergradient of `κ` at `t₀`; `r̃` satisfies
-(17) (`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`), the paper's computation gives `(√r̃)'' ≤ 5⁴ (√b)''`, so
-`√r̃ − 5⁴ √b` is concave, touches `√r − 5⁴ √b` from above at `t₀`, and its tangent at `t₀` is a
-supporting line of `√r − 5⁴ √b`. -/
-theorem twoByM_sqrt_concave {κ b b' b'' : ℝ → ℝ} (hκ : ConcaveOn ℝ Set.univ κ)
+/-- The computation of the proof of Proposition 4.2 (TeX 1328–1346), for twice differentiable
+`r` and `b > 0` with (17) `r ≥ 5⁶ b`, `r'' ≤ 2·5⁶ b''` and (18) `5 b'² ≤ 6 b b''`:
+`(√r)'' = r'' / (2 √r) − r'² / (4 r^{3/2}) ≤ 2·5⁶ b'' / (2·5³ √b) = 5³ b'' / √b ≤ 5⁴ (√b)''`
+(the first inequality uses `r'' ≤ 2·5⁶ b''`, `b'' ≥ 0` and `√r ≥ 5³ √b`; the last is (18) in the
+form `b'' / √b ≤ 5 (√b)''`), so `√r − 5⁴ √b` has a nonpositive second derivative and is concave.
+In the proof of Proposition 4.2 it is applied to `r_η`, `b_η`. -/
+theorem twoByM_sqrt_concave {r r' r'' b b' b'' : ℝ → ℝ}
+    (hr : ∀ t, HasDerivAt r (r' t) t) (hr' : ∀ t, HasDerivAt r' (r'' t) t)
     (hb0 : ∀ t, 0 < b t) (hb : ∀ t, HasDerivAt b (b' t) t) (hb' : ∀ t, HasDerivAt b' (b'' t) t)
-    (h18 : ∀ t, 5 * b' t ^ 2 ≤ 6 * b t * b'' t)
-    (hr : ∀ t, 5 ^ 6 * b t ≤ κ t + 2 * 5 ^ 6 * b t) :
-    ConcaveOn ℝ Set.univ fun t => √(κ t + 2 * 5 ^ 6 * b t) - 5 ^ 4 * √(b t) := by
-  refine twoByM_concave_of_supporting fun t₀ => ?_
-  obtain ⟨m, hm⟩ := twoByM_concave_supporting hκ t₀
-  set r : ℝ → ℝ := fun t => κ t₀ + m * (t - t₀) + 2 * 5 ^ 6 * b t with hr_def
-  set r' : ℝ → ℝ := fun t => m + 2 * 5 ^ 6 * b' t
-  set r'' : ℝ → ℝ := fun t => 2 * 5 ^ 6 * b'' t
-  have hrr : ∀ t, κ t + 2 * 5 ^ 6 * b t ≤ r t := fun t => by simp only [r]; linarith [hm t]
-  have hr0 : ∀ t, 0 < r t := fun t => by
-    have := hb0 t; linarith [hr t, hrr t]
-  have hrd : ∀ t, HasDerivAt r (r' t) t := fun t => by
-    have := ((((hasDerivAt_id' t).sub_const t₀).const_mul m).const_add (κ t₀)).fun_add
-      ((hb t).const_mul (2 * 5 ^ 6))
-    convert this using 1; simp only [r']; ring
-  have hrd' : ∀ t, HasDerivAt r' (r'' t) t := fun t => by
-    have := ((hb' t).const_mul (2 * 5 ^ 6)).const_add m
-    convert this using 1
-  -- the smooth comparison function `√r̃ − 5⁴ √b`
+    (h17 : ∀ t, 5 ^ 6 * b t ≤ r t) (h17' : ∀ t, r'' t ≤ 2 * 5 ^ 6 * b'' t)
+    (h18 : ∀ t, 5 * b' t ^ 2 ≤ 6 * b t * b'' t) :
+    ConcaveOn ℝ Set.univ fun t => √(r t) - 5 ^ 4 * √(b t) := by
+  have hr0 : ∀ t, 0 < r t := fun t => by have := hb0 t; linarith [h17 t]
   set F' : ℝ → ℝ := fun t => r' t / (2 * √(r t)) - 5 ^ 4 * (b' t / (2 * √(b t)))
   set F'' : ℝ → ℝ := fun t => (r'' t - 2 * (r' t / (2 * √(r t))) ^ 2) / (2 * √(r t)) -
     5 ^ 4 * ((b'' t - 2 * (b' t / (2 * √(b t))) ^ 2) / (2 * √(b t)))
   have hF : ∀ t, HasDerivAt (fun t => √(r t) - 5 ^ 4 * √(b t)) (F' t) t := fun t =>
-    (twoByM_sqrt_hasDerivAt hr0 hrd hrd' t).1.sub
+    (twoByM_sqrt_hasDerivAt hr0 hr hr' t).1.sub
       ((twoByM_sqrt_hasDerivAt hb0 hb hb' t).1.const_mul _)
   have hF' : ∀ t, HasDerivAt F' (F'' t) t := fun t =>
-    (twoByM_sqrt_hasDerivAt hr0 hrd hrd' t).2.sub
+    (twoByM_sqrt_hasDerivAt hr0 hr hr' t).2.sub
       ((twoByM_sqrt_hasDerivAt hb0 hb hb' t).2.const_mul _)
-  -- `F'' ≤ 0`: the paper's chain `(√r̃)'' ≤ r̃'' / (2√r̃) ≤ 5³ b'' / √b ≤ 5⁴ (√b)''`
+  -- `F'' ≤ 0`: the paper's chain `(√r)'' ≤ 5³ b'' / √b ≤ 5⁴ (√b)''`
   have hF''0 : ∀ t, F'' t ≤ 0 := fun t => by
     have hbt := hb0 t
     have hβ : 0 < √(b t) := Real.sqrt_pos.2 hbt
     have hβ2 : √(b t) ^ 2 = b t := Real.sq_sqrt hbt.le
     have hs : 0 < √(r t) := Real.sqrt_pos.2 (hr0 t)
+    -- `√r ≥ 5³ √b`, from `r ≥ 5⁶ b`
     have hsβ : 125 * √(b t) ≤ √(r t) := by
       rw [show (125 : ℝ) = √(5 ^ 6) by
         rw [show (5 : ℝ) ^ 6 = 125 ^ 2 by norm_num, Real.sqrt_sq (by norm_num)],
         ← Real.sqrt_mul (by norm_num)]
-      exact Real.sqrt_le_sqrt (by linarith [hr t, hrr t])
+      exact Real.sqrt_le_sqrt (h17 t)
     have hb''0 : 0 ≤ b'' t := by
       have := h18 t
       nlinarith [sq_nonneg (b' t)]
     have e1 : (r'' t - 2 * (r' t / (2 * √(r t))) ^ 2) / (2 * √(r t)) ≤ 125 * b'' t / √(b t) := by
       calc (r'' t - 2 * (r' t / (2 * √(r t))) ^ 2) / (2 * √(r t)) ≤ r'' t / (2 * √(r t)) := by
             gcongr; nlinarith [sq_nonneg (r' t / (2 * √(r t)))]
-        _ = 5 ^ 6 * b'' t / √(r t) := by simp only [r'']; field_simp
+        _ ≤ 2 * 5 ^ 6 * b'' t / (2 * √(r t)) := by gcongr; exact h17' t
+        _ = 5 ^ 6 * b'' t / √(r t) := by field_simp
         _ ≤ 5 ^ 6 * b'' t / (125 * √(b t)) := by gcongr
         _ = 125 * b'' t / √(b t) := by field_simp; ring
+    -- `5³ b'' / √b ≤ 5⁴ (√b)''`, that is (18)
     have e2 : 125 * b'' t / √(b t) ≤
         5 ^ 4 * ((b'' t - 2 * (b' t / (2 * √(b t))) ^ 2) / (2 * √(b t))) := by
       rw [div_le_iff₀ hβ]
@@ -1846,45 +1812,210 @@ theorem twoByM_sqrt_concave {κ b b' b'' : ℝ → ℝ} (hκ : ConcaveOn ℝ Set
       nlinarith
     simp only [F'']
     linarith
-  have hconc : ConcaveOn ℝ Set.univ fun t => √(r t) - 5 ^ 4 * √(b t) :=
-    concaveOn_of_hasDerivWithinAt2_nonpos convex_univ
-      (fun t _ => (hF t).continuousAt.continuousWithinAt) (fun t _ => (hF t).hasDerivWithinAt)
-      (fun t _ => (hF' t).hasDerivWithinAt) fun t _ => hF''0 t
-  refine ⟨F' t₀, fun t => ?_⟩
-  have htan := twoByM_concave_tangent hconc (hF t₀) t
-  have hle : √(κ t + 2 * 5 ^ 6 * b t) ≤ √(r t) := Real.sqrt_le_sqrt (hrr t)
-  have heq : r t₀ = κ t₀ + 2 * 5 ^ 6 * b t₀ := by simp only [r]; ring
-  rw [heq] at htan
+  exact concaveOn_of_hasDerivWithinAt2_nonpos convex_univ
+    (fun t _ => (hF t).continuousAt.continuousWithinAt) (fun t _ => (hF t).hasDerivWithinAt)
+    (fun t _ => (hF' t).hasDerivWithinAt) fun t _ => hF''0 t
+
+/-! #### The mollification of the zig-zag step (TeX 1299–1351)
+
+`ρ_η = φ.normed volume` for a bump `φ : ContDiffBump (0 : ℝ)` (the paper's nonnegative smooth
+mollifier; for the limit `η ↓ 0`, `φ = ContDiffBump.ofRadius η`), and `g_η = ρ_η ⋆ g` the mollification
+(`Morrey.Common.Basic.Analysis.Calculus.BumpFunction.Mollify`). -/
+
+section Mollify
+
+open ContinuousLinearMap
+open scoped Convolution
+
+/-- A smooth function on `ℝ` has its first two derivatives everywhere. -/
+theorem twoByM_hasDerivAt_deriv {f : ℝ → ℝ} (hf : ContDiff ℝ ((⊤ : ℕ∞) : WithTop ℕ∞) f)
+    (t : ℝ) : HasDerivAt f (deriv f t) t ∧ HasDerivAt (deriv f) (deriv (deriv f) t) t :=
+  ⟨(hf.differentiable (by simp)).differentiableAt.hasDerivAt,
+    ((contDiff_infty_iff_deriv.1 hf).2.differentiable (by simp)).differentiableAt.hasDerivAt⟩
+
+/-- (17) (`eq:mollified-inequalities`, TeX 1296–1307): for continuous `r`, `b` with `r − 2 c b`
+concave and `r ≥ c b`, the mollifications satisfy `r_η ≥ c b_η` (the mollification is monotone)
+and `r_η'' ≤ 2 c b_η''`: `(r − 2 c b)_η = r_η − 2 c b_η` is smooth and concave (the mollification
+of a concave function is concave), so its derivative is antitone and its second derivative is
+`≤ 0`. -/
+theorem twoByM_eq17 {r b : ℝ → ℝ} {c : ℝ} (hr : Continuous r) (hb : Continuous b)
+    (hκ : ConcaveOn ℝ Set.univ fun t => r t - 2 * c * b t) (hrb : ∀ t, c * b t ≤ r t)
+    (φ : ContDiffBump (0 : ℝ)) (t : ℝ) :
+    c * (φ.normed volume ⋆[lsmul ℝ ℝ, volume] b) t ≤
+        (φ.normed volume ⋆[lsmul ℝ ℝ, volume] r) t ∧
+      deriv (deriv (φ.normed volume ⋆[lsmul ℝ ℝ, volume] r)) t ≤
+        2 * c * deriv (deriv (φ.normed volume ⋆[lsmul ℝ ℝ, volume] b)) t := by
+  set rη := φ.normed volume ⋆[lsmul ℝ ℝ, volume] r
+  set bη := φ.normed volume ⋆[lsmul ℝ ℝ, volume] b
+  constructor
+  · have := φ.normed_convolution_mono (μ := volume) (g := fun t => c * b t)
+      (continuous_const.mul hb).locallyIntegrable hr.locallyIntegrable hrb t
+    rwa [φ.normed_convolution_const_mul] at this
+  -- `κ_η = (r − 2 c b)_η = r_η − 2 c b_η` is concave
+  have hκη : (φ.normed volume ⋆[lsmul ℝ ℝ, volume] fun t => r t - 2 * c * b t) =
+      fun t => rη t - 2 * c * bη t := by
+    have := φ.normed_convolution_sub (μ := volume) (g' := fun t => 2 * c * b t)
+      hr.locallyIntegrable (continuous_const.mul hb).locallyIntegrable
+    rw [φ.normed_convolution_const_mul] at this
+    exact this
+  have hconc : ConcaveOn ℝ Set.univ fun t => rη t - 2 * c * bη t := by
+    rw [← hκη]
+    exact φ.normed_convolution_concaveOn (hr.sub (continuous_const.mul hb)) hκ
+  have hR := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hr.locallyIntegrable)
+  have hB := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hb.locallyIntegrable)
+  have hd : ∀ s, HasDerivAt (fun t => rη t - 2 * c * bη t) (deriv rη s - 2 * c * deriv bη s) s :=
+    fun s => (hR s).1.sub ((hB s).1.const_mul _)
+  -- the derivative of the concave `κ_η` is antitone, so `κ_η'' ≤ 0`
+  have hanti : Antitone fun s => deriv rη s - 2 * c * deriv bη s := by
+    have := hconc.antitoneOn_deriv fun s _ => (hd s).differentiableAt
+    rw [show deriv (fun t => rη t - 2 * c * bη t) = fun s => deriv rη s - 2 * c * deriv bη s from
+      funext fun s => (hd s).deriv] at this
+    exact antitoneOn_univ.1 this
+  have h2 := hanti.deriv_nonpos (x := t)
+  have h3 : HasDerivAt (fun s => deriv rη s - 2 * c * deriv bη s)
+      (deriv (deriv rη) t - 2 * c * deriv (deriv bη) t) t :=
+    (hR t).2.sub ((hB t).2.const_mul (2 * c))
+  rw [h3.deriv] at h2
   linarith
 
-
-theorem twoByM_lqNorm_eq_norm {n : ℕ} (q : ℝ) (hq : 0 < q) (z : Fin n → ℂ) :
-    lqNorm q z = ‖WithLp.toLp (ENNReal.ofReal q) z‖ := by
-  rw [PiLp.norm_eq_sum (by rw [ENNReal.toReal_ofReal hq.le]; exact hq), ENNReal.toReal_ofReal hq.le]
-  rfl
-
-/-- `t ↦ ‖x + t h‖_{ℓ_q}` is convex (`q ≥ 1`). -/
-theorem twoByM_convex_lqNorm_line {n : ℕ} {q : ℝ} (hq : 1 ≤ q) (x h : Fin n → ℂ) :
-    ConvexOn ℝ Set.univ fun t : ℝ => lqNorm q fun j => x j + t * h j := by
-  have : Fact (1 ≤ ENNReal.ofReal q) := ⟨one_le_ofReal_of_one_le hq⟩
-  have hq0 : 0 < q := by linarith
-  simp only [twoByM_lqNorm_eq_norm q hq0]
-  refine ⟨convex_univ, fun a _ b _ θ φ hθ hφ hsum => ?_⟩
-  have e : ∀ t : ℝ, WithLp.toLp (ENNReal.ofReal q) (fun j => x j + (t : ℂ) * h j) =
-      WithLp.toLp (ENNReal.ofReal q) x + t • WithLp.toLp (ENNReal.ofReal q) h := fun t => by
-    rw [← WithLp.toLp_smul, ← WithLp.toLp_add]
-    congr 1
+/-- `t ↦ ‖a + t v‖` is convex. -/
+theorem twoByM_convexOn_norm_line {E : Type*} [SeminormedAddCommGroup E] [NormedSpace ℝ E]
+    (a v : E) : ConvexOn ℝ Set.univ fun t : ℝ => ‖a + t • v‖ := by
+  refine ⟨convex_univ, fun t₁ _ t₂ _ θ φ hθ hφ hsum => ?_⟩
   obtain rfl : φ = 1 - θ := by linarith
-  simp only [e, smul_eq_mul]
-  calc ‖WithLp.toLp (ENNReal.ofReal q) x +
-        (θ * a + (1 - θ) * b) • WithLp.toLp (ENNReal.ofReal q) h‖ =
-      ‖θ • (WithLp.toLp (ENNReal.ofReal q) x + a • WithLp.toLp (ENNReal.ofReal q) h) +
-        (1 - θ) • (WithLp.toLp (ENNReal.ofReal q) x + b • WithLp.toLp (ENNReal.ofReal q) h)‖ := by
+  simp only [smul_eq_mul]
+  calc ‖a + (θ * t₁ + (1 - θ) * t₂) • v‖ = ‖θ • (a + t₁ • v) + (1 - θ) • (a + t₂ • v)‖ := by
         congr 1; module
-    _ ≤ _ := by
-      refine (norm_add_le _ _).trans ?_
+    _ ≤ θ * ‖a + t₁ • v‖ + (1 - θ) * ‖a + t₂ • v‖ := by
+      refine (norm_add_le _ _).trans_eq ?_
       rw [norm_smul, norm_smul, Real.norm_of_nonneg hθ, Real.norm_of_nonneg hφ]
 
+/-- The convexity of `b_η^{1/q}`, `b (t) = B_q (x + t h)`, `q ≥ 1` (TeX 1308–1317 for `q = 6`):
+`b_η (t) = ∫ ρ_η (s) ‖x + (t − s) h‖_{ℓ_q}^q ds` is the `q`-th power of the `L^q (ℝ; ℓ_q)` norm of
+`s ↦ ρ_η (s)^{1/q} (x + (t − s) h) = u (s) + t k (s)`, with `u (s) = ρ_η (s)^{1/q} (x − s h)` and
+`k (s) = ρ_η (s)^{1/q} h`; by Minkowski's inequality (the triangle inequality of the norm of
+`L^q`) and its homogeneity, `t ↦ ‖u + t k‖_{L^q} = b_η (t)^{1/q}` is convex. -/
+theorem twoByM_convexOn_mollify_Bq {q : ℝ} (hq : 1 ≤ q) {n : ℕ} (x h : Fin n → ℂ)
+    (φ : ContDiffBump (0 : ℝ)) :
+    ConvexOn ℝ Set.univ fun t => (φ.normed volume ⋆[lsmul ℝ ℝ, volume]
+      fun t : ℝ => twoByM_Bq q fun j => x j + t * h j) t ^ (1 / q) := by
+  have : Fact (1 ≤ ENNReal.ofReal q) := ⟨one_le_ofReal_of_one_le hq⟩
+  have hq0 : 0 < q := by linarith
+  set ρ := φ.normed volume with hρ_def
+  -- the weight `w = ρ_η^{1/q}`, continuous with compact support
+  set w : ℝ → ℝ := fun s => ρ s ^ (1 / q) with hw_def
+  have hw : Continuous w := φ.continuous_normed.rpow_const fun _ => Or.inr (by positivity)
+  have hwc : HasCompactSupport w :=
+    φ.hasCompactSupport_normed.comp_left (g := fun z : ℝ => z ^ (1 / q))
+      (Real.zero_rpow (by positivity))
+  set u : ℝ → PiLp (ENNReal.ofReal q) (fun _ : Fin n => ℂ) := fun s =>
+    w s • (WithLp.toLp (ENNReal.ofReal q) x - s • WithLp.toLp (ENNReal.ofReal q) h) with hu_def
+  set k : ℝ → PiLp (ENNReal.ofReal q) (fun _ : Fin n => ℂ) := fun s =>
+    w s • WithLp.toLp (ENNReal.ofReal q) h with hk_def
+  have hu : MemLp u (ENNReal.ofReal q) volume :=
+    (hw.smul (continuous_const.sub (continuous_id.smul continuous_const))).memLp_of_hasCompactSupport
+      (hwc.smul_right (f' := fun s : ℝ =>
+        WithLp.toLp (ENNReal.ofReal q) x - s • WithLp.toLp (ENNReal.ofReal q) h))
+  have hk : MemLp k (ENNReal.ofReal q) volume :=
+    (hw.smul continuous_const).memLp_of_hasCompactSupport
+      (hwc.smul_right (f' := fun _ : ℝ => WithLp.toLp (ENNReal.ofReal q) h))
+  -- `b_η (t)^{1/q} = ‖u + t k‖_{L^q}`
+  have hval : ∀ t, (ρ ⋆[lsmul ℝ ℝ, volume]
+      fun t : ℝ => twoByM_Bq q fun j => x j + t * h j) t ^ (1 / q) =
+        ‖hu.toLp u + t • hk.toLp k‖ := fun t => by
+    have hmem := hu.add (hk.const_smul t)
+    have h1 : ‖hu.toLp u + t • hk.toLp k‖ =
+        (eLpNorm (u + t • k) (ENNReal.ofReal q) volume).toReal := by
+      rw [← MemLp.toLp_const_smul, ← MemLp.toLp_add, Lp.norm_toLp]
+    have h2 := hmem.eLpNorm_eq_integral_rpow_norm (ENNReal.ofReal_pos.2 hq0).ne'
+      ENNReal.ofReal_ne_top
+    rw [ENNReal.toReal_ofReal hq0.le] at h2
+    rw [h1, h2, ENNReal.toReal_ofReal (by positivity), φ.normed_convolution_apply, one_div]
+    congr 1
+    refine integral_congr_ae (Eventually.of_forall fun s => ?_)
+    -- `ρ_η (s) B_q (x + (t − s) h) = ‖ρ_η (s)^{1/q} (x + (t − s) h)‖^q`
+    have hρs : 0 ≤ ρ s := φ.nonneg_normed s
+    have hws : 0 ≤ w s := Real.rpow_nonneg hρs _
+    have hV : WithLp.toLp (ENNReal.ofReal q) (fun j => x j + ((t - s : ℝ) : ℂ) * h j) =
+        WithLp.toLp (ENNReal.ofReal q) x + (t - s) • WithLp.toLp (ENNReal.ofReal q) h := by
+      rw [← WithLp.toLp_smul, ← WithLp.toLp_add]
+      congr 1
+    have e : (u + t • k) s = w s • WithLp.toLp (ENNReal.ofReal q)
+        (fun j => x j + ((t - s : ℝ) : ℂ) * h j) := by
+      rw [hV]
+      simp only [Pi.add_apply, Pi.smul_apply, u, k]
+      module
+    have hw' : w s ^ q = ρ s := by
+      show (ρ s ^ (1 / q)) ^ q = ρ s
+      rw [← Real.rpow_mul hρs, one_div_mul_cancel hq0.ne', Real.rpow_one]
+    show ρ s * twoByM_Bq q (fun j => x j + ((t - s : ℝ) : ℂ) * h j) = ‖(u + t • k) s‖ ^ q
+    rw [e, norm_smul, Real.norm_of_nonneg hws, Real.mul_rpow hws (norm_nonneg _), hw',
+      ← twoByM_lqNorm_eq_norm q hq0, twoByM_lqNorm_rpow, div_self hq0.ne', Real.rpow_one]
+  exact (twoByM_convexOn_norm_line (hu.toLp u) (hk.toLp k)).congr fun t _ => (hval t).symm
+
+/-- `t ↦ B_q (x + t h)` is continuous. -/
+theorem twoByM_continuous_Bq_line {q : ℝ} (hq : 0 ≤ q) {n : ℕ} (x h : Fin n → ℂ) :
+    Continuous fun t : ℝ => twoByM_Bq q fun j => x j + t * h j :=
+  continuous_finsetSum _ fun _ _ =>
+    (continuous_const.add (Complex.continuous_ofReal.mul continuous_const)).norm.rpow_const
+      fun _ => Or.inr hq
+
+/-- `b_η > 0` (TeX 1318), unless `x = h = 0` (TeX 1294): `b (t) = B_q (x + t h) ≥ 0` is continuous
+and positive somewhere in every interval, since `x + t h` vanishes for at most one `t`; the
+mollification of such a function is positive. -/
+theorem twoByM_mollify_Bq_pos {q : ℝ} (hq : 0 < q) {n : ℕ} {x h : Fin n → ℂ}
+    (hxh : ¬(x = 0 ∧ h = 0)) (φ : ContDiffBump (0 : ℝ)) (t : ℝ) :
+    0 < (φ.normed volume ⋆[lsmul ℝ ℝ, volume]
+      fun t : ℝ => twoByM_Bq q fun j => x j + t * h j) t := by
+  -- a point `t'` near `t` with `x + t' h ≠ 0`
+  obtain ⟨t', ht', j, hj⟩ : ∃ t' ∈ Metric.ball t φ.rOut, ∃ j, x j + t' * h j ≠ 0 := by
+    by_cases h0 : ∃ j, x j + t * h j ≠ 0
+    · exact ⟨t, Metric.mem_ball_self φ.rOut_pos, h0⟩
+    push Not at h0
+    have hh : h ≠ 0 := fun hh => hxh ⟨funext fun j => by simpa [hh] using h0 j, hh⟩
+    obtain ⟨j, hj⟩ : ∃ j, h j ≠ 0 := by
+      by_contra hc; push Not at hc; exact hh (funext hc)
+    have hδ := φ.rOut_pos
+    refine ⟨t + φ.rOut / 2, ?_, j, ?_⟩
+    · rw [Metric.mem_ball, Real.dist_eq, show t + φ.rOut / 2 - t = φ.rOut / 2 by ring,
+        abs_of_pos (by linarith)]
+      linarith
+    · have e : x j + ((t + φ.rOut / 2 : ℝ) : ℂ) * h j = ((φ.rOut / 2 : ℝ) : ℂ) * h j := by
+        have := h0 j
+        push_cast
+        linear_combination this
+      rw [e]
+      exact mul_ne_zero (Complex.ofReal_ne_zero.2 (by linarith)) hj
+  refine φ.normed_convolution_pos (μ := volume) (twoByM_continuous_Bq_line hq.le x h)
+    (fun s => twoByM_Bq_nonneg q _) ht' ?_
+  exact lt_of_lt_of_le (Real.rpow_pos_of_pos (norm_pos_iff.2 hj) q)
+    (Finset.single_le_sum (f := fun j => ‖x j + (t' : ℂ) * h j‖ ^ q) (fun j _ => by positivity)
+      (Finset.mem_univ j))
+
+/-- The limit `η ↓ 0` (TeX 1348–1351): for continuous `r`, `b` and `Φ`, if
+`t ↦ Φ (r_η (t), b_η (t))` is concave for every mollifier, so is `t ↦ Φ (r (t), b (t))`. With
+`η = 1/(k + 1)`, `r_η → r` and `b_η → b` pointwise (the paper has locally uniform convergence;
+pointwise convergence suffices), and a pointwise limit of concave functions is concave. -/
+theorem twoByM_concaveOn_of_mollify {r b : ℝ → ℝ} (hr : Continuous r) (hb : Continuous b)
+    {Φ : ℝ → ℝ → ℝ} (hΦ : Continuous fun z : ℝ × ℝ => Φ z.1 z.2)
+    (h : ∀ φ : ContDiffBump (0 : ℝ), ConcaveOn ℝ Set.univ fun t =>
+      Φ ((φ.normed volume ⋆[lsmul ℝ ℝ, volume] r) t)
+        ((φ.normed volume ⋆[lsmul ℝ ℝ, volume] b) t)) :
+    ConcaveOn ℝ Set.univ fun t => Φ (r t) (b t) := by
+  set φ : ℕ → ContDiffBump (0 : ℝ) := fun k =>
+    ContDiffBump.ofRadius (Nat.one_div_pos_of_nat : (0 : ℝ) < 1 / ((k : ℝ) + 1))
+  have hφ : Tendsto (fun k => (φ k).rOut) atTop (𝓝 0) := tendsto_one_div_add_atTop_nhds_zero_nat
+  refine isClosed_setOfPred_concaveOn.mem_of_tendsto (b := atTop)
+    (f := fun k t => Φ (((φ k).normed volume ⋆[lsmul ℝ ℝ, volume] r) t)
+      (((φ k).normed volume ⋆[lsmul ℝ ℝ, volume] b) t))
+    (tendsto_pi_nhds.2 fun t => ?_) (Eventually.of_forall fun k => h (φ k))
+  exact (hΦ.tendsto (r t, b t)).comp
+    ((ContDiffBump.tendsto_normed_convolution (μ := volume) hφ hr t).prodMk_nhds
+      (ContDiffBump.tendsto_normed_convolution (μ := volume) hφ hb t))
+
+end Mollify
 
 /-- A finite sum of concave functions is concave. -/
 theorem twoByM_concaveOn_sum {ι : Type*} (s : Finset ι) {F : ι → ℝ → ℝ}
@@ -1898,120 +2029,85 @@ theorem twoByM_concaveOn_sum {ι : Type*} (s : Finset ι) {F : ι → ℝ → �
     exact (hF a (Finset.mem_insert_self a s)).add
       (ih fun i hi => hF i (Finset.mem_insert_of_mem hi))
 
-/-- `|z|² = (re z)² + (im z)²` along a line, and its derivatives. -/
-theorem twoByM_normSq_line (c w : ℂ) (t : ℝ) :
-    ‖c + t * w‖ ^ 2 = (c.re + t * w.re) ^ 2 + (c.im + t * w.im) ^ 2 := by
-  rw [Complex.sq_norm, Complex.normSq_apply]; simp; ring
+theorem twoByM_continuous_zigzagU (n : ℕ) :
+    Continuous fun p : (Fin n → ℂ) × (Fin n → ℂ) => zigzagU p.1 p.2 := by
+  unfold zigzagU burkholderR burkholderB burkholderU
+  fun_prop
 
-/-- Zig-zag concavity of `U` where some coordinate line `x_{j₀} + t h_{j₀}` avoids `0`. -/
-theorem twoByM_zigzag_generic {n : ℕ}
-    (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) (j₀ : Fin n)
-    (hj₀ : ∀ t : ℝ, x j₀ + t * h j₀ ≠ 0) :
+open ContinuousLinearMap in
+open scoped Convolution in
+/-- **Zig-zag concavity of `U`** (proof of Proposition 4.2, TeX 1286–1352): for `x, y, h ∈ ℂ^n`
+and `|ε| ≤ 1`, `t ↦ U (x + t h, y + t ε h)` is concave.
+
+Proof, the paper's. If `x = h = 0` the function is constant. Otherwise, with `b (t) = B (x + t h)`
+and `r (t) = R (x + t h, y + t ε h)`: `r − 2·5⁶ b = Σ_j u (x_j + t h_j, y_j + t ε h_j)` is concave
+by (14), and `r ≥ 5⁶ b` by (13). For every mollifier `ρ_η`, `r_η` and `b_η` satisfy (17)
+(`twoByM_eq17`), `b_η^{1/6}` is convex (`twoByM_convexOn_mollify_Bq`) and `b_η > 0`
+(`twoByM_mollify_Bq_pos`), so (18) holds for `b_η` (`twoByM_eq18`), and the paper's computation
+makes `√r_η − 5⁴ √b_η` concave (`twoByM_sqrt_concave`). Letting `η ↓ 0`
+(`twoByM_concaveOn_of_mollify`) gives the concavity of `√r − 5⁴ √b = U (x + t h, y + t ε h)`. -/
+theorem twoByM_zigzag {n : ℕ}
+    (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) :
     ConcaveOn ℝ Set.univ fun t : ℝ =>
       zigzagU (fun j => x j + t * h j) (fun j => y j + t * ε * h j) := by
-  -- `κ = r − 2·5⁶ b` and `b`, with `r (t) = R (x + t h, y + t ε h)`, `b (t) = B (x + t h)`
-  set κ : ℝ → ℝ := fun t => ∑ j, burkholderU (x j + t * h j) (y j + t * ε * h j)
-  set P : Fin n → ℝ → ℝ := fun j t => ((x j).re + t * (h j).re) ^ 2 + ((x j).im + t * (h j).im) ^ 2
-  set P' : Fin n → ℝ → ℝ := fun j t =>
-    2 * ((h j).re * ((x j).re + t * (h j).re) + (h j).im * ((x j).im + t * (h j).im))
-  set b : ℝ → ℝ := fun t => ∑ j, P j t ^ 3
-  set b' : ℝ → ℝ := fun t => ∑ j, 3 * P j t ^ 2 * P' j t
-  set b'' : ℝ → ℝ := fun t => ∑ j, (6 * P j t * P' j t ^ 2 +
-    3 * P j t ^ 2 * (2 * ((h j).re ^ 2 + (h j).im ^ 2)))
-  have hbn : ∀ t : ℝ, b t = ∑ j, ‖x j + t * h j‖ ^ 6 := fun t =>
-    Finset.sum_congr rfl fun j _ => by
-      rw [show (6 : ℕ) = 2 * 3 from rfl, pow_mul, twoByM_normSq_line]
-  have hP : ∀ j t, HasDerivAt (P j) (P' j t) t := fun j t => by
-    have h1 := (((hasDerivAt_id' t).mul_const (h j).re).const_add (x j).re).fun_pow 2
-    have h2 := (((hasDerivAt_id' t).mul_const (h j).im).const_add (x j).im).fun_pow 2
-    convert h1.fun_add h2 using 1
-    simp only [P']; ring
-  have hP' : ∀ j t, HasDerivAt (P' j) (2 * ((h j).re ^ 2 + (h j).im ^ 2)) t := fun j t => by
-    have h1 := (((hasDerivAt_id' t).mul_const (h j).re).const_add (x j).re).const_mul (h j).re
-    have h2 := (((hasDerivAt_id' t).mul_const (h j).im).const_add (x j).im).const_mul (h j).im
-    convert (h1.fun_add h2).const_mul 2 using 1
+  by_cases hxh : x = 0 ∧ h = 0
+  · obtain ⟨rfl, rfl⟩ := hxh
+    have : (fun t : ℝ => zigzagU (fun j => (0 : Fin n → ℂ) j + (t : ℂ) * (0 : Fin n → ℂ) j)
+        (fun j => y j + (t : ℂ) * ε * (0 : Fin n → ℂ) j)) = fun _ => zigzagU 0 y := by
+      funext t
+      congr 1 <;> funext j <;> simp
+    rw [this]
+    exact concaveOn_const _ convex_univ
+  -- `b (t) = B (x + t h) = B_6 (x + t h)` and `r (t) = R (x + t h, y + t ε h)`
+  set b : ℝ → ℝ := fun t => twoByM_Bq 6 fun j => x j + t * h j with hb_def
+  set r : ℝ → ℝ := fun t =>
+    burkholderR (fun j => x j + t * h j) (fun j => y j + t * ε * h j) with hr_def
+  have hb : Continuous b := twoByM_continuous_Bq_line (by norm_num) x h
+  have hr : Continuous r := by
+    simp only [hr_def, burkholderR, burkholderU]
+    fun_prop
+  -- `r − 2·5⁶ b = Σ_j u (x_j + t h_j, y_j + t ε h_j)`
+  have hrκ : ∀ t, r t - 2 * 5 ^ 6 * b t =
+      ∑ j, burkholderU (x j + t * h j) (y j + t * ε * h j) := fun t => by
+    simp only [hr_def, hb_def, ← twoByM_burkholderB_eq, burkholderR, burkholderB,
+      Finset.sum_add_distrib, Finset.mul_sum]
     ring
-  have hb : ∀ t, HasDerivAt b (b' t) t := fun t => by
-    have := HasDerivAt.fun_sum (u := Finset.univ) fun j _ => (hP j t).fun_pow 3
-    convert this using 1
-  have hb' : ∀ t, HasDerivAt b' (b'' t) t := fun t => by
-    have := HasDerivAt.fun_sum (u := Finset.univ) fun j _ =>
-      (((hP j t).fun_pow 2).const_mul 3).fun_mul (hP' j t)
-    convert this using 1
-    simp only [b'']
-    refine Finset.sum_congr rfl fun j _ => ?_
-    norm_num; ring
-  have hb0 : ∀ t, 0 < b t := fun t => by
-    rw [hbn]
-    exact lt_of_lt_of_le (pow_pos (norm_pos_iff.2 (hj₀ t)) 6)
-      (Finset.single_le_sum (f := fun j => ‖x j + t * h j‖ ^ 6) (fun j _ => by positivity)
-        (Finset.mem_univ j₀))
-  -- `b^{1/6} = ‖x + t h‖_{ℓ_6}` is convex
-  have hconv : ConvexOn ℝ Set.univ fun t => b t ^ (1 / 6 : ℝ) := by
-    have := twoByM_convex_lqNorm_line (q := 6) (by norm_num) x h
-    convert this using 2 with t
-    rw [hbn, lqNorm]
-    congr 1
-    refine Finset.sum_congr rfl fun j _ => ?_
-    rw [show (6 : ℝ) = ((6 : ℕ) : ℝ) by norm_num, Real.rpow_natCast]
-  have h18 := twoByM_eq18 hb0 hb hb' hconv
-  -- `κ` is concave by (14)
-  have hκ : ConcaveOn ℝ Set.univ κ :=
-    twoByM_concaveOn_sum _ fun j _ =>
+  -- (14): `r − 2·5⁶ b` is concave
+  have hκ : ConcaveOn ℝ Set.univ fun t => r t - 2 * 5 ^ 6 * b t := by
+    simp only [hrκ]
+    exact twoByM_concaveOn_sum _ fun j _ =>
       External.Burkholder.scalarFunction_holds.2 (x j) (y j) (h j) ε hε
-  -- `r ≥ 5⁶ b` by (13)
-  have hr : ∀ t, 5 ^ 6 * b t ≤ κ t + 2 * 5 ^ 6 * b t := fun t => by
-    have : -(5 ^ 6 * b t) ≤ κ t := by
-      rw [hbn, Finset.mul_sum, ← Finset.sum_neg_distrib]
+  -- (13): `r ≥ 5⁶ b`
+  have hrb : ∀ t, 5 ^ 6 * b t ≤ r t := fun t => by
+    have : -(5 ^ 6 * b t) ≤ r t - 2 * 5 ^ 6 * b t := by
+      rw [hrκ]
+      simp only [hb_def, ← twoByM_burkholderB_eq, burkholderB, Finset.mul_sum,
+        ← Finset.sum_neg_distrib]
       refine Finset.sum_le_sum fun j _ => ?_
       have := External.Burkholder.scalarFunction_holds.1 (x j + t * h j) (y j + t * ε * h j)
       have : 0 ≤ ‖y j + t * ε * h j‖ ^ 6 := by positivity
       simp only [burkholderU_eq]
       linarith
     linarith
-  have key := twoByM_sqrt_concave hκ hb0 hb hb' h18 hr
-  convert key using 2 with t
-  rw [zigzagU, burkholderR, burkholderB, ← hbn, Finset.sum_add_distrib, ← Finset.mul_sum, ← hbn]
-
-
-theorem twoByM_continuous_zigzagU (n : ℕ) :
-    Continuous fun p : (Fin n → ℂ) × (Fin n → ℂ) => zigzagU p.1 p.2 := by
-  unfold zigzagU burkholderR burkholderB burkholderU
-  fun_prop
-
-/-- **Zig-zag concavity of `U`** (proof of Proposition 4.2): for `x, y, h ∈ ℂ^n` and `|ε| ≤ 1`,
-`t ↦ U (x + t h, y + t ε h)` is concave. If `h = 0` it is constant; otherwise, with
-`h_{j₀} ≠ 0`, `x_{j₀}` is a limit of points for which `x_{j₀} + t h_{j₀}` never vanishes (so that
-`B (x + t h) > 0`, as the paper's `b_η > 0`), and concavity passes to the limit. -/
-theorem twoByM_zigzag {n : ℕ}
-    (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) :
-    ConcaveOn ℝ Set.univ fun t : ℝ =>
-      zigzagU (fun j => x j + t * h j) (fun j => y j + t * ε * h j) := by
-  classical
-  by_cases hh : h = 0
-  · subst hh
-    simpa using concaveOn_const (c := zigzagU x y) convex_univ
-  obtain ⟨j₀, hj₀⟩ : ∃ j₀, h j₀ ≠ 0 := by
-    by_contra hc; push Not at hc; exact hh (funext hc)
-  obtain ⟨a', ha', ha'0⟩ := External.Burkholder.exists_seq_line_ne_zero (x j₀) (h j₀)
-  refine External.Burkholder.concaveOn_univ_of_tendsto
-    (F := fun m t => zigzagU (fun j => Function.update x j₀ (a' m) j + t * h j)
-      (fun j => y j + t * ε * h j))
-    (fun m => twoByM_zigzag_generic _ y h hε j₀ fun t => by
-      rw [Function.update_self]; exact ha'0 m t)
-    fun t => ?_
-  have hx : Tendsto (fun m => Function.update x j₀ (a' m)) atTop (𝓝 x) := by
-    have := ((continuous_const (y := x)).update j₀ continuous_id').tendsto (x j₀) |>.comp ha'
-    rw [Function.update_eq_self] at this
-    exact this
-  have hline : Tendsto (fun m => fun j => Function.update x j₀ (a' m) j + (t : ℂ) * h j) atTop
-      (𝓝 fun j => x j + (t : ℂ) * h j) :=
-    tendsto_pi_nhds.2 fun j => ((continuous_apply j).tendsto _ |>.comp hx).add_const _
-  have := ((twoByM_continuous_zigzagU n).tendsto
-    ((fun j => x j + (t : ℂ) * h j), (fun j => y j + (t : ℂ) * ε * h j))).comp
-    (hline.prodMk_nhds (tendsto_const_nhds (x := fun j => y j + (t : ℂ) * ε * h j)))
-  exact this
-
+  have hU : (fun t : ℝ => zigzagU (fun j => x j + t * h j) (fun j => y j + t * ε * h j)) =
+      fun t => √(r t) - 5 ^ 4 * √(b t) := by
+    funext t
+    simp only [zigzagU, twoByM_burkholderB_eq, hr_def, hb_def]
+  rw [hU]
+  refine twoByM_concaveOn_of_mollify (Φ := fun r b => √r - 5 ^ 4 * √b) hr hb (by fun_prop)
+    fun φ => ?_
+  -- the mollifications `r_η`, `b_η`: smooth, (17), `b_η > 0`, convexity of `b_η^{1/6}` and (18)
+  have hR := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hr.locallyIntegrable)
+  have hB := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hb.locallyIntegrable)
+  have hb0 := twoByM_mollify_Bq_pos (q := 6) (by norm_num) hxh φ
+  have h17 := twoByM_eq17 hr hb hκ hrb φ
+  have h18 := twoByM_eq18 hb0 (fun t => (hB t).1) (fun t => (hB t).2)
+    (twoByM_convexOn_mollify_Bq (q := 6) (by norm_num) x h φ)
+  -- the paper's computation: `√r_η − 5⁴ √b_η` is concave
+  exact twoByM_sqrt_concave (fun t => (hR t).1) (fun t => (hR t).2) hb0 (fun t => (hB t).1)
+    (fun t => (hB t).2) (fun t => (h17 t).1) (fun t => (h17 t).2) h18
 
 /-- `‖z‖_{ℓ_6}^3 = B (z)^{1/2}`. -/
 theorem twoByM_lq6_cube {n : ℕ} (z : Fin n → ℂ) : lqNorm 6 z ^ 3 = √(burkholderB z) := by
@@ -2047,24 +2143,15 @@ theorem twoByM_continuous_explicitG (n : ℕ) : Continuous (explicitG n) := by
 convex integrand with `g_n ≤ f_n` and `g_n (0) = 0 = f_n (0)`. By (13), (14)
 (`External.Burkholder.scalarFunction_holds`).
 
-Proof: the paper's: (16) from (13) (`twoByM_U_majorization`); rank-one convexity along
-`B + t R`, `rank R = 1`: Lemma 4.1 gives `Q_n R = λ conj (P_n R)` with `|λ| = 1`, so
-`g_n = −U (x + t h, y + t λ h)`, which is convex by the zig-zag concavity of `U`
-(`twoByM_zigzag`), which follows from (13), (14), (17), (18) and the computation
-`(√r)'' ≤ 5⁴ (√b)''`.
-
-Mechanics (the regularization of the zig-zag step, `twoByM_sqrt_concave`; the paper's claims
-(13), (14), (16)–(18) and its computation `(√r)'' ≤ 5⁴ (√b)''` are all kept): the paper mollifies
-`r` and `b` and lets the mollification parameter tend to `0`; the formalization
-instead replaces `r` at each point `t₀` by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2·5⁶ b`
-(`κ = r − 2·5⁶ b` concave by (14), `m` a supergradient of `κ` at `t₀`), for which (17) holds
-(`r̃ ≥ 5⁶ b`, `r̃'' = 2·5⁶ b''`) and (18) is used for `b` itself (from the convexity of
-`b^{1/6} = ‖x + t h‖_{ℓ_6}`); the paper's computation makes `√r̃ − 5⁴ √b` concave, and its
-tangent at `t₀` supports `√r − 5⁴ √b`. Where `B (x + t h)` may vanish, `x` is approximated so that
-it does not (the paper's `b_η > 0`), and concavity passes to the limit. This is a choice of
-regularization, not a change of argument: mollification would need the calculus of convolutions
-(derivatives of `r_η`, Minkowski's integral inequality for `b_η^{1/6}`), which the
-supporting-majorant device avoids while keeping every claim of the step. -/
+Proof: the paper's (TeX 1223–1352): (16) from (13) (`twoByM_U_majorization`); rank-one
+convexity along `B + t R`, `rank R = 1`: Lemma 4.1 gives `Q_n R = λ conj (P_n R)` with
+`|λ| = 1`, so `g_n = −U (x + t h, y + t λ h)`, which is convex by the zig-zag concavity of `U`
+(`twoByM_zigzag`). That is proved as in the paper, with the mollifications `r_η`, `b_η` of
+`r (t) = R (x + t h, y + t λ h)` and `b (t) = B (x + t h)`: (14) and (13) give (17)
+(`twoByM_eq17`); `b_η^{1/6}` is convex by Minkowski's inequality and `b_η > 0`
+(`twoByM_convexOn_mollify_Bq`, `twoByM_mollify_Bq_pos`), which gives (18) (`twoByM_eq18`); the
+computation `(√r_η)'' ≤ 5⁴ (√b_η)''` makes `√r_η − 5⁴ √b_η` concave (`twoByM_sqrt_concave`); and
+`η ↓ 0` gives the concavity of `U (x + t h, y + t λ h)` (`twoByM_concaveOn_of_mollify`). -/
 theorem proposition4_2_minorant (n : ℕ) :
     IsIntegrand (explicitG n) ∧ RankOneConvex (explicitG n) ∧
       (∀ A, explicitG n A ≤ explicitF n A) ∧ explicitG n 0 = 0 ∧ explicitF n 0 = 0 := by
@@ -2935,7 +3022,7 @@ For `1 < p < q`, `q ≥ 2` (Remark 4.5 asks for `p + 2 < q`; the proof of Theore
 `q = p + 3`), the construction of the proof of Proposition 4.2 with Burkholder's function `u_q`
 for the exponent `q` (`External.Burkholder.uq`, with (13), (14) proved in
 `External.Burkholder.scalarFunctionQ_holds`): `c = (q − 1)^q`,
-`R (x, y) = Σ_j (u_q (x_j, y_j) + 2 c |x_j|^q)`, `B (x) = ‖x‖_{ℓ_q}^q`,
+`R (x, y) = Σ_j (u_q (x_j, y_j) + 2 c |x_j|^q)`, `B (x) = ‖x‖_{ℓ_q}^q` (`twoByM_Bq`),
 `U = R^{p/q} − K B^{p/q}` with `K = 2 (q − 1)^p (q − 1) / (p − 1)` (for `p = 3`, `q = 6`, these
 are `burkholderR`, `burkholderB`, `zigzagU`, and `K = 5⁴`), and `g (A) = −U (conj (P_n A), Q_n A)`.
 -/
@@ -2943,10 +3030,6 @@ are `burkholderR`, `burkholderB`, `zigzagU`, and `K = 5⁴`), and `g (A) = −U 
 /-- `R_q (x, y) = Σ_j (u_q (x_j, y_j) + 2 (q − 1)^q |x_j|^q)` (Remark 4.5). -/
 noncomputable def twoByM_Rq {n : ℕ} (q : ℝ) (x y : Fin n → ℂ) : ℝ :=
   ∑ j, (External.Burkholder.uq q (x j) (y j) + 2 * (q - 1) ^ q * ‖x j‖ ^ q)
-
-/-- `B_q (x) = ‖x‖_{ℓ_q}^q` (Remark 4.5). -/
-noncomputable def twoByM_Bq {n : ℕ} (q : ℝ) (x : Fin n → ℂ) : ℝ :=
-  ∑ j, ‖x j‖ ^ q
 
 /-- The constant `K = 2 (q − 1)^p (q − 1) / (p − 1)` of Remark 4.5 (`5⁴` for `p = 3`, `q = 6`). -/
 noncomputable def twoByM_K (p q : ℝ) : ℝ := 2 * (q - 1) ^ p * (q - 1) / (p - 1)
@@ -2971,11 +3054,8 @@ theorem twoByM_K_pos {p q : ℝ} (hp : 1 < p) (hq : 1 < q) : 0 < twoByM_K p q :=
   have := Real.rpow_pos_of_pos (by linarith : (0 : ℝ) < q - 1) p
   exact div_pos (mul_pos (mul_pos two_pos this) (by linarith)) (by linarith)
 
-theorem twoByM_Bq_nonneg {n : ℕ} (q : ℝ) (x : Fin n → ℂ) : 0 ≤ twoByM_Bq q x :=
-  Finset.sum_nonneg fun _ _ => by positivity
-
-/-- (18) for the exponent `q`: for a positive twice differentiable `b` with `b^{1/q}` convex,
-differentiating `b^{1/q}` twice gives `(q − 1) b'² ≤ q b b''`. -/
+/-- (18) for the exponent `q` (TeX 1317–1326 for `q = 6`): for a positive twice differentiable
+`b` with `b^{1/q}` convex, differentiating `b^{1/q}` twice gives `(q − 1) b'² ≤ q b b''`. -/
 theorem twoByM_eq18q {q : ℝ} (hq : 0 < q) {b b' b'' : ℝ → ℝ} (hb0 : ∀ t, 0 < b t)
     (hb : ∀ t, HasDerivAt b (b' t) t) (hb' : ∀ t, HasDerivAt b' (b'' t) t)
     (hconv : ConvexOn ℝ Set.univ fun t => b t ^ (1 / q)) (t : ℝ) :
@@ -3019,25 +3099,19 @@ theorem twoByM_rpow_hasDerivAt {g g' g'' : ℝ → ℝ} {s : ℝ} (hg0 : ∀ t, 
   ⟨(hg t).rpow_const (Or.inl (hg0 t).ne'),
     ((hg' t).mul_const s).fun_mul ((hg t).rpow_const (Or.inl (hg0 t).ne'))⟩
 
-/-- The composition step of Remark 4.5 (the analogue of `twoByM_sqrt_concave` for the exponent
-`s = p/q`): if `κ = r − 2 c b` is concave, `r ≥ c b`, `b > 0` is twice differentiable with
-`(q − 1) b'² ≤ q b b''`, and `2 c^{p/q} (q − 1) ≤ K (p − 1)`, then `r^{p/q} − K b^{p/q}` is concave.
-The computation: `(r^s)'' ≤ s r^{s−1} r'' ≤ 2 s c^s b^{s−1} b''` (from `s < 1`, `r ≥ c b`,
-`r'' = 2 c b''`), and `(b^s)'' ≥ s b^{s−1} b'' (p − 1)/(q − 1)` (from
-`b b'' ≥ (1 − 1/q) b'²`).
-
-Mechanics (the regularization, as in `twoByM_sqrt_concave`; the claims of the step are kept): at
-each point `t₀`,
-`r` is replaced by its smooth majorant `r̃ = κ (t₀) + m (t − t₀) + 2 c b`, `m` a supergradient of
-`κ` at `t₀`, instead of mollifying `r` and `b`; the computation shows that `r̃^s − K b^s` is
-concave, it touches `r^s − K b^s` from above at `t₀`, and its tangent there is a supporting line. -/
-theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 < p) (hpq : p < q)
-    (hc : 0 < c) (hK : 2 * c ^ (p / q) * (q - 1) ≤ K * (p - 1))
-    (hκ : ConcaveOn ℝ Set.univ κ)
+/-- The computation of Remark 4.5 (the analogue of `twoByM_sqrt_concave` for the exponent
+`s = p/q`): for twice differentiable `r` and `b > 0` with (17) `r ≥ c b`, `r'' ≤ 2 c b''`, (18)
+`(q − 1) b'² ≤ q b b''`, and `2 c^{p/q} (q − 1) ≤ K (p − 1)`, `r^{p/q} − K b^{p/q}` is concave:
+`(r^s)'' ≤ s r^{s−1} r'' ≤ 2 s c^s b^{s−1} b''` (from `s < 1`, `r'' ≤ 2 c b''`, `b'' ≥ 0` and
+`r ≥ c b`), and `(b^s)'' ≥ s b^{s−1} b'' (p − 1)/(q − 1)` (from `b b'' ≥ (1 − 1/q) b'²`), so the
+second derivative of `r^s − K b^s` is `≤ 0`. In Remark 4.5 it is applied to `r_η`, `b_η`. -/
+theorem twoByM_rpow_concave {r r' r'' b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 < p)
+    (hpq : p < q) (hc : 0 < c) (hK : 2 * c ^ (p / q) * (q - 1) ≤ K * (p - 1))
+    (hr : ∀ t, HasDerivAt r (r' t) t) (hr' : ∀ t, HasDerivAt r' (r'' t) t)
     (hb0 : ∀ t, 0 < b t) (hb : ∀ t, HasDerivAt b (b' t) t) (hb' : ∀ t, HasDerivAt b' (b'' t) t)
-    (h18 : ∀ t, (q - 1) * b' t ^ 2 ≤ q * b t * b'' t)
-    (hr : ∀ t, c * b t ≤ κ t + 2 * c * b t) :
-    ConcaveOn ℝ Set.univ fun t => (κ t + 2 * c * b t) ^ (p / q) - K * b t ^ (p / q) := by
+    (h17 : ∀ t, c * b t ≤ r t) (h17' : ∀ t, r'' t ≤ 2 * c * b'' t)
+    (h18 : ∀ t, (q - 1) * b' t ^ 2 ≤ q * b t * b'' t) :
+    ConcaveOn ℝ Set.univ fun t => r t ^ (p / q) - K * b t ^ (p / q) := by
   have hq0 : 0 < q := by linarith
   have hq1 : 0 < q - 1 := by linarith
   set s := p / q with hs
@@ -3048,24 +3122,7 @@ theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 
   have hK0 : 0 ≤ K := by
     have : 0 < K * (p - 1) := lt_of_lt_of_le (by positivity) hK
     exact (pos_of_mul_pos_left this (by linarith : (0 : ℝ) ≤ p - 1)).le
-  refine twoByM_concave_of_supporting fun t₀ => ?_
-  obtain ⟨m, hm⟩ := twoByM_concave_supporting hκ t₀
-  obtain ⟨r, hr_def⟩ : ∃ r : ℝ → ℝ, r = fun t => κ t₀ + m * (t - t₀) + 2 * c * b t := ⟨_, rfl⟩
-  obtain ⟨r', hr'_def⟩ : ∃ r' : ℝ → ℝ, r' = fun t => m + 2 * c * b' t := ⟨_, rfl⟩
-  obtain ⟨r'', hr''_def⟩ : ∃ r'' : ℝ → ℝ, r'' = fun t => 2 * c * b'' t := ⟨_, rfl⟩
-  have hrr : ∀ t, κ t + 2 * c * b t ≤ r t := fun t => by rw [hr_def]; linarith [hm t]
-  have hcbr : ∀ t, c * b t ≤ r t := fun t => (hr t).trans (hrr t)
-  have hr0 : ∀ t, 0 < r t := fun t => lt_of_lt_of_le (mul_pos hc (hb0 t)) (hcbr t)
-  have hrd : ∀ t, HasDerivAt r (r' t) t := fun t => by
-    have := ((((hasDerivAt_id' t).sub_const t₀).const_mul m).const_add (κ t₀)).fun_add
-      ((hb t).const_mul (2 * c))
-    rw [hr_def, hr'_def]
-    exact this.congr_deriv (by ring)
-  have hrd' : ∀ t, HasDerivAt r' (r'' t) t := fun t => by
-    have := ((hb' t).const_mul (2 * c)).const_add m
-    rw [hr'_def, hr''_def]
-    exact this
-  -- the smooth comparison function `r̃^s − K b^s`
+  have hr0 : ∀ t, 0 < r t := fun t => lt_of_lt_of_le (mul_pos hc (hb0 t)) (h17 t)
   obtain ⟨F', hF'd⟩ : ∃ F' : ℝ → ℝ,
       F' = fun t => r' t * s * r t ^ (s - 1) - K * (b' t * s * b t ^ (s - 1)) := ⟨_, rfl⟩
   obtain ⟨F'', hF''d⟩ : ∃ F'' : ℝ → ℝ, F'' = fun t =>
@@ -3074,11 +3131,11 @@ theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 
     ⟨_, rfl⟩
   have hF : ∀ t, HasDerivAt (fun t => r t ^ s - K * b t ^ s) (F' t) t := fun t => by
     rw [hF'd]
-    exact (twoByM_rpow_hasDerivAt hr0 hrd hrd' t).1.sub
+    exact (twoByM_rpow_hasDerivAt hr0 hr hr' t).1.sub
       ((twoByM_rpow_hasDerivAt hb0 hb hb' t).1.const_mul _)
   have hF' : ∀ t, HasDerivAt F' (F'' t) t := fun t => by
     rw [hF'd, hF''d]
-    exact (twoByM_rpow_hasDerivAt hr0 hrd hrd' t).2.sub
+    exact (twoByM_rpow_hasDerivAt hr0 hr hr' t).2.sub
       ((twoByM_rpow_hasDerivAt hb0 hb hb' t).2.const_mul _)
   -- `F'' ≤ 0`: the computation of Remark 4.5
   have hF''0 : ∀ t, F'' t ≤ 0 := fun t => by
@@ -3093,10 +3150,10 @@ theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 
       linarith
     set β := b t ^ (s - 1) with hβ
     have hβ0 : 0 < β := Real.rpow_pos_of_pos hBt _
-    -- the `r̃`-term: `(r̃^s)'' ≤ s r̃^{s−1} r̃'' ≤ 2 s c^s b^{s−1} b''`
+    -- the `r`-term: `(r^s)'' ≤ s r^{s−1} r'' ≤ 2 s c^s b^{s−1} b''`
     have hR1 : r t ^ (s - 1) ≤ c ^ (s - 1) * β := by
       rw [hβ, ← Real.mul_rpow hc.le hBt.le]
-      exact Real.rpow_le_rpow_of_nonpos (mul_pos hc hBt) (hcbr t) (by linarith)
+      exact Real.rpow_le_rpow_of_nonpos (mul_pos hc hBt) (h17 t) (by linarith)
     have hcs : c * c ^ (s - 1) = c ^ s := by
       rw [Real.rpow_sub_one hc.ne']; field_simp
     have hX2 : r' t * s * (r' t * (s - 1) * r t ^ (s - 1 - 1)) ≤ 0 := by
@@ -3106,9 +3163,12 @@ theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 
       exact mul_nonneg (mul_nonneg hs0.le (by linarith))
         (mul_nonneg (sq_nonneg _) (Real.rpow_pos_of_pos hRt _).le)
     have hX1 : r'' t * s * r t ^ (s - 1) ≤ 2 * s * c ^ s * b'' t * β := by
-      rw [hr''_def]
-      calc 2 * c * b'' t * s * r t ^ (s - 1) ≤ 2 * c * b'' t * s * (c ^ (s - 1) * β) :=
-            mul_le_mul_of_nonneg_left hR1 (by positivity)
+      have hsr : 0 ≤ s * r t ^ (s - 1) := mul_nonneg hs0.le (Real.rpow_pos_of_pos hRt _).le
+      calc r'' t * s * r t ^ (s - 1) = r'' t * (s * r t ^ (s - 1)) := by ring
+        _ ≤ 2 * c * b'' t * (s * r t ^ (s - 1)) := mul_le_mul_of_nonneg_right (h17' t) hsr
+        _ ≤ 2 * c * b'' t * (s * (c ^ (s - 1) * β)) :=
+            mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hR1 hs0.le)
+              (mul_nonneg (mul_nonneg two_pos.le hc.le) hD)
         _ = 2 * s * (c * c ^ (s - 1)) * b'' t * β := by ring
         _ = 2 * s * c ^ s * b'' t * β := by rw [hcs]
     -- the `b`-term: `(b^s)'' (q − 1) ≥ s b^{s−1} b'' (p − 1)`
@@ -3150,95 +3210,20 @@ theorem twoByM_rpow_concave {κ b b' b'' : ℝ → ℝ} {p q c K : ℝ} (hp : 1 
       rw [e]
       nlinarith
     exact nonpos_of_mul_nonpos_left hfin hq1
-  have hconc : ConcaveOn ℝ Set.univ fun t => r t ^ s - K * b t ^ s :=
-    concaveOn_of_hasDerivWithinAt2_nonpos convex_univ
-      (fun t _ => (hF t).continuousAt.continuousWithinAt) (fun t _ => (hF t).hasDerivWithinAt)
-      (fun t _ => (hF' t).hasDerivWithinAt) fun t _ => hF''0 t
-  refine ⟨F' t₀, fun t => ?_⟩
-  have htan := twoByM_concave_tangent hconc (hF t₀) t
-  have hle : (κ t + 2 * c * b t) ^ s ≤ r t ^ s :=
-    Real.rpow_le_rpow (le_trans (mul_pos hc (hb0 t)).le (hr t)) (hrr t) hs0.le
-  have heq : r t₀ = κ t₀ + 2 * c * b t₀ := by rw [hr_def]; ring
-  rw [heq] at htan
-  linarith
+  exact concaveOn_of_hasDerivWithinAt2_nonpos convex_univ
+    (fun t _ => (hF t).continuousAt.continuousWithinAt) (fun t _ => (hF t).hasDerivWithinAt)
+    (fun t _ => (hF' t).hasDerivWithinAt) fun t _ => hF''0 t
 
-/-- `‖c + t w‖^q = P (t)^{q/2}` with `P (t) = (re c + t re w)² + (im c + t im w)²`. -/
-theorem twoByM_norm_line_rpow (c w : ℂ) (t q : ℝ) :
-    ‖c + t * w‖ ^ q = ((c.re + t * w.re) ^ 2 + (c.im + t * w.im) ^ 2) ^ (q / 2) := by
-  rw [← twoByM_normSq_line, ← Real.rpow_natCast, ← Real.rpow_mul (norm_nonneg _)]
-  congr 1; push_cast; ring
-
-/-- Zig-zag concavity of `U` (Remark 4.5) where every coordinate line `x_j + t h_j` avoids `0`. -/
-theorem twoByM_zigzagq_generic {p q : ℝ} (hp : 1 < p) (hpq : p < q) (hq2 : 2 ≤ q) {n : ℕ}
-    (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) (j₀ : Fin n)
-    (hj : ∀ (j : Fin n) (t : ℝ), x j + t * h j ≠ 0) :
-    ConcaveOn ℝ Set.univ fun t : ℝ =>
-      twoByM_Uq p q (fun j => x j + t * h j) (fun j => y j + t * ε * h j) := by
-  have hB := External.Burkholder.scalarFunctionQ_holds hq2
+theorem twoByM_continuous_Rq {q : ℝ} (hq : 1 ≤ q) (n : ℕ) :
+    Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => twoByM_Rq q z.1 z.2 := by
   have hq0 : 0 < q := by linarith
-  have hc0 : 0 < (q - 1) ^ q := Real.rpow_pos_of_pos (by linarith) q
-  -- `κ = r − 2 c b` and `b`, with `r (t) = R (x + t h, y + t ε h)`, `b (t) = B (x + t h)`
-  set κ : ℝ → ℝ := fun t => ∑ j, External.Burkholder.uq q (x j + t * h j) (y j + t * ε * h j)
-  set P : Fin n → ℝ → ℝ := fun j t => ((x j).re + t * (h j).re) ^ 2 + ((x j).im + t * (h j).im) ^ 2
-  set P' : Fin n → ℝ → ℝ := fun j t =>
-    2 * ((h j).re * ((x j).re + t * (h j).re) + (h j).im * ((x j).im + t * (h j).im))
-  have hPpos : ∀ j t, 0 < P j t := fun j t => by
-    have := pow_pos (norm_pos_iff.2 (hj j t)) 2
-    rw [twoByM_normSq_line] at this
-    exact this
-  have hP : ∀ j t, HasDerivAt (P j) (P' j t) t := fun j t => by
-    have h1 := (((hasDerivAt_id' t).mul_const (h j).re).const_add (x j).re).fun_pow 2
-    have h2 := (((hasDerivAt_id' t).mul_const (h j).im).const_add (x j).im).fun_pow 2
-    convert h1.fun_add h2 using 1
-    simp only [P']; ring
-  have hP' : ∀ j t, HasDerivAt (P' j) (2 * ((h j).re ^ 2 + (h j).im ^ 2)) t := fun j t => by
-    have h1 := (((hasDerivAt_id' t).mul_const (h j).re).const_add (x j).re).const_mul (h j).re
-    have h2 := (((hasDerivAt_id' t).mul_const (h j).im).const_add (x j).im).const_mul (h j).im
-    convert (h1.fun_add h2).const_mul 2 using 1
-    ring
-  set b : ℝ → ℝ := fun t => ∑ j, P j t ^ (q / 2)
-  set b' : ℝ → ℝ := fun t => ∑ j, P' j t * (q / 2) * P j t ^ (q / 2 - 1)
-  set b'' : ℝ → ℝ := fun t => ∑ j, (2 * ((h j).re ^ 2 + (h j).im ^ 2) * (q / 2) *
-    P j t ^ (q / 2 - 1) + P' j t * (q / 2) * (P' j t * (q / 2 - 1) * P j t ^ (q / 2 - 1 - 1)))
-  have hbn : ∀ t : ℝ, b t = ∑ j, ‖x j + t * h j‖ ^ q := fun t =>
-    Finset.sum_congr rfl fun j _ => (twoByM_norm_line_rpow (x j) (h j) t q).symm
-  have hb : ∀ t, HasDerivAt b (b' t) t := fun t => by
-    have := HasDerivAt.fun_sum (u := Finset.univ) fun j _ =>
-      (hP j t).rpow_const (p := q / 2) (Or.inl (hPpos j t).ne')
-    convert this using 1
-  have hb' : ∀ t, HasDerivAt b' (b'' t) t := fun t => by
-    have := HasDerivAt.fun_sum (u := Finset.univ) fun j _ =>
-      ((hP' j t).mul_const (q / 2)).fun_mul
-        ((hP j t).rpow_const (p := q / 2 - 1) (Or.inl (hPpos j t).ne'))
-    convert this using 1
-  have hb0 : ∀ t, 0 < b t := fun t =>
-    lt_of_lt_of_le (Real.rpow_pos_of_pos (hPpos j₀ t) _)
-      (Finset.single_le_sum (f := fun j => P j t ^ (q / 2))
-        (fun j _ => (Real.rpow_pos_of_pos (hPpos j t) _).le) (Finset.mem_univ j₀))
-  -- `b^{1/q} = ‖x + t h‖_{ℓ_q}` is convex
-  have hconv : ConvexOn ℝ Set.univ fun t => b t ^ (1 / q) := by
-    have := twoByM_convex_lqNorm_line (q := q) (by linarith) x h
-    convert this using 2 with t
-    rw [hbn, lqNorm]
-  have h18 := twoByM_eq18q hq0 hb0 hb hb' hconv
-  -- `κ` is concave by (14)
-  have hκ : ConcaveOn ℝ Set.univ κ :=
-    twoByM_concaveOn_sum _ fun j _ => hB.2 (x j) (y j) (h j) ε hε
-  -- `r ≥ c b` by (13)
-  have hr : ∀ t, (q - 1) ^ q * b t ≤ κ t + 2 * (q - 1) ^ q * b t := fun t => by
-    have : -((q - 1) ^ q * b t) ≤ κ t := by
-      rw [hbn, Finset.mul_sum, ← Finset.sum_neg_distrib]
-      refine Finset.sum_le_sum fun j _ => ?_
-      have := hB.1 (x j + t * h j) (y j + t * ε * h j)
-      have : 0 ≤ ‖y j + t * ε * h j‖ ^ q := by positivity
-      linarith
-    linarith
-  have hK : 2 * ((q - 1) ^ q) ^ (p / q) * (q - 1) ≤ twoByM_K p q * (p - 1) := by
-    rw [← Real.rpow_mul (by linarith : (0 : ℝ) ≤ q - 1), show q * (p / q) = p by field_simp,
-      twoByM_K, div_mul_cancel₀ _ (by linarith : p - 1 ≠ 0)]
-  have key := twoByM_rpow_concave hp hpq hc0 hK hκ hb0 hb hb' h18 hr
-  convert key using 2 with t
-  rw [twoByM_Uq, twoByM_Rq, twoByM_Bq, ← hbn, Finset.sum_add_distrib, ← Finset.mul_sum, ← hbn]
+  have hnorm : ∀ j : Fin n, Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => ‖z.1 j‖ ^ q :=
+    fun j => ((continuous_apply j).comp continuous_fst).norm.rpow_const fun _ => Or.inr hq0.le
+  unfold twoByM_Rq
+  refine continuous_finsetSum _ fun j _ => ?_
+  exact ((External.Burkholder.continuous_uq hq).comp
+    (((continuous_apply j).comp continuous_fst).prodMk
+      ((continuous_apply j).comp continuous_snd))).add (continuous_const.mul (hnorm j))
 
 theorem twoByM_continuous_Uq {p q : ℝ} (hp : 0 < p) (hq : 1 ≤ q) (n : ℕ) :
     Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => twoByM_Uq p q z.1 z.2 := by
@@ -3246,51 +3231,88 @@ theorem twoByM_continuous_Uq {p q : ℝ} (hp : 0 < p) (hq : 1 ≤ q) (n : ℕ) :
   have hs : 0 ≤ p / q := by positivity
   have hnorm : ∀ j : Fin n, Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => ‖z.1 j‖ ^ q :=
     fun j => ((continuous_apply j).comp continuous_fst).norm.rpow_const fun _ => Or.inr hq0.le
-  have hR : Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => twoByM_Rq q z.1 z.2 := by
-    unfold twoByM_Rq
-    refine continuous_finsetSum _ fun j _ => ?_
-    exact ((External.Burkholder.continuous_uq hq).comp
-      (((continuous_apply j).comp continuous_fst).prodMk
-        ((continuous_apply j).comp continuous_snd))).add (continuous_const.mul (hnorm j))
   have hB : Continuous fun z : (Fin n → ℂ) × (Fin n → ℂ) => twoByM_Bq q z.1 := by
     unfold twoByM_Bq; exact continuous_finsetSum _ fun j _ => hnorm j
   unfold twoByM_Uq
-  exact (hR.rpow_const fun _ => Or.inr hs).sub
+  exact ((twoByM_continuous_Rq hq n).rpow_const fun _ => Or.inr hs).sub
     (continuous_const.mul (hB.rpow_const fun _ => Or.inr hs))
 
+open ContinuousLinearMap in
+open scoped Convolution in
 /-- **Zig-zag concavity of `U`** (Remark 4.5, the analogue of `twoByM_zigzag`): for
-`x, y, h ∈ ℂ^n` and `|ε| ≤ 1`, `t ↦ U (x + t h, y + t ε h)` is concave. If `h = 0` it is constant;
-otherwise every `x_j` is a limit of points for which `x_j + t h_j` never vanishes (so that
-`B (x + t h)` is smooth and positive, as the paper's `b_η > 0`), and concavity passes to the
-limit. -/
+`x, y, h ∈ ℂ^n` and `|ε| ≤ 1`, `t ↦ U (x + t h, y + t ε h)` is concave.
+
+Proof, the proof of Proposition 4.2 (TeX 1286–1352) with the exponent `q`. If `x = h = 0` the
+function is constant. Otherwise, with `b (t) = B_q (x + t h)`, `r (t) = R_q (x + t h, y + t ε h)`
+and `c = (q − 1)^q`: `r − 2 c b = Σ_j u_q (x_j + t h_j, y_j + t ε h_j)` is concave by (14) and
+`r ≥ c b` by (13) (`External.Burkholder.scalarFunctionQ_holds`). For every mollifier `ρ_η`, `r_η`
+and `b_η` satisfy (17) (`twoByM_eq17`), `b_η^{1/q}` is convex (`twoByM_convexOn_mollify_Bq`) and
+`b_η > 0` (`twoByM_mollify_Bq_pos`), so (18) `(q − 1) b_η'² ≤ q b_η b_η''` holds
+(`twoByM_eq18q`), and the computation `twoByM_rpow_concave` makes `r_η^{p/q} − K b_η^{p/q}`
+concave. Letting `η ↓ 0` (`twoByM_concaveOn_of_mollify`) gives the concavity of
+`r^{p/q} − K b^{p/q} = U (x + t h, y + t ε h)`. -/
 theorem twoByM_zigzagq {p q : ℝ} (hp : 1 < p) (hpq : p < q) (hq2 : 2 ≤ q) {n : ℕ}
     (x y h : Fin n → ℂ) {ε : ℂ} (hε : ‖ε‖ ≤ 1) :
     ConcaveOn ℝ Set.univ fun t : ℝ =>
       twoByM_Uq p q (fun j => x j + t * h j) (fun j => y j + t * ε * h j) := by
-  classical
-  by_cases hh : h = 0
-  · subst hh
-    have : (fun t : ℝ => twoByM_Uq p q (fun j => x j + (t : ℂ) * (0 : Fin n → ℂ) j)
-        (fun j => y j + (t : ℂ) * ε * (0 : Fin n → ℂ) j)) = fun _ => twoByM_Uq p q x y := by
+  by_cases hxh : x = 0 ∧ h = 0
+  · obtain ⟨rfl, rfl⟩ := hxh
+    have : (fun t : ℝ => twoByM_Uq p q (fun j => (0 : Fin n → ℂ) j + (t : ℂ) * (0 : Fin n → ℂ) j)
+        (fun j => y j + (t : ℂ) * ε * (0 : Fin n → ℂ) j)) = fun _ => twoByM_Uq p q 0 y := by
       funext t
       congr 1 <;> funext j <;> simp
     rw [this]
     exact concaveOn_const _ convex_univ
-  obtain ⟨j₀, -⟩ : ∃ j₀, h j₀ ≠ 0 := by
-    by_contra hc; push Not at hc; exact hh (funext hc)
-  choose a' ha' ha'0 using fun j => External.Burkholder.exists_seq_line_ne_zero (x j) (h j)
-  refine External.Burkholder.concaveOn_univ_of_tendsto
-    (F := fun m t => twoByM_Uq p q (fun j => a' j m + t * h j) (fun j => y j + t * ε * h j))
-    (fun m => twoByM_zigzagq_generic hp hpq hq2 (fun j => a' j m) y h hε j₀
-      fun j t => ha'0 j m t) fun t => ?_
-  have hline : Tendsto (fun m => fun j => a' j m + (t : ℂ) * h j) atTop
-      (𝓝 fun j => x j + (t : ℂ) * h j) :=
-    tendsto_pi_nhds.2 fun j => (ha' j).add_const _
-  have hc := (twoByM_continuous_Uq (p := p) (q := q) (by linarith) (by linarith) n).tendsto
-    ((fun j => x j + (t : ℂ) * h j), (fun j => y j + (t : ℂ) * ε * h j))
-  have hl2 := hline.prodMk_nhds (tendsto_const_nhds (x := fun j => y j + (t : ℂ) * ε * h j))
-  have := hc.comp hl2
-  exact this
+  have hBq := External.Burkholder.scalarFunctionQ_holds hq2
+  have hq0 : 0 < q := by linarith
+  have hc0 : 0 < (q - 1) ^ q := Real.rpow_pos_of_pos (by linarith) q
+  have hs : 0 ≤ p / q := by positivity
+  -- `b (t) = B_q (x + t h)` and `r (t) = R_q (x + t h, y + t ε h)`
+  set b : ℝ → ℝ := fun t => twoByM_Bq q fun j => x j + t * h j with hb_def
+  set r : ℝ → ℝ := fun t =>
+    twoByM_Rq q (fun j => x j + t * h j) (fun j => y j + t * ε * h j) with hr_def
+  have hb : Continuous b := twoByM_continuous_Bq_line hq0.le x h
+  have hr : Continuous r := (twoByM_continuous_Rq (by linarith) n).comp
+    (f := fun t : ℝ => ((fun j => x j + (t : ℂ) * h j), (fun j => y j + (t : ℂ) * ε * h j)))
+    (by fun_prop)
+  -- `r − 2 c b = Σ_j u_q (x_j + t h_j, y_j + t ε h_j)`
+  have hrκ : ∀ t, r t - 2 * (q - 1) ^ q * b t =
+      ∑ j, External.Burkholder.uq q (x j + t * h j) (y j + t * ε * h j) := fun t => by
+    simp only [hr_def, hb_def, twoByM_Rq, twoByM_Bq, Finset.sum_add_distrib, Finset.mul_sum]
+    ring
+  -- (14): `r − 2 c b` is concave
+  have hκ : ConcaveOn ℝ Set.univ fun t => r t - 2 * (q - 1) ^ q * b t := by
+    simp only [hrκ]
+    exact twoByM_concaveOn_sum _ fun j _ => hBq.2 (x j) (y j) (h j) ε hε
+  -- (13): `r ≥ c b`
+  have hrb : ∀ t, (q - 1) ^ q * b t ≤ r t := fun t => by
+    have : -((q - 1) ^ q * b t) ≤ r t - 2 * (q - 1) ^ q * b t := by
+      rw [hrκ]
+      simp only [hb_def, twoByM_Bq, Finset.mul_sum, ← Finset.sum_neg_distrib]
+      refine Finset.sum_le_sum fun j _ => ?_
+      have := hBq.1 (x j + t * h j) (y j + t * ε * h j)
+      have : 0 ≤ ‖y j + t * ε * h j‖ ^ q := by positivity
+      linarith
+    linarith
+  have hK : 2 * ((q - 1) ^ q) ^ (p / q) * (q - 1) ≤ twoByM_K p q * (p - 1) := by
+    rw [← Real.rpow_mul (by linarith : (0 : ℝ) ≤ q - 1), show q * (p / q) = p by field_simp,
+      twoByM_K, div_mul_cancel₀ _ (by linarith : p - 1 ≠ 0)]
+  change ConcaveOn ℝ Set.univ fun t => r t ^ (p / q) - twoByM_K p q * b t ^ (p / q)
+  refine twoByM_concaveOn_of_mollify (Φ := fun r b => r ^ (p / q) - twoByM_K p q * b ^ (p / q))
+    hr hb ((continuous_fst.rpow_const fun _ => Or.inr hs).sub
+      (continuous_const.mul (continuous_snd.rpow_const fun _ => Or.inr hs))) fun φ => ?_
+  -- the mollifications `r_η`, `b_η`: smooth, (17), `b_η > 0`, convexity of `b_η^{1/q}` and (18)
+  have hR := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hr.locallyIntegrable)
+  have hB := twoByM_hasDerivAt_deriv
+    (φ.contDiff_normed_convolution (μ := volume) hb.locallyIntegrable)
+  have hb0 := twoByM_mollify_Bq_pos hq0 hxh φ
+  have h17 := twoByM_eq17 hr hb hκ hrb φ
+  have h18 := twoByM_eq18q hq0 hb0 (fun t => (hB t).1) (fun t => (hB t).2)
+    (twoByM_convexOn_mollify_Bq (by linarith) x h φ)
+  -- the computation of Remark 4.5: `r_η^{p/q} − K b_η^{p/q}` is concave
+  exact twoByM_rpow_concave hp hpq hc0 hK (fun t => (hR t).1) (fun t => (hR t).2) hb0
+    (fun t => (hB t).1) (fun t => (hB t).2) (fun t => (h17 t).1) (fun t => (h17 t).2) h18
 
 /-- `B_q (y) ≤ R_q (x, y)`, by (13). -/
 theorem twoByM_Bq_le_Rq {q : ℝ} (hq : 2 ≤ q) {n : ℕ} (x y : Fin n → ℂ) :
@@ -3305,12 +3327,6 @@ theorem twoByM_Bq_le_Rq {q : ℝ} (hq : 2 ≤ q) {n : ℕ} (x y : Fin n → ℂ)
 
 theorem twoByM_Rq_nonneg {q : ℝ} (hq : 2 ≤ q) {n : ℕ} (x y : Fin n → ℂ) : 0 ≤ twoByM_Rq q x y :=
   (twoByM_Bq_nonneg q y).trans (twoByM_Bq_le_Rq hq x y)
-
-/-- `‖z‖_{ℓ_q}^p = B_q (z)^{p/q}`. -/
-theorem twoByM_lqNorm_rpow {n : ℕ} {q : ℝ} (p : ℝ) (z : Fin n → ℂ) :
-    lqNorm q z ^ p = twoByM_Bq q z ^ (p / q) := by
-  rw [lqNorm, twoByM_Bq, ← Real.rpow_mul (Finset.sum_nonneg fun j _ => by positivity)]
-  congr 1; ring
 
 /-- (16) for Remark 4.5: `U (x, y) ≥ ‖y‖_q^p − K ‖x‖_q^p`, from (13). -/
 theorem twoByM_Uq_majorization {p q : ℝ} (hp : 0 < p) (hq : 2 ≤ q) {n : ℕ} (x y : Fin n → ℂ) :
@@ -3434,15 +3450,12 @@ theorem twoByM_quasiconvexAt_of_minorant {d m : ℕ} {f g : Matrix (Fin d) (Fin 
 
 /-- **Theorem 1.2, elementary route** (`cs-thm1.2-elementary`): for `p ∈ (1, ∞)` there is `m₀ (p)`
 such that for every `m ≥ m₀ (p)` there is a `p`-homogeneous, rank-one convex and nowhere
-quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2_umd` (the paper's proof)
-without its three UMD hypotheses; it proves `theorem1_2`.
-
-Departure from the paper (approved by the user): Theorem 1.2 by the route of Remark 4.5
-(Burkholder's scalar function instead of UMD constants), because the UMD estimates the paper's
-proof uses (Proposition 2.7 (1), (3), (5) through Proposition 4.1 and (10)) are out of reach
-(reason 2). Remark 4.5 only sketches this route ("the argument can be extended to general
-`1 < p < ∞`, `p + 2 < q < ∞`, where such a `U` can also be constructed"); the formal proof makes it
-explicit as follows.
+quasiconvex integrand `f : ℝ^{2×m} → ℝ`. The statement of `theorem1_2`, proved a second time, by
+the route of the paper's Remark 4.5 ("an entirely elementary (if more inscrutable) proof of
+Theorem 1.2"): Burkholder's scalar function `u_q` in place of the UMD constants that the paper's
+own proof (Section 4.4, `theorem1_2`) uses through Proposition 4.1 and (10). Remark 4.5 only
+sketches this route ("the argument can be extended to general `1 < p < ∞`, `p + 2 < q < ∞`, where
+such a `U` can also be constructed"); the formal proof makes it explicit as follows.
 
 Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
 * By Lemma 4.2 (`lemma4_2`, `q ≥ p + 2`) and the limiting argument of Section 4.3
@@ -3452,9 +3465,11 @@ Proof. `q = p + 3`, `K = 2 (q − 1)^p (q − 1) / (p − 1)`, `C = K^{1/p}`.
   `g (A) = −U (conj (P_{n₀} A), Q_{n₀} A)` is a continuous, `p`-homogeneous, globally rank-one
   convex integrand with `g ≤ F_{n₀,p,q,C}` and `g (0) = 0` (`twoByM_explicit_minorant_q`: (13),
   (14) for `u_q`, `External.Burkholder.scalarFunctionQ_holds`; Lemma 4.1; the zig-zag concavity of
-  `U`, `twoByM_zigzagq`, with the composition step `twoByM_rpow_concave`, regularized by the
-  supporting-majorant device of `twoByM_sqrt_concave` instead of mollification, a choice of
-  mechanics that keeps the claims of the step).
+  `U`, `twoByM_zigzagq`, regularized by mollification as in the paper (TeX 1299–1351): (17) for
+  `r_η`, `b_η` (`twoByM_eq17`), the convexity of `b_η^{1/q}` by Minkowski's inequality
+  (`twoByM_convexOn_mollify_Bq`), (18) for `b_η` (`twoByM_eq18q`), the computation
+  `twoByM_rpow_concave` for `r_η^{p/q} − K b_η^{p/q}`, and `η ↓ 0`
+  (`twoByM_concaveOn_of_mollify`)).
 * As in Proposition 4.3, `g` is not quasiconvex at `0`: otherwise `F_{n₀,p,q,C}` would be, by the
   paper's argument through quasiconvex minorants (line 559, `quasiconvexAt_iff_exists_minorant`,
   from Dacorogna's formula). Being `p`-homogeneous and continuous, `g` is nowhere quasiconvex

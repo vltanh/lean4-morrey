@@ -227,10 +227,10 @@ theorem lift_quasiconvexAt_of_comp_trunc (hd : d' ≤ d) (hm : m' ≤ m)
     (h : QuasiconvexAt (fun B => f (lift_trunc hd hm B)) A) :
     QuasiconvexAt f (lift_trunc hd hm A) := by
   have hF := lift_isIntegrand_comp hd hm hf
-  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hF.1 hF.2 A).1
+  have hper := (External.Rindler.quasiconvexAtOn_iff_periodic hF.1.measurable hF.2 A).1
     ((cov_quasiconvexAtOn_unitCube_iff _ A).2 h)
   refine (cov_quasiconvexAtOn_unitCube_iff f _).1
-    ((External.Rindler.quasiconvexAtOn_iff_periodic hf.1 hf.2 _).2 ?_)
+    ((External.Rindler.quasiconvexAtOn_iff_periodic hf.1.measurable hf.2 _).2 ?_)
   intro φ K hK hφper hint
   set ψ : (Fin m → ℝ) → Fin d → ℝ := fun y => lift_padV hd (φ (lift_projX hm y)) with hψ
   have hψK : LipschitzWith (‖lift_padV hd‖₊ * K * ‖lift_projX hm‖₊) ψ :=

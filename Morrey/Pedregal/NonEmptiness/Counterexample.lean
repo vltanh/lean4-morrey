@@ -226,14 +226,21 @@ theorem T_cex_eq_empty : T (TriMold.canonical 1) uCex vCex tCex = ∅ := by
   simp only [Set.mem_empty_iff_false, iff_false]
   exact fun hr => not_parallel r (hr.2 mixP mixP_mem_tree mixP_not_leaf)
 
-/-- **Corollary 7.2** (`cor7_2`) **is false.** -/
+/-- **Corollary 7.2** (`cor7_2`) **is false.**
+
+Departure from the paper (reason 1: the statement is false; REPORT.md, E13): the paper
+derives Corollary 7.2 from Proposition 7.1; here it is refuted, by the counterexample of the
+module docstring (`T_cex_eq_empty`). -/
 theorem corollary7_2_false : ¬ Corollary7_2 := by
   intro h
   obtain ⟨r, hr⟩ := h 1 le_rfl (TriMold.canonical 1) uCex vCex uCex_mem vCex_mem tCex tCex_mem
   rw [T_cex_eq_empty] at hr
   exact hr
 
-/-- **Proposition 7.1** (`esta`) **is false.** -/
+/-- **Proposition 7.1** (`esta`) **is false.**
+
+Departure from the paper (reason 1: the statement is false; REPORT.md, E13): refuted, with
+`w := vCex`, instead of proved. -/
 theorem proposition7_1_false : ¬ Proposition7_1 := by
   intro h
   obtain ⟨r, -, hr⟩ := h 1 le_rfl (TriMold.canonical 1) uCex uCex_mem tCex tCex_mem vCex vCex_mem
@@ -242,14 +249,20 @@ theorem proposition7_1_false : ¬ Proposition7_1 := by
 /-- **The summary of Step 2 of the proof of Proposition 7.1, with Claim 7.5** (`positivo`), **is
 false**, already for the sub-mold
 `j = 0`: no weights at all make the decomposition directions of `vCex` parallel to those of
-`uCex` along it. -/
+`uCex` along it.
+
+Departure from the paper (reason 1: the statement is false; REPORT.md, E14): refuted
+instead of proved. -/
 theorem step2Claim_false : ¬ Step2Claim := by
   intro h
   obtain ⟨r, -, -, hr⟩ :=
     h 1 le_rfl (TriMold.canonical 1) uCex uCex_mem tCex tCex_mem 0 vCex vCex_mem
   exact not_parallel r (hr mixP mixP_mem_subMold mixP_not_leaf)
 
-/-- The summary of Step 2 as the paper states it (with the start from `𝕌_j`) is false too. -/
+/-- The summary of Step 2 as the paper states it (with the start from `𝕌_j`) is false too.
+
+Departure from the paper (reason 1: the statement is false; REPORT.md, E14): refuted
+instead of proved. -/
 theorem step2ClaimPaper_false : ¬ Step2ClaimPaper :=
   fun h => step2Claim_false (step2Claim_of_paper h)
 

@@ -31,7 +31,7 @@ project:
 
 classification:
   arxiv: ["math.AP", "math.OC"]
-  msc2020: ["49J45", "26B25", "47H10", "68V15"]
+  msc2020: ["49J45", "26B25", "47H10"]
 
 sources:
   - title: "Morrey's conjecture: rank-one convexity implies quasi-convexity for two-dimensional, two-component maps"
@@ -67,13 +67,15 @@ sources:
 related_formalizations:
   - id: "https://github.com/vltanh/lean4-fixed-point"
     relationship: "builds-on"
-    note: "Provides Kakutani's fixed-point theorem (commit 5f650f0), used by the proofs only."
+    note: "Provides Kakutani's fixed-point theorem (commit 5f650f0), by Kakutani's own argument, used by the proofs only. No other package is used."
   - id: "https://github.com/sergioconti/so3-r1c-and-not-qc"
     relationship: "independent"
     note: >-
       Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
       non-quasiconvex function on 3x3 matrices, with its own definitions of rank-one convexity and
-      quasiconvexity. Not consulted for code; not a formalization of this paper.
+      quasiconvexity; not a formalization of this paper. The proofs here were written without
+      consulting it; searches and checks of 21-22 November 2026 displayed parts of it
+      (docs/Cassese/CREDITS.md), and nothing from it was used.
   - id: "palomar/Sverak in this repository"
     relationship: "other"
     note: >-
@@ -83,7 +85,12 @@ related_formalizations:
   - id: "palomar/Cassese in this repository"
     relationship: "other"
     note: >-
-      The formalization of Cassese, arXiv:2608.03488 (in progress), in the same repository.
+      The formalization of Cassese, arXiv:2608.03488v3, in the same repository, with its own
+      Challenge and metadata (every result that the paper proves is proved, unconditionally). Its
+      2x3 example makes the
+      claim of v1-v2 of this paper for two-component maps in dimension N >= 3 false, an inference
+      recorded in docs/Pedregal/REPORT.md, E17 (that claim is not stated in Lean). It shares no
+      definition with this one.
 
 status:
   scope: >-
@@ -91,10 +98,10 @@ status:
     neither proved nor refuted (the open 2x2 case of Morrey's problem). Formalized and refuted:
     Corollary 7.2, Proposition 7.1, and the summary of Step 2 of the proof of Proposition 7.1 with
     Claim 7.5. Proved: Definitions 3.1-6.1 as definitions, Proposition 3.3, the assertions of
-    Definition 5.1 and eqs. (5.10)-(5.15), Proposition 6.1, Subsection 6.1, Proposition 6.3,
-    Kakutani's theorem (Theorem 6.2), Claim 7.4, Corollary 7.2 from Proposition 7.1, the paper's
-    reduction of Theorem 1.1 (1) to the non-emptiness of the values of T, and Theorem 1.1 (1) for
-    l = 1. Not formalized: Claim 7.3, the reduction of Theorem 1.1 (2) to (1), Section 2 and the
+    Definition 5.1 and eqs. (5.10)-(5.15) ((5.10) with the factor 3^{-1} that its misprint drops),
+    Proposition 6.1, Subsection 6.1, Proposition 6.3, Kakutani's theorem (Theorem 6.2), Claim 7.4,
+    Corollary 7.2 from Proposition 7.1, the paper's reduction of Theorem 1.1 (1) to the
+    non-emptiness of the values of T, and Theorem 1.1 (1) for l = 1. Not formalized: Claim 7.3, the reduction of Theorem 1.1 (2) to (1), Section 2 and the
     examples.
   sorry_count: 0
   sorry_in_definitions: 0
@@ -114,38 +121,47 @@ automation:
         wall_time: "1.86 h elapsed to the completed audit report; 2.4 h of sub-agent working time"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
-      prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill."
+      prompting_notes: "One request: formalize arXiv:1905.06571 with the formalize-math-paper skill. In a later round (21-22 November 2026, the skill's version 4.2.0), an independent agent audited every recorded departure; no proof changed."
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code and the documents at the request of the author, who chose the
     paper. No person has reviewed the proofs. Independent AI agents checked the statements and
-    the counterexample against the TeX source, the formal proofs against the paper's, and the
-    report's findings and literature section. See CREDITS.md.
+    the counterexample against the TeX source, the formal proofs against the paper's, the
+    report's findings and literature section, every recorded departure, and the documents. See
+    docs/Pedregal/CREDITS.md.
 
 fidelity:
   divergences: >-
-    Statements: no statement of the paper was changed. Corollary 7.2, Proposition 7.1 and the
+    Statements: no statement of the paper was changed, apart from the misprint of eq. (5.10) (a
+    missing factor 3^{-1}, docs/Pedregal/REPORT.md, E6). Corollary 7.2, Proposition 7.1 and the
     summary of Step 2 are stated as in the paper (the summary also without its start from the
-    barycenter U_j, a weaker claim, refuted together with the paper's form) and refuted. Theorem
-    1.2 reads the "arbitrary function" psi as continuous. Readings: points of R^2 are Fin 2 -> R;
-    molds are ordered binary trees (Proposition 3.3's permutation is unique only for this
-    reading); leaves are indexed from 0 as (j, k); "parallel" is linear dependence; the
-    parallelism of Definition 6.1 is imposed at every mixture above the first level; laminates are
-    laminates of finite order; Kakutani's theorem is stated with topological upper
-    semicontinuity, derived from the closed graph that Subsection 6.1 proves. Proofs: every proof
-    of a correct result follows the paper's argument. Departures: Theorem 1.1 (1) is proved only
-    with the conclusion of the false Corollary 7.2 as a hypothesis (theorem1_1_of_nonempty), and at
-    l = 1 by an explicit lamination instead of the paper's fixed point (theorem1_1_part1_levelOne),
-    because Corollary 7.2 is false. See REPORT.md, Sections 6 and 7.
+    barycenter U_j, a weaker claim, refuted together with the paper's form) and refuted. Theorem 1.2
+    reads the "arbitrary function" psi as continuous. Readings: points of R^2 are Fin 2 -> R; molds
+    are ordered binary trees (Proposition 3.3's permutation is unique only for this reading); leaves
+    are indexed from 0 as (j, k); "parallel" is linear dependence; the parallelism of Definition 6.1
+    is imposed at every mixture above the first level; laminates are laminates of finite order;
+    Kakutani's theorem is stated with topological upper semicontinuity, derived from the closed
+    graph that Subsection 6.1 proves. Proofs: every proof of a correct result follows the paper's
+    argument. Three departures, each forced by an error of the paper (the paper's step is wrong):
+    Theorem 1.1 (1) is proved only with the conclusion of the false Corollary 7.2 as a hypothesis
+    (theorem1_1_of_nonempty); at l = 1 it is proved by an explicit lamination instead of the paper's
+    fixed point (theorem1_1_part1_levelOne), since the paper's step fails there too; and Proposition
+    7.1, Corollary 7.2 and the summary of Step 2 are refuted by a counterexample instead of proved.
+    See docs/Pedregal/REPORT.md, Sections 6 and 7.
 
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "a Claude Opus 5.5 sub-agent: the statements against the TeX source, and the counterexample recomputed by hand"
+    - "a Claude Opus 5.5 sub-agent: the formal proofs against the paper's"
+    - "a Claude Opus 5.5 sub-agent: the report's findings and literature section"
+    - "a Claude Opus 5.5 sub-agent (a later round): every recorded departure, read-only"
+    - "a Claude Opus 5.5 sub-agent (a later round): the rewritten documents against the code and the TeX source"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
     TeX source and recomputed the counterexample by hand, compared the formal proofs with the
-    paper's, and checked the report's findings and literature section against the sources.
+    paper's, checked the report's findings and literature section against the sources, audited
+    every recorded departure, and checked the documents against the code and the TeX source.
 
 alignment:
   namespace: "PedregalChallenge"

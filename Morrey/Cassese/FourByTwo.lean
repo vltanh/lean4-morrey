@@ -7,8 +7,8 @@ public import Mathlib.Algebra.Order.Star.Real
 public import Mathlib.Analysis.Matrix.PosDef
 public import Mathlib.Analysis.Calculus.Deriv.Polynomial
 public import Mathlib.Analysis.Convex.Deriv
-public import Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds
-public import Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz
+public import HarmonicAnalysis.BeurlingAhlfors.Periodic
+public import CalculusOfVariations.Lipschitz.Mollify
 public import Morrey.Cassese.Hypotheses
 public import Morrey.Cassese.Rademacher
 
@@ -23,8 +23,11 @@ by rows, block `j` (from `0`) formed by the rows `2j` and `2j + 1` (`rowBlock`),
 `C^{rc} (p, N, ρ) = rcThreshold (chainF N p ρ)` and `C^{qc} (p, N, ρ) = qcThreshold (chainF N p ρ)`.
 
 `chainOpNorm N p ρ` is the norm of `(h₀, …, h_N) ↦ Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` from
-`L^p_0 (𝕋²; ℓ₂^{N+1})` to `L^p_0 (𝕋²)`, computed on the dense subspace of mean-zero trigonometric
-polynomials (`trigPoly`, `torusBeurlingPow` in `Morrey/Cassese/Defs.lean`).
+`L^p_0 (𝕋²; ℓ₂^{N+1})` to `L^p_0 (𝕋²)`, computed on the dense subspace of smooth mean-zero tuples,
+as in the paper's proof: a function on `𝕋² = ℝ² / ℤ²` is a `ℤ²`-periodic function on `ℝ²`, its
+`L^p (𝕋²)` norm is the `L^p` norm on the unit square `(0, 1)²`, and `𝓑^k` is the torus multiplier
+with symbol `m (n)^k`, `m (n) = ξ̄ / ξ` at `ξ = n₀ + i n₁`, `m (0) = 0`
+(`UnitAddTorus.periodicMultiplier`, from the package `HarmonicAnalysis`).
 
 The helpers (prefix `fourByTwo_`) package the steps of the paper's proofs:
 
@@ -33,21 +36,22 @@ The helpers (prefix `fourByTwo_`) package the steps of the paper's proofs:
   `{±1}^n` as martingales of Mathlib (`rad_filtration`, `rad_martingale`, in
   `Morrey/Cassese/Rademacher.lean`), and
   Burkholder's inequality for their linear images (`fourByTwo_burkholder`).
-* Proposition 7.2: the periodic lift `Σ w_n e_n` of a trigonometric polynomial and its derivative
-  (`fourByTwo_tp`), the test map `u` solving `∂̄u_j = h_j + ρ ∂u_{j−1}` (`fourByTwo_testMap`,
-  `fourByTwo_uCoeff`), the identities `P_ρ (∇u) = h`, `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`
-  (`fourByTwo_chainP_testMap`, `fourByTwo_chainQ_testMap`), integrals over `𝕋²` as integrals over
-  `(0, 1)²` (`fourByTwo_lintegral_torus`), and the inequality `C^{qc} ≥ chainOpNorm`
-  (`fourByTwo_chainOpNorm_le_qcThreshold`), through periodic test maps (Lemma 2.2,
-  `External.Rindler.quasiconvexAtOn_iff_periodic`). For the inequality `C^{qc} ≤ chainOpNorm`
-  (`fourByTwo_qcThreshold_le_chainOpNorm`): the coefficients `ĥ_j` of `P_ρ (∇u)_j` for every
-  trigonometric test map `u` (`fourByTwo_hOf`), the identities `P_ρ (∇u) = h`,
-  `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (`fourByTwo_chainP_eq_hOf`, `fourByTwo_chainQ_eq_hOf`, by
-  the induction `fourByTwo_telescope`), the inequality `∫ f (∇u) ≥ 0` for these `u`
-  (`fourByTwo_integral_chainF_testMap_nonneg`), and its extension to Lipschitz periodic `φ`
-  through the Fejér means of `φ` (`fourByTwo_fejerW`, `fourByTwo_pd_fejerW`,
-  `fourByTwo_integral_chainF_nonneg_of_periodic`), with the general facts of
-  `Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz`.
+* Proposition 7.2: for a test map `φ`, the complex components `u_j = φ_{2j} + i φ_{2j+1}`
+  (`fourByTwo_u`), with `α_j (∇φ) = ∂u_j`, `β_j (∇φ) = ∂̄u_j` (`fourByTwo_alphaRow_jac`,
+  `fourByTwo_betaRow_jac`) and `P_ρ (∇φ)_j = h_j = ∂̄u_j − ρ ∂u_{j−1}` (`fourByTwo_chainP_jac`);
+  for smooth `ℤ²`-periodic `φ`, the tuple `(h_j)` is smooth, periodic and mean-zero, and
+  `Q (∇φ) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (`fourByTwo_chainQ_jac`, by the induction
+  `fourByTwo_telescope` frequency by frequency); `L^p` norms on the unit square
+  (`fourByTwo_eLpNorm_cube`, `fourByTwo_integral_nonneg_iff`) and on the torus
+  (`fourByTwo_eLpNorm_torus`). The inequality `C^{qc} ≥ chainOpNorm`
+  (`fourByTwo_chainOpNorm_le_qcThreshold`): the solution of `∂̄u_j = h_j + ρ ∂u_{j−1}`
+  (`fourByTwo_solve`, by the inverse of `∂̄` on mean-zero functions), the real test map with rows
+  `Re u_j`, `Im u_j` (`fourByTwo_reIm`), and Lemma 2.2 (periodic test maps,
+  `External.Rindler.quasiconvexAtOn_iff_periodic`). The inequality `C^{qc} ≤ chainOpNorm`
+  (`fourByTwo_qcThreshold_le_chainOpNorm`): `∫ f (∇u) ≥ 0` for smooth periodic `u`
+  (`fourByTwo_integral_chainF_nonneg_of_smooth`), extended to Lipschitz periodic maps by
+  mollification and dominated convergence (`fourByTwo_integral_nonneg_of_smooth`; the paper leaves
+  this step implicit, inventory item E28, filled here), and Lemma 2.2.
 * Theorem 7.1: `‖·‖_{S₂}` is the Frobenius norm, the maps `P_p`, `Q_p` (`fourByTwo_P`,
   `fourByTwo_Q`), monotonicity of `f_{p,ρ,C}` in `C`.
 * Corollary 7.2: homogeneous polynomials, the function `U` and its zig-zag concavity, the quartic
@@ -92,22 +96,28 @@ noncomputable def chainQ {N : ℕ} (A : Matrix (Fin (2 * (N + 1))) (Fin 2) ℝ) 
 noncomputable def chainF (N : ℕ) (p ρ C : ℝ) (A : Matrix (Fin (2 * (N + 1))) (Fin 2) ℝ) : ℝ :=
   C ^ p * √(∑ j, ‖chainP ρ A j‖ ^ 2) ^ p - ‖chainQ A‖ ^ p
 
-/-- `‖(ρ^N 𝓑^{N+1}, ρ^{N−1} 𝓑^N, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`, on mean-zero
-trigonometric polynomials `h_j`. -/
-noncomputable def chainOpNorm (N : ℕ) (p ρ : ℝ) : ℝ≥0∞ :=
-  ⨆ (c : Fin (N + 1) → ((Fin 2 → ℤ) →₀ ℂ)) (_ : ∀ j, c j 0 = 0),
-    eLpNorm (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-        torusBeurlingPow (N + 1 - j.val) (c j) x) (ENNReal.ofReal p) volume /
-      eLpNorm (fun x => √(∑ j, ‖trigPoly (c j) x‖ ^ 2)) (ENNReal.ofReal p) volume
+open scoped ContDiff in
+/-- `‖(ρ^N 𝓑^{N+1}, ρ^{N−1} 𝓑^N, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`: the supremum
+of `‖Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j‖_p / ‖(h_j)‖_{L^p (ℓ₂)}` over the smooth mean-zero tuples
+`(h₀, …, h_N)`, which are dense in `L^p_0 (𝕋²; ℓ₂^{N+1})`, as in the paper's proof.
 
-/-- Dragičević, *Some remarks on the `L^p` estimates for powers of the Ahlfors–Beurling
-operator*, Arch. Math. 96 (2011), Theorem 1.1, as used in the proof of Corollary 7.2:
-`‖𝓑²‖_{L⁴ (ℝ²) → L⁴ (ℝ²)} ≥ 21 / 5`. Out of reach (class X of the inventory): a proposition with
-no proof, a hypothesis of every statement whose proof uses it. It is defined here rather than in
-`External/` because it is stated with the shared definitions of `Morrey/Cassese/Defs.lean`, like
-`DragicevicLowerBound`; the source's own formulation could not be consulted. -/
-def DragicevicL4Bound : Prop :=
-  ENNReal.ofReal (21 / 5) ≤ beurlingPowNorm 2 4
+A function on `𝕋² = ℝ² / ℤ²` is a `ℤ²`-periodic function on `ℝ²` (`UnitAddTorus.IsPeriodic`);
+its mean and its `L^p (𝕋²)` norm are the integral and the `L^p` norm on the unit square `(0, 1)²`
+(`unitCube 2`, of measure `1`). `𝓑^k` is the torus multiplier with symbol `m (n)^k`,
+`m (n) = ξ̄ / ξ` at `ξ = n₀ + i n₁` (`HarmonicAnalysis.beurlingSymbol`,
+`HarmonicAnalysis.latticePoint`), `m (0) = 0`: `g ↦ Σ_n m (n)^k ĝ (n) e_n`
+(`UnitAddTorus.periodicMultiplier`, the series converging absolutely for smooth `g`), which on
+smooth functions is the `k`-th power of `𝓑` (`UnitAddTorus.periodicMultiplier_periodicMultiplier`).
+-/
+noncomputable def chainOpNorm (N : ℕ) (p ρ : ℝ) : ℝ≥0∞ :=
+  ⨆ (h : Fin (N + 1) → (Fin 2 → ℝ) → ℂ)
+    (_ : ∀ j, ContDiff ℝ ∞ (h j) ∧ UnitAddTorus.IsPeriodic (h j) ∧ ∫ x in unitCube 2, h j x = 0),
+    eLpNorm (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+        UnitAddTorus.periodicMultiplier (fun n =>
+          HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+          (h j) x)
+      (ENNReal.ofReal p) (volume.restrict (unitCube 2)) /
+    eLpNorm (fun x => √(∑ j, ‖h j x‖ ^ 2)) (ENNReal.ofReal p) (volume.restrict (unitCube 2))
 
 /-! ### The coefficients `α_j`, `β_j`, `P_ρ`, `Q` are real-linear -/
 
@@ -324,7 +334,8 @@ theorem fourByTwo_burkholder {d m : ℕ} {H : Type}
 Proof (the paper's). By Proposition 2.5 (`proposition2_5`), `f_{p,ρ,K}` with
 `K = (p* − 1) (Σ ρ^{2k})^{1/2}` is rank-one convex at `0` once `E |Q (M_n)|^p ≤ K^p E ‖P_ρ (M_n)‖^p`
 for every rank-one Rademacher martingale `M` started at `0`. "The results of [Cassese 2025]"
-(`C^{rc} ≤ (p* − 1) sup_{A ∈ ℛ₁} |Q (A)| / ‖P_ρ (A)‖`) are used in the form
+(`C^{rc} ≤ (p* − 1) sup_{A ∈ ℛ₁} |Q (A)| / ‖P_ρ (A)‖`; Theorem 2.1 there, stated for the orthogonal
+projections onto a subspace and its complement, whose proof carries over) are used in the form
 `fourByTwo_burkholder`, proved by their standard argument: `Q (M)` and `√S P_ρ (M)` are martingales
 in `ℂ^{N+1}` (`rad_martingale`) and the first is differentially subordinate to the second
 when `|Q| ≤ √S ‖P_ρ‖` on rank-one matrices, so Burkholder's inequality applies. That bound, with
@@ -410,579 +421,174 @@ theorem fourByTwo_integrableOn_comp_jac {d m : ℕ} {g : Matrix (Fin d) (Fin m) 
   · exact Set.mem_univ_pi.mpr fun i => Set.mem_univ_pi.mpr fun k =>
       abs_le.mp (abs_jac_le hφ x i k)
 
-/-! ### Proposition 7.2: trigonometric polynomials on `ℝ²`
+section Proposition72
 
-A trigonometric polynomial on the torus `𝕋² = ℝ² / ℤ²` is lifted to the `ℤ²`-periodic function
-`x ↦ Σ_n w_n e_n (x)` on `ℝ²`, with `e_n (x) = exp (2πi ⟨n, x⟩)` (`fourByTwo_E`), whose
-derivative is explicit. -/
+open scoped ContDiff
 
-/-- `θ_n (x) = 2π ⟨n, x⟩`. -/
-noncomputable def fourByTwo_θ (n : Fin 2 → ℤ) : (Fin 2 → ℝ) →L[ℝ] ℝ :=
-  ∑ i, (2 * Real.pi * (n i : ℝ)) • ContinuousLinearMap.proj i
+/-! ### Proposition 7.2: smooth periodic test maps
 
-theorem fourByTwo_θ_apply (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) :
-    fourByTwo_θ n x = ∑ i, 2 * Real.pi * (n i : ℝ) * x i := by
-  simp [fourByTwo_θ]
+A function on the torus `𝕋² = ℝ² / ℤ²` is a `ℤ²`-periodic function on `ℝ²`
+(`UnitAddTorus.IsPeriodic`); its Fourier coefficients `ĝ (n)`, its mean `ĝ (0)` and its
+`L^p (𝕋²)` norm are taken over the unit square `(0, 1)²` (`UnitAddTorus.cubeFourierCoeff`,
+`unitCube 2`). For a test map `φ : ℝ² → ℝ^{2(N+1)}`, `u_j = φ_{2j} + i φ_{2j+1}` (`fourByTwo_u`),
+so that `α_j (∇φ) = ∂u_j` and `β_j (∇φ) = ∂̄u_j`, with the Wirtinger derivatives
+`∂ = ½ (∂_x − i ∂_y)` and `∂̄ = ½ (∂_x + i ∂_y)` (`UnitAddTorus.dzPi`, `UnitAddTorus.dzbarPi`),
+whose symbols are `πi ν̄` and `πi ν` at the frequency `n`, `ν = n₀ + i n₁`
+(`HarmonicAnalysis.latticePoint`). -/
 
-/-- `e_n (x) = exp (2πi ⟨n, x⟩)` on `ℝ²`. -/
-noncomputable def fourByTwo_E (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) : ℂ :=
-  Complex.exp (Complex.I * (fourByTwo_θ n x : ℂ))
+/-- `u_j = φ_{2j} + i φ_{2j+1}`: block `j` of `φ : ℝ² → ℝ^{2(N+1)}` as a complex function. -/
+noncomputable def fourByTwo_u {N : ℕ} (φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ)
+    (j : Fin (N + 1)) (x : Fin 2 → ℝ) : ℂ :=
+  (φ x (rowBlock j 0) : ℂ) + Complex.I * (φ x (rowBlock j 1) : ℂ)
 
-/-- `e_n` is the monomial `mFourier n` of the torus, composed with the projection `ℝ² → 𝕋²`. -/
-theorem fourByTwo_E_eq (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) :
-    fourByTwo_E n x = UnitAddTorus.mFourier n (fun i => (x i : UnitAddCircle)) := by
-  simp only [UnitAddTorus.mFourier, ContinuousMap.coe_mk, fourier_coe_apply, fourByTwo_E,
-    fourByTwo_θ_apply, ← Complex.exp_sum]
-  congr 1
-  push_cast
-  rw [Finset.mul_sum]
-  refine Finset.sum_congr rfl fun i _ => ?_
-  ring
+/-- `u_j` is smooth when `φ` is. -/
+theorem fourByTwo_contDiff_u {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (j : Fin (N + 1)) : ContDiff ℝ ∞ (fourByTwo_u φ j) :=
+  (Complex.ofRealCLM.contDiff.comp (contDiff_pi.1 hφ _)).add
+    (contDiff_const.mul (Complex.ofRealCLM.contDiff.comp (contDiff_pi.1 hφ _)))
 
-theorem fourByTwo_E_hasFDerivAt (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) :
-    HasFDerivAt (fourByTwo_E n)
-      (fourByTwo_E n x • (Complex.I • (Complex.ofRealCLM.comp (fourByTwo_θ n)))) x := by
-  have h1 : HasFDerivAt (fun y => Complex.I * (fourByTwo_θ n y : ℂ))
-      (Complex.I • (Complex.ofRealCLM.comp (fourByTwo_θ n))) x :=
-    ((Complex.ofRealCLM.comp (fourByTwo_θ n)).hasFDerivAt (x := x)).const_mul Complex.I
-  exact h1.cexp
+/-- `u_j` is periodic when `φ` is. -/
+theorem fourByTwo_isPeriodic_u {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hper : UnitAddTorus.IsPeriodic φ) (j : Fin (N + 1)) :
+    UnitAddTorus.IsPeriodic (fourByTwo_u φ j) :=
+  fun x k => by simp only [fourByTwo_u, hper x k]
 
-theorem fourByTwo_norm_E (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) : ‖fourByTwo_E n x‖ = 1 := by
-  rw [fourByTwo_E, mul_comm, Complex.norm_exp_ofReal_mul_I]
+/-- The partial derivatives of `u_j` are those of `φ_{2j}` and `φ_{2j+1}`. -/
+theorem fourByTwo_fderiv_u {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : Differentiable ℝ φ) (j : Fin (N + 1)) (x v : Fin 2 → ℝ) :
+    fderiv ℝ (fourByTwo_u φ j) x v = (fderiv ℝ (fun y => φ y (rowBlock j 0)) x v : ℂ) +
+      Complex.I * (fderiv ℝ (fun y => φ y (rowBlock j 1)) x v : ℂ) := by
+  have hd : ∀ r, HasFDerivAt (fun y => (φ y r : ℂ))
+      (Complex.ofRealCLM.comp (fderiv ℝ (fun y => φ y r) x)) x := fun r =>
+    Complex.ofRealCLM.hasFDerivAt.comp x ((differentiable_pi.1 hφ r) x).hasFDerivAt
+  have e : fourByTwo_u φ j =
+      fun y => (φ y (rowBlock j 0) : ℂ) + Complex.I * (φ y (rowBlock j 1) : ℂ) := rfl
+  rw [e, ((hd _).fun_add ((hd _).const_mul Complex.I)).fderiv]
+  simp
 
-theorem fourByTwo_dist_E (n : Fin 2 → ℤ) (x y : Fin 2 → ℝ) :
-    dist (fourByTwo_E n x) (fourByTwo_E n y) ≤ ‖fourByTwo_θ n‖ * dist x y := by
-  rw [dist_eq_norm]
-  have h : fourByTwo_E n x - fourByTwo_E n y = fourByTwo_E n y *
-      (Complex.exp (Complex.I * ((fourByTwo_θ n x - fourByTwo_θ n y : ℝ) : ℂ)) - 1) := by
-    rw [fourByTwo_E, fourByTwo_E, mul_sub, mul_one, ← Complex.exp_add]
-    congr 2
-    push_cast
-    ring
-  rw [h, norm_mul, fourByTwo_norm_E, one_mul]
-  refine (Real.norm_exp_I_mul_ofReal_sub_one_le (x := fourByTwo_θ n x - fourByTwo_θ n y)).trans ?_
-  rw [← map_sub, dist_eq_norm]
-  exact (fourByTwo_θ n).le_opNorm _
+/-- `α_j (∇φ) = ∂u_j`. -/
+theorem fourByTwo_alphaRow_jac {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : Differentiable ℝ φ) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
+    alphaRow (jac φ x) j = UnitAddTorus.dzPi (fourByTwo_u φ j) x := by
+  rw [UnitAddTorus.dzPi, fourByTwo_fderiv_u hφ, fourByTwo_fderiv_u hφ]
+  apply Complex.ext <;> simp [alphaRow, jac] <;> ring
 
-/-- `e_n` is `ℤ²`-periodic. -/
-theorem fourByTwo_E_periodic (n : Fin 2 → ℤ) (x : Fin 2 → ℝ) (z : Fin 2 → ℤ) :
-    fourByTwo_E n (x + fun i => (z i : ℝ)) = fourByTwo_E n x := by
-  rw [fourByTwo_E_eq, fourByTwo_E_eq]
-  congr 1
-  funext i
-  simp only [Pi.add_apply, AddCircle.coe_add, add_eq_left]
-  exact (AddCircle.coe_eq_zero_iff (1 : ℝ)).mpr ⟨z i, by simp⟩
+/-- `β_j (∇φ) = ∂̄u_j`. -/
+theorem fourByTwo_betaRow_jac {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : Differentiable ℝ φ) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
+    betaRow (jac φ x) j = UnitAddTorus.dzbarPi (fourByTwo_u φ j) x := by
+  rw [UnitAddTorus.dzbarPi, fourByTwo_fderiv_u hφ, fourByTwo_fderiv_u hφ]
+  apply Complex.ext <;> simp [betaRow, jac] <;> ring
 
-/-- The periodic lift `x ↦ Σ_{n ∈ S} w_n e_n (x)` of a trigonometric polynomial. -/
-noncomputable def fourByTwo_tp (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ)
-    (x : Fin 2 → ℝ) : ℂ :=
-  ∑ n ∈ S, w n * fourByTwo_E n x
-
-theorem fourByTwo_tp_hasFDerivAt (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ)
-    (x : Fin 2 → ℝ) :
-    HasFDerivAt (fourByTwo_tp S w) (∑ n ∈ S, w n •
-      (fourByTwo_E n x • (Complex.I • (Complex.ofRealCLM.comp (fourByTwo_θ n))))) x := by
-  unfold fourByTwo_tp
-  exact HasFDerivAt.fun_sum fun n _ => (fourByTwo_E_hasFDerivAt n x).const_mul (w n)
-
-/-- The partial derivatives: `∂_k (Σ w_n e_n) = Σ w_n e_n · 2πi n_k`. -/
-theorem fourByTwo_tp_partial (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ)
-    (k : Fin 2) :
-    (∑ n ∈ S, w n • (fourByTwo_E n x • (Complex.I • (Complex.ofRealCLM.comp (fourByTwo_θ n)))))
-        (Pi.single k 1) =
-      ∑ n ∈ S, w n * fourByTwo_E n x * (2 * Real.pi * Complex.I * (n k : ℂ)) := by
-  rw [_root_.sum_apply]
-  refine Finset.sum_congr rfl fun n _ => ?_
-  simp only [_root_.smul_apply, ContinuousLinearMap.comp_apply,
-    Complex.ofRealCLM_apply, fourByTwo_θ_apply, smul_eq_mul]
-  rw [Finset.sum_eq_single k (fun i _ hi => by simp [Pi.single_eq_of_ne hi]) (by simp)]
-  simp only [Pi.single_eq_same, mul_one]
-  push_cast
-  ring
-
-theorem fourByTwo_tp_lipschitz (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ) :
-    LipschitzWith (∑ n ∈ S, ‖w n‖₊ * ‖fourByTwo_θ n‖₊) (fourByTwo_tp S w) := by
-  refine lipschitzWith_iff_dist_le_mul.mpr fun x y => ?_
-  rw [dist_eq_norm, fourByTwo_tp, fourByTwo_tp, ← Finset.sum_sub_distrib]
-  push_cast
-  rw [Finset.sum_mul]
-  refine (norm_sum_le _ _).trans (Finset.sum_le_sum fun n _ => ?_)
-  rw [← mul_sub, norm_mul, mul_assoc]
-  exact mul_le_mul_of_nonneg_left (by rw [← dist_eq_norm]; exact fourByTwo_dist_E n x y)
-    (norm_nonneg _)
-
-theorem fourByTwo_tp_periodic (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ)
-    (x : Fin 2 → ℝ) (z : Fin 2 → ℤ) :
-    fourByTwo_tp S w (x + fun i => (z i : ℝ)) = fourByTwo_tp S w x := by
-  simp only [fourByTwo_tp, fourByTwo_E_periodic]
-
-/-- The frequency `ξ = n₀ + i n₁ ∈ ℂ` of `n ∈ ℤ²` (as in `torusBeurlingPow`). -/
-noncomputable def fourByTwo_ξ (n : Fin 2 → ℤ) : ℂ := (n 0 : ℂ) + (n 1 : ℂ) * Complex.I
-
-theorem fourByTwo_conj_ξ (n : Fin 2 → ℤ) :
-    starRingEnd ℂ (fourByTwo_ξ n) = (n 0 : ℂ) - (n 1 : ℂ) * Complex.I := by
-  simp [fourByTwo_ξ, sub_eq_add_neg]
-
-theorem fourByTwo_ξ_eq_zero {n : Fin 2 → ℤ} (h : fourByTwo_ξ n = 0) : n = 0 := by
-  have h1 := congrArg Complex.re h
-  have h2 := congrArg Complex.im h
-  simp [fourByTwo_ξ] at h1 h2
-  funext i
-  fin_cases i <;> simp [h1, h2]
-
-/-- The test map of the proof of Proposition 7.2: `u = (u₀, …, u_N)`, `u_j = Σ_{n ∈ S} w_j (n) e_n`,
-as a map `ℝ² → ℝ^{2(N+1)}` (row `2j` is `Re u_j`, row `2j + 1` is `Im u_j`). -/
-noncomputable def fourByTwo_testMap (N : ℕ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ) : Fin (2 * (N + 1)) → ℝ :=
-  fun r => if r.val % 2 = 0 then (fourByTwo_tp S (w (r.val / 2)) x).re
-    else (fourByTwo_tp S (w (r.val / 2)) x).im
-
-/-- The partial derivative `∂_k u (x) = Σ w_n e_n (x) 2πi n_k`. -/
-noncomputable def fourByTwo_pd (S : Finset (Fin 2 → ℤ)) (w : (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ)
-    (k : Fin 2) : ℂ :=
-  ∑ n ∈ S, w n * fourByTwo_E n x * (2 * Real.pi * Complex.I * (n k : ℂ))
-
-theorem fourByTwo_jac_testMap {N : ℕ} (S : Finset (Fin 2 → ℤ)) (w : ℕ → (Fin 2 → ℤ) → ℂ)
-    (x : Fin 2 → ℝ) (j : Fin (N + 1)) (k : Fin 2) :
-    jac (fourByTwo_testMap N S w) x (rowBlock j 0) k = (fourByTwo_pd S (w j) x k).re ∧
-      jac (fourByTwo_testMap N S w) x (rowBlock j 1) k = (fourByTwo_pd S (w j) x k).im := by
-  have h0 : (fun y => fourByTwo_testMap N S w y (rowBlock j 0)) =
-      fun y => Complex.reCLM (fourByTwo_tp S (w j) y) := by
-    funext y
-    simp [fourByTwo_testMap, rowBlock]
-  have h1 : (fun y => fourByTwo_testMap N S w y (rowBlock j 1)) =
-      fun y => Complex.imCLM (fourByTwo_tp S (w j) y) := by
-    funext y
-    have e1 : (2 * j.val + 1) % 2 = 1 := by omega
-    have e2 : (2 * j.val + 1) / 2 = j.val := by omega
-    simp [fourByTwo_testMap, rowBlock, e1, e2]
-  have hD := fourByTwo_tp_hasFDerivAt S (w j) x
-  refine ⟨?_, ?_⟩
-  · have hc : HasFDerivAt (fun y => Complex.reCLM (fourByTwo_tp S (w j) y))
-        (Complex.reCLM.comp _) x := Complex.reCLM.hasFDerivAt.comp x hD
-    simp only [jac, Matrix.of_apply]
-    rw [h0, hc.fderiv, ContinuousLinearMap.comp_apply, fourByTwo_tp_partial]
-    rfl
-  · have hc : HasFDerivAt (fun y => Complex.imCLM (fourByTwo_tp S (w j) y))
-        (Complex.imCLM.comp _) x := Complex.imCLM.hasFDerivAt.comp x hD
-    simp only [jac, Matrix.of_apply]
-    rw [h1, hc.fderiv, ContinuousLinearMap.comp_apply, fourByTwo_tp_partial]
-    rfl
-
-/-- `α_j (∇u) = ∂u_j = Σ w_j (n) π i ξ̄_n e_n` and `β_j (∇u) = ∂̄u_j = Σ w_j (n) π i ξ_n e_n`. -/
-theorem fourByTwo_alpha_beta_testMap {N : ℕ} (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
-    alphaRow (jac (fourByTwo_testMap N S w) x) j = ∑ n ∈ S, w j n *
-        (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) * fourByTwo_E n x ∧
-      betaRow (jac (fourByTwo_testMap N S w) x) j = ∑ n ∈ S, w j n *
-        (Real.pi * Complex.I * fourByTwo_ξ n) * fourByTwo_E n x := by
-  obtain ⟨h00, h10⟩ := fourByTwo_jac_testMap (N := N) S w x j 0
-  obtain ⟨h01, h11⟩ := fourByTwo_jac_testMap (N := N) S w x j 1
-  have hα : alphaRow (jac (fourByTwo_testMap N S w) x) j =
-      (fourByTwo_pd S (w j) x 0 - Complex.I * fourByTwo_pd S (w j) x 1) / 2 := by
-    rw [alphaRow, h00, h10, h01, h11]
-    apply Complex.ext <;> simp
-  have hβ : betaRow (jac (fourByTwo_testMap N S w) x) j =
-      (fourByTwo_pd S (w j) x 0 + Complex.I * fourByTwo_pd S (w j) x 1) / 2 := by
-    rw [betaRow, h00, h10, h01, h11]
-    apply Complex.ext <;> simp; ring
-  refine ⟨?_, ?_⟩
-  · rw [hα, fourByTwo_pd, fourByTwo_pd, Finset.mul_sum, ← Finset.sum_sub_distrib, Finset.sum_div]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    rw [fourByTwo_conj_ξ]
-    ring_nf
-  · rw [hβ, fourByTwo_pd, fourByTwo_pd, Finset.mul_sum, ← Finset.sum_add_distrib, Finset.sum_div]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    rw [fourByTwo_ξ]
-    ring_nf
-
-/-- The coefficients of `u_j` in the proof of Proposition 7.2, solving `∂̄u_j = h_j + ρ ∂u_{j−1}`
-(`∂u_{−1} = 0`) frequency by frequency (`∂̄` has the symbol `π i ξ`, `∂` the symbol `π i ξ̄`, and
-`∂̄` is invertible on mean-zero functions): `û_j (n) = ĥ_j (n) / (π i ξ_n) + ρ m (ξ_n) û_{j−1} (n)`,
-with `m (ξ) = ξ̄ / ξ`. -/
-noncomputable def fourByTwo_uCoeff (ρ : ℝ) (hc : ℕ → (Fin 2 → ℤ) → ℂ) :
-    ℕ → (Fin 2 → ℤ) → ℂ
-  | 0 => fun n => hc 0 n / (Real.pi * Complex.I * fourByTwo_ξ n)
-  | j + 1 => fun n => hc (j + 1) n / (Real.pi * Complex.I * fourByTwo_ξ n) +
-      ρ * beurlingSymbol (fourByTwo_ξ n) * fourByTwo_uCoeff ρ hc j n
-
-theorem fourByTwo_piIξ_ne {n : Fin 2 → ℤ} (h : fourByTwo_ξ n ≠ 0) :
-    (Real.pi : ℂ) * Complex.I * fourByTwo_ξ n ≠ 0 :=
-  mul_ne_zero (mul_ne_zero (Complex.ofReal_ne_zero.mpr Real.pi_ne_zero) Complex.I_ne_zero) h
-
-/-- The recursion `∂̄u₀ = h₀`, `∂̄u_{j+1} = h_{j+1} + ρ ∂u_j` at the frequency `n ≠ 0`. -/
-theorem fourByTwo_uCoeff_rec (ρ : ℝ) (hc : ℕ → (Fin 2 → ℤ) → ℂ) {n : Fin 2 → ℤ}
-    (h : fourByTwo_ξ n ≠ 0) :
-    (Real.pi * Complex.I * fourByTwo_ξ n) * fourByTwo_uCoeff ρ hc 0 n = hc 0 n ∧
-      ∀ j, (Real.pi * Complex.I * fourByTwo_ξ n) * fourByTwo_uCoeff ρ hc (j + 1) n =
-        hc (j + 1) n + ρ * (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) *
-          fourByTwo_uCoeff ρ hc j n := by
-  have hne := fourByTwo_piIξ_ne h
-  refine ⟨?_, fun j => ?_⟩
-  · simp only [fourByTwo_uCoeff]
-    field_simp
-  · simp only [fourByTwo_uCoeff, beurlingSymbol]
-    field_simp
-
-/-- `∂u_j = Σ_{i ≤ j} ρ^{j−i} 𝓑^{j+1−i} h_i` at the frequency `n` (the induction of the proof of
-Proposition 7.2, from `𝓑 (∂̄w) = ∂w`). -/
-theorem fourByTwo_uCoeff_closed (ρ : ℝ) (hc : ℕ → (Fin 2 → ℤ) → ℂ) (n : Fin 2 → ℤ) (j : ℕ) :
-    (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) * fourByTwo_uCoeff ρ hc j n =
-      ∑ i ∈ Finset.range (j + 1), (ρ : ℂ) ^ (j - i) *
-        beurlingSymbol (fourByTwo_ξ n) ^ (j + 1 - i) * hc i n := by
-  by_cases h : fourByTwo_ξ n = 0
-  · rw [h, map_zero, mul_zero, zero_mul]
-    refine (Finset.sum_eq_zero fun i hi => ?_).symm
-    rw [Finset.mem_range] at hi
-    rw [beurlingSymbol, map_zero, zero_div, zero_pow (by omega), mul_zero, zero_mul]
-  · have hne := fourByTwo_piIξ_ne h
-    have hm : (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) =
-        beurlingSymbol (fourByTwo_ξ n) * (Real.pi * Complex.I * fourByTwo_ξ n) := by
-      rw [beurlingSymbol]; field_simp
-    induction j with
-    | zero =>
-      rw [hm, mul_assoc, (fourByTwo_uCoeff_rec ρ hc h).1]
-      simp
-    | succ j ih =>
-      rw [hm, mul_assoc, (fourByTwo_uCoeff_rec ρ hc h).2 j, Finset.sum_range_succ,
-        Nat.sub_self, pow_zero, one_mul, show j + 1 + 1 - (j + 1) = 1 by omega, pow_one,
-        mul_assoc (ρ : ℂ), ih]
-      have hs : beurlingSymbol (fourByTwo_ξ n) * ((ρ : ℂ) * ∑ i ∈ Finset.range (j + 1),
-          (ρ : ℂ) ^ (j - i) * beurlingSymbol (fourByTwo_ξ n) ^ (j + 1 - i) * hc i n) =
-          ∑ i ∈ Finset.range (j + 1), (ρ : ℂ) ^ (j + 1 - i) *
-            beurlingSymbol (fourByTwo_ξ n) ^ (j + 1 + 1 - i) * hc i n := by
-        rw [Finset.mul_sum, Finset.mul_sum]
-        refine Finset.sum_congr rfl fun i hi => ?_
-        rw [Finset.mem_range] at hi
-        rw [show j + 1 + 1 - i = (j - i) + 2 by omega, show j + 1 - i = (j - i) + 1 by omega,
-          pow_add, pow_add]
-        ring
-      rw [mul_add, hs]
-      ring
-
-/-- The coefficients `ĥ_j (n)` of the tuple `c`, extended by `0` to all `j ∈ ℕ`. -/
-noncomputable def fourByTwo_hc {N : ℕ} (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ) (i : ℕ)
-    (n : Fin 2 → ℤ) : ℂ :=
-  if h : i < N + 1 then c ⟨i, h⟩ n else 0
-
-/-- The frequencies of the tuple `c`. -/
-noncomputable def fourByTwo_supp {N : ℕ} (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ) :
-    Finset (Fin 2 → ℤ) :=
-  Finset.univ.biUnion fun j => (c j).support
-
-theorem fourByTwo_support_subset {N : ℕ} (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ)
-    (j : Fin (N + 1)) : (c j).support ⊆ fourByTwo_supp c :=
-  Finset.subset_biUnion_of_mem (fun j => (c j).support) (Finset.mem_univ j)
-
-/-- The projection `ℝ² → 𝕋²`. -/
-def fourByTwo_proj (x : Fin 2 → ℝ) : UnitAddTorus (Fin 2) := fun i => (x i : UnitAddCircle)
-
-theorem fourByTwo_continuous_proj : Continuous fourByTwo_proj :=
-  continuous_pi fun i => (AddCircle.continuous_mk' 1).comp (continuous_apply i)
-
-theorem fourByTwo_trigPoly_eq {N : ℕ} (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ) (j : Fin (N + 1))
-    (x : Fin 2 → ℝ) :
-    trigPoly (c j) (fourByTwo_proj x) = ∑ n ∈ fourByTwo_supp c, c j n * fourByTwo_E n x := by
-  rw [trigPoly, Finsupp.sum_of_support_subset (c j) (fourByTwo_support_subset c j)
-    (fun n a => a * UnitAddTorus.mFourier n (fourByTwo_proj x)) fun n _ => zero_mul _]
-  exact Finset.sum_congr rfl fun n _ => by rw [fourByTwo_E_eq]; rfl
-
-theorem fourByTwo_torusBeurlingPow_eq {N : ℕ} (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ)
-    (j : Fin (N + 1)) (k : ℕ) (x : Fin 2 → ℝ) :
-    torusBeurlingPow k (c j) (fourByTwo_proj x) = ∑ n ∈ fourByTwo_supp c,
-      beurlingSymbol (fourByTwo_ξ n) ^ k * c j n * fourByTwo_E n x := by
-  rw [torusBeurlingPow, Finsupp.sum_of_support_subset _ (fourByTwo_support_subset c j) _
-    fun n _ => by simp]
-  exact Finset.sum_congr rfl fun n _ => by rw [fourByTwo_E_eq]; rfl
-
-/-- `P_ρ (∇u) = (h₀, …, h_N)` for the test map built from a mean-zero tuple `c` (proof of
-Proposition 7.2). -/
-theorem fourByTwo_chainP_testMap {N : ℕ} (ρ : ℝ) (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ)
-    (hc0 : ∀ j, c j 0 = 0) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
-    chainP ρ (jac (fourByTwo_testMap N (fourByTwo_supp c)
-        (fourByTwo_uCoeff ρ (fourByTwo_hc c))) x) j = trigPoly (c j) (fourByTwo_proj x) := by
-  set w := fourByTwo_uCoeff ρ (fourByTwo_hc c) with hw
-  rw [fourByTwo_trigPoly_eq]
-  have hzero : ∀ n, fourByTwo_ξ n = 0 → c j n = 0 := fun n h => by
-    rw [fourByTwo_ξ_eq_zero h]; exact hc0 j
+/-- `P_ρ (∇φ)_j = h_j = ∂̄u_j − ρ ∂u_{j−1}` (`∂u_{−1} = 0`). -/
+theorem fourByTwo_chainP_jac {N : ℕ} (ρ : ℝ) {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : Differentiable ℝ φ) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
+    chainP ρ (jac φ x) j = UnitAddTorus.dzbarPi (fourByTwo_u φ j) x -
+      if j.val = 0 then 0
+      else (ρ : ℂ) * UnitAddTorus.dzPi (fourByTwo_u φ ⟨j.val - 1, by omega⟩) x := by
   unfold chainP
-  split_ifs with hj
-  · rw [(fourByTwo_alpha_beta_testMap (N := N) _ w x j).2]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    by_cases hξ : fourByTwo_ξ n = 0
-    · rw [hzero n hξ, hξ]; ring
-    · have := (fourByTwo_uCoeff_rec ρ (fourByTwo_hc c) hξ).1
-      have hj0 : j = ⟨0, Nat.succ_pos N⟩ := Fin.ext hj
-      subst hj0
-      simp only [fourByTwo_hc, Nat.succ_pos N, ↓reduceDIte] at this
-      rw [hw, mul_comm (fourByTwo_uCoeff ρ (fourByTwo_hc c) _ n)]
-      exact congrArg (· * fourByTwo_E n x) this
-  · rw [(fourByTwo_alpha_beta_testMap (N := N) _ w x j).2,
-      (fourByTwo_alpha_beta_testMap (N := N) _ w x ⟨j.val - 1, by omega⟩).1, Finset.mul_sum,
-      ← Finset.sum_sub_distrib]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    by_cases hξ : fourByTwo_ξ n = 0
-    · rw [hzero n hξ, hξ, map_zero]; ring
-    · have := (fourByTwo_uCoeff_rec ρ (fourByTwo_hc c) hξ).2 (j.val - 1)
-      rw [show j.val - 1 + 1 = j.val by omega] at this
-      simp only [fourByTwo_hc, j.isLt, ↓reduceDIte] at this
-      have hw' : w j n * (Real.pi * Complex.I * fourByTwo_ξ n) =
-          c j n + ρ * (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) * w (j.val - 1) n := by
-        rw [hw, mul_comm, this]
-      rw [hw']
-      ring
+  split_ifs <;> simp [fourByTwo_alphaRow_jac hφ, fourByTwo_betaRow_jac hφ]
 
-/-- `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` for the test map (proof of Proposition 7.2). -/
-theorem fourByTwo_chainQ_testMap {N : ℕ} (ρ : ℝ) (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ)
-    (x : Fin 2 → ℝ) :
-    chainQ (jac (fourByTwo_testMap N (fourByTwo_supp c)
-        (fourByTwo_uCoeff ρ (fourByTwo_hc c))) x) =
-      ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-        torusBeurlingPow (N + 1 - j.val) (c j) (fourByTwo_proj x) := by
-  rw [chainQ, (fourByTwo_alpha_beta_testMap (N := N) _ _ x (Fin.last N)).1]
-  simp only [Fin.val_last]
-  have h1 : ∀ n, fourByTwo_uCoeff ρ (fourByTwo_hc c) N n *
-      (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n)) * fourByTwo_E n x =
-      ∑ i ∈ Finset.range (N + 1), (ρ : ℂ) ^ (N - i) *
-        (beurlingSymbol (fourByTwo_ξ n) ^ (N + 1 - i) * fourByTwo_hc c i n * fourByTwo_E n x) :=
-    fun n => by
-      rw [mul_comm (fourByTwo_uCoeff _ _ _ _), fourByTwo_uCoeff_closed, Finset.sum_mul]
-      exact Finset.sum_congr rfl fun i _ => by ring
-  simp_rw [h1]
-  rw [Finset.sum_comm, ← Fin.sum_univ_eq_sum_range (fun i => ∑ n ∈ fourByTwo_supp c,
-    (ρ : ℂ) ^ (N - i) * (beurlingSymbol (fourByTwo_ξ n) ^ (N + 1 - i) * fourByTwo_hc c i n *
-      fourByTwo_E n x)) (N + 1)]
-  refine Finset.sum_congr rfl fun j _ => ?_
-  rw [fourByTwo_torusBeurlingPow_eq, Finset.mul_sum]
-  refine Finset.sum_congr rfl fun n _ => ?_
-  simp only [fourByTwo_hc, j.isLt, ↓reduceDIte, Fin.eta]
-  push_cast
-  ring
+/-- `∇φ` is periodic when `φ` is. -/
+theorem fourByTwo_jac_periodic {d : ℕ} {φ : (Fin 2 → ℝ) → Fin d → ℝ}
+    (hper : UnitAddTorus.IsPeriodic φ) (x : Fin 2 → ℝ) (z : Fin 2 → ℤ) :
+    jac φ (x + fun i => (z i : ℝ)) = jac φ x := by
+  ext r k
+  simp only [jac, Matrix.of_apply]
+  rw [← fderiv_comp_add_right]
+  have : (fun y => φ (y + fun i => (z i : ℝ)) r) = fun y => φ y r :=
+    funext fun y => by rw [hper]
+  rw [this]
 
-/-! ### Proposition 7.2: the torus and the unit cube -/
+/-- The tuple `h_j = P_ρ (∇φ)_j` of a smooth `φ` is smooth. -/
+theorem fourByTwo_contDiff_chainP {N : ℕ} (ρ : ℝ) {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (j : Fin (N + 1)) : ContDiff ℝ ∞ fun x => chainP ρ (jac φ x) j := by
+  simp_rw [fourByTwo_chainP_jac ρ (hφ.differentiable (by simp))]
+  by_cases hj : j.val = 0
+  · simpa only [hj, ↓reduceIte, sub_zero] using
+      UnitAddTorus.contDiff_dzbarPi (fourByTwo_contDiff_u hφ j)
+  · simp only [hj, ↓reduceIte]
+    exact (UnitAddTorus.contDiff_dzbarPi (fourByTwo_contDiff_u hφ j)).sub
+      (contDiff_const.mul (UnitAddTorus.contDiff_dzPi (fourByTwo_contDiff_u hφ _)))
 
-/-- Integrals over the torus `𝕋² = ℝ² / ℤ²` (normalised Haar measure) are integrals of the lifts
-over the unit cube. -/
-theorem fourByTwo_lintegral_torus (f : UnitAddTorus (Fin 2) → ℝ≥0∞) :
-    ∫⁻ z, f z = ∫⁻ x in unitCube 2, f (fourByTwo_proj x) := by
-  have hvol : (volume : Measure (UnitAddTorus (Fin 2))) =
-      @volume _ (@MeasureSpace.pi (Fin 2) _ (fun _ => UnitAddCircle)
-        fun _ => instMeasureSpaceUnitAddCircle) := by
-    show Measure.pi (fun _ => (volume : Measure UnitAddCircle)) =
-      Measure.pi (fun _ => AddCircle.haarAddCircle)
-    congr 1
-    funext i
-    rw [AddCircle.volume_eq_smul_haarAddCircle]
-    simp
-  rw [hvol, UnitAddTorus.lintegral_preimage f 0]
-  have h1 : {x : Fin 2 → ℝ | ∀ i, x i ∈ Set.Ioc ((0 : Fin 2 → ℝ) i) ((0 : Fin 2 → ℝ) i + 1)} =
-      Set.univ.pi fun _ => Set.Ioc (0 : ℝ) 1 := by
-    ext x; simp
-  rw [h1, unitCube]
-  exact setLIntegral_congr (Measure.univ_pi_Ioc_ae_eq_Icc.trans Measure.univ_pi_Ioo_ae_eq_Icc.symm)
+/-- The tuple `h_j = P_ρ (∇φ)_j` of a periodic `φ` is periodic. -/
+theorem fourByTwo_isPeriodic_chainP {N : ℕ} (ρ : ℝ)
+    {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} (hper : UnitAddTorus.IsPeriodic φ)
+    (j : Fin (N + 1)) : UnitAddTorus.IsPeriodic fun x => chainP ρ (jac φ x) j :=
+  fun x k => by simp only [fourByTwo_jac_periodic hper]
 
-theorem fourByTwo_integrableOn_cube {g : (Fin 2 → ℝ) → ℝ} (hg : Continuous g) :
-    IntegrableOn g (unitCube 2) :=
-  (hg.integrableOn_Icc (a := 0) (b := 1)).mono_set fun _ hx =>
-    ⟨fun i => (hx i (Set.mem_univ i)).1.le, fun i => (hx i (Set.mem_univ i)).2.le⟩
+/-- The mean of `g` over the unit square is its coefficient `ĝ (0)`. -/
+theorem fourByTwo_cubeFourierCoeff_zero (g : (Fin 2 → ℝ) → ℂ) :
+    UnitAddTorus.cubeFourierCoeff g 0 = ∫ x in unitCube 2, g x := by
+  simp only [UnitAddTorus.cubeFourierCoeff, neg_zero, UnitAddTorus.mFourier_zero,
+    ContinuousMap.one_apply, one_mul]
+  rfl
 
-/-- `‖F‖_{L^p (𝕋²)} = (∫_{(0,1)²} ‖F (x)‖^p dx)^{1/p}` for continuous `F`. -/
-theorem fourByTwo_eLpNorm_torus {E : Type*} [NormedAddCommGroup E]
-    {F : UnitAddTorus (Fin 2) → E} (hF : Continuous F) {p : ℝ} (hp : 0 < p) :
-    eLpNorm F (ENNReal.ofReal p) volume =
-      ENNReal.ofReal ((∫ x in unitCube 2, ‖F (fourByTwo_proj x)‖ ^ p) ^ (1 / p)) := by
-  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simpa using hp) ENNReal.ofReal_ne_top
-    hF.aestronglyMeasurable, ENNReal.toReal_ofReal hp.le, fourByTwo_lintegral_torus]
-  have hc : Continuous fun x => ‖F (fourByTwo_proj x)‖ ^ p :=
-    (hF.comp fourByTwo_continuous_proj).norm.rpow_const fun _ => Or.inr hp.le
-  have hnn : 0 ≤ ∫ x in unitCube 2, ‖F (fourByTwo_proj x)‖ ^ p :=
-    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
-      fun x _ => by positivity
-  rw [← ENNReal.ofReal_rpow_of_nonneg hnn (by positivity),
-    ofReal_integral_eq_lintegral_ofReal (fourByTwo_integrableOn_cube hc)
-      (ae_of_all _ fun x => by positivity)]
-  congr 1
-  refine lintegral_congr fun x => ?_
-  rw [← ofReal_norm, ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hp.le]
+/-- The coefficients of a sum of continuous functions. -/
+theorem fourByTwo_cubeFourierCoeff_add {g g' : (Fin 2 → ℝ) → ℂ} (hg : Continuous g)
+    (hg' : Continuous g') (n : Fin 2 → ℤ) :
+    UnitAddTorus.cubeFourierCoeff (fun x => g x + g' x) n =
+      UnitAddTorus.cubeFourierCoeff g n + UnitAddTorus.cubeFourierCoeff g' n := by
+  simp only [UnitAddTorus.cubeFourierCoeff, mul_add]
+  exact integral_add (UnitAddTorus.integrableOn_cube_of_continuous
+    ((UnitAddTorus.continuous_mFourier_ofPi _).mul hg))
+    (UnitAddTorus.integrableOn_cube_of_continuous
+      ((UnitAddTorus.continuous_mFourier_ofPi _).mul hg'))
 
-theorem fourByTwo_continuous_trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) : Continuous (trigPoly c) :=
-  continuous_finsetSum _ fun n _ => continuous_const.mul (UnitAddTorus.mFourier n).continuous
+/-- The coefficients of a difference of continuous functions. -/
+theorem fourByTwo_cubeFourierCoeff_sub {g g' : (Fin 2 → ℝ) → ℂ} (hg : Continuous g)
+    (hg' : Continuous g') (n : Fin 2 → ℤ) :
+    UnitAddTorus.cubeFourierCoeff (fun x => g x - g' x) n =
+      UnitAddTorus.cubeFourierCoeff g n - UnitAddTorus.cubeFourierCoeff g' n := by
+  simp only [UnitAddTorus.cubeFourierCoeff, mul_sub]
+  exact integral_sub (UnitAddTorus.integrableOn_cube_of_continuous
+    ((UnitAddTorus.continuous_mFourier_ofPi _).mul hg))
+    (UnitAddTorus.integrableOn_cube_of_continuous
+      ((UnitAddTorus.continuous_mFourier_ofPi _).mul hg'))
 
-theorem fourByTwo_continuous_torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) :
-    Continuous (torusBeurlingPow k c) :=
-  continuous_finsetSum _ fun n _ => continuous_const.mul (UnitAddTorus.mFourier n).continuous
+/-- The coefficients of a finite sum of continuous functions. -/
+theorem fourByTwo_cubeFourierCoeff_sum {ι : Type*} (s : Finset ι)
+    {g : ι → (Fin 2 → ℝ) → ℂ} (hg : ∀ i ∈ s, Continuous (g i)) (n : Fin 2 → ℤ) :
+    UnitAddTorus.cubeFourierCoeff (fun x => ∑ i ∈ s, g i x) n =
+      ∑ i ∈ s, UnitAddTorus.cubeFourierCoeff (g i) n := by
+  simp only [UnitAddTorus.cubeFourierCoeff, Finset.mul_sum]
+  exact integral_finsetSum s fun i hi => UnitAddTorus.integrableOn_cube_of_continuous
+    ((UnitAddTorus.continuous_mFourier_ofPi _).mul (hg i hi))
 
-theorem fourByTwo_isLocallyBounded {d m : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
-    (hf : Continuous f) : CalculusOfVariations.IsLocallyBounded f := by
-  intro A
-  refine ⟨f ⁻¹' Metric.ball (f A) 1, hf.continuousAt.preimage_mem_nhds (Metric.ball_mem_nhds _
-    one_pos), |f A| + 1, fun B hB => ?_⟩
-  have := abs_sub_abs_le_abs_sub (f B) (f A)
-  rw [Set.mem_preimage, Metric.mem_ball, Real.dist_eq] at hB
-  linarith
+/-- The coefficients of `h_j = ∂̄u_j − ρ ∂u_{j−1}`: `ĥ_j (n) = πi ν û_j (n) − ρ πi ν̄ û_{j−1} (n)`,
+`ν = n₀ + i n₁`. -/
+theorem fourByTwo_cubeFourierCoeff_chainP {N : ℕ} (ρ : ℝ)
+    {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    (hper : UnitAddTorus.IsPeriodic φ) (j : Fin (N + 1)) (n : Fin 2 → ℤ) :
+    UnitAddTorus.cubeFourierCoeff (fun x => chainP ρ (jac φ x) j) n =
+      Real.pi * Complex.I * HarmonicAnalysis.latticePoint n *
+          UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ j) n -
+        if j.val = 0 then 0
+        else (ρ : ℂ) * (Real.pi * Complex.I * starRingEnd ℂ (HarmonicAnalysis.latticePoint n) *
+          UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ ⟨j.val - 1, by omega⟩) n) := by
+  have h1 : ∀ i, ContDiff ℝ 1 (fourByTwo_u φ i) := fun i =>
+    (fourByTwo_contDiff_u hφ i).of_le (by exact_mod_cast le_top)
+  simp_rw [fourByTwo_chainP_jac ρ (hφ.differentiable (by simp))]
+  by_cases hj : j.val = 0
+  · simp only [hj, ↓reduceIte, sub_zero]
+    exact UnitAddTorus.cubeFourierCoeff_dzbarPi (h1 j) (fourByTwo_isPeriodic_u hper j) n
+  · simp only [hj, ↓reduceIte]
+    rw [fourByTwo_cubeFourierCoeff_sub (UnitAddTorus.contDiff_dzbarPi
+      (fourByTwo_contDiff_u hφ j)).continuous (continuous_const.fun_mul
+      (UnitAddTorus.contDiff_dzPi (fourByTwo_contDiff_u hφ _)).continuous),
+      UnitAddTorus.cubeFourierCoeff_const_mul,
+      UnitAddTorus.cubeFourierCoeff_dzbarPi (h1 j) (fourByTwo_isPeriodic_u hper j),
+      UnitAddTorus.cubeFourierCoeff_dzPi (h1 _) (fourByTwo_isPeriodic_u hper _)]
 
-/-- The test map is Lipschitz. -/
-theorem fourByTwo_testMap_lipschitz (N : ℕ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) : ∃ K, LipschitzWith K (fourByTwo_testMap N S w) := by
-  set K : NNReal := ∑ j ∈ Finset.range (2 * (N + 1)), ∑ n ∈ S, ‖w j n‖₊ * ‖fourByTwo_θ n‖₊
-  refine ⟨K, lipschitzWith_iff_dist_le_mul.mpr fun x y => ?_⟩
-  refine (dist_pi_le_iff (by positivity)).mpr fun r => ?_
-  have hj : r.val / 2 ∈ Finset.range (2 * (N + 1)) := by
-    rw [Finset.mem_range]; omega
-  have hK : (∑ n ∈ S, ‖w (r.val / 2) n‖₊ * ‖fourByTwo_θ n‖₊ : NNReal) ≤ K :=
-    Finset.single_le_sum (f := fun j => ∑ n ∈ S, ‖w j n‖₊ * ‖fourByTwo_θ n‖₊)
-      (fun _ _ => zero_le) hj
-  have htp := lipschitzWith_iff_dist_le_mul.mp (fourByTwo_tp_lipschitz S (w (r.val / 2))) x y
-  have hle : dist (fourByTwo_testMap N S w x r) (fourByTwo_testMap N S w y r) ≤
-      dist (fourByTwo_tp S (w (r.val / 2)) x) (fourByTwo_tp S (w (r.val / 2)) y) := by
-    simp only [fourByTwo_testMap]
-    rw [dist_eq_norm, dist_eq_norm]
-    split_ifs
-    · rw [← Complex.sub_re]; exact Complex.abs_re_le_norm _
-    · rw [← Complex.sub_im]; exact Complex.abs_im_le_norm _
-  refine hle.trans (htp.trans (mul_le_mul_of_nonneg_right ?_ dist_nonneg))
-  exact_mod_cast hK
+/-- The tuple `h_j = P_ρ (∇φ)_j` of a smooth periodic `φ` has mean zero. -/
+theorem fourByTwo_integral_chainP {N : ℕ} (ρ : ℝ)
+    {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} (hφ : ContDiff ℝ ∞ φ)
+    (hper : UnitAddTorus.IsPeriodic φ) (j : Fin (N + 1)) :
+    ∫ x in unitCube 2, chainP ρ (jac φ x) j = 0 := by
+  rw [← fourByTwo_cubeFourierCoeff_zero, fourByTwo_cubeFourierCoeff_chainP ρ hφ hper]
+  simp [HarmonicAnalysis.latticePoint_zero]
 
-theorem fourByTwo_testMap_periodic (N : ℕ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ) (z : Fin 2 → ℤ) :
-    fourByTwo_testMap N S w (x + fun i => (z i : ℝ)) = fourByTwo_testMap N S w x := by
-  funext r
-  simp only [fourByTwo_testMap, fourByTwo_tp_periodic]
-
-/-- The inequality `C^{qc} (p, N, ρ) ≥ ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) →
-L^p_0 (𝕋²)}` of Proposition 7.2, by the paper's argument ("conversely, every smooth mean-zero
-tuple is obtained by solving recursively …", TeX lines 2822–2832), for the mean-zero
-trigonometric polynomials of the definition of `chainOpNorm`: every mean-zero tuple `(h_j)` of
-trigonometric polynomials is `P_ρ (∇u)` for the periodic `u` obtained by solving
-`∂̄u_j = h_j + ρ ∂u_{j−1}`, and then `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`;
-quasiconvexity at `0`, tested with periodic maps
-(Lemma 2.2, `External.Rindler.quasiconvexAtOn_iff_periodic`), gives
-`‖Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j‖_p ≤ C ‖(h_j)‖_p`. -/
-theorem fourByTwo_chainOpNorm_le_qcThreshold (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p) :
-    chainOpNorm N p ρ ≤ qcThreshold (chainF N p ρ) := by
-  have hp0 : 0 < p := by linarith
-  refine le_iInf₂ fun C hC => iSup₂_le fun c hc0 => ?_
-  obtain ⟨hC0, hqc⟩ := hC
-  -- Lemma 2.2: quasiconvexity at `0` with periodic test maps
-  have hcont := fourByTwo_continuous_chainF N hp0.le ρ C
-  have hper : CalculusOfVariations.QuasiconvexAtPeriodic (chainF N p ρ C) 0 :=
-    (External.Rindler.quasiconvexAtOn_iff_periodic hcont.lowerSemicontinuous
-      (fourByTwo_isLocallyBounded hcont) 0).mp
-      ((cov_quasiconvexAtOn_unitCube_iff _ _).mpr hqc)
-  set φ := fourByTwo_testMap N (fourByTwo_supp c) (fourByTwo_uCoeff ρ (fourByTwo_hc c)) with hφ
-  obtain ⟨K, hK⟩ := fourByTwo_testMap_lipschitz N (fourByTwo_supp c)
-    (fourByTwo_uCoeff ρ (fourByTwo_hc c))
-  have key := hper φ K hK (fourByTwo_testMap_periodic _ _ _)
-    (fourByTwo_integrableOn_comp_jac hcont hK)
-  -- the integrand is `C^p ‖(h_j)‖^p − |Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j|^p`
-  set h : UnitAddTorus (Fin 2) → ℝ := fun z => √(∑ j, ‖trigPoly (c j) z‖ ^ 2) with hh
-  set T : UnitAddTorus (Fin 2) → ℂ := fun z => ∑ j : Fin (N + 1),
-    ((ρ ^ (N - j.val) : ℝ) : ℂ) * torusBeurlingPow (N + 1 - j.val) (c j) z with hT
-  have hpt : ∀ x, chainF N p ρ C (0 + CalculusOfVariations.grad φ x) =
-      C ^ p * ‖h (fourByTwo_proj x)‖ ^ p - ‖T (fourByTwo_proj x)‖ ^ p := by
-    intro x
-    rw [zero_add, grad_eq, chainF, Real.norm_of_nonneg (Real.sqrt_nonneg _)]
-    simp only [hφ, fourByTwo_chainP_testMap ρ c hc0, fourByTwo_chainQ_testMap, hT]
-  simp only [hpt] at key
-  rw [fourByTwo_chainF_zero N hp0] at key
-  have hcT : Continuous T := continuous_finsetSum _ fun j _ =>
-    continuous_const.mul (fourByTwo_continuous_torusBeurlingPow _ _)
-  have hch : Continuous h := Real.continuous_sqrt.comp (continuous_finsetSum _ fun j _ =>
-    ((fourByTwo_continuous_trigPoly (c j)).norm.pow 2))
-  have iT : IntegrableOn (fun x => ‖T (fourByTwo_proj x)‖ ^ p) (unitCube 2) :=
-    fourByTwo_integrableOn_cube ((hcT.comp fourByTwo_continuous_proj).norm.rpow_const
-      fun _ => Or.inr hp0.le)
-  have ih : IntegrableOn (fun x => ‖h (fourByTwo_proj x)‖ ^ p) (unitCube 2) :=
-    fourByTwo_integrableOn_cube ((hch.comp fourByTwo_continuous_proj).norm.rpow_const
-      fun _ => Or.inr hp0.le)
-  rw [unitCube_eq_cov] at key
-  rw [integral_sub (ih.const_mul _) iT, integral_const_mul, sub_nonneg] at key
-  -- back to `L^p (𝕋²)` norms
-  refine ENNReal.div_le_of_le_mul ?_
-  rw [fourByTwo_eLpNorm_torus hcT hp0, fourByTwo_eLpNorm_torus hch hp0,
-    ← ENNReal.ofReal_mul hC0]
-  refine ENNReal.ofReal_le_ofReal ?_
-  have hnn : 0 ≤ ∫ x in unitCube 2, ‖h (fourByTwo_proj x)‖ ^ p :=
-    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
-      fun x _ => by positivity
-  have hnnT : 0 ≤ ∫ x in unitCube 2, ‖T (fourByTwo_proj x)‖ ^ p :=
-    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
-      fun x _ => by positivity
-  calc (∫ x in unitCube 2, ‖T (fourByTwo_proj x)‖ ^ p) ^ (1 / p)
-      ≤ (C ^ p * ∫ x in unitCube 2, ‖h (fourByTwo_proj x)‖ ^ p) ^ (1 / p) :=
-        Real.rpow_le_rpow hnnT key (by positivity)
-    _ = C * (∫ x in unitCube 2, ‖h (fourByTwo_proj x)‖ ^ p) ^ (1 / p) := by
-        rw [Real.mul_rpow (Real.rpow_nonneg hC0 _) hnn, one_div,
-          Real.rpow_rpow_inv hC0 hp0.ne']
-
-/-! ### Proposition 7.2: the identity `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} P_ρ (∇u)_j`
-
-The paper's first claim (TeX lines 2808–2821), for every trigonometric test map
-`u = fourByTwo_testMap N S w`: with `h_j = P_ρ (∇u)_j = ∂̄u_j − ρ ∂u_{j−1}` (`∂u_{−1} = 0`),
-`Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`, by induction from `𝓑 (∂̄w) = ∂w`. At the frequency
-`n`, `∂̄` has the symbol `π i ξ_n` and `∂` the symbol `π i ξ̄_n`
-(`fourByTwo_alpha_beta_testMap`). -/
-
-/-- `ĥ_j (n) = π i ξ_n ŵ_j (n) − ρ π i ξ̄_n ŵ_{j−1} (n)` (no second term for `j = 0`). -/
-noncomputable def fourByTwo_hVal (ρ : ℝ) (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : ℕ) (n : Fin 2 → ℤ) : ℂ :=
-  Real.pi * Complex.I * fourByTwo_ξ n * w j n -
-    if j = 0 then 0 else (ρ : ℂ) * (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n) * w (j - 1) n)
-
-/-- The coefficients of `h_j = P_ρ (∇u)_j` for the test map `u = fourByTwo_testMap N S w`, as a
-finitely supported function. -/
-noncomputable def fourByTwo_hOf (N : ℕ) (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : Fin (N + 1)) : (Fin 2 → ℤ) →₀ ℂ :=
-  Finsupp.onFinset S (fun n => if n ∈ S then fourByTwo_hVal ρ w j.val n else 0)
-    fun n hn => by by_contra h; exact hn (ite_eq_right h)
-
-theorem fourByTwo_hOf_apply (N : ℕ) (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : Fin (N + 1)) (n : Fin 2 → ℤ) :
-    fourByTwo_hOf N ρ S w j n = if n ∈ S then fourByTwo_hVal ρ w j.val n else 0 :=
-  Finsupp.onFinset_apply
-
-theorem fourByTwo_ξ_zero : fourByTwo_ξ 0 = 0 := by simp [fourByTwo_ξ]
-
-/-- The tuple `(h_j)` has mean zero. -/
-theorem fourByTwo_hOf_zero (N : ℕ) (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : Fin (N + 1)) : fourByTwo_hOf N ρ S w j 0 = 0 := by
-  rw [fourByTwo_hOf_apply]
-  split_ifs <;> simp [fourByTwo_hVal, fourByTwo_ξ_zero]
-
-theorem fourByTwo_trigPoly_hOf (N : ℕ) (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : Fin (N + 1)) (x : Fin 2 → ℝ) :
-    trigPoly (fourByTwo_hOf N ρ S w j) (fourByTwo_proj x) =
-      ∑ n ∈ S, fourByTwo_hVal ρ w j.val n * fourByTwo_E n x := by
-  rw [trigPoly, fourByTwo_hOf, Finsupp.onFinset_sum _ fun n => zero_mul _]
-  refine Finset.sum_congr rfl fun n hn => ?_
-  rw [ite_eq_left hn, fourByTwo_E_eq]; rfl
-
-theorem fourByTwo_torusBeurlingPow_hOf (N : ℕ) (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (j : Fin (N + 1)) (k : ℕ) (x : Fin 2 → ℝ) :
-    torusBeurlingPow k (fourByTwo_hOf N ρ S w j) (fourByTwo_proj x) =
-      ∑ n ∈ S, beurlingSymbol (fourByTwo_ξ n) ^ k * fourByTwo_hVal ρ w j.val n *
-        fourByTwo_E n x := by
-  rw [torusBeurlingPow, fourByTwo_hOf, Finsupp.onFinset_sum _ fun n => by simp]
-  refine Finset.sum_congr rfl fun n hn => ?_
-  rw [ite_eq_left hn, fourByTwo_E_eq]; rfl
-
-/-- `P_ρ (∇u)_j = h_j` for every trigonometric test map `u`. -/
-theorem fourByTwo_chainP_eq_hOf {N : ℕ} (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ) (j : Fin (N + 1)) :
-    chainP ρ (jac (fourByTwo_testMap N S w) x) j =
-      trigPoly (fourByTwo_hOf N ρ S w j) (fourByTwo_proj x) := by
-  rw [fourByTwo_trigPoly_hOf]
-  unfold chainP
-  split_ifs with hj
-  · rw [(fourByTwo_alpha_beta_testMap (N := N) S w x j).2]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    simp only [fourByTwo_hVal, hj, ↓reduceIte, sub_zero]
-    ring
-  · rw [(fourByTwo_alpha_beta_testMap (N := N) S w x j).2,
-      (fourByTwo_alpha_beta_testMap (N := N) S w x ⟨j.val - 1, by omega⟩).1, Finset.mul_sum,
-      ← Finset.sum_sub_distrib]
-    refine Finset.sum_congr rfl fun n _ => ?_
-    simp only [fourByTwo_hVal, hj, ↓reduceIte]
-    ring
+/-! ### Proposition 7.2: the identity `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} P_ρ (∇u)_j` -/
 
 /-- The induction of the proof of Proposition 7.2 at one frequency: with `m a_j = b_j`
 (`𝓑 (∂̄u_j) = ∂u_j`), `c₀ = a₀` and `c_j = a_j − ρ b_{j−1}`,
@@ -1010,357 +616,424 @@ theorem fourByTwo_telescope (ρ m : ℂ) (a b : ℕ → ℂ) (hab : ∀ j, m * a
 
 /-- `m (ξ) · π i ξ = π i ξ̄`, that is, `𝓑 ∂̄ = ∂` at every frequency (also at `ξ = 0`). -/
 theorem fourByTwo_beurlingSymbol_mul (ξ : ℂ) :
-    beurlingSymbol ξ * (Real.pi * Complex.I * ξ) = Real.pi * Complex.I * starRingEnd ℂ ξ := by
+    HarmonicAnalysis.beurlingSymbol ξ * (Real.pi * Complex.I * ξ) =
+      Real.pi * Complex.I * starRingEnd ℂ ξ := by
   by_cases h : ξ = 0
-  · simp [h, beurlingSymbol]
-  · rw [beurlingSymbol]; field_simp
+  · simp [h, HarmonicAnalysis.beurlingSymbol]
+  · rw [HarmonicAnalysis.beurlingSymbol]; field_simp
 
-/-- `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` for every trigonometric test map `u`. -/
-theorem fourByTwo_chainQ_eq_hOf {N : ℕ} (ρ : ℝ) (S : Finset (Fin 2 → ℤ))
-    (w : ℕ → (Fin 2 → ℤ) → ℂ) (x : Fin 2 → ℝ) :
-    chainQ (jac (fourByTwo_testMap N S w) x) =
-      ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-        torusBeurlingPow (N + 1 - j.val) (fourByTwo_hOf N ρ S w j) (fourByTwo_proj x) := by
-  rw [chainQ, (fourByTwo_alpha_beta_testMap (N := N) S w x (Fin.last N)).1]
-  simp only [Fin.val_last, fourByTwo_torusBeurlingPow_hOf, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  refine Finset.sum_congr rfl fun n _ => ?_
-  have ht := fourByTwo_telescope (ρ : ℂ) (beurlingSymbol (fourByTwo_ξ n))
-    (fun j => Real.pi * Complex.I * fourByTwo_ξ n * w j n)
-    (fun j => Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n) * w j n)
-    (fun j => by rw [← mul_assoc, fourByTwo_beurlingSymbol_mul]) N
-  rw [Fin.sum_univ_eq_sum_range (fun j => ((ρ ^ (N - j) : ℝ) : ℂ) *
-    (beurlingSymbol (fourByTwo_ξ n) ^ (N + 1 - j) * fourByTwo_hVal ρ w j n * fourByTwo_E n x))
-    (N + 1)]
-  have e : ∀ j ∈ Finset.range (N + 1), ((ρ ^ (N - j) : ℝ) : ℂ) *
-      (beurlingSymbol (fourByTwo_ξ n) ^ (N + 1 - j) * fourByTwo_hVal ρ w j n * fourByTwo_E n x) =
-      ((ρ : ℂ) ^ (N - j) * beurlingSymbol (fourByTwo_ξ n) ^ (N + 1 - j) *
-        (Real.pi * Complex.I * fourByTwo_ξ n * w j n - if j = 0 then 0 else
-          (ρ : ℂ) * (Real.pi * Complex.I * starRingEnd ℂ (fourByTwo_ξ n) * w (j - 1) n))) *
-        fourByTwo_E n x := fun j _ => by
-    rw [fourByTwo_hVal]; push_cast; ring
-  rw [Finset.sum_congr rfl e, ← Finset.sum_mul, ht]
-  ring
+/-- The identity of the proof of Proposition 7.2 (TeX lines 2808–2821), for a smooth
+`ℤ²`-periodic test map `φ`: with `h_j = P_ρ (∇φ)_j = ∂̄u_j − ρ ∂u_{j−1}`,
+`Q (∇φ) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`. The paper's induction from `𝓑 (∂̄w) = ∂w` is made
+frequency by frequency (`fourByTwo_telescope`, with `m (ν) πi ν = πi ν̄`), and the two smooth
+periodic sides are equal since their coefficients are (`UnitAddTorus.eq_of_cubeFourierCoeff_eq`). -/
+theorem fourByTwo_chainQ_jac {N : ℕ} (ρ : ℝ) {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (hper : UnitAddTorus.IsPeriodic φ) (x : Fin 2 → ℝ) :
+    chainQ (jac φ x) = ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+      UnitAddTorus.periodicMultiplier (fun n =>
+        HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+        (fun y => chainP ρ (jac φ y) j) x := by
+  have h1 : ∀ i, ContDiff ℝ 1 (fourByTwo_u φ i) := fun i =>
+    (fourByTwo_contDiff_u hφ i).of_le (by exact_mod_cast le_top)
+  have hT : ∀ j : Fin (N + 1), ContDiff ℝ ∞ (UnitAddTorus.periodicMultiplier (fun n =>
+      HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+      (fun y => chainP ρ (jac φ y) j)) := fun j =>
+    UnitAddTorus.contDiff_periodicMultiplier (HarmonicAnalysis.isPolyBounded_beurlingSymbol_pow _)
+      (fourByTwo_contDiff_chainP ρ hφ j) (fourByTwo_isPeriodic_chainP ρ hper j)
+  rw [chainQ, fourByTwo_alphaRow_jac (hφ.differentiable (by simp))]
+  refine congrFun (UnitAddTorus.eq_of_cubeFourierCoeff_eq
+    (UnitAddTorus.contDiff_dzPi (fourByTwo_contDiff_u hφ _))
+    (UnitAddTorus.isPeriodic_dzPi (fourByTwo_isPeriodic_u hper _))
+    (ContDiff.sum fun j _ => contDiff_const.mul (hT j))
+    (fun y k => by simp only [UnitAddTorus.isPeriodic_periodicMultiplier _ _ y k])
+    fun n => ?_) x
+  rw [UnitAddTorus.cubeFourierCoeff_dzPi (h1 _) (fourByTwo_isPeriodic_u hper _),
+    fourByTwo_cubeFourierCoeff_sum _ fun j _ => continuous_const.fun_mul (hT j).continuous]
+  have e : ∀ j : Fin (N + 1), UnitAddTorus.cubeFourierCoeff (fun y => ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+      UnitAddTorus.periodicMultiplier (fun n =>
+        HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+        (fun y => chainP ρ (jac φ y) j) y) n =
+      ((ρ ^ (N - j.val) : ℝ) : ℂ) * (HarmonicAnalysis.beurlingSymbol
+        (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val) *
+        UnitAddTorus.cubeFourierCoeff (fun y => chainP ρ (jac φ y) j) n) := fun j => by
+    rw [UnitAddTorus.cubeFourierCoeff_const_mul, UnitAddTorus.cubeFourierCoeff_periodicMultiplier
+      (HarmonicAnalysis.isPolyBounded_beurlingSymbol_pow _) (fourByTwo_contDiff_chainP ρ hφ j)
+      (fourByTwo_isPeriodic_chainP ρ hper j)]
+  simp_rw [e, fourByTwo_cubeFourierCoeff_chainP ρ hφ hper]
+  -- the induction, frequency by frequency
+  set ν := HarmonicAnalysis.latticePoint n
+  set m := HarmonicAnalysis.beurlingSymbol ν
+  set c : ℕ → ℂ := fun i => if hi : i < N + 1 then
+    UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ ⟨i, hi⟩) n else 0 with hc
+  have ht := fourByTwo_telescope (ρ : ℂ) m (fun i => Real.pi * Complex.I * ν * c i)
+    (fun i => Real.pi * Complex.I * starRingEnd ℂ ν * c i)
+    (fun i => by rw [← mul_assoc, fourByTwo_beurlingSymbol_mul]) N
+  have hcN : c N = UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ (Fin.last N)) n := by
+    simp [hc, Fin.last]
+  rw [← hcN, ← ht, Finset.sum_range]
+  refine Finset.sum_congr rfl fun j _ => ?_
+  have hcj : c j.val = UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ j) n := by
+    simp only [hc, j.isLt, ↓reduceDIte, Fin.eta]
+  by_cases hj : j.val = 0
+  · simp only [hj, ↓reduceIte, sub_zero, ← hcj]
+    push_cast
+    ring
+  · have hcj' : c (j.val - 1) =
+        UnitAddTorus.cubeFourierCoeff (fourByTwo_u φ ⟨j.val - 1, by omega⟩) n := by
+      simp only [hc, show j.val - 1 < N + 1 by omega, ↓reduceDIte]
+    simp only [hj, ↓reduceIte, ← hcj, ← hcj']
+    push_cast
+    ring
 
-/-- The inequality `∫_{(0,1)²} f_{p,ρ,C} (∇u) ≥ 0` for every trigonometric test map `u`, with
-`C = ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` (the definition of `chainOpNorm`, applied to the mean-zero tuple
-`h = P_ρ (∇u)`, whose image is `Q (∇u)`). -/
-theorem fourByTwo_integral_chainF_testMap_nonneg (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p)
-    (hfin : chainOpNorm N p ρ ≠ ⊤) (S : Finset (Fin 2 → ℤ)) (w : ℕ → (Fin 2 → ℤ) → ℂ) :
-    0 ≤ ∫ x in unitCube 2,
-      chainF N p ρ (chainOpNorm N p ρ).toReal (jac (fourByTwo_testMap N S w) x) := by
+/-! ### Proposition 7.2: `L^p` norms on the unit square and on the torus -/
+
+/-- Continuous functions are integrable on the unit square. -/
+theorem fourByTwo_integrableOn_cube {g : (Fin 2 → ℝ) → ℝ} (hg : Continuous g) :
+    IntegrableOn g (unitCube 2) :=
+  (hg.integrableOn_Icc (a := 0) (b := 1)).mono_set fun _ hx =>
+    ⟨fun i => (hx i (Set.mem_univ i)).1.le, fun i => (hx i (Set.mem_univ i)).2.le⟩
+
+/-- `‖F‖_{L^p ((0,1)²)} = (∫_{(0,1)²} ‖F (x)‖^p dx)^{1/p}` for continuous `F`. -/
+theorem fourByTwo_eLpNorm_cube {E : Type*} [NormedAddCommGroup E] {F : (Fin 2 → ℝ) → E}
+    (hF : Continuous F) {p : ℝ} (hp : 0 < p) :
+    eLpNorm F (ENNReal.ofReal p) (volume.restrict (unitCube 2)) =
+      ENNReal.ofReal ((∫ x in unitCube 2, ‖F x‖ ^ p) ^ (1 / p)) := by
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simpa using hp) ENNReal.ofReal_ne_top
+    hF.aestronglyMeasurable, ENNReal.toReal_ofReal hp.le]
+  have hc : Continuous fun x => ‖F x‖ ^ p := hF.norm.rpow_const fun _ => Or.inr hp.le
+  have hnn : 0 ≤ ∫ x in unitCube 2, ‖F x‖ ^ p :=
+    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
+      fun x _ => by positivity
+  rw [← ENNReal.ofReal_rpow_of_nonneg hnn (by positivity),
+    ofReal_integral_eq_lintegral_ofReal (fourByTwo_integrableOn_cube hc)
+      (ae_of_all _ fun x => by positivity)]
+  congr 1
+  refine lintegral_congr fun x => ?_
+  rw [← ofReal_norm, ENNReal.ofReal_rpow_of_nonneg (norm_nonneg _) hp.le]
+
+/-- `∫_{(0,1)²} (K^p ‖H‖^p − ‖T‖^p) ≥ 0` if and only if `‖T‖_p ≤ K ‖H‖_p` (norms in
+`L^p ((0,1)²)`), for continuous `H`, `T`. -/
+theorem fourByTwo_integral_nonneg_iff {E F : Type*} [NormedAddCommGroup E] [NormedAddCommGroup F]
+    {H : (Fin 2 → ℝ) → E} {T : (Fin 2 → ℝ) → F} (hH : Continuous H) (hT : Continuous T)
+    {p K : ℝ} (hp : 0 < p) (hK : 0 ≤ K) :
+    0 ≤ ∫ x in unitCube 2, (K ^ p * ‖H x‖ ^ p - ‖T x‖ ^ p) ↔
+      eLpNorm T (ENNReal.ofReal p) (volume.restrict (unitCube 2)) ≤
+        ENNReal.ofReal K * eLpNorm H (ENNReal.ofReal p) (volume.restrict (unitCube 2)) := by
+  have iH : IntegrableOn (fun x => ‖H x‖ ^ p) (unitCube 2) :=
+    fourByTwo_integrableOn_cube (hH.norm.rpow_const fun _ => Or.inr hp.le)
+  have iT : IntegrableOn (fun x => ‖T x‖ ^ p) (unitCube 2) :=
+    fourByTwo_integrableOn_cube (hT.norm.rpow_const fun _ => Or.inr hp.le)
+  have hms : MeasurableSet (unitCube 2) := by
+    simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo]
+  have hnH : 0 ≤ ∫ x in unitCube 2, ‖H x‖ ^ p :=
+    setIntegral_nonneg hms fun x _ => by positivity
+  have hnT : 0 ≤ ∫ x in unitCube 2, ‖T x‖ ^ p :=
+    setIntegral_nonneg hms fun x _ => by positivity
+  rw [integral_sub (iH.const_mul _) iT, integral_const_mul, sub_nonneg,
+    fourByTwo_eLpNorm_cube hT hp, fourByTwo_eLpNorm_cube hH hp, ← ENNReal.ofReal_mul hK,
+    ENNReal.ofReal_le_ofReal_iff (by positivity),
+    ← Real.rpow_le_rpow_iff (Real.rpow_nonneg hnT _) (by positivity) hp,
+    Real.mul_rpow hK (Real.rpow_nonneg hnH _), one_div, Real.rpow_inv_rpow hnT hp.ne',
+    Real.rpow_inv_rpow hnH hp.ne']
+
+/-- Integrals over the torus `𝕋² = ℝ² / ℤ²` (normalised Haar measure) are integrals of the lifts
+over the unit square. -/
+theorem fourByTwo_lintegral_torus (f : UnitAddTorus (Fin 2) → ℝ≥0∞) :
+    ∫⁻ z, f z = ∫⁻ x in unitCube 2, f (UnitAddTorus.ofPi x) := by
+  have hvol : (volume : Measure (UnitAddTorus (Fin 2))) =
+      @volume _ (@MeasureSpace.pi (Fin 2) _ (fun _ => UnitAddCircle)
+        fun _ => instMeasureSpaceUnitAddCircle) := by
+    show Measure.pi (fun _ => (volume : Measure UnitAddCircle)) =
+      Measure.pi (fun _ => AddCircle.haarAddCircle)
+    congr 1
+    funext i
+    rw [AddCircle.volume_eq_smul_haarAddCircle]
+    simp
+  rw [hvol, UnitAddTorus.lintegral_preimage f 0]
+  have h1 : {x : Fin 2 → ℝ | ∀ i, x i ∈ Set.Ioc ((0 : Fin 2 → ℝ) i) ((0 : Fin 2 → ℝ) i + 1)} =
+      Set.univ.pi fun _ => Set.Ioc (0 : ℝ) 1 := by
+    ext x; simp
+  rw [h1, unitCube]
+  exact setLIntegral_congr (Measure.univ_pi_Ioc_ae_eq_Icc.trans Measure.univ_pi_Ioo_ae_eq_Icc.symm)
+
+/-- `‖F‖_{L^p (𝕋²)} = ‖F ∘ π‖_{L^p ((0,1)²)}`, `π : ℝ² → 𝕋²` the projection. -/
+theorem fourByTwo_eLpNorm_torus {E : Type*} [NormedAddCommGroup E]
+    {F : UnitAddTorus (Fin 2) → E} (hF : Continuous F) {p : ℝ} (hp : 0 < p) :
+    eLpNorm F (ENNReal.ofReal p) volume =
+      eLpNorm (fun x => F (UnitAddTorus.ofPi x)) (ENNReal.ofReal p)
+        (volume.restrict (unitCube 2)) := by
+  rw [eLpNorm_eq_lintegral_rpow_enorm_toReal (by simpa using hp) ENNReal.ofReal_ne_top
+    hF.aestronglyMeasurable, eLpNorm_eq_lintegral_rpow_enorm_toReal (by simpa using hp)
+    ENNReal.ofReal_ne_top (hF.comp UnitAddTorus.continuous_ofPi).aestronglyMeasurable (f := fun x =>
+      F (UnitAddTorus.ofPi x)),
+    fourByTwo_lintegral_torus]
+
+/-- Trigonometric polynomials are continuous on `𝕋²`. -/
+theorem fourByTwo_continuous_trigPoly (c : (Fin 2 → ℤ) →₀ ℂ) : Continuous (trigPoly c) :=
+  continuous_finsetSum _ fun n _ => continuous_const.mul (UnitAddTorus.mFourier n).continuous
+
+/-- `𝓑^k` of a trigonometric polynomial is continuous on `𝕋²`. -/
+theorem fourByTwo_continuous_torusBeurlingPow (k : ℕ) (c : (Fin 2 → ℤ) →₀ ℂ) :
+    Continuous (torusBeurlingPow k c) :=
+  continuous_finsetSum _ fun n _ => continuous_const.mul (UnitAddTorus.mFourier n).continuous
+
+/-- A continuous integrand is locally bounded. -/
+theorem fourByTwo_isLocallyBounded {d m : ℕ} {f : Matrix (Fin d) (Fin m) ℝ → ℝ}
+    (hf : Continuous f) : CalculusOfVariations.IsLocallyBounded f := by
+  intro A
+  refine ⟨f ⁻¹' Metric.ball (f A) 1, hf.continuousAt.preimage_mem_nhds (Metric.ball_mem_nhds _
+    one_pos), |f A| + 1, fun B hB => ?_⟩
+  have := abs_sub_abs_le_abs_sub (f B) (f A)
+  rw [Set.mem_preimage, Metric.mem_ball, Real.dist_eq] at hB
+  linarith
+
+/-! ### Proposition 7.2: `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`
+
+"Conversely, every smooth mean-zero tuple `(h_j)` is obtained by solving recursively
+`∂̄u_j = h_j + ρ ∂u_{j−1}`, which is possible since `∂̄` is invertible on mean-zero functions on the
+torus" (TeX lines 2822–2830). -/
+
+/-- The solution of `∂̄u₀ = h₀`, `∂̄u_{j+1} = h_{j+1} + ρ ∂u_j`, by the inverse of `∂̄` on
+mean-zero functions: `u_j = ∂̄⁻¹ (h_j + ρ ∂u_{j−1})`, the multiplier with symbol `(πi ν)⁻¹`
+(`UnitAddTorus.dzbarInvSymbol`). -/
+noncomputable def fourByTwo_solve (ρ : ℝ) (h : ℕ → (Fin 2 → ℝ) → ℂ) :
+    ℕ → (Fin 2 → ℝ) → ℂ
+  | 0 => UnitAddTorus.periodicMultiplier UnitAddTorus.dzbarInvSymbol (h 0)
+  | j + 1 => UnitAddTorus.periodicMultiplier UnitAddTorus.dzbarInvSymbol
+      (fun x => h (j + 1) x + ρ * UnitAddTorus.dzPi (fourByTwo_solve ρ h j) x)
+
+/-- For smooth periodic mean-zero `h_j`, the `u_j` are smooth, periodic and solve
+`∂̄u_j = h_j + ρ ∂u_{j−1}` (`∂u_{−1} = 0`): `h_j + ρ ∂u_{j−1}` is smooth, periodic and mean-zero,
+and `∂̄ ∂̄⁻¹ = id` on such functions (`UnitAddTorus.dzbarPi_periodicMultiplier_dzbarInvSymbol`). -/
+theorem fourByTwo_solve_spec (ρ : ℝ) {h : ℕ → (Fin 2 → ℝ) → ℂ}
+    (hh : ∀ i, ContDiff ℝ ∞ (h i) ∧ UnitAddTorus.IsPeriodic (h i) ∧
+      UnitAddTorus.cubeFourierCoeff (h i) 0 = 0) (j : ℕ) :
+    ContDiff ℝ ∞ (fourByTwo_solve ρ h j) ∧ UnitAddTorus.IsPeriodic (fourByTwo_solve ρ h j) ∧
+      UnitAddTorus.dzbarPi (fourByTwo_solve ρ h j) = fun x => h j x +
+        if j = 0 then 0 else ρ * UnitAddTorus.dzPi (fourByTwo_solve ρ h (j - 1)) x := by
+  induction j with
+  | zero =>
+    obtain ⟨h1, h2, h3⟩ := hh 0
+    refine ⟨UnitAddTorus.contDiff_periodicMultiplier UnitAddTorus.isPolyBounded_dzbarInvSymbol
+      h1 h2, UnitAddTorus.isPeriodic_periodicMultiplier _ _, ?_⟩
+    simp only [fourByTwo_solve, ↓reduceIte, add_zero]
+    exact UnitAddTorus.dzbarPi_periodicMultiplier_dzbarInvSymbol h1 h2 h3
+  | succ j ih =>
+    obtain ⟨u1, u2, -⟩ := ih
+    obtain ⟨h1, h2, h3⟩ := hh (j + 1)
+    have d1 := UnitAddTorus.contDiff_dzPi u1
+    have g1 : ContDiff ℝ ∞ fun x => h (j + 1) x +
+        ρ * UnitAddTorus.dzPi (fourByTwo_solve ρ h j) x := h1.add (contDiff_const.mul d1)
+    have g2 : UnitAddTorus.IsPeriodic fun x => h (j + 1) x +
+        ρ * UnitAddTorus.dzPi (fourByTwo_solve ρ h j) x := fun x k => by
+      simp only [h2 x k, UnitAddTorus.isPeriodic_dzPi u2 x k]
+    have g3 : UnitAddTorus.cubeFourierCoeff (fun x => h (j + 1) x +
+        ρ * UnitAddTorus.dzPi (fourByTwo_solve ρ h j) x) 0 = 0 := by
+      rw [fourByTwo_cubeFourierCoeff_add h1.continuous (continuous_const.fun_mul d1.continuous),
+        UnitAddTorus.cubeFourierCoeff_const_mul, h3,
+        UnitAddTorus.cubeFourierCoeff_dzPi_zero (u1.of_le (by exact_mod_cast le_top)) u2]
+      simp
+    refine ⟨UnitAddTorus.contDiff_periodicMultiplier UnitAddTorus.isPolyBounded_dzbarInvSymbol
+      g1 g2, UnitAddTorus.isPeriodic_periodicMultiplier _ _, ?_⟩
+    simp only [fourByTwo_solve, Nat.succ_ne_zero, ↓reduceIte, Nat.add_sub_cancel]
+    exact UnitAddTorus.dzbarPi_periodicMultiplier_dzbarInvSymbol g1 g2 g3
+
+/-- The real test map `φ : ℝ² → ℝ^{2(N+1)}` of `u = (u₀, …, u_N)`: rows `2j` and `2j + 1` are
+`Re u_j` and `Im u_j`. -/
+noncomputable def fourByTwo_reIm (N : ℕ) (u : ℕ → (Fin 2 → ℝ) → ℂ) (x : Fin 2 → ℝ) :
+    Fin (2 * (N + 1)) → ℝ :=
+  fun r => if r.val % 2 = 0 then (u (r.val / 2) x).re else (u (r.val / 2) x).im
+
+/-- The complex components of the real test map of `u` are the `u_j`. -/
+theorem fourByTwo_u_reIm (N : ℕ) (u : ℕ → (Fin 2 → ℝ) → ℂ) (j : Fin (N + 1)) :
+    fourByTwo_u (fourByTwo_reIm N u) j = u j.val := by
+  funext x
+  have e1 : (2 * j.val + 1) % 2 = 1 := by omega
+  have e2 : (2 * j.val + 1) / 2 = j.val := by omega
+  have e3 : (2 * j.val) % 2 = 0 := by omega
+  have e4 : (2 * j.val) / 2 = j.val := by omega
+  apply Complex.ext <;> simp [fourByTwo_u, fourByTwo_reIm, rowBlock, e1, e2, e3, e4]
+
+/-- The real test map of smooth `u_j` is smooth. -/
+theorem fourByTwo_contDiff_reIm (N : ℕ) {u : ℕ → (Fin 2 → ℝ) → ℂ}
+    (hu : ∀ i, ContDiff ℝ ∞ (u i)) : ContDiff ℝ ∞ (fourByTwo_reIm N u) :=
+  contDiff_pi.2 fun r => by
+    by_cases h : r.val % 2 = 0
+    · simp only [fourByTwo_reIm, h, ↓reduceIte]
+      exact Complex.reCLM.contDiff.comp (hu _)
+    · simp only [fourByTwo_reIm, h, ↓reduceIte]
+      exact Complex.imCLM.contDiff.comp (hu _)
+
+/-- The real test map of periodic `u_j` is periodic. -/
+theorem fourByTwo_isPeriodic_reIm (N : ℕ) {u : ℕ → (Fin 2 → ℝ) → ℂ}
+    (hu : ∀ i, UnitAddTorus.IsPeriodic (u i)) : UnitAddTorus.IsPeriodic (fourByTwo_reIm N u) :=
+  fun x k => by
+    funext r
+    simp only [fourByTwo_reIm, hu _ x k]
+
+/-- The inequality `C^{qc} (p, N, ρ) ≥ ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) →
+L^p_0 (𝕋²)}` of Proposition 7.2, by the paper's argument (TeX lines 2822–2832): every smooth
+mean-zero tuple `(h_j)` is `P_ρ (∇φ)` for the test map `φ` with rows `Re u_j`, `Im u_j`
+(`fourByTwo_reIm`), `u` obtained by solving `∂̄u_j = h_j + ρ ∂u_{j−1}` (`fourByTwo_solve`, by the
+inverse of `∂̄` on mean-zero functions); `φ` is smooth and periodic, hence Lipschitz, and by the
+identity `Q (∇φ) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (`fourByTwo_chainQ_jac`), quasiconvexity at `0`,
+tested with periodic maps (Lemma 2.2, `External.Rindler.quasiconvexAtOn_iff_periodic`), gives
+`‖Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j‖_p ≤ C ‖(h_j)‖_p`. -/
+theorem fourByTwo_chainOpNorm_le_qcThreshold (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p) :
+    chainOpNorm N p ρ ≤ qcThreshold (chainF N p ρ) := by
+  have hp0 : 0 < p := by linarith
+  refine le_iInf₂ fun C hC => iSup₂_le fun h hh => ?_
+  obtain ⟨hC0, hqc⟩ := hC
+  -- Lemma 2.2: quasiconvexity at `0` with periodic test maps
+  have hcont := fourByTwo_continuous_chainF N hp0.le ρ C
+  have hper : CalculusOfVariations.QuasiconvexAtPeriodic (chainF N p ρ C) 0 :=
+    (External.Rindler.quasiconvexAtOn_iff_periodic hcont.measurable
+      (fourByTwo_isLocallyBounded hcont) 0).mp
+      ((cov_quasiconvexAtOn_unitCube_iff _ _).mpr hqc)
+  -- the tuple, extended by `0`, and the solution `u` of `∂̄u_j = h_j + ρ ∂u_{j−1}`
+  set h' : ℕ → (Fin 2 → ℝ) → ℂ := fun i => if hi : i < N + 1 then h ⟨i, hi⟩ else 0 with hh'
+  have hh'' : ∀ i, ContDiff ℝ ∞ (h' i) ∧ UnitAddTorus.IsPeriodic (h' i) ∧
+      UnitAddTorus.cubeFourierCoeff (h' i) 0 = 0 := by
+    intro i
+    by_cases hi : i < N + 1
+    · obtain ⟨a, b, c⟩ := hh ⟨i, hi⟩
+      simp only [hh', hi, ↓reduceDIte]
+      exact ⟨a, b, by rw [fourByTwo_cubeFourierCoeff_zero]; exact c⟩
+    · simp only [hh', hi, ↓reduceDIte]
+      exact ⟨contDiff_const, fun _ _ => rfl, by simp [UnitAddTorus.cubeFourierCoeff]⟩
+  have hus := fourByTwo_solve_spec ρ hh''
+  have hh'j : ∀ j : Fin (N + 1), h' j.val = h j := fun j => by
+    simp only [hh', j.isLt, ↓reduceDIte, Fin.eta]
+  -- the test map
+  set φ := fourByTwo_reIm N (fourByTwo_solve ρ h') with hφ
+  have hφs : ContDiff ℝ ∞ φ := fourByTwo_contDiff_reIm N fun i => (hus i).1
+  have hφp : UnitAddTorus.IsPeriodic φ := fourByTwo_isPeriodic_reIm N fun i => (hus i).2.1
+  obtain ⟨K, hK⟩ := hφp.exists_lipschitzWith (hφs.of_le (by exact_mod_cast le_top))
+  have key := hper φ K hK hφp (fourByTwo_integrableOn_comp_jac hcont hK)
+  -- `P_ρ (∇φ) = (h₀, …, h_N)` and `Q (∇φ) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`
+  have hP : ∀ j x, chainP ρ (jac φ x) j = h j x := by
+    intro j x
+    rw [fourByTwo_chainP_jac ρ (hφs.differentiable (by simp)), fourByTwo_u_reIm,
+      fourByTwo_u_reIm, congrFun (hus j).2.2 x, hh'j]
+    by_cases hj : j.val = 0 <;> simp [hj]
+  set H : (Fin 2 → ℝ) → ℝ := fun x => √(∑ j, ‖h j x‖ ^ 2) with hH
+  set T : (Fin 2 → ℝ) → ℂ := fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+    UnitAddTorus.periodicMultiplier (fun n =>
+      HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+      (h j) x with hT
+  have hpt : ∀ x, chainF N p ρ C (0 + CalculusOfVariations.grad φ x) =
+      C ^ p * ‖H x‖ ^ p - ‖T x‖ ^ p := by
+    intro x
+    rw [zero_add, grad_eq, chainF, Real.norm_of_nonneg (Real.sqrt_nonneg _),
+      fourByTwo_chainQ_jac ρ hφs hφp]
+    simp only [hP, hT]
+  simp only [hpt] at key
+  rw [fourByTwo_chainF_zero N hp0, unitCube_eq_cov] at key
+  have hcH : Continuous H := Real.continuous_sqrt.comp (continuous_finsetSum _ fun j _ =>
+    ((hh j).1.continuous.norm.pow 2))
+  have hcT : Continuous T := continuous_finsetSum _ fun j _ => continuous_const.mul
+    (UnitAddTorus.contDiff_periodicMultiplier (HarmonicAnalysis.isPolyBounded_beurlingSymbol_pow _)
+      (hh j).1 (hh j).2.1).continuous
+  refine ENNReal.div_le_of_le_mul ?_
+  exact (fourByTwo_integral_nonneg_iff hcH hcT hp0 hC0).1 key
+
+/-! ### Proposition 7.2: `C^{qc} ≤ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` -/
+
+/-- For a smooth `ℤ²`-periodic `u`, `∫_{(0,1)²} f_{p,ρ,C} (∇u) ≥ 0` with
+`C = ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`: by the identity `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j`
+(`fourByTwo_chainQ_jac`) and the definition of `chainOpNorm`, applied to the smooth mean-zero
+tuple `h = P_ρ (∇u)` (TeX lines 2808–2821). -/
+theorem fourByTwo_integral_chainF_nonneg_of_smooth (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p)
+    (hfin : chainOpNorm N p ρ ≠ ⊤) {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
+    (hφ : ContDiff ℝ ∞ φ) (hper : UnitAddTorus.IsPeriodic φ) :
+    0 ≤ ∫ x in unitCube 2, chainF N p ρ (chainOpNorm N p ρ).toReal (jac φ x) := by
   have hp0 : 0 < p := by linarith
   set K := (chainOpNorm N p ρ).toReal with hKdef
   have hK0 : 0 ≤ K := ENNReal.toReal_nonneg
   have hK : ENNReal.ofReal K = chainOpNorm N p ρ := ENNReal.ofReal_toReal hfin
-  set c := fourByTwo_hOf N ρ S w with hc
-  have hc0 : ∀ j, c j 0 = 0 := fun j => fourByTwo_hOf_zero N ρ S w j
-  set h : UnitAddTorus (Fin 2) → ℝ := fun z => √(∑ j, ‖trigPoly (c j) z‖ ^ 2) with hh
-  set T : UnitAddTorus (Fin 2) → ℂ := fun z => ∑ j : Fin (N + 1),
-    ((ρ ^ (N - j.val) : ℝ) : ℂ) * torusBeurlingPow (N + 1 - j.val) (c j) z with hT
-  have hpt : ∀ x, chainF N p ρ K (jac (fourByTwo_testMap N S w) x) =
-      K ^ p * ‖h (fourByTwo_proj x)‖ ^ p - ‖T (fourByTwo_proj x)‖ ^ p := by
+  have hh : ∀ j, ContDiff ℝ ∞ (fun x => chainP ρ (jac φ x) j) ∧
+      UnitAddTorus.IsPeriodic (fun x => chainP ρ (jac φ x) j) ∧
+      ∫ x in unitCube 2, chainP ρ (jac φ x) j = 0 := fun j =>
+    ⟨fourByTwo_contDiff_chainP ρ hφ j, fourByTwo_isPeriodic_chainP ρ hper j,
+      fourByTwo_integral_chainP ρ hφ hper j⟩
+  set H : (Fin 2 → ℝ) → ℝ := fun x => √(∑ j, ‖chainP ρ (jac φ x) j‖ ^ 2) with hH
+  set T : (Fin 2 → ℝ) → ℂ := fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+    UnitAddTorus.periodicMultiplier (fun n =>
+      HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+      (fun y => chainP ρ (jac φ y) j) x with hT
+  have hpt : ∀ x, chainF N p ρ K (jac φ x) = K ^ p * ‖H x‖ ^ p - ‖T x‖ ^ p := by
     intro x
-    rw [chainF, Real.norm_of_nonneg (Real.sqrt_nonneg _)]
-    simp only [hT, hc, fourByTwo_chainP_eq_hOf ρ S w x, fourByTwo_chainQ_eq_hOf ρ S w x]
+    rw [chainF, Real.norm_of_nonneg (Real.sqrt_nonneg _), fourByTwo_chainQ_jac ρ hφ hper]
   simp only [hpt]
-  have hcT : Continuous T := continuous_finsetSum _ fun j _ =>
-    continuous_const.mul (fourByTwo_continuous_torusBeurlingPow _ _)
-  have hch : Continuous h := Real.continuous_sqrt.comp (continuous_finsetSum _ fun j _ =>
-    ((fourByTwo_continuous_trigPoly (c j)).norm.pow 2))
-  have iT : IntegrableOn (fun x => ‖T (fourByTwo_proj x)‖ ^ p) (unitCube 2) :=
-    fourByTwo_integrableOn_cube ((hcT.comp fourByTwo_continuous_proj).norm.rpow_const
-      fun _ => Or.inr hp0.le)
-  have ih : IntegrableOn (fun x => ‖h (fourByTwo_proj x)‖ ^ p) (unitCube 2) :=
-    fourByTwo_integrableOn_cube ((hch.comp fourByTwo_continuous_proj).norm.rpow_const
-      fun _ => Or.inr hp0.le)
-  rw [integral_sub (ih.const_mul _) iT, integral_const_mul, sub_nonneg]
-  -- the definition of `chainOpNorm`, for the mean-zero tuple `c`
-  have hratio : eLpNorm T (ENNReal.ofReal p) volume / eLpNorm h (ENNReal.ofReal p) volume ≤
-      ENNReal.ofReal K := by
+  -- the definition of `chainOpNorm`, for the smooth mean-zero tuple `h = P_ρ (∇φ)`
+  have hratio : eLpNorm T (ENNReal.ofReal p) (volume.restrict (unitCube 2)) /
+      eLpNorm H (ENNReal.ofReal p) (volume.restrict (unitCube 2)) ≤ ENNReal.ofReal K := by
     rw [hK]
-    exact le_iSup₂ (f := fun (c : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ) (_ : ∀ j, c j 0 = 0) =>
+    exact le_iSup₂ (f := fun (h : Fin (N + 1) → (Fin 2 → ℝ) → ℂ)
+      (_ : ∀ j, ContDiff ℝ ∞ (h j) ∧ UnitAddTorus.IsPeriodic (h j) ∧
+        ∫ x in unitCube 2, h j x = 0) =>
       eLpNorm (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-        torusBeurlingPow (N + 1 - j.val) (c j) x) (ENNReal.ofReal p) volume /
-      eLpNorm (fun x => √(∑ j, ‖trigPoly (c j) x‖ ^ 2)) (ENNReal.ofReal p) volume) c hc0
-  rw [fourByTwo_eLpNorm_torus hcT hp0, fourByTwo_eLpNorm_torus hch hp0,
-    ENNReal.div_le_iff_le_mul (Or.inr ENNReal.ofReal_ne_top) (Or.inl ENNReal.ofReal_ne_top),
-    ← ENNReal.ofReal_mul hK0] at hratio
-  have hnn : 0 ≤ ∫ x in unitCube 2, ‖h (fourByTwo_proj x)‖ ^ p :=
-    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
-      fun x _ => by positivity
-  have hnnT : 0 ≤ ∫ x in unitCube 2, ‖T (fourByTwo_proj x)‖ ^ p :=
-    setIntegral_nonneg (by simp [unitCube, MeasurableSet.univ_pi, measurableSet_Ioo])
-      fun x _ => by positivity
-  rw [ENNReal.ofReal_le_ofReal_iff (mul_nonneg hK0 (Real.rpow_nonneg hnn _))] at hratio
-  have key := Real.rpow_le_rpow (Real.rpow_nonneg hnnT _) hratio hp0.le
-  rw [Real.mul_rpow hK0 (Real.rpow_nonneg hnn _), one_div, Real.rpow_inv_rpow hnnT hp0.ne',
-    Real.rpow_inv_rpow hnn hp0.ne'] at key
-  exact key
-
-/-! ### Proposition 7.2: Lipschitz periodic test maps
-
-The paper proves the identity for smooth `u`; quasiconvexity is tested with Lipschitz periodic
-maps `φ` (Lemma 2.2), and the passage between the two is left implicit. It is filled here with
-the Fejér means `u_M` of `φ` (`UnitAddTorus.fejerMean`): trigonometric test maps whose gradients
-are `σ_M (∇φ)` (the Fourier coefficients of `∇φ` are `2πi n φ̂ (n)`,
-`UnitAddTorus.cubeFourierCoeff_fderiv`), bounded by `2 Lip (φ)`, and converging to `∇φ` in `L²`
-(`UnitAddTorus.tendsto_integral_norm_fejerMean_sub_sq`), hence almost everywhere along a
-subsequence; dominated convergence then passes `∫ f (∇u_M) ≥ 0` to the limit. -/
-
-/-- `jac φ` is periodic when `φ` is. -/
-theorem fourByTwo_jac_periodic {d : ℕ} {φ : (Fin 2 → ℝ) → Fin d → ℝ}
-    (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x)
-    (x : Fin 2 → ℝ) (z : Fin 2 → ℤ) : jac φ (x + fun i => (z i : ℝ)) = jac φ x := by
-  ext r k
-  simp only [jac, Matrix.of_apply]
-  rw [← fderiv_comp_add_right]
-  have : (fun y => φ (y + fun i => (z i : ℝ)) r) = fun y => φ y r :=
-    funext fun y => by rw [hper]
-  rw [this]
-
-/-- `∂_k φ_j = ∂_k φ_{2j} + i ∂_k φ_{2j+1}` (rows `2j`, `2j + 1` of `∇φ`). -/
-noncomputable def fourByTwo_dφ {N : ℕ} (φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ)
-    (j : Fin (N + 1)) (k : Fin 2) (x : Fin 2 → ℝ) : ℂ :=
-  (jac φ x (rowBlock j 0) k : ℂ) + Complex.I * (jac φ x (rowBlock j 1) k : ℂ)
-
-/-- The Fourier coefficients of `φ_j = φ_{2j} + i φ_{2j+1}`. -/
-noncomputable def fourByTwo_φHat {N : ℕ} (φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ)
-    (j : Fin (N + 1)) (n : Fin 2 → ℤ) : ℂ :=
-  UnitAddTorus.cubeFourierCoeff (fun x => (φ x (rowBlock j 0) : ℂ)) n +
-    Complex.I * UnitAddTorus.cubeFourierCoeff (fun x => (φ x (rowBlock j 1) : ℂ)) n
-
-theorem fourByTwo_measurable_jac_apply {d : ℕ} (φ : (Fin 2 → ℝ) → Fin d → ℝ) (r : Fin d)
-    (k : Fin 2) : Measurable fun x => jac φ x r k :=
-  measurable_fderiv_apply_const ℝ (fun y => φ y r) (Pi.single k 1)
-
-theorem fourByTwo_measurable_dφ {N : ℕ} (φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ)
-    (j : Fin (N + 1)) (k : Fin 2) : Measurable (fourByTwo_dφ φ j k) :=
-  (Complex.measurable_ofReal.comp (fourByTwo_measurable_jac_apply φ _ k)).add
-    (measurable_const.mul (Complex.measurable_ofReal.comp (fourByTwo_measurable_jac_apply φ _ k)))
-
-theorem fourByTwo_norm_dφ_le {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} {L : NNReal}
-    (hφ : LipschitzWith L φ) (j : Fin (N + 1)) (k : Fin 2) (x : Fin 2 → ℝ) :
-    ‖fourByTwo_dφ φ j k x‖ ≤ 2 * L := by
-  unfold fourByTwo_dφ
-  refine (norm_add_le _ _).trans ?_
-  rw [norm_mul, Complex.norm_I, one_mul, Complex.norm_real, Complex.norm_real, Real.norm_eq_abs,
-    Real.norm_eq_abs]
-  linarith [abs_jac_le hφ x (rowBlock j 0) k, abs_jac_le hφ x (rowBlock j 1) k]
-
-theorem fourByTwo_dφ_isPeriodic {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
-    (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x)
-    (j : Fin (N + 1)) (k : Fin 2) : UnitAddTorus.IsPeriodic (fourByTwo_dφ φ j k) := by
-  intro x z
-  simp only [fourByTwo_dφ, fourByTwo_jac_periodic hper]
-
-/-- The Fourier coefficients of `∂_k φ_j` are `2πi n_k φ̂_j (n)`. -/
-theorem fourByTwo_cubeFourierCoeff_dφ {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ}
-    {L : NNReal} (hφ : LipschitzWith L φ)
-    (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x)
-    (j : Fin (N + 1)) (k : Fin 2) (n : Fin 2 → ℤ) :
-    UnitAddTorus.cubeFourierCoeff (fourByTwo_dφ φ j k) n =
-      2 * Real.pi * Complex.I * (n k : ℂ) * fourByTwo_φHat φ j n := by
-  have hlip : ∀ r, LipschitzWith L fun y => φ y r := fun r => by
-    simpa [Function.comp_def, Function.eval] using (LipschitzWith.eval r).comp hφ
-  have hperr : ∀ r, UnitAddTorus.IsPeriodic fun y => φ y r := fun r x z => by
-    simp only [hper]
-  have hmeas : ∀ r, AEStronglyMeasurable fun x => (jac φ x r k : ℂ) := fun r =>
-    (Complex.measurable_ofReal.comp (fourByTwo_measurable_jac_apply φ r k)).aestronglyMeasurable
-  have hbd : ∀ r x, ‖(jac φ x r k : ℂ)‖ ≤ L := fun r x => by
-    rw [Complex.norm_real, Real.norm_eq_abs]; exact abs_jac_le hφ x r k
-  have hsum : ∑ i, (n i : ℂ) * (((Pi.single k (1 : ℝ) : Fin 2 → ℝ) i : ℝ) : ℂ) = n k := by
-    fin_cases k <;> simp [Fin.sum_univ_two]
-  have hd : ∀ r, UnitAddTorus.cubeFourierCoeff (fun x => (jac φ x r k : ℂ)) n =
-      2 * Real.pi * Complex.I * (n k : ℂ) *
-        UnitAddTorus.cubeFourierCoeff (fun x => (φ x r : ℂ)) n := by
-    intro r
-    have := UnitAddTorus.cubeFourierCoeff_fderiv (hlip r) (hperr r) (Pi.single k 1) n
-    rw [hsum] at this
-    exact this
-  unfold fourByTwo_dφ fourByTwo_φHat
-  rw [UnitAddTorus.cubeFourierCoeff_add (hmeas _) (hbd _) ((hmeas _).const_mul Complex.I)
-    (D := L) (fun x => by rw [norm_mul, Complex.norm_I, one_mul]; exact hbd _ x),
-    UnitAddTorus.cubeFourierCoeff_const_mul, hd, hd]
-  ring
-
-/-- The coefficients of the Fejér means `u_M` of `φ` (component `j`). -/
-noncomputable def fourByTwo_fejerW (N : ℕ) (φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ) (M : ℕ) :
-    ℕ → (Fin 2 → ℤ) → ℂ :=
-  fun j n => if h : j < N + 1 then (UnitAddTorus.fejerWeight M n : ℂ) * fourByTwo_φHat φ ⟨j, h⟩ n
-    else 0
-
-/-- `∂_k u_{M,j} = σ_M (∂_k φ_j)`. -/
-theorem fourByTwo_pd_fejerW {N : ℕ} {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} {L : NNReal}
-    (hφ : LipschitzWith L φ)
-    (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x) (M : ℕ)
-    (j : Fin (N + 1)) (k : Fin 2) (x : Fin 2 → ℝ) :
-    fourByTwo_pd (UnitAddTorus.fejerSupport M) (fourByTwo_fejerW N φ M j) x k =
-      UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x := by
-  unfold fourByTwo_pd UnitAddTorus.fejerMean
-  refine Finset.sum_congr rfl fun n _ => ?_
-  rw [fourByTwo_cubeFourierCoeff_dφ hφ hper, fourByTwo_E_eq]
-  simp only [fourByTwo_fejerW, j.isLt, ↓reduceDIte, Fin.eta]
-  rw [show (fun i => (x i : UnitAddCircle)) = UnitAddTorus.ofPi x from rfl]
-  ring
-
-/-- Every row of `ℝ^{2(N+1)×2}` is row `0` or row `1` of a block. -/
-theorem fourByTwo_row_cases {N : ℕ} (r : Fin (2 * (N + 1))) :
-    ∃ j : Fin (N + 1), r = rowBlock j 0 ∨ r = rowBlock j 1 := by
-  refine ⟨⟨r.val / 2, by omega⟩, ?_⟩
-  rcases Nat.mod_two_eq_zero_or_one r.val with h | h
-  · left; ext; simp only [rowBlock, Fin.val_zero, add_zero]; omega
-  · right; ext; simp only [rowBlock, Fin.val_one]; omega
+        UnitAddTorus.periodicMultiplier (fun n =>
+          HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+          (h j) x) (ENNReal.ofReal p) (volume.restrict (unitCube 2)) /
+      eLpNorm (fun x => √(∑ j, ‖h j x‖ ^ 2)) (ENNReal.ofReal p) (volume.restrict (unitCube 2)))
+      (fun j x => chainP ρ (jac φ x) j) hh
+  have hcH : Continuous H := Real.continuous_sqrt.comp (continuous_finsetSum _ fun j _ =>
+    ((hh j).1.continuous.norm.pow 2))
+  have hcT : Continuous T := continuous_finsetSum _ fun j _ => continuous_const.mul
+    (UnitAddTorus.contDiff_periodicMultiplier (HarmonicAnalysis.isPolyBounded_beurlingSymbol_pow _)
+      (hh j).1 (hh j).2.1).continuous
+  rw [fourByTwo_integral_nonneg_iff hcH hcT hp0 hK0]
+  refine (ENNReal.div_le_iff_le_mul (Or.inr ENNReal.ofReal_ne_top) (Or.inl ?_)).mp hratio
+  rw [fourByTwo_eLpNorm_cube hcH hp0]
+  exact ENNReal.ofReal_ne_top
 
 open Filter Topology in
-/-- A Lipschitz `ℤ²`-periodic test map `φ` satisfies `∫_{(0,1)²} f_{p,ρ,C} (∇φ) ≥ 0` with
-`C = ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`: through the Fejér means `u_M` of `φ`, trigonometric test maps
-(`fourByTwo_integral_chainF_testMap_nonneg`) with `∇u_M → ∇φ` almost everywhere along a
-subsequence and `|∇u_M| ≤ 2 Lip (φ)`. -/
-theorem fourByTwo_integral_chainF_nonneg_of_periodic (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p)
-    (hfin : chainOpNorm N p ρ ≠ ⊤) {φ : (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ} {L : NNReal}
-    (hφ : LipschitzWith L φ)
-    (hper : ∀ (x : Fin 2 → ℝ) (z : Fin 2 → ℤ), φ (x + fun i => (z i : ℝ)) = φ x) :
-    0 ≤ ∫ x in unitCube 2, chainF N p ρ (chainOpNorm N p ρ).toReal (jac φ x) := by
-  have hp0 : 0 < p := by linarith
-  set G := chainF N p ρ (chainOpNorm N p ρ).toReal with hG
-  have hGc : Continuous G := fourByTwo_continuous_chainF N hp0.le ρ _
-  set u : ℕ → (Fin 2 → ℝ) → Fin (2 * (N + 1)) → ℝ := fun M =>
-    fourByTwo_testMap N (UnitAddTorus.fejerSupport M) (fourByTwo_fejerW N φ M) with hu
-  have hjac : ∀ M x (j : Fin (N + 1)) k,
-      jac (u M) x (rowBlock j 0) k = (UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x).re ∧
-        jac (u M) x (rowBlock j 1) k = (UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x).im := by
-    intro M x j k
-    have h := fourByTwo_jac_testMap (N := N) (UnitAddTorus.fejerSupport M)
-      (fourByTwo_fejerW N φ M) x j k
-    rw [fourByTwo_pd_fejerW hφ hper] at h
-    exact h
-  have hfm_bd : ∀ M x j k, ‖UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x‖ ≤ 2 * L :=
-    fun M x j k => UnitAddTorus.norm_fejerMean_le M
-      (fourByTwo_measurable_dφ φ j k).aestronglyMeasurable (fourByTwo_norm_dφ_le hφ j k) x
-  have hu_bd : ∀ M x r k, |jac (u M) x r k| ≤ 2 * L := by
-    intro M x r k
-    obtain ⟨j, hr | hr⟩ := fourByTwo_row_cases r <;> subst hr
-    · rw [(hjac M x j k).1]; exact (Complex.abs_re_le_norm _).trans (hfm_bd M x j k)
-    · rw [(hjac M x j k).2]; exact (Complex.abs_im_le_norm _).trans (hfm_bd M x j k)
-  -- a bound for `f` on the matrices with entries in `[−2L, 2L]`
-  obtain ⟨B, hB⟩ : ∃ B : ℝ, ∀ A : Matrix (Fin (2 * (N + 1))) (Fin 2) ℝ,
-      (∀ r k, |A r k| ≤ 2 * L) → ‖G A‖ ≤ B := by
-    obtain ⟨B, hB⟩ := (isCompact_univ_pi fun _ : Fin (2 * (N + 1)) =>
-      isCompact_univ_pi fun _ : Fin 2 => isCompact_Icc (a := -(2 * (L : ℝ))) (b := 2 * L)
-      ).exists_bound_of_continuousOn hGc.continuousOn
-    exact ⟨B, fun A hA => hB A (Set.mem_univ_pi.mpr fun r => Set.mem_univ_pi.mpr fun k =>
-      abs_le.mp (hA r k))⟩
-  -- the `L²` error of the Fejér means of the entries of `∇φ`
-  set E : ℕ → (Fin 2 → ℝ) → ℝ := fun M x => ∑ j : Fin (N + 1), ∑ k : Fin 2,
-    ‖UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x - fourByTwo_dφ φ j k x‖ ^ 2 with hE
-  have hterm_int : ∀ M (j : Fin (N + 1)) (k : Fin 2), IntegrableOn (fun x =>
-      ‖UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x - fourByTwo_dφ φ j k x‖ ^ 2)
-      (unitCube 2) := by
-    intro M j k
-    refine UnitAddTorus.integrableOn_cube_of_bound (((UnitAddTorus.continuous_fejerMean M _
-      ).measurable.sub (fourByTwo_measurable_dφ φ j k)).norm.pow_const 2).aestronglyMeasurable
-      (C := (2 * L + 2 * L) ^ 2) fun x => ?_
-    rw [norm_pow, norm_norm]
-    exact pow_le_pow_left₀ (norm_nonneg _) ((norm_sub_le _ _).trans
-      (add_le_add (hfm_bd M x j k) (fourByTwo_norm_dφ_le hφ j k x))) 2
-  have hE_int : ∀ M, IntegrableOn (E M) (unitCube 2) := fun M =>
-    integrable_finsetSum _ fun j _ => integrable_finsetSum _ fun k _ => hterm_int M j k
-  have hE_nn : ∀ M x, 0 ≤ E M x := fun M x =>
-    Finset.sum_nonneg fun j _ => Finset.sum_nonneg fun k _ => by positivity
-  have hE_tend : Tendsto (fun M => ∫ x in unitCube 2, E M x) atTop (𝓝 0) := by
-    have h : ∀ M, ∫ x in unitCube 2, E M x = ∑ j : Fin (N + 1), ∑ k : Fin 2,
-        ∫ x in unitCube 2,
-          ‖UnitAddTorus.fejerMean M (fourByTwo_dφ φ j k) x - fourByTwo_dφ φ j k x‖ ^ 2 := by
-      intro M
-      rw [integral_finsetSum _ fun j _ => integrable_finsetSum _ fun k _ => hterm_int M j k]
-      exact Finset.sum_congr rfl fun j _ => integral_finsetSum _ fun k _ => hterm_int M j k
-    simp_rw [h]
-    rw [show (0 : ℝ) = ∑ _j : Fin (N + 1), ∑ _k : Fin 2, (0 : ℝ) by simp]
-    exact tendsto_finsetSum _ fun j _ => tendsto_finsetSum _ fun k _ =>
-      UnitAddTorus.tendsto_integral_norm_fejerMean_sub_sq (fourByTwo_measurable_dφ φ j k)
-        (fourByTwo_norm_dφ_le hφ j k) (fourByTwo_dφ_isPeriodic hper j k)
-  -- convergence in measure, and a subsequence converging almost everywhere
-  have hmeas : TendstoInMeasure (volume.restrict (unitCube 2)) E atTop fun _ => 0 := by
-    refine tendstoInMeasure_of_tendsto_eLpNorm (p := 1) one_ne_zero ?_
-    have h : ∀ M, eLpNorm (E M - fun _ => 0) 1 (volume.restrict (unitCube 2)) =
-        ENNReal.ofReal (∫ x in unitCube 2, E M x) := by
-      intro M
-      have h0 : (E M - fun _ => (0 : ℝ)) = E M := by funext x; simp
-      rw [h0, eLpNorm_one_eq_lintegral_enorm,
-        ofReal_integral_eq_lintegral_ofReal (hE_int M) (ae_of_all _ (hE_nn M))]
-      all_goals first
-        | exact lintegral_congr fun x => Real.enorm_eq_ofReal (hE_nn M x)
-        | exact (hE_int M).aestronglyMeasurable
-    simp_rw [h]
-    rw [← ENNReal.ofReal_zero]
-    exact ENNReal.tendsto_ofReal hE_tend
-  obtain ⟨ns, -, hns⟩ := hmeas.exists_seq_tendsto_ae
-  -- pointwise convergence of `f (∇u_M)`
+/-- The passage from smooth to Lipschitz periodic test maps. Implicit step filled (E28, a gap
+fill): the paper proves the identity for smooth `u`, and Lemma 2.2 tests with Lipschitz periodic
+maps; a Lipschitz periodic map is reached by mollification (`CalculusOfVariations.mollifyPi`) and
+dominated convergence. The mollifications `u_n = ρ_n ⋆ φ` are smooth, periodic and `K`-Lipschitz,
+with `∇u_n → ∇φ` almost everywhere, and `G` is bounded on the matrices with entries in `[−K, K]`.
+-/
+theorem fourByTwo_integral_nonneg_of_smooth {d : ℕ} {G : Matrix (Fin d) (Fin 2) ℝ → ℝ}
+    (hG : Continuous G)
+    (hsmooth : ∀ u : (Fin 2 → ℝ) → Fin d → ℝ, ContDiff ℝ ∞ u → UnitAddTorus.IsPeriodic u →
+      0 ≤ ∫ x in unitCube 2, G (jac u x))
+    {φ : (Fin 2 → ℝ) → Fin d → ℝ} {K : NNReal} (hφ : LipschitzWith K φ)
+    (hper : UnitAddTorus.IsPeriodic φ) :
+    0 ≤ ∫ x in unitCube 2, G (jac φ x) := by
+  -- a bound for `G` on the matrices with entries in `[−K, K]`
+  obtain ⟨B, hB⟩ := (isCompact_univ_pi fun _ : Fin d => isCompact_univ_pi fun _ : Fin 2 =>
+    isCompact_Icc (a := -(K : ℝ)) (b := K)).exists_bound_of_continuousOn hG.continuousOn
+  have hbd : ∀ n x, ‖G (jac (CalculusOfVariations.mollifyPi n φ) x)‖ ≤ B :=
+    fun n x => hB _ (Set.mem_univ_pi.mpr fun r => Set.mem_univ_pi.mpr fun k => abs_le.mp
+      (abs_jac_le (CalculusOfVariations.mollifyPi_lipschitzWith hφ n) x r k))
+  -- `∇ (ρ_n ⋆ φ) → ∇φ` almost everywhere
   have hconv : ∀ᵐ x ∂(volume.restrict (unitCube 2)),
-      Tendsto (fun i => G (jac (u (ns i)) x)) atTop (𝓝 (G (jac φ x))) := by
-    filter_upwards [hns] with x hx
-    refine (hGc.tendsto _).comp ?_
-    have hd : ∀ (j : Fin (N + 1)) (k : Fin 2), Tendsto (fun i =>
-        UnitAddTorus.fejerMean (ns i) (fourByTwo_dφ φ j k) x - fourByTwo_dφ φ j k x) atTop
-        (𝓝 0) := by
-      intro j k
-      rw [tendsto_zero_iff_norm_tendsto_zero]
-      have hs : Tendsto (fun i => √(E (ns i) x)) atTop (𝓝 0) := by
-        have := (Real.continuous_sqrt.tendsto 0).comp hx
-        rw [Real.sqrt_zero] at this
-        exact this
-      refine squeeze_zero (fun i => norm_nonneg _) (fun i => ?_) hs
-      refine Real.le_sqrt_of_sq_le ?_
-      simp only [hE]
-      refine le_trans ?_ (Finset.single_le_sum (fun j _ => Finset.sum_nonneg fun k _ =>
-        by positivity) (Finset.mem_univ j))
-      exact Finset.single_le_sum (f := fun k => ‖UnitAddTorus.fejerMean (ns i)
-        (fourByTwo_dφ φ j k) x - fourByTwo_dφ φ j k x‖ ^ 2) (fun k _ => by positivity)
-        (Finset.mem_univ k)
-    refine tendsto_pi_nhds.mpr fun r => tendsto_pi_nhds.mpr fun k => ?_
-    obtain ⟨j, hr | hr⟩ := fourByTwo_row_cases r <;> subst hr
-    · have h := (Complex.continuous_re.tendsto 0).comp (hd j k)
-      simp only [Function.comp_def, Complex.sub_re, Complex.zero_re] at h
-      have e : ∀ i, jac (u (ns i)) x (rowBlock j 0) k =
-          (UnitAddTorus.fejerMean (ns i) (fourByTwo_dφ φ j k) x).re -
-            (fourByTwo_dφ φ j k x).re + jac φ x (rowBlock j 0) k := fun i => by
-        rw [(hjac (ns i) x j k).1]; simp [fourByTwo_dφ]
-      simp_rw [e]
-      simpa using h.add_const (jac φ x (rowBlock j 0) k)
-    · have h := (Complex.continuous_im.tendsto 0).comp (hd j k)
-      simp only [Function.comp_def, Complex.sub_im, Complex.zero_im] at h
-      have e : ∀ i, jac (u (ns i)) x (rowBlock j 1) k =
-          (UnitAddTorus.fejerMean (ns i) (fourByTwo_dφ φ j k) x).im -
-            (fourByTwo_dφ φ j k x).im + jac φ x (rowBlock j 1) k := fun i => by
-        rw [(hjac (ns i) x j k).2]; simp [fourByTwo_dφ]
-      simp_rw [e]
-      simpa using h.add_const (jac φ x (rowBlock j 1) k)
+      Tendsto (fun n => G (jac (CalculusOfVariations.mollifyPi n φ) x)) atTop
+        (𝓝 (G (jac φ x))) :=
+    ae_restrict_of_ae ((CalculusOfVariations.ae_tendsto_grad_mollifyPi hφ).mono
+      fun x hx => (hG.tendsto _).comp hx)
   -- dominated convergence
-  have hlim : Tendsto (fun i => ∫ x in unitCube 2, G (jac (u (ns i)) x)) atTop
-      (𝓝 (∫ x in unitCube 2, G (jac φ x))) :=
-    tendsto_integral_of_dominated_convergence (fun _ => B)
-      (fun i => (hGc.measurable.comp (measurable_jac _)).aestronglyMeasurable)
-      (integrableOn_const (by rw [volume_unitCube]; exact ENNReal.one_ne_top))
-      (fun i => ae_of_all _ fun x => hB _ (hu_bd _ x))
-      hconv
-  exact ge_of_tendsto' hlim fun i =>
-    fourByTwo_integral_chainF_testMap_nonneg N ρ hp hfin _ _
+  have hlim := tendsto_integral_of_dominated_convergence (fun _ => B)
+    (fun n => (hG.measurable.comp (measurable_jac _)).aestronglyMeasurable)
+    (integrableOn_const (by rw [volume_unitCube]; exact ENNReal.one_ne_top))
+    (fun n => ae_of_all _ (hbd n)) hconv
+  exact ge_of_tendsto' hlim fun n => hsmooth _
+    (CalculusOfVariations.mollifyPi_contDiff hφ.continuous n)
+    (CalculusOfVariations.mollifyPi_periodic hper n)
 
 /-- The inequality `C^{qc} (p, N, ρ) ≤ ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) →
 L^p_0 (𝕋²)}` of Proposition 7.2, by the paper's argument (TeX lines 2808–2821): with
-`C = ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`, the identity `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} P_ρ (∇u)_j`
-(`fourByTwo_chainP_eq_hOf`, `fourByTwo_chainQ_eq_hOf`) gives `∫ f_{p,ρ,C} (∇u) ≥ 0` for every
-periodic `u`, that is, `f_{p,ρ,C}` is quasiconvex at `0` (Lemma 2.2,
-`External.Rindler.quasiconvexAtOn_iff_periodic`).
+`C = ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`, for every smooth periodic `u`, `h = P_ρ (∇u)` is a smooth mean-zero
+tuple and `Q (∇u) = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (`fourByTwo_chainQ_jac`), so
+`∫ f_{p,ρ,C} (∇u) ≥ 0` (`fourByTwo_integral_chainF_nonneg_of_smooth`); hence `f_{p,ρ,C}` is
+quasiconvex at `0` (Lemma 2.2, `External.Rindler.quasiconvexAtOn_iff_periodic`).
 
-Departure from the paper (reason 3 of the rules: the representation). The paper states the
-identity for smooth periodic `u`; the norm `chainOpNorm` is computed on trigonometric
-polynomials, so the identity is proved for every trigonometric test map, by the paper's induction
-frequency by frequency. Implicit step filled: Lemma 2.2 tests quasiconvexity with Lipschitz
-periodic maps, and the paper passes from its smooth `u` to these without comment; here a
-Lipschitz periodic `φ` is reached through its Fejér means
-(`fourByTwo_integral_chainF_nonneg_of_periodic`). -/
+Implicit step filled (E28, a gap fill): the paper proves the identity for smooth `u`, and
+Lemma 2.2 tests with Lipschitz periodic maps; a Lipschitz periodic map is reached by mollification
+(`CalculusOfVariations.mollifyPi`) and dominated convergence
+(`fourByTwo_integral_nonneg_of_smooth`). -/
 theorem fourByTwo_qcThreshold_le_chainOpNorm (N : ℕ) (ρ : ℝ) {p : ℝ} (hp : 1 < p) :
     qcThreshold (chainF N p ρ) ≤ chainOpNorm N p ρ := by
   by_cases hfin : chainOpNorm N p ρ = ⊤
@@ -1374,86 +1047,122 @@ theorem fourByTwo_qcThreshold_le_chainOpNorm (N : ℕ) (ρ : ℝ) {p : ℝ} (hp 
     rw [fourByTwo_chainF_zero N hp0]
     simp only [zero_add, grad_eq]
     rw [unitCube_eq_cov]
-    exact fourByTwo_integral_chainF_nonneg_of_periodic N ρ hp hfin hφ hφper
+    exact fourByTwo_integral_nonneg_of_smooth hcont
+      (fun u hu hup => fourByTwo_integral_chainF_nonneg_of_smooth N ρ hp hfin hu hup) hφ hφper
   have hqc : QuasiconvexAt (chainF N p ρ K) 0 :=
     (cov_quasiconvexAtOn_unitCube_iff _ _).mp
-      ((External.Rindler.quasiconvexAtOn_iff_periodic hcont.lowerSemicontinuous
+      ((External.Rindler.quasiconvexAtOn_iff_periodic hcont.measurable
         (fourByTwo_isLocallyBounded hcont) 0).mpr hper)
   rw [← hK]
   exact iInf₂_le K ⟨ENNReal.toReal_nonneg, hqc⟩
 
--- The proof does not use the paper's hypothesis `0 < ρ` (see the docstring).
-set_option linter.unusedVariables false in
 /-- **Proposition 7.2** (`prop:qcbound`): for every `p ∈ (1, ∞)`,
-`C^{qc} (p, N, ρ) = ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`.
+`C^{qc} (p, N, ρ) = ‖(ρ^N 𝓑^{N+1}, …, ρ 𝓑², 𝓑)‖_{L^p_0 (𝕋²; ℓ₂^{N+1}) → L^p_0 (𝕋²)}`, for every
+real `ρ`: the paper's setting has `ρ > 0`, which the proof does not use, so it is not assumed.
 
-Proof (the paper's, TeX lines 2807–2832). For a periodic `u`, `h_j = ∂̄u_j − ρ ∂u_{j−1}` gives
-`P_ρ (∇u) = (h₀, …, h_N)` and `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (induction from
-`𝓑 (∂̄w) = ∂w`), so `C^{qc} ≤ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` (`fourByTwo_qcThreshold_le_chainOpNorm`);
-conversely every mean-zero tuple `(h_j)` is `P_ρ (∇u)` for the `u` obtained by solving
-`∂̄u_j = h_j + ρ ∂u_{j−1}`, since `∂̄` is invertible on mean-zero functions, so
-`C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` (`fourByTwo_chainOpNorm_le_qcThreshold`).
+Proof (the paper's, TeX lines 2807–2832). For a smooth periodic `u`, `h_j = ∂̄u_j − ρ ∂u_{j−1}`
+gives `P_ρ (∇u) = (h₀, …, h_N)` and `Q (∇u) = ∂u_N = Σ_j ρ^{N−j} 𝓑^{N+1−j} h_j` (induction from
+`𝓑 (∂̄w) = ∂w`, `fourByTwo_chainQ_jac`), so `C^{qc} ≤ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`
+(`fourByTwo_qcThreshold_le_chainOpNorm`); conversely every smooth mean-zero tuple `(h_j)` is
+`P_ρ (∇u)` for the `u` obtained by solving `∂̄u_j = h_j + ρ ∂u_{j−1}`, since `∂̄` is invertible on
+mean-zero functions, so `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖`
+(`fourByTwo_chainOpNorm_le_qcThreshold`). The norm is the supremum over smooth mean-zero tuples
+(`chainOpNorm`), as in the paper's proof.
 
-Departure from the paper (reason 3 of the rules: the representation), in the inequality `≤`.
-The paper states the identity for smooth periodic `u`; here the norm is computed on mean-zero
-trigonometric polynomials (`chainOpNorm`), so the identity is proved for every trigonometric test
-map, by the paper's induction frequency by frequency (`fourByTwo_chainQ_eq_hOf`). Implicit step
-filled: quasiconvexity is tested with Lipschitz periodic maps (Lemma 2.2), and the paper passes
-from smooth `u` to these without comment; the step is made with Fejér means
-(`fourByTwo_integral_chainF_nonneg_of_periodic`, with the general facts of
-`Morrey.Common.Basic.Analysis.Fourier.TorusLipschitz`: the Fourier coefficients of the gradient
-of a Lipschitz periodic function, Parseval's identity, and the Fejér kernel). No `L^p` bound for
-Fourier multipliers is needed. The hypothesis `0 < ρ` of the paper's setting is not used. -/
-theorem proposition7_2 (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ) {p : ℝ} (hp : 1 < p) :
+Implicit step filled (E28, a gap fill): the paper proves the identity for smooth `u`, and
+Lemma 2.2 tests with Lipschitz periodic maps; a Lipschitz periodic map is reached by mollification
+(`CalculusOfVariations.mollifyPi`) and dominated convergence
+(`fourByTwo_integral_nonneg_of_smooth`). No `L^p` bound for Fourier multipliers is needed. -/
+theorem proposition7_2 (N : ℕ) {ρ : ℝ} {p : ℝ} (hp : 1 < p) :
     qcThreshold (chainF N p ρ) = chainOpNorm N p ρ :=
   le_antisymm (fourByTwo_qcThreshold_le_chainOpNorm N ρ hp)
     (fourByTwo_chainOpNorm_le_qcThreshold N ρ hp)
 
 /-- **Proposition 7.2** (`prop:qcbound`), "in particular":
-`C^{qc} (p, N, ρ) ≥ ρ^N ‖𝓑^{N+1}‖_{L^p (ℝ²) → L^p (ℝ²)}`. Conditional on transference for
-homogeneous multipliers (HNVW I, Corollary 5.7.6).
+`C^{qc} (p, N, ρ) ≥ ρ^N ‖𝓑^{N+1}‖_{L^p (ℝ²) → L^p (ℝ²)}`. Unconditional: transference for
+homogeneous multipliers (HNVW I, Corollary 5.7.6) is proved (`hnvwTransference_holds`, from
+`External/HNVW`).
 
 Proof (the paper's): take `(h₀, …, h_N) = (h, 0, …, 0)` in the identity of Proposition 7.2, whose
-inequality `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` is `fourByTwo_chainOpNorm_le_qcThreshold`; this gives
-`C^{qc} ≥ ρ^N ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`, and transference (`HNVWTransference`) compares the torus
-norm with the norm on `ℝ²`. -/
-theorem proposition7_2_lower (hT : HNVWTransference) (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ)
+inequality `C^{qc} ≥ ‖(ρ^N 𝓑^{N+1}, …, 𝓑)‖` is `fourByTwo_chainOpNorm_le_qcThreshold`, with `h` a
+mean-zero trigonometric polynomial (smooth, and `𝓑^{N+1} h = torusBeurlingPow (N + 1) h`,
+`HarmonicAnalysis.periodicMultiplier_trigPoly`); this gives `C^{qc} ≥ ρ^N ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`
+(`torusBeurlingPowNorm`, a supremum over mean-zero trigonometric polynomials), and transference
+(`hnvwTransference_holds`) compares the torus norm with the norm on `ℝ²`. -/
+theorem proposition7_2_lower (N : ℕ) {ρ : ℝ} (hρ : 0 < ρ)
     {p : ℝ} (hp : 1 < p) :
     ENNReal.ofReal (ρ ^ N) * beurlingPowNorm (N + 1) p ≤ qcThreshold (chainF N p ρ) := by
+  have hp0 : 0 < p := by linarith
   refine le_trans ?_ (fourByTwo_chainOpNorm_le_qcThreshold N ρ hp)
   -- transference: `‖𝓑^{N+1}‖_{L^p (ℝ²)} ≤ ‖𝓑^{N+1}‖_{L^p_0 (𝕋²)}`
-  refine (mul_le_mul_right (hT (N + 1) p (by omega) hp) _).trans ?_
-  -- the tuples `(h, 0, …, 0)`
+  refine (mul_le_mul_right (hnvwTransference_holds (N + 1) p (by omega) hp) _).trans ?_
+  -- the tuples `(h, 0, …, 0)`, `h` a mean-zero trigonometric polynomial
   rw [torusBeurlingPowNorm, ENNReal.mul_iSup]
   refine iSup_le fun c => ?_
   rw [ENNReal.mul_iSup]
   refine iSup_le fun hc => ?_
-  set C : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ := fun j => if j = 0 then c else 0 with hCdef
-  have hC0 : ∀ j, C j 0 = 0 := fun j => by
-    by_cases hj : j = 0 <;> simp [hCdef, hj, hc]
-  refine le_trans (le_of_eq ?_) (le_iSup₂ (f := fun (C : Fin (N + 1) → (Fin 2 → ℤ) →₀ ℂ)
-    (_ : ∀ j, C j 0 = 0) => eLpNorm (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-        torusBeurlingPow (N + 1 - j.val) (C j) x) (ENNReal.ofReal p) volume /
-      eLpNorm (fun x => √(∑ j, ‖trigPoly (C j) x‖ ^ 2)) (ENNReal.ofReal p) volume) C hC0)
+  set g : (Fin 2 → ℝ) → ℂ := fun x => trigPoly c (UnitAddTorus.ofPi x) with hg
+  have hge : g = fun x => ∑ n ∈ c.support,
+      c n * UnitAddTorus.mFourier n (UnitAddTorus.ofPi x) := by
+    funext x
+    simp only [hg, trigPoly, Finsupp.sum]
+  have hgs : ContDiff ℝ ∞ g := by
+    rw [hge]
+    simp_rw [UnitAddTorus.mFourier_ofPi]
+    exact ContDiff.sum fun n _ => contDiff_const.mul (Complex.contDiff_exp.comp
+      (contDiff_const.mul (ContDiff.sum fun i _ => contDiff_const.mul
+        (Complex.ofRealCLM.contDiff.comp (contDiff_pi.1 contDiff_id i)))))
+  have hgp : UnitAddTorus.IsPeriodic g := fun x k => by
+    simp only [hg, UnitAddTorus.ofPi_add_int]
+  have hg0 : ∫ x in unitCube 2, g x = 0 := by
+    rw [← fourByTwo_cubeFourierCoeff_zero, hge, UnitAddTorus.cubeFourierCoeff_trig]
+    simp [hc]
+  set h : Fin (N + 1) → (Fin 2 → ℝ) → ℂ := fun j => if j = 0 then g else 0 with hh
+  have hhj : ∀ j, ContDiff ℝ ∞ (h j) ∧ UnitAddTorus.IsPeriodic (h j) ∧
+      ∫ x in unitCube 2, h j x = 0 := by
+    intro j
+    by_cases hj : j = 0
+    · simp only [hh, hj, ↓reduceIte]
+      exact ⟨hgs, hgp, hg0⟩
+    · simp only [hh, hj, ↓reduceIte]
+      exact ⟨contDiff_const, fun _ _ => rfl, by simp⟩
+  refine le_trans (le_of_eq ?_) (le_iSup₂ (f := fun (h : Fin (N + 1) → (Fin 2 → ℝ) → ℂ)
+      (_ : ∀ j, ContDiff ℝ ∞ (h j) ∧ UnitAddTorus.IsPeriodic (h j) ∧
+        ∫ x in unitCube 2, h j x = 0) =>
+      eLpNorm (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
+        UnitAddTorus.periodicMultiplier (fun n =>
+          HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+          (h j) x) (ENNReal.ofReal p) (volume.restrict (unitCube 2)) /
+      eLpNorm (fun x => √(∑ j, ‖h j x‖ ^ 2)) (ENNReal.ofReal p) (volume.restrict (unitCube 2)))
+      h hhj)
+  have hB : UnitAddTorus.periodicMultiplier (fun n =>
+      HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1)) g =
+      fun x => torusBeurlingPow (N + 1) c (UnitAddTorus.ofPi x) :=
+    HarmonicAnalysis.periodicMultiplier_trigPoly (N + 1) c
   have hnum : (fun x => ∑ j : Fin (N + 1), ((ρ ^ (N - j.val) : ℝ) : ℂ) *
-      torusBeurlingPow (N + 1 - j.val) (C j) x) =
-      ((ρ ^ N : ℝ) : ℂ) • torusBeurlingPow (N + 1) c := by
+      UnitAddTorus.periodicMultiplier (fun n =>
+        HarmonicAnalysis.beurlingSymbol (HarmonicAnalysis.latticePoint n) ^ (N + 1 - j.val))
+        (h j) x) =
+      ((ρ ^ N : ℝ) : ℂ) • fun x => torusBeurlingPow (N + 1) c (UnitAddTorus.ofPi x) := by
     funext x
     rw [Finset.sum_eq_single (0 : Fin (N + 1))]
-    · simp [hCdef]
+    · simp [hh, hB]
     · intro j _ hj
-      simp [hCdef, hj, torusBeurlingPow]
+      simp [hh, hj, UnitAddTorus.periodicMultiplier, UnitAddTorus.cubeFourierCoeff]
     · simp
-  have hden : (fun x => √(∑ j, ‖trigPoly (C j) x‖ ^ 2)) = fun x => ‖trigPoly c x‖ := by
+  have hden : (fun x => √(∑ j, ‖h j x‖ ^ 2)) = fun x => ‖g x‖ := by
     funext x
     rw [Finset.sum_eq_single (0 : Fin (N + 1))]
-    · simp [hCdef, Real.sqrt_sq (norm_nonneg _)]
+    · simp [hh, Real.sqrt_sq (norm_nonneg _)]
     · intro j _ hj
-      simp [hCdef, hj, trigPoly]
+      simp [hh, hj]
     · simp
-  rw [hnum, hden, eLpNorm_const_smul, eLpNorm_norm _
-    (fourByTwo_continuous_trigPoly c).aestronglyMeasurable, ← ofReal_norm, Complex.norm_real,
-    Real.norm_of_nonneg (pow_nonneg hρ.le _), mul_div_assoc]
+  rw [hnum, hden, eLpNorm_const_smul, eLpNorm_norm _ (hgs.continuous.aestronglyMeasurable),
+    fourByTwo_eLpNorm_torus (fourByTwo_continuous_torusBeurlingPow _ c) hp0,
+    fourByTwo_eLpNorm_torus (fourByTwo_continuous_trigPoly c) hp0, ← ofReal_norm,
+    Complex.norm_real, Real.norm_of_nonneg (pow_nonneg hρ.le _), mul_div_assoc]
+
+end Proposition72
 
 /-! ### Theorem 7.1: the standard identifications and the threshold argument -/
 
@@ -1539,8 +1248,9 @@ theorem fourByTwo_rankOneConvexAt_of_lt (N : ℕ) {p : ℝ} (hp : 0 < p) (ρ : �
 /-- **Theorem 7.1** (`cs-thm7.1`): for `p ∈ (1, 2) ∪ (2, ∞)` there are linear maps
 `P_p : ℝ^{4×2} → ℝ^{2×2}`, `Q_p : ℝ^{4×2} → ℝ²` and `C (p) > 0` such that
 `A ↦ C (p)^p ‖P_p (A)‖_{S₂}^p − ‖Q_p (A)‖_{ℓ₂}^p` is rank-one convex at `0` but not quasiconvex
-at `0`. Conditional on transference (Proposition 7.2) and Dragičević's lower bound
-`‖𝓑²‖_p > p* − 1`; Burkholder's inequality (Theorem 2.3) enters through Proposition 7.1.
+at `0`. Unconditional: transference (Proposition 7.2) and Dragičević's lower bound
+`‖𝓑²‖_p > p* − 1` are proved (`hnvwTransference_holds`, `dragicevicLowerBound_holds`), and
+Burkholder's inequality (Theorem 2.3) enters through Proposition 7.1.
 
 Proof (the paper's): `N = 1`, with `ℝ^{4×2} ≅ Lin (ℂ, ℂ²)` and `ℝ^{2×2} ≅ ℂ²` (row `j` of `P_p (A)`
 is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the integrand is
@@ -1549,8 +1259,7 @@ is `(Re, Im)` of `P_ρ (A)_j`, `Q_p (A) = (Re, Im)` of `Q (A)`, so that the inte
 `ρ ‖𝓑²‖_p > (p* − 1) √(1 + ρ²)` for large `ρ` (explicitly `ρ = (p* − 1) / (‖𝓑²‖_p − p* + 1) + 1`,
 or `ρ = 1` if `‖𝓑²‖_p = ∞`), and `C` is chosen strictly between. Since `f_{p,ρ,C}` increases with
 `C`, `C > C^{rc}` gives rank-one convexity at `0` and `C < C^{qc}` its failure of quasiconvexity. -/
-theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
-    (hp : 1 < p) (hp2 : p ≠ 2) :
+theorem theorem7_1 {p : ℝ} (hp : 1 < p) (hp2 : p ≠ 2) :
     ∃ (P : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] Matrix (Fin 2) (Fin 2) ℝ)
       (Q : Matrix (Fin 4) (Fin 2) ℝ →ₗ[ℝ] (Fin 2 → ℝ)) (C : ℝ), 0 < C ∧
       RankOneConvexAt
@@ -1572,7 +1281,7 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
       exact ENNReal.ofReal_lt_top
     · set b := (beurlingPowNorm 2 p).toReal with hbdef
       have hab : a < b := by
-        have h := hD p hp hp2
+        have h := dragicevicLowerBound_holds p hp hp2
         rw [← ENNReal.ofReal_toReal hb] at h
         exact (ENNReal.ofReal_lt_ofReal_iff'.mp h).1
       set ρ := a / (b - a) + 1 with hρdef
@@ -1603,7 +1312,7 @@ theorem theorem7_1 (hT : HNVWTransference) (hD : DragicevicLowerBound) {p : ℝ}
     rw [fourByTwo_integrand_eq]
     apply not_quasiconvexAt_of_lt_qcThreshold hC0.le
     refine lt_of_lt_of_le hC2 ?_
-    have h72 := proposition7_2_lower hT 1 hρ hp
+    have h72 := proposition7_2_lower 1 hρ hp
     rw [pow_one] at h72
     exact h72
 
@@ -1877,8 +1586,9 @@ theorem fourByTwo_not_quasiconvexAt_of_le {d m : ℕ} {f g : Matrix (Fin d) (Fin
     _ ≤ ∫ x in unitCube m, f (0 + jac φ x) := integral_mono hint' hint fun x => hle _
 
 /-- **Corollary 7.2** (`cs-cor7.2`): there is a homogeneous polynomial `𝒫 : ℝ^{4×2} → ℝ` of degree
-four which is rank-one convex but not quasiconvex at `0`. Conditional on transference
-(Proposition 7.2) and Dragičević's bound `‖𝓑²‖_{L⁴} ≥ 21/5`.
+four which is rank-one convex but not quasiconvex at `0`. Unconditional: transference
+(Proposition 7.2) and Dragičević's bound `‖𝓑²‖_{L⁴} ≥ 21/5` are proved (`hnvwTransference_holds`,
+`dragicevicL4Bound_holds`).
 
 Proof (the paper's): `U (x, y) = |y|⁴ − 10 |x|² |y|² − 15 |x|⁴` on `ℂ² × ℂ` (`fourByTwo_U`)
 satisfies `2U (x, y) ≥ |y|⁴ − 130 |x|⁴` (`fourByTwo_U_bound`) and is zig-zag concave:
@@ -1890,8 +1600,7 @@ because `|Q (R)| ≤ √3 ‖P_{√2} (R)‖` for rank-one `R` (the estimate of 
 `C₀ = 1170^{1/4}`, with the same value `0` at `0`. By Proposition 7.2 and Dragičević,
 `C^{qc} (4, 1, √2) ≥ √2 ‖𝓑²‖_{L⁴} ≥ 21 √2 / 5 > C₀`, so `f_{4,√2,C₀}`, and with it its minorant `𝒫`,
 is not quasiconvex at `0` (`fourByTwo_not_quasiconvexAt_of_le`). -/
-theorem corollary7_2 (hT : HNVWTransference)
-    (hD4 : DragicevicL4Bound) :
+theorem corollary7_2 :
     ∃ P : Matrix (Fin 4) (Fin 2) ℝ → ℝ, IsHomogeneousPolynomial 4 P ∧ RankOneConvex P ∧
       ¬ QuasiconvexAt P 0 := by
   refine ⟨fourByTwo_quartic, fourByTwo_quartic_isHomPoly, fourByTwo_quartic_rankOneConvex, ?_⟩
@@ -1926,9 +1635,9 @@ theorem corollary7_2 (hT : HNVWTransference)
     simp [fourByTwo_quartic, fourByTwo_U, hP0, hQ0]
   -- Proposition 7.2 and Dragičević: `C^{qc} (4, 1, √2) ≥ √2 ‖𝓑²‖_{L⁴} ≥ 21 √2 / 5 > C₀`
   have hqc : ENNReal.ofReal C0 < qcThreshold (chainF 1 4 (√2)) := by
-    have h72 := proposition7_2_lower hT 1 (Real.sqrt_pos.mpr two_pos) (by norm_num : (1 : ℝ) < 4)
+    have h72 := proposition7_2_lower 1 (Real.sqrt_pos.mpr two_pos) (by norm_num : (1 : ℝ) < 4)
     rw [pow_one] at h72
-    refine lt_of_lt_of_le ?_ ((mul_le_mul_right hD4 _).trans h72)
+    refine lt_of_lt_of_le ?_ ((mul_le_mul_right dragicevicL4Bound_holds _).trans h72)
     rw [← ENNReal.ofReal_mul (Real.sqrt_nonneg _),
       ENNReal.ofReal_lt_ofReal_iff (by positivity)]
     refine lt_of_pow_lt_pow_left₀ 4 (by positivity) ?_

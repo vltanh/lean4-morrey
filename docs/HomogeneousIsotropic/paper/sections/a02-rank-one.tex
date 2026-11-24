@@ -1,0 +1,72 @@
+\section{Proofs for Section~\ref{sec:roc}}\label{app:roc}
+
+Here $\Phi$ is a profile of degree $p\in\R$; the proof of \cref{lem:minorant} uses $p>0$.
+
+\begin{proof}[Proof of \cref{lem:basic}]
+(a) is \ref{P2} for $(z_0,w_0)=(\tfrac12,\tfrac12)$ and $(\alpha,\beta)=(\tfrac12,-\tfrac12)$.
+For (b), \ref{P2} with $(z_0,w_0)=(x_0,y_0)$ and $\alpha=\beta=i$ says that
+$g(\tau)=\Phi\bigl(\sqrt{x_0^2+\tau^2},\sqrt{y_0^2+\tau^2}\bigr)$ is convex; it is even, so
+$g(0)\le g(\tau)$. Take $\tau=\sqrt{x_1^2-x_0^2}$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:minorant}]
+The convex function $\tilde h$ has a supporting line at $t$: there is $m$ with
+$\tilde h(s)\ge H+m(s-t)$ for all $s$. On $[-1,1]$ this is $h\ge\ell$ with $\ell(s)=(H-mt)+ms$,
+that is, $G_{H-mt,m}\le\Phi$ on the quadrant; at the origin both sides vanish. At $(x_t,y_t)$
+the minorant has the value $\ell(t)=H$.
+\end{proof}
+
+The next lemma turns a comparison near one point into a supporting line.
+
+\begin{lemma}\label{lem:convex}
+Let $g\colon\R\to\R$ be convex and $\tau_0\in\R$. Let $k$ be a real function with $k\le g$
+near $\tau_0$ and $k(\tau_0)=g(\tau_0)$, differentiable at $\tau_0$. Then
+$g(\tau)\ge g(\tau_0)+k'(\tau_0)(\tau-\tau_0)$ for every $\tau\in\R$.
+\end{lemma}
+
+\begin{proof}
+For $0<\varepsilon<1$, convexity gives
+$g(\tau_0+\varepsilon(\tau-\tau_0))\le(1-\varepsilon)g(\tau_0)+\varepsilon g(\tau)$. For small
+$\varepsilon$,
+\[
+  g(\tau)-g(\tau_0)\ge\frac{g(\tau_0+\varepsilon(\tau-\tau_0))-g(\tau_0)}{\varepsilon}
+  \ge\frac{k(\tau_0+\varepsilon(\tau-\tau_0))-k(\tau_0)}{\varepsilon},
+\]
+and the right side tends to $k'(\tau_0)(\tau-\tau_0)$ as $\varepsilon\downarrow0$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{prop:tangent}]
+Let $X(\tau)=\abs{x_t+\tau\alpha}$ and $Y(\tau)=\abs{y_t+\tau\beta}$. The function
+$g(\tau)=\Phi(X(\tau),Y(\tau))$ is convex by \ref{P2}, the function
+$k(\tau)=G_{H-mt,m}(X(\tau),Y(\tau))$ satisfies $k\le g$, and $k(0)=H=g(0)$ because
+$x_t+y_t=1$ and $x_t-y_t=t$. Since $x_t>0$,
+$X(\tau)=\bigl((x_t+\tau\re\alpha)^2+\tau^2(\im\alpha)^2\bigr)^{1/2}$ is differentiable at $0$
+with $X'(0)=\re\alpha$; likewise $Y'(0)=\re\beta$. The partial derivatives of
+$G_{c_0,m}(x,y)=\sigma^{p-1}(c_0\sigma+m\delta)$ at $(x_t,y_t)$, where $\sigma=1$,
+$\delta=t$ and $c_0+mt=H$, are
+\[
+  (p-1)H+c_0+m=\Phi_x,\qquad(p-1)H+c_0-m=\Phi_y .
+\]
+So $k'(0)=\Phi_x\re\alpha+\Phi_y\re\beta$, and \cref{lem:convex} gives \eqref{eq:tangent}.
+\end{proof}
+
+\begin{proof}[Proof of \cref{cor:BE}]
+Let $\tau=2x_ty_t>0$, $\alpha=-y_t+i\sqrt{1-y_t^2}$ and $\beta=-x_t+i\sqrt{1-x_t^2}$, so that
+$\abs\alpha=\abs\beta=1$. Then
+\[
+  \abs{x_t+\tau\alpha}^2=x_t^2\bigl((1-2y_t^2)^2+4y_t^2(1-y_t^2)\bigr)=x_t^2,
+\]
+and likewise $\abs{y_t+\tau\beta}=y_t$: the line joins the base matrix to a rotated copy of it.
+By \eqref{eq:tangent},
+\[
+  H\ge H-2x_ty_t\,(y_t\Phi_x+x_t\Phi_y)=H-2x_ty_t\,(pH-2tm). \qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of \cref{lem:ends}]
+For $u>0$, \cref{lem:basic}\,(b), from $(\sqrt u,0)$ to
+$\bigl(\tfrac{1+u}2,\tfrac{\abs{1-u}}2\bigr)$, and \ref{P1} give
+$\tilde h(u)\ge\Phi(\sqrt u,0)=u^{p/2}h(1)$, with equality at $u=1$. \Cref{lem:convex}
+with $k(u)=u^{p/2}h(1)$ and $\tau_0=1$ gives the first inequality. The second is the first for
+the mirror image.
+\end{proof}

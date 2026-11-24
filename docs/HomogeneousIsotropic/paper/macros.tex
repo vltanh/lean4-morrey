@@ -1,0 +1,32 @@
+% Notation of the paper. Section files do not define macros of their own.
+
+% --- numbers, sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\M}{\R^{2\times 2}}                    % real 2 x 2 matrices
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}             % the Euclidean norm of a matrix
+\DeclareMathOperator{\re}{Re}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\rank}{rank}
+\newcommand{\SO}{\mathrm{SO}(2)}
+\newcommand{\CO}{\mathrm{CO}(2)}                   % the multiples of orthogonal matrices
+
+% --- the class
+\newcommand{\Hyp}{\textup{(H)}}                    % the common hypotheses
+
+% --- Lean declarations
+% \lean{name} typesets a declaration name (underscores allowed). Names are upright, are not
+% letter-spaced, and break only after a dot, an underscore, a hyphen or a slash.
+\renewcommand{\UrlFont}{\ttfamily\upshape}
+\Urlmuskip=0mu
+\makeatletter
+\def\UrlBreaks{\do\.\do\_\do\-\do\/}
+\def\UrlBigBreaks{}
+\def\UrlNoBreaks{}
+\makeatother
+\newcommand{\lean}[1]{\textup{\path{#1}}}
+% \leanx{expression} typesets a Lean expression with spaces; symbols outside ASCII are written in
+% math mode, and an underscore as \_.
+\newcommand{\leanx}[1]{\textup{\texttt{#1}}}

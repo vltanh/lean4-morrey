@@ -28,13 +28,14 @@ where their statements can live:
   `Morrey/Cassese/Hypotheses.lean`: `burkholderInequality_holds`,
   `burkholderSquareFunction_holds`);
 * Proposition 2.6 (`cs-prop2.6`): `External.Osekowski.HilbertCharacterization` (context only);
-* Definition 2.5: `umdConstWith` (`Defs`, shared block), `umdConst`, `complexUMDConst` (`Defs`,
-  after the shared block);
-* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2)
-  (hypotheses, `Defs`, shared block), `PisierLpUMD` (3), `YaroslavtsevComplexUMD` (5)
-  (hypotheses, `Defs`, after the shared block), and `HNVWDyadicUMD` (4), `HNVWZigZag` (6) (here;
-  used only in Remark 4.1);
-* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (hypothesis, `Defs`, shared block).
+* Definition 2.5: `umdConstWith`, `umdConst`, `complexUMDConst` (`Defs`, after the shared
+  block); the dyadic constant `dyadicUMDConst` and zig-zag concavity (`IsZigZagConcave`,
+  `IsComplexZigZagConcave`), which Proposition 2.7 (4), (6) use (here);
+* Proposition 2.7 (`prop:umd`): `HNVWExtrapolation` (1), `RandrianantoaninaSchattenUMD` (2),
+  `PisierLpUMD` (3), `HNVWDyadicUMD` (4), `YaroslavtsevComplexUMD` (5), `HNVWZigZag` (6) (proved,
+  in `Morrey/Cassese/Hypotheses.lean`: `hnvwExtrapolation_holds`, …, `hnvwZigZag_holds`);
+* Proposition 2.8 (`cs-prop2.8`): `CoxVeraarDecoupling` (proved, in
+  `Morrey/Cassese/Hypotheses.lean`: `coxVeraarDecoupling_holds`).
 
 Definitions here:
 
@@ -768,14 +769,14 @@ theorem proposition2_4 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous
 
 /-- **Proposition 2.1** (`prop:rk1envelope`): for a continuous integrand `f`,
 `f^{rc} (A) = inf_{μ ∈ 𝒫ℒ(A)} ∫ f dμ`, the infimum over the prelaminates with barycentre `A`.
-Quoted from Pedregal 1993 (Section 4) and Dacorogna 2008 (Theorem 6.10), whose proofs assume `f`
-bounded below; Remark 2.1 removes the assumption and notes that the proposition also follows from
-Proposition 2.4. 
+Quoted from Pedregal 1993 (Section 4) and Dacorogna 2008 (Theorem 6.10), whose proofs, says
+Remark 2.1, assume `f` bounded below (Dacorogna's theorem asks only for a rank-one convex minorant);
+the remark removes the assumption and notes that the proposition also follows from Proposition 2.4.
 
 Proof: Remark 2.1's second route, from Proposition 2.4. Jensen's inequality along the splittings
 gives `g (A) ≤ ⟨g, μ⟩ ≤ ⟨f, μ⟩` for every rank-one convex minorant `g` and every `μ ∈ 𝒫ℒ (A)`, so
 `f^{rc} (A) ≤ inf_{𝒫ℒ (A)} ⟨f, μ⟩`; dyadic prelaminates are prelaminates, so the infimum is at most
-`inf_{𝒫ℒ_dyad (A)} ⟨f, μ⟩ = f^{rc} (A)` (Proposition 2.4). No boundedness from below is needed.-/
+`inf_{𝒫ℒ_dyad (A)} ⟨f, μ⟩ = f^{rc} (A)` (Proposition 2.4). No boundedness from below is needed. -/
 theorem proposition2_1 {f : Matrix (Fin d) (Fin m) ℝ → ℝ} (hf : Continuous f)
     (A : Matrix (Fin d) (Fin m) ℝ) :
     rcEnvelope f A =
@@ -1185,7 +1186,7 @@ theorem quasiconvexAt_iff_exists_minorant
     -- Dacorogna's formula is an infimum over the unit ball; Definition 2.1 is on the unit cube,
     -- and Lemma 2.2 passes from one to the other
     have hball : CalculusOfVariations.QuasiconvexAtOn (CalculusOfVariations.unitBall m) f A :=
-      (External.Rindler.quasiconvexAtOn_iff hf.lowerSemicontinuous hfI.2 A tk_unitBall_isOpen
+      (External.Rindler.quasiconvexAtOn_iff hf.measurable hfI.2 A tk_unitBall_isOpen
         tk_unitBall_isBounded tk_unitBall_nonempty).1
         ((cov_quasiconvexAtOn_unitCube_iff f A).2 hA)
     have hBfin : volume (CalculusOfVariations.unitBall m) < ⊤ :=
@@ -1571,7 +1572,7 @@ theorem proposition2_3_c {p : ℝ}
   -- (Lemma 2.2), so `g ≤ f^{rc} ≤ f`
   obtain ⟨g, hgI, hgQ, hgf, hg0⟩ := (quasiconvexAt_iff_exists_minorant hf 0).1 hqc
   have hgR : RankOneConvex g := tk_rankOneConvex_of_cov
-    (External.Rindler.rankOneConvex_of_quasiconvex hgI.1 hgI.2
+    (External.Rindler.rankOneConvex_of_quasiconvex hgI.1.measurable hgI.2
       fun A => (cov_quasiconvexAtOn_unitCube_iff g A).2 (hgQ A))
   rcases tk_rc_cases hf with ⟨hno, _⟩ | ⟨G, hGI, hGR, hGf, hmax, hGe⟩
   · exact (hno g hgI hgR hgf).elim
@@ -1974,13 +1975,6 @@ noncomputable def dyadicUMDConst (X : Type*) [NormedAddCommGroup X] [NormedSpace
     ℝ≥0∞ :=
   sInf {β | IsDyadicUMDBound X p β}
 
-/-- **Proposition 2.7 (4)** (`prop:umd`), citing HNVW I, Theorem 4.2.5: restricting (4) to dyadic
-martingales gives the same optimal constant, `UMD_p^{dyad} (X) = UMD_p (X)`. Used only in
-Remark 4.1; a proposition with no proof (class X), a hypothesis of no statement. -/
-def HNVWDyadicUMD : Prop :=
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    dyadicUMDConst X p = umdConst X p
-
 /-- `U : X × X → ℝ` is zig-zag concave for the obstacle `‖y‖^p − β^p ‖x‖^p` (real scalars):
 `z ↦ U (x + z, y + ε z)` is concave for every `ε ∈ [−1, 1]`, `U (0, 0) = 0`, and
 `U (x, y) ≥ ‖y‖^p − β^p ‖x‖^p`. -/
@@ -1994,19 +1988,5 @@ def IsComplexZigZagConcave {X : Type*} [NormedAddCommGroup X] [NormedSpace ℂ X
     (U : X → X → ℝ) : Prop :=
   (∀ (x y : X) (ε : ℂ), ‖ε‖ ≤ 1 → ConcaveOn ℝ Set.univ fun z : X => U (x + z) (y + ε • z)) ∧
     U 0 0 = 0 ∧ ∀ x y : X, ‖y‖ ^ p - β ^ p * ‖x‖ ^ p ≤ U x y
-
-/-- **Proposition 2.7 (6)** (`prop:umd`), citing HNVW I, Theorem 4.5.6, and Yaroslavtsev,
-Proposition 3.7: a Banach space `X` is `UMD_p` if and only if there is a zig-zag concave `U` for
-some `β > 0`; then `β ≥ UMD_p (X)`, and `β ≥ UMD_{ℂ,p} (X)` when `X` is complex and `U` is
-zig-zag concave in the complex sense. Not used in any proof; a proposition with no proof
-(class X), a hypothesis of no statement. -/
-def HNVWZigZag : Prop :=
-  (∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℝ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    (umdConst X p < ⊤ ↔ ∃ β : ℝ, 0 < β ∧ ∃ U : X → X → ℝ, IsZigZagConcave p β U) ∧
-    ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsZigZagConcave p β U →
-      umdConst X p ≤ ENNReal.ofReal β) ∧
-  ∀ (X : Type) [NormedAddCommGroup X] [NormedSpace ℂ X] [CompleteSpace X] (p : ℝ), 1 < p →
-    ∀ (β : ℝ) (U : X → X → ℝ), 0 < β → IsComplexZigZagConcave p β U →
-      complexUMDConst X p ≤ ENNReal.ofReal β
 
 end Cassese

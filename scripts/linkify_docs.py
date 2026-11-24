@@ -41,7 +41,9 @@ DOCS = ['README.md',
         'docs/Sverak/CREDITS.md',
         'docs/Cassese/README.md',
         'docs/Cassese/REPORT.md',
-        'docs/Cassese/CREDITS.md']
+        'docs/Cassese/CREDITS.md',
+        'docs/HomogeneousIsotropic/README.md',
+        'docs/HomogeneousIsotropic/CREDITS.md']
 # Namespaces in which the documents name declarations without their prefix, most specific last.
 NAMESPACES = ['External.Kakutani', 'Matrix']
 # With several papers in one repository (references/multi-paper.md): the namespaces of the documents
@@ -50,16 +52,19 @@ NAMESPACES = ['External.Kakutani', 'Matrix']
 # directory that contains the document is used.
 NAMESPACES_BY_DIR = {'docs/Pedregal': ['Pedregal', 'PedregalChallenge'],
                      'docs/Sverak': ['Sverak', 'SverakChallenge'],
-                     'docs/Cassese': ['Cassese', 'CasseseChallenge']}
+                     'docs/Cassese': ['Cassese', 'CasseseChallenge'],
+                     'docs/HomogeneousIsotropic': ['HomogeneousIsotropic', 'HomogeneousIsotropicChallenge']}
 # Top-level module names of the project: a code span naming such a module links to its file.
-MODULE_ROOTS = ('Morrey', 'Pedregal', 'Sverak', 'Cassese')
+MODULE_ROOTS = ('Morrey', 'Pedregal', 'Sverak', 'Cassese', 'HomogeneousIsotropic')
 # The module whose declarations win when a name is declared in several modules. With several
 # papers, a tuple of modules, one per paper (each Challenge repeats its own paper's definitions):
 # ('PaperA.Challenge', 'PaperB.Challenge').
-PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge', 'Cassese.Challenge')
+PREFERRED_MODULE = ('Pedregal.Challenge', 'Sverak.Challenge', 'Cassese.Challenge',
+                    'HomogeneousIsotropic.Challenge')
 # The source directory of each module root whose `lean_lib` has a `srcDir` other than the
 # repository root.
-SOURCE_DIRS = {'Pedregal': 'palomar', 'Sverak': 'palomar', 'Cassese': 'palomar'}
+SOURCE_DIRS = {'Pedregal': 'palomar', 'Sverak': 'palomar', 'Cassese': 'palomar',
+               'HomogeneousIsotropic': 'palomar'}
 # Directories, besides the repository root, against which the paths in the documents of a
 # given directory are resolved.
 PATH_BASES = {'': ['.github/workflows']}

@@ -1,0 +1,117 @@
+\pdfoutput=1
+\documentclass[11pt,reqno]{amsart}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[final]{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{aliascnt}
+\usepackage{xcolor}
+\usepackage[margin=1.2in]{geometry}
+\usepackage[hyphens]{url}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,
+  urlcolor=blue!50!black,
+  pdftitle={Morrey's problem for homogeneous isotropic integrands in the plane},
+  pdfauthor={The-Anh Vu-Le}]{hyperref}
+\usepackage[capitalize,noabbrev]{cleveref}
+
+\input{macros}
+
+% ---------------------------------------------------------------- theorem environments
+% All environments share one counter (numbered within sections); the alias counters let cleveref
+% recover the type of each label.
+\theoremstyle{plain}
+% The main theorem of the Introduction is numbered by a letter.
+\newtheorem{maintheorem}{Theorem}
+\renewcommand{\themaintheorem}{\Alph{maintheorem}}
+\crefname{maintheorem}{Theorem}{Theorems}
+\newtheorem{theorem}{Theorem}[section]
+\newcommand{\shared}[3]{%
+  \newaliascnt{#1}{theorem}\newtheorem{#1}[#1]{#2}\aliascntresetthe{#1}\crefname{#1}{#2}{#3}}
+\shared{proposition}{Proposition}{Propositions}
+\shared{lemma}{Lemma}{Lemmas}
+\shared{corollary}{Corollary}{Corollaries}
+\theoremstyle{definition}
+\shared{definition}{Definition}{Definitions}
+\theoremstyle{remark}
+\shared{remark}{Remark}{Remarks}
+
+\emergencystretch=1.5em
+\vfuzz=2pt % a page may be up to 2pt too high without a warning
+\setlength{\textfloatsep}{18pt plus 2pt minus 4pt} % space between a float and the text
+\setlength{\intextsep}{18pt plus 2pt minus 4pt}
+\setlist[enumerate]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\setlist[itemize]{leftmargin=*,itemsep=2pt,topsep=3pt}
+\numberwithin{equation}{section}
+
+% The caption of a longtable in the style of the class's table captions.
+\setlength{\LTcapwidth}{\textwidth}
+\makeatletter
+\def\LT@makecaption#1#2#3{%
+  \LT@mcol\LT@cols c{\hbox to\z@{\hss\parbox[t]\LTcapwidth{%
+    \centering\normalsize #1{\textsc{#2}.\enspace}#3\endgraf\vskip\belowcaptionskip}\hss}}}
+\makeatother
+
+% ---------------------------------------------------------------- title
+\title[Homogeneous isotropic integrands in the plane]{Morrey's problem for homogeneous
+isotropic integrands in the plane}
+
+\author{The-Anh Vu-Le}
+% Affiliation and e-mail are the author's to fill in before submission.
+
+\date{November 2026}
+\subjclass[2020]{Primary 49J45; Secondary 26B25, 30C62}
+\keywords{Morrey's problem, rank-one convexity, quasiconvexity, polyconvexity, isotropic
+integrands, homogeneous integrands, Burkholder function, truncated determinant, formal proof}
+
+\begin{document}
+
+\begin{abstract}
+  Morrey's problem asks whether rank-one convexity implies quasiconvexity. It is open for
+  integrands on real $2\times2$ matrices. We prove that the answer is yes for every isotropic,
+  positively $p$-homogeneous integrand on these matrices, for every $p>0$. If $p\ge2$, the
+  nonnegative integrands of this class are polyconvex, with an explicit polyaffine support at
+  every matrix; this answers a question of Guerra and Kristensen. For the integrands that take
+  negative values, the proof builds touching quasiconvex minorants by integrating the truncated
+  determinant over scales. It uses the
+  quasiconvexity of the truncated determinant, which is claimed in a recent preprint of Agazzi
+  et al.\ and which we audited with a Lean formalization. All results are formalized in Lean~4.
+\end{abstract}
+
+\maketitle
+
+\setcounter{tocdepth}{1}
+{\small\tableofcontents}
+
+\input{sections/01-introduction}
+\input{sections/02-setting}
+\input{sections/03-rank-one}
+\input{sections/04-supports}
+\input{sections/05-low-exponents}
+\input{sections/06-signed}
+\input{sections/07-discussion}
+
+\appendix
+\crefalias{section}{appendix}
+\crefalias{subsection}{appendix}
+\crefname{appendix}{Appendix}{Appendices}
+\Crefname{appendix}{Appendix}{Appendices}
+\input{sections/a01-setting}
+\input{sections/a02-rank-one}
+\input{sections/a03-supports}
+\input{sections/a04-low-exponents}
+\input{sections/a05-signed}
+\input{sections/a06-formal}
+
+\input{sections/acknowledgments}
+
+\bibliographystyle{amsplain}
+\bibliography{refs}
+
+\end{document}

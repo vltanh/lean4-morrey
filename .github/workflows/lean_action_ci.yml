@@ -22,7 +22,7 @@ jobs:
         run: >-
           diff <({ find Morrey -name '*.lean'; cd palomar && find . -name Solution.lean; }
           | sed 's#^\./##; s/\.lean$//; s#/#.#g' | sort)
-          <(grep -E '^import all (Morrey|Pedregal|Sverak|Cassese)\.' scripts/Audit.lean
+          <(grep -E '^import all (Morrey|Pedregal|Sverak|Cassese|HomogeneousIsotropic)\.' scripts/Audit.lean
           | sed 's/^import all //' | sort)
       - name: Audit axioms and dependencies
         run: lake env lean scripts/Audit.lean
@@ -50,3 +50,4 @@ jobs:
           docs/Pedregal/README.md docs/Pedregal/REPORT.md docs/Pedregal/CREDITS.md
           docs/Sverak/README.md docs/Sverak/REPORT.md docs/Sverak/CREDITS.md
           docs/Cassese/README.md docs/Cassese/REPORT.md docs/Cassese/CREDITS.md
+          docs/HomogeneousIsotropic/README.md docs/HomogeneousIsotropic/CREDITS.md

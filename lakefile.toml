@@ -1,7 +1,7 @@
 name = "Morrey"
 version = "0.1.0"
 keywords = ["math"]
-defaultTargets = ["Common", "Pedregal", "Sverak", "Cassese", "Palomar"]
+defaultTargets = ["Common", "Pedregal", "Sverak", "Cassese", "HomogeneousIsotropic", "Palomar"]
 
 [leanOptions]
 pp.unicode.fun = true
@@ -17,6 +17,28 @@ rev = "v4.36.0-rc2"
 name = "FixedPoint"
 git = "https://github.com/vltanh/lean4-fixed-point.git"
 rev = "5f650f00b1db63837a452696331a98ca886b94a8"
+
+[[require]]
+name = "HarmonicAnalysis"
+git = "https://github.com/vltanh/lean4-harmonic-analysis"
+rev = "4c9fb088fe3ed7452430f825730e3d23fa4d0a6a"
+
+[[require]]
+name = "CalculusOfVariations"
+git = "https://github.com/vltanh/lean4-calculus-of-variations"
+rev = "a3778e447c557dd8eb81b84f47db4aa9ed0070d0"
+
+[[require]]
+name = "BanachProbability"
+git = "https://github.com/vltanh/lean4-banach-probability"
+rev = "dc3966ce34fbc31b2936a0ca9b8a50356d690ae1"
+
+# The formalization of Agazzi et al., arXiv:2609.28311: the quasiconvexity of the truncated
+# determinant, for Morrey/HomogeneousIsotropic. It requires the three packages above at these pins.
+[[require]]
+name = "Iwaniec"
+git = "https://github.com/vltanh/lean4-iwaniec"
+rev = "e4922fa6bfdadbe5fe22231c91b69044dac89bab"
 
 [[lean_lib]]
 name = "Common"
@@ -34,9 +56,13 @@ globs = ["Morrey.Sverak.+"]
 name = "Cassese"
 globs = ["Morrey.Cassese.+"]
 
+[[lean_lib]]
+name = "HomogeneousIsotropic"
+globs = ["Morrey.HomogeneousIsotropic.+"]
+
 # Each paper's Challenge and Solution (the files of its Palomar submission), as the modules
 # `Pedregal.Challenge`, `Pedregal.Solution`, ... of the source directory `palomar/`.
 [[lean_lib]]
 name = "Palomar"
 srcDir = "palomar"
-globs = ["Pedregal.+", "Sverak.+", "Cassese.+"]
+globs = ["Pedregal.+", "Sverak.+", "Cassese.+", "HomogeneousIsotropic.+"]

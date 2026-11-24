@@ -99,8 +99,8 @@ prop:elem	proposition	1	prop:explicit,lem:order,cs-sec4.3-limit,cs-qc-minorant,c
 # that the sketch describes: the proofs of Propositions 4.2 (Lemma 4.1, with Burkholder's u_q in place
 # of (13), (14)) and 4.3 (Lemma 4.2, the limiting argument, line 559, the consequences of
 # Proposition 2.3), g itself as the integrand ("g_n is itself nowhere quasiconvex"), and the lifting of
-# the proof of Theorem 1.2 (Lemma 2.2). Label ours (Lean: theorem1_2_elementary, which proves the
-# unconditional Theorem 1.2).
+# the proof of Theorem 1.2 (Lemma 2.2). Label ours (Lean: theorem1_2_elementary, a second proof of
+# Theorem 1.2; theorem1_2 follows the paper's proof).
 # hand: the u_q analogues of (13), (14) that the route uses (External.Burkholder.scalarFunctionQ_holds)
 # carry no label of the paper: the paper states (13), (14) for u_6 only (eq:scalar-properties, which
 # the prop:explicit row lists), and Remark 4.5 only says that such a U "can also be constructed"; the
@@ -179,7 +179,7 @@ cor:uncond	corollary	1	thm:sharp2sided,prop:rankonerademacher,prop:qcexact4
 # sufficiently high dimension", lines 2688-2689) is Proposition 6.6's lower bound on C^qc; it names no
 # other result.
 cor:polsquare	corollary	1	prop:qcexact4
-# hand: Theorem 1.4 at p = q = 4, by "a more elementary and straightforward proof" (Section 6.4, lines
+# hand: Theorem 1.4 at p = q = 4, by "a more elementary and straightforward proof" (Section 6.3, lines
 # 2550-2554), with d_0 = 588 (Corollary 6.3): the quartic g of Corollary 6.4 is rank-one convex and,
 # by Proposition 6.6, not quasiconvex at 0 for d >= 588; homogeneity makes it nowhere quasiconvex. The
 # paper states no separate result. Label ours (Lean: theorem1_4_four).

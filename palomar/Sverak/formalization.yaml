@@ -14,8 +14,9 @@ project:
     Every result of the paper is proved by the paper's argument: Lemma 1 (quasiconvexity of a
     continuous function is tested by periodic maps), the structure of the subspace L and the
     computation (4), Lemma 2 (the extension of f from L to a rank-one convex F), the Theorem, the
-    Remark (F is a polynomial of degree four) and the Corollary. Nothing is assumed. The paper is
-    one of three on Morrey's problem formalized in this repository, each its own submission.
+    Remark (F is a polynomial of degree four) and the Corollary. Nothing is assumed, and the
+    proofs use only Mathlib. The repository formalizes other papers on Morrey's problem too, each
+    its own submission.
   authors:
     - "The-Anh Vu-Le"
   license: "Apache-2.0"
@@ -24,7 +25,7 @@ project:
 
 classification:
   arxiv: ["math.AP", "math.OC"]
-  msc2020: ["49J45", "26B25", "68V15"]
+  msc2020: ["49J45", "26B25"]
 
 sources:
   - title: "Rank-one convexity does not imply quasiconvexity"
@@ -37,7 +38,7 @@ sources:
     note: >-
       Formalized from the published article (PDF). Every result is proved by the paper's
       argument; the formalization supplies the limit in Lemma 1, which the paper leaves to the
-      reader.
+      reader, and builds the cut-off of Lemma 1 with the paper's bound |D eta| <= 2/eps.
     author_endorsement: "not-contacted"
 
 related_formalizations:
@@ -45,14 +46,19 @@ related_formalizations:
     relationship: "independent"
     note: >-
       Conti, Dolzmann and Dondl's Lean 4 formalization of a frame-indifferent rank-one convex,
-      non-quasiconvex function on 3x3 matrices, with its own definitions. It includes parts of
-      Šverák's argument (the test map w, its gradients in L, the integral (4), the "only if" half
-      of Lemma 1), not Lemma 2, the Theorem or the Corollary. Not consulted.
+      non-quasiconvex function on 3x3 matrices, with its own definitions. It includes adaptations
+      to R^3 of parts of Šverák's argument (of the test map w, as phi(x) = (sin x1, sin x2,
+      -sin(x1 + x2)), of its gradients in L and of the integral (4)) and the "only if" half of
+      Lemma 1; not Lemma 2, the Theorem or the Corollary. The proofs here were written without
+      consulting it; searches and checks of 21-22 November 2026 displayed parts of it
+      (docs/Cassese/CREDITS.md), and nothing from it was used.
   - id: "https://github.com/Gabriele-Cassese/MorreyTwoComponentsLean"
     relationship: "independent"
     note: >-
-      Cassese's Lean formalization of results of arXiv:2608.03488 (2x m and 2x3 examples). Not
-      consulted; not a formalization of this paper.
+      Cassese's Lean formalization of results of arXiv:2608.03488 (2x m and 2x3 examples); not a
+      formalization of this paper. The proofs here were written without consulting it; searches and
+      checks of 21-22 November 2026 displayed parts of it (docs/Cassese/CREDITS.md), and nothing from
+      it was used.
   - id: "palomar/Pedregal in this repository"
     relationship: "other"
     note: >-
@@ -61,8 +67,10 @@ related_formalizations:
   - id: "palomar/Cassese in this repository"
     relationship: "other"
     note: >-
-      The formalization of Cassese, arXiv:2608.03488 (in progress), in the same repository. It
-      imports this library: it restates Šverák's example in Cassese's definitions.
+      The formalization of Cassese, arXiv:2608.03488v3, in the same repository, with its own
+      Challenge and metadata (every result that the paper proves is proved, unconditionally). It
+      imports this library: it restates Šverák's example in Cassese's definitions, and its
+      periodic test maps use the cut-off of Lemma 1.
 
 status:
   scope: >-
@@ -82,9 +90,12 @@ automation:
         The formalize-math-paper skill (https://github.com/vltanh/formalize-math-paper, commit
         020f253); the main session and 7 sub-agents on this paper (1 statement checker, 4 provers,
         1 proof checker, 1 cleanup agent), plus 1 checker of the repository's README shared with
-        the other papers; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2.
+        the other papers; Lean v4.36.0-rc2, Mathlib v4.36.0-rc2. A later round (21-22 November
+        2026, the skill's version 4.2.0, commit f5e7420): an independent audit of every recorded
+        departure, 2 provers that rebuilt the cut-off of Lemma 1 as the paper's and the
+        mollification lemmas it uses, and an independent reviewer of that work.
       cost:
-        wall_time: "1.7 h elapsed for the whole second round (this paper, Cassese's and the reorganization, in parallel); 1.4 h of sub-agent working time on this paper"
+        wall_time: "1.7 h elapsed for the whole second round (this paper, Cassese's and the reorganization, in parallel); 1.4 h of sub-agent working time on this paper; in the later round, 0.26 h of prover time on this paper, besides agents shared with Cassese's paper"
         spend_usd: "not tracked"
         hardware: "local machine (20 cores, 62 GB RAM) and API"
       prompting_notes: >-
@@ -93,32 +104,41 @@ automation:
   spend_usd: "not tracked"
   notes: >-
     The AI system wrote the code and the documents at the request of the author. No person has
-    reviewed the proofs. Independent AI agents checked the statements against the paper and the
-    formal proofs against the paper's. See docs/Sverak/CREDITS.md.
+    reviewed the proofs. Independent AI agents checked the statements against the paper, the
+    formal proofs against the paper's, every recorded departure, and the documents. See
+    docs/Sverak/CREDITS.md.
 
 fidelity:
   divergences: >-
     Statements: no statement of the paper was changed. Readings: matrices are Matrix (Fin m) (Fin n)
     R and gradients have the components as rows; quasiconvexity (ii) is stated on a given domain,
-    with smooth compactly supported test maps and the requirement that the integral exist
-    (automatic for continuous f on a bounded domain), and the Theorem and the Corollary are proved
-    on the open unit cube, the domain of the paper's proofs (the paper cites that the class does
-    not depend on the domain; that is not formalized); Lemma 1 is proved for every matrix A (the
-    paper writes A = 0); P is given by its formula and proved orthogonal; the constants that the
-    paper leaves open are c = 6 in Lemma 2 and k = n + 1 for some natural n, and the cutoff of
-    Lemma 1 satisfies |D eta| <= C/eps with a C larger than the paper's 2, which its argument does
-    not use; "polynomial of degree four" is total degree 4, for eps /= 0. Proofs: every proof
-    follows the paper's argument; the steps it leaves to the reader (the limit in Lemma 1, the
-    compactness of K and the other implicit steps of Lemma 2, the rank-zero case in the Corollary)
-    are supplied along its lines. See docs/Sverak/REPORT.md, Sections 3, 6 and 7.
+    with smooth compactly supported test maps and the requirement that the integral exist (automatic
+    for continuous f on a bounded domain), and the Theorem and the Corollary are proved on the open
+    unit cube, the domain of the paper's proofs (the paper cites that the class does not depend on
+    the domain; that is not formalized for smooth test maps); Lemma 1 is proved for every matrix A
+    (the paper writes A = 0); P is given by its formula and proved orthogonal; the constants that
+    the paper leaves open are c = 6 in Lemma 2 and k = n + 1 for some natural n; the cut-off of
+    Lemma 1, which the paper takes for granted, is built with the paper's properties (1 on [eps, 1 -
+    eps]^n, 0 off (eps/16, 1 - eps/16)^n, |D eta| <= 8/(5 eps) <= 2/eps) as the mollification of a
+    Lipschitz profile; "polynomial of degree four" is total degree 4, for eps /= 0. Proofs: every
+    proof follows the paper's argument, with no departure; the steps it leaves to the reader (the
+    limit in Lemma 1, the compactness of K and the other implicit steps of Lemma 2, the rank-zero
+    case in the Corollary) are supplied along its lines. See docs/Sverak/REPORT.md, Sections 3, 6
+    and 7.
 
 review:
   status: "agent-reviewed"
   reviewers:
-    - "none"
+    - "a Claude Opus 5.5 sub-agent (second round): the statements against the paper"
+    - "a Claude Opus 5.5 sub-agent (second round): the formal proofs against the paper's"
+    - "a Claude Opus 5.5 sub-agent (second round): the literature in the repository's README"
+    - "a Claude Opus 5.5 sub-agent (third round): every recorded departure, read-only"
+    - "a Claude Opus 5.5 sub-agent (third round): the rebuilt cut-off of Lemma 1 against the paper"
+    - "a Claude Opus 5.5 sub-agent (third round): the rewritten documents against the code and the paper"
   notes: >-
     No human review. Independent AI agents (Claude Opus 5.5) checked every statement against the
-    paper and compared the formal proofs with the paper's.
+    paper, compared the formal proofs with the paper's, audited every recorded departure against
+    the paper, and checked the documents against the code and the paper.
 
 alignment:
   namespace: "SverakChallenge"

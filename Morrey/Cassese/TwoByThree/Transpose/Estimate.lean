@@ -5,13 +5,19 @@ public import Mathlib.MeasureTheory.Constructions.Pi
 public import Mathlib.MeasureTheory.Function.LocallyIntegrable
 public import Mathlib.MeasureTheory.Measure.Haar.NormedSpace
 public import Mathlib.Analysis.SpecialFunctions.Integrals.Basic
+public import Mathlib.Analysis.SpecialFunctions.PolarCoord
 
 /-!
 # Corollary 5.3: the energy of the cut-off witness
 
-`∫ q̂_{δ,Λ} (∇v_R) ≤ M₁ + M₃ − (75/32) log (R/4)` for `v_R = 𝒱φ_R` and `0 < δ ≤ δ₀`
-(`tbt3_integral_le`), with `M₁`, `M₃` the fixed contributions of the inner region `|x|² ≤ 2` and of
-the outer region `|x|² ≥ R²` (rescaled to `|y|² ≥ 1`).
+The energy estimate of the proof sketch (TeX 2121–2134) for `v_R = 𝒱φ_R`, `R > 2`, `0 ≤ δ ≤ 1`:
+`∫ q̂_{δ,Λ} (∇v_R) ≤ 2π (−c + C δ) log R + O(1)` with `c = 75/8`, `C = 4·10⁶` and
+`O(1) = M₁ + M₃ + π (c − C δ) log 2` (`tbt3_integral_le`). The plane splits into the inner region
+`|x|² ≤ 2`, the bulk `2 < |x|² < R²` and the outer region `|x|² ≥ R²`. In the bulk
+`q̂_{δ,Λ} (∇v_R) ≤ (−c + C δ) / |x|²` (`tbt3_bulk_le`), and
+`∫_{2 < |x|² < R²} |x|⁻² dx = 2π log (R/√2)` in polar coordinates (`tbt3_integral_inv_Sq_bulk`).
+The inner region and the outer region (rescaled to `|y|² ≥ 1`) contribute at most the constants
+`M₁`, `M₃`, which do not depend on `R` (`tbt3_inner_le`, `tbt3_outer_le`).
 
 Helpers are prefixed `tbt3_`.
 -/
@@ -19,7 +25,7 @@ Helpers are prefixed `tbt3_`.
 @[expose] public section
 
 open MeasureTheory
-open scoped Matrix ENNReal
+open scoped Matrix ENNReal Real
 
 namespace Cassese
 
@@ -129,156 +135,70 @@ theorem tbt3_jac_bulk {R : ℝ} (hR : 0 < R) {x : Fin 2 → ℝ}
     tbt3_D1_eqOn U (tbt3_D1_eqOn U (tbt3_D1_eqOn U e j) i) k hx
   rw [tbt3_jac_V_transpose (tbt3_contDiff_PhiR R), e3, e3, e3, e3]
 
-/-- The bulk: `q̂_{δ,Λ} (∇v_R) ≤ −(75/16) / |x|²` on `2 < |x|² < R²` for `0 ≤ δ ≤ δ₀`. -/
-theorem tbt3_bulk_le {R δ : ℝ} (hR : 0 < R) (hδ : 0 ≤ δ) (hδ₀ : δ ≤ 75 / 64000000) (Λ : ℝ)
+/-- The bulk (TeX 2121–2123): on `2 < |x|² < R²`, where `φ_R = φ`, the bounds
+`q₃ ((∇v)ᵀ) ≤ −c / |x|²` and `|∇v|⁴ ≤ C / |x|²` with `c = 75/8`, `C = 4·10⁶` (`tbt3_bulk_bounds`)
+give `q̂_{δ,Λ} (∇v_R) = q₃ ((∇v)ᵀ) + δ |∇v|⁴ ≤ (−c + C δ) / |x|²` for `δ ≥ 0`. -/
+theorem tbt3_bulk_le {R δ : ℝ} (hR : 0 < R) (hδ : 0 ≤ δ) (Λ : ℝ)
     {x : Fin 2 → ℝ} (hx : 2 < tbt3Sq x ∧ tbt3Sq x < R ^ 2) :
-    qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) ≤ -(75 / 16) / tbt3Sq x := by
+    qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) ≤ (-(75 / 8) + 4000000 * δ) / tbt3Sq x := by
   rw [tbt3_qHat_jac δ Λ (tbt3_contDiff_PhiR R), tbt3_jac_bulk hR hx]
   have hs : 0 < MvPolynomial.eval x tbt3S := by rw [tbt3_eval_S]; exact lt_trans two_pos hx.1
   obtain ⟨h1, h2⟩ := tbt3_bulk_bounds hs
   rw [tbt3_eval_S] at h1 h2
   have hS : tbt3Sq x = x 0 ^ 2 + x 1 ^ 2 := rfl
-  rw [hS] at hx ⊢
-  have hp : 0 < x 0 ^ 2 + x 1 ^ 2 := lt_trans two_pos hx.1
+  rw [hS]
   have h3 : δ * frobSq (tbt3T _ _ _ _) ^ 2 ≤ δ * (4000000 / (x 0 ^ 2 + x 1 ^ 2)) :=
     mul_le_mul_of_nonneg_left h2 hδ
-  have h4 : δ * (4000000 / (x 0 ^ 2 + x 1 ^ 2)) ≤ 75 / 16 / (x 0 ^ 2 + x 1 ^ 2) := by
-    rw [mul_div_assoc', div_le_div_iff_of_pos_right hp]; linarith
-  have h5 : -(75 / 8) / (x 0 ^ 2 + x 1 ^ 2) + 75 / 16 / (x 0 ^ 2 + x 1 ^ 2) =
-      -(75 / 16) / (x 0 ^ 2 + x 1 ^ 2) := by ring
+  have h4 : (-(75 / 8) + 4000000 * δ) / (x 0 ^ 2 + x 1 ^ 2) =
+      -(75 / 8) / (x 0 ^ 2 + x 1 ^ 2) + δ * (4000000 / (x 0 ^ 2 + x 1 ^ 2)) := by ring
   linarith
 
-/-- `∫_{2 < a < R/2} ∫_{0 < b < a} 1 / (2 a²) = ½ log (R/4)`. -/
-theorem tbt3_integral_triangle {R : ℝ} (hR : 4 < R) :
-    ∫ x in {x : Fin 2 → ℝ | 2 < x 0 ∧ x 0 < R / 2 ∧ 0 < x 1 ∧ x 1 < x 0}, 1 / (2 * x 0 ^ 2) =
-      1 / 2 * Real.log (R / 4) := by
-  set S := {x : Fin 2 → ℝ | 2 < x 0 ∧ x 0 < R / 2 ∧ 0 < x 1 ∧ x 1 < x 0}
-  have hSm : MeasurableSet S := by
-    refine (measurableSet_lt measurable_const (measurable_pi_apply 0)).inter
-      ((measurableSet_lt (measurable_pi_apply 0) measurable_const).inter
-      ((measurableSet_lt measurable_const (measurable_pi_apply 1)).inter
-      (measurableSet_lt (measurable_pi_apply 1) (measurable_pi_apply 0))))
-  have hg : Measurable fun x : Fin 2 → ℝ => 1 / (2 * x 0 ^ 2) := by fun_prop
-  rw [integral_eq_lintegral_of_nonneg_ae (Filter.Eventually.of_forall fun x => by positivity)
-    hg.aestronglyMeasurable]
-  rw [← lintegral_indicator hSm]
-  set f := MeasurableEquiv.finTwoArrow (α := ℝ)
-  have hf : MeasurePreserving f.symm volume volume := (volume_preserving_finTwoArrow ℝ).symm
-  have hF : Measurable (S.indicator fun x : Fin 2 → ℝ => ENNReal.ofReal (1 / (2 * x 0 ^ 2))) :=
-    (hg.ennreal_ofReal).indicator hSm
-  rw [← hf.lintegral_comp_emb f.symm.measurableEmbedding, Measure.volume_eq_prod,
-    lintegral_prod (fun p => S.indicator (fun x : Fin 2 → ℝ => ENNReal.ofReal (1 / (2 * x 0 ^ 2)))
-      (f.symm p)) (hF.comp f.symm.measurable).aemeasurable]
-  have inner : ∀ a : ℝ, ∫⁻ b : ℝ, S.indicator (fun x : Fin 2 → ℝ =>
-      ENNReal.ofReal (1 / (2 * x 0 ^ 2))) (f.symm (a, b)) =
-      (Set.Ioo 2 (R / 2)).indicator (fun a => ENNReal.ofReal (1 / (2 * a))) a := by
-    intro a
-    by_cases ha : a ∈ Set.Ioo 2 (R / 2)
-    · rw [Set.indicator_of_mem ha]
-      have : ∀ b, S.indicator (fun x : Fin 2 → ℝ => ENNReal.ofReal (1 / (2 * x 0 ^ 2)))
-          (f.symm (a, b)) = (Set.Ioo 0 a).indicator (fun _ => ENNReal.ofReal (1 / (2 * a ^ 2))) b := by
-        intro b
-        by_cases hb : b ∈ Set.Ioo 0 a
-        · rw [Set.indicator_of_mem hb, Set.indicator_of_mem]
-          · rfl
-          · exact ⟨ha.1, ha.2, hb.1, hb.2⟩
-        · rw [Set.indicator_of_notMem hb, Set.indicator_of_notMem]
-          exact fun h => hb ⟨h.2.2.1, h.2.2.2⟩
-      simp_rw [this]
-      rw [lintegral_indicator_const measurableSet_Ioo, Real.volume_Ioo, ←
-        ENNReal.ofReal_mul (by have := ha.1; positivity)]
-      congr 1
-      have : a ≠ 0 := by have := ha.1; positivity
-      rw [sub_zero]; field_simp
-    · rw [Set.indicator_of_notMem ha]
-      have : ∀ b, S.indicator (fun x : Fin 2 → ℝ => ENNReal.ofReal (1 / (2 * x 0 ^ 2)))
-          (f.symm (a, b)) = 0 := fun b =>
-        Set.indicator_of_notMem (fun h : f.symm (a, b) ∈ S => ha ⟨h.1, h.2.1⟩) _
-      simp only [this, lintegral_zero]
-  simp_rw [inner]
-  rw [lintegral_indicator measurableSet_Ioo]
-  have hi : IntegrableOn (fun a : ℝ => 1 / (2 * a)) (Set.Ioo 2 (R / 2)) := by
-    refine (ContinuousOn.integrableOn_compact isCompact_Icc ?_).mono_set Set.Ioo_subset_Icc_self
-    refine ContinuousOn.div continuousOn_const (by fun_prop) fun a ha => ?_
-    have := ha.1; positivity
-  have hnn : 0 ≤ᵐ[volume.restrict (Set.Ioo 2 (R / 2))] fun a : ℝ => 1 / (2 * a) :=
-    (ae_restrict_iff' measurableSet_Ioo).mpr (Filter.Eventually.of_forall fun a ha => by
-      have := ha.1; show (0 : ℝ) ≤ 1 / (2 * a); positivity)
-  rw [← ofReal_integral_eq_lintegral_ofReal hi hnn,
-    ENNReal.toReal_ofReal (integral_nonneg_of_ae hnn), ← integral_Ioc_eq_integral_Ioo,
-    ← intervalIntegral.integral_of_le (by linarith)]
-  have e : (fun a : ℝ => 1 / (2 * a)) = fun a => 1 / 2 * a⁻¹ := by funext a; field_simp
-  rw [e, intervalIntegral.integral_const_mul, integral_inv_of_pos (by norm_num) (by linarith)]
-  congr 2; ring
+/-! ### The bulk integral in polar coordinates -/
 
-/-- `J (R) = ∫_{2 < |x|² < R²} |x|⁻² ≥ ½ log (R/4)`: the triangle `2 < x₀ < R/2`, `0 < x₁ < x₀`
-lies in the annulus, where `|x|² ≤ 2 x₀²`. -/
-theorem tbt3_J_lower {R : ℝ} (hR : 4 < R) :
-    1 / 2 * Real.log (R / 4) ≤
-      ∫ x in {z : Fin 2 → ℝ | 2 < tbt3Sq z ∧ tbt3Sq z < R ^ 2}, 1 / tbt3Sq x := by
+/-- The bulk integral in polar coordinates (TeX 2131–2134):
+`∫_{2 < |x|² < R²} |x|⁻² dx = ∫_{−π}^{π} ∫_{√2}^{R} r⁻¹ dr dθ = 2π log (R/√2)` for `R > √2`.
+The plane `Fin 2 → ℝ` is carried to `ℝ × ℝ` (`volume_preserving_finTwoArrow`) and then to polar
+coordinates `(r, θ) ∈ (0, ∞) × (−π, π)` (`integral_comp_polarCoord_symm`, Jacobian `r`), where the
+integrand is `1_{√2 < r < R} r⁻¹ · 1`, a product (`setIntegral_prod_mul`). -/
+theorem tbt3_integral_inv_Sq_bulk {R : ℝ} (hR : √2 < R) :
+    ∫ x in {z : Fin 2 → ℝ | 2 < tbt3Sq z ∧ tbt3Sq z < R ^ 2}, 1 / tbt3Sq x =
+      2 * π * Real.log (R / √2) := by
+  have hR0 : 0 < R := lt_of_le_of_lt (Real.sqrt_nonneg 2) hR
   set A := {z : Fin 2 → ℝ | 2 < tbt3Sq z ∧ tbt3Sq z < R ^ 2}
-  set S := {x : Fin 2 → ℝ | 2 < x 0 ∧ x 0 < R / 2 ∧ 0 < x 1 ∧ x 1 < x 0}
-  have hSm : MeasurableSet S := by
-    refine (measurableSet_lt measurable_const (measurable_pi_apply 0)).inter
-      ((measurableSet_lt (measurable_pi_apply 0) measurable_const).inter
-      ((measurableSet_lt measurable_const (measurable_pi_apply 1)).inter
-      (measurableSet_lt (measurable_pi_apply 1) (measurable_pi_apply 0))))
-  have hSA : S ⊆ A := by
-    intro x hx
-    obtain ⟨h1, h2, h3, h4⟩ := hx
-    refine ⟨?_, ?_⟩ <;> simp only [tbt3Sq] <;> nlinarith
-  -- `A ⊆ {2 ≤ |x|² ≤ R²}`, compact, where `1/|x|²` is continuous
-  set K := {z : Fin 2 → ℝ | 2 ≤ tbt3Sq z ∧ tbt3Sq z ≤ R ^ 2}
-  have hK : IsCompact K := by
-    refine IsCompact.of_isClosed_subset (isCompact_closedBall (0 : Fin 2 → ℝ) R)
-      ((isClosed_le continuous_const tbt3_continuous_Sq).inter
-        (isClosed_le tbt3_continuous_Sq continuous_const)) fun z hz => ?_
-    rw [Metric.mem_closedBall, dist_zero_right]
-    refine (pi_norm_le_iff_of_nonneg (by linarith)).mpr fun i => ?_
-    rw [Real.norm_eq_abs]
-    have h := hz.2
-    have hRpos : 0 ≤ R := by linarith
-    apply abs_le_of_sq_le_sq _ hRpos
-    simp only [tbt3Sq] at h
-    fin_cases i <;> simp <;> nlinarith [sq_nonneg (z 0), sq_nonneg (z 1)]
-  have hc : ContinuousOn (fun x => 1 / tbt3Sq x) K :=
-    continuousOn_const.div tbt3_continuous_Sq.continuousOn fun x hx => by
-      have := hx.1; positivity
-  have hiA : IntegrableOn (fun x => 1 / tbt3Sq x) A :=
-    (hc.integrableOn_compact hK).mono_set fun x hx => ⟨hx.1.le, hx.2.le⟩
-  have hiS : IntegrableOn (fun x : Fin 2 → ℝ => 1 / (2 * x 0 ^ 2)) S := by
-    refine (ContinuousOn.integrableOn_compact (K := {x : Fin 2 → ℝ | 2 ≤ x 0 ∧ x 0 ≤ R ∧
-      0 ≤ x 1 ∧ x 1 ≤ R}) ?_ ?_).mono_set ?_
-    · refine IsCompact.of_isClosed_subset (isCompact_closedBall (0 : Fin 2 → ℝ) R) ?_ ?_
-      · exact (isClosed_le continuous_const (continuous_apply 0)).inter
-          ((isClosed_le (continuous_apply 0) continuous_const).inter
-          ((isClosed_le continuous_const (continuous_apply 1)).inter
-          (isClosed_le (continuous_apply 1) continuous_const)))
-      · intro z hz
-        rw [Metric.mem_closedBall, dist_zero_right]
-        refine (pi_norm_le_iff_of_nonneg (by linarith)).mpr fun i => ?_
-        rw [Real.norm_eq_abs]
-        obtain ⟨h1, h2, h3, h4⟩ := hz
-        fin_cases i <;> simp <;> rw [abs_le] <;> constructor <;> linarith
-    · refine continuousOn_const.div (by fun_prop) fun x hx => ?_
-      have := hx.1; positivity
-    · intro x hx
-      obtain ⟨h1, h2, h3, h4⟩ := hx
-      exact ⟨h1.le, by linarith, h3.le, by linarith⟩
-  calc 1 / 2 * Real.log (R / 4)
-      = ∫ x in S, 1 / (2 * x 0 ^ 2) := (tbt3_integral_triangle hR).symm
-    _ ≤ ∫ x in S, 1 / tbt3Sq x := by
-        refine setIntegral_mono_on hiS (hiA.mono_set hSA) hSm fun x hx => ?_
-        obtain ⟨h1, h2, h3, h4⟩ := hx
-        have hp : 0 < tbt3Sq x := by simp only [tbt3Sq]; nlinarith
-        rw [div_le_div_iff₀ (by positivity) hp]
-        simp only [tbt3Sq]; nlinarith
-    _ ≤ ∫ x in A, 1 / tbt3Sq x :=
-        setIntegral_mono_set hiA ((ae_restrict_iff' ((measurableSet_lt measurable_const
-          tbt3_continuous_Sq.measurable).inter (measurableSet_lt tbt3_continuous_Sq.measurable
-          measurable_const))).mpr (Filter.Eventually.of_forall fun x hx => by
-            have : 2 < tbt3Sq x := hx.1; show (0 : ℝ) ≤ 1 / tbt3Sq x; exact div_nonneg zero_le_one (by linarith)))
-          (Filter.Eventually.of_forall hSA)
+  have hm : Measurable tbt3Sq := tbt3_continuous_Sq.measurable
+  have hA : MeasurableSet A := (measurableSet_lt measurable_const hm).inter
+    (measurableSet_lt hm measurable_const)
+  set e := MeasurableEquiv.finTwoArrow (α := ℝ)
+  have he : MeasurePreserving e.symm volume volume := (volume_preserving_finTwoArrow ℝ).symm
+  rw [← integral_indicator hA, ← he.integral_comp' (A.indicator fun x => 1 / tbt3Sq x),
+    ← integral_comp_polarCoord_symm]
+  -- the integrand in polar coordinates: `r · 1_{2 < r² < R²} r⁻² = 1_{√2 < r < R} r⁻¹`
+  have hpt : ∀ p ∈ polarCoord.target,
+      p.1 • A.indicator (fun x => 1 / tbt3Sq x) (e.symm (polarCoord.symm p)) =
+        (Set.Ioo (√2) R).indicator (fun r => r⁻¹) p.1 * (fun _ => (1 : ℝ)) p.2 := by
+    rintro ⟨r, θ⟩ ⟨hr, -⟩
+    have hr : 0 < r := hr
+    have hS : tbt3Sq (e.symm (polarCoord.symm (r, θ))) = r ^ 2 := by
+      simp [e, tbt3Sq, polarCoord_symm_apply]
+      nlinarith [Real.sin_sq_add_cos_sq θ]
+    have hiff : e.symm (polarCoord.symm (r, θ)) ∈ A ↔ r ∈ Set.Ioo (√2) R := by
+      simp only [A, Set.mem_ofPred_eq, hS, Set.mem_Ioo]
+      rw [Real.sqrt_lt' hr, pow_lt_pow_iff_left₀ hr.le hR0.le two_ne_zero]
+    by_cases h : r ∈ Set.Ioo (√2) R
+    · rw [Set.indicator_of_mem (hiff.mpr h), Set.indicator_of_mem h, hS, smul_eq_mul]
+      field_simp
+    · rw [Set.indicator_of_notMem (mt hiff.mp h), Set.indicator_of_notMem h, smul_zero, zero_mul]
+  -- Fubini on `(0, ∞) × (−π, π)`: `∫_{√2}^{R} r⁻¹ dr = log (R/√2)` and `∫_{−π}^{π} dθ = 2π`
+  rw [setIntegral_congr_fun polarCoord.open_target.measurableSet hpt, polarCoord_target,
+    Measure.volume_eq_prod,
+    setIntegral_prod_mul ((Set.Ioo (√2) R).indicator fun r => r⁻¹) (fun _ => (1 : ℝ)),
+    setIntegral_indicator measurableSet_Ioo,
+    Set.inter_eq_right.mpr
+      (Set.Ioo_subset_Ioi_self.trans (Set.Ioi_subset_Ioi (Real.sqrt_nonneg 2))),
+    ← integral_Ioc_eq_integral_Ioo, ← intervalIntegral.integral_of_le hR.le,
+    integral_inv_of_pos (Real.sqrt_pos.2 two_pos) hR0, setIntegral_const,
+    Real.volume_real_Ioo_of_le (by linarith [Real.pi_pos]), smul_eq_mul]
+  ring
 
 /-! ### The fixed inner and outer contributions -/
 
@@ -405,11 +325,18 @@ theorem tbt3_integrable_energy {R : ℝ} (hR : 0 < R) (δ Λ : ℝ) :
   have : x ∉ tsupport (tbt3V (tbt3PhiR R)) := fun h => hc (tbt3_tsupport_V_subset _ h)
   simp [tbt3_jac_eq_zero this, tbt3_qHat_zero]
 
-/-- **The energy estimate** (TeX 2131–2134):
-`∫ q̂_{δ,Λ} (∇v_R) ≤ M₁ + M₃ − (75/16) · ½ log (R/4)` for `R > 4` and `0 ≤ δ ≤ δ₀`. -/
-theorem tbt3_integral_le {R δ : ℝ} (hR : 4 < R) (hδ : 0 ≤ δ) (hδ₀ : δ ≤ 75 / 64000000) (Λ : ℝ) :
+/-- **The energy estimate** (TeX 2131–2134): for `R > 2` and `0 ≤ δ ≤ 1`,
+`∫ q̂_{δ,Λ} (∇v_R) ≤ 2π (−c + C δ) log R + O(1)` with `c = 75/8`, `C = 4·10⁶` and
+`O(1) = M₁ + M₃ + π (c − C δ) log 2`. The plane splits into the inner region `|x|² ≤ 2`, where
+`v_R = 𝒱φ_in` and the energy is at most `M₁` (`tbt3_inner_le`); the bulk `2 < |x|² < R²`, where
+`q̂_{δ,Λ} (∇v_R) ≤ (−c + C δ) / |x|²` (`tbt3_bulk_le`) and `∫ |x|⁻² = 2π log (R/√2)` in polar
+coordinates (`tbt3_integral_inv_Sq_bulk`); and the outer region `|x|² ≥ R²`, where
+`∇v_R (x) = R^{−1/2} ∇v_out (x/R)`, so that its energy is that of `v_out` on `|y|² ≥ 1`, at most
+`M₃` (`tbt3_outer_le`). -/
+theorem tbt3_integral_le {R δ : ℝ} (hR : 2 < R) (hδ : 0 ≤ δ) (hδ1 : δ ≤ 1) (Λ : ℝ) :
     ∫ x, qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) ≤
-      tbt3M1 + tbt3M3 - 75 / 16 * (1 / 2 * Real.log (R / 4)) := by
+      2 * π * (-(75 / 8) + 4000000 * δ) * Real.log R +
+        (tbt3M1 + tbt3M3 + π * (75 / 8 - 4000000 * δ) * Real.log 2) := by
   have hR0 : 0 < R := by linarith
   have hR4 : 4 < R ^ 2 := by nlinarith
   set f := fun x => qHat δ Λ (jac (tbt3V (tbt3PhiR R)) x) with hf_def
@@ -444,7 +371,7 @@ theorem tbt3_integral_le {R δ : ℝ} (hR : 4 < R) (hδ : 0 ≤ δ) (hδ₀ : δ
         simp only [hf_def]
         rw [tbt3_jac_in hR0 (lt_of_le_of_lt hx (by linarith))]
     rw [this]
-    exact tbt3_inner_le (by linarith) Λ
+    exact tbt3_inner_le hδ1 Λ
   -- the outer region, rescaled
   have h3 : (∫ x in A3, f x) ≤ tbt3M3 := by
     set B3 := {z : Fin 2 → ℝ | 1 ≤ tbt3Sq z}
@@ -481,19 +408,23 @@ theorem tbt3_integral_le {R δ : ℝ} (hR : 4 < R) (hδ : 0 ≤ δ) (hδ₀ : δ
     rw [integral_const_mul, Measure.integral_comp_inv_smul, Module.finrank_fin_fun,
       integral_indicator (measurableSet_le measurable_const hm), abs_of_pos (by positivity),
       smul_eq_mul, ← mul_assoc, inv_mul_cancel₀ (by positivity), one_mul]
-    exact tbt3_outer_le (by linarith) Λ
-  -- the bulk
-  have h2 : (∫ x in A2, f x) ≤ -(75 / 16) * (1 / 2 * Real.log (R / 4)) := by
+    exact tbt3_outer_le hδ1 Λ
+  -- the bulk, in polar coordinates
+  have h2 : (∫ x in A2, f x) ≤ (-(75 / 8) + 4000000 * δ) * (2 * π * Real.log (R / √2)) := by
     have hi := tbt3_integrableOn_inv_Sq R
-    calc ∫ x in A2, f x ≤ ∫ x in A2, -(75 / 16) * (1 / tbt3Sq x) :=
+    have hR2 : √2 < R := lt_trans ((Real.sqrt_lt' two_pos).mpr (by norm_num)) hR
+    calc ∫ x in A2, f x ≤ ∫ x in A2, (-(75 / 8) + 4000000 * δ) * (1 / tbt3Sq x) :=
           setIntegral_mono_on hf.integrableOn (hi.const_mul _) hA2 fun x hx => by
-            have := tbt3_bulk_le hR0 hδ hδ₀ Λ hx
+            have := tbt3_bulk_le hR0 hδ Λ hx
             simp only [hf_def]
             rw [mul_one_div]; exact this
-      _ = -(75 / 16) * ∫ x in A2, 1 / tbt3Sq x := integral_const_mul _ _
-      _ ≤ -(75 / 16) * (1 / 2 * Real.log (R / 4)) := by
-          have := tbt3_J_lower hR
-          nlinarith
+      _ = (-(75 / 8) + 4000000 * δ) * ∫ x in A2, 1 / tbt3Sq x := integral_const_mul _ _
+      _ = (-(75 / 8) + 4000000 * δ) * (2 * π * Real.log (R / √2)) := by
+          rw [tbt3_integral_inv_Sq_bulk hR2]
+  -- `2π log (R/√2) = 2π log R − π log 2`
+  have hlog : Real.log (R / √2) = Real.log R - Real.log 2 / 2 := by
+    rw [Real.log_div hR0.ne' (Real.sqrt_pos.2 two_pos).ne', Real.log_sqrt zero_le_two]
+  rw [hlog] at h2
   rw [hsplit]
   linarith
 

@@ -1,0 +1,408 @@
+\section{Integrands that change sign}\label{sec:signed}
+
+This section proves \cref{thm:A} for the integrands that take a negative value. As explained
+after \cref{prop:small}, such an integrand has $p>1$, and the case $p=2$ is \cref{thm:iff}\,(b).
+Throughout this section $p>1$, $p\ne2$, and
+\[
+  e=-1\ \text{if }p<2,\qquad e=1\ \text{if }p>2,\qquad a=\frac{\abs{p-2}}p=\frac{e(p-2)}p,
+\]
+so that $0<a<1$; for $p<2$, $a$ is the number of \cref{sec:plt2}, and for $p>2$ it is the
+number $\kappa$ of \cref{sec:pge2}. $\Phi$ is a profile of degree $p$, of any sign, and $h$,
+$(x_t,y_t)$, $\sigma=x+y$ and $\delta=x-y$ are as in \cref{sec:setting}. The proofs are in
+\cref{app:signed}.
+
+\subsection{Orientation and hard bases}\label{sec:orientation}
+
+\begin{lemma}\label{lem:orient}
+Let $\Phi$ be a profile of degree $p>0$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $h(0)\ge0$.
+\item $(-t)^{p/2}h(-1)\le h(t)$ for $-1\le t\le0$, and $t^{p/2}h(1)\le h(t)$ for $0\le t\le1$.
+\item If $\Phi(x,y)<0$ for some $x,y\ge0$, then $h(-1)<0$ or $h(1)<0$.
+\item Let $t\in[-1,1]$ and $m\in\R$ with $h(s)\ge h(t)+m(s-t)$ for $s\in[-1,1]$. If $t>-1$, then
+  $m\ge-\tfrac p2h(-1)$; if $t<1$, then $m\le\tfrac p2h(1)$. In particular $m>0$ if $t>-1$ and
+  $h(-1)<0$.
+\end{enumerate}
+\end{lemma}
+
+Part (b) comes from the hyperbolas of \cref{lem:basic}\,(b), and part (d) from the supporting
+lines at the ends (\cref{lem:ends}). By (a) and the convexity of $h$, the numbers $h(-1)$ and
+$h(1)$ are not both negative. The mirror image $\Phi^\ast$ exchanges them, and for the profile
+of $F$ it is the profile of $A\mapsto F(JA)$, which is quasiconvex if and only if $F$ is
+(\cref{lem:reflect}). So for an integrand that changes sign we may assume $h(-1)<0$. Then
+$h(1)\ge0$, hence $h\ge0$ on $[0,1]$ by (b), and $F$ is negative only at matrices of negative
+determinant. By (d), every supporting line of $h$ at a point of $(-1,1]$ has a positive slope.
+
+Let $\ell(s)=H+m(s-t)$ be a supporting line of $h$ at $t$, with $H=h(t)$. One of the two
+supporting lines of \cref{lem:ends} at the ends vanishes at $-a$: the line at $-1$ vanishes at
+$2/p-1$, which is $-a$ for $p>2$, and the line at $1$ vanishes at $1-2/p$, which is $-a$ for
+$p<2$. As functions of matrices, $B_p=G_{a,1}$ and $\abs A^p=G_{1,0}$, so that
+\begin{equation}\label{eq:easy}
+  G_{H-mt,m}(A)=m\,B_p(A)+\ell(-a)\,\abs A^p
+\end{equation}
+(\cref{lem:easy}\,(a)).
+We call $(t,m)$ an \emph{easy base} if $\ell(-a)\ge0$. If moreover $m\ge0$, which holds when
+$h(-1)<0$ and $t>-1$, then \eqref{eq:easy} is a nonnegative combination of $B_p$ and of the
+convex function $\abs A^p$. The other points need a new construction.
+
+\begin{definition}\label{def:hard}
+Let $\abs t<1$, $H=h(t)$, and let $m$ be the slope of a supporting line of $h$ at $t$, that is,
+$h(s)\ge H+m(s-t)$ for $s\in[-1,1]$, or equivalently $G_{H-mt,m}\le\Phi$ on the quadrant. The
+pair $(t,m)$ is a \emph{hard base} if this line is negative at $-a$, that is, if
+$p(H-mt)-e(p-2)m<0$.
+\end{definition}
+
+\begin{lemma}\label{lem:hard}
+Let $\Phi$ be a profile of degree $p$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $h(-a)\ge0$.
+\item A hard base $(t,m)$ has $t<-a$ if $p<2$, and $t>-a$ if $p>2$.
+\item Let $h(-1)<0$. A hard base $(t,m)$ has $m>0$, and $h(t)<0$ if $p<2$, $h(t)>0$ if $p>2$.
+\end{enumerate}
+\end{lemma}
+
+Parts (a) and (b) compare a supporting line with the line of \cref{lem:ends} that vanishes at
+$-a$. So, if $h(-1)<0$, a hard base is a point where $h$ is negative when $p<2$, and a point
+where $h$ is positive but its supporting line is negative at $-a$ when $p>2$. At the easy bases
+\eqref{eq:easy} gives the quasiconvex minorant, by the next lemma: if $m>0$ and $\ell(-a)\ge0$,
+then $(p-2)m\le p(H-mt)$ for $p>2$, and $(2-p)\abs m\le p(H-mt)$ for $p<2$.
+
+\begin{lemma}\label{lem:easy}
+Let $c_0,m\in\R$, and let $G_{c_0,m}(A)=\abs A^{p-2}(c_0\abs A^2+m\det A)$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item For every $p\ne0$, $G_{c_0,m}(A)=m\,B_p(A)+(c_0-\abs{1-2/p}\,m)\abs A^p$.
+\item If $p>2$, $m\ge0$ and $(p-2)m\le pc_0$, then $G_{c_0,m}$ is quasiconvex.
+\item If $1<p<2$ and $(2-p)\abs m\le pc_0$, then $G_{c_0,m}$ is quasiconvex.
+\end{enumerate}
+\end{lemma}
+
+The quasiconvexity of $B_p$ that (b) and (c) use comes from \cref{prop:radial}
+(\cref{cor:burkholder}).
+
+\subsection{Restricted supports at a hard base}\label{sec:restricted}
+
+For real numbers $H$, $m$, $t$ with $1+et\ne0$ put $C=pH-2tm$,
+\begin{equation}\label{eq:restricted}
+\begin{gathered}
+  c=\frac{epH+(1-et)m}{1+et},\qquad v=\frac{2C}{1+et},\qquad\alpha=ct-(p-1)H,\\
+  q(x,y)=\alpha+v\,r+c\,(x^2-y^2),
+\end{gathered}
+\end{equation}
+where $r=(\sigma-e\delta)/2$, that is, $r=x$ if $p<2$ and $r=y$ if $p>2$. At a hard base we take
+$H=h(t)$; then $C\ge0$ by \cref{cor:BE}. For $p>2$ the numbers $c$, $v$, $\alpha$ are the
+numbers $c$, $\gamma$, $k$ of \cref{sec:caseI}, and $q$ is the function of \cref{prop:caseI}.
+For $p<2$ the numbers $c$ and $v$ are given by the formulas for $c$ and $b_1$ of Case~II in
+\cref{app:pge2}. In both cases $q$ is of the form
+\eqref{eq:profilesupport} once $v\ge0$, and it touches $\Phi$ at the base point, but it need not
+lie below $\Phi$ on the whole quadrant.
+
+\begin{lemma}\label{lem:rs-identities}
+Let $p,e,H,m,t\in\R$ with $1+et\ne0$, and let $c$, $v$, $\alpha$, $q$ be given by
+\eqref{eq:restricted} with these numbers.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $q(x_t,y_t)=H$, and $q(x,y)=H-tm+m(x-y)$ if $x+y=1$.
+\item $c-ev/2=m$ and $\alpha+v/2=H-tm$.
+\item For $x,y\ge0$ with $s=x+y>0$,
+  $\alpha s^p+v\,r\,s^{p-1}+c\,(x^2-y^2)\,s^{p-2}=G_{H-mt,m}(x,y)$.
+\item Let $p>1$, $p\ne2$, and $e$ as above, and let $(t,m)$ be a hard base and $H=h(t)$. Then
+  $v\ge0$, and if $h(-1)<0$, then $c>0$ and $\alpha<0$.
+\end{enumerate}
+\end{lemma}
+
+Part (c) says that the function $l\mapsto l^pq(x/l,y/l)$ equals, at $l=x+y$, the Burkholder-type
+minorant at $(x,y)$.
+
+\begin{proposition}[Restricted supports]\label{prop:restricted}
+Let $h(-1)<0$, let $(t,m)$ be a hard base, and let $q$ be as in \eqref{eq:restricted} with
+$H=h(t)$. Then $q(x,y)\le\Phi(x,y)$ at the points $(x,y)$ of the quadrant
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item with $x<y$, if $p<2$;
+\item with $\Phi(x,y)\ge0$, if $p>2$;
+\item with $x+y\le1$.
+\end{enumerate}
+\end{proposition}
+
+The proof follows that of \cref{prop:caseI}. For a point $(x,y)$ let
+$\psi(l)=l^pq(x/l,y/l)=\alpha l^p+v\,r\,l^{p-1}+c\,(x^2-y^2)\,l^{p-2}$, so that the claim is
+$\psi(1)\le\Phi(x,y)$, and $q\le\Phi$ at $(x/l,y/l)$ means $\psi(l)\le\Phi(x,y)$.
+\begin{itemize}
+\item For $p>2$ at a point where $\Phi\ge0$, the proof of \cref{prop:caseI} applies: it uses
+  the sign of $\Phi$ only at the point $(x,y)$.
+\item For $p<2$ and $x<y$, both $\alpha$ and $c(x^2-y^2)$ are negative, so $\psi$ tends to
+  $-\infty$ at $0$ and at $\infty$ and has a maximum at a stationary point. As in
+  \cref{lem:line}, the stationary points form a line in the coordinates $(\abs z,\det A)$, and
+  this line is the image of a rank-one line through the base point, now one along which $z$
+  moves radially: $\tau\mapsto(x_t+\tau,y_t+\tau e^{i\theta})$. On it $q\le\Phi$ is the
+  first-order inequality.
+\item On the ball $x+y=s\le1$, at the remaining points, $\psi$ is nonincreasing on $[s,1]$, so
+  that $\psi(1)\le\psi(s)=G_{H-mt,m}(x,y)\le\Phi(x,y)$ by \cref{lem:rs-identities}\,(c). For
+  $p<2$ this holds at every point with $\delta\ge t\sigma$, and for $p>2$ at every point with
+  $\delta\le t\sigma$, which contains the points where $\Phi<0$.
+\end{itemize}
+
+The restricted supports at two hard bases, scaled to two points, are monotone in the following
+sense.
+
+\begin{proposition}[Monotonicity of the supports]\label{prop:monotone}
+Let $h(-1)<0$, let $(t_1,m_1)$ and $(t_2,m_2)$ be hard bases, with the numbers $c_i$ and $v_i$
+of \eqref{eq:restricted} for $H=h(t_i)$, and let $S_1,S_2>0$. Put
+$\hat v_i=S_i^{p-1}v_i$, $\hat c_i=S_i^{p-2}c_i$, $r_i=S_i(1-et_i)/2$ and $d_i=S_i^2t_i$. Then
+\[
+  (\hat v_2-\hat v_1)(r_2-r_1)+(\hat c_2-\hat c_1)(d_2-d_1)\ge0 .
+\]
+\end{proposition}
+
+The numbers $r_i$ and $d_i$ are the values of $r$ and of $x^2-y^2$ at the point
+$S_i(x_{t_i},y_{t_i})$, and with the number $\alpha_i$ of \eqref{eq:restricted} the function
+$S_i^p\alpha_i+\hat v_ir+\hat c_i(x^2-y^2)$ is the restricted support of the base $i$ scaled to
+$S_i$ (\cref{sec:setting}). It equals $\Phi$ at
+$S_i(x_{t_i},y_{t_i})$, and it lies below $\Phi$ at the base point of the other: for $p<2$ that
+point has $x<y$, since $t_j<-a<0$, and for $p>2$, $\Phi>0$ there, by \cref{lem:hard}; so
+\cref{prop:restricted}\,(a) or (b) applies. Adding the two inequalities gives the proposition.
+
+\subsection{Radial integration of the truncated determinant}\label{sec:radial}
+
+For $e\in\R$, a continuous $N\colon\R\to\R$ and a matrix $X$ with the coordinates $(z,w)$, let
+$\sigma=\abs z+\abs w$, $\delta=\abs z-\abs w$, and
+\[
+  \Psi^e_N(X)=(\sigma+e\delta)\,N(\sigma)-2\int_0^\sigma N(r)\,dr .
+\]
+Here $\sigma=\abs X$, and $\sigma+e\delta$ is $2\abs z$ for $e=1$ and $2\abs w$ for $e=-1$. We
+write $\Psi^e_N$ also for the same function of the profile variables,
+$\Psi^e_N(x,y)=(x+y+e(x-y))\,N(x+y)-2\int_0^{x+y}N(r)\,dr$ for $x,y\ge0$, so that
+$\Psi^e_N(X)=\Psi^e_N(\abs z,\abs w)$.
+
+\begin{proposition}[Radial integration of the truncated determinant]\label{prop:radial}
+Let $N\colon\R\to\R$ be a continuous function that is convex on $[0,\infty)$, with
+$N(0)\le0$, and let $e\in\{1,-1\}$. Then $\Psi^e_N$ is quasiconvex on $\M$.
+\end{proposition}
+
+The building blocks are the affine functions $N$ and the hinge functions $N(r)=(r-\rho)_+$. Let
+$L$ be the truncated determinant \eqref{eq:truncated}, $J=\diag(1,-1)$, and
+\[
+  K_e(X)=(\sigma-1)_+\,(1+e\delta).
+\]
+
+\begin{lemma}\label{lem:radial}
+Let $e\in\R$, and let $X\in\M$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item If $N(r)=n_0+n_1r$, then $\Psi^e_N(X)=-n_0(\sigma-e\delta)+en_1\det X$.
+\item If $N(r)=(r-\rho)_+$ with $\rho>0$, then $\Psi^e_N(X)=\rho^2K_e(\rho^{-1}X)$.
+\item $K_1(X)=L(JX)+\det X$ and $K_{-1}(X)=L(X)-\det X$, and $K_1$, $K_{-1}$ are quasiconvex.
+\item Let $e\in\{1,-1\}$, let $N$ and $N'$ be continuous, and let $\abs{N-N'}\le\varepsilon$ on
+  $[0,R]$. Then $\abs{\Psi^e_N(X)-\Psi^e_{N'}(X)}\le4R\varepsilon$ if $\sigma\le R$.
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma}\label{lem:hinge}
+Let $R>0$, let $N$ be convex and continuous on $[0,R]$, and let $\varepsilon>0$. There are
+$n_1\in\R$ and finitely many numbers $w_i\ge0$ and $\rho_i>0$ such that
+\[
+  \Bigl\lvert N(r)-N(0)-n_1r-\sum_iw_i\,(r-\rho_i)_+\Bigr\rvert\le\varepsilon\qquad
+  \text{for }r\in[0,R].
+\]
+\end{lemma}
+
+\Cref{prop:radial} follows. Let $e=\pm1$. For $N(r)=n_0+n_1r+\sum_iw_i(r-\rho_i)_+$ with $n_0\le0$,
+$w_i\ge0$ and $\rho_i>0$, \cref{lem:radial} writes $\Psi^e_N$ as the sum of
+$-n_0(\sigma-e\delta)+en_1\det X$, which is $-2n_0\abs w+n_1\det X$ or
+$-2n_0\abs z-n_1\det X$, a convex function plus a null Lagrangian, and of the quasiconvex
+functions $w_i\rho_i^2K_e(\rho_i^{-1}X)$. A general $N$ is approximated on $[0,R]$ by such
+functions with the same value at $0$ (\cref{lem:hinge}), and then $\Psi^e_N$ is approximated on
+the matrices with $\abs X\le R$ (\cref{lem:radial}\,(d)). For a Lipschitz test map $\varphi$ the
+matrices $A+\nabla\varphi(x)$ lie in such a set, so Jensen's inequality passes to the limit.
+
+The Burkholder function is itself a function $\Psi^e_N$. Let $N_p(r)=r_+^{p-1}$, where
+$r_+=\max\{r,0\}$. Since $\int_0^\sigma r^{p-1}\,dr=\sigma^p/p$, for $p>0$,
+\[
+  \Psi^e_{\pm N_p}(X)=\pm\sigma^{p-1}\Bigl(\Bigl(1-\frac2p\Bigr)\sigma+e\delta\Bigr),
+\]
+while $B_p(X)=\sigma^{p-1}(\abs{1-2/p}\sigma+\delta)$, because $\abs X=\sigma$ and
+$\det X=\sigma\delta$. The function $N_p$ is convex on $[0,\infty)$ for $p\ge2$, and $-N_p$ for
+$1<p\le2$.
+
+\begin{corollary}[The Burkholder function]\label{cor:burkholder}
+Let $N_p(r)=r_+^{p-1}$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item For $p\ge2$, $B_p=\Psi^1_{N_p}$ and $B_p(JX)=\Psi^{-1}_{N_p}(X)$. For $1<p\le2$,
+  $B_p=\Psi^{-1}_{-N_p}$ and $B_p(JX)=\Psi^1_{-N_p}(X)$.
+\item For every $p>1$, the Burkholder function $B_p$ and its mirror image $A\mapsto B_p(JA)$
+  are quasiconvex.
+\end{enumerate}
+\end{corollary}
+
+So the quasiconvexity of $B_p$, which is claimed as Corollary~2 of~\cite{SharpHI}, follows from
+that of the truncated determinant, claimed as Theorem~1 there.
+
+\subsection{The path of supporting lines and the radial minorant}\label{sec:path}
+
+Let $(t_0,m_0)$ be a hard base. By \cref{prop:restricted}\,(c) its restricted support $q_0$ lies
+below $\Phi$ on the unit ball. To go further we follow the supporting lines of $h$ with the
+slopes $m_0-e\xi$, $\xi\ge0$, and attach to each a scale $S(\xi)$, so that the restricted
+supports, scaled to $S(\xi)$, fit together into one function $\alpha_0+\Psi^e_N$.
+
+\begin{definition}\label{def:path}
+Let $t_0,m_0,R\in\R$. A \emph{path of hard bases from $(t_0,m_0)$ to the scale $R$} consists of
+a number $\bar\xi\ge0$ and functions $T,k,S\colon\R\to\R$ such that, with $m(\xi)=m_0-e\xi$ and
+$g(\xi)=k(\xi)-a\,m(\xi)$:
+\begin{enumerate}[label=\textup{(\roman*)}]
+\item for $\xi\in[0,\bar\xi]$, $(T(\xi),m(\xi))$ is a hard base and
+  $k(\xi)=h(T(\xi))-m(\xi)T(\xi)$; moreover $T(0)=t_0$, and $T$ is continuous on
+  $[0,\bar\xi]$;
+\item at every $\xi\in[0,\bar\xi]$, $k$ has the derivative $eT(\xi)$, and $S$ has the derivative
+  \[
+    S'(\xi)=-\frac{S(\xi)\,(1+eT(\xi))}{p\,g(\xi)};
+  \]
+\item $S>0$ on $[0,\bar\xi]$, $S(0)=1$ and $S(\bar\xi)=R$.
+\end{enumerate}
+\end{definition}
+
+Here $k(\xi)$ is the intercept and $g(\xi)$ the value at $-a$ of the supporting line of slope
+$m(\xi)$ at $T(\xi)$. At a hard base $g<0$ and $\abs T<1$, so $S$ is increasing.
+
+\begin{proposition}\label{prop:path}
+Let $h$ be strictly convex on $[-1,1]$, and let $(t_0,m_0)$ be a hard base. For every $R\ge1$
+there is a path of hard bases from $(t_0,m_0)$ to the scale $R$.
+\end{proposition}
+
+The point $T(\xi)$ is where the line of slope $m(\xi)$ supports $h$; as $\xi$ grows the slope
+moves towards a supporting slope of $h$ at $-a$, where the supporting line is nonnegative at
+$-a$ by \cref{lem:hard}\,(a). Up to the first $\xi$ where $g$ vanishes, every point is a hard
+base, $T$ stays between $t_0$ and $-a$, and $g$ has the derivative $e(T+a)$, so that
+$\abs g$ decreases at most linearly. The scale is the quadrature
+$S(\xi)=\exp\int_0^\xi(1+eT)/(-pg)$, and it tends to $\infty$ where $g$ vanishes. No
+orientation of $h$ is needed here.
+
+Along a path, let $c(\xi)$, $v(\xi)$, $\alpha(\xi)$ be the numbers \eqref{eq:restricted} at the
+hard base $(T(\xi),m(\xi))$, with $H=h(T(\xi))$, and put
+\[
+  M(\xi)=S(\xi)^{p-1}m(\xi),\qquad f(\xi)=e\,S(\xi)^{p-2}c(\xi).
+\]
+On the segment $x+y=S(\xi)$ the Burkholder-type function of the supporting line of slope $m(\xi)$
+is $S^pk+M\delta$, and $f$ is $e$ times the determinant coefficient $\hat c$ of the restricted
+support scaled to $S(\xi)$. By \cref{lem:radial}\,(a) and \cref{lem:rs-identities}\,(b), the
+affine function $N_\xi(s)=eM(\xi)+f(\xi)(s-S(\xi))$ has
+\[
+  \Psi^e_{N_\xi}(x,y)=\hat v(\xi)\,r+\hat c(\xi)\,(x^2-y^2),\qquad
+  \hat v=S^{p-1}v,\quad\hat c=S^{p-2}c,
+\]
+the scaled restricted support without its constant. Let
+\[
+  N(s)=\sup_{\xi\in[0,\bar\xi]}\bigl(eM(\xi)+f(\xi)(s-S(\xi))\bigr),\qquad
+  I(s)=\alpha(0)+s\,N(s)-2\int_0^sN(r)\,dr ,
+\]
+the upper envelope of the lines $N_\xi$, and its function $I$.
+
+\begin{lemma}\label{lem:path}
+Let $\bar\xi$, $T$, $k$, $S$ be a path of hard bases from $(t_0,m_0)$ to the scale $R$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item At every $\xi\in[0,\bar\xi]$, $M$ has the derivative $e\,f(\xi)\,S'(\xi)$.
+\item If $h(-1)<0$, then $f$ is nondecreasing on $[0,\bar\xi]$.
+\item If $f$ is nondecreasing on $[0,\bar\xi]$, then
+  $eM(\xi')+f(\xi')(S(\xi)-S(\xi'))\le eM(\xi)$ for $\xi,\xi'\in[0,\bar\xi]$.
+\end{enumerate}
+\end{lemma}
+
+The quadrature for $S$ is equivalent to (a), which makes the lines $N_\xi$ the tangents of one
+convex curve: by (c), $N_{\xi'}(S(\xi))\le eM(\xi)$. Part (b) is where \cref{prop:monotone}
+enters. For $\xi_1<\xi_2$ it reads, with $W=S_2+eS_1T_1>0$ and $r_i=S_i(1-eT_i)/2$,
+\[
+  (f_2-f_1)(S_2-S_1)\,W\ge2(r_2-r_1)\bigl(e(M_2-M_1)-f_1(S_2-S_1)\bigr),
+\]
+and by (a) the last factor is at most $D(S_2-S_1)$ in absolute value if $\abs{f-f_1}\le D$ on
+$[\xi_1,\xi_2]$. For $\xi_2$ close to $\xi_1$, $\abs{r_2-r_1}$ is small and the inequality
+improves itself: $f$ cannot decrease.
+
+\begin{lemma}\label{lem:envelope}
+Let $\bar\xi$, $T$, $k$, $S$ be a path of hard bases from $(t_0,m_0)$ to the scale $R$, and let
+$N$ and $I$ be as above.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $N$ is convex on $\R$.
+\end{enumerate}
+If $f$ is nondecreasing on $[0,\bar\xi]$, then moreover:
+\begin{enumerate}[label=\textup{(\alph*)},start=2]
+\item $N(S(\xi))=eM(\xi)$ for $\xi\in[0,\bar\xi]$;
+\item $N(s)=ec(0)\,s-v(0)/2$ for $s\le1$;
+\item $I(S(\xi))=S(\xi)^p\,k(\xi)$ for $\xi\in[0,\bar\xi]$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}[The radial minorant]\label{prop:minorant}
+Let $h(-1)<0$, and let $\bar\xi$, $T$, $k$, $S$ be a path of hard bases from $(t_0,m_0)$ to the
+scale $R$. Let $\alpha_0$ be the number $\alpha$ of \eqref{eq:restricted} for $H=h(t_0)$, $m_0$
+and $t_0$. There is a convex $N\colon\R\to\R$ with $N(0)\le0$ such that
+\[
+  \alpha_0+\Psi^e_N(x,y)\le\Phi(x,y)\qquad\text{for }x,y\ge0\text{ with }x+y\le R,
+\]
+with equality at $(x_{t_0},y_{t_0})$.
+\end{proposition}
+
+The function $N$ is the envelope above; since $h(-1)<0$, $f$ is nondecreasing
+(\cref{lem:path}\,(b)). Put $G=\alpha_0+\Psi^e_N$. On the segment $x+y=s$, $G$ is affine in
+$\delta$: $G(x,y)=I(s)+eN(s)\,\delta$. At $s=S(\xi)$, by \cref{lem:envelope}\,(b) and (d),
+\[
+  G(x,y)=S^pk(\xi)+S^{p-1}m(\xi)\,\delta=s^p\Bigl(k(\xi)+m(\xi)\frac\delta s\Bigr)
+  \le s^p\,h\Bigl(\frac\delta s\Bigr)=\Phi(x,y).
+\]
+So on the sphere of radius $s\in[1,R]$, $G$ is $s^p$ times a supporting line of $h$, evaluated
+at $\delta/s$. For $s\le1$, $N$ is affine by \cref{lem:envelope}\,(c), and $G=q_0$ by
+\cref{lem:radial}\,(a); it lies below $\Phi$ by \cref{prop:restricted}\,(c).
+\Cref{prop:path,prop:minorant} together give the next corollary.
+
+\begin{corollary}\label{cor:minorant}
+Let $h$ be strictly convex on $[-1,1]$ with $h(-1)<0$, let $(t_0,m_0)$ be a hard base, and let
+$\alpha_0$ be as in \cref{prop:minorant}. For every $R\ge1$ there is a convex
+$N\colon\R\to\R$ with $N(0)\le0$ such that $\alpha_0+\Psi^e_N(x,y)\le\Phi(x,y)$ for
+$x,y\ge0$ with $x+y\le R$, with equality at $(x_{t_0},y_{t_0})$.
+\end{corollary}
+
+\subsection{The proof of \texorpdfstring{\cref{thm:A}}{Theorem A}}\label{sec:proofA}
+
+\begin{lemma}\label{lem:reflect}
+Each of the properties \ref{H1}, \ref{H2} and \ref{H3} passes from $F$ to $A\mapsto F(JA)$. If
+$F$ is isotropic with profile $\Phi$, then $F(JA)=\Phi(\abs w,\abs z)$ for $A$ with the
+coordinates $(z,w)$, and the function $h$ of the profile of $A\mapsto F(JA)$ has at $-1$ the
+value $h(1)$. If $f\colon\M\to\R$ is quasiconvex, so is $A\mapsto f(JA)$.
+\end{lemma}
+
+\begin{lemma}\label{lem:perturb}
+For $A$ with the coordinates $(z,w)$ let $\Theta(A)=\abs z^p+\abs w^p$.
+\begin{enumerate}[label=\textup{(\alph*)}]
+\item $\Theta$ is isotropic and positively $p$-homogeneous, its profile is $x^p+y^p$, and for
+  $p\ge1$ it is rank-one convex.
+\item Let $p>1$, let $h_0$ be convex on $[-1,1]$, and let $\varepsilon>0$. Then
+  $t\mapsto h_0(t)+\varepsilon\bigl(((1+t)/2)^p+((1-t)/2)^p\bigr)$ is strictly convex on
+  $[-1,1]$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proposition}\label{prop:interior}
+Let $F$ satisfy~\Hyp\ with $p>1$, $p\ne2$, and let the function $h$ of its profile be strictly
+convex on $[-1,1]$, with $h(-1)<0$. Then $F$ is quasiconvex at every matrix $A_0$ whose
+coordinates $z_0$ and $w_0$ are both nonzero.
+\end{proposition}
+
+At such a matrix $t_0=(\abs{z_0}-\abs{w_0})/\abs{A_0}$ satisfies $\abs{t_0}<1$, and a supporting
+slope $m_0$ of $h$ at $t_0$ is positive. At an easy base, \eqref{eq:easy} gives a quasiconvex
+minorant that touches $F$ at $A_0$. At a hard base, let $\varphi$ be a test map. Its gradient is
+bounded, so $\abs{A_0+\nabla\varphi}\le R\abs{A_0}$ for some $R\ge1$. With $N$ from
+\cref{cor:minorant} for this $R$, the function $X\mapsto\abs{A_0}^p(\alpha_0+
+\Psi^e_N(X/\abs{A_0}))$ is quasiconvex by \cref{prop:radial}, lies below $F$ at the matrices of norm
+at most $R\abs{A_0}$, and equals $F$ at $A_0$. This gives Jensen's inequality for $\varphi$.
+
+\begin{lemma}\label{lem:dense}
+Let $F\colon\M\to\R$ be continuous, and quasiconvex at every matrix whose two coordinates are
+nonzero. Then $F$ is quasiconvex.
+\end{lemma}
+
+\begin{proposition}\label{prop:oriented}
+Let $F$ satisfy~\Hyp\ with $p>1$, $p\ne2$, and let $h(-1)<0$ for the function $h$ of its
+profile. Then $F$ is quasiconvex.
+\end{proposition}
+
+For $0<\varepsilon<-h(-1)$, the integrand $F+\varepsilon\Theta$ satisfies~\Hyp, and the function
+$h$ of its profile is strictly convex and negative at $-1$ (\cref{lem:perturb}). It is
+quasiconvex by \cref{prop:interior,lem:dense}, and Jensen's inequality for $F$ follows as
+$\varepsilon\to0$. \Cref{thm:A} follows from \cref{prop:oriented}, applied to $F$ or, by
+\cref{lem:orient}\,(c) and \cref{lem:reflect}, to $A\mapsto F(JA)$, and from the cases of
+\cref{sec:intro-small}.

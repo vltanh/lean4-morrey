@@ -29,7 +29,8 @@ CHALLENGE = 'palomar/Pedregal/Challenge.lean'
 # When PAIRS is empty, the single pair (DEFS, CHALLENGE) is used.
 PAIRS = [('Morrey/Pedregal/Defs.lean', 'palomar/Pedregal/Challenge.lean'),
          ('Morrey/Sverak/Defs.lean', 'palomar/Sverak/Challenge.lean'),
-         ('Morrey/Cassese/Defs.lean', 'palomar/Cassese/Challenge.lean')]
+         ('Morrey/Cassese/Defs.lean', 'palomar/Cassese/Challenge.lean'),
+         ('Morrey/HomogeneousIsotropic/Defs.lean', 'palomar/HomogeneousIsotropic/Challenge.lean')]
 # The marker lines around the shared block, in both files.
 BEGIN = '-- BEGIN SHARED DEFINITIONS\n'
 END = '-- END SHARED DEFINITIONS\n'
