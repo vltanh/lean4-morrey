@@ -1,5 +1,47 @@
 # Roadmap to completion
 
+## All-N composition theorem for overlapping circuits, and nonunit three-ridge waveforms
+
+The [new random-cube composition theorem](IWANIEC_MORREY_CUBE_COUPLING.md)
+handles arbitrary N bounded rank-one-subspace-valued profiles with
+pairwise independent reference variables and a joint density p
+relative to the product marginals. It proves universal Jensen whenever
+||p-1||∞ ≤ 1/[2(3^N-2N²-1)], or under the sharper local
+mixed-difference parity budget. Randomly sampled pairs in each
+coordinate yield translated rank-one cubes with overlapping parity
+interactions. The proof uses the published planar three-wave theorem,
+finite subset Möbius inversion for **exact** probability reconstruction,
+and independent midpoint convex Jensen. The same theorem gives
+conditional block removal with an arbitrary retained tail.
+
+An explicit **arbitrary-N actual-gradient** application has all
+frequency lengths within a factor of five, no dyadic or parallel-block
+peeling, and m nonparallel minimal triple circuits sharing two core
+waves, with simultaneously nonzero triple correlations. The two core
+ridge derivatives are arbitrary bounded vector-valued profiles.
+A uniform grid-discrepancy argument proves near-product density for
+every phase choice. This is not an assertion of arbitrary comparable-
+scale Jensen; the family is weakly dependent.
+
+A separate nonperturbative antithetic-pair argument handles two
+arbitrary bounded ridge derivatives plus a sawtooth in a third
+nonparallel direction whenever that direction's coefficient in
+the primitive frequency relation has magnitude ≥2. Arbitrary third
+step profiles are covered if the coefficient times their minimum
+interval length is ≥16. The unrestricted three-ridge waveform claim
+remains open; there is no fixed-winding fine-partition limit.
+
+The [checker](../../research/audit/iwaniec_cube_coupling_exact.py)
+actually passed: exact nonbinary overlapping-cube reconstruction,
+exact rational grid discrepancy controls, and arithmetic construction
+checks through 102 variables. Hand proofs only; no Lean or human
+certification or novelty claim.
+
+**Remaining P2 gate:** remove the small-dependence assumption or
+prove a gap-preserving universal conditional decomposition for
+strongly correlated clusters. Do not enumerate larger isolated
+cases or infer universal Jensen from pairwise independence.
+
 ## Bounded minimal resonance circuits and complete parallel-block peeling criterion
 
 The [new arithmetic/circuit theorem](IWANIEC_MORREY_MINIMAL_RESONANCE.md)
