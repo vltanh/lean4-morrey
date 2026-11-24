@@ -1,5 +1,87 @@
 # Roadmap to completion
 
+## General homogeneous cone — exact regularization and positive-trace normalization
+
+The [new global approximation and rigidity note](IWANIEC_MORREY_HOMOGENEOUS_REGULARIZATION.md)
+proves a density theorem for EVERY finite-valued positively
+p-homogeneous RC integrand, for every fixed p>1 and without
+isotropy. Average ordinary mollifications F_t over a log interval:
+    H=(1/log(b/a)) int_a^b F_t dt/t.
+The Euler defect E=DH:X-pH telescopes exactly to
+(F_a-F_b)/log(b/a), so BOTH E and DE become uniformly small
+on the unit sphere when b->0 and b/a->infinity. Rehomogenize
+G(X)=|X|^p H(X/|X|). The precise Hessian change for V=w+alpha X
+at unit X, w perpendicular to X, is
+    -E|w|²-2alpha DE:w-alpha² DE:X-(p-1)alpha²E.
+It is uniformly o(1)|V|². Repair with a vanishing
+positive multiple of |X|^p to get exactly homogeneous,
+smooth-off-zero, uniformly strongly RC approximants.
+Preserves nonnegativity and all original orthogonal
+invariances. This is not ordinary convolution that loses
+homogeneity. It works in arbitrary finite dimensions.
+
+**Exact main-gate reduction:** p=1 follows from p>1 by
+subtracting a linear support at zero (Kirchheim--Kristensen)
+and using the convex powers (F-L)^(1+eps) as eps->0.
+The already verified p<1 case is zero. Hence it suffices
+to solve the arbitrary smooth strongly RC angular problem
+for p>1. Any hypothetical strict homogeneous counterexample
+survives with a rational exponent p>1, rational angular
+polynomial P in F(X)=|X|^p P(X/|X|), and a rational
+piecewise-affine periodic gradient witness. The rank-one
+Hessian test on unit spheres is polynomial by the exact
+defect identity, so each such candidate is decidable by
+real algebraic methods; its energy witness is algebraic.
+No uniform degree/size bound, and no unbounded enumeration
+is proposed as a completion strategy.
+
+**Positive trace at degree two:** if m=min_{rank H=1,|H|=1} F(H)>0,
+no evenness or strict Hessian assumption is needed for a
+coercive determinant shift. With M=max_{|X|=1}|F(X)| and
+L a local Lipschitz constant, tau=min(1/4,m/(4sqrt(2)L),
+m/(16M)) gives F(X)>=c det X + m tau² |X|².
+For normalized opposite-det X,Y, connect X to tY,
+and form U=(tX+Y)/sqrt(1+t²), V=(X-tY)/sqrt(1+t²),
+both rank one. The ratio gap is at least m|U|²>=
+4m/(|X|²+|Y|²). The minimizing determinant ratios
+are attained away from rank-one because of positive
+trace. The midpoint shift gives the global bound.
+For EVEN F, both reciprocal connections (X,tY) and
+(X,-Y/t) can be used for arbitrary p>1; combine their
+inequalities with weights 1/(1+k), k/(1+k), k=t^(p-2).
+This gives a signed determinant-power lower support
+for ALL p>1, and the uniform estimate
+    F(X)>=(m/2)|X|^p+c sign(det X)|det X|^(p/2)
+for 1<p<=2. The factor is sharp at p=2 (operator norm).
+For p!=2 the signed power is not a null Lagrangian,
+so no universal QC inference. Neither lower bound
+proves RC of the remainder after subtracting the
+coercivity term.
+
+**Affine-plane rigidity, NO HOMOGENEITY:** the earlier
+null-plane theorem is now stronger. Any finite RC
+integrand affine on a full common-factor rank-one plane
+is PC, at every base. Normalize F([a,0])=0. A finite
+convex function constant on a whole line is invariant
+under that line; use this first on the common-left-factor
+plane and then on the first-column plane at fixed b
+to get F([a+tb,b])=F([a,b]). Thus F=G(b,det X).
+Common first columns at independent b endpoints give
+lifted Jensen. Convexity along lines avoiding b=0
+bounds G above and below near the missing axis by
+values at b±e,b+2e, e perpendicular to b. Uniform
+secant-slope bounds give a finite continuous convex
+extension across b=0. This proves the original energy
+PC with no sign, smoothness, homogeneity or symmetry.
+
+The symbolic Hessian, radial derivative and opposite-ray
+identities were actually executed successfully. Hand proofs;
+no Lean or publication-priority claim. The new regularization
+covers the entire angular cone, but its universal QC gate
+remains open. No universal extremal decomposition into
+null directions or affine planes has been proved. The
+signed homogeneous isotropic theorem is formally closed.
+
 ## No rotational symmetry — exact null-ray recession and null-plane classification
 
 The [new rank-one-null theorem](IWANIEC_MORREY_RANKONE_NULL.md)
