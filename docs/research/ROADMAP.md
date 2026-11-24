@@ -1,5 +1,75 @@
 # Roadmap to completion
 
+## Entire nonsmooth homogeneous cone — weak Hessian recovery and vanishing-ac-curvature rigidity
+
+The [new weak-Hessian theorem](IWANIEC_MORREY_HOMOGENEOUS_WEAK_HESSIAN.md)
+covers EVERY finite p-homogeneous RC F, p>1, with no symmetry,
+sign, differentiability or angular partition assumption. The
+rank-one directional second derivatives are positive measures.
+Coordinate and four all-entry rank-one probes give all Hessian
+coefficients except the coefficient T of the linear cofactor
+operator C. Write D²F=S+T C, with S a matrix measure perpendicular
+to C and trace tau=Delta F>=0. Planar quadratic polyconvexity
+applied to its density gives |S|<=tau. Differentiate Euler:
+    D²F X=(p-1) DF dX.
+Contract with C X to recover the missing distribution:
+    |X|² T=(p-1)(CX:DF)dX-(CX)·S X.
+Therefore the entire D²F is a Radon measure, including the
+origin by a cutoff argument, with
+    |D²F|<=3 tau+2(p-1)|DF|/|X| dX.
+
+Apply Alberti's rank-one theorem to the BV map DF. The
+singular Hessian has symmetric rank-one density and
+nonnegative trace, hence is PSD; Euler implies its density
+annihilates X. With Q the ac Hessian density, the exact weak
+formulation is
+    D²F=P+lambda C dX, P>=0,
+where a measurable midpoint of the planar quadratic
+multiplier interval gives lambda in L¹_loc, homogeneous
+of degree p-2. No singular indefinite curvature is needed.
+Euler also recovers the ORIGINAL F a.e. from Q:
+    DF=QX/(p-1), F=(X:QX)/(p(p-1)).
+Thus nonsmooth Hessian singularities do not supply
+independent first-order data. This does not imply that
+lambda is constant or that P is a convex Hessian.
+
+**Uniform rigidity theorem:** put tau_a=tr Q>=0 and
+E_ac=int_(B1) tau_a. For any locally uniformly converging
+sequence of RC p-homogeneous F_j with E_ac(F_j)->0,
+the limit is zero if p!=2, and
+    F=a det_+ + b det_-, a+b>=0
+if p=2 (thus PC and QC). Proof uses beta=(p-1)DF:CX/|X|²
+from Euler, not an assumed feasible multiplier: the recovery
+identity gives |Q-beta C|<=3 tau_a. Scaling and passage in
+distributions yield (p-1)DF=beta CX and D²F-beta C>=0
+in the limit, even if singular mass becomes ac. The first
+identity forces constancy on connected determinant fibers.
+Homogeneity gives F=h(det), with separate orientation powers.
+The PSD residual is h''(d)[CX tensor CX-2d C].
+Testing XJ and XK (J skew, K symmetric off-diagonal)
+gives opposite values -4d² and +4d² in brackets,
+so h''=0. This yields the classification, including
+the exact pure-singular-curvature case.
+
+On the earlier compact signed homogeneous base, this implies
+E_ac(F)>=c_p M(F) for all p!=2 (positive c_p by compactness).
+At p=2, modulo determinant and after M(F)=1 normalization,
+small E_ac forces uniform angular closeness to the SINGLE
+normalized polyconvex |det| profile. These results include
+all nonsmooth extreme points, not just smooth sectors.
+
+The preceding smooth theorem uses vanishing MINIMUM
+rank-one curvature, whereas the new pure-singular
+classification uses vanishing ac TRACE. Extremality has
+NOT been shown to force that trace to vanish. The remaining
+issue is the ac rank-one-degenerate part with variable
+determinant multiplier; no universal QC proof is claimed.
+Symbolic rank-one probes, Euler recovery and determinant
+fiber identities were checked by an actually executed
+script. Hand proofs, one external BV theorem, no new Lean
+verification or novelty claim. Signed homogeneous isotropic
+remains formally closed; homogeneous anisotropic remains open.
+
 ## Global extremal rigidity — straight saturated characteristics and degree-two classification
 
 The [new saturated-characteristic theorem](IWANIEC_MORREY_SATURATED_CHARACTERISTICS.md)
