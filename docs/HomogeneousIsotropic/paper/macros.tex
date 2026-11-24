@@ -27,3 +27,6 @@
 \def\UrlNoBreaks{}
 \makeatother
 \newcommand{\lean}[1]{\textup{\path{#1}}}
+% \leanx{expression} typesets a Lean expression with spaces; symbols outside ASCII are written in
+% math mode, and an underscore as \_.
+\newcommand{\leanx}[1]{\textup{\texttt{#1}}}

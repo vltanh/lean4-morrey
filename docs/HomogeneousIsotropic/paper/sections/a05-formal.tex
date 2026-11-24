@@ -17,24 +17,25 @@ They are
 identity $\det A=\abs z^2-\abs w^2$ (\lean{det_eq_norm_sq_sub}), which ties the coordinates to
 the determinant. Its definitions are the following.\par}
 \begin{itemize}
-\item Matrices are \lean{Matrix (Fin 2) (Fin 2) ℝ}, and the gradient of
-  $\varphi\colon\R^2\to\R^2$ is the matrix \lean{jac φ x} of the derivatives of its components.
-\item \lean{IsRankOneConvex F}: $\tau\mapsto F(A+\tau B)$ is convex on $\R$ for every $A$ and
-  every $B$ with \lean{B.rank = 1}.
-\item \lean{IsQuasiconvex F}: $F(A)\le\int_{(0,1)^2}F(A+\nabla\varphi)$ for every $A$ and every
+\item Matrices are \leanx{Matrix (Fin 2) (Fin 2) $\R$}, and the gradient of
+  $\varphi\colon\R^2\to\R^2$ is the matrix \leanx{jac $\varphi$ x} of the derivatives of its
+  components.
+\item \leanx{IsRankOneConvex F}: $\tau\mapsto F(A+\tau B)$ is convex on $\R$ for every $A$ and
+  every $B$ with \leanx{B.rank~=~1}.
+\item \leanx{IsQuasiconvex F}: $F(A)\le\int_{(0,1)^2}F(A+\nabla\varphi)$ for every $A$ and every
   Lipschitz $\varphi$ vanishing outside the open unit square, for which $F(A+\nabla\varphi)$ is
   integrable.
-\item \lean{IsIsotropic F}: invariance under
-  \lean{Matrix.specialOrthogonalGroup (Fin 2) ℝ} on both sides. \lean{IsPosHomogeneous p F}:
+\item \leanx{IsIsotropic F}: invariance under
+  \leanx{Matrix.specialOrthogonalGroup (Fin 2) $\R$} on both sides. \leanx{IsPosHomogeneous p F}:
   $F(cA)=c^pF(A)$ for $c>0$, with the real power.
-\item \lean{Polyconvex F}: $F(A)=g(A,\det A)$ for a convex $g$ on the product of the matrices
-  and $\R$. \lean{HasPolyaffineSupportAt F A₀}: a function
+\item \leanx{Polyconvex F}: $F(A)=g(A,\det A)$ for a convex $g$ on the product of the matrices
+  and $\R$. \leanx{HasPolyaffineSupportAt F A$_0$}: a function
   $k+\sum_{i,j}K_{ij}A_{ij}+c\det A$ lies below $F$ and equals $F$ at $A_0$.
 \item \lean{conformalPart}, \lean{anticonformalPart}: the coordinates $z$, $w$.
-  \lean{burkholderType p c₀ m} is $G_{c_0,m}$, written with $\abs z+\abs w$ and
-  $\abs z-\abs w$, and \lean{burkholder p A} is
+  \leanx{burkholderType p c$_0$ m} is $G_{c_0,m}$, written with $\abs z+\abs w$ and
+  $\abs z-\abs w$, and \leanx{burkholder p A} is
   $(\abs z+\abs w)^{p-1}(\abs z-(p-1)\abs w)=\tfrac p2B_p(A)$ for $1\le p\le2$.
-\item \lean{multiplier p H m t} is the number $c^\ast$ of \cref{thm:closed}.
+\item \leanx{multiplier p H m t} is the number $c^\ast$ of \cref{thm:closed}.
 \end{itemize}
 The definitions are copied verbatim from the library, so the library's theorems have precisely
 the statements given in the Challenge file.
@@ -69,10 +70,10 @@ of \cref{thm:main} are checked on an integrand that is not convex, $F(A)=(\det A
   library has the implications that the proofs use: a nonzero matrix with
   $\abs\alpha=\abs\beta$ has rank one, and an isotropic $F$ is $\Phi(\abs z,\abs w)$.
 \item In \cref{cor:low}\,(a) and \cref{cor:all} the quasiconvexity of the Burkholder function is
-  the hypothesis \lean{IsQuasiconvex (burkholder p)}. It is not proved in the repository for
+  the hypothesis \leanx{IsQuasiconvex (burkholder p)}. It is not proved in the repository for
   $1<p<2$, and its derivation from the statement of~\cite{SharpHI}
   (\cref{sec:intro-low}) is not formalized. The identity of \cref{thm:low} is stated with
-  \lean{burkholder p}, hence with the denominators $p(2-p)$.
+  \leanx{burkholder p}, hence with the denominators $p(2-p)$.
 \item In \cref{thm:closed} the supporting line is given by its slope: the hypothesis is
   $h(s)\ge H+m(s-t)$ for $s\in[-1,1]$.
 \item The equalities at $(x_t,y_t)$ in \cref{lem:minorant}, in \cref{prop:caseI}, in Case II and
