@@ -1,5 +1,11 @@
 # Roadmap to completion
 
+## Material-anisotropic scale reduction on GL^+(2) — 2026-11-24
+
+See [OBJECTIVE_ISOCHORIC](IWANIEC_MORREY_OBJECTIVE_ISOCHORIC.md) for the hand proofs. The signed left-SO(2)-invariant degree-two theorem extends to the open positive-determinant cone without requiring any finite extension across det=0. Shield inversion then gives the exact polyconvex representation of every finite, objective, scale-invariant RC energy as a supremum of |Xv|²/det X+k. The entire volume-affine coupling h0(X)+det(X) h1(X), with arbitrary scale-invariant material-anisotropic shape functions, is consequently PC.
+
+For every continuous additive split h(X)+g(det X), with h scale invariant, the maximal finite beta such that g+beta log is convex exists whenever the split is RC. Its logarithmic normalization h-beta log det is RC. This reduction needs no rotational invariance; the beta=0 objective case is now completely PC, including every convex g with a finite limit at zero. For nonzero beta the remaining objective logarithmic gate has arbitrary shape and base; the positive-log stationary-shape case follows from a normalized magic-plus support. The general objective logarithmic gate and genuinely nonlinear shape-volume couplings remain open. These are all-base hand proofs where specified, not Lean-verified theorems. They do not establish unrestricted planar Morrey, or remove the last rotation invariance.
+
 ## Literature-guided theorem — entire continuous isotropic additive split on GL^+(2)
 
 The [new volumetric–isochoric theorem](IWANIEC_MORREY_VOLUMETRIC_SHIELD.md)
