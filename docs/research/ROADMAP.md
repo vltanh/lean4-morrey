@@ -1,5 +1,39 @@
 # Roadmap to completion
 
+## Signed problem: unconditional spectral half-space supports for EVERY nonzero base
+
+The [new signed spectral-support theorem](IWANIEC_MORREY_SIGNED_SPECTRAL_SUPPORT.md)
+gives explicit polyaffine supports for every signed isotropic
+p-homogeneous RC integrand, oriented to have its negative values at
+negative determinants. Normalize the base operator norm to 1.
+For 1<p<2 the support is valid on **all matrices with signed smaller
+singular value delta<=1**; for p>2 it is valid on **all matrices with
+delta>=-1**. Both cover arbitrary gradient amplitudes and all base
+ratios. For the superquadratic hard case the support is also valid
+on all nonnegative-energy matrices. Jensen follows on these regions
+for every compact law with the correct matrix/determinant moments.
+This result is unconditional and does not use the 2026 QC preprint.
+
+The subquadratic hard case uses the new negative scale-maximum proof:
+the scale polynomial tends to minus infinity at BOTH ends when det<0,
+so its stationary maximum (even negative) is controlled by one
+rank-one tangent. Direct rank-one slope inequalities extend the
+support to positive determinants with delta<=1. The complementary
+superquadratic argument uses the stationary polynomial and two
+endpoint estimates to cover every negative-energy matrix with
+delta>=-1. The easy bases use elementary signed Burkholder
+polyaffine supports on the same spectral regions, with no external
+QC theorem.
+
+The theorem gives an explicit global deficit bound by the integral
+of a scale-rescaled support discrepancy over the exceptional cones.
+**Remaining signed gate:** compensate this discrepancy for all
+actual compatible gradients, not just those avoiding expansive
+opposite-orientation matrices. No proof of this compensation or of
+the full signed conjecture is claimed. The [exact checker](../../research/audit/iwaniec_signed_spectral_exact.py)
+was run locally: 160 polynomial and 27 interval feasibility controls
+passed. Hand proofs only, no Lean or external review claim.
+
 ## PRIMARY RESEARCH DIRECTION — signed isotropic homogeneous quasiconvexity
 
 The fixed-wave and abstract martingale/compatibility-penalty research
