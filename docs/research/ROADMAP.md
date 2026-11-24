@@ -1,5 +1,61 @@
 # Roadmap to completion
 
+## MAIN GATE refinement — exact input-adaptive representation and complete terminal-trap geometry
+
+The [new adaptive martingale note](IWANIEC_MORREY_ADAPTIVE_MARTINGALE.md)
+contains three global structural results, not more fixed-wave cases.
+
+**Mandatory change to Beurling strategy:** a single COMMON
+filtration for all inputs is impossible, even approximately.
+The product identity of three Fourier phase martingales proves
+that twelve fixed smooth individually laminate two-ridge gradients
+have total common-filtration determinant cost >=1, independently
+of depth and auxiliary randomness. Continuous covariations give
+the same obstruction. For projected Beurling representations in
+a common continuous filtration, some input has expected absolute
+trace-bracket mismatch >1/300. Thus a successful determinant
+martingale construction must be input-specific, not a universal
+linear/common-filtration representation.
+
+**Exact continuous characterization:** every compact laminate
+(and only such a law) is the terminal law of a bounded continuous
+matrix martingale whose determinant is a martingale. This follows
+from unit-speed stopped Brownian rank-one splits, tightness on
+compact time intervals and a uniform terminal time tail bound.
+It removes any concern that exact continuous representation might
+be strictly stronger than D=0.
+
+**Global adaptive reduction:** at a conditional law satisfying the
+minor identity, use its centered lifted covariance in R^5.
+An exact minor-preserving rank-one binary observation exists
+iff the projection at zero determinant-coordinate contains a
+nonzero rank-one matrix. All nontrivial blocked laws are supported
+on BOTH sheets of a two-sheeted hyperboloid, in affine dimension
+2 or 3, and none is a laminate. A compact maximal-variance
+decomposition over minor-compatible conditional laws with
+laminate barycenter distribution leaves only Diracs and these
+classified traps; its minimum residual r satisfies D<=r/2 and
+r=0 iff D=0.
+
+Every nonconstant smooth periodic gradient has connected support
+and satisfies the minor identity, so admits an exact
+minor-preserving nonzero rank-one split. Positive likelihoods
+retain the original support and permit further finite steps,
+but this does NOT establish vanishing residual at infinite depth.
+Conditional laws may lose actual gradient compatibility.
+
+**Sole open global gate:** use actual gradient compatibility to
+avoid the nontrivial two-sheeted traps in an OPTIMAL adaptive
+decomposition (r=0), or construct the equivalent exact input-specific
+neutral martingale. An arbitrary nonoptimal trapped decomposition
+does not refute Morrey. No proof of global avoidance or actual
+negative witness is provided; no wave/degree ladder is resumed.
+
+The [exact checker](../../research/audit/iwaniec_adaptive_martingale_exact.py)
+passed locally: 64 rational phase-filtration controls and
+two 2D/3D trap controls plus the explicit positive-likelihood split.
+Hand proofs only, no external review, novelty or Lean claim.
+
 ## MAIN ROUTE — unrestricted scalar determinant defect; fixed-wave investigations suspended
 
 The [new global martingale-defect theorem](IWANIEC_MORREY_MARTINGALE_DEFECT.md)
