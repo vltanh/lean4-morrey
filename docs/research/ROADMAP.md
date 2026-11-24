@@ -1,5 +1,55 @@
 # Roadmap to completion
 
+## MAIN NONHOMOGENEOUS ATTACK — generalize the scalar projection, not just radial shells
+
+The [new shifted-shell and nonlinear projection note](IWANIEC_MORREY_NONHOMOG_ROW_PROJECTION.md)
+gives both a rigorous stop rule and a substantially larger positive
+QC construction, independent of the signed homogeneous audit.
+
+**Refuted:** universal touching unshifted affine-shell minorants.
+The explicit isotropic QC function
+F(X)=L_1(|z|,||w|-1|) is a supremum of translated formalized L
+integrands. At base J, the spectral law (s,delta)=(0,0),(2,-2),(4,2)
+with masses 3/8,1/2,1/8 satisfies the conformal norm and determinant
+moments and EVERY K_r^± test, but its F-Jensen gap is exactly -1/4.
+This excludes even approximate touching affine-shell supports on
+the radius-4 ball, and their positive/supremal closures with PC.
+The gap persists for smooth positive coercive strongly RC energies.
+The law is NOT a gradient law. The affine-shell theorem itself
+remains valid, but its proposed universal support extension is FALSE.
+All kernel tests below the base radius follow automatically from
+the three norm/minor conditions; above the base, endpoint checking
+on a finite support is exact by concavity between radii.
+
+**New positive mechanism:** the L² scalar projection zeta for ANY
+compact convex gradient constraint K obeys
+integral grad Phi(p+D zeta) dot D(eta-zeta)>=0
+for EVERY convex C¹ potential Phi, not just the quadratic.
+Proof: a scalar implicit convex diffusion resolvent is order
+preserving by testing the positive part of the difference of
+Euler equations. Its translation/constant equivariance preserves
+ALL gradient support-function constraints. Apply the original
+projection variational inequality to the resolvent, then pass
+to the limit using uniform convexity and smooth approximation.
+
+As a consequence, for ANY compact convex K, convex C¹ Phi and
+real c, the generalized row-truncated determinant is globally QC:
+on first rows a in K take max(c det(a,b),C(a,b)); outside K take
+C(a,b), where C is the convex supremum over z in boundary K of
+c det(z,b)+grad Phi(z) dot(a-z). The proof combines the nonlinear
+projection sign with the determinant null Lagrangian. Rotational
+suprema/averages yield isotropic nonhomogeneous generators with
+arbitrary constraint geometry and nonlinear boundary calibration.
+This extends the analytic L machinery itself beyond radial cutoffs.
+
+**Remaining main task:** find global touching QC calibrations
+for arbitrary isotropic F using the row-projection inequalities
+(10) or another genuinely universal construction. Their existence
+is not proved. Do not continue the refuted affine-shell ODE
+or enumerate a new sequence of special cases. Full isotropic
+Morrey remains open. Exact checker for the three-radius no-go
+was executed successfully; nonlinear projection proof is hand-level.
+
 ## PRIMARY RESEARCH DIRECTION — remove homogeneity while retaining isotropy
 
 The user is handling the audit/formalization of the signed homogeneous
@@ -37,8 +87,9 @@ differential inclusion for c=M' with
 z'=(c-f_sdelta)/f_deltadelta, D*=f_ss-(c-f_sdelta)^2/f_deltadelta,
 and -D*/(s-z)<=c'<=D*/(s+z), plus the explicit angular bounds.
 Pointwise feasibility follows from planar quadratic
-polyconvexity; global viability does NOT follow. Need a
-global obstacle minorant, allowing noncontact intervals.
+polyconvexity; global viability does NOT follow. **SUPERSEDED:
+the proposed universal affine-shell obstacle minorant is refuted
+by the exact shifted-shell witness above.**
 Do not infer full isotropic Morrey or pursue a new exponent,
 wave, or polynomial-degree ladder.
 
