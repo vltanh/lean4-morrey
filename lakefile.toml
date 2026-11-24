@@ -38,7 +38,7 @@ rev = "dc3966ce34fbc31b2936a0ca9b8a50356d690ae1"
 [[require]]
 name = "Iwaniec"
 git = "https://github.com/vltanh/lean4-iwaniec"
-rev = "972c01272b2a573ae58fb43fac47c97196db2cbb"
+rev = "ad90b8e3d5c1ab38cf901f33cdbe053ceba0cc58"
 
 [[lean_lib]]
 name = "Common"
