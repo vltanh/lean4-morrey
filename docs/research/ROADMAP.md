@@ -1,5 +1,57 @@
 # Roadmap to completion
 
+## MAIN ROUTE — unrestricted scalar determinant defect; fixed-wave investigations suspended
+
+The [new global martingale-defect theorem](IWANIEC_MORREY_MARTINGALE_DEFECT.md)
+defines a nonnegative scalar D(nu) for ANY compact planar matrix law:
+inf over finite binary conditional-expectation filtrations of
+E sum |det Delta M| plus half the unresolved terminal variance.
+**No fixed wave count, integrand degree, isotropy or homogeneity.**
+
+- Quantitative repair: nearest rank-one truncation of each binary
+  increment, with a controlled stopping rule, yields a finite-order
+  laminate supported in B_{4R}(A) at W2-squared distance <=2D(nu)
+  in the infimum. A two-sided coupling continuity bound and the
+  classical bounded prelaminate approximation theorem show
+  **D=0 iff laminate**. For every smooth RC F of local Hessian
+  bound K, the Jensen deficit is <=K D(nu).
+- Exact global dual: D is the supremal Jensen deficit over smooth
+  functions with Hessian lower bound -2|det H| in each direction.
+  A determinant-penalized binary Bellman envelope proves exact
+  duality, not a heuristic or finite termination guarantee.
+- Continuous covariance repair: a PSD determinant-neutral
+  covariance is a sum of rank-one outer products. Itô yields
+  the Jensen deficit <=K times expected absolute determinant
+  bracket variation.
+- **Beurling projection bridge:** for any projected martingale
+  representation U_T=g(P), E[V_T|P]=Bg(P), define delta as
+  expected total variation of the difference of the two complex
+  trace brackets. Unitarity gives projection variance <=delta;
+  Taylor plus the covariance estimate gives the actual gradient
+  Jensen deficit <=2K delta, without a false conditional Jensen
+  step. A smooth bounded-Hessian extension matching the test
+  ball removes all growth restrictions.
+
+The exact checker actually passed 160 rational martingale controls,
+59 with early stopping, plus a projection algebra control.
+These are hand proofs and exact regression checks, not Lean or
+human certification. No proof of the zero-defect assertion or
+counterexample is claimed.
+
+**Sole main mathematical gate:** prove D(law(A+Dphi))=0 for
+every periodic Lipschitz phi, e.g. construct projected Beurling
+martingale representations of arbitrary smooth periodic gradients
+with absolute bracket mismatch delta -> 0. Alternatively find
+a genuine compatible gradient with certified D>0.
+Standard projected representations and norm bounds do not give
+this pathwise/total-variation property. A signed cancellation is
+not enough. No wave-count or degree ladder will establish it.
+
+The earlier four-wave D/TQ corner list is retained below as
+historical subordinate work but **suspended**: closure of one or
+both corners would not advance the missing global implication
+without a universal coupling/induction argument.
+
 ## N=0,...,4 ledger: entire four-wave problem reduced to TWO fixed corner inequalities
 
 The [new exhaustive four-wave reduction](IWANIEC_MORREY_FOUR_WAVE_CASES.md)
