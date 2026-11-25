@@ -1,0 +1,9 @@
+quartic monomials 66 delta 1 lambda 22.0
+exact analytic gradients checked by finite differences
+seed 0 normalized quartic gap +1.8092696e-10 best +1.8092696e-10 iterations 60
+seed 1 normalized quartic gap +6.498034e-10 best +1.8092696e-10 iterations 133
+seed 2 normalized quartic gap +1.2106927e-09 best +1.8092696e-10 iterations 94
+seed 3 normalized quartic gap +5.9584658e-10 best +1.8092696e-10 iterations 140
+seed 4 normalized quartic gap +3.9639055e-08 best +1.8092696e-10 iterations 170
+seed 5 normalized quartic gap +4.7594857e-10 best +1.8092696e-10 iterations 139
+BEST 1.8092696260024783e-10

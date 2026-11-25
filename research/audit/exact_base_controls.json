@@ -1,0 +1,37 @@
+{
+  "null_linear_direction": {
+    "status": "unbounded_below",
+    "kernel_direction": [
+      "0",
+      "1"
+    ],
+    "linear_kernel_pairing": "1",
+    "negative_base": [
+      "0",
+      "-1"
+    ],
+    "negative_value": "-1"
+  },
+  "tiny_positive_curvature": {
+    "status": "finite_minimum",
+    "base": [
+      "0",
+      "-100000000"
+    ],
+    "minimum": "-99",
+    "rank": 2,
+    "nullity": 0
+  },
+  "safe_singular_minimum": {
+    "status": "finite_minimum",
+    "base": [
+      "-1",
+      "0"
+    ],
+    "minimum": "1",
+    "rank": 1,
+    "nullity": 1
+  },
+  "indefinite_control": "rejected by exact principal minor",
+  "scope": "Quadratic regression controls only; no claim these cases arise from a valid planar Morrey candidate."
+}

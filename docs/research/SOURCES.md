@@ -1,0 +1,129 @@
+# Sources, dependencies and priority
+
+Cutoff: 21 November 2026. This page records the primary literature used in the research and the
+limits of the prior-work search. It does not certify novelty, community acceptance of a recent
+preprint, or an external Lean build. The repository's existing paper-specific reports remain
+the detailed sources for the Pedregal and Šverák audits.
+
+## Direct isotropic-to-unrestricted quantitative stability (23 November 2026)
+
+[The all-p≥2 anisotropic/nonhomogeneous stability theorem](IWANIEC_MORREY_ANISOTROPIC_QUANT_STABILITY.md)
+is a direct *conditional* consequence of the proposed
+nonnegative isotropic p-homogeneous rank-one-convex⇒polyconvex
+theorem in [the same PR](IWANIEC_MORREY_PGE2_POLYCONVEXITY.md).
+Assuming that theorem is verified, subtract
+a small \(c\|A\|_F^p\) from any smooth
+strictly positive and uniformly rank-one-elliptic
+isotropic p-homogeneous core; the remainder
+stays nonnegative/isotropic/p-hom/RC,
+and is therefore polyconvex by the assumed result.
+An explicit uniform convexity bound
+\(c_p=p/[(p-1)4^{p-1}3^{p-2}]\)
+then absorbs **any** anisotropic,
+nonhomogeneous C² perturbation with
+a sufficiently small global weighted
+Hessian bound, proving QC for **all**
+periodic gradients and amplitudes.
+The [exact nonconvex quartic baseline control](../../research/audit/iwaniec_anisotropic_stability_exact.py)
+passed.
+
+This is a hand derivation based on standard
+p-power uniform convexity and the **assumed**
+isotropic result. No novelty priority,
+Lean kernel certification, or general
+unrestricted Morrey conclusion is claimed.
+It proves a quantitative neighborhood
+extension (G1), NOT that every arbitrary
+anisotropic or nonhomogeneous globally
+RC integrand is quasiconvex.
+
+
+## Fourier-wave and all-gradient audit — 23 November 2026
+
+- **Prior art**: G. Sebestyén and L. Székelyhidi, *Laminates Supported on Cubes*, J. Convex Anal. 24 (2017), 1217–1237, [DOI](https://doi.org/10.68381/jca24070), proves the special three-sawtooth-wave planar laminate theorem. **Do not extend this to arbitrary vector-valued three-ridge profiles by taking means of randomly shifted square waves**: rank-one Jensen has the [wrong inequality direction](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md).
+- **Prior art**: A. Guerra and R. Teixeira da Costa, *Numerical evidence towards a positive answer to Morrey's problem*, Rev. Mat. Iberoam. 38 (2022), 601–614, [DOI](https://doi.org/10.4171/RMI/1286), Theorem 3.3(b),(d), records the standard 2-wave and special 3-sawtooth theorems; Proposition 3.2 characterizes QC via all wave counts.
+- [New hand deductions, no novelty claim](IWANIEC_MORREY_RESONANCE_SIEVE.md): for any finite RC F and arbitrarily many compatible plane-wave cosines, a quantitative short-integer-resonance criterion bounds possible Jensen deficit, proved by independent-phase Jensen and tensor Bernstein approximation. [Exact test](../../research/audit/iwaniec_morrey_resonance_exact.py).
+- [Strict high-order resonance positivity](IWANIEC_MORREY_STRICT_RESONANCE.md): an all-N **exact** Jensen theorem for arbitrary C² uniformly strict RC integrands, whenever the independent-phase rank-one curvature margin dominates the Bernstein correlation error. [Exact test](../../research/audit/iwaniec_strict_resonance_exact.py).
+- [Two-line Fourier tail for arbitrary periodic gradients](IWANIEC_MORREY_TWO_LINE_SPECTRAL.md): a quantitative all-integrand/all-gradient Jensen-deficit bound using the **known** two-ridge theorem and orthogonal Fourier projection. [Exact test](../../research/audit/iwaniec_two_line_spectral_exact.py).
+- **Invalidated attempt:** the [three-ridge randomized-square-wave proof](IWANIEC_MORREY_THREE_RIDGE_GLOBAL_QC.md) was explicitly **RETRACTED**; neither arbitrary-three-ridge Jensen nor its proposed three-line spectral bound follows. This is an unresolved direction, not a theorem.
+
+These developments DO NOT establish or refute unrestricted planar Morrey. The assumed p≥2 isotropic proof itself remains an unrefereed hand result (and is accepted *as a premise only* for this research strategy). No Lean kernel proof of these Fourier deductions is claimed.
+
+
+## Primary literature and the role it plays
+
+| Source | Relevance and scope in this research |
+| --- | --- |
+| Pedregal, [arXiv:1905.06571v5](https://arxiv.org/abs/1905.06571v5), 18 June 2026 | The exact version audited. The existing [report](../Pedregal/REPORT.md) explains the false nonemptiness statements and the remaining open main theorem. Older versions had a broader dimensional claim. |
+| Šverák, *Rank-one convexity does not imply quasiconvexity* (1992) | Source of the `3 × 2` construction formalized in this repository; see its [report](../Sverak/REPORT.md). Supplies a higher-dimensional control and reusable cutoff infrastructure. |
+| Sebestyén–Székelyhidi, [arXiv:1504.06516](https://arxiv.org/abs/1504.06516), published 2017 | Three-wave/cube laminates in `2 × 2`; constrains direct reuse of the three-wave mechanism. The uniform level-one cube is a special case. |
+| Guerra–Teixeira da Costa, [arXiv:2006.09063v1](https://arxiv.org/abs/2006.09063v1), published 2022 | Numerical evidence and the N-wave framework. Finite wave/grid searches do not establish the unrestricted implication. |
+| Awi–Šverák, *Remarks on Morrey's quasi-convexity* (2023) | Prior convex-optimization formulation, cited in the [global certificate note](../../research/archive/files/morrey_global_certificate_research.md). Conic reformulation itself is not claimed as new here. Exact bibliographic/theorem comparison remains part of a publication review. |
+| Dacorogna–Haeberly, [1996 paper](https://doc.rero.ch/record/290415/files/S0308210500023180.pdf), DOI [10.1017/S0308210500023180](https://doi.org/10.1017/S0308210500023180) | Established anisotropic candidate energies and numerical methods. |
+| Dacorogna–Haeberly, [1998 paper](https://www.numdam.org/item/M2AN_1998__32_2_153_0.pdf), Example 3 | The eigenvalue criteria used for the degree-one energies in E03; exact parameter checks are saved with the experiments. |
+| Aubert, [1988 paper](https://www.numdam.org/item/M2AN_1988__22_1_5_0.pdf), §3 | Comparison against an earlier nonpolyconvex example. The construction there is different from the displayed `Pβ`; this comparison is not a general novelty proof. |
+| Bandeira–Pedregal, [2009 paper](https://www.numdam.org/item/10.1016/j.anihpc.2008.08.002.pdf), §3 | The homogeneous-quartic Hessian/generalized-eigenvalue method is prior work. Its displayed examples do not give the exact `Pβ` expression or the `β=2` threshold; broader equivalence/priority remains open. |
+| Marcellini, [*Quasiconvex quadratic forms in two dimensions* (1984)](https://people.dimai.unifi.it/marcellini/lavori/reprints/1984_Marcellini_Appl_Math_Optim_Quasiconvex_quadratic_forms_in_two_dimensions.pdf) | Background for quadratic positivity, null-Lagrangian correction and polyconvexity in the planar setting. The larger bivector pullback argument uses the Finsler–Thorpe input pinned below; its scope is rechecked in A06. |
+| Bruno–Pasqualotto, [arXiv:2608.06367v1](https://arxiv.org/abs/2608.06367v1) | Quasiconvexity for the Dacorogna–Marcellini energy and the bivariantly rotationally invariant homogeneous quartic class. Used as an **external analytic input** in H16/H18; does not settle arbitrary anisotropic quartics. |
+| 23 Nov 2026 global p>2 method audits | [Fractional quartic power obstruction](IWANIEC_MORREY_FRACTIONAL_POWER_NOGO.md) shows p∈(2,11/4) powers can fail RC; [exact compatible heat-flow witness](IWANIEC_MORREY_P4_HEATFLOW_NOGO.md) has derivative +920 for the globally PC homogeneous determinant-square energy and extends to nearby exponents. These prevent falsely promoting special interpolation or heat-flow methods to universal theorems. The heat-flow failure phenomenon was already present in archive H24; the new exact Fourier certificate is an independent replay. |
+| Cassese, [arXiv:2608.03488v3](https://arxiv.org/abs/2608.03488v3), 16 September 2026 | Explicit homogeneous quartic counterexample in `2 × 3` and broader higher-dimensional results. E04 tests planar pullbacks; the source result is not a `2 × 2` counterexample. Main now includes the unconditional quartic construction and other results with explicitly distinguished hypotheses; see [FORMAL_STATUS.md](FORMAL_STATUS.md). This audit did not rebuild Lean locally. |
+| Agazzi–Bruno–Guerra–Pasqualotto, [arXiv:2608.12298](https://arxiv.org/abs/2608.12298) | Higher-dimensional `2 × 4` construction and Grabovsky-derived methods that motivated the pullback investigations. The no-go argument H25 concerns a specified quadratic-bivector-norm planar class, not this entire paper. |
+| Guerra–Kristensen, [arXiv:2112.10563](https://arxiv.org/abs/2112.10563), *Automatic quasiconvexity of homogeneous isotropic rank-one convex integrands* (2022) | Theorem 1.2 makes the Morrey implication true at conformal 2 × 2 bases for every nonnegative isotropic rank-one-convex p-homogeneous integrand; the 1<p<2 part was conditional on Burkholder quasiconvexity. The 2026 Iwaniec preprint discharges that condition. Theorem 4.2 further yields an [explicit all-matrix quasiconvex minorant](IWANIEC_MORREY.md#4a-conformal-morrey-for-every-nonnegative-isotropic-homogeneous-integrand). |
+| Conti–De Lellis–Müller–Romeo, [*Polyconvexity equals rank-one convexity for connected isotropic sets in M²ˣ²*](https://doi.org/10.1016/S1631-073X(03)00333-9), 2003; building on Cardaliaguet–Tahraoui | A compact connected SO(2)×SO(2)-invariant lamination-convex set is polyconvex. Applied to bounded star-shaped sublevel sets of an isotropic homogeneous rank-one-convex integrand, it gives [all-p polyconvex level sets and L∞ Jensen](IWANIEC_MORREY_LEVELSETS.md), not ordinary integral quasiconvexity. |
+| Strict supremal Jensen corollary (23 Nov 2026) | [Five-dimensional determinant-lift crosspolytope proof](IWANIEC_MORREY_STRICT_SUPREMAL.md): a minor-compatible law with positive base energy cannot have all support energies ≤base with some strictly smaller, for any nonnegative isotropic homogeneous RC energy. A fixed PC-Jensen violation eventually disappears under large positive powers. Derives from the **established** Conti et al. (2003) isotropic-set theorem; no novelty or Lean claim. |
+| Voss–Ghiba–Martin–Neff, [arXiv:2009.09690](https://arxiv.org/abs/2009.09690), *A rank-one convex, non-polyconvex isotropic function on GL⁺(2) with compact connected sublevel sets*, PRSE A 152 (2022), 356–381 | Published obstruction to inferring function-level polyconvexity from connected isotropic sublevels on the **orientation-preserving invertible domain**. Does **not** settle the globally finite nonnegative homogeneous p>2 question; see [scope note](IWANIEC_MORREY_LEVELSETS.md#3a-important-published-no-go-for-the-naive-cross-level-inference). |
+| **PRIOR ART — Dacorogna–Koshigoe (1993)**, [*On the different notions of convexity for rotationally invariant functions*](https://www.numdam.org/item/AFST_1993_6_2_2_163_0/), Theorem 2.1, pp. 169–170 | Under exactly SO(2)×SO(2) invariance, proves equivalence of global PC, signed-diagonal PC, **four-atom minors-preserving diagonal Jensen**, and a **global poly-affine support at every diagonal base**. Our 2026 four-atom and scalar supporting-cone reductions recover/specialize these earlier results and MUST NOT be claimed as novel. [Priority audit](IWANIEC_MORREY_PRIOR_ART_1993.md). |
+| **Prior art — three-gradient rigidity**, Šverák (1991–93), Müller (1998) [Theorem 2.5](https://www.uni-ulm.de/fileadmin/website_uni_ulm/mawi.inst.010/Microstructures__Mueller__4_.pdf); Bhattacharya–Firoozye–James–Kohn (1994), [*Restrictions on microstructure*](https://doi.org/10.1017/S0308210500022381), Result 1.9 | Every homogeneous planar W¹∞ gradient Young measure supported on three pairwise rank-two-separated matrices is Dirac; a connected pair yields a two-step laminate by the determinant moment. [Morrey-oriented synthesis and rational T3 control](IWANIEC_MORREY_THREE_ATOM_RIGIDITY.md). Not a theorem that all minors-compatible 3-atom laws laminate; those can still obstruct **polyconvexity**. |
+| 23 November 2026 exact p≥4 negative-certificate hierarchy | [Research deduction and standard-library verifier](IWANIEC_MORREY_PGE4_EXACT_HIERARCHY.md) combine Dacorogna–Koshigoe's 1993 four-diagonal-atom criterion, the signed-singular Legendre–Hadamard test, strictification by Frobenius/operator-norm powers, rational C² approximation, and exact rational-power intervals. **Only C² profiles are shown to admit rational-polynomial counterexample certificates; no positive termination or ordinary Morrey result.** |
+| Dacorogna–Marcellini planar quartic polyconvex endpoint | The classical fact that (Q_e=s(s-2e\det A)) is globally polyconvex is recorded, with the sharp scalar endpoint, in [Rindler, Example 4.2](https://warwick.ac.uk/fac/sci/maths/people/staff/filip_rindler/ma4g6_17_ln.pdf) and [SOS Polyconvexity, Theorem 2](https://cmc.deusto.eus/sums-of-squares-polyconvexity/). Combined with convex quartic generators, it gives the [exact positive stabilization cone](IWANIEC_MORREY_QUARTIC_STABILIZATION.md). No publication priority asserted for this elementary decomposition. |
+| 23 Nov 2026 quartic shear/curvature and global quadratic-deficit notes | [Shear coefficient exclusion](IWANIEC_MORREY_QUARTIC_SHEAR_BOUND.md) sharpens the positive DM stabilization result to the entire admissible high-coupling RC quartic sector; [quantitative all-p result](IWANIEC_MORREY_GLOBAL_QUADRATIC_DEFICIT.md) derives global \(O(\mathrm{dist}(A,CO(2))^2)\) possible-Jensen-deficit bounds for matrix-C² isotropic p≥2 energies from the published Guerra–Kristensen conformal determinant-power support. No originality, formal Lean, or unrestricted proof claimed. |
+| Wiedemann–Peter, [*Characterization of polyconvex isotropic functions*](https://doi.org/10.1007/s00526-025-03222-z), published 28 February 2026 | Theorem 1.4 and Corollary 1.5 establish the **general** diagonal/signed-singular characterization of finite isotropic polyconvex integrands in 2D and 3D. Our [one-multiplier support condition](IWANIEC_MORREY_GENERAL_SUPPORT_CRITERION.md) is a specialized, explicit pointwise poly-affine formulation, not a discovery of the general reduction. The Guerra–Kristensen global p>2 question is not answered by the characterization alone. |
+| Four-diagonal-atom all-p reduction (22 Nov 2026) | [Research theorem and exact rational sparsifier](IWANIEC_MORREY_FOUR_ATOM.md) apply Wiedemann–Peter's diagonal convex representative, plus standard four-moment LP extreme point sparsification, to reduce failure of p>2 isotropic global **polyconvexity** to at most four diagonal atoms. Two-atom laws reduce to rank-one lines. This is a bounded witness type, not a finite positive decision procedure, and not a gradient-law Morrey counterexample. |
+| Signed p=2 and source correction (22 Nov 2026) | [Hand proof and exact rational checker](IWANIEC_MORREY_P2_SIGNED.md) remove nonnegativity from global isotropic 2-homogeneous rank-one convex→polyconvex, and repair an invalid minors-average identity printed in Guerra–Kristensen (2022), Proposition 3.7. The corrected exact witness retains the nonpolyconvexity conclusion; it is **not** a quasiconvexity counterexample. Not independently reviewed or Lean-verified. |
+| Iwaniec L-cone obstruction (22 Nov 2026) | [Exact global support no-go](IWANIEC_MORREY_CONE_NOGO.md) proves L is not polyconvex at zero, but positive sums of all left/right GL transforms and matrix translates of L together with polyconvex energies cannot support Guerra–Kristensen's nonisotropic T at I; the resulting support envelope has an exact 1-unit gap. Assumes the preprint's claimed rank-one convexity/QC for L and is not Lean-certified. |
+| Iwaniec L smooth robust nonpolyconvex class (22 Nov 2026) | [Exact four-atom minors witness and smoothing argument](IWANIEC_MORREY_SMOOTH_QC.md) show that the 2026 L integrand, after adding (1+arepsilon|A|_F^2) for (0<arepsilon<1/4), is nonpolyconvex while coercive and strongly rank-one convex; smoothing produces a C∞ example with the same features. Quasiconvexity is **conditional** on the Iwaniec preprint. This does not give a planar gradient counterexample. |
+| Scalar acoustic theorem (22 Nov 2026) | [Hand proof and exact symbolic check](IWANIEC_MORREY_ACOUSTIC.md) reduce rank-one convexity of any C² isotropic p-homogeneous planar integrand to one-variable Legendre–Hadamard/PSD inequalities and two conformal endpoint inequalities. Related to classical isotropic elasticity criteria; no novelty claim and not Lean-verified. |
+| Exact hybrid-envelope no-go (22 Nov 2026) | [Rational rank-one-convex p=4 profile and universal two-point cone separator](IWANIEC_MORREY_HYBRID_NOGO.md), verified by [standard-library exact checker](../../research/audit/iwaniec_hybrid_no_go_exact.py). **Disproves completeness of the specific hybrid QC-minorant cone**, not quasiconvexity itself; acoustic-to-global lemma awaits independent review/Lean. |
+| 22 Nov 2026 derived Morrey consequence | [Proposed universal isotropic support-cone proof](IWANIEC_MORREY_UNIVERSAL.md): extending the Guerra–Kristensen/Iwaniec conformal result to every matrix for nonnegative isotropic p-homogeneous rank-one-convex F, 1<p<2. Includes endpoint-slope lemma, exact Burkholder cone supports, a p=2 polyconvex argument, and a p>2 obstruction. **Pending independent review and formal verification; no originality claim.** |
+| 22 Nov 2026 hybrid Morrey research | [General support hierarchy](IWANIEC_MORREY_GENERAL.md) uses the 2026 Burkholder global QC claim to produce a canonical QC minorant for every nonnegative isotropic p-homogeneous 2×2 integrand, p>2, plus explicit exact simple-test obstruction and the remaining universal completeness gate. **Hand proof only, not Lean or peer reviewed.** |
+| Agazzi et al., [arXiv:2609.28311v2](https://arxiv.org/abs/2609.28311v2), 8 October 2026 | Claims quasiconvexity of a special clipped-determinant integrand L (Theorem 1), of all Burkholder B_p (Corollary 2), and the sharp Beurling–Ahlfors norm. Neither result settles universal 2 × 2 Morrey. The [dedicated connection audit](IWANIEC_MORREY.md) derives the exact nonnegative-defect decomposition, conditional general convex-body calibration and formalization gates. The projection contact lemma and norm bridge were not independently reverified in this research commit. |
+| Conti–Dolzmann–Dondl, [arXiv:2610.31886](https://arxiv.org/abs/2610.31886) | Frame-indifferent `3 × 3` example and related [Lean repository](https://github.com/sergioconti/so3-r1c-and-not-qc). Its mention of Pedregal as a proposed proof is not validation of the disputed argument. |
+| Powers, [*Rational Certificates of Positivity on Compact Semialgebraic Sets*](https://www.math.emory.edu/~vicki/pub/rationalreps.pdf), author manuscript, Theorem 6 | Rational Putinar input for A03. The sphere constraints include an explicit redundant ball generator. Homogenization and gap-preserving strictification are proved in [GLOBAL_CERTIFICATES.md](GLOBAL_CERTIFICATES.md). This is an application of established positivity, not a novelty claim. |
+| Magron, [*Convergence rates for polynomial optimization on set products*, arXiv:2505.18580v4](https://arxiv.org/abs/2505.18580v4), 3 June 2026 | Prior work on SOS hierarchies on products of spheres. Its rates are not needed for A03 and do not bound the unknown Morrey witness degree or mesh. |
+| Bettiol–Krishnan, [*Ricci flow does not preserve positive sectional curvature in dimension four*](https://link.springer.com/article/10.1007/s00526-022-02335-z), Calc. Var. 62, 13 (2023), §2.2, Proposition 2.2 | Precise non-strict Finsler–Thorpe statement used in H25. The [structural audit](STRUCTURAL_AUDIT.md) explains the Bianchi-component bridge from an arbitrary quadratic form on bivectors. |
+| [lean4-fixed-point](https://github.com/vltanh/lean4-fixed-point) | Source dependency behind the repository's Kakutani formalization. It does not fix the failed nonemptiness hypothesis. |
+
+The versioned abstracts for Bruno–Pasqualotto, Cassese, Guerra–Teixeira da Costa and Agazzi et al.
+were rechecked during this consolidation. Other entries preserve the primary-source comparisons
+recorded in the existing reports and recovered research. The completion audit additionally checked the Powers, Magron and Bettiol–Krishnan primary
+sources above. This is not a new systematic literature review of every lemma.
+
+## What the prior-work search establishes
+
+The original Pedregal audit records searches of arXiv, cited papers, responses to the proposed
+proof and GitHub formalizations. The subsequent research compared established candidate families,
+homogeneous-quartic methods, the new higher-dimensional constructions and selected exact formulas.
+See the [Pedregal literature report](../Pedregal/REPORT.md), the
+[Pβ comparison](../../research/experiments/2026-11-21/work_pb/README.md), and the
+[DH comparison](../../research/experiments/2026-11-21/work_lit/README.md).
+
+These searches did not establish priority. In particular:
+
+- Cubic rigidity, quadratic quasiconvexity, finite-dimensional separation and Carathéodory
+  bounds are established tools or straightforward consequences; no novelty is claimed.
+- An exact coefficient formula not found in the papers inspected may occur under a linear
+  change of variables, a different normalization or an older theorem. The `Pβ` threshold,
+  flat-line support and quartic cone observations require theorem-specific review.
+- H16/H18 depend on an external analytic theorem. Exact polynomial identities and rational
+  stability constants do not independently verify that theorem.
+- H22 uses Hilbert's ternary-quartic theorem; H25 uses a Finsler–Thorpe/equality-S-lemma result.
+  A06 pins the latter reference and its hypotheses. Hilbert's theorem and all external inputs still need precise citations in any publication or Lean translation.
+- The original report's “no earlier formalization found” is a dated search result, not a claim
+  that no such work exists. This research ledger does not repeat it as a novelty guarantee.
+
+## Publication gate
+
+Before treating an entry as a publishable new theorem, freeze its statement and parameter range,
+search its mathematical invariants as well as its displayed formula, compare the closest primary
+results, and obtain independent mathematical review. Record exact versions and the final scope of
+the claim.

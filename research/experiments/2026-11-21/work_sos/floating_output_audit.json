@@ -1,0 +1,52 @@
+[
+  {
+    "file": "features4/best.npz",
+    "degree": 4,
+    "actual_gap": 0.00010790702740464893,
+    "coefficient_residual": 3.82343365856741e-08,
+    "gram_min_eig": 8.263598915313462e-08,
+    "mean_gradient_max": 3.8163916471489756e-17,
+    "mean_determinant": -2.6020852139652106e-17,
+    "gradient_variance": 0.9999999999999998
+  },
+  {
+    "file": "features6/best.npz",
+    "degree": 6,
+    "actual_gap": 7.476335573490204e-05,
+    "coefficient_residual": 1.2752619435712348e-11,
+    "gram_min_eig": 9.985690309140114e-08,
+    "mean_gradient_max": 9.205554070759736e-18,
+    "mean_determinant": -1.0408340855860843e-17,
+    "gradient_variance": 0.9999999999999999
+  },
+  {
+    "file": "search4/best.npz",
+    "degree": 4,
+    "actual_gap": 5.836703559591112e-08,
+    "coefficient_residual": 4.360400929215302e-14,
+    "gram_min_eig": 9.997813674963293e-08,
+    "mean_gradient_max": 6.938893903907228e-18,
+    "mean_determinant": 2.168404344971009e-18,
+    "gradient_variance": 1.0
+  },
+  {
+    "file": "search6/best.npz",
+    "degree": 6,
+    "actual_gap": 1.860103463237596e-05,
+    "coefficient_residual": 1.476166148198631e-11,
+    "gram_min_eig": 9.954297587225146e-08,
+    "mean_gradient_max": 1.214306433183765e-17,
+    "mean_determinant": -1.3877787807814457e-17,
+    "gradient_variance": 0.9999999999999998
+  },
+  {
+    "file": "search8_diverse/best.npz",
+    "degree": 4,
+    "actual_gap": 4.58499825158806e-05,
+    "coefficient_residual": 3.531904976816769e-11,
+    "gram_min_eig": 9.95441778448486e-08,
+    "mean_gradient_max": 1.452830911130576e-17,
+    "mean_determinant": 6.938893903907228e-18,
+    "gradient_variance": 0.9999999999999998
+  }
+]

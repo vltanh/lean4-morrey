@@ -1,0 +1,5 @@
+PASS: exact rational identity for all 35 homogeneous quartic coefficients
+PASS: 35 nonnegative rational Hessian evaluations at integer rank-one directions
+PASS: 32 level-two gradients have zero mean and zero mean determinant
+PROVED: for this concrete level-two ν, every homogeneous quartic rank-one convex P satisfies P(0) <= average P(Dw)
+LIMIT: one ν and homogeneous quartics at base F=0; NOT unrestricted Morrey

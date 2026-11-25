@@ -1,0 +1,722 @@
+[
+  {
+    "seed": 0,
+    "round": 0,
+    "optimized_gap": 6.886548714058254e-08,
+    "field_iterations": 61,
+    "gap": 0.001083041123291388,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.974375391969865e-08,
+    "coefficient_residual": 5.498306237389228e-11
+  },
+  {
+    "seed": 0,
+    "round": 1,
+    "optimized_gap": 5.8444103608128086e-08,
+    "field_iterations": 1,
+    "gap": 5.8470333991350444e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.977501983192397e-08,
+    "coefficient_residual": 2.606515003833465e-11
+  },
+  {
+    "seed": 0,
+    "round": 2,
+    "optimized_gap": 5.8445617867913044e-08,
+    "field_iterations": 2,
+    "gap": 5.847246745098964e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.990082536744787e-08,
+    "coefficient_residual": 4.89071293635927e-12
+  },
+  {
+    "seed": 0,
+    "round": 3,
+    "optimized_gap": 5.8397113261034607e-08,
+    "field_iterations": 2,
+    "gap": 5.84236937594902e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.958224503832124e-08,
+    "coefficient_residual": 1.6785128842400354e-11
+  },
+  {
+    "seed": 0,
+    "round": 4,
+    "optimized_gap": 5.844461360367033e-08,
+    "field_iterations": 2,
+    "gap": 5.845501784095201e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.999045657827188e-08,
+    "coefficient_residual": 8.395506512215434e-12
+  },
+  {
+    "seed": 0,
+    "round": 5,
+    "optimized_gap": 5.842397495006185e-08,
+    "field_iterations": 0,
+    "gap": 5.842397495006185e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.948334213716684e-08,
+    "coefficient_residual": 1.3204992654891612e-12
+  },
+  {
+    "seed": 1,
+    "round": 0,
+    "optimized_gap": 8.619478096287846e-08,
+    "field_iterations": 129,
+    "gap": 0.0026337983253283312,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.987517135568647e-08,
+    "coefficient_residual": 7.07635339214363e-11
+  },
+  {
+    "seed": 1,
+    "round": 1,
+    "optimized_gap": 6.681347418408634e-08,
+    "field_iterations": 18,
+    "gap": 6.757211157632042e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999741666760504e-08,
+    "coefficient_residual": 2.4381521511865738e-11
+  },
+  {
+    "seed": 1,
+    "round": 2,
+    "optimized_gap": 6.668651241727679e-08,
+    "field_iterations": 16,
+    "gap": 6.67039702789232e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.998362861997999e-08,
+    "coefficient_residual": 8.347215153459766e-12
+  },
+  {
+    "seed": 1,
+    "round": 3,
+    "optimized_gap": 6.670676319098251e-08,
+    "field_iterations": 2,
+    "gap": 6.670856455707536e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.997697201852138e-08,
+    "coefficient_residual": 2.2874362927537698e-11
+  },
+  {
+    "seed": 1,
+    "round": 4,
+    "optimized_gap": 6.670460792830678e-08,
+    "field_iterations": 2,
+    "gap": 6.670502581561367e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.997685557366249e-08,
+    "coefficient_residual": 1.4526612740211085e-11
+  },
+  {
+    "seed": 1,
+    "round": 5,
+    "optimized_gap": 6.670398597725097e-08,
+    "field_iterations": 2,
+    "gap": 6.67041733094368e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.99768103061994e-08,
+    "coefficient_residual": 1.5225242752084958e-11
+  },
+  {
+    "seed": 2,
+    "round": 0,
+    "optimized_gap": 6.958790856848821e-08,
+    "field_iterations": 152,
+    "gap": 0.00035470573219062565,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.968219060812326e-08,
+    "coefficient_residual": 6.168622904145771e-11
+  },
+  {
+    "seed": 2,
+    "round": 1,
+    "optimized_gap": 5.8462828236296844e-08,
+    "field_iterations": 0,
+    "gap": 5.8462828236296844e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.813659628388798e-08,
+    "coefficient_residual": 6.6734381497747714e-12
+  },
+  {
+    "seed": 2,
+    "round": 2,
+    "optimized_gap": 5.8462828236296844e-08,
+    "field_iterations": 0,
+    "gap": 5.8462828236296844e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.813659628388798e-08,
+    "coefficient_residual": 6.6734381497747714e-12
+  },
+  {
+    "seed": 2,
+    "round": 3,
+    "optimized_gap": 5.8462828236296844e-08,
+    "field_iterations": 0,
+    "gap": 5.8462828236296844e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.813659628388798e-08,
+    "coefficient_residual": 6.6734381497747714e-12
+  },
+  {
+    "seed": 2,
+    "round": 4,
+    "optimized_gap": 5.8462828236296844e-08,
+    "field_iterations": 0,
+    "gap": 5.8462828236296844e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.813659628388798e-08,
+    "coefficient_residual": 6.6734381497747714e-12
+  },
+  {
+    "seed": 2,
+    "round": 5,
+    "optimized_gap": 5.8462828236296844e-08,
+    "field_iterations": 0,
+    "gap": 5.8462828236296844e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.813659628388798e-08,
+    "coefficient_residual": 6.6734381497747714e-12
+  },
+  {
+    "seed": 3,
+    "round": 0,
+    "optimized_gap": 6.700266515136947e-08,
+    "field_iterations": 121,
+    "gap": 0.0006107697357451569,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.989960032897303e-08,
+    "coefficient_residual": 8.249825340011716e-11
+  },
+  {
+    "seed": 3,
+    "round": 1,
+    "optimized_gap": 5.8407246731564146e-08,
+    "field_iterations": 22,
+    "gap": 5.8437037193504794e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.996204691085216e-08,
+    "coefficient_residual": 4.8618227499463984e-14
+  },
+  {
+    "seed": 3,
+    "round": 2,
+    "optimized_gap": 5.838129944756024e-08,
+    "field_iterations": 1,
+    "gap": 5.838133267288812e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.992904207788456e-08,
+    "coefficient_residual": 2.2525154484698273e-12
+  },
+  {
+    "seed": 3,
+    "round": 3,
+    "optimized_gap": 5.842969763536471e-08,
+    "field_iterations": 8,
+    "gap": 5.8433701278992e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.99578505241706e-08,
+    "coefficient_residual": 2.5222879340702775e-14
+  },
+  {
+    "seed": 3,
+    "round": 4,
+    "optimized_gap": 5.8381070511324794e-08,
+    "field_iterations": 1,
+    "gap": 5.8381076042081897e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.973479683076704e-08,
+    "coefficient_residual": 6.792563039814681e-12
+  },
+  {
+    "seed": 3,
+    "round": 5,
+    "optimized_gap": 5.842246823846117e-08,
+    "field_iterations": 1,
+    "gap": 5.8422559878867617e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.99477070639895e-08,
+    "coefficient_residual": 1.5483274384830992e-14
+  },
+  {
+    "seed": 4,
+    "round": 0,
+    "optimized_gap": 8.096495352336715e-08,
+    "field_iterations": 180,
+    "gap": 0.0013862853743936189,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.969576711704492e-08,
+    "coefficient_residual": 7.542588775777403e-11
+  },
+  {
+    "seed": 4,
+    "round": 1,
+    "optimized_gap": 5.8424803019190295e-08,
+    "field_iterations": 11,
+    "gap": 5.8501869111395154e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.867474557835094e-08,
+    "coefficient_residual": 5.2701176755931556e-11
+  },
+  {
+    "seed": 4,
+    "round": 2,
+    "optimized_gap": 5.837520671163985e-08,
+    "field_iterations": 2,
+    "gap": 5.840750953187046e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.999729858711238e-08,
+    "coefficient_residual": 4.233113859442028e-12
+  },
+  {
+    "seed": 4,
+    "round": 3,
+    "optimized_gap": 5.8367035598242096e-08,
+    "field_iterations": 3,
+    "gap": 5.8381549864120604e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.997813674963293e-08,
+    "coefficient_residual": 4.360400929215302e-14
+  },
+  {
+    "seed": 4,
+    "round": 4,
+    "optimized_gap": 5.83678800491031e-08,
+    "field_iterations": 2,
+    "gap": 5.836868129740018e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999488824873875e-08,
+    "coefficient_residual": 2.7487734310938094e-13
+  },
+  {
+    "seed": 4,
+    "round": 5,
+    "optimized_gap": 5.838975156604004e-08,
+    "field_iterations": 3,
+    "gap": 5.839380769464751e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 1.0000991679282206e-07,
+    "coefficient_residual": 5.174787681694326e-12
+  },
+  {
+    "seed": 5,
+    "round": 0,
+    "optimized_gap": 7.227403899237781e-08,
+    "field_iterations": 250,
+    "gap": 0.0007837659164440494,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.932096819942971e-08,
+    "coefficient_residual": 5.6778278953451e-10
+  },
+  {
+    "seed": 5,
+    "round": 1,
+    "optimized_gap": 5.8396525182235487e-08,
+    "field_iterations": 32,
+    "gap": 5.8913353889426215e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.996531638348863e-08,
+    "coefficient_residual": 2.7027510953034004e-12
+  },
+  {
+    "seed": 5,
+    "round": 2,
+    "optimized_gap": 5.840767736262782e-08,
+    "field_iterations": 3,
+    "gap": 5.8444402112304214e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.975194525800378e-08,
+    "coefficient_residual": 9.10010955479379e-12
+  },
+  {
+    "seed": 5,
+    "round": 3,
+    "optimized_gap": 5.839782600139571e-08,
+    "field_iterations": 10,
+    "gap": 5.846103512863455e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.995504724025431e-08,
+    "coefficient_residual": 6.306066779870889e-14
+  },
+  {
+    "seed": 5,
+    "round": 4,
+    "optimized_gap": 5.8423484422849e-08,
+    "field_iterations": 20,
+    "gap": 5.8446144494191936e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.996006552376873e-08,
+    "coefficient_residual": 1.919020498064583e-13
+  },
+  {
+    "seed": 5,
+    "round": 5,
+    "optimized_gap": 5.837177700471364e-08,
+    "field_iterations": 0,
+    "gap": 5.837177700471364e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.998295201121736e-08,
+    "coefficient_residual": 6.375316941031883e-13
+  },
+  {
+    "seed": 6,
+    "round": 0,
+    "optimized_gap": 6.772058007544778e-08,
+    "field_iterations": 232,
+    "gap": 0.0009038478449092977,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.986708771678389e-08,
+    "coefficient_residual": 3.412139321090635e-11
+  },
+  {
+    "seed": 6,
+    "round": 1,
+    "optimized_gap": 5.85022846297779e-08,
+    "field_iterations": 4,
+    "gap": 5.8507299227970654e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.989224894577637e-08,
+    "coefficient_residual": 1.3045414358134333e-12
+  },
+  {
+    "seed": 6,
+    "round": 2,
+    "optimized_gap": 5.848702267297821e-08,
+    "field_iterations": 1,
+    "gap": 5.848707326735195e-08,
+    "status": "optimal",
+    "gram_min_eig": 1.0000071848527783e-07,
+    "coefficient_residual": 1.6371150962646297e-11
+  },
+  {
+    "seed": 6,
+    "round": 3,
+    "optimized_gap": 5.848568780539297e-08,
+    "field_iterations": 1,
+    "gap": 5.848572864990489e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.998274834468862e-08,
+    "coefficient_residual": 1.651090028587099e-11
+  },
+  {
+    "seed": 6,
+    "round": 4,
+    "optimized_gap": 5.849404899887638e-08,
+    "field_iterations": 1,
+    "gap": 5.8494081950725374e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.98776908602638e-08,
+    "coefficient_residual": 9.414409128574025e-11
+  },
+  {
+    "seed": 6,
+    "round": 5,
+    "optimized_gap": 5.8418924221294985e-08,
+    "field_iterations": 1,
+    "gap": 5.8418971032433873e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.98616723689132e-08,
+    "coefficient_residual": 5.7615103660202394e-11
+  },
+  {
+    "seed": 7,
+    "round": 0,
+    "optimized_gap": 7.0079318257083e-08,
+    "field_iterations": 125,
+    "gap": 0.0012887712869217272,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.754051602827095e-08,
+    "coefficient_residual": 5.798815316815364e-10
+  },
+  {
+    "seed": 7,
+    "round": 1,
+    "optimized_gap": 5.8901165479859334e-08,
+    "field_iterations": 0,
+    "gap": 5.8901165479859334e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.970751774473153e-08,
+    "coefficient_residual": 1.0931633809968533e-10
+  },
+  {
+    "seed": 7,
+    "round": 2,
+    "optimized_gap": 5.8901165479859334e-08,
+    "field_iterations": 0,
+    "gap": 5.8901165479859334e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.970751774473153e-08,
+    "coefficient_residual": 1.0931633809968533e-10
+  },
+  {
+    "seed": 7,
+    "round": 3,
+    "optimized_gap": 5.8901165479859334e-08,
+    "field_iterations": 0,
+    "gap": 5.8901165479859334e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.970751774473153e-08,
+    "coefficient_residual": 1.0931633809968533e-10
+  },
+  {
+    "seed": 7,
+    "round": 4,
+    "optimized_gap": 5.8901165479859334e-08,
+    "field_iterations": 0,
+    "gap": 5.8901165479859334e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.970751774473153e-08,
+    "coefficient_residual": 1.0931633809968533e-10
+  },
+  {
+    "seed": 7,
+    "round": 5,
+    "optimized_gap": 5.8901165479859334e-08,
+    "field_iterations": 0,
+    "gap": 5.8901165479859334e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.970751774473153e-08,
+    "coefficient_residual": 1.0931633809968533e-10
+  },
+  {
+    "seed": 8,
+    "round": 0,
+    "optimized_gap": 7.850280226947226e-08,
+    "field_iterations": 250,
+    "gap": 0.00147309910690036,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.973391400750667e-08,
+    "coefficient_residual": 7.523131770326152e-11
+  },
+  {
+    "seed": 8,
+    "round": 1,
+    "optimized_gap": 5.902199901279957e-08,
+    "field_iterations": 28,
+    "gap": 6.281856511090286e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.915579965745648e-08,
+    "coefficient_residual": 1.7740142688182914e-11
+  },
+  {
+    "seed": 8,
+    "round": 2,
+    "optimized_gap": 5.836796077308376e-08,
+    "field_iterations": 0,
+    "gap": 5.836796077308376e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.9999878037598e-08,
+    "coefficient_residual": 1.0084988399938766e-12
+  },
+  {
+    "seed": 8,
+    "round": 3,
+    "optimized_gap": 5.836796077308376e-08,
+    "field_iterations": 0,
+    "gap": 5.836796077308376e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.9999878037598e-08,
+    "coefficient_residual": 1.0084988399938766e-12
+  },
+  {
+    "seed": 8,
+    "round": 4,
+    "optimized_gap": 5.836796077308376e-08,
+    "field_iterations": 0,
+    "gap": 5.836796077308376e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.9999878037598e-08,
+    "coefficient_residual": 1.0084988399938766e-12
+  },
+  {
+    "seed": 8,
+    "round": 5,
+    "optimized_gap": 5.836796077308376e-08,
+    "field_iterations": 0,
+    "gap": 5.836796077308376e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.9999878037598e-08,
+    "coefficient_residual": 1.0084988399938766e-12
+  },
+  {
+    "seed": 9,
+    "round": 0,
+    "optimized_gap": 6.956256489680524e-08,
+    "field_iterations": 41,
+    "gap": 0.0015280862272589921,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.949533943246171e-08,
+    "coefficient_residual": 7.590877926233475e-11
+  },
+  {
+    "seed": 9,
+    "round": 1,
+    "optimized_gap": 5.8486066520910174e-08,
+    "field_iterations": 4,
+    "gap": 5.8500484591137785e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.994560123246635e-08,
+    "coefficient_residual": 3.6249496460083463e-11
+  },
+  {
+    "seed": 9,
+    "round": 2,
+    "optimized_gap": 5.8429900962656964e-08,
+    "field_iterations": 1,
+    "gap": 5.842996800210268e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.961214633621635e-08,
+    "coefficient_residual": 1.1361251869845823e-10
+  },
+  {
+    "seed": 9,
+    "round": 3,
+    "optimized_gap": 5.8480550017976105e-08,
+    "field_iterations": 1,
+    "gap": 5.8480581200374115e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999108199679757e-08,
+    "coefficient_residual": 2.429758477751065e-11
+  },
+  {
+    "seed": 9,
+    "round": 4,
+    "optimized_gap": 5.84777882004076e-08,
+    "field_iterations": 1,
+    "gap": 5.847780860684945e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.998559474177745e-08,
+    "coefficient_residual": 1.2265004550177094e-13
+  },
+  {
+    "seed": 9,
+    "round": 5,
+    "optimized_gap": 5.847533094649353e-08,
+    "field_iterations": 1,
+    "gap": 5.847533436416719e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.998715549660377e-08,
+    "coefficient_residual": 1.462842000310438e-11
+  },
+  {
+    "seed": 10,
+    "round": 0,
+    "optimized_gap": 7.521042295992818e-08,
+    "field_iterations": 208,
+    "gap": 0.0004948422349846863,
+    "status": "optimal",
+    "gram_min_eig": 9.99317392177858e-08,
+    "coefficient_residual": 2.7489514076238074e-11
+  },
+  {
+    "seed": 10,
+    "round": 1,
+    "optimized_gap": 6.008685568957317e-08,
+    "field_iterations": 50,
+    "gap": 7.036770372221927e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.994363659468922e-08,
+    "coefficient_residual": 1.7455650921978735e-11
+  },
+  {
+    "seed": 10,
+    "round": 2,
+    "optimized_gap": 5.8450927974928535e-08,
+    "field_iterations": 2,
+    "gap": 5.850860858615305e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.998581393297852e-08,
+    "coefficient_residual": 4.669649812227145e-13
+  },
+  {
+    "seed": 10,
+    "round": 3,
+    "optimized_gap": 5.844385181110714e-08,
+    "field_iterations": 0,
+    "gap": 5.844385181110714e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999071207123924e-08,
+    "coefficient_residual": 7.461521935626665e-14
+  },
+  {
+    "seed": 10,
+    "round": 4,
+    "optimized_gap": 5.844385181110714e-08,
+    "field_iterations": 0,
+    "gap": 5.844385181110714e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999071207123924e-08,
+    "coefficient_residual": 7.461521935626665e-14
+  },
+  {
+    "seed": 10,
+    "round": 5,
+    "optimized_gap": 5.844385181110714e-08,
+    "field_iterations": 0,
+    "gap": 5.844385181110714e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999071207123924e-08,
+    "coefficient_residual": 7.461521935626665e-14
+  },
+  {
+    "seed": 11,
+    "round": 0,
+    "optimized_gap": 7.566143778978787e-08,
+    "field_iterations": 103,
+    "gap": 0.0008179255106617809,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.985967010711341e-08,
+    "coefficient_residual": 2.713195248712271e-11
+  },
+  {
+    "seed": 11,
+    "round": 1,
+    "optimized_gap": 5.838400396942225e-08,
+    "field_iterations": 2,
+    "gap": 5.840482088485168e-08,
+    "status": "optimal_inaccurate",
+    "gram_min_eig": 9.992436193532148e-08,
+    "coefficient_residual": 3.504694798261987e-12
+  },
+  {
+    "seed": 11,
+    "round": 2,
+    "optimized_gap": 5.839440850643353e-08,
+    "field_iterations": 2,
+    "gap": 5.8423036454892345e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999860722111348e-08,
+    "coefficient_residual": 1.7596687995613536e-13
+  },
+  {
+    "seed": 11,
+    "round": 3,
+    "optimized_gap": 5.838893723845259e-08,
+    "field_iterations": 0,
+    "gap": 5.838893723845259e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999878652607182e-08,
+    "coefficient_residual": 2.8816413231297355e-12
+  },
+  {
+    "seed": 11,
+    "round": 4,
+    "optimized_gap": 5.838893723845259e-08,
+    "field_iterations": 0,
+    "gap": 5.838893723845259e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999878652607182e-08,
+    "coefficient_residual": 2.8816413231297355e-12
+  },
+  {
+    "seed": 11,
+    "round": 5,
+    "optimized_gap": 5.838893723845259e-08,
+    "field_iterations": 0,
+    "gap": 5.838893723845259e-08,
+    "status": "optimal",
+    "gram_min_eig": 9.999878652607182e-08,
+    "coefficient_residual": 2.8816413231297355e-12
+  }
+]

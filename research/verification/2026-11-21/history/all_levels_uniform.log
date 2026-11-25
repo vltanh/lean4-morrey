@@ -1,0 +1,20 @@
+Command (from repository root): python3 research/archive/files/morrey_all_levels_uniform_obstruction.py
+Executed on an unchanged temporary copy to preserve archived bytes.
+Scope: Exact finite stencil rank checks underlying the hand all-level reduction; uniform weights and single-use trees only.
+Exit code: 0
+
+STDOUT
+PASS: each interface stencil independently has rank 2
+PASS: all 84 overlapping local cases; only 42 swap-orbits
+PASS: all 1128 n=4 pairs; only 75 translation/swap-orbits
+FINITE REDUCTION: 117 inequivalent rank checks cover all dyadic levels >=2
+THEOREM: for EVERY dyadic n=2^l >=4, every L_e-L_f (e!=f) has rank 2
+COROLLARY: generic (u,v) defeat UNIFORM-WEIGHT fixed points of every mold
+OPEN: existence of nonuniform fixed points and unrestricted Morrey 2x2
+PASS: generic singleton pair constraint: 24 local overlap cases + 6 n=4 adjacency classes
+PASS: generic 3-leaf obstruction: 42 local cases + 90 exceptional n=4 relative cases
+THEOREM: for each l>=2, GENERIC dyadic gradient measures have no
+         equal-mass single-use binary lamination tree (duplicated leaves remain possible)
+EXCEPTION: at l=1, exactly 12 distinct interface pairs have rank <=1 difference
+
+STDERR

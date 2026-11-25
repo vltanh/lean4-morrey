@@ -1,0 +1,16 @@
+{
+  "visited": 121,
+  "seconds": 2.8375840009994135,
+  "complete": true,
+  "stop_reason": null,
+  "replay": {
+    "verified": true,
+    "lower_bound": "0",
+    "weakest_leaf_bound": "0",
+    "nodes": {
+      "branch": 60,
+      "lower": 61
+    },
+    "scope": "all positive fillings in this fixed rational vertex set and all polynomials in the finite square-factor cone with the two stated normalizations; not unrestricted Morrey"
+  }
+}

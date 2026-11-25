@@ -1,0 +1,21 @@
+{
+  "identity": "exact",
+  "certificate_kind": "norm_multiplier",
+  "global_rank_one_convex": true,
+  "epsilon": "2",
+  "degree_bound": 4,
+  "scope": "Coercive global Legendre-Hadamard bound; not automatically quasiconvex",
+  "periodic_pl_witness": {
+    "triangles": 8,
+    "gap": "80",
+    "strict_violation": false,
+    "mean_gradient": [
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    "mean_det_gradient": "0"
+  },
+  "certificate_sha256": "f6e818dcc85e18de86ae1e05e2a726ee0760796fa17cae5bcdb9f8361b9708d4"
+}

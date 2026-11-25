@@ -1,0 +1,30 @@
+{
+  "vertices": 8,
+  "oriented_faces": 102,
+  "multiplicity_cap": 3232,
+  "solver_status": 0,
+  "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "solver_objective": 1.01,
+  "scope": "floating search only; no positive lower-bound certificate",
+  "exact_candidate": {
+    "gap_interval": [
+      "0",
+      "0"
+    ],
+    "penalized_gap_interval": [
+      "0",
+      "0"
+    ],
+    "mass_interval": [
+      "1",
+      "1"
+    ],
+    "orientation_counts": {
+      "positive": 2
+    },
+    "strict_negative": false,
+    "strict_negative_penalized": false,
+    "boundary": "exact integer chain; integrated bivector checked",
+    "scope": "energy interval plus verified RC construction; BV trace needed for graph witness"
+  }
+}
