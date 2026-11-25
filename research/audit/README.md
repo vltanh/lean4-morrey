@@ -201,3 +201,7 @@ Run `python3 research/audit/multiscale_constants.py` and `python3 research/audit
 ## Global C¹,¹ relative localization and normalized data repair
 
 Run `python3 research/audit/c11_cutoff_constants.py`. Actual local execution checked 16 exact localization budgets and five normalized-repair and rounding budgets. The [analytic proof](../../docs/research/IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md) establishes the all-amplitude relative theorem, explicit rational intervals for the universal margin, and the known-condition-number exact alternative. No large finite LP was evaluated and no exact-zero result or Lean theorem is claimed.
+
+## Cofactor shear duality and universal margin bound
+
+Run `python3 research/audit/cofactor_duality_exact.py` (SymPy). The actually executed exact controls verify the transformed quadratic gradient and inverse formulas, PSD/order comparisons for three shear parameters, six Fourier cofactor-gradient controls, and rational transport/margin constants. See the [hand proof](../../docs/research/IWANIEC_MORREY_COFACTOR_DUALITY.md). This is not independent certification of the analytic duality or a proof of exact zero.
