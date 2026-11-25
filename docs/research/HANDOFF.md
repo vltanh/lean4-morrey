@@ -1,5 +1,7 @@
 # Fresh-eye handoff — the actual mathematical problem
 
+**ACTIVE PRIORITY (24 November 2026): [Prove beta_* = 0](FOCUS_BETA_ZERO.md).** Focus on an unrestricted exact-zero certificate, preferably a universal self-contraction or effective gap separation. The polyconvex-stabilization branch and other restricted results are historical references, not active completion gates. This directive takes precedence over older proposed next steps.
+
 **Read this before browsing the old research.** No previous proposed completion strategy is assumed to work. The goal is unrestricted planar Morrey, not another class of integrands.
 
 ## Target

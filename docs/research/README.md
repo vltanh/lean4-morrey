@@ -1,5 +1,7 @@
 # Planar Morrey research — clean reset (24 November 2026)
 
+**ACTIVE PRIORITY (24 November 2026): [Prove beta_* = 0](FOCUS_BETA_ZERO.md).** Focus on an unrestricted exact-zero certificate, preferably a universal self-contraction or effective gap separation. The polyconvex-stabilization branch and other restricted results are historical references, not active completion gates. This directive takes precedence over older proposed next steps.
+
 **Unrestricted finite-valued 2 × 2 Morrey remains OPEN.** No certified planar counterexample is in this repository. The formalized signed homogeneous bi-isotropic theorem on main is complete, for every positive exponent. Do not confuse that theorem with removing either continuous symmetry or homogeneity.
 
 This reset separates the formal baseline, positive results, disproved methods, unproved reductions and experiments. It intentionally does not appoint another special-class program as the main problem.
@@ -24,13 +26,13 @@ This reset separates the formal baseline, positive results, disproved methods, u
 
 **Exact-zero continuation:** [Global C¹,¹ relative localization](IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md) proves a uniform all-amplitude relative mesh theorem and a computable universal optimal relative margin in a fixed C¹,¹ normalization. A finite condition-number alternative can certify exact strong QC or a genuine softened-energy counterexample. Zero of the universal margin is still open; the explicit finite bounds remain theoretical.
 
-**Exact cofactor symmetry:** [Cofactor shear duality and universal margin bound](IWANIEC_MORREY_COFACTOR_DUALITY.md) preserves RC/QC and their finite envelopes and exposes a critical-state rigidity target with compatible gradients and cofactor stresses. The universal margin is bounded below by −99/200, not yet zero. These are hand proofs, not a new Lean theorem or a complete Morrey proof.
+**Exact cofactor symmetry:** [Cofactor shear duality and universal margin bound](IWANIEC_MORREY_COFACTOR_DUALITY.md) preserves RC/QC and their finite envelopes and exposes a critical-state rigidity target with compatible gradients and cofactor stresses. That earlier margin estimate is superseded by the acoustic hand bounds P15/P16; the universal margin is still not known to be zero. These are hand proofs, not a new Lean theorem or a complete Morrey proof.
 
 **Higher-dimensional transfer route:** [Joint 4×2 Hamiltonian flow](IWANIEC_MORREY_JOINT_HAMILTONIAN_FLOW.md) gives a short-time RC-preserving evolution with a 4×2 Hamiltonian, QC preservation, and an exact finite jet test for transferring a negative higher-dimensional gap on a gradient-stress graph into a planar counterexample. No qualifying negative joint field or exact-zero proof has been found.
 
 **Full stationary lift:** [Full stationary lift and local repair](IWANIEC_MORREY_FULL_STATIONARY_LIFT.md) adds the inner-variation energy-momentum block and an explicit local quadratic curvature repair for higher-dimensional RC tests. Direct embedding tests on the known negative mechanisms clarify the surviving nonlinear transfer gate. No negative planar witness or exact-zero proof.
 
-**Current critical-state gate:** [Quadratic-tail critical states and exact clipping](IWANIEC_MORREY_QUADRATIC_TAIL_CRITICAL.md) uses the pinned scalar projection theorem to obtain bounded-base, bounded-amplitude near-equality gradients for one fixed smooth critical H and bounded actual six-row lifts, with all errors relative to variance. Relative second variation adds an energy-based stability constraint. High-amplitude concentration is removed; exact rigidity and Morrey remain open.
+**Earlier critical-state approach:** [Quadratic-tail critical states and exact clipping](IWANIEC_MORREY_QUADRATIC_TAIL_CRITICAL.md) uses the pinned scalar projection theorem to obtain bounded-base, bounded-amplitude near-equality gradients for one fixed smooth critical H and bounded actual six-row lifts, with all errors relative to variance. Relative second variation adds an energy-based stability constraint. High-amplitude concentration is removed; exact rigidity and Morrey remain open.
 
 **Maximum-defect continuation:** [Maximum-defect contact laws and inner-stress shear](IWANIEC_MORREY_INNER_STRESS_SHEAR.md) produces exact support-separated compact shifted six-row laws and an exact local domain-coordinate amplification D↦D/(1−tD). This bypasses absolute-variance dilution in the new setup. The regular chart and normalization cannot yet be continued to a fixed fraction of the pole, and the unrestricted problem remains open.
 

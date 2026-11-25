@@ -1,5 +1,7 @@
 # Reset roadmap — one unrestricted objective, not a list of special cases
 
+**ACTIVE PRIORITY (24 November 2026): [Prove beta_* = 0](FOCUS_BETA_ZERO.md).** Focus on an unrestricted exact-zero certificate, preferably a universal self-contraction or effective gap separation. The polyconvex-stabilization branch and other restricted results are historical references, not active completion gates. This directive takes precedence over older proposed next steps.
+
 The question is stated in [HANDOFF](HANDOFF.md). The previous chronological roadmap (https://github.com/vltanh/lean4-morrey/blob/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research/ROADMAP.md) is preserved as historical research. No old “Gate 1” terminology is assumed to indicate completion percentage. The unrestricted mathematical problem is OPEN.
 
 ## G0 — trustworthy working baseline
