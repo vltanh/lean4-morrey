@@ -197,3 +197,7 @@ Executed report: [integer_filling_search_control_result.json](integer_filling_se
 ## Uniform multiscale geometry cutoff
 
 Run `python3 research/audit/multiscale_constants.py` and `python3 research/audit/relative_margin_constants.py`. The first verifies exact Fourier multiplier support/partition and discarded-gap averaging on integer frequencies in [-16,16]^2, and explicit budgets for six rational tolerances. The second verifies 64 relative-margin parameter triples. See the [analytic proof](../../docs/research/IWANIEC_MORREY_UNIFORM_GEOMETRY_CUTOFF.md). Both scripts were actually executed; they check arithmetic, not the universal localization theorem. The enormous finite optimizations have not been enumerated or solved.
+
+## Global C¹,¹ relative localization and normalized data repair
+
+Run `python3 research/audit/c11_cutoff_constants.py`. Actual local execution checked 16 exact localization budgets and five normalized-repair and rounding budgets. The [analytic proof](../../docs/research/IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md) establishes the all-amplitude relative theorem, explicit rational intervals for the universal margin, and the known-condition-number exact alternative. No large finite LP was evaluated and no exact-zero result or Lean theorem is claimed.
