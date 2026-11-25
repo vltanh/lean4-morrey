@@ -245,3 +245,7 @@ Run `python3 research/audit/beta_radial_exact.py` (standard library). The actual
 ## Direct acoustic heat estimate
 
 Run `python3 research/audit/beta_acoustic_exact.py` (SymPy). Actual local execution passed the symbolic heat contraction, trace split, perpendicular acoustic and square-completion identities, and the exact artificial two-state relaxation control. See [the analytic proof](../../docs/research/IWANIEC_MORREY_BETA_ACOUSTIC_HEAT.md). It proves the improved bound −1/8 and curvature contrast ≤5 without an Iwaniec dependency. No actual negative gradient witness, self-contraction, or Lean theorem.
+
+## Heat-jet saturation and exact stronger-relaxation control
+
+Run `python3 research/audit/beta_heat_jet_exact.py` (SymPy). Actual execution verified the spectrum, rank-one curvature, heat cost, all 64 quadratic covariance identities and 16 constant-target weighted identities on 128 symmetrized artificial states, and rational strictness budgets. See [the hand proof](../../docs/research/IWANIEC_MORREY_BETA_HEAT_JET_RIGIDITY.md). These are algebraic checks, not a gradient or constitutive realization, Lean proof, or proof of Morrey.
