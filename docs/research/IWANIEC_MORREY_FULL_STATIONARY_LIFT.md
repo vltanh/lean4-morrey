@@ -140,7 +140,7 @@ Thus the complete family of direct linear full-rank embeddings of this particula
     2[((p0:X_i)I-X_i^T p0-A^T p_i)] J
 for common centers A,p0. This is a fixed linear row combination of X_i and C p_i: use adj(X_i^T p0)J=adj(p0) J X_i and p_i J=J C p_i. Hence the additional pair differences cannot increase the rank of the embedding.
 
-For any bounded compact family of such full-rank embeddings with a common positive lower singular-value bound and common C11 bound on F, there is a positive L² separation from an exact constitutive fit. Otherwise center the input and stress and extract convergent row matrices and a locally uniform subsequential limit of the recentered gradients DF using their uniform Lipschitz bound. The limit is the derivative of a globally C11 RC F, by local uniform convergence of the functions, and is an exact forbidden lift. This is a compactness separation, not an explicit numerical bound.
+For the four-row lift, any bounded compact family of such full-rank embeddings with a common positive lower singular-value bound and common C11 bound on F has a positive L² separation from an exact constitutive fit. For the six-row lift, the same compactness statement requires also bounded recentered affine bases and base stresses, or that the full lift is normalized before measuring the residual; the energy-momentum block contains products with these offsets. Otherwise center the input and stress and extract convergent row matrices and a locally uniform subsequential limit of the recentered gradients DF using their uniform Lipschitz bound. The limit is the derivative of a globally C11 RC F, by local uniform convergence of the functions, and is an exact forbidden lift. This is a compactness separation, not an explicit numerical bound.
 
 This does NOT rule out projecting a nonlinear joint lift onto the Sverak field, with additional compatible rows or extra modes in the kernel of the row projection. That is the relevant surviving transfer problem.
 
@@ -166,6 +166,18 @@ has closed one-form, with
     det X=(49/8) sigma² (1-cos theta),
     (p:X)/2=-(49/8) sigma² sin theta.
 The latter is a primitive of p:dX on the entire open cone in these parameters. Nevertheless this particular row remix cannot be realized by a global C11 RC F on ALL radial scales sigma>0: subtract the constant value at zero and observe p(sigma,theta) is linear in sigma, so F agrees with (p:X)/2 there and DF(0)=0. Logarithmic Cesaro averages of s^(-2)F(s X) have a locally uniformly convergent subsequence by the common C11 normalization, and their limit is positively 2-homogeneous RC (the difference after any fixed dilation is bounded by O(1/T) times |X|², using the endpoints of the averaging interval of length T). They preserve these values on the cone. By [the prior degree-two origin support theorem](IWANIEC_MORREY_ANISOTROPIC_ORIGIN_RECTIFIED.md) the limit must dominate c det for some real c. The displayed ratio -sin(theta)/(1-cos(theta)) is unbounded below near theta=0 from the positive side, contradiction. This uses all-scale realization; no such global contradiction follows merely from closedness on a fixed annulus. Other remixings and non-power fields remain open. In particular the exactness condition alone is not a rank-one convex extension theorem.
+
+
+### 5.3 Eliminate equality states with a touching polyaffine support as a genuinely new transfer source
+
+For any differentiable F with a global touching polyaffine support at A,
+    F(X)>=a+B:X+c det X,  F(A)=a+B:A+c det A,
+every bounded compatible equality test must satisfy equality of this pointwise bound a.e., because its integrated gap is precisely the nonnegative excess above a null Lagrangian. At each contact point the differentiable nonnegative excess has zero derivative. Hence on the whole equality law
+    p(X)=B+c C X,
+    T(X)= (a+B:X)I-X^T B.
+In particular C p(X)=C B+c X and T(X)J=aJ+adj(B) J X. Both extra blocks of the full lift are thus affine **row-linear** functions of X, with the same formulas at A. A negative higher-dimensional Jensen gap on this lift already gives a negative planar RC Jensen gap simply by composing that higher-dimensional integrand with this affine row embedding. It does not need the new repair or Hamiltonian mechanism.
+
+This includes every equality state of a smooth positively two-homogeneous planar RC energy at zero, by the previous determinant-support theorem. It also includes the equality states at all bases where the initial energy is polyconvex and has a finite convex lifted representative with a supporting hyperplane at (A,det A). Consequently a genuinely nonlinear transfer should look for a QC equality or sufficiently near-equality state at a base lacking a touching polyaffine support. This is a structural restriction, not a proof that all planar equality states have such a support.
 
 ## 6. Verification and next target
 
