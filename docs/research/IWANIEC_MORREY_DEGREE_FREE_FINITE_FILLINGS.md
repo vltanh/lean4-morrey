@@ -148,7 +148,7 @@ Actual executed results:
 - four instance: 30-second joint MILP timed out with incumbent about −2.72e−13 and floating lower bound −0.08745. The fixed-chain LP gave zero, the exact radial repair gave positive gap 845657/41943040000000000. That numerical output does not certify the finite optimum. The exact geometric enumeration in Section 2 subsequently closed this entire finite vertex instance, for every RC integrand.
 - Both independent exact enumeration runs completed. No strict negative actual gradient was found. A separate 20-triangle generic-map merge attempt hit its time budget; the result supplies no theorem.
 
-The scripts, inputs and reports are preserved in the accompanying reproduction materials. These are actual finite tests of the new simultaneous search and exact replay; they are not evidence that all unrestricted geometries are laminates. The full degree-free finite-data optimization is a proved construction, not an executed large-grid campaign.
+The executed scripts, compressed exact proof tree, inputs and reports are preserved in the [reproduction materials](../../research/experiments/2026-11-24-joint-fillings/README.md). These are actual finite tests of the new simultaneous search and exact replay; they are not evidence that all unrestricted geometries are laminates. The full degree-free finite-data optimization is a proved construction, not an executed large-grid campaign.
 
 ## 7. Remaining global gate
 

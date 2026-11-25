@@ -1,0 +1,29 @@
+{
+  "vertices": 10,
+  "projected_vertices": 6,
+  "triangles": 52,
+  "polynomial_coefficients": 64,
+  "square_factors": 443,
+  "scope": "finite joint numerical search only; no positive lower-bound certificate",
+  "fixed_chain_LP_status": 0,
+  "fixed_chain_LP_objective": 0,
+  "variables": 685,
+  "constraints": 449,
+  "seconds_limit": 5,
+  "wall_seconds": 0.5693133840013616,
+  "solver_status": 0,
+  "solver_message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "objective": 0,
+  "mip_dual_bound": 0,
+  "mip_gap": 0,
+  "mip_nodes": 19,
+  "exact_candidate": {
+    "faces": 6,
+    "raw_exact_gap": "0",
+    "repair": "1/10000000000",
+    "strict_negative": false,
+    "global_rc": "exact rational residual bound plus radial repair",
+    "compatibility": "positive integer filling with exact degree-one boundary",
+    "repaired_exact_gap": "69/10240000000000"
+  }
+}
