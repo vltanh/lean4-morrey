@@ -249,3 +249,7 @@ Run `python3 research/audit/beta_acoustic_exact.py` (SymPy). Actual local execut
 ## Heat-jet saturation and exact stronger-relaxation control
 
 Run `python3 research/audit/beta_heat_jet_exact.py` (SymPy). Actual execution verified the spectrum, rank-one curvature, heat cost, all 64 quadratic covariance identities and 16 constant-target weighted identities on 128 symmetrized artificial states, and rational strictness budgets. See [the hand proof](../../docs/research/IWANIEC_MORREY_BETA_HEAT_JET_RIGIDITY.md). These are algebraic checks, not a gradient or constitutive realization, Lean proof, or proof of Morrey.
+
+## Bounded-degree independent-copy contraction test
+
+Run `python3 research/audit/beta_copy_degree_exact.py` (SymPy), or append `--discover` for the actual SciPy/NumPy LP discovery. Both modes passed locally: exact positive rational quadrature weights at degrees 2,4,6,8 for the same artificial law at t=1/16; exact normalization and verified-L discriminator checks. The [hand proof](../../docs/research/IWANIEC_MORREY_BETA_COPY_DEGREE_TEST.md) extends the obstruction to every fixed degree and closure under the listed abstract law operations. No compatible negative gradient law, new universal beta bound, self-contraction or Lean theorem.
