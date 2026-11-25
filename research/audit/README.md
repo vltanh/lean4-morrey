@@ -229,3 +229,7 @@ Run `python3 research/audit/combined_shear_exact.py` (SymPy). The executed scrip
 ## Planar envelope pinching and chart-free contraction
 
 Run `python3 research/audit/envelope_contact_exact.py` (SymPy). Actual execution passed the exact stress/defect and envelope-level algebra and 360 rational atom-penalty checks. The [analytic proof](../../docs/research/IWANIEC_MORREY_ENVELOPE_PINCHING.md) relies explicitly on published planar incompatibility and transition-layer theorems for its new relative coercivity result. Those analytic arguments are not independently verified by the script; no new Lean proof, uniform normalized amplifier or counterexample is claimed.
+
+## Rank-one curvature compactness and optimal contact repair
+
+Run `python3 research/audit/lh_jet_repair_exact.py` (standard library). Actual local execution passed 40 rational multiaffine controls, exact coefficient/growth budgets, 36 contact-parameter controls and the two-point/eight curvature-budget checks. See [the proof](../../docs/research/IWANIEC_MORREY_LH_COMPACTNESS_JET_REPAIR.md). The effective uniform-rigidity algorithm is a theoretical construction depending on R16 and the published generalized gradient YM characterization; no full quantifier-elimination stage was executed. No independent analytic certification, new Lean theorem or unrestricted result.
