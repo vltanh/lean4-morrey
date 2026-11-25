@@ -241,3 +241,7 @@ Run `python3 research/audit/six_atom_no_local_collapse_exact.py` and `python3 re
 ## Direct radial matching universal margin
 
 Run `python3 research/audit/beta_radial_exact.py` (standard library). The actual execution checked rational Taylor-series bounds, scalar-inequality derivative and tangent budgets, and 20 exact radial-kernel controls. The [hand proof](../../docs/research/IWANIEC_MORREY_BETA_RADIAL_MATCHING.md) uses the verified truncated determinant to prove beta_*≥−58/125 for the full normalized C11 class. It does not establish a self-contraction to zero or a new Lean theorem.
+
+## Direct acoustic heat estimate
+
+Run `python3 research/audit/beta_acoustic_exact.py` (SymPy). Actual local execution passed the symbolic heat contraction, trace split, perpendicular acoustic and square-completion identities, and the exact artificial two-state relaxation control. See [the analytic proof](../../docs/research/IWANIEC_MORREY_BETA_ACOUSTIC_HEAT.md). It proves the improved bound −1/8 and curvature contrast ≤5 without an Iwaniec dependency. No actual negative gradient witness, self-contraction, or Lean theorem.
