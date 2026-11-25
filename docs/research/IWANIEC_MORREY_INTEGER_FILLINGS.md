@@ -49,7 +49,8 @@ Let C be a finite sublinear function on real 2x2 matrices, and W continuous with
 As proved in the [signed-trace note](IWANIEC_MORREY_SIGNED_TRACE_FOLD_TRANSFER.md), it is continuous, positively 1-homogeneous on simple bivectors, and line convex iff W is RC. The following comparison needs neither RC nor QC.
 
 Choose a large square Omega containing Q and all the non-flat support of the projected extension S strictly in its interior. Then
-    E_Phi(S over Omega)=E_Phi(T)+(|Omega|-1)W(A).
+    E_Phi(S over Omega)<=E_Phi(T)+(|Omega|-1)W(A).
+Equality holds for the termwise sheet representation. If overlapping oppositely oriented portions cancel as currents, the inequality follows since Phi_W(xi)+Phi_W(-xi)>=0: this follows directly from sublinearity C(L)+C(-L)>=0 and the bounded deficit with the negative-sheet penalty. The upper bound, not equality, suffices.
 For almost every target y the nonvertical energy after area change of variables is
     F_y=sum_positive W(X_i)+sum_negative [C(-X_i)+2M].
 If no negative sheet occurs, there is exactly one positive sheet and F_y=W(Z). Otherwise k=n_->=1, n_+=k+1. By sublinearity and the bounds,
@@ -117,6 +118,21 @@ For the negative direction this is complete over rational vertices and rational 
 
 **What is different from the old nodal searches:** for a fixed integrand the geometry is a linear cost with integer compatibility constraints, allowing arbitrary faces and singular projections. The unknown nodal coordinates need not be optimized nonconvexly. All actual gradient witnesses are included by density over vertex sets. The BV trace is the soundness bridge back to single-valued planar maps. This is not a proof that arbitrary minor-compatible data are realizable.
 
+
+### 4.1 Uniform geometric budget at any prescribed violation size
+
+This additional bound applies to the entire fixed normalized class from the signed-trace theorem, not a particular energy or mesh. Write C(X)=|X|_F, M=1, A=0. Suppose a witness has gradient Frobenius norm <=1/2 and gap <=-epsilon, epsilon>0. The graph area satisfies
+    |m(X)|^2=1+|X|^2+det(X)^2 <= (1+|X|^2/2)^2 <=(9/8)^2.
+Thus its area excess is at most 1/8. Take eta=4epsilon (or a nearby positive rational number <=4epsilon). The new penalized gap is <=-epsilon/2. A strict witness can be placed on the unit square with affine boundary by periodic tiling, cutoff and arbitrarily small scaling/error, keeping the same bound up to an arbitrarily small margin. For example begin with any witness gap <=-epsilon, choose eta=2epsilon to leave spare error for that conversion; area-penalized negativity survives. Translation of the periodic potential by a constant and the gradient bound allow a fixed bounded ambient box for the original graph, after cutoff and scaling.
+
+For a strict negative integer filling with eta>0,
+    E_Psi(T)<Psi(e12)=W(0)+1+eta<=1+eta.
+Since Psi(xi)>=|L(xi)|+a_-+eta|xi|, this implies
+$
+\int |L|\,d\|T\|+\int a_-\,d\|T\|+\eta\,\operatorname{Mass}(T)<1+\eta.
+$
+In particular Mass(T)<(1+eta)/eta and the excess number of negative projection sheets, integrated with respect to projected area, is bounded independently of mesh. The same bound is valid for the termwise mass of a certified chain. Its trace has total variation bounded by the mixed-minor budget (for confined projection at zero base), since Dv is the pushforward of L. This supplies a priori search constraints for every normalized potential violation of a fixed size. It bounds total area and weighted sheet count, NOT the number of small triangles or topology; a mass bound alone gives no energy-continuous finite lattice approximation for an unknown non-QC energy.
+
 ## 5. Exact integrality-gap benchmark: do not relax to real coefficients
 
 Take the verified QC truncated determinant L0 as W, with C0=2|z| and M=1. The prior signed-trace note proves C0-1<=L0<=C0. Set
@@ -138,6 +154,6 @@ The new [integer filling verifier](../../research/audit/integer_filling_exact.py
 * the verified truncated L or convex norm-minus-one controls, and a rational polynomial glued to a linear-growth tail after replaying the existing global LH certificate;
 * rigorous rational square-root intervals via integer square root, and unpenalized and area-penalized energy gap intervals.
 
-The actually executed default control is a flat square plus the oriented boundary of a rational tetrahedron, with three positive, one negative and two vertical faces. Its unpenalized gap is exactly 3/8 for truncated L. A flipped face and a fractional multiplicity were both rejected. The rational real-versus-integer gap control of Section 5 was also executed. No MILP optimum for a difficult candidate, full rational-polynomial-tail replay, universal stress positivity or negative filling has been established by these controls.
+The actually executed default control is a flat square plus the oriented boundary of a rational tetrahedron, with three positive, one negative and two vertical faces. Its unpenalized gap is exactly 3/8 for truncated L. A flipped face and a fractional multiplicity were both rejected. The rational real-versus-integer gap control of Section 5 was also executed. The separate finite discovery driver integer_filling_search.py was run on the eight-vertex truncated-L control, with 102 oriented nondegenerate triangle variables and the rigorous multiplicity cap 3232. HiGHS returned objective 1.01, and exact verification gave unpenalized and penalized gaps both zero, with the two flat faces. This is a successful pipeline control, not a proof of lower bounds for new energies. No difficult-candidate MILP campaign, full rational-polynomial-tail replay, universal stress positivity or negative filling has been established.
 
 **Remaining research target:** derive a uniform lower bound on the degree-one integer filling objective from line convexity, or find one globally RC integrand with a certified strict negative integer filling. The earlier angular positive-stress formulation remains equivalent, but this new formulation supplies an exact geometric optimization route with a genuine compatibility constraint. Try integer-valid inequalities or a constructive triangle simplification preserving the boundary, rather than endlessly increasing triangle counts. The explicit relaxation gap explains why an ordinary linear dual calibration cannot be the universal proof. There is no known accuracy-independent vertex, multiplicity, or triangle-count bound, and the unrestricted conjecture stays open.

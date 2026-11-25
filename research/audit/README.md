@@ -182,3 +182,14 @@ Run `python3 research/audit/parametric_compactification_exact.py` (SymPy). The e
 ## Folded graph and signed trace controls
 
 Run `python3 research/audit/signed_trace_exact.py` (SymPy). Executed controls verify the mixed-minor relation, Piola cancellation, a rational degree-one three-sheet folded map with exact signed trace gradient and energy lower bound, and flat-sector identities. See [signed trace and folding theorem](../../docs/research/IWANIEC_MORREY_SIGNED_TRACE_FOLD_TRANSFER.md). The analytic theorem also uses Sard, the area formula and W¹,¹ approximation. The finite algebra controls do not establish general Morrey.
+
+## Degree-one integer filling discovery and exact verification
+
+Run `python3 research/audit/integer_filling_exact.py` for the folded/vertical rational tetrahedron control (gap exactly 3/8) and rejection of invalid boundary and fractional multiplicities. To run the finite discovery control (requires NumPy/SciPy):
+
+```sh
+python3 research/audit/integer_filling_search.py research/audit/integer_filling_search_control.json --seconds 10 --candidate /tmp/filling-candidate.json
+python3 research/audit/integer_filling_exact.py /tmp/filling-candidate.json
+```
+
+Executed report: [integer_filling_search_control_result.json](integer_filling_search_control_result.json). This is an attained floating MILP result and independently verified exact candidate, not a new positive lower bound. The [BV trace theorem](../../docs/research/IWANIEC_MORREY_INTEGER_FILLINGS.md) supplies the mathematical bridge to actual gradients for any strict negative certified integer filling. Polynomial-tail energies replay the existing global LH certificate; that path has not been separately exercised in this control. Real/multigraph relaxation is not accepted as degree-one compatibility.
