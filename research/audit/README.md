@@ -237,3 +237,7 @@ Run `python3 research/audit/lh_jet_repair_exact.py` (standard library). Actual l
 ## Exact local-collapse falsification
 
 Run `python3 research/audit/six_atom_no_local_collapse_exact.py` and `python3 research/audit/reverse_merge_exact.py`. Actual local executions verified the rational six-cycle, separate-convex grid certificate, all three T4 configurations and strict corner gaps/moment determinants, 100 partial pair merges, and ten mixed T4 collapses. See [the analytic proof](../../docs/research/IWANIEC_MORREY_NO_LOCAL_COLLAPSE.md) for why the six-atom test rules out ALL compatible non-Dirac sublaws on at most four atoms, not just selected cycle weights. This is a refutation of a specific universal local-move lemma, not a Morrey counterexample. No new Lean result.
+
+## Direct radial matching universal margin
+
+Run `python3 research/audit/beta_radial_exact.py` (standard library). The actual execution checked rational Taylor-series bounds, scalar-inequality derivative and tangent budgets, and 20 exact radial-kernel controls. The [hand proof](../../docs/research/IWANIEC_MORREY_BETA_RADIAL_MATCHING.md) uses the verified truncated determinant to prove beta_*≥−58/125 for the full normalized C11 class. It does not establish a self-contraction to zero or a new Lean theorem.
