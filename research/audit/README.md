@@ -265,3 +265,7 @@ Run `python3 research/audit/beta_hyperboloid_sos.py` (SciPy, NumPy, SymPy). Actu
 ## Direct product-metric Legendre beta comparison
 
 Run `python3 research/audit/beta_legendre_exact.py` (SymPy, SciPy). Actual execution checked the exact inverse/normalization identities, 54 rational product-metric controls, and five LP controls against exact triangle-vertex elimination. See [the proof and comparison limitation](../../docs/research/IWANIEC_MORREY_BETA_LEGENDRE_TEST.md). The artificial surviving state is not a common-energy gradient witness. No self-contraction, improved universal bound, or Lean result.
+
+## Normalized Hamiltonian beta test
+
+Run `python3 research/audit/beta_quadratic_tangent_exact.py` (SciPy, SymPy, NumPy). Executed twelve LP controls with exact dual identities or admissible negative generators, exact cofactor/tangent identities, full-covariance moments, mollifier bounds and strict nonlinear rational cost. See [the hand proof](../../docs/research/IWANIEC_MORREY_BETA_NORMALIZED_HAMILTONIAN_TEST.md). SHA-256 9a2f0d43359144a2a6562b5c3e2ef5b481a5d6f1e61f1626cbef5543760d291c. No universal contraction, unrestricted feasibility certificate or Lean proof.
