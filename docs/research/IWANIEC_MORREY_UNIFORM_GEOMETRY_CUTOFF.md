@@ -199,3 +199,73 @@ For example epsilon=1 already gives log2(n)=153888, and epsilon=1/10 gives log2(
 No new Lean theorem or independent human validation. The prior negative results about arbitrary conditioning, determinant moments, common filtrations, sampled LH and finite positive grids do not imply or refute this construction: each localized band uses an actual periodic/zero-boundary potential, the relative L2 budget, and a genuine globally RC repair.
 
 **Next gate:** a uniform exact gap-amplification or zero-defect argument, or a substantially sharper constructive estimate that makes a meaningful fixed-accuracy computation practicable. There is no proved positive lower bound on the size of a normalized violation if any exists. Do not equate arbitrary prescribed tolerance with exact positivity, or treat an unexecuted enormous optimization as a closed case. Unrestricted planar Morrey remains open.
+
+## 9. Stronger relative-margin comparison for a fixed smooth integrand
+
+The absolute-gap extraction above was arranged for the entire nonsmooth normalized class. There is a useful stronger comparison for a **fixed smooth energy**, without changing its matrix argument or its amplitude in the local tests. It avoids an absolute error proportional to ||X||_2 in the discarded-band step.
+
+Suppose F is any C^3 matrix energy with global Hessian and third derivative operator bounds M,T, respectively. No rank-one convexity assumption is needed for the following comparison. For a fixed periodic n by n square mesh with common diagonal, define
+$$
+\beta_n(F)=\inf_{B,U}\frac{\int[F(B+DU)-F(B)]}{\int|DU|^2},
+$$
+over every constant base B and every periodic PL mesh map U of nonzero gradient norm. The base and nodal values are unrestricted real variables; in particular this is NOT an infimum over just the normalized nodal grid of Theorem A. Taylor expansion and the zero gradient mean give |beta_n(F)|<=M/2.
+
+**Theorem C (relative finite-mesh stability).** For every prescribed eta>0 there is an explicit computable n depending only on M,T,eta such that
+$$
+\boxed{\quad
+\int [F(A+D\varphi)-F(A)]\ \ge\ [\beta_n(F)-\eta]\int |D\varphi|^2
+\quad}
+$$
+for ALL bases A and periodic Lipschitz maps with ||Dphi||_infty<=1. For a different fixed bound R>0 on the gradient, replace T by RT (equivalently apply the theorem to F(RY)/R^2, whose relative mesh infimum is the same). In particular a certified positive mesh margin beta_n(F)>=eta proves exact Jensen on all gradients in that bounded range, not just an approximate absolute lower bound. If F has a global LH margin m>0 and one proves the universal RC Jensen inequality on this one mesh, the mesh margin is at least m/2 by applying it to F-(m/2)|X|^2. Choosing eta=m/4 gives an exact global strong Jensen inequality on the bounded range. This latter observation is conditional on the finite-mesh all-RC assertion; no such assertion is supplied here.
+
+**Proof.** Approximate the original potential by product Fejer convolution as before; pass to the limit after proving the relative estimate for a finite Fourier field X. Write E=||X||_2^2, keep the base A in all Taylor expansions, and use the partition and localization of Sections 3--5. This time do the construction for EVERY offset, not merely a selected offset. Write alpha=g/(K+g) and Y for the discarded field. Exactly
+    average_offset Y=alpha X,
+    average_offset ||Y||_2^2<=alpha E,
+    average_offset ||X-Y||_2^2>= (1-2alpha) E.
+The first follows coefficientwise, and the third follows by expanding the square and using the first. The second is the multiplier-square estimate already proved. The retained block supports are disjoint since g>=3, hence E_ret=||X-Y||_2^2=sum_j E_j<=E for each offset.
+
+Taylor expand F(A+X-Y) about A+X and average over offsets. Since X has zero mean,
+    |int DF(A+X):X|=|int [DF(A+X)-DF(A)]:X|<=M E.
+Therefore
+$$
+\operatorname{avg}_{\rm offset} J_F(A,X-Y)
+\le J_F(A,X)+\tfrac32 M\alpha E.
+$$
+This is the improved relative error estimate: it uses the average of the discarded field, not Cauchy-Schwarz and an absolute Lipschitz constant.
+
+For each offset use the same per-band intermediate-scale cells, cutoffs, and periodic interpolants as before, with B_C=A+L_j(center). Let
+    e_loc=4M lambda^2+1024T lambda
+          +M(6theta+256lambda^2/theta^2)+M(4+zeta)zeta.
+Sections 3--5 prove that the retained-field gap differs from the weighted sum of the local mesh gaps by at most e_loc E_ret.
+
+There is also a two-sided comparison of total gradient energy. On the boundary layers the cutoff's difference from G_j in L2 is at most
+    ||(chi-1)G_j||_2+||w_j tensor Dchi||_2
+    <=(2 sqrt(theta)+16lambda/theta) sqrt(E_j),
+using the shifted-grid energy estimate. The periodic mesh interpolation adds error <=zeta sqrt(E_j). Thus the aggregate mesh-gradient L2 norm in each band differs from sqrt(E_j) by at most gamma sqrt(E_j), where
+    gamma=2 sqrt(theta)+16lambda/theta+zeta.
+Rescaling each cell and weighting by its original area preserves these norm comparisons. If S_mesh is the sum of weighted squared mesh-gradient norms, it follows that
+    |S_mesh-E_ret| <=(2gamma+gamma^2) E_ret.
+The first band has only the smaller interpolation error, and obeys the same bound.
+
+Every mesh gap is bounded below by beta_n(F) times its gradient energy, at its actual frozen base. Consequently for every offset
+    J_F(A,X-Y)>= beta_n(F) E_ret
+                 -[e_loc+(M/2)(2gamma+gamma^2)] E_ret.
+Average this inequality and use the retained-energy estimate, |beta_n(F)|<=M/2, and E_ret<=E. Combine with the averaged Taylor estimate to obtain the explicit result
+$$
+J_F(A,X)\ge\left[\beta_n(F)-\tfrac52 M\alpha-e_{\rm loc}
+                        -\tfrac M2(2\gamma+\gamma^2)\right] E.
+$$
+
+For one choice of parameters, take
+    rho=min(1/16,eta/[1024(M+1)]), theta=rho^2, zeta=rho,
+and choose dyadic lambda=2^(-s), s>=1, so small that
+    lambda<=rho^3/16, 1024T lambda<=eta/8, 4M lambda^2<=eta/8.
+Let g=2s+1, K=ceil(64 g(M+1)/eta) and choose n from the explicit H0 mesh bound in Section 6 using these parameters. Then alpha<=eta/[64(M+1)], gamma<=4rho, and
+    M(6theta+256lambda^2/theta^2)<=7M rho^2,
+    M(4+zeta)zeta<=5M rho,
+    (M/2)(2gamma+gamma^2)<=(9/2) M rho.
+All error terms sum to <eta by direct substitution. This proves Theorem C for the smooth Fourier field, then for arbitrary bounded gradients by Fejer approximation in L2. QED.
+
+If a fixed F has an exact semialgebraic evaluation formula with certified M,T, a requested lower bound on beta_n(F) is a finite real-algebraic universal inequality in the base and nodal variables, hence decidable in principle by quantifier elimination. This does not assert that the required positive margin holds or that the enormous mesh is practical. For a merely globally Lipschitz energy one must not assume a positive uniform beta_n over arbitrary amplitudes; the ratio can approach zero at infinity. The strictification observation above explains how a genuinely positive margin, if independently established, would enter an exact proof.
+
+The companion [relative_margin_constants.py](../../research/audit/relative_margin_constants.py) was executed on 64 exact rational triples of M,T,eta; every budget inequality passed (largest tested total error/tolerance about 0.117). This checks the constants only. The remaining general gate is still exact positivity (or an exact negative certificate), not a further collection of frequency cases.

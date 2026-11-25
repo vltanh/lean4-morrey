@@ -193,3 +193,7 @@ python3 research/audit/integer_filling_exact.py /tmp/filling-candidate.json
 ```
 
 Executed report: [integer_filling_search_control_result.json](integer_filling_search_control_result.json). This is an attained floating MILP result and independently verified exact candidate, not a new positive lower bound. The [BV trace theorem](../../docs/research/IWANIEC_MORREY_INTEGER_FILLINGS.md) supplies the mathematical bridge to actual gradients for any strict negative certified integer filling. Polynomial-tail energies replay the existing global LH certificate; that path has not been separately exercised in this control. Real/multigraph relaxation is not accepted as degree-one compatibility.
+
+## Uniform multiscale geometry cutoff
+
+Run `python3 research/audit/multiscale_constants.py` and `python3 research/audit/relative_margin_constants.py`. The first verifies exact Fourier multiplier support/partition and discarded-gap averaging on integer frequencies in [-16,16]^2, and explicit budgets for six rational tolerances. The second verifies 64 relative-margin parameter triples. See the [analytic proof](../../docs/research/IWANIEC_MORREY_UNIFORM_GEOMETRY_CUTOFF.md). Both scripts were actually executed; they check arithmetic, not the universal localization theorem. The enormous finite optimizations have not been enumerated or solved.
