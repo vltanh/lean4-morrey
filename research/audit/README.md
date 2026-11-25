@@ -261,3 +261,7 @@ Run `python3 research/audit/beta_adaptive_detector_exact.py` (standard library).
 ## All-affine hyperboloid LP certificate
 
 Run `python3 research/audit/beta_hyperboloid_sos.py` (SciPy, NumPy, SymPy). Actual local execution: six-variable LP with 15 inequalities, HiGHS objective 53, exact coefficient vectors (16,8,1), (18,9,1); all coefficient budgets, seven square decompositions, PSD trace/skew and generic affine identities, 18 transformed trap and 18 near-critical controls passed. SHA-256 4324a7e6c4fa42f2ba5b825c0f5512811f2c7ddcc48e42b323d31215625c1e02. See [the analytic proof](../../docs/research/IWANIEC_MORREY_BETA_HYPERBOLOID_CERTIFICATE.md). No full covariance QE, general QC reweighting theorem, Lean verification or Morrey proof.
+
+## Direct product-metric Legendre beta comparison
+
+Run `python3 research/audit/beta_legendre_exact.py` (SymPy, SciPy). Actual execution checked the exact inverse/normalization identities, 54 rational product-metric controls, and five LP controls against exact triangle-vertex elimination. See [the proof and comparison limitation](../../docs/research/IWANIEC_MORREY_BETA_LEGENDRE_TEST.md). The artificial surviving state is not a common-energy gradient witness. No self-contraction, improved universal bound, or Lean result.

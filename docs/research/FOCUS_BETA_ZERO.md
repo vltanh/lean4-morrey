@@ -25,7 +25,7 @@ In the b=-beta_*>0 contradiction setup, H=F+b|.|² is QC and strongly RC, but ne
 ## Stop the drift
 
 - The polyconvex-stabilization branch (P17, Section 4) is **historical/restricted**, not the active gate. Do not try to establish PC of general H, nor impose PC reweighting inequalities on a QC energy.
-- The earlier contact-law contractions, shear continuation, local collapses, and heat-jet/finite-test relaxations are references, not independent goals. Reuse them only if they furnish a rigorous step in the beta_* proof. In particular, N18–N22 document failures that must not be assumed away.
+- The earlier contact-law contractions, shear continuation, local collapses, and heat-jet/finite-test relaxations are references, not independent goals. Reuse them only if they furnish a rigorous step in the beta_* proof. In particular, N18–N23 document failures that must not be assumed away.
 - Do not start a new hierarchy of atom counts, polynomial degrees, frequencies, mesh sizes, integrand subclasses, or increasingly local cases without a proved uniform stopping bound.
 - A smaller negative bound, another necessary condition, or another equivalent formulation is not exact-zero progress by itself. It may be recorded as an auxiliary result, but must not displace the active target. Explain precisely how it enables a contraction, gap separation, or complete direct proof before prioritizing more work on it.
 - Do not report a numerical relaxation's infeasibility as a proof unless every unrestricted candidate is rigorously represented and all solver outputs are certified exactly. Do not infer gradient compatibility from determinant moments, arbitrary conditioning, or Caratheodory reduction.
@@ -33,3 +33,5 @@ In the b=-beta_*>0 contradiction setup, H=F+b|.|² is QC and strongly RC, but ne
 Before a substantial computational campaign, state the exact global implication and certificate to be checked, why its domain includes every actual unrestricted candidate, and the smallest meaningful falsification test. Use exact rational/algebraic checks for final certificates. Record failed mechanisms in the ledger; stop rather than repeatedly tune a falsified relaxation.
 
 **Acceptance:** a rigorous proof of beta_*=0, a justified finite exhaustive proof with all cases certified, or a genuine globally RC negative compatible-gradient witness. No claim of closure or proximity without one of these. The verified homogeneous isotropic theorem is unchanged.
+
+**Most recent direct attempt (N23):** [Direct product-metric Legendre test](IWANIEC_MORREY_BETA_LEGENDRE_TEST.md) tests the universal beta inequality on exactly normalized anisotropic Legendre duals. The optimized quadratic Fenchel comparison still admits a positive-b isotropic formal state. No self-contraction resulted. Do not optimize this same comparison further or replace the active target with its auxiliary covariance inequality.
