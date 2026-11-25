@@ -205,3 +205,7 @@ Run `python3 research/audit/c11_cutoff_constants.py`. Actual local execution che
 ## Cofactor shear duality and universal margin bound
 
 Run `python3 research/audit/cofactor_duality_exact.py` (SymPy). The actually executed exact controls verify the transformed quadratic gradient and inverse formulas, PSD/order comparisons for three shear parameters, six Fourier cofactor-gradient controls, and rational transport/margin constants. See the [hand proof](../../docs/research/IWANIEC_MORREY_COFACTOR_DUALITY.md). This is not independent certification of the analytic duality or a proof of exact zero.
+
+## Joint Hamiltonian flow controls and sufficient transfer certificate
+
+Run `python3 research/audit/joint_hamiltonian_exact.py` (SymPy) and `python3 research/audit/joint_hamiltonian_gap.py` (standard library). The former checks exact canonical/Riccati identities and 27 rational null-direction/4x2 rank-one curvature controls. The latter verifies exact direct LH-SOS identities, rational periodic PL geometry and the sufficient flow-gap upper bound from the [hand proof](../../docs/research/IWANIEC_MORREY_JOINT_HAMILTONIAN_FLOW.md). Both were actually executed. The negative-derivative null scaling control has planar gap 2 and joint Bregman gap -4, but does not pass the strict negative flow test; a corrupted LH-SOS identity is rejected. These are regression tests, not a completed higher-dimensional counterexample campaign or Lean certification.
