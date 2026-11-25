@@ -1,0 +1,19 @@
+All tests: 9,000 rank-one Hessian evaluation samples, 65 monomial moment equations, floating point LP.
+Theorem (exact): positive certificate uses at most 64 evaluations if it exists.
+Experiment (not proof):
+N= 4 seed= 200 sample= 9000 status=feasible support= 64 residual= 4.984901380566953e-14 runtime= 0.38
+N= 4 seed= 201 sample= 9000 status=feasible support= 64 residual= 3.3306690738754696e-15 runtime= 0.27
+N= 4 seed= 202 sample= 9000 status=feasible support= 64 residual= 7.771561172376096e-15 runtime= 0.23
+N= 8 seed= 203 sample= 9000 status=feasible support= 64 residual= 1.0436096431476471e-14 runtime= 0.22
+N= 4 seed= 210 sample= 9000 status=feasible support= 64 residual= 4.374278717023117e-14 runtime= 0.25
+N= 4 seed= 211 sample= 9000 status=feasible support= 64 residual= 2.4202861936828413e-14 runtime= 0.25
+N= 4 seed= 212 sample= 9000 status=feasible support= 64 residual= 2.4369395390522186e-14 runtime= 0.27
+N= 4 seed= 213 sample= 9000 status=feasible support= 64 residual= 1.2850831510036187e-14 runtime= 0.27
+N= 4 seed= 214 sample= 9000 status=feasible support= 64 residual= 2.020605904817785e-14 runtime= 0.28
+N= 4 seed= 215 sample= 9000 status=feasible support= 64 residual= 2.2440382885235977e-14 runtime= 0.27
+N= 8 seed= 216 sample= 9000 status=feasible support= 64 residual= 1.6930901125533637e-14 runtime= 0.24
+N= 8 seed= 217 sample= 9000 status=feasible support= 64 residual= 1.765254609153999e-14 runtime= 0.25
+N= 8 seed= 218 sample= 9000 status=feasible support= 64 residual= 3.477773624638303e-14 runtime= 0.24
+N= 16 seed= 219 sample= 9000 status=feasible support= 64 residual= 1.912359159916832e-14 runtime= 0.22
+N= 16 seed= 220 sample= 9000 status=feasible support= 64 residual= 6.977751709769109e-14 runtime= 0.23
+N= 16 seed= 221 sample= 9000 status=feasible support= 64 residual= 5.662137425588298e-15 runtime= 0.23

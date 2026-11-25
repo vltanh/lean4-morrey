@@ -1,0 +1,4 @@
+35 exact sympy coefficient identities verified.
+All 70 change-of-variables matrices nonsingular.
+Certified rank 35/35 modulo 104729; det mod p = 41797; hence rank 35 over Q.
+No numeric tolerance, no optimization, no assumptions on grid size.

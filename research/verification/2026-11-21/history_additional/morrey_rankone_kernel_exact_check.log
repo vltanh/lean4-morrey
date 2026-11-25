@@ -1,0 +1,10 @@
+degree <= 2 polynomial dimension 15 rank of all rank-one Hessian evaluations 9 max nonnegative certificate terms 9
+degree <= 3 polynomial dimension 35 rank of all rank-one Hessian evaluations 29 max nonnegative certificate terms 29
+degree <= 4 polynomial dimension 70 rank of all rank-one Hessian evaluations 64 max nonnegative certificate terms 64
+degree <= 5 polynomial dimension 126 rank of all rank-one Hessian evaluations 120 max nonnegative certificate terms 120
+degree <= 6 polynomial dimension 210 rank of all rank-one Hessian evaluations 204 max nonnegative certificate terms 204
+degree <= 7 polynomial dimension 330 rank of all rank-one Hessian evaluations 324 max nonnegative certificate terms 324
+degree <= 8 polynomial dimension 495 rank of all rank-one Hessian evaluations 489 max nonnegative certificate terms 489
+EXACT: rank-one Hessian SOS verified for gamma=9/8 at E11
+EXACT: non-gradient measure has E[A]=0, E[det A]=0, and f_gamma Jensen gap = -2/325
+ALL CHECKS PASSED

@@ -1,0 +1,6 @@
+PASS: 20 homogeneous cubic coefficients
+PASS: six rank-one test directions produce a 24x20 matrix of rank 20
+PASS: generic rank-one polynomial identity has 36 independent rows, rank 20
+THEOREM: global rank-one-convex polynomial degree <= 3 is degree <= 2
+COMBINE with Fourier/Plancherel quadratic quasiconvexity: all such P are quasiconvex
+NOT A PROOF of the unrestricted Morrey conjecture

@@ -1,0 +1,12 @@
+{
+  "node_bound": 187,
+  "moment_lipschitz_B": 1728324864,
+  "denominator_exponent_N": 20,
+  "delta": "1/1048576",
+  "min_weight": "609780026077441588225593635099024126195796851553424987055619851502971928581844763775955128/2066125697787913695682901131507161573788805726445109827562870269447264594266674531696925",
+  "inverse_inf_norm": "12304070906562514331699047560038709785366558280920876879407027276723693245018622390073/137741713185860913045526742100477438252587048429673988504191351296484306284444968779795",
+  "explanation": "If all 32 scalar periodic nodal values for U,V change by < 2^-N, each quartic moment changes by at most B*delta; the unique weights solving A*lambda=b remain > 0 since ||A^-1||\u221e*B*delta < min(lambda)/2. Thus homogeneous quartic Jensen remains valid for the whole open ball.",
+  "Bshift": 2633856032,
+  "joint_denominator_exponent_N": 21,
+  "joint_delta": "1/2097152"
+}

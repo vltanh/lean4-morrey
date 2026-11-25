@@ -1,0 +1,2 @@
+{"check": "LH coefficient map", "relative_error": 9.508161904440274e-09}
+{"control": "Sverak 3x2 three-wave", "gap": -0.012977131246816914, "status": "optimal", "gram_min_eig": 9.998252653472317e-08, "coefficient_residual": 1.8837362225632148e-13}

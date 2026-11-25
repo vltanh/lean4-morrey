@@ -1,0 +1,69 @@
+{
+  "scope": "Exact algebra checks on temporary copies; no searches or Lean build. Analytic dependencies remain hand/external proofs.",
+  "path_relocations": {
+    "morrey_verify_quartic_orbit_basis.py": "/mnt/data/ -> temporary working directory",
+    "morrey_quartic_harmonic_verifier.py": "/mnt/data/ -> temporary working directory"
+  },
+  "checks": [
+    {
+      "script": "research/archive/files/morrey_verify_quartic_l2_certificate.py",
+      "source_sha256": "74180cbcf639c0664469bc0a8c83db26e3a1ae97d9aa791a0eefa7c7620bb2c8",
+      "command": [
+        "python3",
+        "morrey_verify_quartic_l2_certificate.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_verify_quartic_l2_certificate.log"
+    },
+    {
+      "script": "research/archive/files/morrey_cubic_rigidity.py",
+      "source_sha256": "872515bd07bff585588745af95ea531c2763f8d86718c5ef137978d921a2f72f",
+      "command": [
+        "python3",
+        "morrey_cubic_rigidity.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_cubic_rigidity.log"
+    },
+    {
+      "script": "research/archive/files/morrey_rankone_kernel_exact_check.py",
+      "source_sha256": "f0be61e1cdb9b37f11adbd580efb4ce64e842eae185e05ad73f6ec906cbde918",
+      "command": [
+        "python3",
+        "morrey_rankone_kernel_exact_check.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_rankone_kernel_exact_check.log"
+    },
+    {
+      "script": "research/archive/files/morrey_global_quartic_open_ball_verify.py",
+      "source_sha256": "58b27176f9d9bac89d17e7da31e247fcf0789547cdc9a03d8d9e500e1bbe3256",
+      "command": [
+        "python3",
+        "morrey_global_quartic_open_ball_verify.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_global_quartic_open_ball_verify.log"
+    },
+    {
+      "script": "research/archive/files/morrey_verify_quartic_orbit_basis.py",
+      "source_sha256": "e712419c31f6bb522ebf28c60b2ad9974ffa70982da2c5cd2f191615184d2905",
+      "command": [
+        "python3",
+        "morrey_verify_quartic_orbit_basis.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_verify_quartic_orbit_basis.log"
+    },
+    {
+      "script": "research/archive/files/morrey_quartic_harmonic_verifier.py",
+      "source_sha256": "1c8811910b839d2bb2e21c9ab7ac695a4aef1271ca32083b788932470ef11fb2",
+      "command": [
+        "python3",
+        "morrey_quartic_harmonic_verifier.py"
+      ],
+      "exit_code": 0,
+      "log": "morrey_quartic_harmonic_verifier.log"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "scope": "Exact audit controls and identities only; no planar counterexample, search rerun or Lean build.",
+  "python": "3.12.14",
+  "inputs_sha256": {
+    "README.md": "0baa6a5fc6ac24c712312f739b88a6bad5381b7ee91122fe1364be4721cd8ac8",
+    "exact_base.py": "f5476739d80cbe7adc04a6b171b9e80af2da25e3648c1d9bd80123c576f22d72",
+    "exact_base_controls.json": "df0e613253a1e226790e88911f6a6e07e0d12c97badc2986dd04b5cb1294f6c4",
+    "norm_control_certificate.json": "f6e818dcc85e18de86ae1e05e2a726ee0760796fa17cae5bcdb9f8361b9708d4",
+    "pbeta_exact_sos.json": "cca4d53d7dd694309f49d15731de0f932287807f1dd507baa8ccf922d38d6ec3",
+    "pbeta_exact_sos.py": "203dcd29445e785b73b8a37e9f629dd94eeb679da93793295b34235f3157930f",
+    "pbeta_schur_reduction_check.py": "3c2ce569fdd3111e8118c82a3e99c8f2c4d33e4b110eff10c2af69a6e2dafd15",
+    "sphere_certificate.py": "1d23fed2bdc900bf533f8911fb2d391864a8c53761e97bda8fcd18ddc5b459d9",
+    "sphere_control.py": "dac96d47bca6d0ae5d947f2fe954a86731d2b52cd0991ac1ddc80bfb5b950fba",
+    "sphere_control_certificate.json": "fa9e5b44f26a691e3a7deb6582f4617c58c5ea81256a4535c533fcbc87729216",
+    "sphere_control_results.json": "3af40e9d4d3060c8556c807103965cd96f936308b2189ef2cdd8c9f4aa51a370"
+  },
+  "checks": [
+    {
+      "name": "sphere_controls",
+      "command": [
+        "python3",
+        "sphere_control.py"
+      ],
+      "exit_code": 0,
+      "log": "../../audit/sphere_control_results.json"
+    },
+    {
+      "name": "sphere_certificate",
+      "command": [
+        "python3",
+        "sphere_certificate.py",
+        "sphere_control_certificate.json"
+      ],
+      "exit_code": 0,
+      "log": "sphere_certificate.log"
+    },
+    {
+      "name": "norm_certificate",
+      "command": [
+        "python3",
+        "sphere_certificate.py",
+        "norm_control_certificate.json"
+      ],
+      "exit_code": 0,
+      "log": "norm_certificate.log"
+    },
+    {
+      "name": "exact_base",
+      "command": [
+        "python3",
+        "exact_base.py"
+      ],
+      "exit_code": 0,
+      "log": "../../audit/exact_base_controls.json"
+    },
+    {
+      "name": "pbeta_sos",
+      "command": [
+        "python3",
+        "pbeta_exact_sos.py"
+      ],
+      "exit_code": 0,
+      "log": "../../audit/pbeta_exact_sos.json"
+    },
+    {
+      "name": "pbeta_schur",
+      "command": [
+        "python3",
+        "pbeta_schur_reduction_check.py"
+      ],
+      "exit_code": 0,
+      "log": "pbeta_schur.log"
+    }
+  ],
+  "saved_output_matches": {
+    "sphere_control_certificate.json": true,
+    "norm_control_certificate.json": true,
+    "sphere_control_results.json": true,
+    "exact_base_controls.json": true,
+    "pbeta_exact_sos.json": true
+  },
+  "passed": true
+}
