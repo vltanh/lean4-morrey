@@ -233,3 +233,7 @@ Run `python3 research/audit/envelope_contact_exact.py` (SymPy). Actual execution
 ## Rank-one curvature compactness and optimal contact repair
 
 Run `python3 research/audit/lh_jet_repair_exact.py` (standard library). Actual local execution passed 40 rational multiaffine controls, exact coefficient/growth budgets, 36 contact-parameter controls and the two-point/eight curvature-budget checks. See [the proof](../../docs/research/IWANIEC_MORREY_LH_COMPACTNESS_JET_REPAIR.md). The effective uniform-rigidity algorithm is a theoretical construction depending on R16 and the published generalized gradient YM characterization; no full quantifier-elimination stage was executed. No independent analytic certification, new Lean theorem or unrestricted result.
+
+## Exact local-collapse falsification
+
+Run `python3 research/audit/six_atom_no_local_collapse_exact.py` and `python3 research/audit/reverse_merge_exact.py`. Actual local executions verified the rational six-cycle, separate-convex grid certificate, all three T4 configurations and strict corner gaps/moment determinants, 100 partial pair merges, and ten mixed T4 collapses. See [the analytic proof](../../docs/research/IWANIEC_MORREY_NO_LOCAL_COLLAPSE.md) for why the six-atom test rules out ALL compatible non-Dirac sublaws on at most four atoms, not just selected cycle weights. This is a refutation of a specific universal local-move lemma, not a Morrey counterexample. No new Lean result.
