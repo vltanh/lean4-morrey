@@ -213,3 +213,7 @@ Run `python3 research/audit/joint_hamiltonian_exact.py` (SymPy) and `python3 res
 ## Full stationary lift exact algebra
 
 Run `python3 research/audit/full_stationary_lift_exact.py` (SymPy). Actual local execution checked the full lift first/second derivatives, null rank-one tangent identities, three-wave exterior exactness coefficients, canonical Cassese direct-block exactness and quartic densities, and one split-signature row remix. See [the hand proof](../../docs/research/IWANIEC_MORREY_FULL_STATIONARY_LIFT.md). No new solver campaign or qualifying negative planar certificate is claimed.
+
+## Quadratic-tail critical states
+
+Run `python3 research/audit/quadratic_tail_exact.py` (standard library). Actual execution verified the exact changed-core clipping comparison (energy decrease 49/2 and squared error 17), 80 rational Fourier projection/row-rotation controls, and relative variance, inner variation, truncation-rate, annulus and exponential budgets. The [analytic proof](../../docs/research/IWANIEC_MORREY_QUADRATIC_TAIL_CRITICAL.md) uses the pinned verified scalar projection theorem for its exact bounded-amplitude reduction and bounded compatible full lift. The toy clipping control is not a numerical implementation of that projection. No new Lean theorem or exact rigidity result is claimed.

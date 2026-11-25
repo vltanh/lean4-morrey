@@ -198,6 +198,46 @@ If |g|<=B1 and Lip g<=L1, then
     int |U_j^lin|^p <= (2p/lambda)^p (2B1)^(p-2) L1² E_j.
 When B1>0, write D=4B1/lambda and C1=L1²/(4B1²). The right side is C1 E_j (Dp)^p. Expanding exp(|U|/(4D))-1-|U|/(4D) and using k!>=(k/e)^k and e<3 gives a bounded exponential moment relative to E_j. When B1=0 the energy is convex quadratic and the critical sequence cannot exist. This route gives relative higher moments but not L-infinity bounds; Sections 2 and 4 give the stronger bounded result via the scalar projection.
 
+
+## 6.1 First genuinely energy-based restriction after the concentration gate
+
+The preceding compatibility identities alone use only near stationarity. We can now impose a stronger stability condition using QC near equality itself, with no derivative bounds on the spatial gradients.
+
+**Theorem C (relative second variation).** Let H and the bounded critical sequences from Sections 1--4 be fixed. Suppose V_j is any zero-mean compatible periodic gradient with a common L-infinity bound B1 and ||V_j||_2²<=B2 E_j. Write delta_j=j_j/E_j. Then
+$
+\boxed{
+\int D²H(A_j+U_j)[V_j,V_j]\ \ge\ -C(H,B_1,B_2)\delta_j^{1/3} E_j
+}
+\tag{6}
+$
+eventually when delta_j<=1. For zero gap the right side is zero. No stationary solution or exact attainment is assumed.
+
+Indeed, QC of h_j gives
+    int h_j(U_j+t V_j)>=0,   int h_j(U_j-t V_j)>=0
+for every real t. Add both Taylor expansions about U_j. The linear terms cancel. With T0=Sup ||D³H|| finite by the quadratic exterior (or a local bound on the common compact range for |t|<=1), the two remainders have combined absolute value at most
+    (T0/3)|t|³ int |V_j|³ <= (T0/3) B1 B2 |t|³ E_j.
+It follows that
+    int D²H(A_j+U_j)[V_j,V_j]/E_j >= -2 delta_j/t² -(T0/3) B1 B2 |t|.
+Choose t=delta_j^(1/3) when delta_j>0; otherwise let t->0. This proves (6).
+
+Apply (6) simultaneously to every constant row map D:R^6->R², with V_j=D Z_j, using the genuine bounded compatible lift from (4). For row maps of operator norm at most one the constants B1,B2 are uniform. Replacing Z_j by W_j changes the second variation by at most
+    M ||D||² (||Z_j||_2+||W_j||_2)||Z_j-W_j||_2=o(E_j).
+Consequently every compact weighted critical state mu of Section 5 must satisfy
+$
+\boxed{
+\int D²H(A_*+r\theta)[D W_{A_*}(r,\theta),D W_{A_*}(r,\theta)]\,d\mu
+\ \ge0\quad\text{for all }D\in\mathbb R^{2\times6}.
+}
+\tag{7}
+$
+In particular one common symmetric 12 by 12 quadratic matrix is positive semidefinite: its entries are obtained by taking the twelve elementary row maps as a basis in the left side of (7). Unlike individual pointwise LH tests this is a spatially derived second-variation restriction with all cross-row stress correlations. The conclusion does not depend on the number of active gradient values or on the original mesh.
+
+There is also a whole nonlinear row-variation restriction for the fixed H: for every constant base B and row map D,
+    liminf_j J_H(B,D Z_j)/E_j>=0.
+Replacing D Z_j by D W_j in the Bregman integrand at B changes the relative integral by o(1), using the fixed compact range and (4). At the original base and row map selecting the first two rows the limit is zero. Thus the weighted critical state gives a nonnegative function of (B,D) with an exact zero at (A_*,D_first). This is a family of actual QC competitors, not an assumed extra rank-one Jensen inequality on arbitrary stress matrices.
+
+The next rigidity argument should use (7), the nonzero annulus mass (5), the energy equality, and the actual compatibility from (4) together. At present no universal contradiction to (7) has been established. In particular do not infer that a finite-dimensional matrix positivity test on moment data decides unrestricted rigidity. The value of the new condition is as a necessary quantitative constraint arising from energy near-minimality, not a standalone sufficient test for gradient compatibility.
+
 ## 7. Status and next exact gate
 
 The unrestricted problem is now reduced, for the critical-state route, to this single rigidity statement:
