@@ -257,3 +257,7 @@ Run `python3 research/audit/beta_copy_degree_exact.py` (SymPy), or append `--dis
 ## Finite beta certificate and adaptive-detector controls
 
 Run `python3 research/audit/beta_adaptive_detector_exact.py` (standard library). Executed exact rational checks passed the common-energy contact/curvature budgets, 12 anisotropy/dilution checks, the second trap scale-detector failure, and four near-critical nonblocked perturbations with regression-adaptive detection. See [the hand proof](../../docs/research/IWANIEC_MORREY_BETA_ADAPTIVE_CERTIFICATE.md). The finite baseline is refuted by artificial common-energy laws. No actual gradient counterexample, full QE/SDP infeasibility certificate or Lean validation.
+
+## All-affine hyperboloid LP certificate
+
+Run `python3 research/audit/beta_hyperboloid_sos.py` (SciPy, NumPy, SymPy). Actual local execution: six-variable LP with 15 inequalities, HiGHS objective 53, exact coefficient vectors (16,8,1), (18,9,1); all coefficient budgets, seven square decompositions, PSD trace/skew and generic affine identities, 18 transformed trap and 18 near-critical controls passed. SHA-256 4324a7e6c4fa42f2ba5b825c0f5512811f2c7ddcc48e42b323d31215625c1e02. See [the analytic proof](../../docs/research/IWANIEC_MORREY_BETA_HYPERBOLOID_CERTIFICATE.md). No full covariance QE, general QC reweighting theorem, Lean verification or Morrey proof.
