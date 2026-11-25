@@ -217,3 +217,7 @@ Run `python3 research/audit/full_stationary_lift_exact.py` (SymPy). Actual local
 ## Quadratic-tail critical states
 
 Run `python3 research/audit/quadratic_tail_exact.py` (standard library). Actual execution verified the exact changed-core clipping comparison (energy decrease 49/2 and squared error 17), 80 rational Fourier projection/row-rotation controls, and relative variance, inner variation, truncation-rate, annulus and exponential budgets. The [analytic proof](../../docs/research/IWANIEC_MORREY_QUADRATIC_TAIL_CRITICAL.md) uses the pinned verified scalar projection theorem for its exact bounded-amplitude reduction and bounded compatible full lift. The toy clipping control is not a numerical implementation of that projection. No new Lean theorem or exact rigidity result is claimed.
+
+## Inner-stress shear and maximum-defect law
+
+Run `python3 research/audit/inner_stress_shear_exact.py` (SymPy). Actual local execution passed four rational polynomial-jet controls, the symbolic null rank-one contact-Hessian identity, and exact defect/stress-mean and regular-chart budget checks. See the [hand proof](../../docs/research/IWANIEC_MORREY_INNER_STRESS_SHEAR.md). No qualifying planar negative energy was constructed; the local amplifier is conditional on an existing nonzero defect, not a uniform normalized separation or Lean theorem.
