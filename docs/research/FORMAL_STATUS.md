@@ -28,3 +28,7 @@ No local Lean build or new kernel audit was executed in this research reset. The
 ## Post-reset CI follow-up
 
 The [reset-tree CI run 45500655053](https://github.com/vltanh/lean4-morrey/actions/runs/45500655053) at 8ef4d2f completed with the Lean build, exhaustive audit-import coverage, axiom/dependency audit, all three route checks, and all Challenge definition checks successful. It failed only at the documentation link check (`docs/HomogeneousIsotropic/CREDITS.md`); the Markdown-table step was skipped. The new research files made four previously plain-code note paths resolvable, so the current branch linkifies those four spans without changing the credits' prose or any formal proof. Fresh complete CI is still needed to confirm that the repaired documentation passes. The post-reset parametric and flat-contact notes are hand proofs, not new Lean theorems.
+
+## Reset CI completed
+
+Both [run 45507443979](https://github.com/vltanh/lean4-morrey/actions/runs/45507443979) and [run 45507435211](https://github.com/vltanh/lean4-morrey/actions/runs/45507435211) completed successfully at exact commit e3981e34d5dafa04948cf4736cc6a881a3309cfa after the credits-link repair. The subsequent signed-trace proof and exact controls are research-only, not newly Lean-certified. The formal baseline is unchanged.

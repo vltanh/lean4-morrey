@@ -1,5 +1,7 @@
 # Close the anisotropic flat-region blow-up, and transfer the original flat example through a genuine inverse
 
+**Subsequent update:** [Signed trace and folding-safe extension](IWANIEC_MORREY_SIGNED_TRACE_FOLD_TRANSFER.md) closes the remaining folded-gradient case for E and proves both E and E2 globally QC. The following is the earlier proof record; statements that E is open are historical, superseded by the linked theorem.
+
 24 November 2026. This note resolves a specific hard example from the fresh-eye ledger, not a new main program of special integrands. It uses the already verified truncated determinant and an exact limiting argument. The original nonhomogeneous flat example is proved QC at all bases with |delta(A)|<=1 and for smooth globally invertible orientation-preserving/reversing tests in the remaining orientation sector. Full arbitrary-gradient QC of the original E is still OPEN. The unrestricted Morrey problem is OPEN. No new Lean proof or priority claim.
 
 ## 1. The vector contact inequality supplied by a translated kernel

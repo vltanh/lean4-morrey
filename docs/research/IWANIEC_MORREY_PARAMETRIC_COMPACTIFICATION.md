@@ -1,5 +1,7 @@
 # Unrestricted compactification on oriented graph bivectors
 
+**Subsequent update:** [Signed trace and folding-safe extension](IWANIEC_MORREY_SIGNED_TRACE_FOLD_TRANSFER.md) handles folds for the canonical complete bounded-deficit extension and identifies a fixed compact normalized RC class. The full universal compact positive-stress feasibility remains open.
+
 24 November 2026. Fresh-eye research after the reset. **All finite-valued planar RC integrands and all bounded compatible gradients are covered by the reduction**, not only homogeneous or isotropic energies. The new angle is a compact domain for the entire integrand side of the unrestricted question.
 
 Results: exact extension of arbitrary local RC data to a globally line-convex positive-homogeneous function on the decomposable bivector cone; explicit compactness and a positive polynomial smoothing operator; a finite, effectively specified family of globally RC tests at every prescribed relative area accuracy, uniform over all compatible fields, amplitudes, bases and integrands. An exact compact positive-stress criterion has a fixed mass equal to the area excess. The underlying geometric chart change also identifies a useful obstruction that has not been handled by the graph swap.
