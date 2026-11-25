@@ -253,3 +253,7 @@ Run `python3 research/audit/beta_heat_jet_exact.py` (SymPy). Actual execution ve
 ## Bounded-degree independent-copy contraction test
 
 Run `python3 research/audit/beta_copy_degree_exact.py` (SymPy), or append `--discover` for the actual SciPy/NumPy LP discovery. Both modes passed locally: exact positive rational quadrature weights at degrees 2,4,6,8 for the same artificial law at t=1/16; exact normalization and verified-L discriminator checks. The [hand proof](../../docs/research/IWANIEC_MORREY_BETA_COPY_DEGREE_TEST.md) extends the obstruction to every fixed degree and closure under the listed abstract law operations. No compatible negative gradient law, new universal beta bound, self-contraction or Lean theorem.
+
+## Finite beta certificate and adaptive-detector controls
+
+Run `python3 research/audit/beta_adaptive_detector_exact.py` (standard library). Executed exact rational checks passed the common-energy contact/curvature budgets, 12 anisotropy/dilution checks, the second trap scale-detector failure, and four near-critical nonblocked perturbations with regression-adaptive detection. See [the hand proof](../../docs/research/IWANIEC_MORREY_BETA_ADAPTIVE_CERTIFICATE.md). The finite baseline is refuted by artificial common-energy laws. No actual gradient counterexample, full QE/SDP infeasibility certificate or Lean validation.
