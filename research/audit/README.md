@@ -209,3 +209,7 @@ Run `python3 research/audit/cofactor_duality_exact.py` (SymPy). The actually exe
 ## Joint Hamiltonian flow controls and sufficient transfer certificate
 
 Run `python3 research/audit/joint_hamiltonian_exact.py` (SymPy) and `python3 research/audit/joint_hamiltonian_gap.py` (standard library). The former checks exact canonical/Riccati identities and 27 rational null-direction/4x2 rank-one curvature controls. The latter verifies exact direct LH-SOS identities, rational periodic PL geometry and the sufficient flow-gap upper bound from the [hand proof](../../docs/research/IWANIEC_MORREY_JOINT_HAMILTONIAN_FLOW.md). Both were actually executed. The negative-derivative null scaling control has planar gap 2 and joint Bregman gap -4, but does not pass the strict negative flow test; a corrupted LH-SOS identity is rejected. These are regression tests, not a completed higher-dimensional counterexample campaign or Lean certification.
+
+## Full stationary lift exact algebra
+
+Run `python3 research/audit/full_stationary_lift_exact.py` (SymPy). Actual local execution checked the full lift first/second derivatives, null rank-one tangent identities, three-wave exterior exactness coefficients, canonical Cassese direct-block exactness and quartic densities, and one split-signature row remix. See [the hand proof](../../docs/research/IWANIEC_MORREY_FULL_STATIONARY_LIFT.md). No new solver campaign or qualifying negative planar certificate is claimed.

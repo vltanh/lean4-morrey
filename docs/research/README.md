@@ -28,6 +28,8 @@ This reset separates the formal baseline, positive results, disproved methods, u
 
 **Higher-dimensional transfer route:** [Joint 4×2 Hamiltonian flow](IWANIEC_MORREY_JOINT_HAMILTONIAN_FLOW.md) gives a short-time RC-preserving evolution with a 4×2 Hamiltonian, QC preservation, and an exact finite jet test for transferring a negative higher-dimensional gap on a gradient-stress graph into a planar counterexample. No qualifying negative joint field or exact-zero proof has been found.
 
+**Full stationary lift:** [Full stationary lift and local repair](IWANIEC_MORREY_FULL_STATIONARY_LIFT.md) adds the inner-variation energy-momentum block and an explicit local quadratic curvature repair for higher-dimensional RC tests. Direct embedding tests on the known negative mechanisms clarify the surviving nonlinear transfer gate. No negative planar witness or exact-zero proof.
+
 The earlier detailed notes remain at their original paths for link stability, but are **historical references**, not active roadmap items. The long previous README, ledger, roadmap and formal-status summary are available byte-for-byte in the [pre-reset snapshot](https://github.com/vltanh/lean4-morrey/tree/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research). The research/checker/experiment files have not been erased or silently reinterpreted as proofs.
 
 Current conventions: RC = rank-one convexity, QC = quasiconvexity, PC = polyconvexity. A negative result for PC or for a proof method does not imply non-QC. The Jensen gap is average F(A+Dphi) minus F(A). Strictly negative is the counterexample direction. A finite-order laminate, a laminate (all RC Jensen tests), a correct-minors abstract law, and an actual gradient law are different notions.
