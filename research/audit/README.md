@@ -221,3 +221,7 @@ Run `python3 research/audit/quadratic_tail_exact.py` (standard library). Actual 
 ## Inner-stress shear and maximum-defect law
 
 Run `python3 research/audit/inner_stress_shear_exact.py` (SymPy). Actual local execution passed four rational polynomial-jet controls, the symbolic null rank-one contact-Hessian identity, and exact defect/stress-mean and regular-chart budget checks. See the [hand proof](../../docs/research/IWANIEC_MORREY_INNER_STRESS_SHEAR.md). No qualifying planar negative energy was constructed; the local amplifier is conditional on an existing nonzero defect, not a uniform normalized separation or Lean theorem.
+
+## Combined shear and projective transfer
+
+Run `python3 research/audit/combined_shear_exact.py` (SymPy). The executed script (SHA-256 43021001adfbfff7387a4a97105552b4439ae42bf23f79a3baba9690f9cad125) passed 12 exact rational joint-shear algebra checks, an exact quadratic two-orientation chart control, and four rational near-singular folded-sheet controls. See [the analytic proof](../../docs/research/IWANIEC_MORREY_COMBINED_SHEAR_CONTINUATION.md). No exact-zero calculation, qualifying negative planar witness, or new Lean validation is claimed.
