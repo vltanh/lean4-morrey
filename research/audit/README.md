@@ -225,3 +225,7 @@ Run `python3 research/audit/inner_stress_shear_exact.py` (SymPy). Actual local e
 ## Combined shear and projective transfer
 
 Run `python3 research/audit/combined_shear_exact.py` (SymPy). The executed script (SHA-256 43021001adfbfff7387a4a97105552b4439ae42bf23f79a3baba9690f9cad125) passed 12 exact rational joint-shear algebra checks, an exact quadratic two-orientation chart control, and four rational near-singular folded-sheet controls. See [the analytic proof](../../docs/research/IWANIEC_MORREY_COMBINED_SHEAR_CONTINUATION.md). No exact-zero calculation, qualifying negative planar witness, or new Lean validation is claimed.
+
+## Planar envelope pinching and chart-free contraction
+
+Run `python3 research/audit/envelope_contact_exact.py` (SymPy). Actual execution passed the exact stress/defect and envelope-level algebra and 360 rational atom-penalty checks. The [analytic proof](../../docs/research/IWANIEC_MORREY_ENVELOPE_PINCHING.md) relies explicitly on published planar incompatibility and transition-layer theorems for its new relative coercivity result. Those analytic arguments are not independently verified by the script; no new Lean proof, uniform normalized amplifier or counterexample is claimed.
