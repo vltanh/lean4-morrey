@@ -178,3 +178,285 @@ This is a different exact operation from the previous outer cofactor shear, whic
 ## 6. Verification
 
 The companion [inner_stress_shear_exact.py](../../research/audit/inner_stress_shear_exact.py) was executed locally with Python/SymPy. Four rational polynomial-jet controls check the exact transformed gradient, action, stress, contact characteristic equations, cofactor identities and additive composition. A symbolic null rank-one calculation checks that the contact Hessian derivative is zero on the LH boundary. Exact symbolic mean and defect identities and rational chart budgets also passed. These are algebraic controls only, not an independent review of the analytic proof or a constructed planar counterexample. No Lean verification or unrestricted solution.
+
+## 7. Inverse-coordinate transport and the missing contraction
+
+27 November 2026. The following are exact identities for an actual change
+of independent variables. They record its interaction with stationary
+energies and martingale dilations, and a compatible test on which every
+nontrivial constant linear shear increases the Dirichlet energy. They do
+not prove the fixed-period Jensen assertion R29, improve the universal
+margin, or exclude all inverse-coordinate methods.
+
+### 7.1 The positive chart, its weights, and the full stress
+
+Use row Jacobians, the Frobenius inner product, and distinguish the
+cofactor matrix $CZ=\operatorname{cof}Z$ from the adjugate
+$\operatorname{adj}Z=(CZ)^T$. Let $u$ be a periodic Lipschitz map on
+the unit-area planar torus, $X=Du$, and let $B$ be a constant real
+$2\times2$ matrix. If
+$$
+ |t|\,\|B\|_{\rm op}\|X\|_{L^\infty,\rm op}<1,
+$$
+then $y=x+tBu(x)$ is a globally bi-Lipschitz degree-one change of
+coordinates. Put
+$$
+ Q_t(Z)=I+tBZ,\quad \Delta_t(Z)=\det Q_t(Z),\quad
+ \Psi_t(Z)=ZQ_t(Z)^{-1}.
+$$
+The transported potential $u_t=u\circ y^{-1}$ satisfies
+$$
+ Du_t(y(x))=\Psi_t(X(x)),\qquad dy=\Delta_t(X)\,dx.
+$$
+In two dimensions the useful polynomial identity is
+$$
+ \boxed{\ \Delta_t(Z)\Psi_t(Z)
+       =Z+t\det Z\,\operatorname{adj}B.\ }                 \tag{12}
+$$
+Also $\Psi_t^{-1}=\Psi_{-t}$ on the corresponding matrix charts.
+Since $\int X=0$ and $\int\det X=0$, one has
+$\int\Delta_t(X)=1$. Thus the transported gradient law uses precisely
+the probability weight $\Delta_t(X)$, with no extra normalization.
+
+For a $C^2$ energy $f$ define, on that chart,
+$$
+ f_t(W)=\det(I-tBW)\,
+        f\!\left(W(I-tBW)^{-1}\right).
+$$
+Then
+$$
+ f_t(\Psi_t(X))=\frac{f(X)}{\Delta_t(X)},\qquad
+ \int f_t(Du_t)-f_t(0)=\int f(X)-f(0).                    \tag{13}
+$$
+The original Jensen gap is preserved exactly. For a rank-one matrix
+$V$, writing $L=I+tXB$ and $Q=I+tBX$, its curvature is
+$$
+ D^2f_t(\Psi_t(X))[V,V]
+ =\frac{D^2f(X)[L V Q,L V Q]}{\Delta_t(X)}.               \tag{14}
+$$
+Indeed, along a rank-one line in $W$, both
+$\det(I-tBW)$ and $W-t\det W\,\operatorname{adj}B$ are affine.
+The usual one-dimensional perspective differentiation gives (14).
+The direction $LVQ$ remains rank one, so RC is preserved within the
+positive chart. This does not furnish a global finite extension with
+the original derivative-Lipschitz bound.
+
+The full stress also has an exact transport formula. Let
+$p=Df(X)$, $T=f(X)I-X^Tp$, and let $p_t,T_t$ denote the corresponding
+quantities for $f_t$, evaluated at $\Psi_t(X)$. Direct differentiation
+and the two-dimensional cofactor identities give
+$$
+\begin{aligned}
+ p_t&=\frac{L^T(pQ^T-tf(X)B^T)}{\Delta_t(X)},&
+ T_t&=\frac{TQ^T}{\Delta_t(X)},\\
+ Cp_t&=(Cp-t\,\operatorname{adj}B\,CT)Q^{-1},&
+ CT_t&=CTQ^{-1}.                                        \tag{15}
+\end{aligned}
+$$
+These formulas retain the energy-momentum block. With the earlier
+rotation convention, $CT=J^T(TJ)$, so using $CT$ instead of $TJ$
+only applies a constant left rotation to that compatible block.
+
+### 7.2 Stationarity identifies a first-order term, not its sign
+
+The transported Dirichlet energy is
+$$
+ E_t=\int |Du_t|^2
+ =\int\frac{|X+t\det X\,\operatorname{adj}B|^2}
+                {1+t\operatorname{tr}(BX)+t^2\det B\det X}.
+                                                               \tag{16}
+$$
+Consequently
+$$
+ E'_0=\int\left[|X|^2\operatorname{tr}(BX)
+                    -2X:XBX\right].                    \tag{17}
+$$
+For $B=I$, (16) also simplifies to
+$$
+ E_t=\int
+       \frac{|X|^2-2\det X}
+            {1+t\operatorname{tr}X+t^2\det X},
+$$
+using $\int\det X=0$.
+At a fixed matrix argument the generator of the energy transformation
+is
+$$
+ k_B(X,f,p)=p:XBX-f\,\operatorname{tr}(BX).                \tag{18}
+$$
+
+Here is the exact stationary cancellation that can legitimately be
+used. Suppose $H=f+b|\cdot|^2$ is QC at zero and $u$ attains equality
+in its Jensen inequality. No attainment assertion for the universal
+margin is being made. Differentiating the energy of $H$ under the
+actual changes $x\mapsto x+tBu(x)$, in both signs of $t$, gives
+$$
+ 0=\int\left[H(X)\operatorname{tr}(BX)-DH(X):XBX\right],
+ \qquad
+ \boxed{\ \int k_B(X,f(X),Df(X))=bE'_0.\ }               \tag{19}
+$$
+This follows directly from (17) and $DH=Df+2bX$. It identifies the
+first-order correlation term; it does not imply $E'_0=0$ or cancel
+the derivative of the normalized deficit.
+
+For clarity, suppose additionally that global RC extensions matching
+the transported witness range have derivative-Lipschitz bounds $M_t$,
+with $M_0=1$ and a derivative at zero. Such extensions with this
+normalization behavior are an additional hypothesis, not a consequence
+of the local chart. If the initial gap is $-bE_0$, its negative
+Hessian-normalized quotient is
+$$
+ \frac{-bE_0}{M_tE_t},\qquad
+ \left.\frac{d}{dt}\frac{-bE_0}{M_tE_t}\right|_{t=0}
+       =b\left(M'_0+\frac{E'_0}{E_0}\right).              \tag{20}
+$$
+Thus a negative sum in (20) would give a gain. Equations (13) and (19)
+alone give no sign for that sum. The available extension argument
+supplies no favorable first-order estimate for the global
+derivative-Lipschitz bound.
+
+### 7.3 The conditional determinant defect in an optimal dilation
+
+The next calculation applies to any centered martingale coupling
+$(X,Y)$ with $\mathbb E[Y\mid X]=X$ and
+$\mathbb E\det X=\mathbb E\det Y=0$, and in particular to an optimal
+dilation whenever these chart hypotheses hold. Write $R=Y-X$ and
+$$
+ e(X)=\mathbb E[\det R\mid X],\qquad \mathbb E e=0.
+$$
+For a probability interpretation assume a bounded common chart with
+$\Delta_t(Y)>0$; in particular this holds for sufficiently small
+$t$ if $X,Y$ are bounded. An unbounded optimal target is not thereby
+placed in a positive chart at any fixed nonzero $t$.
+
+Reweight the joint law by $\Delta_t(Y)$ and send $Y$ to
+$\Psi_t(Y)$. Its total mass is one. From (12) and
+$\mathbb E[\det Y\mid X]=\det X+e(X)$, the new marginal weight and
+conditional barycenter are exactly
+$$
+\begin{aligned}
+ w_t(X)&=\Delta_t(X)+t^2\det B\,e(X),\\
+ m_t(X)&=
+ \frac{X+t(\det X+e(X))\operatorname{adj}B}{w_t(X)},\\
+ m_t(X)-\Psi_t(X)&=
+ \frac{t\,e(X)\operatorname{adj}B\,(I+tBX)^{-1}}{w_t(X)}.
+                                                               \tag{21}
+\end{aligned}
+$$
+The conditional determinant defect of this reweighted coupling is
+also explicit:
+$$
+ \mathbb E_t\!\left[
+       \det(\Psi_t(Y)-m_t(X))\mid X\right]
+       =\frac{e(X)}{w_t(X)^2}.                            \tag{22}
+$$
+To check (22), the conditional mean of $\det\Psi_t(Y)$ is
+$(\det X+e)/w_t$. Subtract $\det m_t$; the numerator reduces to
+$e$ by the two-dimensional determinant expansion.
+
+For a finite rank-one tree contained in the positive chart, the
+weighted projective image is again a rank-one tree: replace a child
+weight $\theta_i$ by
+$\theta_i\Delta_t(Y_i)/\Delta_t(Y_{\rm parent})$.
+The determinant weight and the numerator in (12) are affine on each
+rank-one segment, and the projective image preserves the rank-one
+connection. This explains the laminate side of the calculation within
+such a chart. It does not supply a global transport theorem for an
+unbounded optimal target.
+
+In particular, if $B$ has rank one, the source weight agrees exactly
+with the actual spatial weight $\Delta_t(X)$, but the conditional
+mean still differs by
+$$
+ m_t(X)-\Psi_t(X)
+       =\frac{t\,e(X)\operatorname{adj}B}{\Delta_t(X)}.
+$$
+Such a scalar field times a fixed rank-one matrix need not be a
+gradient. The martingale constraint for the actual transported
+gradient therefore requires a further compatible repair. Neither
+(21) nor (22) constructs that repair or proves it has favorable cost.
+
+There is an explicit compatible-source control in which even the
+correct-minor condition fails after this conditional correction.
+Take $X=\operatorname{diag}(a,b)$, with independent uniform signs, and
+$Y=\operatorname{diag}(2s,2r)$ with conditional probabilities
+$$
+ \mathbb P(s,r\mid a,b)
+   =\frac{4+2as+2br+(ab+a)sr}{16}.
+$$
+They are nonnegative, $\mathbb E[Y\mid X]=X$, and the marginal of
+$Y$ is the uniform product law on $\operatorname{diag}(\pm2,\pm2)$,
+hence a laminate. Here $e(X)=a$, with zero global mean.
+For $B=\operatorname{diag}(1,0)$ and $t=1/4$, all target
+Jacobian weights are positive. The corrected barycenter and its
+source weights are
+$$
+ m_t(X)=\operatorname{diag}
+    \left(\frac{a}{1+ta},\,b+\frac{ta}{1+ta}\right),
+ \qquad \frac{1+ta}{4}.
+$$
+This law is centered, but
+$$
+ \mathbb E_t\det m_t(X)=\frac{t}{1-t^2}=\frac4{15}>0,
+$$
+so it cannot be a centered periodic gradient law. The coupling is
+**not optimal**: its source is already a laminate and has optimal
+dilation cost zero. This is a control on the proposed transport rule,
+not a countermodel to optimality in P20/P21 or to Morrey.
+
+### 7.4 An actual gradient on which every constant shear raises the energy
+
+Let $\tau$ be the periodic triangular function with derivative $+1$
+on the first half-period and $-1$ on the second, and set
+$u(x_1,x_2)=(\tau(x_1),\tau(x_2))$.
+Its gradient is $X=\operatorname{diag}(a,b)$, with independent,
+equiprobable $a,b\in\{-1,1\}$. This is an actual compatible
+two-level laminate and $E_0=2$.
+
+For each atom put $\delta=ab$, $\ell=aB_{11}+bB_{22}$, and
+$d_{a,b}=1+t\ell+t^2\delta\det B$. Since $X$ is orthogonal,
+$$
+ \frac{|X+t\delta\,\operatorname{adj}B|^2}{d_{a,b}}
+   =2+
+     t^2\frac{|B|^2-2\delta\det B}{d_{a,b}}.
+$$
+Hence the exact energy change is
+$$
+ \boxed{\ E_t-2=\frac{t^2}{4}
+     \sum_{a,b=\pm1}
+        \frac{|B|^2-2ab\det B}{d_{a,b}}>0\ }              \tag{23}
+$$
+for every nonzero $B$ and nonzero safe $t$, for example
+$|t|\|B\|_{\rm op}<1$.
+All denominators are positive. Each numerator is nonnegative because
+$2|\det B|\le |B|^2$, and the two determinant-sign numerators cannot
+both vanish unless $B=0$. In particular
+$$
+ E_t=2+t^2|B|^2+O(t^3).
+$$
+For a conformal or anticonformal $B=\lambda O$, $O\in O(2)$, the
+formula specializes to
+$$
+ E_t=\frac{2}{1-t^2\lambda^2}
+ \qquad (|t\lambda|<1).
+$$
+Thus compatibility alone does not make a constant inverse-coordinate
+shear decrease Dirichlet energy. This control has no negative RC
+Jensen gap; it does not exclude a method that uses additional
+correlations of an extremal energy, its stress, and its gradient.
+
+### 7.5 Exact checks and remaining implication
+
+The companion [inverse_transport_exact.py](../../research/audit/inverse_transport_exact.py)
+checks the projective numerator and inverse, cofactor versus adjugate
+conventions, full-stress transport, polynomial-jet chain rules and
+rank-one curvature, the stationarity algebra, conditional moment and
+determinant-defect formulas, and the all-$B$ triangular-gradient
+control. Symbolic identities are checked with SymPy and finite
+couplings with exact rational arithmetic.
+
+These checks certify the displayed finite algebra, not a universal
+extension bound, an optimal compatible repair, or QC for the R29 class.
+The remaining issue is a favorable global normalization or another
+genuine compatible operation using energy-stress correlations. No
+unrestricted Jensen proof, improved universal bound, or Lean
+declaration is asserted.
