@@ -2,7 +2,7 @@
 
 **This is the only living research status file.** Update it for every meaningful result, failed mechanism, change of priority, or formal verification. Detailed research notes, archived inventories, and proof/checker files are supporting evidence, not separate status trackers. The PR description is a stable link, not another status report.
 
-**Last updated: 27 November 2026. Unrestricted finite-valued planar Morrey remains OPEN.** The current requested direction is to relax homogeneity or isotropy. **P28 proves the entire first-order logarithmic scaling extension by hand:** every finite isotropic RC F with F(tA)=t²[F(A)+c log(t) det A] is QC at every base, including nonsmooth functions and arbitrary bounded gradient tests. For c≠0 these energies have no global polyaffine lower bound. Exact algebra checks and two independent agent proof reviews passed; this extension is not Lean-certified. The general removal of either assumption remains open.
+**Last updated: 27 November 2026. Unrestricted finite-valued planar Morrey remains OPEN.** The current request is an exhaustive strengthening, not another special scaling class. **R29 reduces the entire unrestricted problem to one fixed discrete scaling rule, G(2A)=4G(A):** any strict counterexample can be converted to a positive, uniformly strongly RC, globally C¹,¹ counterexample obeying that rule. Smoothing preserves strict negativity; the subsequent localization and translated periodization preserve the negative gap exactly. This is a hand-proved reduction, **not a proof that the reduced class is QC**. A separate symmetry-preserving density theorem covers all isotropic energies using variable dyadic periods. P28 remains a valid logarithmic-class QC theorem, but is no longer the completion target.
 
 The unrestricted target remains beta_*=0. R16 records the reduction and P15/P16 the strongest hand estimate −1/8 < beta_* ≤ 0; neither is newly Lean-certified. The alternative is one certified genuine planar negative pair. The signed homogeneous bi-isotropic QC theorem for every p>0 and stated nonnegative p≥2 PC theorem are already verified on main.
 
@@ -23,21 +23,29 @@ Gradient laws obey the mean and determinant identities, but those identities alo
 
 ## Roadmap
 
-### Current extension — relax exact homogeneity
+### Current extension — an exhaustive discrete-scaling target
 
-The 27 November request reopens extensions of the verified homogeneous theorem. The [logarithmic scaling proof](IWANIEC_MORREY_LOGARITHMIC_HOMOGENEITY.md) closes an entire functional class, with no restriction on angular profile beyond isotropy and RC:
+The [discrete-scaling reduction](IWANIEC_MORREY_DISCRETE_SCALING_REDUCTION.md) covers **every** possible finite-valued planar RC counterexample. It is enough to prove QC for the single class of positive, uniformly strongly RC functions G that are globally C¹,¹, smooth away from zero, and satisfy G(2A)=4G(A). A compact perturbation of a quadratic is moved far from zero and repeated on disjoint dyadic annuli. The translated negative test stays entirely in one copy, so its Jensen gap is preserved exactly. The target can further fix base I, require every test gradient to lie in the ball of radius 1/10 around I, impose Lip DG≤202 and relative value/first-derivative distance at most 1/100 from the norm square, and require G to be even and exactly the norm square on det≤0. No isotropy is imposed on this exhaustive class.
+
+The construction also makes G arbitrarily close to a positive quadratic in relative value and first derivative; this does not control its Hessian and is not a perturbative QC theorem. There is no new universal finite cutoff or improved beta_* bound. The proof of QC for the whole fixed-period class remains the single unresolved implication.
+
+For the **isotropic-only** route, a separate construction preserves isotropy and approximates every RC energy locally uniformly, modulo constants, by strongly RC energies satisfying G(2^N A)=2^(2N)G(A), with N allowed to vary. Translation in the fixed-period construction does not preserve isotropy. The verified homogeneous theorem controls the average over logarithmic scale phase, not each phase; averaging can erase a negative test.
+
+The earlier [logarithmic scaling theorem](IWANIEC_MORREY_LOGARITHMIC_HOMOGENEITY.md) remains available, with no restriction on angular profile beyond isotropy and RC:
 
 | Scope | Status |
 | --- | --- |
 | Exact positive homogeneity, isotropic, signed, every p>0 | Verified on main (P01). |
 | First-order logarithmic scaling F(tA)=t^p[F(A)+log(t)G(A)] | Hand proof complete (P28). RC forces G=0 unless p=2, when G=c det. |
 | Dilation errors F(tA)−t^p F(A) are arbitrary null Lagrangians | Hand proof complete (P28), by an exact cocycle classification and the logarithmic theorem. |
+| Positive strongly RC C¹,¹ energies with G(2A)=4G(A), without isotropy | R29 is an exhaustive reduction of unrestricted Morrey to this one class. QC for the class is open. |
+| Isotropic strongly RC C¹,¹ energies with G(2^N A)=2^(2N)G(A), variable N | R29 gives density modulo constants and an exhaustive isotropic reduction. QC for the class is open. |
 | Arbitrary nonhomogeneous isotropic energies | Open. The exact scaling restriction has been weakened, not eliminated in full. |
 | Arbitrary homogeneous energies without isotropy | Open. The existing one-sided degree-two result P05 is not a new result of this continuation. |
 
-The proof constructs globally RC homogeneous approximants with an O(epsilon²) curvature repair, applies P01, and takes a locally uniform first-order limit modulo the determinant. It handles singular curvature measures and the origin directly. A global strongly QC, nonpolyconvex example lies outside the prior affine-shell and separated-angular forms. [Exact checker](../../research/audit/logarithmic_homogeneity_exact.py).
+P28's proof constructs globally RC homogeneous approximants with an O(epsilon²) curvature repair, applies P01, and takes a locally uniform first-order limit modulo the determinant. It handles singular curvature measures and the origin directly. A global strongly QC, nonpolyconvex example lies outside the prior affine-shell and separated-angular forms. [Exact checker](../../research/audit/logarithmic_homogeneity_exact.py).
 
-The remaining extension task is arbitrary scale-and-shape coupling or the full anisotropic homogeneous theorem. P28 does not establish completeness of the homogeneous support closure, improve beta_*, or close unrestricted G1. Its analytic proof is ready for further mathematical review and formalization; the active Lean sources are unchanged.
+The current task is the full fixed-period implication above, or a direct proof for arbitrary isotropic scale-and-shape coupling. Do not replace it with a ladder of logarithmic orders, periods, exponents, or angular profiles. P28 does not establish completeness of the homogeneous support closure, and R29 does not prove the remaining QC implication. The active Lean sources are unchanged.
 
 ### Unrestricted target
 
@@ -62,6 +70,7 @@ Choose a mechanism with a quantified implication valid for every normalized RC e
 1. **Self-contraction:** prove beta_* ≥ theta beta_* for an explicit 0≤theta<1. Since beta_*≤0, this forces equality. A computer-assisted proof needs a sound universal reduction and an exact LP/SOS/interval/algebraic certificate, not merely a finite collection of necessary tests.
 2. **Gap separation:** prove beta_*=0 or beta_*≤−epsilon for an explicit epsilon>0, then certify beta_*>−epsilon using a justified finite computation or an analytic bound. R16 supplies positive-accuracy enclosures, not the separation.
 3. **Direct rigidity:** for b=−beta_*>0, H=F+b|.|² is QC and strongly RC, not necessarily PC. Uniformly exclude vanishing relative stabilized residual at fixed b (for example, a valid j≥c b^N with positive c and finite N). Include all genuine near-extremizers, including concentration or vanishing absolute energy. A different direct global Jensen proof is equally acceptable.
+4. **Fixed discrete scaling:** prove QC for every positive, uniformly strongly RC, globally C¹,¹ planar G with G(2A)=4G(A), smooth off zero. R29 proves that the universal statement already suffices at the fixed base I with all test values within distance 1/10 of I, with Lip DG≤202 and the additional normalizations above. The fixed period is 2; no period-by-period ladder is needed. The integrand profile and compatible gradient geometry remain unrestricted.
 
 #### Do not repeat these failed mechanisms
 
@@ -100,7 +109,7 @@ Independently audit the actual successful global mathematical proof or negative 
 
 Before any substantial computation, state the exact global implication, why every unrestricted candidate is covered, and the smallest test that could refute the proposed mechanism. No atom-, frequency-, mesh-, degree-, exponent- or subclass ladder without a proved stopping bound. A finite parameterization or arbitrarily accurate finite approximation is not an exact decision procedure. Record negative approaches once in the ledger; reopen only with a changed, testable hypothesis.
 
-Unrestricted closure means a proof of beta_*=0, a justified finite exact proof with every case certified, or a certified negative planar witness. The separately requested structural extension P28 is not such a closure.
+Unrestricted closure means a proof of beta_*=0, a proof of the full equivalent fixed-period target in R29, a justified finite exact proof with every case certified, or a certified negative planar witness. Neither the restricted QC theorem P28 nor the reduction R29 alone is such a closure.
 
 ## Result ledger
 
@@ -139,7 +148,7 @@ Evidence: **V** = verified at pinned main with successful CI; **P** = published/
 | P27 | **Simultaneous matrix-valued dilation budgets.** For every actual gradient law a single martingale dilation into a laminate satisfies int RR^T ≤ 2b int XX^T in PSD order; a possibly different one satisfies the analogous column bound. Every scalar-optimal coupling of a universal near-extremizing law matches both covariance matrices up to sqrt(2(1+2b)j) for unit variance and j=b−d. | H; uses P20, affine gradient invariance, closed upward covariance sets, convex separation and QC stationarity. No simultaneous full tensor bound, no proof b=0. | [Proof](IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md#111-uniform-matrix-valued-residual-budget-for-the-complete-class-of-gradients) |
 | P28 | **Remove exact homogeneity for the entire first-order logarithmic scaling class.** Finite isotropic RC F with F(tA)=t²[F(A)+c log(t) det A] is QC at every base; c≠0 excludes every global polyaffine lower bound. All positive-exponent first-order logarithmic scaling and homogeneity modulo null-Lagrangian dilation errors reduce exactly to this case or P01. Quadratic RC margins pass to QC margins. | H; nonsmooth distributional proof, arbitrary bounded gradient tests including both determinant signs, no added sign or regularity hypothesis. Exact symbolic controls and two independent agent proof reviews passed. New hand theorem, not Lean-certified; arbitrary scale dependence and removal of isotropy remain open. | [Proof and scope](IWANIEC_MORREY_LOGARITHMIC_HOMOGENEITY.md), [checker](../../research/audit/logarithmic_homogeneity_exact.py) |
 
-Additional special-case results are indexed by topic in the catalog. P04–P12 and P28 are not ordered steps in a proof of P01's unrestricted extension. P28 addresses the current requested relaxation; it is not an unrestricted completion gate.
+Additional special-case results are indexed by topic in the catalog. P04–P12 and P28 are not ordered steps in a proof of P01's unrestricted extension. The current exhaustive target is R29; its missing implication is stated above.
 
 
 ### Global reductions and open obligations
@@ -174,6 +183,7 @@ Additional special-case results are indexed by topic in the catalog. P04–P12 a
 | R26 | **Exact finite occupation-flow LP on a rational matrix grid, all splitting depths.** Split occupations and terminal martingale transport form one rational LP; positive split variance bounds occupations, and every feasible solution defines an absorbing rank-one Markov process. Cyclic zero certificates need not have finite trees. Nested grids converge by R25. | H/R; five HiGHS primal/dual controls checked exactly with Fraction: minimal T4 zero (8 states), N18 six-well cycle zero (12 states), sawtooth and enlarged T4 zero, artificial determinant pair cost 2. No uniform exact-zero grid cutoff or general gradient construction. | [LP and reproducible controls](IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md#85-one-finite-lp-over-all-depths-on-a-rational-matrix-grid) |
 | R27 | **Uniform explicit matrix-grid approximation of the unrestricted dilation cost.** For any bounded rational law in the unit ball and rational epsilon>0, a single common finite rational occupation grid gives d≤d_G≤d+epsilon (radius O(log(1/epsilon)), polynomial state count up to log factors). Proof normalizes the dual obstacle, interpolates discrete RC inequalities, repairs LH curvature and controls the optimal target's exponential tail with a global RC barrier. R16 plus rational nodal rounding now gives two-sided b enclosures from occupation LPs only on the law side. | H/R; depends on P20/P22/P23/R26 and R16 for the universal enclosure. Eight exact accuracy-budget controls, no giant grid solved. Explicit grids are impractical; still no uniform exact-zero cutoff, separation or spatial contraction. | [Proof and finite certificate](IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md#92-uniform-finite-grid-approximation-of-the-unrestricted-dilation-lp) |
 | R28 | **Exact maximum over all real nodal assignments on a fixed rational mesh and target grid.** A common rational terminal-energy dual polyhedron, after removing affine gauges, gives U_G=max_z(c_z+sqrt(q_z)−1/2) over its vertices; q_z is squared norm of the dual slope projected onto the rational weighted compatible-gradient space. Combined with R16/R27, max(0,U_G−eta/2)≤b≤U_G+eta/2. No rational nodal enumeration. | H/R; seven exact primal/dual diagonal-grid controls with HiGHS replay. Vertex enumeration and uniform spatial/matrix grids remain enormous. The grid cost can be positive even on a continuum of true laminates; no exact-zero cutoff. | [Whole-mesh formula](IWANIEC_MORREY_C11_OPTIMAL_MARGIN.md#112-finite-matrix-grid-lp-maximization-over-a-whole-real-gradient-mesh) |
+| R29 | **Exhaustive fixed-dilation reduction, plus symmetry-preserving density.** For every prescribed T>1 (in particular T=2), unrestricted finite-valued RC⇒QC is equivalent to QC for positive, uniformly strongly RC, globally C¹,¹ functions G, smooth off zero, with G(TA)=T²G(A). Smooth quadratic-tail localization and translation put any strict negative witness in one compact patch; disjoint scaled copies preserve that gap exactly. Can additionally fix base I, test range B_(1/10)(I), Lip DG≤202, evenness, equality to the norm square on det≤0, and arbitrarily small relative value/first-derivative distance to the norm square. Separately, affine plus discrete degree-two functions with variable dyadic periods are locally uniformly dense in all finite RC functions; isotropy is preserved in that density construction. | H/R; the fixed-period reduction does not preserve continuous isotropy and is not a fixed-coordinate density statement. The symmetry-preserving construction has no universal period bound. QC for either exhaustive class, a universally positive strong-RC margin, a small Hessian perturbation bound, and a finite exact cutoff are not proved. No new Lean theorem. | [Full reduction and limits](IWANIEC_MORREY_DISCRETE_SCALING_REDUCTION.md), [exact controls](../../research/audit/discrete_scaling_exact.py) |
 
 All R entries are research-level hand reductions unless their cited source has a separate Lean proof. R02 is a complete *negative* semidecision framework. R03–R09 are not certified existence algorithms.
 
@@ -228,9 +238,11 @@ The previous ledger's stable IDs, detailed numerical budgets, original file hash
 
 ## Formal status
 
-### 27 November extension
+### 27 November extension and exhaustive reduction
 
 P28 uses the verified signed homogeneous theorem below. Its new distributional approximation, null-drift classification and quantitative example are hand proofs with exact algebra controls. No new Lean theorem, local Lean build or CI verification is claimed. Reproduce its algebra with `python3 research/audit/logarithmic_homogeneity_exact.py`.
+
+R29's localization, translation, discrete periodization and symmetry-preserving density arguments are hand proofs. Their reduction does not depend on the homogeneous QC theorem; that theorem is used only to explain the isotropic phase-average bound. Reproduce the finite algebra controls with `python3 research/audit/discrete_scaling_exact.py`. These checks do not certify the analytic quantifiers or the still-open QC conclusion. No new Lean build or CI verification is claimed.
 
 ### Verified baseline
 
@@ -271,4 +283,4 @@ Both [run 45507443979](https://github.com/vltanh/lean4-morrey/actions/runs/45507
 - [Global negative certificates](GLOBAL_CERTIFICATES.md), [reproduction instructions](REPRODUCING.md), [literature and source notes](SOURCES.md), [archive provenance](archive/README.md).
 - [Previous separate status files](https://github.com/vltanh/lean4-morrey/tree/736498ce3e1c1f4cc63e494571711813a58aa8a0/docs/research) are frozen, not maintained; all prior research history is preserved on the archive branches.
 
-Editorial consolidation did not introduce mathematical claims. The subsequent P18–P28, R25–R28 and N25 results are hand proofs with the stated external inputs and limits, not Lean certification. The active formal baseline is unchanged; fresh CI is not claimed.
+Editorial consolidation did not introduce mathematical claims. The subsequent P18–P28, R25–R29 and N25 results are hand proofs with the stated external inputs and limits, not Lean certification. The active formal baseline is unchanged; fresh CI is not claimed.
