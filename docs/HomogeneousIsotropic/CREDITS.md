@@ -18,12 +18,12 @@ How the result on homogeneous isotropic integrands, its formal proof and its pap
 
 - The argument for `p ≥ 2` was first written as a research note in
   [pull request 1](https://github.com/vltanh/lean4-morrey/pull/1) of this repository
-  (`docs/research/IWANIEC_MORREY_PGE2_POLYCONVEXITY.md` on the branch
+  ([`docs/research/IWANIEC_MORREY_PGE2_POLYCONVEXITY.md`](../research/IWANIEC_MORREY_PGE2_POLYCONVEXITY.md) on the branch
   `research/ledger-roadmap-2026-11-21`). The same pull request holds:
   - a second AI pass that checked the note
-    (`docs/research/IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md`);
+    ([`docs/research/IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md`](../research/IWANIEC_MORREY_PGE2_INDEPENDENT_AUDIT.md));
   - an addendum for `1 < p < 2`
-    (`docs/research/IWANIEC_MORREY_ISOTROPIC_EXTENSIONS.md`);
+    ([`docs/research/IWANIEC_MORREY_ISOTROPIC_EXTENSIONS.md`](../research/IWANIEC_MORREY_ISOTROPIC_EXTENSIONS.md));
   - numerical checks, described in the note.
 - The notes were written in AI-assisted sessions with Claude. The author reports that ChatGPT
   Chat 6 Extra High worked on the problem as well; the notes do not say which part is whose.
@@ -97,7 +97,7 @@ The author reported a new result in pull request 1: the theorem holds for integr
 negative values.
 
 - The argument is by ChatGPT Chat 6 Extra High, recorded in pull request 1
-  (`docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md`, commit b0cc8f7, with the restricted
+  ([`docs/research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md`](../research/IWANIEC_MORREY_SIGNED_CHARACTERISTICS.md), commit b0cc8f7, with the restricted
   supports of `IWANIEC_MORREY_SIGNED_SPECTRAL_SUPPORT.md`, commit 2273662). It is a candidate hand
   proof there: it integrates scaled truncated determinants with a weight given by an ordinary
   differential equation on supporting slopes.

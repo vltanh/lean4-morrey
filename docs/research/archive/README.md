@@ -1,0 +1,21 @@
+# Frozen pre-reset research archive
+
+All original research is preserved at [pre-reset commit d198628](https://github.com/vltanh/lean4-morrey/tree/d198628ecccb10fb1f2ded5ecd99f37e55c55e16). Use the [complete catalog](https://github.com/vltanh/lean4-morrey/blob/736498ce3e1c1f4cc63e494571711813a58aa8a0/docs/research/CATALOG.md) to locate every one of its 102 notes. Links in that catalog are pinned to the original commit so relative links, historical wording and old evidence levels are recoverable. Detailed historical notes remain at their existing paths on the working branch to avoid breaking prior cross-links. They are not active completion tasks.
+
+Historical summaries: [README](https://github.com/vltanh/lean4-morrey/blob/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research/README.md), [ledger with original IDs](https://github.com/vltanh/lean4-morrey/blob/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research/LEDGER.md), [roadmap](https://github.com/vltanh/lean4-morrey/blob/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research/ROADMAP.md), [formal status](https://github.com/vltanh/lean4-morrey/blob/d198628ecccb10fb1f2ded5ecd99f37e55c55e16/docs/research/FORMAL_STATUS.md). Original older artifacts and scripts: [research archive](../../../research/archive/README.md), [experiments](../../../research/experiments), [exact checkers](../../../research/audit/README.md), [verification records](../../../research/verification), [source manifest](../../../research/source_manifest.json).
+
+The current [entry page](../README.md), [ledger](../README.md#result-ledger) and [roadmap](../README.md#roadmap) are authoritative after the reset. The complete pre-reset snapshot is available without relying on the current branch or overwritten summaries.
+
+## Pre-squash archive (25 November 2026)
+
+The complete 186-commit PR head is preserved at [d2c3b65](https://github.com/vltanh/lean4-morrey/tree/d2c3b656850e95545ed153981d16711cc2254a10) and on the [backup branch](https://github.com/vltanh/lean4-morrey/tree/archive/research-pre-squash-2026-11-25). This is the recovery source for the superseded [handoff](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/docs/research/HANDOFF.md), [exact-zero directive](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/docs/research/FOCUS_BETA_ZERO.md), [long roadmap](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/docs/research/ROADMAP.md) and original verification reports. The current entry page and roadmap absorb their operational content.
+
+Five verification log copies were removed only after comparing their Git blob hashes against their retained canonical files. The original reports at the pinned archive are unchanged; current report log paths point to the identical retained bytes. Source-manifest payloads, exact checkers, unique numerical records, detailed mathematical arguments, archived Lean sources and the active formalization are retained.
+
+| Removed duplicate | Canonical bytes |
+| --- | --- |
+| [exact_base.log](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/research/verification/completion_audit/exact_base.log) | [exact_base_controls.json](../../../research/audit/exact_base_controls.json) |
+| [pbeta_sos.log](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/research/verification/completion_audit/pbeta_sos.log) | [pbeta_exact_sos.json](../../../research/audit/pbeta_exact_sos.json) |
+| [sphere_controls.log](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/research/verification/completion_audit/sphere_controls.log) | [sphere_control_results.json](../../../research/audit/sphere_control_results.json) |
+| [pbeta_high_precision.log](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/research/verification/2026-11-21/pbeta_high_precision.log) | [high_precision.log](../../../research/experiments/2026-11-21/work_pb/high_precision.log) |
+| [sos_floating_outputs.log](https://github.com/vltanh/lean4-morrey/blob/d2c3b656850e95545ed153981d16711cc2254a10/research/verification/2026-11-21/sos_floating_outputs.log) | [floating_output_audit.log](../../../research/experiments/2026-11-21/work_sos/floating_output_audit.log) |

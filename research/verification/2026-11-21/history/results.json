@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-21",
+  "scope": "Four historical certificate replays on unchanged temporary copies. No optimization searches and no Lean build. The all-level mathematical bridges remain hand arguments.",
+  "python": "3.12.14",
+  "sympy": "1.14.0",
+  "gap_convention": "Ledger J=average f(F+Du)-f(F). polynomial_pipeline prints -J, so its -405772 is ledger J=+405772.",
+  "checks": [
+    {
+      "name": "l1_mold",
+      "ledger_ids": [
+        "H01"
+      ],
+      "command": "python3 research/archive/files/morrey_l1_mold_certificate.py",
+      "script": "research/archive/files/morrey_l1_mold_certificate.py",
+      "sha256": "41dc2be7ba61c191fccf9b035ec933640f3851bc08d9142c8424a9f53089b52f",
+      "scope": "Exact abstract cube/interface occurrence and determinant constraints for the level-one universal mold; not a Lean bridge to TriMold.",
+      "evidence": "exact arithmetic / symbolic verification; not a Lean proof",
+      "exit_code": 0,
+      "elapsed_seconds": 0.027,
+      "log": "l1_mold.log"
+    },
+    {
+      "name": "all_levels_uniform",
+      "ledger_ids": [
+        "H04",
+        "H05"
+      ],
+      "command": "python3 research/archive/files/morrey_all_levels_uniform_obstruction.py",
+      "script": "research/archive/files/morrey_all_levels_uniform_obstruction.py",
+      "sha256": "71ff3ec232245bb14eaab52a7d1b6ddc50ee6cef424ab50e179f1cae7a480521",
+      "scope": "Exact finite stencil rank checks underlying the hand all-level reduction; uniform weights and single-use trees only.",
+      "evidence": "exact arithmetic / symbolic verification; not a Lean proof",
+      "exit_code": 0,
+      "elapsed_seconds": 0.023,
+      "log": "all_levels_uniform.log"
+    },
+    {
+      "name": "level2_obstruction",
+      "ledger_ids": [
+        "H02",
+        "H03",
+        "H05"
+      ],
+      "command": "python3 research/archive/files/morrey_level2_uniform_fixedpoint_obstruction.py",
+      "script": "research/archive/files/morrey_level2_uniform_fixedpoint_obstruction.py",
+      "sha256": "20872067b6d7c6b38e82b2878cdbcf4c3053e44bae24c526643f959ed652f980",
+      "scope": "Exact explicit level-two interface determinants, single-use obstruction, and 1/8192 relative-weight neighborhood corner signs.",
+      "evidence": "exact arithmetic / symbolic verification; not a Lean proof",
+      "exit_code": 0,
+      "elapsed_seconds": 0.026,
+      "log": "level2_obstruction.log"
+    },
+    {
+      "name": "polynomial_pipeline",
+      "ledger_ids": [
+        "H09"
+      ],
+      "command": "python3 research/archive/files/morrey_polynomial_certificate.py",
+      "script": "research/archive/files/morrey_polynomial_certificate.py",
+      "sha256": "69c3168283c828e8528410ca264ae4656c4b39b3c0cc574e3113fd289b454d2d",
+      "scope": "Exact rational LH-SOS sanity example and genuine periodic PL gradients; historical gap is f(F)-average, the opposite of the ledger convention.",
+      "evidence": "exact arithmetic / symbolic verification; not a Lean proof",
+      "exit_code": 0,
+      "elapsed_seconds": 0.386,
+      "log": "polynomial_pipeline.log"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "exact_directional_control_checks": 30,
+  "control_dimension": "3x2",
+  "fe_mean_gradient_and_det_zero": true,
+  "fe_variance_one": true,
+  "degree_six_barrier_gradient_errors": {
+    "0.0001": 3.3292256679099055e-11,
+    "0.01": 1.5361204036167732e-11
+  }
+}

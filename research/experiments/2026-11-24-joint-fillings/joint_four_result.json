@@ -1,0 +1,29 @@
+{
+  "vertices": 16,
+  "projected_vertices": 8,
+  "triangles": 328,
+  "polynomial_coefficients": 64,
+  "square_factors": 443,
+  "scope": "finite joint numerical search only; no positive lower-bound certificate",
+  "fixed_chain_LP_status": 0,
+  "fixed_chain_LP_objective": 0,
+  "variables": 1243,
+  "constraints": 1900,
+  "seconds_limit": 30,
+  "wall_seconds": 30.044403642999896,
+  "solver_status": 1,
+  "solver_message": "Time limit reached. (HiGHS Status 13: Time limit reached)",
+  "objective": -2.715154490129379e-13,
+  "mip_dual_bound": -0.08744881494829179,
+  "mip_gap": 322076755727.6392,
+  "mip_nodes": 692,
+  "exact_candidate": {
+    "faces": 8,
+    "raw_exact_gap": "0",
+    "repair": "1/10000000000",
+    "strict_negative": false,
+    "global_rc": "exact rational residual bound plus radial repair",
+    "compatibility": "positive integer filling with exact degree-one boundary",
+    "repaired_exact_gap": "845657/41943040000000000"
+  }
+}

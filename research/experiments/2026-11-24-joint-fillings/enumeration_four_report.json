@@ -1,0 +1,13 @@
+{
+  "vertices": 16,
+  "projected_vertices": 8,
+  "candidate_triangles": 328,
+  "partial_states": 3793,
+  "fillings": 1142,
+  "distinct_laws": 661,
+  "exact_merge_certified_fillings": 1142,
+  "unclosed_fillings": 0,
+  "unclosed_distinct_laws": 0,
+  "enumeration_seconds": 0.44957514599991555,
+  "total_seconds": 3.6287597390000883
+}

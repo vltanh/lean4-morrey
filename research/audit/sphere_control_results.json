@@ -1,0 +1,70 @@
+{
+  "valid_control": {
+    "identity": "exact",
+    "certificate_kind": "sphere_ideal",
+    "global_rank_one_convex": true,
+    "epsilon": "2",
+    "degree_bound": 4,
+    "scope": "Coercive global Legendre-Hadamard bound; not automatically quasiconvex",
+    "periodic_pl_witness": {
+      "triangles": 8,
+      "gap": "80",
+      "strict_violation": false,
+      "mean_gradient": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "mean_det_gradient": "0"
+    }
+  },
+  "rejections": [
+    {
+      "case": "sphere_ideal:changed_curvature",
+      "reason": "Coefficient identity fails at 1 monomials"
+    },
+    {
+      "case": "sphere_ideal:negative_square_weight",
+      "reason": "Square weights must be nonnegative"
+    },
+    {
+      "case": "sphere_ideal:zero_margin",
+      "reason": "Strict sphere margin must be positive"
+    },
+    {
+      "case": "norm_multiplier:changed_curvature",
+      "reason": "Coefficient identity fails at 20 monomials"
+    },
+    {
+      "case": "norm_multiplier:negative_square_weight",
+      "reason": "Square weights must be nonnegative"
+    },
+    {
+      "case": "norm_multiplier:zero_margin",
+      "reason": "Strict sphere margin must be positive"
+    }
+  ],
+  "norm_multiplier_control": {
+    "identity": "exact",
+    "certificate_kind": "norm_multiplier",
+    "global_rank_one_convex": true,
+    "epsilon": "2",
+    "degree_bound": 4,
+    "scope": "Coercive global Legendre-Hadamard bound; not automatically quasiconvex",
+    "periodic_pl_witness": {
+      "triangles": 8,
+      "gap": "80",
+      "strict_violation": false,
+      "mean_gradient": [
+        "0",
+        "0",
+        "0",
+        "0"
+      ],
+      "mean_det_gradient": "0"
+    }
+  },
+  "quartic_order_one_gram_size": 135,
+  "sextic_order_one_gram_size": 315
+}

@@ -28,6 +28,8 @@ quasiconvexity of the truncated determinant, claimed in a 2026 preprint that has
 Lean formalization, [lean4-iwaniec](https://github.com/vltanh/lean4-iwaniec); the proof takes it
 from there.
 
+**Research workspace:** [unrestricted planar Morrey research status](docs/research/README.md).
+
 ## The state of the problem
 
 **Morrey's problem**: does rank-one convexity imply quasiconvexity for `f : ℝ^{d×m} → ℝ`? A

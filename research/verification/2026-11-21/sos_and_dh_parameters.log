@@ -1,0 +1,3 @@
+P_beta SOS-LH identity modulo det(H): exact PASS
+DH strongest boundary matrix: exact eigenvalue/commutation PASS
+RC follows from DH1996 Corollary 1.5, not from this checker alone.

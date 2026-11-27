@@ -1,0 +1,53 @@
+{
+  "dh_results": {
+    "runs": 48,
+    "families": {
+      "strong": {
+        "minimum_gap": 7.105427357601002e-15,
+        "maximum_gap": 0.00181338470656911,
+        "converged": 16,
+        "runs": 24
+      },
+      "original": {
+        "minimum_gap": 1.2434497875801753e-14,
+        "maximum_gap": 0.00501459837094842,
+        "converged": 21,
+        "runs": 24
+      }
+    }
+  },
+  "dh_fixed_results": {
+    "runs": 360,
+    "families": {
+      "strong": {
+        "minimum_gap": 0.0005373773418817507,
+        "maximum_gap": 0.17059325887405447,
+        "converged": 156,
+        "runs": 180
+      },
+      "original": {
+        "minimum_gap": 0.004650699647464229,
+        "maximum_gap": 0.24020836615051128,
+        "converged": 167,
+        "runs": 180
+      }
+    }
+  },
+  "dh_conditioned_results": {
+    "runs": 64,
+    "families": {
+      "strong": {
+        "minimum_gap": 9.789845752639081e-05,
+        "maximum_gap": 0.006721547203142997,
+        "converged": 8,
+        "runs": 32
+      },
+      "original": {
+        "minimum_gap": 0.0001251099920747123,
+        "maximum_gap": 0.019328462462671503,
+        "converged": 7,
+        "runs": 32
+      }
+    }
+  }
+}

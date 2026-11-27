@@ -1,0 +1,16 @@
+Command (from repository root): python3 research/archive/files/morrey_polynomial_certificate.py
+Executed on an unchanged temporary copy to preserve archived bytes.
+Scope: Exact rational LH-SOS sanity example and genuine periodic PL gradients; historical gap is f(F)-average, the opposite of the ledger convention.
+Exit code: 0
+
+STDOUT
+PASS: exact SOS identity proves global rank-one convexity
+PASS: nonconvex rank-one convex polynomial |A|^2 + 5 det(A)
+PASS: exact 4x4 periodic mean gradient = 0 and mean determinant = 0
+PASS: rational Jensen gap: -405772
+PASS: sanity-check expected sign (no Morrey violation)
+PASS: negative control violates Jensen but fails rank-one convexity
+NOTE: SOS witness is sufficient, not necessary, for global LH positivity
+NOTE: NO counterexample and NO complete proof of Morrey established
+
+STDERR

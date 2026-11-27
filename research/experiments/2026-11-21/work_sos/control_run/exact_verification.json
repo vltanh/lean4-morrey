@@ -1,0 +1,10 @@
+{
+  "dimension": "3x2",
+  "exact_polynomial_identity": true,
+  "exact_positive_gram": true,
+  "gram_size": 42,
+  "gap": "-103817049981/8000000000000",
+  "gap_float": -0.012977131247625,
+  "min_LDL_pivot_float": 1.0732785126731608e-07,
+  "status": "Known higher-dimensional mechanism validated; no 2x2 conclusion."
+}
